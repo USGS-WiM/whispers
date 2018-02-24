@@ -1,20 +1,63 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <span>WHISPers </span>
-    <span> Wildlife Health Information Sharing Partnership event reporting system</span>
-    <span class="spacer"></span>
-    <span>
-      <button mat-button>
-        <mat-icon class="icon">info_outline</mat-icon>About</button>
-    </span>
-  </mat-toolbar-row>
+<header class="header">
+  <mat-toolbar color="primary" class="mat-typography whispers-header">
+    <mat-toolbar-row>
+      <span class="mat-display-3">WHISPers&nbsp;&nbsp;
+      </span>
+      <span class="subheading-1">
+        Wildlife Health Information Sharing Partnership event reporting system
+      </span>
+      <span class="spacer"></span>
 
-  <mat-toolbar-row>
-    <span></span>
-    <span class="spacer"></span>
-    <span>
-      <button mat-button>
-        <mat-icon class="icon">account_box</mat-icon>Login</button>
-    </span>
-  </mat-toolbar-row>
-</mat-toolbar>
+    </mat-toolbar-row>
+
+    <mat-toolbar-row class="toolbar-bottom-row">
+      <span></span>
+      <span class="spacer"></span>
+      <span>
+        <button mat-button>
+          <mat-icon class="icon">account_box</mat-icon>Login</button>
+      </span>
+      <span>
+        <button mat-button>
+          <mat-icon class="icon">info_outline</mat-icon>About</button>
+      </span>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</header>
+<router-outlet></router-outlet>
+
+<!-- <div class="grid">
+  <aside class="sidebar">Sidebar</aside>
+  <article class="content">
+    <h1>2 column, header and footer</h1>
+    <p>This example uses line-based positioning, to position the header and footer, stretching them across the grid.</p>
+  </article>
+</div> -->
+
+<footer class="footer">
+  <mat-toolbar color="primary" class="mat-typography whispers-header">
+    <mat-toolbar-row>
+      <span class="">USGS National Wildlife Health Center</span>
+      <span class="spacer"></span>
+
+    </mat-toolbar-row>
+  </mat-toolbar>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <mat-sidenav-container fullscreen>
+  <mat-sidenav mode="side" opened>Sidenav content</mat-sidenav>
+  <mat-sidenav-content>
+  </mat-sidenav-content>
+</mat-sidenav-container> -->

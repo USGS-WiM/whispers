@@ -1,0 +1,29 @@
+@import '~@angular/material/theming';
+
+
+.spacer {
+    flex: 1 1 auto;
+  }
+
+  .icon {
+    padding: 0 5px;
+  }
+
+  .mat-display-3 {
+    margin-bottom: auto !important;
+  }
+
+  .toolbar-bottom-row {
+    height: 40px;
+    background-color: #42A5F5 !important;
+  }
+
+  .whispers-header {
+      /* margin: 0px !important; */
+      position: sticky;
+      top: 0;
+  }
+
+
+
+

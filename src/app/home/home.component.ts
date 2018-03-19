@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import * as L from 'leaflet';
+declare let L: any;
 
+import { APP_UTILITIES } from '@app/app.utilities';
 
 
 @Component({
@@ -11,11 +12,15 @@ import * as L from 'leaflet';
 export class HomeComponent implements OnInit {
 
   map;
+  eventArray = []
+  columnsToDisplay = ['id', 'event_type_string', 'start_date', 'end_date'];
 
 
   constructor() { }
 
   ngOnInit() {
+
+    this.eventArray = APP_UTILITIES.SAMPLE_EVENT_DATA;
 
     setTimeout(() => {
       this.map = new L.Map('map', {

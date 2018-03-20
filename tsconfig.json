@@ -9,7 +9,15 @@
     "experimentalDecorators": true,
     "baseUrl": "src",
     "paths": {
-      "@app/*": ["app/*"]
+      "@app/*": [
+        "app/*"
+      ],
+      "@interfaces/*": [
+        "app/interfaces/*"
+      ],
+      "@services/*": [
+        "app/services/*"
+      ]
     },
     "target": "es2017",
     "typeRoots": [

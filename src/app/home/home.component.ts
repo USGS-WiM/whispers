@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 declare let L: any;
+
+import { Event } from '@interfaces/event';
+import { EventService } from '@services/event.service';
 
 import { APP_UTILITIES } from '@app/app.utilities';
 
@@ -10,17 +13,11 @@ import { APP_UTILITIES } from '@app/app.utilities';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
   map;
-  eventArray = []
-  columnsToDisplay = ['id', 'event_type_string', 'start_date', 'end_date'];
 
-
-  constructor() { }
+  constructor(private _eventService: EventService) { }
 
   ngOnInit() {
-
-    this.eventArray = APP_UTILITIES.SAMPLE_EVENT_DATA;
 
     setTimeout(() => {
       this.map = new L.Map('map', {
@@ -36,5 +33,5 @@ export class HomeComponent implements OnInit {
       500);
   }
 
-
 }
+

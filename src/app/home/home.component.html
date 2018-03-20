@@ -50,49 +50,9 @@
   </aside>
   <article class="map-and-table">
     <div id="map"></div>
-    <!-- <div>
-      <div class="example-header">
-        <mat-form-field>
-          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-        </mat-form-field>
-      </div>
 
-      <div class="example-container mat-elevation-z8" *ngIf="eventArray">
+    <div>
 
-        <mat-table [dataSource]="eventArray" matSort>
-
-
-          <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Event ID </mat-header-cell>
-            <mat-cell *matCellDef="let event"> {{event.id}} </mat-cell>
-          </ng-container>
-
-
-          <ng-container matColumnDef="eventType">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Event Type </mat-header-cell>
-            <mat-cell *matCellDef="let event"> {{event.event_type_string}} </mat-cell>
-          </ng-container>
-
-
-          <ng-container matColumnDef="startDate">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </mat-header-cell>
-            <mat-cell *matCellDef="let event"> {{event.start_date | date:'shortDate'}} </mat-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="endDate">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> End Date </mat-header-cell>
-            <mat-cell *matCellDef="let event" [style.color]="event.color"> {{event.end_date | date:'shortDate'}} </mat-cell>
-          </ng-container>
-
-          <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
-
-          <mat-row *matRowDef="let event; columns: columnsToDisplay;">
-          </mat-row>
-
-        </mat-table>
-
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-      </div>
-    </div> -->
+    </div>
   </article>
 </div>

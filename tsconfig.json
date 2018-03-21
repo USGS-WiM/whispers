@@ -19,7 +19,7 @@
         "app/services/*"
       ]
     },
-    "target": "es2017",
+    "target": "es5",
     "typeRoots": [
       "node_modules/@types"
     ],

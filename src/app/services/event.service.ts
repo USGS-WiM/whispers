@@ -6,7 +6,8 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import { Subject } from "rxjs/Subject";
 
-import { APP_SETTINGS } from '../app.settings';
+import { APP_SETTINGS } from '@app/app.settings';
+import { APP_UTILITIES } from '@app/app.utilities';
 
 import { Event } from '@interfaces/event';
 
@@ -17,7 +18,7 @@ export class EventService {
 
   public queryEvents(eventQuery): Observable<Event[]> {
 
-    let options = new RequestOptions({
+    const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
@@ -25,6 +26,11 @@ export class EventService {
       .map((response: Response) => <Event[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
+  }
+
+  // TEMPORARY function to retrieve hard-coded sample event data from local disk
+  public getTestData(): Event[] {
+    return APP_UTILITIES.SAMPLE_EVENT_DATA;
   }
 
   private handleError(error: Response) {

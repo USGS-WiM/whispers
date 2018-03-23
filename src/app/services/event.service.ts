@@ -4,19 +4,20 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
-import { Subject } from "rxjs/Subject";
+import { Subject } from 'rxjs/Subject';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 
 import { Event } from '@interfaces/event';
+import { EventSummary } from '@interfaces/event-summary';
 
 @Injectable()
 export class EventService {
 
   constructor(private _http: Http) { }
 
-  public queryEvents(eventQuery): Observable<Event[]> {
+  public queryEvents(eventQuery): Observable<EventSummary[]> {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
@@ -29,7 +30,7 @@ export class EventService {
   }
 
   // TEMPORARY function to retrieve hard-coded sample event data from local disk
-  public getTestData(): Event[] {
+  public getTestData(): EventSummary[] {
     return APP_UTILITIES.SAMPLE_EVENT_DATA;
   }
 

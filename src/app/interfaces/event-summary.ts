@@ -1,6 +1,12 @@
 import { History } from '@interfaces/history';
 
-export interface Event extends History {
+import { State } from '@interfaces/state';
+import { County } from '@interfaces/county';
+import { Species } from '@interfaces/species';
+import { EventDiagnosis } from '@interfaces/event-diagnosis';
+
+export interface EventSummary extends History {
+    id: number;
     superevent: string;
     legal_number: number;
     legal_status: string;
@@ -14,5 +20,8 @@ export interface Event extends History {
     event_reference: string;
     event_type_string: string;
     event_type: number;
-    id: number;
+    event_diagnosis: EventDiagnosis;
+    states: State[];
+    counties: County[];
+    species: Species[];
 }

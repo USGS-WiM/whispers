@@ -37,7 +37,7 @@ import {
   MatTableModule,
   MatTabsModule,
   MatToolbarModule,
-  MatTooltipModule,
+  MatTooltipModule
 } from '@angular/material';
 
 
@@ -49,6 +49,8 @@ import { EventSubmissionComponent } from './event-submission/event-submission.co
 import { DiagnosticServicesComponent } from './diagnostic-services/diagnostic-services.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { EventService } from '@app/services/event.service';
+import { SearchDialogComponent } from './search-dialog/search-dialog.component';
+import { StateService } from '@app/services/state.service';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,8 @@ import { EventService } from '@app/services/event.service';
     EventDetailsComponent,
     EventSubmissionComponent,
     DiagnosticServicesComponent,
-    UserDashboardComponent
+    UserDashboardComponent,
+    SearchDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -99,10 +102,11 @@ import { EventService } from '@app/services/event.service';
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule,
+    MatTooltipModule
   ],
-  providers: [EventService],
-  bootstrap: [AppComponent]
+  providers: [EventService, StateService],
+  bootstrap: [AppComponent],
+  entryComponents: [SearchDialogComponent]
 })
 export class AppModule { }
 

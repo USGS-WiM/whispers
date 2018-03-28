@@ -17,6 +17,9 @@
       ],
       "@services/*": [
         "app/services/*"
+      ],
+      "@search-dialog/*": [
+        "app/search-dialog/*"
       ]
     },
     "target": "es5",

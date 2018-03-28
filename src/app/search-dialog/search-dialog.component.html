@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>Update Search</h1>
+<mat-dialog-content>
+  <form [formGroup]="searchForm">
+
+    <mat-form-field>
+      <mat-select placeholder="Event Type" formControlName="event_type">
+        <mat-option *ngFor="let eventType of eventTypes" [value]="eventType.name">
+          {{eventType.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
+
+
+    <!-- <mat-form-field class="example-full-width">
+      <input matInput placeholder="State" aria-label="Diagnosis" [matAutocomplete]="auto" [formControl]="stateCtrl">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
+          <span>{{ state.name }}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <br> -->
+
+    <mat-form-field>
+      <mat-chip-list #chipList>
+        <mat-chip *ngFor="let state of selectedStates" [selectable]="selectable" [removable]="removable" (remove)="remove(state)">{{state.name}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+      <input type="text" matInput placeholder="State" aria-label="State" [matAutocomplete]="auto" formControlName="states" [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
+          <span>{{state.name}}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+  </form>
+
+
+
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button>Cancel</button>
+  <button mat-button>Submit</button>
+</mat-dialog-actions>

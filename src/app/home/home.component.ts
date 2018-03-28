@@ -1,10 +1,13 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 declare let L: any;
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 
 import { Event } from '@interfaces/event';
 import { EventSummary } from '@interfaces/event-summary';
 import { EventService } from '@services/event.service';
+
+import { SearchDialogComponent } from '@search-dialog/search-dialog.component';
 
 import { APP_UTILITIES } from '@app/app.utilities';
 
@@ -15,6 +18,9 @@ import { APP_UTILITIES } from '@app/app.utilities';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit {
+
+  searchDialogRef: MatDialogRef<SearchDialogComponent>;
+
   map;
 
   displayedColumns = [
@@ -35,7 +41,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _eventService: EventService) { }
+  constructor(private _eventService: EventService, private _dialog: MatDialog) { }
+
+  openSearchDialog() {
+    this.searchDialogRef = this._dialog.open(SearchDialogComponent);
+  }
 
   ngOnInit() {
 

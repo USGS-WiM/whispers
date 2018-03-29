@@ -24,23 +24,20 @@
 
     <mat-form-field>
       <mat-chip-list #chipList>
-        <mat-chip *ngFor="let state of selectedStates" [selectable]="selectable" [removable]="removable" (remove)="remove(state)">{{state.name}}
+        <mat-chip *ngFor="let state of selectedStates" [selectable]="selectable" [removable]="removable" (remove)="removeChip(state)">{{state}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
       </mat-chip-list>
-      <input type="text" matInput placeholder="State" aria-label="State" [matAutocomplete]="auto" formControlName="states" [matChipInputFor]="chipList"
-        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
-      <mat-autocomplete #auto="matAutocomplete">
+      <input type="text" matInput placeholder="State" aria-label="State" [matChipInputFor]="chipList" [matAutocomplete]="auto" [formControl]="stateControl">
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="stateSelected($event)">
         <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
           <span>{{state.name}}</span>
         </mat-option>
       </mat-autocomplete>
+
     </mat-form-field>
 
   </form>
-
-
-
 
 </mat-dialog-content>
 <mat-dialog-actions>

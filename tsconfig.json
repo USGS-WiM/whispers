@@ -17,6 +17,12 @@
       ],
       "@services/*": [
         "app/services/*"
+      ],
+      "@search-dialog/*": [
+        "app/search-dialog/*"
+      ],
+      "@pipes/*": [
+        "app/pipes/*"
       ]
     },
     "target": "es5",

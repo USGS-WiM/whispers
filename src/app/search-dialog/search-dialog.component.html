@@ -4,46 +4,53 @@
 
     <mat-form-field>
       <mat-select placeholder="Event Type" formControlName="event_type">
-        <mat-option *ngFor="let eventType of eventTypes" [value]="eventType.name">
+        <mat-option *ngFor="let eventType of eventTypes" [value]="eventType.id">
           {{eventType.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>
     <br>
 
-
-    <!-- <mat-form-field class="example-full-width">
-      <input matInput placeholder="State" aria-label="Diagnosis" [matAutocomplete]="auto" [formControl]="stateCtrl">
-      <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
-          <span>{{ state.name }}</span>
+     <!-- Diagnosis select -->
+    <mat-form-field class="full-width">
+      <mat-chip-list #diagnoisChipList>
+        <mat-chip *ngFor="let diagnosis of selectedDiagnoses" [selectable]="selectable" [removable]="removable" (remove)="removeChip(diagnosis, 'diagnosis')">{{diagnosis.name }}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input matInput placeholder="Diagnosis" aria-label="Diagnosis" [matChipInputFor]="diagnosisChipList" [matAutocomplete]="auto"
+          [formControl]="diagnosisControl" #diagnosisChipInput>
+      </mat-chip-list>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addChip($event, diagnosisChipInput, 'diagnosis')">
+        <mat-option *ngFor="let diagnosis of filteredDiagnoses" [value]="diagnosis">
+          <span>{{diagnosis.name}}</span>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-    <br> -->
+    <mat-checkbox>Include All</mat-checkbox>
+     <!-- end Diagnosis select -->
 
+    <br>
+
+
+    <!-- State select -->
     <mat-form-field class="full-width">
-
-      <mat-chip-list #chipList>
-        <mat-chip *ngFor="let state of selectedStates" [selectable]="selectable" [removable]="removable" (remove)="removeChip(state)">{{state.name }}
+      <mat-chip-list #stateChipList>
+        <mat-chip *ngFor="let state of selectedStates" [selectable]="selectable" [removable]="removable" (remove)="removeChip(state, 'state')">{{state.name }}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
-
-        <input matInput placeholder="State" aria-label="State" [matChipInputFor]="chipList" [matAutocomplete]="auto" [formControl]="stateControl"
-          #chipInput>
+        <input matInput placeholder="State" aria-label="State" [matChipInputFor]="stateChipList" [matAutocomplete]="auto" [formControl]="stateControl"
+          #stateChipInput>
       </mat-chip-list>
-
-
-
-      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addChip($event, chipInput)">
-
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addChip($event, stateChipInput, 'state')">
         <mat-option *ngFor="let state of filteredStates" [value]="state">
           <span>{{state.name}}</span>
         </mat-option>
-
       </mat-autocomplete>
-
     </mat-form-field>
+    <mat-checkbox>Include All</mat-checkbox>
+    <!-- end State select -->
+
+    <br>
 
   </form>
 

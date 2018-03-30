@@ -248,7 +248,7 @@ export class APP_UTILITIES {
                 "abbreviation": "WA"
             },
             {
-                "id": 491,
+                "id": 49,
                 "name": "West Virginia",
                 "abbreviation": "WV"
             },

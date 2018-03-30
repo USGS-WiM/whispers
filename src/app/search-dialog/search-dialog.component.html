@@ -11,7 +11,15 @@
     </mat-form-field>
     <br>
 
-     <!-- Diagnosis select -->
+    <mat-form-field>
+      <mat-select placeholder="Diagnosis Type" formControlName="diagnosis_type">
+        <mat-option *ngFor="let diagnosisType of diagnosisTypes" [value]="diagnosisType.id">
+          {{diagnosisType.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Diagnosis select -->
     <mat-form-field class="full-width">
       <mat-chip-list #diagnoisChipList>
         <mat-chip *ngFor="let diagnosis of selectedDiagnoses" [selectable]="selectable" [removable]="removable" (remove)="removeChip(diagnosis, 'diagnosis')">{{diagnosis.name }}
@@ -27,10 +35,9 @@
       </mat-autocomplete>
     </mat-form-field>
     <mat-checkbox>Include All</mat-checkbox>
-     <!-- end Diagnosis select -->
+    <!-- end Diagnosis select -->
 
     <br>
-
 
     <!-- State select -->
     <mat-form-field class="full-width">

@@ -13,6 +13,9 @@ import { State } from '@interfaces/state';
 import { StateService } from '@services/state.service';
 import { EventType } from '@interfaces/event-type';
 import { EventTypeService } from '@services/event-type.service';
+import { Diagnosis } from '@app/interfaces/diagnosis';
+import { DiagnosisTypeService } from '@services/diagnosis-type.service';
+import { DiagnosisType } from '@app/interfaces/diagnosis-type';
 
 @Component({
   selector: 'app-search-dialog',
@@ -31,11 +34,23 @@ export class SearchDialogComponent implements OnInit {
   stateControl: FormControl;
 
   eventTypes: EventType[];
-
+  diagnosisTypes: DiagnosisType[];
   states = [];
 
   filteredStates = [];
   selectedStates = []; // chips list
+
+  filteredDiagnoses = [];
+  selectedDiagnoses = []; // chips list
+
+  // event type: multi-select
+  // diagnosis: auto-complete + chiplist
+  // diagnosis type: multi-select
+  // species: auto-complete + chiplist
+  // state: auto-complete + chiplist
+  // county: auto-complete + chiplist
+  // flyway: multi-select
+  // affected = number
 
   buildSearchForm() {
     this.searchForm = this.formBuilder.group({
@@ -59,7 +74,8 @@ export class SearchDialogComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private _stateService: StateService,
-    private _eventTypeService: EventTypeService) {
+    private _eventTypeService: EventTypeService,
+    private _diagnosisTypeService: DiagnosisTypeService) {
 
     this.stateControl = new FormControl();
     this.diagnosisControl = new FormControl();
@@ -72,6 +88,11 @@ export class SearchDialogComponent implements OnInit {
     // get event types from the eventType service
     this._eventTypeService.getEventTypes()
       .subscribe(eventTypes => this.eventTypes = eventTypes,
+        error => this.errorMessage = <any>error);
+
+    // get diagnosis types from the diagnosisType service
+    this._diagnosisTypeService.getDiagnosisTypes()
+      .subscribe(diagnosisTypes => this.diagnosisTypes = diagnosisTypes,
         error => this.errorMessage = <any>error);
 
     this.states = this._stateService.getTestData();

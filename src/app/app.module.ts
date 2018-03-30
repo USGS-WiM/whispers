@@ -53,6 +53,7 @@ import { SearchDialogComponent } from './search-dialog/search-dialog.component';
 import { StateService } from '@app/services/state.service';
 import { DisplayValuePipe } from './pipes/display-value.pipe';
 import { EventTypeService } from '@services/event-type.service';
+import { DiagnosisTypeService } from '@services/diagnosis-type.service';
 
 @NgModule({
   declarations: [
@@ -107,7 +108,7 @@ import { EventTypeService } from '@services/event-type.service';
     MatToolbarModule,
     MatTooltipModule
   ],
-  providers: [EventService, EventTypeService, StateService],
+  providers: [EventService, EventTypeService, StateService, DiagnosisTypeService],
   bootstrap: [AppComponent],
   entryComponents: [SearchDialogComponent]
 })

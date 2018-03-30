@@ -51,6 +51,7 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
 import { EventService } from '@app/services/event.service';
 import { SearchDialogComponent } from './search-dialog/search-dialog.component';
 import { StateService } from '@app/services/state.service';
+import { DisplayValuePipe } from './pipes/display-value.pipe';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { StateService } from '@app/services/state.service';
     EventSubmissionComponent,
     DiagnosticServicesComponent,
     UserDashboardComponent,
-    SearchDialogComponent
+    SearchDialogComponent,
+    DisplayValuePipe
   ],
   imports: [
     BrowserModule,

@@ -44,7 +44,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(private _eventService: EventService, private _dialog: MatDialog) { }
 
   openSearchDialog() {
-    this.searchDialogRef = this._dialog.open(SearchDialogComponent);
+    this.searchDialogRef = this._dialog.open(SearchDialogComponent, {
+      minWidth: '50%'
+    });
   }
 
   ngOnInit() {

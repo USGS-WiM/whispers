@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Update Search</h1>
 <mat-dialog-content>
-  <form [formGroup]="searchForm">
+  <form [formGroup]="searchForm" class="autocomplete-form">
 
     <mat-form-field>
       <mat-select placeholder="Event Type" formControlName="event_type">
@@ -22,17 +22,25 @@
     </mat-form-field>
     <br> -->
 
-    <mat-form-field>
+    <mat-form-field class="full-width">
+
       <mat-chip-list #chipList>
-        <mat-chip *ngFor="let state of selectedStates" [selectable]="selectable" [removable]="removable" (remove)="removeChip(state)">{{state}}
+        <mat-chip *ngFor="let state of selectedStates" [selectable]="selectable" [removable]="removable" (remove)="removeChip(state)">{{state.name }}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
+
+        <input matInput placeholder="State" aria-label="State" [matChipInputFor]="chipList" [matAutocomplete]="auto" [formControl]="stateControl"
+          #chipInput>
       </mat-chip-list>
-      <input type="text" matInput placeholder="State" aria-label="State" [matChipInputFor]="chipList" [matAutocomplete]="auto" [formControl]="stateControl">
-      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="stateSelected($event)">
-        <mat-option *ngFor="let state of filteredStates | async" [value]="state.name">
+
+
+
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addChip($event, chipInput)">
+
+        <mat-option *ngFor="let state of filteredStates" [value]="state">
           <span>{{state.name}}</span>
         </mat-option>
+
       </mat-autocomplete>
 
     </mat-form-field>

@@ -18,19 +18,18 @@ import { StateService } from '@app/services/state.service';
 })
 export class SearchDialogComponent implements OnInit {
 
-  searchForm: FormGroup;
-
-  states: State[];
-  filteredStates: Observable<any[]>;
-
-  stateControl: FormControl;
-
-  selectedStates = [];
-
   visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;
+
+  searchForm: FormGroup;
+  stateControl: FormControl;
+
+  states = [];
+
+  filteredStates = [];
+  selectedStates = []; // chips list
 
   buildSearchForm() {
     this.searchForm = this.formBuilder.group({
@@ -59,40 +58,23 @@ export class SearchDialogComponent implements OnInit {
 
     this.buildSearchForm();
 
-    this.filteredStates = this.stateControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(state => state ? this.filterStates(state) : this.states.slice())
-      );
-
   }
 
   ngOnInit() {
     this.states = this._stateService.getTestData();
+    // Set initial value of filteredStates to all states
+    this.filteredStates = this._stateService.getTestData();
 
-    // onValuechange no good - captures every single value change - need to listen for selection
-    // this.searchForm.controls['states'].valueChanges.subscribe(
-    //   (selectedValue) => {
-    //     console.log('A state has been selected. Selection is: ', selectedValue);
-    //     console.log(this.searchForm.get('states').value);
-    //   }
-    // );
-
-    // this.searchForm.controls['states'].optionSelected
-
+    // Subscribe to listen for changes to AutoComplete input and run filter
+    this.stateControl.valueChanges.subscribe(val => {
+      this.filterOptions(val);
+    });
   }
 
-  filterStates(name: string) {
-    return this.states.filter(state =>
-      state.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
-  }
-
-  stateSelected(event: MatAutocompleteSelectedEvent) {
-    console.log('A state has been selected. Selection is: ', event.option.value);
-    //// on selection: add that value to chiplist and to actual searchForm value, then clear current selection
-
-    this.selectedStates.push(event.option.value);
-
+  filterOptions(text: string) {
+    // Set filteredStates array to filtered options
+    this.filteredStates = this.states.filter(obj =>
+      obj.name.toLowerCase().indexOf(text.toString().toLowerCase()) === 0);
   }
 
   addChip(event: MatAutocompleteSelectedEvent, input: any): void {
@@ -101,9 +83,8 @@ export class SearchDialogComponent implements OnInit {
     // Add chip for selected option
     this.selectedStates.push(selection);
     // Remove selected option from available options and set filteredOptions
-    // NOTE: revisit these next 2 lines
-    // this.options = this.options.filter(obj => obj.name !== selection.name);
-    // this.filteredOptions = this.options;
+    this.filteredStates = this.states.filter(obj => obj.id !== selection.id);
+
     // Reset the autocomplete input text value
     if (input) {
       input.value = '';
@@ -117,13 +98,9 @@ export class SearchDialogComponent implements OnInit {
     if (index >= 0) {
       // Remove key from selectedStates array
       this.selectedStates.splice(index, 1);
-      // Add key to options array
-      // this.options.push(chip);
+      // Add key to states array
+      this.states.push(chip);
     }
   }
-
-
-
-
 
 }

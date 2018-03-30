@@ -16,6 +16,7 @@ import { EventTypeService } from '@services/event-type.service';
 import { Diagnosis } from '@app/interfaces/diagnosis';
 import { DiagnosisTypeService } from '@services/diagnosis-type.service';
 import { DiagnosisType } from '@app/interfaces/diagnosis-type';
+import { DiagnosisService } from '@app/services/diagnosis.service';
 
 @Component({
   selector: 'app-search-dialog',
@@ -34,6 +35,7 @@ export class SearchDialogComponent implements OnInit {
   stateControl: FormControl;
 
   eventTypes: EventType[];
+  diagnoses: Diagnosis[];
   diagnosisTypes: DiagnosisType[];
   states = [];
 
@@ -75,7 +77,8 @@ export class SearchDialogComponent implements OnInit {
     private formBuilder: FormBuilder,
     private _stateService: StateService,
     private _eventTypeService: EventTypeService,
-    private _diagnosisTypeService: DiagnosisTypeService) {
+    private _diagnosisTypeService: DiagnosisTypeService,
+    private _diagnosisService: DiagnosisService) {
 
     this.stateControl = new FormControl();
     this.diagnosisControl = new FormControl();
@@ -95,6 +98,18 @@ export class SearchDialogComponent implements OnInit {
       .subscribe(diagnosisTypes => this.diagnosisTypes = diagnosisTypes,
         error => this.errorMessage = <any>error);
 
+    // get diagnoses from the diagnoses service
+    this._diagnosisService.getDiagnoses()
+      .subscribe(
+        (diagnoses) => {
+          this.diagnoses = diagnoses;
+          this.filteredDiagnoses = diagnoses;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
     this.states = this._stateService.getTestData();
     // Set initial value of filteredStates to all states
     this.filteredStates = this._stateService.getTestData();
@@ -104,6 +119,13 @@ export class SearchDialogComponent implements OnInit {
       // this.filterOptions(val, 'stateControl');
       if (val.length > 1) {
         this.filterOptions('states', this.filteredStates, val, this.states);
+      }
+    });
+
+    // Subscribe to listen for changes to AutoComplete input and run filter
+    this.diagnosisControl.valueChanges.subscribe(val => {
+      if (val.length > 2) {
+        this.filterOptions('diagnosis', this.filteredDiagnoses, val, this.diagnoses);
       }
     });
   }
@@ -120,6 +142,7 @@ export class SearchDialogComponent implements OnInit {
         this.filteredStates = filteredOptions;
         break;
       case 'diagnosis':
+        this.filteredDiagnoses = filteredOptions;
         break;
       default:
     }
@@ -145,6 +168,11 @@ export class SearchDialogComponent implements OnInit {
         // filteredStates becomes all states except the one just selected
         break;
       case 'diagnosis':
+        // Add chip for selected option
+        this.selectedDiagnoses.push(selection);
+        // Remove selected option from available options and set filteredOptions
+        this.filteredDiagnoses = this.diagnoses.filter(obj => obj.id !== selection.id);
+        // filteredStates becomes all states except the one just selected
         break;
       default:
     }
@@ -161,16 +189,25 @@ export class SearchDialogComponent implements OnInit {
     switch (control) {
       case 'state':
         // Find key of object in array
-        const index = this.selectedStates.indexOf(chip);
+        const indexState = this.selectedStates.indexOf(chip);
         // If key exists
-        if (index >= 0) {
+        if (indexState >= 0) {
           // Remove key from selectedStates array
-          this.selectedStates.splice(index, 1);
+          this.selectedStates.splice(indexState, 1);
           // Add key to states array
           this.states.push(chip);
         }
         break;
       case 'diagnosis':
+        // Find key of object in array
+        const indexDiagnosis = this.selectedDiagnoses.indexOf(chip);
+        // If key exists
+        if (indexDiagnosis >= 0) {
+          // Remove key from selectedStates array
+          this.selectedDiagnoses.splice(indexDiagnosis, 1);
+          // Add key to states array
+          this.diagnoses.push(chip);
+        }
         break;
       default:
     }

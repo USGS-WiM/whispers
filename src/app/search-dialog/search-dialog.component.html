@@ -22,7 +22,7 @@
     <!-- Diagnosis select -->
     <mat-form-field class="full-width">
       <mat-chip-list #diagnoisChipList>
-        <mat-chip *ngFor="let diagnosis of selectedDiagnoses" [selectable]="selectable" [removable]="removable" (remove)="removeChip(diagnosis, 'diagnosis')">{{diagnosis.name }}
+        <mat-chip *ngFor="let diagnosis of selectedDiagnoses" [selectable]="selectable" [removable]="removable" (remove)="removeChip(diagnosis, 'diagnosis')">{{diagnosis.diagnosis}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
         <input matInput placeholder="Diagnosis" aria-label="Diagnosis" [matChipInputFor]="diagnosisChipList" [matAutocomplete]="auto"
@@ -30,7 +30,7 @@
       </mat-chip-list>
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addChip($event, diagnosisChipInput, 'diagnosis')">
         <mat-option *ngFor="let diagnosis of filteredDiagnoses" [value]="diagnosis">
-          <span>{{diagnosis.name}}</span>
+          <span>{{diagnosis.diagnosis}}</span>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -42,7 +42,7 @@
     <!-- State select -->
     <mat-form-field class="full-width">
       <mat-chip-list #stateChipList>
-        <mat-chip *ngFor="let state of selectedStates" [selectable]="selectable" [removable]="removable" (remove)="removeChip(state, 'state')">{{state.name }}
+        <mat-chip *ngFor="let state of selectedStates" [selectable]="selectable" [removable]="removable" (remove)="removeChip(state, 'state')">{{state.name}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
         <input matInput placeholder="State" aria-label="State" [matChipInputFor]="stateChipList" [matAutocomplete]="auto" [formControl]="stateControl"

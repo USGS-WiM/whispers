@@ -22,7 +22,7 @@ export class DiagnosisTypeService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.EVENT_TYPES_URL, options)
+    return this._http.get(APP_SETTINGS.DIAGNOSIS_TYPES_URL, options)
       .map((response: Response) => <DiagnosisType[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

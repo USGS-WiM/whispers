@@ -25,14 +25,16 @@
         <mat-chip *ngFor="let diagnosis of selectedDiagnoses" [selectable]="selectable" [removable]="removable" (remove)="removeChip(diagnosis, 'diagnosis')">{{diagnosis.diagnosis}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
-        <input matInput placeholder="Diagnosis" aria-label="Diagnosis" [matChipInputFor]="diagnosisChipList" [matAutocomplete]="auto"
+        <input matInput placeholder="Diagnosis" aria-label="Diagnosis" [matChipInputFor]="diagnosisChipList" [matAutocomplete]="diagnosisAutoComplete"
           [formControl]="diagnosisControl" #diagnosisChipInput>
       </mat-chip-list>
-      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addChip($event, diagnosisChipInput, 'diagnosis')">
+
+      <mat-autocomplete #diagnosisAutoComplete="matAutocomplete" (optionSelected)="addChip($event, diagnosisChipInput, 'diagnosis')">
         <mat-option *ngFor="let diagnosis of filteredDiagnoses" [value]="diagnosis">
           <span>{{diagnosis.diagnosis}}</span>
         </mat-option>
       </mat-autocomplete>
+
     </mat-form-field>
     <mat-checkbox>Include All</mat-checkbox>
     <!-- end Diagnosis select -->
@@ -45,10 +47,10 @@
         <mat-chip *ngFor="let state of selectedStates" [selectable]="selectable" [removable]="removable" (remove)="removeChip(state, 'state')">{{state.name}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
-        <input matInput placeholder="State" aria-label="State" [matChipInputFor]="stateChipList" [matAutocomplete]="auto" [formControl]="stateControl"
-          #stateChipInput>
+        <input matInput placeholder="State" aria-label="State" [matChipInputFor]="stateChipList" [matAutocomplete]="stateAutoComplete"
+          [formControl]="stateControl" #stateChipInput>
       </mat-chip-list>
-      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addChip($event, stateChipInput, 'state')">
+      <mat-autocomplete #stateAutoComplete="matAutocomplete" (optionSelected)="addChip($event, stateChipInput, 'state')">
         <mat-option *ngFor="let state of filteredStates" [value]="state">
           <span>{{state.name}}</span>
         </mat-option>

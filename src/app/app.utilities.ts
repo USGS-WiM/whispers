@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core";
-import { EventSummary } from "@app/interfaces/event-summary";
+import { Injectable } from '@angular/core';
+import { EventSummary } from '@app/interfaces/event-summary';
 
 @Injectable()
 export class APP_UTILITIES {
@@ -2479,4 +2479,6 @@ export class APP_UTILITIES {
             }
         ];
     }
+
+
 }

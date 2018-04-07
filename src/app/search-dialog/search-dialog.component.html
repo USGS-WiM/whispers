@@ -18,15 +18,45 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <br>
 
-    <!-- Diagnosis select -->
-    <mat-form-field class="full-width">
-      <mat-chip-list #diagnoisChipList>
+    <!-- Diagnosis select automplete and chiplist seperate -->
+    <div>
+      <div class="autocomplete-input">
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Add Diagnosis" aria-label="Add Diagnosis" [matAutocomplete]="auto" [formControl]="diagnosisControlTest">
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, diagnosisChipInput, 'diagnosis')">
+            <mat-option *ngFor="let diagnosis of filteredDiagnoses| async" [value]="diagnosis">
+              <span>{{ diagnosis.diagnosis }}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="chiplist">
+        <mat-chip-list #diagnosisChipListTest>
+          <span *ngFor="let diagnosis of selectedDiagnoses" >
+              <mat-chip [selectable]="selectable" [removable]="removable" (remove)="removeChip(diagnosis, 'diagnosis')">{{diagnosis.diagnosis}}
+                  <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <span *ngIf="(selectedDiagnoses.indexOf(diagnosis)) < (selectedDiagnoses.length - 1)">&nbsp;or&nbsp;</span>
+          </span>
+         
+        </mat-chip-list>
+      </div>
+    </div>
+
+    <!-- end Diagnosis select automplete and chiplist seperate -->
+
+
+
+    <!-- Diagnosis select autocomplete/chiplist hybrid -->
+    <!-- <mat-form-field class="full-width">
+      <mat-chip-list #diagnosisChipList>
         <mat-chip *ngFor="let diagnosis of selectedDiagnoses" [selectable]="selectable" [removable]="removable" (remove)="removeChip(diagnosis, 'diagnosis')">{{diagnosis.diagnosis}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
         </mat-chip>
         <input matInput placeholder="Diagnosis" aria-label="Diagnosis" [matChipInputFor]="diagnosisChipList" [matAutocomplete]="diagnosisAutoComplete"
-          [formControl]="diagnosisControl" #diagnosisChipInput>
+          [formControl]="diagnosisControl" #diagnosisChipInput (focus)="inputFocus()">
       </mat-chip-list>
 
       <mat-autocomplete #diagnosisAutoComplete="matAutocomplete" (optionSelected)="addChip($event, diagnosisChipInput, 'diagnosis')">
@@ -36,13 +66,13 @@
       </mat-autocomplete>
 
     </mat-form-field>
-    <mat-checkbox>Include All</mat-checkbox>
-    <!-- end Diagnosis select -->
+    <mat-checkbox>Include All</mat-checkbox> -->
+    <!-- end Diagnosis select autocomplete/chiplist hybrid -->
 
     <br>
 
     <!-- State select -->
-    <mat-form-field class="full-width">
+    <!-- <mat-form-field class="full-width">
       <mat-chip-list #stateChipList>
         <mat-chip *ngFor="let state of selectedStates" [selectable]="selectable" [removable]="removable" (remove)="removeChip(state, 'state')">{{state.name}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
@@ -56,7 +86,7 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-    <mat-checkbox>Include All</mat-checkbox>
+    <mat-checkbox>Include All</mat-checkbox> -->
     <!-- end State select -->
 
     <br>
@@ -66,5 +96,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button>Cancel</button>
-  <button mat-button>Submit</button>
+  <button mat-button (click)="submitSearch()">Submit</button>
 </mat-dialog-actions>

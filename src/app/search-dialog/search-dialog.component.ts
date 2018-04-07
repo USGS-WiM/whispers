@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import { startWith } from 'rxjs/operators/startWith';
 import { map } from 'rxjs/operators/map';
 
-import { MatAutocompleteSelectedEvent } from '@angular/material';
-import { MatAutocompleteTrigger } from '@angular/material';
+import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocompleteTrigger } from '@angular/material';
 
 import { APP_UTILITIES } from '@app/app.utilities';
 
@@ -24,6 +23,8 @@ import { DiagnosisService } from '@app/services/diagnosis.service';
   styleUrls: ['./search-dialog.component.scss']
 })
 export class SearchDialogComponent implements OnInit {
+  @ViewChild('diagnosisChipInput', { read: MatAutocompleteTrigger })
+  private autoCompleteTrigger: MatAutocompleteTrigger;
   errorMessage = '';
   visible = true;
   selectable = true;
@@ -32,6 +33,7 @@ export class SearchDialogComponent implements OnInit {
 
   searchForm: FormGroup;
   diagnosisControl: FormControl;
+  diagnosisControlTest: FormControl;
   stateControl: FormControl;
 
   eventTypes: EventType[];
@@ -42,8 +44,9 @@ export class SearchDialogComponent implements OnInit {
   filteredStates = [];
   selectedStates = []; // chips list
 
-  filteredDiagnoses = [];
+  filteredDiagnoses: Observable<any[]>;
   selectedDiagnoses = []; // chips list
+  //diagnosesRetrieved = false;
 
   // event type: multi-select
   // diagnosis: auto-complete + chiplist
@@ -82,9 +85,9 @@ export class SearchDialogComponent implements OnInit {
 
     this.stateControl = new FormControl();
     this.diagnosisControl = new FormControl();
+    this.diagnosisControlTest = new FormControl();
 
     this.buildSearchForm();
-
   }
 
   ngOnInit() {
@@ -103,32 +106,65 @@ export class SearchDialogComponent implements OnInit {
       .subscribe(
         (diagnoses) => {
           this.diagnoses = diagnoses;
-          this.filteredDiagnoses = diagnoses;
+          // listen for changes on diagnosis control
+          this.filteredDiagnoses = this.diagnosisControlTest.valueChanges
+            .pipe(
+              startWith<string | any>(''),
+              map(value => typeof value === 'string' ? value : value.diagnosis),
+              map(diagnosis => diagnosis ? this.filterDiagnoses(diagnosis) : this.diagnoses.slice())
+            );
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
 
-    this.states = this._stateService.getTestData();
-    // Set initial value of filteredStates to all states
-    this.filteredStates = this._stateService.getTestData();
+
+    // // TEMPORARY: states data coming from local file
+    // this.states = this._stateService.getTestData();
+    // // Set initial value of filteredStates to all states
+    // this.filteredStates = this._stateService.getTestData();
+    // // Subscribe to listen for changes to AutoComplete input and run filter
+    // this.stateControl.valueChanges.subscribe(val => {
+    //   // this.filterOptions(val, 'stateControl');
+    //   if (val.length > 1) {
+    //     this.filterOptions('states', this.filteredStates, val, this.states);
+    //   }
+    // });
+    // TEMPORARY: states data coming from local file
 
     // Subscribe to listen for changes to AutoComplete input and run filter
-    this.stateControl.valueChanges.subscribe(val => {
-      // this.filterOptions(val, 'stateControl');
-      if (val.length > 1) {
-        this.filterOptions('states', this.filteredStates, val, this.states);
-      }
-    });
+    // this.diagnosisControl.valueChanges.subscribe(val => {
+    //   if (val.length > 2) {
+    //     this.filterOptions('diagnosis', this.filteredDiagnoses, val, this.diagnoses);
+    //   }
+    // });
 
-    // Subscribe to listen for changes to AutoComplete input and run filter
-    this.diagnosisControl.valueChanges.subscribe(val => {
-      if (val.length > 2) {
-        this.filterOptions('diagnosis', this.filteredDiagnoses, val, this.diagnoses);
-      }
-    });
+
   }
+
+  filterDiagnoses(text: string): any[] {
+    return this.diagnoses.filter(diagnosis =>
+      diagnosis.diagnosis.toLowerCase().indexOf(text.toLowerCase()) === 0);
+  }
+
+  displayFn(diagnosis?: Diagnosis): string | undefined {
+    return diagnosis ? diagnosis.diagnosis : undefined;
+  }
+
+  inputFocus() {
+    setTimeout(() => {
+      if (!this.autoCompleteTrigger.panelOpen) {
+        this.autoCompleteTrigger.openPanel();
+      }
+    }, 10);
+  }
+
+  submitSearch() {
+    console.log(this.diagnosisControlTest.value)
+  }
+
+
 
   filterOptions(model, filteredOptions, text: string, sourceArray) {
     console.log(sourceArray);
@@ -171,8 +207,8 @@ export class SearchDialogComponent implements OnInit {
         // Add chip for selected option
         this.selectedDiagnoses.push(selection);
         // Remove selected option from available options and set filteredOptions
-        this.filteredDiagnoses = this.diagnoses.filter(obj => obj.id !== selection.id);
-        // filteredStates becomes all states except the one just selected
+        //this.filteredDiagnoses = this.diagnoses.filter(obj => obj.id !== selection.id);
+        // filteredDiagnoses becomes all states except the one just selected
         break;
       default:
     }

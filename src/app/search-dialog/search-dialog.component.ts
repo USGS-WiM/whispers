@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
-import { startWith } from 'rxjs/operators/startWith';
-import { map } from 'rxjs/operators/map';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/map';
+
+import { MatSnackBar } from '@angular/material';
 
 import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocompleteTrigger } from '@angular/material';
 
@@ -81,7 +83,8 @@ export class SearchDialogComponent implements OnInit {
     private _stateService: StateService,
     private _eventTypeService: EventTypeService,
     private _diagnosisTypeService: DiagnosisTypeService,
-    private _diagnosisService: DiagnosisService) {
+    private _diagnosisService: DiagnosisService,
+    public snackBar: MatSnackBar) {
 
     this.stateControl = new FormControl();
     this.diagnosisControl = new FormControl();
@@ -107,12 +110,17 @@ export class SearchDialogComponent implements OnInit {
         (diagnoses) => {
           this.diagnoses = diagnoses;
           // listen for changes on diagnosis control
+          // this.filteredDiagnoses = this.diagnosisControlTest.valueChanges
+          //   .pipe(
+          //     startWith<string | any>(''),
+          //     map(value => typeof value === 'string' ? value : value.diagnosis),
+          //     map(diagnosis => diagnosis ? this.filterDiagnoses(diagnosis) : this.diagnoses.slice())
+          //   );
           this.filteredDiagnoses = this.diagnosisControlTest.valueChanges
-            .pipe(
-              startWith<string | any>(''),
-              map(value => typeof value === 'string' ? value : value.diagnosis),
-              map(diagnosis => diagnosis ? this.filterDiagnoses(diagnosis) : this.diagnoses.slice())
-            );
+            .startWith(null)
+            .map(val => this.filter(val));
+
+          // console.log(this.filteredDiagnoses);
         },
         error => {
           this.errorMessage = <any>error;
@@ -143,6 +151,21 @@ export class SearchDialogComponent implements OnInit {
 
   }
 
+  filter(val: any): string[] {
+    const realval = val && typeof val === 'object' ? val.diagosis : val;
+    const result = [];
+    let lastOption = null;
+    for (let i = 0; i < this.diagnoses.length; i++) {
+      if (!realval || this.diagnoses[i].diagnosis.toLowerCase().startsWith(realval.toLowerCase())) {
+        if (this.diagnoses[i].diagnosis !== lastOption) {
+          lastOption = this.diagnoses[i].diagnosis;
+          result.push(this.diagnoses[i]);
+        }
+      }
+    }
+    return result;
+  }
+
   filterDiagnoses(text: string): any[] {
     return this.diagnoses.filter(diagnosis =>
       diagnosis.diagnosis.toLowerCase().indexOf(text.toLowerCase()) === 0);
@@ -152,16 +175,26 @@ export class SearchDialogComponent implements OnInit {
     return diagnosis ? diagnosis.diagnosis : undefined;
   }
 
-  inputFocus() {
-    setTimeout(() => {
-      if (!this.autoCompleteTrigger.panelOpen) {
-        this.autoCompleteTrigger.openPanel();
-      }
-    }, 10);
-  }
+  // inputFocus() {
+  //   setTimeout(() => {
+  //     if (!this.autoCompleteTrigger.panelOpen) {
+  //       this.autoCompleteTrigger.openPanel();
+  //     }
+  //   }, 10);
+  // }
 
   submitSearch() {
     console.log(this.diagnosisControlTest.value)
+  }
+
+  stopPropagation(event) {
+    event.stopPropagation();
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 
 
@@ -191,10 +224,10 @@ export class SearchDialogComponent implements OnInit {
   //   );
   // }
 
-  addChip(event: MatAutocompleteSelectedEvent, input: any, control: string): void {
+  addChip(event: MatAutocompleteSelectedEvent, control: string): void {
     // Define selection constant
-    const selection = event.option.value;
-
+    let alreadySelected = false;
+    let selection = event.option.value;
     switch (control) {
       case 'state':
         // Add chip for selected option
@@ -204,19 +237,37 @@ export class SearchDialogComponent implements OnInit {
         // filteredStates becomes all states except the one just selected
         break;
       case 'diagnosis':
-        // Add chip for selected option
-        this.selectedDiagnoses.push(selection);
-        // Remove selected option from available options and set filteredOptions
-        //this.filteredDiagnoses = this.diagnoses.filter(obj => obj.id !== selection.id);
-        // filteredDiagnoses becomes all states except the one just selected
+        if (this.selectedDiagnoses.length > 0) {
+          // check if the selection is already in the selected array
+          for (let diagnosis of this.selectedDiagnoses) {
+            if (diagnosis.id === selection.id) {
+              alreadySelected = true;
+              this.openSnackBar('Already Selected', 'OK');
+            }
+          }
+          if (alreadySelected === false) {
+            // Add selected item to selected array, which will show as a chip
+            this.selectedDiagnoses.push(selection);
+            // reset the form
+            this.diagnosisControlTest.reset();
+          }
+
+        } else {
+          // Add selected item to selected array, which will show as a chip
+          this.selectedDiagnoses.push(selection);
+          // reset the form
+          this.diagnosisControlTest.reset();
+        }
+
+
         break;
       default:
     }
 
     // Reset the autocomplete input text value
-    if (input) {
-      input.value = '';
-    }
+    // if (input) {
+    //   input.value = '';
+    // }
     // sets the value back to blank, which triggers the filterOptions function,
     // which sets filteredOptions back to an empty array (fix this)
   }
@@ -241,8 +292,6 @@ export class SearchDialogComponent implements OnInit {
         if (indexDiagnosis >= 0) {
           // Remove key from selectedStates array
           this.selectedDiagnoses.splice(indexDiagnosis, 1);
-          // Add key to states array
-          this.diagnoses.push(chip);
         }
         break;
       default:

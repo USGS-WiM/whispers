@@ -25,8 +25,8 @@ import { DiagnosisService } from '@app/services/diagnosis.service';
   styleUrls: ['./search-dialog.component.scss']
 })
 export class SearchDialogComponent implements OnInit {
-  @ViewChild('diagnosisChipInput', { read: MatAutocompleteTrigger })
-  private autoCompleteTrigger: MatAutocompleteTrigger;
+  //@ViewChild('diagnosisChipInput', { read: MatAutocompleteTrigger })
+  //private autoCompleteTrigger: MatAutocompleteTrigger;
   errorMessage = '';
   visible = true;
   selectable = true;
@@ -34,21 +34,24 @@ export class SearchDialogComponent implements OnInit {
   addOnBlur = true;
 
   searchForm: FormGroup;
+  // independent controls - values do not persist - used to select the value and add to a selection array
+  diagnosisTypeControl: FormControl;
   diagnosisControl: FormControl;
-  diagnosisControlTest: FormControl;
   stateControl: FormControl;
 
   eventTypes: EventType[];
-  diagnoses: Diagnosis[];
   diagnosisTypes: DiagnosisType[];
+  diagnoses: Diagnosis[];
   states = [];
 
   filteredStates = [];
   selectedStates = []; // chips list
 
+  filteredDiagnosisTypes: Observable<any[]>;
+  selectedDiagnosisType = [];
+
   filteredDiagnoses: Observable<any[]>;
   selectedDiagnoses = []; // chips list
-  //diagnosesRetrieved = false;
 
   // event type: multi-select
   // diagnosis: auto-complete + chiplist
@@ -88,7 +91,6 @@ export class SearchDialogComponent implements OnInit {
 
     this.stateControl = new FormControl();
     this.diagnosisControl = new FormControl();
-    this.diagnosisControlTest = new FormControl();
 
     this.buildSearchForm();
   }
@@ -101,8 +103,18 @@ export class SearchDialogComponent implements OnInit {
 
     // get diagnosis types from the diagnosisType service
     this._diagnosisTypeService.getDiagnosisTypes()
-      .subscribe(diagnosisTypes => this.diagnosisTypes = diagnosisTypes,
-        error => this.errorMessage = <any>error);
+      .subscribe(
+        (diagnosisTypes) => {
+          this.diagnosisTypes = diagnosisTypes;
+          this.filteredDiagnosisTypes = this.diagnosisTypeControl.valueChanges
+            .startWith(null)
+            .map(val => this.filter(val));
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
     // get diagnoses from the diagnoses service
     this._diagnosisService.getDiagnoses()
@@ -110,13 +122,13 @@ export class SearchDialogComponent implements OnInit {
         (diagnoses) => {
           this.diagnoses = diagnoses;
           // listen for changes on diagnosis control
-          // this.filteredDiagnoses = this.diagnosisControlTest.valueChanges
+          // this.filteredDiagnoses = this.diagnosisControl.valueChanges
           //   .pipe(
           //     startWith<string | any>(''),
           //     map(value => typeof value === 'string' ? value : value.diagnosis),
           //     map(diagnosis => diagnosis ? this.filterDiagnoses(diagnosis) : this.diagnoses.slice())
           //   );
-          this.filteredDiagnoses = this.diagnosisControlTest.valueChanges
+          this.filteredDiagnoses = this.diagnosisControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val));
 
@@ -151,6 +163,7 @@ export class SearchDialogComponent implements OnInit {
 
   }
 
+  // TODO 4/12/18: make this filter function resuable for all the formcontrols using arguments
   filter(val: any): string[] {
     const realval = val && typeof val === 'object' ? val.diagosis : val;
     const result = [];
@@ -184,7 +197,7 @@ export class SearchDialogComponent implements OnInit {
   // }
 
   submitSearch() {
-    console.log(this.diagnosisControlTest.value)
+    console.log(this.diagnosisControl.value)
   }
 
   stopPropagation(event) {
@@ -249,14 +262,14 @@ export class SearchDialogComponent implements OnInit {
             // Add selected item to selected array, which will show as a chip
             this.selectedDiagnoses.push(selection);
             // reset the form
-            this.diagnosisControlTest.reset();
+            this.diagnosisControl.reset();
           }
 
         } else {
           // Add selected item to selected array, which will show as a chip
           this.selectedDiagnoses.push(selection);
           // reset the form
-          this.diagnosisControlTest.reset();
+          this.diagnosisControl.reset();
         }
 
 

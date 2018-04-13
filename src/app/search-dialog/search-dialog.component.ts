@@ -25,8 +25,7 @@ import { DiagnosisService } from '@app/services/diagnosis.service';
   styleUrls: ['./search-dialog.component.scss']
 })
 export class SearchDialogComponent implements OnInit {
-  //@ViewChild('diagnosisChipInput', { read: MatAutocompleteTrigger })
-  //private autoCompleteTrigger: MatAutocompleteTrigger;
+
   errorMessage = '';
   visible = true;
   selectable = true;
@@ -35,32 +34,26 @@ export class SearchDialogComponent implements OnInit {
 
   searchForm: FormGroup;
   // independent controls - values do not persist - used to select the value and add to a selection array
+  eventTypeControl: FormControl;
   diagnosisTypeControl: FormControl;
   diagnosisControl: FormControl;
   stateControl: FormControl;
 
   eventTypes: EventType[];
+  filteredEventTypes: Observable<any[]>;
+  selectedEventTypes = [];
+
   diagnosisTypes: DiagnosisType[];
-  diagnoses: Diagnosis[];
-  states = [];
-
-  filteredStates = [];
-  selectedStates = []; // chips list
-
   filteredDiagnosisTypes: Observable<any[]>;
-  selectedDiagnosisType = [];
+  selectedDiagnosisTypes = [];
 
+  diagnoses: Diagnosis[];
   filteredDiagnoses: Observable<any[]>;
   selectedDiagnoses = []; // chips list
 
-  // event type: multi-select
-  // diagnosis: auto-complete + chiplist
-  // diagnosis type: multi-select
-  // species: auto-complete + chiplist
-  // state: auto-complete + chiplist
-  // county: auto-complete + chiplist
-  // flyway: multi-select
-  // affected = number
+  states = [];
+  filteredStates: Observable<any[]>;
+  selectedStates = []; // chips list
 
   buildSearchForm() {
     this.searchForm = this.formBuilder.group({
@@ -74,6 +67,8 @@ export class SearchDialogComponent implements OnInit {
       affected: null,
       start_date: null,
       end_date: null,
+      event_type_includes_all: false,
+      diagnosis_type_includes_all: false,
       diagnosis_includes_all: false,
       species_includes_all: false,
       states_includes_all: false,
@@ -89,8 +84,10 @@ export class SearchDialogComponent implements OnInit {
     private _diagnosisService: DiagnosisService,
     public snackBar: MatSnackBar) {
 
-    this.stateControl = new FormControl();
+    this.eventTypeControl = new FormControl();
+    this.diagnosisTypeControl = new FormControl();
     this.diagnosisControl = new FormControl();
+    this.stateControl = new FormControl();
 
     this.buildSearchForm();
   }
@@ -98,9 +95,17 @@ export class SearchDialogComponent implements OnInit {
   ngOnInit() {
     // get event types from the eventType service
     this._eventTypeService.getEventTypes()
-      .subscribe(eventTypes => this.eventTypes = eventTypes,
-        error => this.errorMessage = <any>error);
-
+      .subscribe(
+        eventTypes => {
+          this.eventTypes = eventTypes;
+          this.filteredEventTypes = this.eventTypeControl.valueChanges
+            .startWith(null)
+            .map(val => this.filter(val, this.eventTypes, 'name'));
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
     // get diagnosis types from the diagnosisType service
     this._diagnosisTypeService.getDiagnosisTypes()
       .subscribe(
@@ -108,37 +113,25 @@ export class SearchDialogComponent implements OnInit {
           this.diagnosisTypes = diagnosisTypes;
           this.filteredDiagnosisTypes = this.diagnosisTypeControl.valueChanges
             .startWith(null)
-            .map(val => this.filter(val));
-
+            .map(val => this.filter(val, this.diagnosisTypes, 'name'));
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
-
     // get diagnoses from the diagnoses service
     this._diagnosisService.getDiagnoses()
       .subscribe(
         (diagnoses) => {
           this.diagnoses = diagnoses;
-          // listen for changes on diagnosis control
-          // this.filteredDiagnoses = this.diagnosisControl.valueChanges
-          //   .pipe(
-          //     startWith<string | any>(''),
-          //     map(value => typeof value === 'string' ? value : value.diagnosis),
-          //     map(diagnosis => diagnosis ? this.filterDiagnoses(diagnosis) : this.diagnoses.slice())
-          //   );
           this.filteredDiagnoses = this.diagnosisControl.valueChanges
             .startWith(null)
-            .map(val => this.filter(val));
-
-          // console.log(this.filteredDiagnoses);
+            .map(val => this.filter(val, this.diagnoses, 'diagnosis'));
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
-
 
     // // TEMPORARY: states data coming from local file
     // this.states = this._stateService.getTestData();
@@ -146,58 +139,35 @@ export class SearchDialogComponent implements OnInit {
     // this.filteredStates = this._stateService.getTestData();
     // // Subscribe to listen for changes to AutoComplete input and run filter
     // this.stateControl.valueChanges.subscribe(val => {
-    //   // this.filterOptions(val, 'stateControl');
     //   if (val.length > 1) {
     //     this.filterOptions('states', this.filteredStates, val, this.states);
     //   }
     // });
     // TEMPORARY: states data coming from local file
 
-    // Subscribe to listen for changes to AutoComplete input and run filter
-    // this.diagnosisControl.valueChanges.subscribe(val => {
-    //   if (val.length > 2) {
-    //     this.filterOptions('diagnosis', this.filteredDiagnoses, val, this.diagnoses);
-    //   }
-    // });
-
-
   }
 
-  // TODO 4/12/18: make this filter function resuable for all the formcontrols using arguments
-  filter(val: any): string[] {
-    const realval = val && typeof val === 'object' ? val.diagosis : val;
+  filter(val: any, searchArray: any, searchProperty: string): string[] {
+    const realval = val && typeof val === 'object' ? val.searchProperty : val;
     const result = [];
     let lastOption = null;
-    for (let i = 0; i < this.diagnoses.length; i++) {
-      if (!realval || this.diagnoses[i].diagnosis.toLowerCase().startsWith(realval.toLowerCase())) {
-        if (this.diagnoses[i].diagnosis !== lastOption) {
-          lastOption = this.diagnoses[i].diagnosis;
-          result.push(this.diagnoses[i]);
+    for (let i = 0; i < searchArray.length; i++) {
+      if (!realval || searchArray[i][searchProperty].toLowerCase().startsWith(realval.toLowerCase())) {
+        if (searchArray[i][searchProperty] !== lastOption) {
+          lastOption = searchArray[i][searchProperty];
+          result.push(searchArray[i]);
         }
       }
     }
     return result;
   }
 
-  filterDiagnoses(text: string): any[] {
-    return this.diagnoses.filter(diagnosis =>
-      diagnosis.diagnosis.toLowerCase().indexOf(text.toLowerCase()) === 0);
-  }
-
   displayFn(diagnosis?: Diagnosis): string | undefined {
     return diagnosis ? diagnosis.diagnosis : undefined;
   }
 
-  // inputFocus() {
-  //   setTimeout(() => {
-  //     if (!this.autoCompleteTrigger.panelOpen) {
-  //       this.autoCompleteTrigger.openPanel();
-  //     }
-  //   }, 10);
-  // }
-
   submitSearch() {
-    console.log(this.diagnosisControl.value)
+    console.log(this.diagnosisControl.value);
   }
 
   stopPropagation(event) {
@@ -210,79 +180,60 @@ export class SearchDialogComponent implements OnInit {
     });
   }
 
+  // filterOptions(model, filteredOptions, text: string, sourceArray) {
+  //   console.log(sourceArray);
+  //   // filter the options per user text input
+  //   filteredOptions = sourceArray.filter(obj =>
+  //     obj.name.toLowerCase().indexOf(text.toString().toLowerCase()) === 0
+  //   );
+  //   // now set this filteredOptions result back to the relevent filtered[X] array
+  //   switch (model) {
 
+  //     case 'states':
+  //       this.filteredStates = filteredOptions;
+  //       break;
+  //     case 'diagnosis':
+  //       this.filteredDiagnoses = filteredOptions;
+  //       break;
+  //     default:
+  //   }
+  // }
 
-  filterOptions(model, filteredOptions, text: string, sourceArray) {
-    console.log(sourceArray);
-    // filter the options per user text input
-    filteredOptions = sourceArray.filter(obj =>
-      obj.name.toLowerCase().indexOf(text.toString().toLowerCase()) === 0
-    );
-    // now set this filteredOptions result back to the relevent filtered[X] array
-    switch (model) {
-      case 'states':
-        this.filteredStates = filteredOptions;
+  resetFormControl(control) {
+    switch (control) {
+      case 'eventType': this.eventTypeControl.reset();
         break;
-      case 'diagnosis':
-        this.filteredDiagnoses = filteredOptions;
+      case 'diagnosisType': this.diagnosisTypeControl.reset();
         break;
-      default:
+      case 'diagnosis': this.diagnosisControl.reset();
+        break;
     }
   }
 
-  // filterOptions(text: string, control: string) {
-  //   // Set filteredStates array to filtered options
-  //   this.filteredStates = this.states.filter(obj =>
-  //     obj.name.toLowerCase().indexOf(text.toString().toLowerCase()) === 0
-  //   );
-  // }
-
-  addChip(event: MatAutocompleteSelectedEvent, control: string): void {
+  addChip(event: MatAutocompleteSelectedEvent, selectedValuesArray: any, control: string): void {
     // Define selection constant
     let alreadySelected = false;
     let selection = event.option.value;
-    switch (control) {
-      case 'state':
-        // Add chip for selected option
-        this.selectedStates.push(selection);
-        // Remove selected option from available options and set filteredOptions
-        this.filteredStates = this.states.filter(obj => obj.id !== selection.id);
-        // filteredStates becomes all states except the one just selected
-        break;
-      case 'diagnosis':
-        if (this.selectedDiagnoses.length > 0) {
-          // check if the selection is already in the selected array
-          for (let diagnosis of this.selectedDiagnoses) {
-            if (diagnosis.id === selection.id) {
-              alreadySelected = true;
-              this.openSnackBar('Already Selected', 'OK');
-            }
-          }
-          if (alreadySelected === false) {
-            // Add selected item to selected array, which will show as a chip
-            this.selectedDiagnoses.push(selection);
-            // reset the form
-            this.diagnosisControl.reset();
-          }
-
-        } else {
-          // Add selected item to selected array, which will show as a chip
-          this.selectedDiagnoses.push(selection);
-          // reset the form
-          this.diagnosisControl.reset();
+    if (selectedValuesArray.length > 0) {
+      // check if the selection is already in the selected array
+      for (let item of selectedValuesArray) {
+        if (item.id === selection.id) {
+          alreadySelected = true;
+          this.openSnackBar('Already Selected', 'OK');
         }
-
-
-        break;
-      default:
+      }
+      if (alreadySelected === false) {
+        // Add selected item to selected array, which will show as a chip
+        selectedValuesArray.push(selection);
+        // reset the form
+        this.resetFormControl(control);
+      }
+    } else {
+      // Add selected item to selected array, which will show as a chip
+      selectedValuesArray.push(selection);
+      // reset the form
+      this.resetFormControl(control);
     }
-
-    // Reset the autocomplete input text value
-    // if (input) {
-    //   input.value = '';
-    // }
-    // sets the value back to blank, which triggers the filterOptions function,
-    // which sets filteredOptions back to an empty array (fix this)
   }
 
   removeChip(chip: any, control: string): void {
@@ -298,6 +249,15 @@ export class SearchDialogComponent implements OnInit {
           this.states.push(chip);
         }
         break;
+      case 'diagnosisType':
+        // Find key of object in array
+        const indexDiagnosisType = this.selectedDiagnosisTypes.indexOf(chip);
+        // If key exists
+        if (indexDiagnosisType >= 0) {
+          // Remove key from selectedStates array
+          this.selectedDiagnosisTypes.splice(indexDiagnosisType, 1);
+        }
+        break;
       case 'diagnosis':
         // Find key of object in array
         const indexDiagnosis = this.selectedDiagnoses.indexOf(chip);
@@ -309,6 +269,5 @@ export class SearchDialogComponent implements OnInit {
         break;
       default:
     }
-
   }
 }

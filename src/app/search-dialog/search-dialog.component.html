@@ -3,25 +3,50 @@
 
   <form [formGroup]="searchForm" class="autocomplete-form">
 
-    <!-- <mat-form-field>
-      <mat-select placeholder="Event Type" formControlName="event_type">
-        <mat-option *ngFor="let eventType of eventTypes" [value]="eventType.id">
-          {{eventType.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <br>
-
-    <mat-form-field>
-      <mat-select placeholder="Diagnosis Type" formControlName="diagnosis_type">
-        <mat-option *ngFor="let diagnosisType of diagnosisTypes" [value]="diagnosisType.id">
-          {{diagnosisType.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field> -->
-    <br>
-
     <mat-accordion>
+      <!-- Event type expansion panel -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <b>Event Type</b>
+          </mat-panel-title>
+          <mat-panel-description>
+            <span>
+              <div class="chiplist">
+                <mat-chip-list #eventTypeChipList>
+                  <span *ngFor="let eventType of selectedEventTypes">
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(eventType, 'eventType')">{{eventType.name}}
+                      <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
+                    </mat-chip>
+                    <span *ngIf="(selectedEventTypes.indexOf(eventType)) < (selectedEventTypes.length - 1)">{{(searchForm.get('event_type_includes_all').value) ? "and" : "or"}}&nbsp;</span>
+                  </span>
+                </mat-chip-list>
+              </div>
+            </span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <div class="autocomplete-input">
+            <mat-form-field class="full-width">
+              <input type="text" matInput placeholder="Add Event Type" aria-label="Add Event Type" [matAutocomplete]="eventTypeAutoComplete"
+                [formControl]="eventTypeControl">
+              <mat-autocomplete #eventTypeAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedEventTypes, 'eventType')">
+                <mat-option *ngFor="let eventType of filteredEventTypes | async" [value]="eventType">
+                  <span>{{ eventType.name }}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="search-type-radios">
+            <label>Search type </label>
+            <mat-radio-group formControlName="event_type_includes_all">
+              <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
+              <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <!--- end Event type expansion panel -->
 
       <!--- Diagnosis type expansion panel -->
       <mat-expansion-panel>
@@ -32,12 +57,12 @@
           <mat-panel-description>
             <span>
               <div class="chiplist">
-                <mat-chip-list #diagnosisChipList>
-                  <span *ngFor="let diagnosis of selectedDiagnoses">
-                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(diagnosis, 'diagnosis')">{{diagnosis.diagnosis}}
+                <mat-chip-list #diagnosisTypeChipList>
+                  <span *ngFor="let diagnosisType of selectedDiagnosisTypes">
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(diagnosisType, 'diagnosisType')">{{diagnosisType.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedDiagnoses.indexOf(diagnosis)) < (selectedDiagnoses.length - 1)">{{(searchForm.get('diagnosis_includes_all').value) ? "and" : "or"}}&nbsp;</span>
+                    <span *ngIf="(selectedDiagnosisTypes.indexOf(diagnosisType)) < (selectedDiagnosisTypes.length - 1)">{{(searchForm.get('diagnosis_type_includes_all').value) ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
               </div>
@@ -47,26 +72,25 @@
         <div>
           <div class="autocomplete-input">
             <mat-form-field class="full-width">
-              <input type="text" matInput placeholder="Add Diagnosis" aria-label="Add Diagnosis" [matAutocomplete]="auto" [formControl]="diagnosisControl">
-              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event,'diagnosis')">
-                <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis">
-                  <span>{{ diagnosis.diagnosis }}</span>
+              <input type="text" matInput placeholder="Add Diagnosis Type" aria-label="Add Diagnosis Type" [matAutocomplete]="diagnosisTypeAutoComplete"
+                [formControl]="diagnosisTypeControl">
+              <mat-autocomplete #diagnosisTypeAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedDiagnosisTypes, 'diagnosisType')">
+                <mat-option *ngFor="let diagnosisType of filteredDiagnosisTypes | async" [value]="diagnosisType">
+                  <span>{{ diagnosisType.name }}</span>
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
           </div>
           <div class="search-type-radios">
             <label>Search type </label>
-            <mat-radio-group formControlName="diagnosis_includes_all">
+            <mat-radio-group formControlName="diagnosis_type_includes_all">
               <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
               <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
             </mat-radio-group>
           </div>
         </div>
       </mat-expansion-panel>
-
       <!--- end Diagnosis type expansion panel -->
-
 
       <!--- Diagnosis expansion panel -->
       <mat-expansion-panel>
@@ -92,8 +116,9 @@
         <div>
           <div class="autocomplete-input">
             <mat-form-field class="full-width">
-              <input type="text" matInput placeholder="Add Diagnosis" aria-label="Add Diagnosis" [matAutocomplete]="auto" [formControl]="diagnosisControl">
-              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event,'diagnosis')">
+              <input type="text" matInput placeholder="Add Diagnosis" aria-label="Add Diagnosis" [matAutocomplete]="diagnosisAutoComplete"
+                [formControl]="diagnosisControl">
+              <mat-autocomplete #diagnosisAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedDiagnoses, 'diagnosis')">
                 <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis">
                   <span>{{ diagnosis.diagnosis }}</span>
                 </mat-option>
@@ -111,7 +136,50 @@
       </mat-expansion-panel>
       <!--- end Diagnosis expansion panel -->
 
-      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+      <!--- State expansion panel -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <b>State</b>
+          </mat-panel-title>
+          <mat-panel-description>
+            <span>
+              <div class="chiplist">
+                <mat-chip-list #stateChipList>
+                  <span *ngFor="let state of selectedStates">
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(state, 'state')">{{state.name}}
+                      <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
+                    </mat-chip>
+                    <span *ngIf="(selectedStates.indexOf(state)) < (selectedStates.length - 1)">{{(searchForm.get('state_includes_all').value) ? "and" : "or"}}&nbsp;</span>
+                  </span>
+                </mat-chip-list>
+              </div>
+            </span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <div class="autocomplete-input">
+            <mat-form-field class="full-width">
+              <input type="text" matInput placeholder="Add State" aria-label="Add State" [matAutocomplete]="stateAutoComplete" [formControl]="stateControl">
+              <mat-autocomplete #stateAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedStates, 'state')">
+                <mat-option *ngFor="let state of filteredStates | async" [value]="state">
+                  <span>{{ state.name }}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="search-type-radios">
+            <label>Search type </label>
+            <mat-radio-group formControlName="state_includes_all">
+              <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
+              <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <!--- end State expansion panel -->
+
+      <!-- <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
         <mat-expansion-panel-header>
           <mat-panel-title>
             State
@@ -121,8 +189,7 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <p>I'm visible because I am open</p>
-      </mat-expansion-panel>
-
+      </mat-expansion-panel> -->
 
     </mat-accordion>
 

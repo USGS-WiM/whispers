@@ -9,258 +9,259 @@ export class APP_UTILITIES {
             {
                 "id": 1,
                 "name": "Alabama",
+                "country": 1,
                 "abbreviation": "AL"
             },
             {
                 "id": 2,
                 "name": "Alaska",
-                "abbreviation": "AK"
+                "country": 1,  "abbreviation": "AK"
             },
             {
                 "id": 3,
                 "name": "Arizona",
-                "abbreviation": "AZ"
+                "country": 1,  "abbreviation": "AZ"
             },
             {
                 "id": 4,
                 "name": "Arkansas",
-                "abbreviation": "AR"
+                "country": 1,  "abbreviation": "AR"
             },
             {
                 "id": 5,
                 "name": "California",
-                "abbreviation": "CA"
+                "country": 1,  "abbreviation": "CA"
             },
             {
                 "id": 6,
                 "name": "Colorado",
-                "abbreviation": "CO"
+                "country": 1,  "abbreviation": "CO"
             },
             {
                 "id": 7,
                 "name": "Connecticut",
-                "abbreviation": "CT"
+                "country": 1,  "abbreviation": "CT"
             },
             {
                 "id": 8,
                 "name": "Delaware",
-                "abbreviation": "DE"
+                "country": 1,  "abbreviation": "DE"
             },
             {
                 "id": 9,
                 "name": "District of Columbia",
-                "abbreviation": "DC"
+                "country": 1,  "abbreviation": "DC"
             },
             {
                 "id": 10,
                 "name": "Florida",
-                "abbreviation": "FL"
+                "country": 1,  "abbreviation": "FL"
             },
             {
                 "id": 11,
                 "name": "Georgia",
-                "abbreviation": "GA"
+                "country": 1,  "abbreviation": "GA"
             },
             {
                 "id": 12,
                 "name": "Hawaii",
-                "abbreviation": "HI"
+                "country": 1,  "abbreviation": "HI"
             },
             {
                 "id": 13,
                 "name": "Idaho",
-                "abbreviation": "ID"
+                "country": 1,  "abbreviation": "ID"
             },
             {
                 "id": 14,
                 "name": "Illinois",
-                "abbreviation": "IL"
+                "country": 1,  "abbreviation": "IL"
             },
             {
                 "id": 15,
                 "name": "Indiana",
-                "abbreviation": "IN"
+                "country": 1,  "abbreviation": "IN"
             },
             {
                 "id": 16,
                 "name": "Iowa",
-                "abbreviation": "IA"
+                "country": 1,  "abbreviation": "IA"
             },
             {
                 "id": 17,
-                "name": "Kansa",
-                "abbreviation": "KS"
+                "name": "Kansas",
+                "country": 1,  "abbreviation": "KS"
             },
             {
                 "id": 18,
                 "name": "Kentucky",
-                "abbreviation": "KY"
+                "country": 1,  "abbreviation": "KY"
             },
             {
                 "id": 19,
                 "name": "Lousiana",
-                "abbreviation": "LA"
+                "country": 1,  "abbreviation": "LA"
             },
             {
                 "id": 20,
                 "name": "Maine",
-                "abbreviation": "ME"
+                "country": 1,  "abbreviation": "ME"
             },
             {
                 "id": 21,
                 "name": "Maryland",
-                "abbreviation": "MD"
+                "country": 1,  "abbreviation": "MD"
             },
             {
                 "id": 22,
                 "name": "Massachusetts",
-                "abbreviation": "MA"
+                "country": 1,  "abbreviation": "MA"
             },
             {
                 "id": 23,
                 "name": "Michigan",
-                "abbreviation": "MI"
+                "country": 1,  "abbreviation": "MI"
             },
             {
                 "id": 24,
                 "name": "Minnesota",
-                "abbreviation": "MN"
+                "country": 1,  "abbreviation": "MN"
             },
             {
                 "id": 25,
                 "name": "Mississippi",
-                "abbreviation": "MS"
+                "country": 1,  "abbreviation": "MS"
             },
             {
                 "id": 26,
                 "name": "Missouri",
-                "abbreviation": "MO"
+                "country": 1,  "abbreviation": "MO"
             },
             {
                 "id": 27,
                 "name": "Montana",
-                "abbreviation": "MT"
+                "country": 1,  "abbreviation": "MT"
             },
             {
                 "id": 28,
                 "name": "Nebraska",
-                "abbreviation": "NE"
+                "country": 1,  "abbreviation": "NE"
             },
             {
                 "id": 29,
                 "name": "Nevada",
-                "abbreviation": "NV"
+                "country": 1,  "abbreviation": "NV"
             },
             {
                 "id": 30,
                 "name": "New Hampshire",
-                "abbreviation": "NH"
+                "country": 1,  "abbreviation": "NH"
             },
             {
                 "id": 31,
                 "name": "New Jersey",
-                "abbreviation": "NJ"
+                "country": 1,  "abbreviation": "NJ"
             },
             {
                 "id": 32,
                 "name": "New Mexico",
-                "abbreviation": "NM"
+                "country": 1,  "abbreviation": "NM"
             },
             {
                 "id": 33,
                 "name": "New York",
-                "abbreviation": "NY"
+                "country": 1,  "abbreviation": "NY"
             },
             {
                 "id": 34,
                 "name": "North Carolina",
-                "abbreviation": "NC"
+                "country": 1,  "abbreviation": "NC"
             },
             {
                 "id": 35,
                 "name": "North Dakota",
-                "abbreviation": "ND"
+                "country": 1,  "abbreviation": "ND"
             },
             {
                 "id": 36,
                 "name": "Ohio",
-                "abbreviation": "OH"
+                "country": 1,  "abbreviation": "OH"
             },
             {
                 "id": 37,
                 "name": "Oklahoma",
-                "abbreviation": "OK"
+                "country": 1,  "abbreviation": "OK"
             },
             {
 
                 "id": 38,
                 "name": "Oregon",
-                "abbreviation": "OR"
+                "country": 1,  "abbreviation": "OR"
             },
             {
                 "id": 39,
                 "name": "Pennsylvania",
-                "abbreviation": "PA"
+                "country": 1,  "abbreviation": "PA"
             },
             {
                 "id": 40,
                 "name": "Rhode Island",
-                "abbreviation": "RI"
+                "country": 1,  "abbreviation": "RI"
             },
             {
                 "id": 41,
                 "name": "South Carolina",
-                "abbreviation": "SC"
+                "country": 1,  "abbreviation": "SC"
             },
             {
                 "id": 42,
                 "name": "South Dakota",
-                "abbreviation": "SD"
+                "country": 1,  "abbreviation": "SD"
             },
             {
                 "id": 43,
                 "name": "Tennessee",
-                "abbreviation": "TN"
+                "country": 1,  "abbreviation": "TN"
             },
             {
                 "id": 44,
                 "name": "Texas",
-                "abbreviation": "TX"
+                "country": 1,  "abbreviation": "TX"
             },
             {
                 "id": 45,
                 "name": "Utah",
-                "abbreviation": "UT"
+                "country": 1,  "abbreviation": "UT"
             },
             {
                 "id": 46,
                 "name": "Vermont",
-                "abbreviation": "VT"
+                "country": 1,  "abbreviation": "VT"
             },
             {
                 "id": 47,
                 "name": "Virginia",
-                "abbreviation": "VA"
+                "country": 1,  "abbreviation": "VA"
             },
             {
                 "id": 48,
                 "name": "Washington",
-                "abbreviation": "WA"
+                "country": 1,  "abbreviation": "WA"
             },
             {
                 "id": 49,
                 "name": "West Virginia",
-                "abbreviation": "WV"
+                "country": 1,  "abbreviation": "WV"
             },
             {
                 "id": 50,
                 "name": "Wisconsin",
-                "abbreviation": "WI"
+                "country": 1,  "abbreviation": "WI"
             },
             {
                 "id": 51,
                 "name": "Wyoming",
-                "abbreviation": "WY"
+                "country": 1,  "abbreviation": "WY"
             }
         ]
     }

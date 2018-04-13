@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
-import { startWith } from 'rxjs/operators/startWith';
-import { map } from 'rxjs/operators/map';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/map';
 
-import { MatAutocompleteSelectedEvent } from '@angular/material';
-import { MatAutocompleteTrigger } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
+
+import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocompleteTrigger } from '@angular/material';
 
 import { APP_UTILITIES } from '@app/app.utilities';
 
@@ -13,6 +14,11 @@ import { State } from '@interfaces/state';
 import { StateService } from '@services/state.service';
 import { EventType } from '@interfaces/event-type';
 import { EventTypeService } from '@services/event-type.service';
+import { Diagnosis } from '@interfaces/diagnosis';
+import { DiagnosisTypeService } from '@services/diagnosis-type.service';
+import { DiagnosisType } from '@interfaces/diagnosis-type';
+import { DiagnosisService } from '@services/diagnosis.service';
+import { SpeciesService } from '@services/species.service';
 
 @Component({
   selector: 'app-search-dialog',
@@ -20,6 +26,7 @@ import { EventTypeService } from '@services/event-type.service';
   styleUrls: ['./search-dialog.component.scss']
 })
 export class SearchDialogComponent implements OnInit {
+
   errorMessage = '';
   visible = true;
   selectable = true;
@@ -27,15 +34,32 @@ export class SearchDialogComponent implements OnInit {
   addOnBlur = true;
 
   searchForm: FormGroup;
+  // independent controls - values do not persist - used to select the value and add to a selection array
+  eventTypeControl: FormControl;
+  diagnosisTypeControl: FormControl;
   diagnosisControl: FormControl;
   stateControl: FormControl;
+  speciesControl: FormControl;
 
   eventTypes: EventType[];
+  filteredEventTypes: Observable<any[]>;
+  selectedEventTypes = [];
+
+  diagnosisTypes: DiagnosisType[];
+  filteredDiagnosisTypes: Observable<any[]>;
+  selectedDiagnosisTypes = [];
+
+  diagnoses: Diagnosis[];
+  filteredDiagnoses: Observable<any[]>;
+  selectedDiagnoses = []; // chips list
 
   states = [];
-
-  filteredStates = [];
+  filteredStates: Observable<any[]>;
   selectedStates = []; // chips list
+
+  species = [];
+  filteredSpecies: Observable<any[]>;
+  selectedSpecies = []; // chips list
 
   buildSearchForm() {
     this.searchForm = this.formBuilder.group({
@@ -49,9 +73,11 @@ export class SearchDialogComponent implements OnInit {
       affected: null,
       start_date: null,
       end_date: null,
+      event_type_includes_all: false,
+      diagnosis_type_includes_all: false,
       diagnosis_includes_all: false,
       species_includes_all: false,
-      states_includes_all: false,
+      state_includes_all: false,
       openEventsOnly: false
     });
   }
@@ -59,100 +85,192 @@ export class SearchDialogComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private _stateService: StateService,
-    private _eventTypeService: EventTypeService) {
+    private _eventTypeService: EventTypeService,
+    private _diagnosisTypeService: DiagnosisTypeService,
+    private _diagnosisService: DiagnosisService,
+    private _speciesService: SpeciesService,
+    public snackBar: MatSnackBar) {
 
-    this.stateControl = new FormControl();
+    this.eventTypeControl = new FormControl();
+    this.diagnosisTypeControl = new FormControl();
     this.diagnosisControl = new FormControl();
+    this.stateControl = new FormControl();
+    this.speciesControl = new FormControl();
 
     this.buildSearchForm();
-
   }
 
   ngOnInit() {
     // get event types from the eventType service
     this._eventTypeService.getEventTypes()
-      .subscribe(eventTypes => this.eventTypes = eventTypes,
-        error => this.errorMessage = <any>error);
+      .subscribe(
+        eventTypes => {
+          this.eventTypes = eventTypes;
+          this.filteredEventTypes = this.eventTypeControl.valueChanges
+            .startWith(null)
+            .map(val => this.filter(val, this.eventTypes, 'name'));
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get diagnosis types from the diagnosisType service
+    this._diagnosisTypeService.getDiagnosisTypes()
+      .subscribe(
+        (diagnosisTypes) => {
+          this.diagnosisTypes = diagnosisTypes;
+          this.filteredDiagnosisTypes = this.diagnosisTypeControl.valueChanges
+            .startWith(null)
+            .map(val => this.filter(val, this.diagnosisTypes, 'name'));
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get diagnoses from the diagnoses service
+    this._diagnosisService.getDiagnoses()
+      .subscribe(
+        (diagnoses) => {
+          this.diagnoses = diagnoses;
+          this.filteredDiagnoses = this.diagnosisControl.valueChanges
+            .startWith(null)
+            .map(val => this.filter(val, this.diagnoses, 'diagnosis'));
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get states from the state service
+    this._stateService.getStates()
+      .subscribe(
+        (states) => {
+          this.states = states;
+          this.filteredStates = this.stateControl.valueChanges
+            .startWith(null)
+            .map(val => this.filter(val, this.states, 'name'));
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get species from the state service
+    this._speciesService.getSpecies()
+      .subscribe(
+        (species) => {
+          this.species = species;
+          this.filteredSpecies = this.stateControl.valueChanges
+            .startWith(null)
+            .map(val => this.filter(val, this.species, 'name'));
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
-    this.states = this._stateService.getTestData();
-    // Set initial value of filteredStates to all states
-    this.filteredStates = this._stateService.getTestData();
+  }
 
-    // Subscribe to listen for changes to AutoComplete input and run filter
-    this.stateControl.valueChanges.subscribe(val => {
-      // this.filterOptions(val, 'stateControl');
-      if (val.length > 1) {
-        this.filterOptions('states', this.filteredStates, val, this.states);
+  filter(val: any, searchArray: any, searchProperty: string): string[] {
+    const realval = val && typeof val === 'object' ? val.searchProperty : val;
+    const result = [];
+    let lastOption = null;
+    for (let i = 0; i < searchArray.length; i++) {
+      if (!realval || searchArray[i][searchProperty].toLowerCase().startsWith(realval.toLowerCase())) {
+        if (searchArray[i][searchProperty] !== lastOption) {
+          lastOption = searchArray[i][searchProperty];
+          result.push(searchArray[i]);
+        }
       }
+    }
+    return result;
+  }
+
+  displayFn(diagnosis?: Diagnosis): string | undefined {
+    return diagnosis ? diagnosis.diagnosis : undefined;
+  }
+
+  submitSearch() {
+    console.log(this.diagnosisControl.value);
+  }
+
+  stopPropagation(event) {
+    event.stopPropagation();
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
     });
   }
 
-  filterOptions(model, filteredOptions, text: string, sourceArray) {
-    console.log(sourceArray);
-    // filter the options per user text input
-    filteredOptions = sourceArray.filter(obj =>
-      obj.name.toLowerCase().indexOf(text.toString().toLowerCase()) === 0
-    );
-    // now set this filteredOptions result back to the relevent filtered[X] array
-    switch (model) {
-      case 'states':
-        this.filteredStates = filteredOptions;
+  resetFormControl(control) {
+    switch (control) {
+      case 'eventType': this.eventTypeControl.reset();
         break;
-      case 'diagnosis':
+      case 'diagnosisType': this.diagnosisTypeControl.reset();
         break;
-      default:
+      case 'diagnosis': this.diagnosisControl.reset();
+        break;
     }
   }
 
-  // filterOptions(text: string, control: string) {
-  //   // Set filteredStates array to filtered options
-  //   this.filteredStates = this.states.filter(obj =>
-  //     obj.name.toLowerCase().indexOf(text.toString().toLowerCase()) === 0
-  //   );
-  // }
-
-  addChip(event: MatAutocompleteSelectedEvent, input: any, control: string): void {
+  addChip(event: MatAutocompleteSelectedEvent, selectedValuesArray: any, control: string): void {
     // Define selection constant
-    const selection = event.option.value;
-
-    switch (control) {
-      case 'state':
-        // Add chip for selected option
-        this.selectedStates.push(selection);
-        // Remove selected option from available options and set filteredOptions
-        this.filteredStates = this.states.filter(obj => obj.id !== selection.id);
-        // filteredStates becomes all states except the one just selected
-        break;
-      case 'diagnosis':
-        break;
-      default:
+    let alreadySelected = false;
+    let selection = event.option.value;
+    if (selectedValuesArray.length > 0) {
+      // check if the selection is already in the selected array
+      for (let item of selectedValuesArray) {
+        if (item.id === selection.id) {
+          alreadySelected = true;
+          this.openSnackBar('Already Selected', 'OK');
+        }
+      }
+      if (alreadySelected === false) {
+        // Add selected item to selected array, which will show as a chip
+        selectedValuesArray.push(selection);
+        // reset the form
+        this.resetFormControl(control);
+      }
+    } else {
+      // Add selected item to selected array, which will show as a chip
+      selectedValuesArray.push(selection);
+      // reset the form
+      this.resetFormControl(control);
     }
-
-    // Reset the autocomplete input text value
-    if (input) {
-      input.value = '';
-    }
-    // sets the value back to blank, which triggers the filterOptions function,
-    // which sets filteredOptions back to an empty array (fix this)
   }
 
   removeChip(chip: any, control: string): void {
     switch (control) {
       case 'state':
         // Find key of object in array
-        const index = this.selectedStates.indexOf(chip);
+        const indexState = this.selectedStates.indexOf(chip);
         // If key exists
-        if (index >= 0) {
+        if (indexState >= 0) {
           // Remove key from selectedStates array
-          this.selectedStates.splice(index, 1);
+          this.selectedStates.splice(indexState, 1);
           // Add key to states array
           this.states.push(chip);
         }
         break;
+      case 'diagnosisType':
+        // Find key of object in array
+        const indexDiagnosisType = this.selectedDiagnosisTypes.indexOf(chip);
+        // If key exists
+        if (indexDiagnosisType >= 0) {
+          // Remove key from selectedStates array
+          this.selectedDiagnosisTypes.splice(indexDiagnosisType, 1);
+        }
+        break;
       case 'diagnosis':
+        // Find key of object in array
+        const indexDiagnosis = this.selectedDiagnoses.indexOf(chip);
+        // If key exists
+        if (indexDiagnosis >= 0) {
+          // Remove key from selectedStates array
+          this.selectedDiagnoses.splice(indexDiagnosis, 1);
+        }
         break;
       default:
     }
-
   }
 }

@@ -9,32 +9,21 @@ import { Subject } from 'rxjs/Subject';
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 
-import { Species } from '@interfaces/species';
+import { Diagnosis } from '@interfaces/diagnosis';
 
 @Injectable()
-export class SpeciesService {
+export class DiagnosisService {
 
   constructor(private _http: Http) { }
 
-  public querySpecies(speciesQuery): Observable<Species[]> {
+  public getDiagnoses(): Observable<Diagnosis[]> {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.SPECIES_URL + speciesQuery, options)
-      .map((response: Response) => <Species[]>response.json())
-      .catch(this.handleError);
-  }
-
-  public getSpecies(): Observable<Species[]> {
-
-    const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
-    });
-
-    return this._http.get(APP_SETTINGS.SPECIES_URL, options)
-      .map((response: Response) => <Species[]>response.json())
+    return this._http.get(APP_SETTINGS.DIAGNOSES_URL, options)
+      .map((response: Response) => <Diagnosis[]>response.json())
       .catch(this.handleError);
   }
 

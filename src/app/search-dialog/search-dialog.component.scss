@@ -3,7 +3,24 @@
     // max-width: 500px;
     width: 100%;
   }
+
+  .autocomplete-input {
+    width:40%;
+  }
   
   .full-width {
-    width: 85%;
+    width: 100%;
   }
+
+.autocomplete-input{
+  display: inline-block;
+  margin-right: 2em;
+}
+
+.chiplist {
+  display: inline-block;
+}
+
+.search-type-radios {
+  display: inline-block;
+}

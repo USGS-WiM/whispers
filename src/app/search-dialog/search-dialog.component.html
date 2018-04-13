@@ -179,6 +179,49 @@
       </mat-expansion-panel>
       <!--- end State expansion panel -->
 
+      <!--- Species expansion panel -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <b>Species</b>
+          </mat-panel-title>
+          <mat-panel-description>
+            <span>
+              <div class="chiplist">
+                <mat-chip-list #speciesChipList>
+                  <span *ngFor="let species of selectedSpecies">
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(species, 'species')">{{species.name}}
+                      <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
+                    </mat-chip>
+                    <span *ngIf="(selectedSpecies.indexOf(species)) < (selectedSpecies.length - 1)">{{(searchForm.get('species_includes_all').value) ? "and" : "or"}}&nbsp;</span>
+                  </span>
+                </mat-chip-list>
+              </div>
+            </span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <div class="autocomplete-input">
+            <mat-form-field class="full-width">
+              <input type="text" matInput placeholder="Add Species" aria-label="Add Species" [matAutocomplete]="speciesAutoComplete" [formControl]="speciesControl">
+              <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedSpecies, 'species')">
+                <mat-option *ngFor="let species of filteredSpecies | async" [value]="species">
+                  <span>{{ species.name }}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="search-type-radios">
+            <label>Search type </label>
+            <mat-radio-group formControlName="species_includes_all">
+              <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
+              <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <!--- end Species expansion panel -->
+
       <!-- <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
         <mat-expansion-panel-header>
           <mat-panel-title>

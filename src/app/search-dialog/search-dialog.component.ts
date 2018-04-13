@@ -14,10 +14,11 @@ import { State } from '@interfaces/state';
 import { StateService } from '@services/state.service';
 import { EventType } from '@interfaces/event-type';
 import { EventTypeService } from '@services/event-type.service';
-import { Diagnosis } from '@app/interfaces/diagnosis';
+import { Diagnosis } from '@interfaces/diagnosis';
 import { DiagnosisTypeService } from '@services/diagnosis-type.service';
-import { DiagnosisType } from '@app/interfaces/diagnosis-type';
-import { DiagnosisService } from '@app/services/diagnosis.service';
+import { DiagnosisType } from '@interfaces/diagnosis-type';
+import { DiagnosisService } from '@services/diagnosis.service';
+import { SpeciesService } from '@services/species.service';
 
 @Component({
   selector: 'app-search-dialog',
@@ -38,6 +39,7 @@ export class SearchDialogComponent implements OnInit {
   diagnosisTypeControl: FormControl;
   diagnosisControl: FormControl;
   stateControl: FormControl;
+  speciesControl: FormControl;
 
   eventTypes: EventType[];
   filteredEventTypes: Observable<any[]>;
@@ -55,6 +57,10 @@ export class SearchDialogComponent implements OnInit {
   filteredStates: Observable<any[]>;
   selectedStates = []; // chips list
 
+  species = [];
+  filteredSpecies: Observable<any[]>;
+  selectedSpecies = []; // chips list
+
   buildSearchForm() {
     this.searchForm = this.formBuilder.group({
       event_type: null,
@@ -71,7 +77,7 @@ export class SearchDialogComponent implements OnInit {
       diagnosis_type_includes_all: false,
       diagnosis_includes_all: false,
       species_includes_all: false,
-      states_includes_all: false,
+      state_includes_all: false,
       openEventsOnly: false
     });
   }
@@ -82,12 +88,14 @@ export class SearchDialogComponent implements OnInit {
     private _eventTypeService: EventTypeService,
     private _diagnosisTypeService: DiagnosisTypeService,
     private _diagnosisService: DiagnosisService,
+    private _speciesService: SpeciesService,
     public snackBar: MatSnackBar) {
 
     this.eventTypeControl = new FormControl();
     this.diagnosisTypeControl = new FormControl();
     this.diagnosisControl = new FormControl();
     this.stateControl = new FormControl();
+    this.speciesControl = new FormControl();
 
     this.buildSearchForm();
   }
@@ -132,18 +140,32 @@ export class SearchDialogComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
-
-    // // TEMPORARY: states data coming from local file
-    // this.states = this._stateService.getTestData();
-    // // Set initial value of filteredStates to all states
-    // this.filteredStates = this._stateService.getTestData();
-    // // Subscribe to listen for changes to AutoComplete input and run filter
-    // this.stateControl.valueChanges.subscribe(val => {
-    //   if (val.length > 1) {
-    //     this.filterOptions('states', this.filteredStates, val, this.states);
-    //   }
-    // });
-    // TEMPORARY: states data coming from local file
+    // get states from the state service
+    this._stateService.getStates()
+      .subscribe(
+        (states) => {
+          this.states = states;
+          this.filteredStates = this.stateControl.valueChanges
+            .startWith(null)
+            .map(val => this.filter(val, this.states, 'name'));
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get species from the state service
+    this._speciesService.getSpecies()
+      .subscribe(
+        (species) => {
+          this.species = species;
+          this.filteredSpecies = this.stateControl.valueChanges
+            .startWith(null)
+            .map(val => this.filter(val, this.species, 'name'));
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
   }
 
@@ -179,25 +201,6 @@ export class SearchDialogComponent implements OnInit {
       duration: 2000,
     });
   }
-
-  // filterOptions(model, filteredOptions, text: string, sourceArray) {
-  //   console.log(sourceArray);
-  //   // filter the options per user text input
-  //   filteredOptions = sourceArray.filter(obj =>
-  //     obj.name.toLowerCase().indexOf(text.toString().toLowerCase()) === 0
-  //   );
-  //   // now set this filteredOptions result back to the relevent filtered[X] array
-  //   switch (model) {
-
-  //     case 'states':
-  //       this.filteredStates = filteredOptions;
-  //       break;
-  //     case 'diagnosis':
-  //       this.filteredDiagnoses = filteredOptions;
-  //       break;
-  //     default:
-  //   }
-  // }
 
   resetFormControl(control) {
     switch (control) {

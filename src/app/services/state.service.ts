@@ -22,7 +22,19 @@ export class StateService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.EVENTS_URL + stateQuery, options)
+    return this._http.get(APP_SETTINGS.STATES_URL + stateQuery, options)
+      .map((response: Response) => <State[]>response.json())
+      // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  public getStates(): Observable<State[]> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.get(APP_SETTINGS.STATES_URL, options)
       .map((response: Response) => <State[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

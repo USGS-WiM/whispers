@@ -13,7 +13,7 @@
     width: 100%;
     margin: 0px auto;
     grid-gap: 2px;
-    background-color:  #42A5F5 !important;
+    background-color:  #2E7D32 !important;
   }
   
   @media screen and (min-width: 500px) {
@@ -35,7 +35,7 @@
     }
 
     .grid {
-      background-color: #42A5F5 !important;
+      background-color: #2E7D32 !important;
       margin: 0px auto;
       grid-template-columns: 1fr 3fr;
       height: 1000px;
@@ -54,7 +54,7 @@
   }
   
   .grid > * {
-    background-color: #E3F2FD;
+    background-color: #E8F5E9;
     /* needed for the floated layout*/
     margin-bottom: 5px;
   }

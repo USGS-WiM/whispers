@@ -40,11 +40,6 @@ export class StateService {
       .catch(this.handleError);
   }
 
-  // TEMPORARY function to retrieve hard-coded sample state data from local disk
-  public getTestData(): State[] {
-    return APP_UTILITIES.STATES;
-  }
-
   private handleError(error: Response) {
     console.error(error);
     return Observable.throw(error.json().error || 'Server error');

@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map';
 import { MatSnackBar } from '@angular/material';
 
 import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocompleteTrigger } from '@angular/material';
-
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { APP_UTILITIES } from '@app/app.utilities';
 
 import { State } from '@interfaces/state';
@@ -19,6 +19,7 @@ import { DiagnosisTypeService } from '@services/diagnosis-type.service';
 import { DiagnosisType } from '@interfaces/diagnosis-type';
 import { DiagnosisService } from '@services/diagnosis.service';
 import { SpeciesService } from '@services/species.service';
+import { CountyService } from '@services/county.service';
 
 @Component({
   selector: 'app-search-dialog',
@@ -39,6 +40,7 @@ export class SearchDialogComponent implements OnInit {
   diagnosisTypeControl: FormControl;
   diagnosisControl: FormControl;
   stateControl: FormControl;
+  countyControl: FormControl;
   speciesControl: FormControl;
 
   eventTypes: EventType[];
@@ -56,6 +58,10 @@ export class SearchDialogComponent implements OnInit {
   states = [];
   filteredStates: Observable<any[]>;
   selectedStates = []; // chips list
+
+  counties = [];
+  filteredCounties: Observable<any[]>;
+  selectedCounties = []; // chips list
 
   species = [];
   filteredSpecies: Observable<any[]>;
@@ -78,13 +84,16 @@ export class SearchDialogComponent implements OnInit {
       diagnosis_includes_all: false,
       species_includes_all: false,
       state_includes_all: false,
+      county_includes_all: false,
       openEventsOnly: false
     });
   }
 
   constructor(
+    public searchDialogRef: MatDialogRef<SearchDialogComponent>,
     private formBuilder: FormBuilder,
     private _stateService: StateService,
+    private _countyService: CountyService,
     private _eventTypeService: EventTypeService,
     private _diagnosisTypeService: DiagnosisTypeService,
     private _diagnosisService: DiagnosisService,
@@ -95,6 +104,7 @@ export class SearchDialogComponent implements OnInit {
     this.diagnosisTypeControl = new FormControl();
     this.diagnosisControl = new FormControl();
     this.stateControl = new FormControl();
+    this.countyControl = new FormControl();
     this.speciesControl = new FormControl();
 
     this.buildSearchForm();
@@ -153,7 +163,20 @@ export class SearchDialogComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
-    // get species from the state service
+    // get counties from the county service
+    this._countyService.getCounties()
+      .subscribe(
+        (states) => {
+          this.states = states;
+          this.filteredCounties = this.countyControl.valueChanges
+            .startWith(null)
+            .map(val => this.filter(val, this.counties, 'name'));
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get species from the sspecies service
     this._speciesService.getSpecies()
       .subscribe(
         (species) => {
@@ -210,6 +233,9 @@ export class SearchDialogComponent implements OnInit {
         break;
       case 'diagnosis': this.diagnosisControl.reset();
         break;
+      case 'state': this.stateControl.reset();
+        break;
+      case 'county': this.countyControl.reset();
     }
   }
 
@@ -239,38 +265,48 @@ export class SearchDialogComponent implements OnInit {
     }
   }
 
-  removeChip(chip: any, control: string): void {
-    switch (control) {
-      case 'state':
-        // Find key of object in array
-        const indexState = this.selectedStates.indexOf(chip);
-        // If key exists
-        if (indexState >= 0) {
-          // Remove key from selectedStates array
-          this.selectedStates.splice(indexState, 1);
-          // Add key to states array
-          this.states.push(chip);
-        }
-        break;
-      case 'diagnosisType':
-        // Find key of object in array
-        const indexDiagnosisType = this.selectedDiagnosisTypes.indexOf(chip);
-        // If key exists
-        if (indexDiagnosisType >= 0) {
-          // Remove key from selectedStates array
-          this.selectedDiagnosisTypes.splice(indexDiagnosisType, 1);
-        }
-        break;
-      case 'diagnosis':
-        // Find key of object in array
-        const indexDiagnosis = this.selectedDiagnoses.indexOf(chip);
-        // If key exists
-        if (indexDiagnosis >= 0) {
-          // Remove key from selectedStates array
-          this.selectedDiagnoses.splice(indexDiagnosis, 1);
-        }
-        break;
-      default:
+  removeChip(chip: any, selectedValuesArray: any, control: string): void {
+    // Find key of object in selectedValuesArray
+    const index = selectedValuesArray.indexOf(chip);
+    // If key exists
+    if (index >= 0) {
+      // Remove key from selectedValuesArray array
+      selectedValuesArray.splice(index, 1);
     }
   }
+
+  // removeChip(chip: any, control: string): void {
+  //   switch (control) {
+  //     case 'state':
+  //       // Find key of object in array
+  //       const indexState = this.selectedStates.indexOf(chip);
+  //       // If key exists
+  //       if (indexState >= 0) {
+  //         // Remove key from selectedStates array
+  //         this.selectedStates.splice(indexState, 1);
+  //         // Add key to states array
+  //         this.states.push(chip);
+  //       }
+  //       break;
+  //     case 'diagnosisType':
+  //       // Find key of object in array
+  //       const indexDiagnosisType = this.selectedDiagnosisTypes.indexOf(chip);
+  //       // If key exists
+  //       if (indexDiagnosisType >= 0) {
+  //         // Remove key from selectedStates array
+  //         this.selectedDiagnosisTypes.splice(indexDiagnosisType, 1);
+  //       }
+  //       break;
+  //     case 'diagnosis':
+  //       // Find key of object in array
+  //       const indexDiagnosis = this.selectedDiagnoses.indexOf(chip);
+  //       // If key exists
+  //       if (indexDiagnosis >= 0) {
+  //         // Remove key from selectedStates array
+  //         this.selectedDiagnoses.splice(indexDiagnosis, 1);
+  //       }
+  //       break;
+  //     default:
+  //   }
+  // }
 }

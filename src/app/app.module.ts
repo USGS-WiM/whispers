@@ -54,8 +54,9 @@ import { StateService } from '@app/services/state.service';
 import { DisplayValuePipe } from './pipes/display-value.pipe';
 import { EventTypeService } from '@services/event-type.service';
 import { DiagnosisTypeService } from '@services/diagnosis-type.service';
-import { DiagnosisService } from '@app/services/diagnosis.service';
-import { SpeciesService } from '@app/services/species.service';
+import { DiagnosisService } from '@services/diagnosis.service';
+import { SpeciesService } from '@services/species.service';
+import { CountyService } from '@services/county.service';
 
 @NgModule({
   declarations: [
@@ -110,7 +111,7 @@ import { SpeciesService } from '@app/services/species.service';
     MatToolbarModule,
     MatTooltipModule
   ],
-  providers: [EventService, EventTypeService, StateService, DiagnosisTypeService, DiagnosisService, SpeciesService],
+  providers: [EventService, EventTypeService, StateService, CountyService, DiagnosisTypeService, DiagnosisService, SpeciesService],
   bootstrap: [AppComponent],
   entryComponents: [SearchDialogComponent]
 })

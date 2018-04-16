@@ -8,12 +8,12 @@ import { DiagnosticServicesComponent } from './diagnostic-services/diagnostic-se
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
 export const ROUTES: Routes = [
-    {path: '', redirectTo: 'home', pathMatch: 'full'},
-    {path: 'home', component: HomeComponent},
-    {path: 'event', component: EventDetailsComponent},
-    {path: 'eventsubmission', component: EventSubmissionComponent},
-    {path: 'diagnostic', component: DiagnosticServicesComponent},
-    {path: 'userdashboard', component: UserDashboardComponent}
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: 'home', component: HomeComponent },
+    { path: 'event/:id', component: EventDetailsComponent },
+    { path: 'eventsubmission', component: EventSubmissionComponent },
+    { path: 'diagnostic', component: DiagnosticServicesComponent },
+    { path: 'userdashboard', component: UserDashboardComponent }
     // {
     //     path: 'admin', 
     //     component: AdminComponent,

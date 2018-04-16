@@ -1,3 +1,52 @@
-<p>
-  event-details works!
-</p>
+<mat-spinner *ngIf="eventDataLoading"></mat-spinner>
+<div id="eventDetailsContainer" *ngIf="!eventDataLoading">
+
+  <div class="detailsDiv">
+    <mat-card>
+      <mat-card-title>
+        <b>Event {{eventData.id}}</b>
+        <br> {{eventData.event_type_string}}
+
+      </mat-card-title>
+      <!-- <mat-card-subtitle>{{eventData.event_type_string}}</mat-card-subtitle> -->
+      <mat-card-content *ngIf="!eventDataLoading">
+        <div id="public-event-data">
+          <p>
+            <div class="event-header">
+              <b>{{eventData.start_date | date:'mediumDate'}} thru {{eventData.end_date | date:'mediumDate'}}</b>
+              <br>
+              <b> Affected: {{eventData.affected_count}}
+              </b>
+              <br>
+              <b>Diagnosis:</b>
+              <b>
+                <span *ngFor="let diagnosis of eventData.event_diagnosis">{{diagnosis.diagnosis_string}}</span>
+              </b>
+              <mat-list id="public-location-list" role="list" dense>
+                <h3 mat-subheader class="text-larger">Location</h3>
+                <b>
+                  <mat-list-item role="listitem" *ngFor="let event_location of eventData.event_locations">{{event_location.county_string}}, {{event_location.state_string}}, {{event_location.country_string}}</mat-list-item>
+                </b>
+              </mat-list>
+              <!-- <b>
+                <span *ngFor="let event_location of eventData.event_locations">{{event_location.county_string}}, {{event_location.state_string}}, {{event_location.country_string}} </span>
+              </b> -->
+            </div>
+        </div>
+
+        <div id="privileged-event-data">
+
+        </div>
+
+        <p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="mapDiv">
+    <mat-card>
+      <div id="map"></div>
+    </mat-card>
+  </div>
+
+</div>

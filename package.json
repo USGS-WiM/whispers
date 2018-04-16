@@ -17,7 +17,7 @@
     "@angular/common": "^5.2.6",
     "@angular/compiler": "^5.2.6",
     "@angular/core": "^5.2.6",
-    "@angular/flex-layout": "^2.0.0-beta.12",
+    "@angular/flex-layout": "2.0.0-beta.10-4905443",
     "@angular/forms": "^5.2.6",
     "@angular/http": "^5.2.6",
     "@angular/material": "^5.2.4",
@@ -30,7 +30,8 @@
     "font-roboto": "0.0.2",
     "hammerjs": "^2.0.8",
     "leaflet": "^1.3.1",
-    "rxjs": "^5.4.2",
+    "rxjs": "^5.5.10",
+    "typeface-oswald": "0.0.54",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {

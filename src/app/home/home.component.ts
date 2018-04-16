@@ -65,8 +65,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(this.map);
 
-    },
-      500);
+    }, 500);
   }
 
   /**

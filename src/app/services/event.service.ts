@@ -11,6 +11,7 @@ import { APP_UTILITIES } from '@app/app.utilities';
 
 import { Event } from '@interfaces/event';
 import { EventSummary } from '@interfaces/event-summary';
+import { EventDetail } from '@interfaces/event-detail';
 
 @Injectable()
 export class EventService {
@@ -30,8 +31,12 @@ export class EventService {
   }
 
   // TEMPORARY function to retrieve hard-coded sample event data from local disk
-  public getTestData(): EventSummary[] {
+  public getTestData(): any[] {
     return APP_UTILITIES.SAMPLE_EVENT_DATA;
+  }
+
+  public getSampleEventDetail(): any {
+    return APP_UTILITIES.SAMPLE_EVENT_DETAIL_DATA;
   }
 
   private handleError(error: Response) {

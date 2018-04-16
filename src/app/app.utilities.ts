@@ -146,7 +146,7 @@ export class APP_UTILITIES {
                 "event_reference": " Aquasure",
                 "event_type_string": "Surveillance",
                 "event_type": 2,
-                "id": 0
+                "id": 1000
             },
             {
                 "species": [
@@ -246,7 +246,7 @@ export class APP_UTILITIES {
                 "event_reference": " Isoswitch",
                 "event_type_string": "Surveillance",
                 "event_type": 1,
-                "id": 1
+                "id": 1001
             },
             {
                 "species": [
@@ -378,7 +378,7 @@ export class APP_UTILITIES {
                 "event_reference": " Aquoavo",
                 "event_type_string": "Morbidity / Mortality",
                 "event_type": 2,
-                "id": 2
+                "id": 1002
             },
             {
                 "species": [
@@ -484,7 +484,7 @@ export class APP_UTILITIES {
                 "event_reference": " Liquicom",
                 "event_type_string": "Surveillance",
                 "event_type": 1,
-                "id": 3
+                "id": 1003
             },
             {
                 "species": [
@@ -590,7 +590,7 @@ export class APP_UTILITIES {
                 "event_reference": " Insectus",
                 "event_type_string": "Surveillance",
                 "event_type": 2,
-                "id": 4
+                "id": 1004
             },
             {
                 "species": [
@@ -732,7 +732,7 @@ export class APP_UTILITIES {
                 "event_reference": " Artiq",
                 "event_type_string": "Surveillance",
                 "event_type": 1,
-                "id": 5
+                "id": 1005
             },
             {
                 "species": [
@@ -822,7 +822,7 @@ export class APP_UTILITIES {
                 "event_reference": " Megall",
                 "event_type_string": "Surveillance",
                 "event_type": 2,
-                "id": 6
+                "id": 1006
             },
             {
                 "species": [
@@ -925,7 +925,7 @@ export class APP_UTILITIES {
                 "event_reference": " Autograte",
                 "event_type_string": "Morbidity / Mortality",
                 "event_type": 1,
-                "id": 7
+                "id": 1007
             },
             {
                 "species": [
@@ -1044,7 +1044,7 @@ export class APP_UTILITIES {
                 "event_reference": " Photobin",
                 "event_type_string": "Surveillance",
                 "event_type": 1,
-                "id": 8
+                "id": 1008
             },
             {
                 "species": [
@@ -1144,7 +1144,7 @@ export class APP_UTILITIES {
                 "event_reference": " Micronaut",
                 "event_type_string": "Surveillance",
                 "event_type": 1,
-                "id": 9
+                "id": 1009
             },
             {
                 "species": [
@@ -1244,7 +1244,7 @@ export class APP_UTILITIES {
                 "event_reference": " Multron",
                 "event_type_string": "Morbidity / Mortality",
                 "event_type": 1,
-                "id": 10
+                "id": 1010
             },
             {
                 "species": [
@@ -1334,7 +1334,7 @@ export class APP_UTILITIES {
                 "event_reference": " Nikuda",
                 "event_type_string": "Surveillance",
                 "event_type": 2,
-                "id": 11
+                "id": 1011
             },
             {
                 "species": [
@@ -1453,7 +1453,7 @@ export class APP_UTILITIES {
                 "event_reference": " Proflex",
                 "event_type_string": "Surveillance",
                 "event_type": 2,
-                "id": 12
+                "id": 1012
             },
             {
                 "species": [
@@ -1569,7 +1569,7 @@ export class APP_UTILITIES {
                 "event_reference": " Amtas",
                 "event_type_string": "Morbidity / Mortality",
                 "event_type": 2,
-                "id": 13
+                "id": 1013
             },
             {
                 "species": [
@@ -1659,7 +1659,7 @@ export class APP_UTILITIES {
                 "event_reference": " Sequitur",
                 "event_type_string": "Morbidity / Mortality",
                 "event_type": 1,
-                "id": 14
+                "id": 1014
             },
             {
                 "species": [
@@ -1785,7 +1785,7 @@ export class APP_UTILITIES {
                 "event_reference": " Momentia",
                 "event_type_string": "Surveillance",
                 "event_type": 2,
-                "id": 15
+                "id": 1015
             },
             {
                 "species": [
@@ -1898,7 +1898,7 @@ export class APP_UTILITIES {
                 "event_reference": " Stockpost",
                 "event_type_string": "Surveillance",
                 "event_type": 1,
-                "id": 16
+                "id": 1016
             },
             {
                 "species": [
@@ -2001,7 +2001,7 @@ export class APP_UTILITIES {
                 "event_reference": " Limozen",
                 "event_type_string": "Morbidity / Mortality",
                 "event_type": 1,
-                "id": 17
+                "id": 1017
             },
             {
                 "species": [
@@ -2114,7 +2114,7 @@ export class APP_UTILITIES {
                 "event_reference": " Dentrex",
                 "event_type_string": "Surveillance",
                 "event_type": 2,
-                "id": 18
+                "id": 1018
             },
             {
                 "species": [
@@ -2214,10 +2214,105 @@ export class APP_UTILITIES {
                 "event_reference": " Waterbaby",
                 "event_type_string": "Morbidity / Mortality",
                 "event_type": 1,
-                "id": 19
+                "id": 1019
             }
         ];
     }
 
+    public static get SAMPLE_EVENT_DETAIL_DATA(): Object {
+        return {
+            "id": 1000,
+            "superevent": null,
+            "legal_number": null,
+            "legal_status": 1,
+            "event_status_string": "New Event Record",
+            "event_status": 1,
+            "epi_staff": "Barb Bodenstein",
+            "affected_count": 25,
+            "end_date": "2018-03-17",
+            "start_date": "2018-02-11",
+            "complete": false,
+            "event_reference": "Bird die-off",
+            "event_type_string": "Mortality/Morbidity",
+            "event_type": 1,
+            "event_diagnosis": [
+                {
+                    "event_id": 1000,
+                    "diagnosis_id": 45,
+                    "diagnosis_string": "Avian Cholera",
+                    "confirmed": true,
+                    "major": true,
+                    "priority": 1
+                }
+            ],
+            "event_locations": [
+                {
+                    "event": 1000,
+                    "start_date": "2018-02-11",
+                    "end_date": "2018-03-17",
+                    "country": 1,
+                    "country_string": "United States of America",
+                    "state": 24,
+                    "state_string": "Minnesota",
+                    "county": 47,
+                    "county_string": "Anoka",
+                    "county_multiple": false,
+                    "county_unknown": false,
+                    "latitude": 45.362498,
+                    "longitude": -93.339744,
+                    "priority": 1,
+                    "land_ownership": 2,
+                    "land_ownership_string": "State/Province",
+                    "flyway": "Mississppi",
+                    "gnis_name": 644081,
+                    "gnis_name_string": "Lake George",
+                    "location_species": [
+                        {
+                            "event_location": 1,
+                            "species": 23,
+                            "species_string": "American Coot",
+                            "population_count": 100,
+                            "sick_count": 100,
+                            "dead_count": 23,
+                            "sick_count_estimated": null,
+                            "dead_count_estimated": null,
+                            "priority": 1,
+                            "captive": 0,
+                            "age_bias": 1,
+                            "age_bias_string": "No noticeable bias",
+                            "sex_bias": 1,
+                            "sex_bias_string": "No noticeable bias",
+                            "species_diagnosis": [
+                                {
+                                    "location_species": 1,
+                                    "diagnosis": {
+                                        "id": 67,
+                                        "name": "Avian Cholera",
+                                        "diagnosis_type": 1,
+                                        "diagnosis_type_string": "Bacteria"
+                                    },
+                                    "confirmed": true,
+                                    "major": true,
+                                    "priority": 1,
+                                    "causal": true,
+                                    "tested_count": 3,
+                                    "positive_count": 3,
+                                    "suspect_count": 25,
+                                    "pooled": true,
+                                    "diagnosis_organization": [
+                                        {
+                                            "organization": 23,
+                                            "name": "Minnesota Department of Nautral Resources"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+
+    }
 
 }

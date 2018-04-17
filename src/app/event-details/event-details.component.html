@@ -26,8 +26,31 @@
                 <h3 mat-subheader class="text-larger">Location</h3>
                 <b>
                   <mat-list-item role="listitem" *ngFor="let event_location of eventData.event_locations">{{event_location.county_string}}, {{event_location.state_string}}, {{event_location.country_string}}</mat-list-item>
+
+                  <h3 mat-subheader class="text-larger">Contacts</h3>
+                  <mat-list-item role="listitem" *ngFor="let event_organization of eventData.event_organization">{{event_organization.name}}, {{event_organization.city}}, {{event_organization.state | displayValue:'abbreviation':this.states}}</mat-list-item>
+
                 </b>
               </mat-list>
+              <label>Species Affected</label>
+              <!-- <table>
+                <tr>
+                  <th mat-sort-header="name">Dessert (100g)</th>
+                  <th mat-sort-header="calories">Calories</th>
+                  <th mat-sort-header="fat">Fat (g)</th>
+                  <th mat-sort-header="carbs">Carbs (g)</th>
+                  <th mat-sort-header="protein">Protein (g)</th>
+                </tr>
+
+                <tr *ngFor="let species of eventData.event_locations location_species">
+                  <td>{{dessert.name}}</td>
+                  <td>{{dessert.calories}}</td>
+                  <td>{{dessert.fat}}</td>
+                  <td>{{dessert.carbs}}</td>
+                  <td>{{dessert.protein}}</td>
+                </tr>
+              </table> -->
+
               <!-- <b>
                 <span *ngFor="let event_location of eventData.event_locations">{{event_location.county_string}}, {{event_location.state_string}}, {{event_location.country_string}} </span>
               </b> -->

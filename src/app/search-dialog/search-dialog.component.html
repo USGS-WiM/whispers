@@ -3,25 +3,11 @@
 
   <form [formGroup]="searchForm" class="autocomplete-form">
 
-    <mat-form-field>
-      <input matInput type="number" placeholder="Number Affected" value="5">
-    </mat-form-field>
-    <br>
-    <mat-form-field>
-      <input matInput [matDatepicker]="startDate" placeholder="Start Date">
-      <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-      <mat-datepicker #startDate></mat-datepicker>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput [matDatepicker]="endDate" placeholder="End Date">
-      <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-      <mat-datepicker #endDate></mat-datepicker>
-    </mat-form-field>
 
     <mat-divider></mat-divider>
 
     <mat-accordion>
+
       <!-- Event type expansion panel -->
       <mat-expansion-panel>
         <mat-expansion-panel-header>
@@ -281,19 +267,54 @@
           </div>
         </div>
       </mat-expansion-panel>
-      <!--- end County expansion panel -->
 
-      <!-- 
-      <mat-card>
-        <b>Number Affected</b>
-        <mat-form-field>
-          <input matInput type="number" placeholder="Number Affected" value="5">
-        </mat-form-field>
-      </mat-card>
+      <!-- Number Affected expansion panel -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <b>Number Affected</b>
+          </mat-panel-title>
+          <mat-panel-description>
+            <span>{{searchForm.get('affected').value}}</span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <mat-form-field>
+            <input matInput type="number" placeholder="Number Affected" value="5" formControlName="affected">
+          </mat-form-field>
 
-      <mat-card>
-        <b>Start Date</b>
-      </mat-card> -->
+        </div>
+      </mat-expansion-panel>
+      <!--- end Number Affected expansion panel -->
+
+      <!-- Date Range expansion panel -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <b>Date Range</b>
+          </mat-panel-title>
+          <mat-panel-description>
+            <span>{{searchForm.get('start_date').value | date:'mediumDate'}}</span>
+            <span *ngIf="(searchForm.get('start_date').value !== null) || (searchForm.get('end_date').value !== null)">&nbsp;thru&nbsp;</span>
+            <span>{{searchForm.get('end_date').value | date:'mediumDate'}}</span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <mat-form-field>
+            <input matInput [matDatepicker]="startDate" placeholder="Start Date" formControlName="start_date">
+            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+            <mat-datepicker #startDate></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput [matDatepicker]="endDate" placeholder="End Date" formControlName="end_date">
+            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+            <mat-datepicker #endDate></mat-datepicker>
+          </mat-form-field>
+
+        </div>
+      </mat-expansion-panel>
+      <!--- end Date Range expansion panel -->
 
     </mat-accordion>
   </form>

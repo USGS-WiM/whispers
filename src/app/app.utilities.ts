@@ -2235,11 +2235,39 @@ export class APP_UTILITIES {
             "event_reference": "Bird die-off",
             "event_type_string": "Mortality/Morbidity",
             "event_type": 1,
+            "event_organization": [
+                {
+                    "id": 1,
+                    "name": "U.S. Geological Survey",
+                    "private_name": "USGS",
+                    "address_one": "12201 Sunrise Valley Drive",
+                    "address_two": "",
+                    "city": "Reston",
+                    "zip_postal_code": 20192,
+                    "state": 47,
+                    "country": 1,
+                    "phone": null,
+                    "parent_organization": null,
+                    "do_not_publish": false,
+                    "created_date": "2018-04-17",
+                    "created_by": "admin",
+                    "modified_date": "2018-04-17",
+                    "modified_by": "admin"
+                }
+            ],
             "event_diagnosis": [
                 {
                     "event_id": 1000,
                     "diagnosis_id": 45,
                     "diagnosis_string": "Avian Cholera",
+                    "confirmed": true,
+                    "major": true,
+                    "priority": 1
+                },
+                {
+                    "event_id": 1000,
+                    "diagnosis_id": 45,
+                    "diagnosis_string": "Cooties",
                     "confirmed": true,
                     "major": true,
                     "priority": 1
@@ -2251,10 +2279,10 @@ export class APP_UTILITIES {
                     "start_date": "2018-02-11",
                     "end_date": "2018-03-17",
                     "country": 1,
-                    "country_string": "United States of America",
-                    "state": 24,
+                    "country_string": "United States",
+                    "state": 27,
                     "state_string": "Minnesota",
-                    "county": 47,
+                    "county": 1312,
                     "county_string": "Anoka",
                     "county_multiple": false,
                     "county_unknown": false,

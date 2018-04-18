@@ -76,7 +76,7 @@ export class SearchDialogComponent implements OnInit {
       states: null,
       counties: null,
       flyway: null,
-      affected: null,
+      affected: 5,
       start_date: null,
       end_date: null,
       event_type_includes_all: false,

@@ -13,5 +13,5 @@ export interface SpeciesDiagnosis extends History {
     positive_count: number;
     suspect_count: number;
     pooled: boolean;
-    organization: OrganizationSummary[];
+    diagnosis_organization: OrganizationSummary[];
 }

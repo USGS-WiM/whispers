@@ -3,6 +3,7 @@ import { SpeciesDiagnosis } from '@interfaces/species-diagnosis';
 export interface LocationSpecies extends History {
     event_location: number;
     species: number;
+    species_string?: string;
     population_count: number;
     sick_count: number;
     dead_count: number;

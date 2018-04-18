@@ -45,7 +45,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   openSearchDialog() {
     this.searchDialogRef = this._dialog.open(SearchDialogComponent, {
-      minWidth: '60%'
+      minWidth: '60%',
+      // height: '75%'
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 declare let L: any;
 
@@ -15,30 +15,51 @@ import { LocationSpecies } from '@interfaces/location-species';
   styleUrls: ['./event-details.component.scss']
 })
 export class EventDetailsComponent implements OnInit {
+
+  //@ViewChild('speciesTable') table: any;
   id: string;
   map;
   states = [];
 
   eventData: EventDetail;
-  eventLocationSpecies: LocationSpecies[] = [];
+  eventLocationSpecies: any[] = [];
 
   eventDataLoading = true;
 
+  // speciesTableRows = [];
+  // expanded: any = {};
+  // timeout: any;
+  // speciesTableColumns = [
+  //   { prop: 'Species' },
+  //   { name: 'Population' },
+  //   { name: 'Sick' },
+  //   { name: 'Dead' },
+  //   { name: 'Estimated Sick' },
+  //   { name: 'Estimated Dead' }
+  // ];
 
   errorMessage;
 
-  constructor(private route: ActivatedRoute, private eventService: EventService, private stateService: StateService) { }
+  constructor(private route: ActivatedRoute, private eventService: EventService, private stateService: StateService) {
+    this.eventLocationSpecies = [];
+  }
 
   ngOnInit() {
+
+    this.eventLocationSpecies = [];
 
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
 
       this.eventData = this.eventService.getSampleEventDetail();
 
-      for (const event_location of this.eventData.event_locations) {
-        this.eventLocationSpecies.push(event_location.location_species);
+      for (let event_location of this.eventData.event_locations) {
+        for (let location_species of event_location.location_species) {
+          this.eventLocationSpecies.push(location_species);
+        }
       }
+      console.log('eventLocationSpecies:', this.eventLocationSpecies)
+      //this.speciesTableRows = this.eventLocationSpecies;
       this.eventDataLoading = false;
 
     });
@@ -66,5 +87,15 @@ export class EventDetailsComponent implements OnInit {
 
     }, 500);
   }
+
+
+  // toggleExpandRow(row) {
+  //   console.log('Toggled Expand Row!', row);
+  //   this.table.rowDetail.toggleExpandRow(row);
+  // }
+
+  // onDetailToggle(event) {
+  //   console.log('Detail Toggled', event);
+  // }
 
 }

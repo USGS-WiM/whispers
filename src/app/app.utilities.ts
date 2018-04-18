@@ -2263,6 +2263,14 @@ export class APP_UTILITIES {
                     "confirmed": true,
                     "major": true,
                     "priority": 1
+                },
+                {
+                    "event_id": 1000,
+                    "diagnosis_id": 45,
+                    "diagnosis_string": "Cooties",
+                    "confirmed": true,
+                    "major": true,
+                    "priority": 1
                 }
             ],
             "event_locations": [
@@ -2271,10 +2279,10 @@ export class APP_UTILITIES {
                     "start_date": "2018-02-11",
                     "end_date": "2018-03-17",
                     "country": 1,
-                    "country_string": "United States of America",
-                    "state": 24,
+                    "country_string": "United States",
+                    "state": 27,
                     "state_string": "Minnesota",
-                    "county": 47,
+                    "county": 1312,
                     "county_string": "Anoka",
                     "county_multiple": false,
                     "county_unknown": false,

@@ -6,6 +6,12 @@
       <mat-card-title>
         <b>Event {{eventData.id}}</b>
         <br> {{eventData.event_type_string}}
+        <br>
+        <span class="text-smaller">
+          <span>{{eventData.start_date | date:'mediumDate'}}</span>
+          <span>thru</span>
+          <span>{{eventData.end_date | date:'mediumDate'}}</span>
+        </span>
 
       </mat-card-title>
       <!-- <mat-card-subtitle>{{eventData.event_type_string}}</mat-card-subtitle> -->
@@ -13,47 +19,69 @@
         <div id="public-event-data">
           <p>
             <div class="event-header">
-              <b>{{eventData.start_date | date:'mediumDate'}} thru {{eventData.end_date | date:'mediumDate'}}</b>
-              <br>
-              <b> Affected: {{eventData.affected_count}}
-              </b>
-              <br>
-              <b>Diagnosis:</b>
-              <b>
-                <span *ngFor="let diagnosis of eventData.event_diagnosis">{{diagnosis.diagnosis_string}}</span>
-              </b>
-              <mat-list id="public-location-list" role="list" dense>
-                <h3 mat-subheader class="text-larger">Location</h3>
-                <b>
-                  <mat-list-item role="listitem" *ngFor="let event_location of eventData.event_locations">{{event_location.county_string}}, {{event_location.state_string}}, {{event_location.country_string}}</mat-list-item>
 
-                  <h3 mat-subheader class="text-larger">Contacts</h3>
-                  <mat-list-item role="listitem" *ngFor="let event_organization of eventData.event_organization">{{event_organization.name}}, {{event_organization.city}}, {{event_organization.state | displayValue:'abbreviation':this.states}}</mat-list-item>
-
-                </b>
-              </mat-list>
-              <label>Species Affected</label>
-              <!-- <table>
+              <table>
                 <tr>
-                  <th mat-sort-header="name">Dessert (100g)</th>
-                  <th mat-sort-header="calories">Calories</th>
-                  <th mat-sort-header="fat">Fat (g)</th>
-                  <th mat-sort-header="carbs">Carbs (g)</th>
-                  <th mat-sort-header="protein">Protein (g)</th>
+                  <th>Affected</th>
+                  <td>{{eventData.affected_count}}</td>
                 </tr>
-
-                <tr *ngFor="let species of eventData.event_locations location_species">
-                  <td>{{dessert.name}}</td>
-                  <td>{{dessert.calories}}</td>
-                  <td>{{dessert.fat}}</td>
-                  <td>{{dessert.carbs}}</td>
-                  <td>{{dessert.protein}}</td>
+                <tr>
+                  <th [attr.rowspan]="eventData.event_diagnosis.length + 1 ">Diagnosis</th>
+                  <!-- <td *ngFor="let diagnosis of eventData.event_diagnosis">{{diagnosis.diagnosis_string}}</td> -->
                 </tr>
-              </table> -->
+                <tr *ngFor="let diagnosis of eventData.event_diagnosis" class="noBorder">
+                  <td>{{diagnosis.diagnosis_string}}</td>
+                </tr>
+                <tr>
+                  <th [attr.rowspan]="eventData.event_locations.length + 1 ">Locations</th>
+                </tr>
+                <tr *ngFor="let eventLocation of eventData.event_locations">
+                  <td>{{eventLocation.county_string}}, {{eventLocation.state_string}}, {{eventLocation.country_string}}</td>
+                </tr>
+              </table>
+            </div>
+            <br>
+            <div class="event-details">
+              <p>
+                <label for="speciesList" class="event-detail-label">Species Affected</label>
+                <table id="speciesList">
+                  <tr>
+                    <th>Species</th>
+                    <th>Population</th>
+                    <th>Sick</th>
+                    <th>Dead</th>
+                    <th class="limit-width">Sick Estimate </th>
+                    <th class="limit-width">Dead Estimate</th>
+                    <th>Diagnosis</th>
+                  </tr>
 
-              <!-- <b>
-                <span *ngFor="let event_location of eventData.event_locations">{{event_location.county_string}}, {{event_location.state_string}}, {{event_location.country_string}} </span>
-              </b> -->
+                  <tr *ngFor="let loc_species of eventLocationSpecies">
+                    <td>{{loc_species.species_string}}</td>
+                    <td>{{loc_species.population_count}}</td>
+                    <td>{{loc_species.sick_count}}</td>
+                    <td>{{loc_species.dead_count}}</td>
+                    <td>{{sick_count_estimated}}</td>
+                    <td>{{dead_count_estimated}}</td>
+                    <td>
+                      <span *ngIf="loc_species.species_diagnosis.length > 0">
+                        <span *ngFor="let species_diagnosis of loc_species.species_diagnosis">
+                          <span class="text-bold">{{species_diagnosis.diagnosis.name}}</span>
+                          <span *ngIf="species_diagnosis.causal">(Causal)</span>
+                          <br>
+                          <span class="text-smaller">{{species_diagnosis.tested_count}} specimens tested |</span>
+                          <span class="text-smaller">{{species_diagnosis.positive_count}} positive</span>
+                          <br>
+                          <span class="text-smaller"> by {{species_diagnosis.diagnosis_organization[0].name}}</span>
+                        </span>
+                      </span>
+                      <span *ngIf="loc_species.species_diagnosis.length === 0">To Be Determined</span>
+                    </td>
+                  </tr>
+                </table>
+
+                <div>
+
+                </div>
             </div>
         </div>
 

@@ -2225,6 +2225,7 @@ export class APP_UTILITIES {
             "superevent": null,
             "legal_number": null,
             "legal_status": 1,
+            "legal_status_string": "Not legal",
             "event_status_string": "New Event Record",
             "event_status": 1,
             "epi_staff": "Barb Bodenstein",
@@ -2274,6 +2275,70 @@ export class APP_UTILITIES {
                 }
             ],
             "event_locations": [
+                {
+                    "event": 1000,
+                    "start_date": "2018-02-11",
+                    "end_date": "2018-03-17",
+                    "country": 1,
+                    "country_string": "United States",
+                    "state": 27,
+                    "state_string": "Minnesota",
+                    "county": 1312,
+                    "county_string": "Anoka",
+                    "county_multiple": false,
+                    "county_unknown": false,
+                    "latitude": 45.362498,
+                    "longitude": -93.339744,
+                    "priority": 1,
+                    "land_ownership": 2,
+                    "land_ownership_string": "State/Province",
+                    "flyway": "Mississppi",
+                    "gnis_name": 644081,
+                    "gnis_name_string": "Lake George",
+                    "location_species": [
+                        {
+                            "event_location": 1,
+                            "species": 23,
+                            "species_string": "American Coot",
+                            "population_count": 100,
+                            "sick_count": 100,
+                            "dead_count": 23,
+                            "sick_count_estimated": null,
+                            "dead_count_estimated": null,
+                            "priority": 1,
+                            "captive": 0,
+                            "age_bias": 1,
+                            "age_bias_string": "No noticeable bias",
+                            "sex_bias": 1,
+                            "sex_bias_string": "No noticeable bias",
+                            "species_diagnosis": [
+                                {
+                                    "location_species": 1,
+                                    "diagnosis": {
+                                        "id": 67,
+                                        "name": "Avian Cholera",
+                                        "diagnosis_type": 1,
+                                        "diagnosis_type_string": "Bacteria"
+                                    },
+                                    "confirmed": true,
+                                    "major": true,
+                                    "priority": 1,
+                                    "causal": true,
+                                    "tested_count": 3,
+                                    "positive_count": 3,
+                                    "suspect_count": 25,
+                                    "pooled": true,
+                                    "diagnosis_organization": [
+                                        {
+                                            "organization": 23,
+                                            "name": "Minnesota Department of Nautral Resources"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
                 {
                     "event": 1000,
                     "start_date": "2018-02-11",

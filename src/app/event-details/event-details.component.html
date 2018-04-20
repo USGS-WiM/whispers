@@ -43,10 +43,11 @@
             <br>
             <div class="event-details">
               <p>
-                <label for="speciesList" class="event-detail-label">Species Affected</label>
+                <!-- <label for="speciesList" class="event-detail-label">Species Affected</label> -->
                 <table id="speciesList">
                   <tr>
                     <th>Species</th>
+                    <th>Location</th>
                     <th>Population</th>
                     <th>Sick</th>
                     <th>Dead</th>
@@ -57,6 +58,97 @@
 
                   <tr *ngFor="let loc_species of eventLocationSpecies">
                     <td>{{loc_species.species_string}}</td>
+                    <td>
+                      <span>{{loc_species.county_string}}, {{loc_species.state_string}}</span>
+                      <br>
+                      <span>{{loc_species.country_string}}</span>
+                    </td>
+                    <td>{{loc_species.population_count}}</td>
+                    <td>{{loc_species.sick_count}}</td>
+                    <td>{{loc_species.dead_count}}</td>
+                    <td>{{sick_count_estimated}}</td>
+                    <td>{{dead_count_estimated}}</td>
+                    <td>
+                      <span *ngIf="loc_species.species_diagnosis.length > 0">
+                        <span *ngFor="let species_diagnosis of loc_species.species_diagnosis">
+                          <span class="text-bold">{{species_diagnosis.diagnosis.name}}</span>
+                          <span *ngIf="species_diagnosis.causal">(Causal)</span>
+                          <br>
+                          <span class="text-smaller">{{species_diagnosis.tested_count}} specimens tested |</span>
+                          <span class="text-smaller">{{species_diagnosis.positive_count}} positive</span>
+                          <br>
+                          <span class="text-smaller"> by {{species_diagnosis.diagnosis_organization[0].name}}</span>
+                        </span>
+                      </span>
+                      <span *ngIf="loc_species.species_diagnosis.length === 0">To Be Determined</span>
+                    </td>
+                  </tr>
+                </table>
+                <div>
+
+                </div>
+            </div>
+        </div>
+        <p>
+
+          <div id="privileged-event-data" class="privileged-event-data">
+            <label class="event-detail-label">Privileged Event Data</label>
+            <p>
+              <span class="text-larger">You have
+                <span>edit</span> privileges for this event</span>
+              <table>
+                <tr>
+                  <th>Event Owner</th>
+                  <td>{{eventData.event_organization[0].private_name}}</td>
+                </tr>
+                <tr>
+                  <th>Event Reference</th>
+                  <td>{{eventData.event_reference}}</td>
+                </tr>
+                <tr>
+                  <th>Event Status</th>
+                  <td>{{eventData.event_status_string}}</td>
+                </tr>
+                <tr>
+                  <th>Complete</th>
+                  <td>{{eventData.complete}}</td>
+                </tr>
+                <tr>
+                  <th>Legal Status</th>
+                  <td>{{eventData.legal_status_string}}</td>
+                </tr>
+                <tr>
+                  <th>Legal Number</th>
+                  <td>{{eventData.legal_number}}</td>
+                </tr>
+                <tr>
+                  <th>Superevent</th>
+                  <td></td>
+                </tr>
+
+              </table>
+
+              <p>
+                <mat-card-subtitle>Privileged Species and Diagnosis Details</mat-card-subtitle>
+                <table id="speciesList">
+                  <tr>
+                    <th>Species</th>
+                    <th>Location</th>
+                    <th>Population</th>
+                    <th>Sick</th>
+                    <th>Dead</th>
+                    <th class="limit-width">Sick Estimate </th>
+                    <th class="limit-width">Dead Estimate</th>
+                    <th>Diagnosis</th>
+                  </tr>
+
+                  <tr *ngFor="let loc_species of eventLocationSpecies">
+                    <td>{{loc_species.species_string}}</td>
+                    <td>
+                      <span>{{loc_species.county_string}}, {{loc_species.state_string}}</span>
+                      <br>
+                      <span>{{loc_species.country_string}}</span>
+                    </td>
                     <td>{{loc_species.population_count}}</td>
                     <td>{{loc_species.sick_count}}</td>
                     <td>{{loc_species.dead_count}}</td>
@@ -79,17 +171,12 @@
                   </tr>
                 </table>
 
-                <div>
+                <p>
+                  <mat-card-subtitle>Contacts</mat-card-subtitle>
 
-                </div>
-            </div>
-        </div>
+          </div>
 
-        <div id="privileged-event-data">
-
-        </div>
-
-        <p>
+          <p>
       </mat-card-content>
     </mat-card>
   </div>

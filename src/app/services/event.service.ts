@@ -35,8 +35,14 @@ export class EventService {
     return APP_UTILITIES.SAMPLE_EVENT_DATA;
   }
 
-  public getSampleEventDetail(): any {
-    return APP_UTILITIES.SAMPLE_EVENT_DETAIL_DATA;
+  public getSampleEventDetail(eventID): any {
+
+    for (const event of APP_UTILITIES.SAMPLE_EVENT_DETAIL_DATA) {
+      if (event.id === Number(eventID)) {
+        return event;
+      }
+    }
+
   }
 
   private handleError(error: Response) {

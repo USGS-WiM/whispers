@@ -51,7 +51,7 @@ export class EventDetailsComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
 
-      this.eventData = this.eventService.getSampleEventDetail();
+      this.eventData = this.eventService.getSampleEventDetail(this.id);
 
       for (let event_location of this.eventData.event_locations) {
         for (let location_species of event_location.location_species) {
@@ -62,7 +62,7 @@ export class EventDetailsComponent implements OnInit {
         }
 
       }
-      console.log('eventLocationSpecies:', this.eventLocationSpecies)
+      console.log('eventLocationSpecies:', this.eventLocationSpecies);
       //this.speciesTableRows = this.eventLocationSpecies;
       this.eventDataLoading = false;
 

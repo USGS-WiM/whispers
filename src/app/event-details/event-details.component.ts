@@ -22,7 +22,7 @@ export class EventDetailsComponent implements OnInit {
   states = [];
 
   eventData: EventDetail;
-  eventLocationSpecies: any[] = [];
+  eventLocationSpecies: LocationSpecies[] = [];
 
   eventDataLoading = true;
 
@@ -51,14 +51,18 @@ export class EventDetailsComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
 
-      this.eventData = this.eventService.getSampleEventDetail();
+      this.eventData = this.eventService.getSampleEventDetail(this.id);
 
       for (let event_location of this.eventData.event_locations) {
         for (let location_species of event_location.location_species) {
+          location_species.county_string = event_location.county_string;
+          location_species.state_string = event_location.state_string;
+          location_species.country_string = event_location.country_string;
           this.eventLocationSpecies.push(location_species);
         }
+
       }
-      console.log('eventLocationSpecies:', this.eventLocationSpecies)
+      console.log('eventLocationSpecies:', this.eventLocationSpecies);
       //this.speciesTableRows = this.eventLocationSpecies;
       this.eventDataLoading = false;
 

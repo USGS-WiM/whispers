@@ -166,8 +166,8 @@ export class SearchDialogComponent implements OnInit {
     // get counties from the county service
     this._countyService.getCounties()
       .subscribe(
-        (states) => {
-          this.states = states;
+        (counties) => {
+          this.counties = counties;
           this.filteredCounties = this.countyControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.counties, 'name'));
@@ -208,7 +208,7 @@ export class SearchDialogComponent implements OnInit {
   }
 
   displayFn(diagnosis?: Diagnosis): string | undefined {
-    return diagnosis ? diagnosis.diagnosis : undefined;
+    return diagnosis ? diagnosis.name : undefined;
   }
 
   submitSearch() {

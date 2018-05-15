@@ -107,7 +107,7 @@
               <div class="chiplist">
                 <mat-chip-list #diagnosisChipList>
                   <span *ngFor="let diagnosis of selectedDiagnoses">
-                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(diagnosis, selectedDiagnoses, 'diagnosis')">{{diagnosis.diagnosis}}
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(diagnosis, selectedDiagnoses, 'diagnosis')">{{diagnosis.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
                     <span *ngIf="(selectedDiagnoses.indexOf(diagnosis)) < (selectedDiagnoses.length - 1)">{{(searchForm.get('diagnosis_includes_all').value) ? "and" : "or"}}&nbsp;</span>
@@ -124,7 +124,7 @@
                 [formControl]="diagnosisControl">
               <mat-autocomplete #diagnosisAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedDiagnoses, 'diagnosis')">
                 <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis">
-                  <span>{{ diagnosis.diagnosis }}</span>
+                  <span>{{ diagnosis.name }}</span>
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>

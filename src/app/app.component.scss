@@ -23,10 +23,20 @@
   }
 
   .whispers-header {
-      /* margin: 0px !important; */
+    //font-family: 'Oswald', sans-serif !important;
+    font-family: 'PT Sans', sans-serif !important;
       position: sticky;
       top: 0;
   }
+
+  .title {
+    //font-family: 'Oswald', sans-serif !important;
+    font-family: 'PT Sans', sans-serif !important;
+  }
+
+  .text-smaller {
+    font-size: smaller;
+}
 
 
 

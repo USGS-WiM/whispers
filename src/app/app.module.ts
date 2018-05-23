@@ -58,6 +58,8 @@ import { DiagnosisTypeService } from '@services/diagnosis-type.service';
 import { DiagnosisService } from '@services/diagnosis.service';
 import { SpeciesService } from '@services/species.service';
 import { CountyService } from '@services/county.service';
+import { LegalStatusService } from '@app/services/legal-status.service';
+import { CountryService } from '@app/services/country.service';
 
 @NgModule({
   declarations: [
@@ -113,7 +115,17 @@ import { CountyService } from '@services/county.service';
     MatToolbarModule,
     MatTooltipModule
   ],
-  providers: [EventService, EventTypeService, StateService, CountyService, DiagnosisTypeService, DiagnosisService, SpeciesService],
+  providers: [
+    EventService,
+    EventTypeService,
+    LegalStatusService,
+    CountryService,
+    StateService,
+    CountyService,
+    DiagnosisTypeService,
+    DiagnosisService,
+    SpeciesService
+  ],
   bootstrap: [AppComponent],
   entryComponents: [SearchDialogComponent]
 })

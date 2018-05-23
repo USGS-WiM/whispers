@@ -4,9 +4,14 @@
       <span class="mat-display-3 title">WHISPers&nbsp;&nbsp;
       </span>
       <span class="subheading-1">
-        Wildlife Health Information Sharing Partnership <span class="text-smaller">event reporting system</span>
+        Wildlife Health Information Sharing Partnership
+        <span class="text-smaller">event reporting system</span>
       </span>
       <span class="spacer"></span>
+      <span>
+        <button mat-button>
+          <mat-icon class="icon">info_outline</mat-icon>About</button>
+      </span>
 
     </mat-toolbar-row>
 
@@ -14,13 +19,14 @@
       <span></span>
       <span class="spacer"></span>
       <span>
-        <button mat-button>
-          <mat-icon class="icon">account_box</mat-icon>Login</button>
+        <button mat-button (click)="navigateToEventSubmit()">
+          <i class="material-icons">library_add</i> Submit Event</button>
       </span>
       <span>
         <button mat-button>
-          <mat-icon class="icon">info_outline</mat-icon>About</button>
+          <mat-icon class="icon">account_box</mat-icon>Login</button>
       </span>
+
     </mat-toolbar-row>
   </mat-toolbar>
 </header>

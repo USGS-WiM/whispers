@@ -1,0 +1,25 @@
+.form-container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .form-control {
+      width: 15em;
+      margin:10px;
+  }
+
+  .text-large {
+      font-size: large;
+  }
+
+  .text-bold {
+      font-style: bold;
+  }
+
+  .event-location-card {
+      width: 100%;
+  }
+  
+//   .example-container > * {
+//     width: 100%;
+//   }

@@ -3,8 +3,18 @@
 
   <div class="detailsDiv">
     <mat-card>
+      <div class="event-detail-action-bar">
+        <button mat-raised-button color="primary" class="event-detail-action-button">
+          <i class="material-icons">share</i> Share</button>
+        <button mat-raised-button color="primary" class="event-detail-action-button">
+          <i class="material-icons">print</i> Print Event Details</button>
+        <button mat-raised-button color="primary" class="event-detail-action-button">
+          <i class="material-icons">unarchive</i> Export Event Data</button>
+      </div>
       <mat-card-title>
-        <b>Event {{eventData.id}}</b>
+        <span>
+          <b>Event {{eventData.id}}</b>
+        </span>
         <br> {{eventData.event_type_string}}
         <br>
         <span class="text-smaller">

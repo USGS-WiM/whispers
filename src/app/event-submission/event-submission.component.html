@@ -1,3 +1,89 @@
-<p>
-  event-submission works!
-</p>
+<mat-spinner *ngIf="lookupDataLoading"></mat-spinner>
+<div *ngIf="!lookupDataLoading">
+
+  <div class="detailsDiv">
+    <mat-card>
+      <mat-card-title>
+        <span>
+          <b>Event Submission</b>
+        </span>
+        <br>
+        <span class="text-smaller">
+          Submit data for a wildflife mortality/morbidity or surveillance event
+        </span>
+
+      </mat-card-title>
+      <mat-card-content *ngIf="!eventDataLoading">
+
+        <div class="form-container">
+
+          <form [formGroup]="eventSubmissionForm" class="autocomplete-form">
+
+            <mat-form-field class="form-control">
+              <mat-select placeholder="Event Type" formControlName="event_type">
+                <mat-option *ngFor="let eventType of eventTypes" value="eventType.id">{{eventType.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="form-control">
+              <input matInput placeholder="Event Name" formControlName="event_reference">
+            </mat-form-field>
+
+            <mat-form-field class="form-control">
+              <mat-select placeholder="Legal Status" formControlName="legal_status">
+                <mat-option *ngFor="let legalStatus of legalStatuses" value="legalStatus.id">{{legalStatus.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="form-control">
+              <input matInput placeholder="Legal Case Number" formControlName="legal_number">
+            </mat-form-field>
+            <p>
+
+              <h3 class="text-large text-bold">Locations</h3>
+              <p>
+
+                <!--Locations Section-->
+                <div formArrayName="event_locations">
+                  <div class="location-container" *ngFor="let eventLocation of getEventLocations(eventSubmissionForm); let i = index">
+                    <mat-card class="event-location-card" [formGroupName]="i">
+                      <h5>Location</h5>
+
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="startDate" placeholder="Onset Date">
+                        <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                        <mat-datepicker #startDate></mat-datepicker>
+                      </mat-form-field>
+
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="endDate" placeholder="End Date">
+                        <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                        <mat-datepicker #endDate></mat-datepicker>
+                      </mat-form-field>
+
+                      <br>
+
+                      <mat-form-field class="form-control">
+                        <mat-select placeholder="Country" formControlName="country">
+                          <mat-option *ngFor="let country of countries" value="country.id">{{country.name}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+
+                    </mat-card>
+                  </div>
+                </div>
+
+          </form>
+
+        </div>
+
+        <p>
+
+          <div>
+            <pre> {{eventSubmissionForm.value | json}} </pre>
+          </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>

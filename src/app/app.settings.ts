@@ -25,6 +25,7 @@ export class APP_SETTINGS {
     public static get STATES_URL(): string { return this._API_ENDPOINT + 'states/'; }
     public static get COUNTIES_URL(): string { return this._API_ENDPOINT + 'counties/'; }
     public static get LAND_OWNERSHIPS_URL(): string { return this._API_ENDPOINT + 'landownerships/'; }
+    public static get LEGAL_STATUS_URL(): string { return this._API_ENDPOINT + 'legalstatuses/'; }
     public static get LOCATION_SPECIES_URL(): string { return this._API_ENDPOINT + 'locationspecies/'; }
     public static get SPECIES_URL(): string { return this._API_ENDPOINT + 'species/'; }
     public static get AGE_BIASES_URL(): string { return this._API_ENDPOINT + 'agebiases/'; }

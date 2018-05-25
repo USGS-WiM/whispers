@@ -51,7 +51,7 @@ import { DiagnosticServicesComponent } from './diagnostic-services/diagnostic-se
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { EventService } from '@app/services/event.service';
 import { SearchDialogComponent } from './search-dialog/search-dialog.component';
-import { StateService } from '@app/services/state.service';
+import { AdministrativeLevelOneService } from '@app/services/administrative-level-one.service';
 import { DisplayValuePipe } from './pipes/display-value.pipe';
 import { EventTypeService } from '@services/event-type.service';
 import { DiagnosisTypeService } from '@services/diagnosis-type.service';
@@ -60,6 +60,7 @@ import { SpeciesService } from '@services/species.service';
 import { CountyService } from '@services/county.service';
 import { LegalStatusService } from '@app/services/legal-status.service';
 import { CountryService } from '@app/services/country.service';
+import { LandOwnershipService } from '@app/services/land-ownership.service';
 
 @NgModule({
   declarations: [
@@ -119,8 +120,9 @@ import { CountryService } from '@app/services/country.service';
     EventService,
     EventTypeService,
     LegalStatusService,
+    LandOwnershipService,
     CountryService,
-    StateService,
+    AdministrativeLevelOneService,
     CountyService,
     DiagnosisTypeService,
     DiagnosisService,

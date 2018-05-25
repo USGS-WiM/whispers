@@ -4,7 +4,8 @@ declare let L: any;
 
 import 'rxjs/add/operator/switchMap';
 import { EventService } from '@services/event.service';
-import { StateService } from '@services/state.service';
+import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
+
 
 import { EventDetail } from '@interfaces/event-detail';
 import { LocationSpecies } from '@interfaces/location-species';
@@ -40,7 +41,9 @@ export class EventDetailsComponent implements OnInit {
 
   errorMessage;
 
-  constructor(private route: ActivatedRoute, private eventService: EventService, private stateService: StateService) {
+  constructor(private route: ActivatedRoute,
+    private eventService: EventService,
+    private adminLevelOneService: AdministrativeLevelOneService) {
     this.eventLocationSpecies = [];
   }
 
@@ -69,7 +72,7 @@ export class EventDetailsComponent implements OnInit {
     });
 
     // get states from the state service
-    this.stateService.getStates()
+    this.adminLevelOneService.getAdminLevelOnes()
       .subscribe(
         (states) => {
           this.states = states;

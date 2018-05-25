@@ -7,8 +7,10 @@ export class APP_SETTINGS {
     private static _environment: string = 'development';
     private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersdev.wim.usgs.gov/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
     public static set environment(env: string) { this._environment = env; }
-    public static get API_USERNAME(): string { return 'admin' }
-    public static get API_PASSWORD(): string { return 'whispersadmin' }
+    public static get API_USERNAME(): string { return 'admin'; }
+    public static get API_PASSWORD(): string { return 'whispersadmin'; }
+
+    public static get DEFAULT_COUNTRY(): string { return 'USA'; }
 
     public static get AUTH_URL(): string { return this._API_ENDPOINT + 'auth/'; }
     public static get EVENTS_URL(): string { return this._API_ENDPOINT + 'events/'; }

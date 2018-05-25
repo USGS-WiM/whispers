@@ -9,33 +9,33 @@ import { Subject } from 'rxjs/Subject';
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 
-import { State } from '@interfaces/state';
+import { AdministrativeLevelOne } from '@interfaces/administrative-level-one';
 
 @Injectable()
-export class StateService {
+export class AdministrativeLevelOneService {
 
   constructor(private _http: Http) { }
 
-  public queryStates(stateQuery): Observable<State[]> {
+  public queryAdminLevelOnes(adminLevelOneQuery): Observable<AdministrativeLevelOne[]> {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.STATES_URL + stateQuery, options)
-      .map((response: Response) => <State[]>response.json())
+    return this._http.get(APP_SETTINGS.STATES_URL + adminLevelOneQuery, options)
+      .map((response: Response) => <AdministrativeLevelOne[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
-  public getStates(): Observable<State[]> {
+  public getAdminLevelOnes(): Observable<AdministrativeLevelOne[]> {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
     return this._http.get(APP_SETTINGS.STATES_URL, options)
-      .map((response: Response) => <State[]>response.json())
+      .map((response: Response) => <AdministrativeLevelOne[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
   }

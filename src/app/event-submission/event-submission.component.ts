@@ -4,8 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 
-import { State } from '@interfaces/state';
-import { StateService } from '@services/state.service';
+import { APP_SETTINGS } from '@app/app.settings';
+import { APP_UTILITIES } from '@app/app.utilities';
 
 import { EventType } from '@interfaces/event-type';
 import { EventTypeService } from '@app/services/event-type.service';
@@ -28,6 +28,11 @@ import { SpeciesService } from '@services/species.service';
 import { Country } from '@interfaces/country';
 import { CountryService } from '@app/services/country.service';
 
+import { AdministrativeLevelOne } from '@interfaces/administrative-level-one';
+import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
+
+import { LandOwnership } from '@interfaces/land-ownership';
+import { LandOwnershipService } from '@services/land-ownership.service';
 
 @Component({
   selector: 'app-event-submission',
@@ -37,7 +42,10 @@ import { CountryService } from '@app/services/country.service';
 export class EventSubmissionComponent implements OnInit {
   eventTypes: EventType[];
   legalStatuses: LegalStatus[];
+  landOwnerships: LandOwnership[];
+
   countries: Country[];
+  adminLevelOnes: AdministrativeLevelOne[];
 
   errorMessage;
 
@@ -59,7 +67,9 @@ export class EventSubmissionComponent implements OnInit {
     private formBuilder: FormBuilder,
     private eventTypeService: EventTypeService,
     private legalStatusService: LegalStatusService,
-    private countryService: CountryService
+    private landOwnershipService: LandOwnershipService,
+    private countryService: CountryService,
+    private adminLevelOneService: AdministrativeLevelOneService
   ) {
     this.buildEventSubmissionForm();
   }
@@ -89,6 +99,17 @@ export class EventSubmissionComponent implements OnInit {
         }
       );
 
+    // get landOwnerships from the LandOwnerShipService
+    this.landOwnershipService.getLandOwnerships()
+      .subscribe(
+        landOwnerships => {
+          this.landOwnerships = landOwnerships;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
     // get countries from the countryService
     this.countryService.getCountries()
       .subscribe(
@@ -100,10 +121,22 @@ export class EventSubmissionComponent implements OnInit {
         }
       );
 
+    // query adminLevelOnes from the adminLevelOneService using default country
+    this.adminLevelOneService.queryAdminLevelOnes(APP_UTILITIES.DEFAULT_COUNTRY_ID)
+      .subscribe(
+        adminLevelOnes => {
+          this.adminLevelOnes = adminLevelOnes;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
   }
 
   initEventLocation() {
     return this.formBuilder.group({
+      name: null,
       start_date: null,
       end_date: null,
       country: null,
@@ -141,6 +174,40 @@ export class EventSubmissionComponent implements OnInit {
 
   getEventLocations(form) {
     return form.controls.event_locations.controls;
+  }
+
+  updateAdminLevelOneOptions(selectedCountryID) {
+    const id = Number(selectedCountryID);
+
+    // query the adminlevelones endpoint for appropriate records
+    // update the options for the adminLevelOne select with the response
+
+    this.adminLevelOneService.queryAdminLevelOnes(id)
+      .subscribe(
+        adminLevelOnes => {
+          this.adminLevelOnes = adminLevelOnes;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
+  updateAdminLevelTwoOptions(selectedAdminLevelOneID) {
+    const id = Number(selectedAdminLevelOneID);
+
+    // query the adminlevelones endpoint for appropriate records
+    // update the options for the adminLevelOne select with the response
+
+    // this.adminLevelTwoService.queryAdminLevelTwos(id)
+    //   .subscribe(
+    //     adminLevelTwos => {
+    //       this.adminLevelTwos = adminLevelTwos;
+    //     },
+    //     error => {
+    //       this.errorMessage = <any>error;
+    //     }
+    //   );
   }
 
 }

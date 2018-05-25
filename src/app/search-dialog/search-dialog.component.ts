@@ -10,8 +10,8 @@ import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocompleteTrigger
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { APP_UTILITIES } from '@app/app.utilities';
 
-import { State } from '@interfaces/state';
-import { StateService } from '@services/state.service';
+import { AdministrativeLevelOne } from '@interfaces/administrative-level-one';
+import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
 import { EventType } from '@interfaces/event-type';
 import { EventTypeService } from '@services/event-type.service';
 import { Diagnosis } from '@interfaces/diagnosis';
@@ -92,7 +92,7 @@ export class SearchDialogComponent implements OnInit {
   constructor(
     public searchDialogRef: MatDialogRef<SearchDialogComponent>,
     private formBuilder: FormBuilder,
-    private _stateService: StateService,
+    private _adminLevelOneService: AdministrativeLevelOneService,
     private _countyService: CountyService,
     private _eventTypeService: EventTypeService,
     private _diagnosisTypeService: DiagnosisTypeService,
@@ -151,7 +151,7 @@ export class SearchDialogComponent implements OnInit {
         }
       );
     // get states from the state service
-    this._stateService.getStates()
+    this._adminLevelOneService.getAdminLevelOnes()
       .subscribe(
         (states) => {
           this.states = states;

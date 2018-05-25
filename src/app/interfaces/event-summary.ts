@@ -1,6 +1,6 @@
 import { History } from '@interfaces/history';
 
-import { State } from '@interfaces/state';
+import { AdministrativeLevelOne } from '@interfaces/administrative-level-one';
 import { County } from '@interfaces/county';
 import { Species } from '@interfaces/species';
 import { EventDiagnosis } from '@interfaces/event-diagnosis';
@@ -21,7 +21,7 @@ export interface EventSummary extends History {
     event_type_string: string;
     event_type: number;
     event_diagnosis: EventDiagnosis;
-    states: State[];
+    states: AdministrativeLevelOne[];
     counties: County[];
     species: Species[];
 }

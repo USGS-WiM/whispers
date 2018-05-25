@@ -16,13 +16,13 @@ export class CountyService {
 
   constructor(private _http: Http) { }
 
-  public queryCounties(stateQuery): Observable<County[]> {
+  public queryCounties(query): Observable<County[]> {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.COUNTIES_URL + stateQuery, options)
+    return this._http.get(APP_SETTINGS.COUNTIES_URL + query, options)
       .map((response: Response) => <County[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

@@ -1,10 +1,15 @@
-.form-container {
+.horizontal-form-container {
     display: flex;
     flex-direction: row;
   }
 
+  .vertical-form-container {
+    display: flex;
+    flex-direction: column;
+  }
+
   .form-control {
-      width: 15em;
+      width: 18em;
       margin:10px;
   }
 
@@ -17,7 +22,7 @@
   }
 
   .event-location-card {
-      width: 100%;
+    //   width: 100%;
   }
   
 //   .example-container > * {

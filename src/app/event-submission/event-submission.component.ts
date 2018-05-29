@@ -31,8 +31,17 @@ import { CountryService } from '@app/services/country.service';
 import { AdministrativeLevelOne } from '@interfaces/administrative-level-one';
 import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
 
+// import { AdministrativeLevelTwo } from '@interfaces/administrative-level-two';
+// import { AdministrativeLevelTwoService } from '@services/administrative-level-two.service';
+
 import { LandOwnership } from '@interfaces/land-ownership';
 import { LandOwnershipService } from '@services/land-ownership.service';
+
+import { SexBias } from '@interfaces/sex-bias';
+import { SexBiasService } from '@services/sex-bias.service';
+
+import { AgeBias } from '@interfaces/age-bias';
+import { AgeBiasService } from '@services/age-bias.service';
 
 @Component({
   selector: 'app-event-submission',
@@ -46,6 +55,10 @@ export class EventSubmissionComponent implements OnInit {
 
   countries: Country[];
   adminLevelOnes: AdministrativeLevelOne[];
+
+  species: Species[];
+  sexBiases: SexBias[];
+  ageBiases: AgeBias[];
 
   errorMessage;
 
@@ -69,7 +82,10 @@ export class EventSubmissionComponent implements OnInit {
     private legalStatusService: LegalStatusService,
     private landOwnershipService: LandOwnershipService,
     private countryService: CountryService,
-    private adminLevelOneService: AdministrativeLevelOneService
+    private adminLevelOneService: AdministrativeLevelOneService,
+    private speciesService: SpeciesService,
+    private sexBiasService: SexBiasService,
+    private ageBiasService: AgeBiasService
   ) {
     this.buildEventSubmissionForm();
   }
@@ -132,6 +148,39 @@ export class EventSubmissionComponent implements OnInit {
         }
       );
 
+    // get species from the speciesService
+    this.speciesService.getSpecies()
+      .subscribe(
+        species => {
+          this.species = species;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get sexBiases from the sexBias service
+    this.sexBiasService.getSexBiases()
+      .subscribe(
+        sexBiases => {
+          this.sexBiases = sexBiases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get ageBiases from the ageBias service
+    this.ageBiasService.getAgeBiases()
+      .subscribe(
+        ageBiases => {
+          this.ageBiases = ageBiases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
   }
 
   initEventLocation() {
@@ -139,7 +188,7 @@ export class EventSubmissionComponent implements OnInit {
       name: null,
       start_date: null,
       end_date: null,
-      country: null,
+      country: APP_UTILITIES.DEFAULT_COUNTRY_ID,
       administrative_level_one: null,
       administrative_level_two: null,
       latitude: null,
@@ -172,8 +221,28 @@ export class EventSubmissionComponent implements OnInit {
     control.push(this.initEventLocation());
   }
 
+  removeEventLocation(i) {
+    const control = <FormArray>this.eventSubmissionForm.get('event_locations');
+    control.removeAt(i);
+
+  }
+
   getEventLocations(form) {
     return form.controls.event_locations.controls;
+  }
+
+  getLocationSpecies(form) {
+    return form.controls.location_species.controls;
+  }
+
+  addLocationSpecies(i) {
+    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_species');
+    control.push(this.initLocationSpecies());
+  }
+
+  removeLocationSpecies(i, j) {
+    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_species');
+    control.removeAt(j);
   }
 
   updateAdminLevelOneOptions(selectedCountryID) {

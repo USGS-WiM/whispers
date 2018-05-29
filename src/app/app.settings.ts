@@ -24,8 +24,8 @@ export class APP_SETTINGS {
     public static get EVENT_CONTACTS_URL(): string { return this._API_ENDPOINT + 'eventcontacts/'; }
     public static get EVENT_LOCATIONS_URL(): string { return this._API_ENDPOINT + 'eventlocations/'; }
     public static get COUNTRIES_URL(): string { return this._API_ENDPOINT + 'countries/'; }
-    public static get STATES_URL(): string { return this._API_ENDPOINT + 'states/'; }
-    public static get COUNTIES_URL(): string { return this._API_ENDPOINT + 'counties/'; }
+    public static get ADMINISTRATIVE_LEVEL_ONES_URL(): string { return this._API_ENDPOINT + 'administrativelevelones/'; }
+    public static get ADMINISTRATIVE_LEVEL_TWOS_URL(): string { return this._API_ENDPOINT + 'administrativeleveltwos/'; }
     public static get LAND_OWNERSHIPS_URL(): string { return this._API_ENDPOINT + 'landownerships/'; }
     public static get LEGAL_STATUS_URL(): string { return this._API_ENDPOINT + 'legalstatuses/'; }
     public static get LOCATION_SPECIES_URL(): string { return this._API_ENDPOINT + 'locationspecies/'; }

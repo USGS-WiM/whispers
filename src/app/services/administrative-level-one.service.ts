@@ -16,13 +16,13 @@ export class AdministrativeLevelOneService {
 
   constructor(private _http: Http) { }
 
-  public queryAdminLevelOnes(adminLevelOneQuery): Observable<AdministrativeLevelOne[]> {
+  public queryAdminLevelOnes(countryID): Observable<AdministrativeLevelOne[]> {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.STATES_URL + adminLevelOneQuery, options)
+    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_ONES_URL + '?country=' + countryID, options)
       .map((response: Response) => <AdministrativeLevelOne[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
@@ -34,7 +34,7 @@ export class AdministrativeLevelOneService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.STATES_URL, options)
+    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_ONES_URL, options)
       .map((response: Response) => <AdministrativeLevelOne[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

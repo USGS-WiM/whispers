@@ -61,6 +61,8 @@ import { CountyService } from '@services/county.service';
 import { LegalStatusService } from '@app/services/legal-status.service';
 import { CountryService } from '@app/services/country.service';
 import { LandOwnershipService } from '@app/services/land-ownership.service';
+import { AgeBiasService } from '@app/services/age-bias.service';
+import { SexBiasService } from '@app/services/sex-bias.service';
 
 @NgModule({
   declarations: [
@@ -126,7 +128,9 @@ import { LandOwnershipService } from '@app/services/land-ownership.service';
     CountyService,
     DiagnosisTypeService,
     DiagnosisService,
-    SpeciesService
+    SpeciesService,
+    AgeBiasService,
+    SexBiasService
   ],
   bootstrap: [AppComponent],
   entryComponents: [SearchDialogComponent]

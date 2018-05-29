@@ -22,7 +22,7 @@ export class CountyService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.COUNTIES_URL + query, options)
+    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_TWOS_URL + query, options)
       .map((response: Response) => <County[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
@@ -34,7 +34,7 @@ export class CountyService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.COUNTIES_URL, options)
+    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_TWOS_URL, options)
       .map((response: Response) => <County[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

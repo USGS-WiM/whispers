@@ -44,13 +44,12 @@
         </div>
         <p>
 
+          <!--Locations Section-->
           <div>
-            <h3 class="text-large text-bold">Locations</h3>
+            <h4 class="text-large text-bold">Locations</h4>
             <p>
-
               <form [formGroup]="eventSubmissionForm">
 
-                <!--Locations Section-->
                 <div formArrayName="event_locations">
                   <div class="location-container" *ngFor="let eventLocation of getEventLocations(eventSubmissionForm); let i = index">
                     <mat-card class="event-location-card" [formGroupName]="i">
@@ -68,7 +67,6 @@
                           <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                           <mat-datepicker #endDate></mat-datepicker>
                         </mat-form-field>
-
                       </div>
                       <br>
 
@@ -91,12 +89,6 @@
                             <mat-option *ngFor="let adminLevelTwo of adminLevelTwos" value="{{adminLevelTwo.id}}">{{adminLevelTwo.name}}</mat-option>
                           </mat-select>
                         </mat-form-field>
-                      </div>
-
-                      <div class="horizontal-form-container">
-                      </div>
-
-                      <div class="horizontal-form-container">
                       </div>
 
                       <div class="vertical-form-container">
@@ -128,89 +120,98 @@
                           <input matInput placeholder="GNIS Standardized Location Name" formControlName="gnis_name">
                         </mat-form-field>
 
-
                       </div>
 
-                      <h4 class="text-large text-bold">Species Affected</h4>
                       <!--Location Species Section-->
-                      <div formArrayName="location_species">
-                        <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let j = index">
+                      <div>
+                        <h4 class="text-large text-bold">Species Affected</h4>
+                        <div formArrayName="location_species">
+                          <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let j = index">
 
-                          <div class="horizontal-form-container" [formGroupName]="j">
-                            <mat-form-field class="form-control ">
-                              <mat-select placeholder="Species" formControlName="species">
-                                <mat-option *ngFor="let species of species" value="{{species.id}}">{{species.name}}</mat-option>
-                              </mat-select>
-                            </mat-form-field>
+                            <div class="horizontal-form-container" [formGroupName]="j">
+                              <mat-form-field class="form-control ">
+                                <mat-select placeholder="Species" formControlName="species">
+                                  <mat-option *ngFor="let species of species" value="{{species.id}}">{{species.name}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
 
-                            <mat-form-field class=" species-number-control">
-                              <input matInput placeholder="# Known Dead" formControlName="dead">
-                            </mat-form-field>
+                              <mat-form-field class=" species-number-control">
+                                <input matInput placeholder="# Known Dead" formControlName="dead">
+                              </mat-form-field>
 
-                            <mat-form-field class=" species-number-control">
-                              <input matInput placeholder="# Estimated Dead" formControlName="estimated_dead">
-                            </mat-form-field>
+                              <mat-form-field class=" species-number-control">
+                                <input matInput placeholder="# Estimated Dead" formControlName="estimated_dead">
+                              </mat-form-field>
 
-                            <mat-form-field class=" species-number-control">
-                              <input matInput placeholder="# Known Sick" formControlName="sick">
-                            </mat-form-field>
+                              <mat-form-field class=" species-number-control">
+                                <input matInput placeholder="# Known Sick" formControlName="sick">
+                              </mat-form-field>
 
-                            <mat-form-field class=" species-number-control">
-                              <input matInput placeholder="# Estimated Sick" formControlName="estimated_sick">
-                            </mat-form-field>
+                              <mat-form-field class=" species-number-control">
+                                <input matInput placeholder="# Estimated Sick" formControlName="estimated_sick">
+                              </mat-form-field>
 
-                            <mat-form-field class=" species-number-control">
-                              <input matInput placeholder="Est. Population at Risk" formControlName="population">
-                            </mat-form-field>
+                              <mat-form-field class=" species-number-control">
+                                <input matInput placeholder="Est. Population at Risk" formControlName="population">
+                              </mat-form-field>
 
-                            <mat-form-field class="species-number-control">
-                              <mat-select placeholder="Age Bias" formControlName="age_bias">
-                                <mat-option *ngFor="let ageBias of ageBiases" value="{{ageBias.id}}">{{ageBias.name}}</mat-option>
-                              </mat-select>
-                            </mat-form-field>
+                              <mat-form-field class="species-number-control">
+                                <mat-select placeholder="Age Bias" formControlName="age_bias">
+                                  <mat-option *ngFor="let ageBias of ageBiases" value="{{ageBias.id}}">{{ageBias.name}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
 
-                            <mat-form-field class="species-number-control">
-                              <mat-select placeholder="Sex Bias" formControlName="sex_bias">
-                                <mat-option *ngFor="let sexBias of sexBiases" value="{{sexBias.id}}">{{sexBias.name}}</mat-option>
-                              </mat-select>
-                            </mat-form-field>
+                              <mat-form-field class="species-number-control">
+                                <mat-select placeholder="Sex Bias" formControlName="sex_bias">
+                                  <mat-option *ngFor="let sexBias of sexBiases" value="{{sexBias.id}}">{{sexBias.name}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
 
-                            <button mat-button color="warn" (click)="removeLocationSpecies(i, j)">
-                              <i class="material-icons">remove_circle</i> Remove</button>
+                              <button mat-button color="warn" (click)="removeLocationSpecies(i, j)">
+                                <i class="material-icons">remove_circle</i> Remove</button>
 
+                            </div>
+                            <mat-divider [inset]="true"></mat-divider>
                           </div>
-                          <mat-divider [inset]="true"></mat-divider>
                         </div>
-
                       </div>
-
                       <div class="button-row">
                         <button mat-button color="primary" (click)="addLocationSpecies(i)">
                           <i class="material-icons">add_circle</i> Add Species</button>
                       </div>
-
-
-
-
-
+                      <!--End Location Species Section-->
 
                       <p>
-                        <mat-divider [inset]="true"></mat-divider>
+
+                        <!--Location Contacts Section-->
+                        <div class="contacts-section-header">
+                          <div>
+                            <h4 class="text-large text-bold">Contacts</h4>
+                          </div>
+                        </div>
+
+                        <div>
+                        
+                        </div>
+
+                        <div>
+                          <button mat-button color="primary" class="event-detail-action-button">
+                            <i class="material-icons">person_add</i> Add New Contact</button>
+                        </div>
+
                         <p>
 
-                          <button mat-button color="warn" (click)="removeEventLocation(i)">
-                            <i class="material-icons">
-                              remove_circle
-                            </i> Remove This Location</button>
+                          <mat-divider [inset]="true"></mat-divider>
+                          <p>
+                            <button mat-button color="warn" (click)="removeEventLocation(i)">
+                              <i class="material-icons">remove_circle</i> Remove This Location</button>
 
                     </mat-card>
                   </div>
                 </div>
-
               </form>
-
-
           </div>
+          <!-- End Locations Section-->
 
           <button mat-raised-button color="primary" (click)="addEventLocation()">
             <i class="material-icons">

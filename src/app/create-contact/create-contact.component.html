@@ -1,0 +1,43 @@
+<form [formGroup]="createContactForm">
+
+  <div class="vertical-form-container">
+
+    <mat-form-field>
+      <input matInput placeholder="First Name" formControlName="first_name">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Last Name" formControlName="last_name">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Phone Number" formControlName="phone_number">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Email Address" formControlName="email_address">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Title" formControlName="title">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Position" formControlName="position">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="Type" formControlName="type">
+        <mat-option *ngFor="let contactType of contactTypes" value="{{contactType.id}}">{{contactType.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select placeholder="Organization" formControlName="org_id">
+        <mat-option *ngFor="let organiztion of organizations" value="{{organization.id}}">{{organization.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+
+</form>

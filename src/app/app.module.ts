@@ -63,6 +63,7 @@ import { CountryService } from '@app/services/country.service';
 import { LandOwnershipService } from '@app/services/land-ownership.service';
 import { AgeBiasService } from '@app/services/age-bias.service';
 import { SexBiasService } from '@app/services/sex-bias.service';
+import { CreateContactComponent } from './create-contact/create-contact.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { SexBiasService } from '@app/services/sex-bias.service';
     DiagnosticServicesComponent,
     UserDashboardComponent,
     SearchDialogComponent,
-    DisplayValuePipe
+    DisplayValuePipe,
+    CreateContactComponent
   ],
   imports: [
     BrowserModule,

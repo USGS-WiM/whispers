@@ -29,7 +29,7 @@ import { CountyService } from '@services/county.service';
 export class SearchDialogComponent implements OnInit {
 
   errorMessage = '';
-  visible = true;
+  // visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;

@@ -44,6 +44,7 @@ export class APP_SETTINGS {
     public static get ROLES_URL(): string { return this._API_ENDPOINT + 'roles/'; }
     public static get ORGANIZATIONS_URL(): string { return this._API_ENDPOINT + 'organizations/'; }
     public static get CONTACTS_URL(): string { return this._API_ENDPOINT + 'contacts/'; }
+    public static get CONTACT_TYPES_URL(): string { return this._API_ENDPOINT + 'contacttypes/'; }
     public static get GROUPS_URL(): string { return this._API_ENDPOINT + 'groups/'; }
 
 

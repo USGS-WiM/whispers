@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 
+import { MatDialog, MatDialogRef } from '@angular/material';
+
 import { Contact } from '@interfaces/contact';
 
 
@@ -30,11 +32,15 @@ export class CreateContactComponent implements OnInit {
       position: '',
       type: null,
       org_id: null,
-      owner_org_id: null
+      owner_org_id: null,
+      affiliation: ''
     });
   }
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    public createContactDialogRef: MatDialogRef<CreateContactComponent>
+  ) {
     this.buildCreateContactForm();
   }
 

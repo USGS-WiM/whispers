@@ -9,4 +9,5 @@ export interface Contact extends History {
     type: number;
     org_id: number;
     owner_ord_id: number;
+    affiliation: string;
 }

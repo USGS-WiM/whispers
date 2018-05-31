@@ -64,6 +64,7 @@ import { LandOwnershipService } from '@app/services/land-ownership.service';
 import { AgeBiasService } from '@app/services/age-bias.service';
 import { SexBiasService } from '@app/services/sex-bias.service';
 import { CreateContactComponent } from './create-contact/create-contact.component';
+import { ContactTypeService } from '@services/contact-type.service';
 
 @NgModule({
   declarations: [
@@ -132,10 +133,11 @@ import { CreateContactComponent } from './create-contact/create-contact.componen
     DiagnosisService,
     SpeciesService,
     AgeBiasService,
-    SexBiasService
+    SexBiasService,
+    ContactTypeService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SearchDialogComponent]
+  entryComponents: [SearchDialogComponent, CreateContactComponent]
 })
 export class AppModule { }
 

@@ -1,36 +1,37 @@
 .horizontal-form-container {
     display: flex;
     flex-direction: row;
-  }
+}
 
-  .vertical-form-container {
+.vertical-form-container {
     display: flex;
     flex-direction: column;
-  }
+}
 
-  .form-control {
-      width: 18em;
-      margin:10px;
-  }
+.contacts-section-header {
+    display: flex;
+    flex-direction: row;
+}
 
-  .text-large {
-      font-size: large;
-  }
+.form-control {
+    width: 18em;
+    margin: 10px;
+}
 
-  .text-bold {
-      font-style: bold;
-  }
+.text-large {
+    font-size: large;
+}
 
-  .event-location-card {
+.text-bold {
+    font-style: bold;
+}
+
+.event-location-card {
     margin-top: 1em;
     margin-bottom: 1em;
-  }
+}
 
-  .species-number-control{
-      width: 8em;
-      margin: 10px;
-  }
-  
-//   .example-container > * {
-//     width: 100%;
-//   }
+.species-number-control {
+    width: 8em;
+    margin: 10px;
+}

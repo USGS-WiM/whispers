@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 
+import { MatDialog, MatDialogRef } from '@angular/material';
+
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 
@@ -43,12 +45,23 @@ import { SexBiasService } from '@services/sex-bias.service';
 import { AgeBias } from '@interfaces/age-bias';
 import { AgeBiasService } from '@services/age-bias.service';
 
+import { Contact } from '@interfaces/contact';
+
+import { ContactType } from '@interfaces/contact-type';
+import { ContactTypeService } from '@app/services/contact-type.service';
+
+import { CreateContactComponent } from '@create-contact/create-contact.component';
+
+
 @Component({
   selector: 'app-event-submission',
   templateUrl: './event-submission.component.html',
   styleUrls: ['./event-submission.component.scss']
 })
 export class EventSubmissionComponent implements OnInit {
+
+  createContactDialogRef: MatDialogRef<CreateContactComponent>;
+
   eventTypes: EventType[];
   legalStatuses: LegalStatus[];
   landOwnerships: LandOwnership[];
@@ -60,9 +73,14 @@ export class EventSubmissionComponent implements OnInit {
   sexBiases: SexBias[];
   ageBiases: AgeBias[];
 
+  contactTypes: ContactType[];
+
+  userContacts = [];
+
   errorMessage;
 
   eventSubmissionForm: FormGroup;
+
 
   buildEventSubmissionForm() {
     this.eventSubmissionForm = this.formBuilder.group({
@@ -78,6 +96,7 @@ export class EventSubmissionComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private dialog: MatDialog,
     private eventTypeService: EventTypeService,
     private legalStatusService: LegalStatusService,
     private landOwnershipService: LandOwnershipService,
@@ -85,9 +104,17 @@ export class EventSubmissionComponent implements OnInit {
     private adminLevelOneService: AdministrativeLevelOneService,
     private speciesService: SpeciesService,
     private sexBiasService: SexBiasService,
-    private ageBiasService: AgeBiasService
+    private ageBiasService: AgeBiasService,
+    private contactTypeService: ContactTypeService
   ) {
     this.buildEventSubmissionForm();
+  }
+
+  openCreateContactDialog() {
+    this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      // minWidth: '60%',
+      // height: '75%'
+    });
   }
 
   ngOnInit() {
@@ -181,13 +208,24 @@ export class EventSubmissionComponent implements OnInit {
         }
       );
 
+    // get contact types from the ContactTypeService
+    this.contactTypeService.getContactTypes()
+      .subscribe(
+        contactTypes => {
+          this.contactTypes = contactTypes;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
   }
 
   initEventLocation() {
     return this.formBuilder.group({
-      name: null,
-      start_date: null,
-      end_date: null,
+      name: '',
+      start_date: '',
+      end_date: '',
       country: APP_UTILITIES.DEFAULT_COUNTRY_ID,
       administrative_level_one: null,
       administrative_level_two: null,
@@ -197,6 +235,9 @@ export class EventSubmissionComponent implements OnInit {
       gnis_name: '',
       location_species: this.formBuilder.array([
         this.initLocationSpecies()
+      ]),
+      location_contacts: this.formBuilder.array([
+        this.initLocationContacts()
       ])
     });
   }
@@ -216,6 +257,24 @@ export class EventSubmissionComponent implements OnInit {
     });
   }
 
+  initLocationContacts() {
+    return this.formBuilder.group({
+      id: null,
+      contact_type: null
+      // first_name: '',
+      // last_name: '',
+      // phone_number: '',
+      // email_address: '',
+      // title: '',
+      // position: '',
+      // type: null,
+      // org_id: null,
+      // owner_org_id: null
+    });
+  }
+
+
+  // event locations
   addEventLocation() {
     const control = <FormArray>this.eventSubmissionForm.get('event_locations');
     control.push(this.initEventLocation());
@@ -231,10 +290,7 @@ export class EventSubmissionComponent implements OnInit {
     return form.controls.event_locations.controls;
   }
 
-  getLocationSpecies(form) {
-    return form.controls.location_species.controls;
-  }
-
+  // location species
   addLocationSpecies(i) {
     const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_species');
     control.push(this.initLocationSpecies());
@@ -244,6 +300,27 @@ export class EventSubmissionComponent implements OnInit {
     const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_species');
     control.removeAt(j);
   }
+
+  getLocationSpecies(form) {
+    return form.controls.location_species.controls;
+  }
+
+  // location contacts
+  addLocationContacts(i) {
+    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_contacts');
+    control.push(this.initLocationContacts());
+  }
+
+  removeLocationContacts(i, k) {
+    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_contacts');
+    control.removeAt(k);
+  }
+
+  getLocationContacts(form) {
+    return form.controls.location_contacts.controls;
+  }
+
+
 
   updateAdminLevelOneOptions(selectedCountryID) {
     const id = Number(selectedCountryID);

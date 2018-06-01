@@ -81,17 +81,19 @@ export class EventSubmissionComponent implements OnInit {
 
   eventSubmissionForm: FormGroup;
 
-
   buildEventSubmissionForm() {
     this.eventSubmissionForm = this.formBuilder.group({
       event_reference: '',
       event_type: null,
       legal_status: null,
       legal_number: '',
+      event_organization: null,
+      comments: this.formBuilder.array([]),
       event_locations: this.formBuilder.array([
         this.initEventLocation()
       ])
     });
+
   }
 
   constructor(
@@ -233,11 +235,17 @@ export class EventSubmissionComponent implements OnInit {
       longitude: null,
       land_ownership: null,
       gnis_name: '',
+      area_description: '',
+      environmental_factors: '',
+      clinical_signs: '',
       location_species: this.formBuilder.array([
         this.initLocationSpecies()
       ]),
       location_contacts: this.formBuilder.array([
         this.initLocationContacts()
+      ]),
+      comments: this.formBuilder.array([
+       // this.initLocationComments()
       ])
     });
   }
@@ -261,18 +269,15 @@ export class EventSubmissionComponent implements OnInit {
     return this.formBuilder.group({
       id: null,
       contact_type: null
-      // first_name: '',
-      // last_name: '',
-      // phone_number: '',
-      // email_address: '',
-      // title: '',
-      // position: '',
-      // type: null,
-      // org_id: null,
-      // owner_org_id: null
     });
   }
 
+  initLocationComments() {
+    return this.formBuilder.group({
+      comment: '',
+      comment_type: null
+    });
+  }
 
   // event locations
   addEventLocation() {
@@ -320,6 +325,20 @@ export class EventSubmissionComponent implements OnInit {
     return form.controls.location_contacts.controls;
   }
 
+  // location comments
+  addLocationComments(i) {
+    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_comments');
+    control.push(this.initLocationComments());
+  }
+
+  removeLocationComments(i, m) {
+    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_comments');
+    control.removeAt(m);
+  }
+
+  getLocationComments(form) {
+    return form.controls.location_comments.controls;
+  }
 
 
   updateAdminLevelOneOptions(selectedCountryID) {

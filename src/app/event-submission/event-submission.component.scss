@@ -11,11 +11,25 @@
 .contacts-section-header {
     display: flex;
     flex-direction: row;
+    margin-right: 10em;
 }
 
 .form-control {
     width: 18em;
     margin: 10px;
+}
+
+.comment-text-area {
+    width: 60em;
+    margin-bottom: 2em;
+}
+
+.event-org-select {
+    width: 40em;
+}
+
+.hint {
+    max-width: 90%;
 }
 
 .text-large {

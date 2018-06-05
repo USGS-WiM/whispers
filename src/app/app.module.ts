@@ -65,6 +65,8 @@ import { AgeBiasService } from '@app/services/age-bias.service';
 import { SexBiasService } from '@app/services/sex-bias.service';
 import { CreateContactComponent } from './create-contact/create-contact.component';
 import { ContactTypeService } from '@services/contact-type.service';
+import { OrganizationService } from '@app/services/organization.service';
+import { ContactService } from '@app/services/contact.service';
 
 @NgModule({
   declarations: [
@@ -134,7 +136,9 @@ import { ContactTypeService } from '@services/contact-type.service';
     SpeciesService,
     AgeBiasService,
     SexBiasService,
-    ContactTypeService
+    ContactService,
+    ContactTypeService,
+    OrganizationService
   ],
   bootstrap: [AppComponent],
   entryComponents: [SearchDialogComponent, CreateContactComponent]

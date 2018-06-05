@@ -28,6 +28,10 @@
     width: 40em;
 }
 
+.contact-select {
+    width: 40em;
+}
+
 .hint {
     max-width: 90%;
 }
@@ -47,5 +51,12 @@
 
 .species-number-control {
     width: 8em;
-    margin: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+}
+
+.field-help-button {
+    // width: 25px !important;
+    // height: 15px !important;
 }

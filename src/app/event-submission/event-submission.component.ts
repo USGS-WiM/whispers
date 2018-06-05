@@ -46,9 +46,13 @@ import { AgeBias } from '@interfaces/age-bias';
 import { AgeBiasService } from '@services/age-bias.service';
 
 import { Contact } from '@interfaces/contact';
+import { ContactService } from '@services/contact.service';
 
 import { ContactType } from '@interfaces/contact-type';
 import { ContactTypeService } from '@app/services/contact-type.service';
+
+import { Organization } from '@interfaces/organization';
+import { OrganizationService } from '@services/organization.service';
 
 import { CreateContactComponent } from '@create-contact/create-contact.component';
 
@@ -73,6 +77,8 @@ export class EventSubmissionComponent implements OnInit {
   sexBiases: SexBias[];
   ageBiases: AgeBias[];
 
+  organizations: Organization[];
+
   contactTypes: ContactType[];
 
   userContacts = [];
@@ -80,6 +86,15 @@ export class EventSubmissionComponent implements OnInit {
   errorMessage;
 
   eventSubmissionForm: FormGroup;
+
+  eventLocationArray: FormArray;
+  locationContactsArray: FormArray;
+  locationSpeciesArray: FormArray;
+
+  commonEventData = {
+    species: [],
+    contacts: []
+  };
 
   buildEventSubmissionForm() {
     this.eventSubmissionForm = this.formBuilder.group({
@@ -94,6 +109,8 @@ export class EventSubmissionComponent implements OnInit {
       ])
     });
 
+    this.eventLocationArray = this.eventSubmissionForm.get('event_locations') as FormArray;
+
   }
 
   constructor(
@@ -107,7 +124,9 @@ export class EventSubmissionComponent implements OnInit {
     private speciesService: SpeciesService,
     private sexBiasService: SexBiasService,
     private ageBiasService: AgeBiasService,
-    private contactTypeService: ContactTypeService
+    private contactTypeService: ContactTypeService,
+    private organizationService: OrganizationService,
+    private contactService: ContactService
   ) {
     this.buildEventSubmissionForm();
   }
@@ -221,6 +240,74 @@ export class EventSubmissionComponent implements OnInit {
         }
       );
 
+    // get organizations from the OrganizationService
+    this.organizationService.getOrganizations()
+      .subscribe(
+        organizations => {
+          this.organizations = organizations;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // TEMPORARY- will need to use user creds to query user contact list
+    // get contact types from the ContactTypeService
+    this.contactService.getContacts()
+      .subscribe(
+        contacts => {
+          this.userContacts = contacts;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+  }
+
+  createCommonEventDataObject(objectType, eventLocationIndex, objectInstanceIndex) {
+
+    const eventLocations = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'];
+
+    // check which object is being sent, parse out the specific form group instance from the form, add to the commonEventData object
+    switch (objectType) {
+      case 'contact':
+        const contactsArray =
+          <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][eventLocationIndex].get('location_contacts');
+        const contact = contactsArray.controls[objectInstanceIndex];
+        this.commonEventData.contacts.push(contact);
+
+        // loop through event locations and push the new contact into each, except the one it came from (so as to avoid duplicate)
+        for (let i = 0, j = eventLocations.length; i < j; i++) {
+
+          if (i !== eventLocationIndex) {
+            const locationContacts = eventLocations[i].get('location_contacts');
+            locationContacts.push(contact);
+          }
+        }
+
+        break;
+      case 'species':
+        const speciesArray =
+          <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][eventLocationIndex].get('location_species');
+        const species = speciesArray.controls[objectInstanceIndex];
+        this.commonEventData.species.push(species);
+
+        // loop through event locations and push the new contact into each, except the one it came from (so as to avoid duplicate)
+        for (let i = 0, j = eventLocations.length; i < j; i++) {
+
+          if (i !== eventLocationIndex) {
+            const locationSpecies = eventLocations[i].get('location_species');
+            locationSpecies.push(species);
+          }
+        }
+
+        break;
+    }
+
+
+    console.log(this.commonEventData);
+
   }
 
   initEventLocation() {
@@ -239,13 +326,13 @@ export class EventSubmissionComponent implements OnInit {
       environmental_factors: '',
       clinical_signs: '',
       location_species: this.formBuilder.array([
-        this.initLocationSpecies()
+        // this.initLocationSpecies()
       ]),
       location_contacts: this.formBuilder.array([
-        this.initLocationContacts()
+        // this.initLocationContacts()
       ]),
       comments: this.formBuilder.array([
-       // this.initLocationComments()
+        // this.initLocationComments()
       ])
     });
   }
@@ -283,6 +370,26 @@ export class EventSubmissionComponent implements OnInit {
   addEventLocation() {
     const control = <FormArray>this.eventSubmissionForm.get('event_locations');
     control.push(this.initEventLocation());
+
+    const eventLocations = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'];
+    const newEventLocationIndex = eventLocations.length - 1;
+    const newEventLocation = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][newEventLocationIndex]
+
+    if (this.commonEventData.species.length > 0) {
+
+      for (const species of this.commonEventData.species) {
+        const locationSpecies = <FormArray>newEventLocation.get('location_species');
+        locationSpecies.push(species);
+      }
+    }
+
+    if (this.commonEventData.contacts.length > 0) {
+
+      for (const contact of this.commonEventData.contacts) {
+        const locationContacts = <FormArray>newEventLocation.get('location_contacts');
+        locationContacts.push(contact);
+      }
+    }
   }
 
   removeEventLocation(i) {

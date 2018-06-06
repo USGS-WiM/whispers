@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { MatDialog, MatDialogRef } from '@angular/material';
+
+import { AboutComponent } from '@about/about.component';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,8 +12,17 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class AppComponent {
   title = 'app';
-  constructor(private router: Router, private route: ActivatedRoute) {
+  aboutDialogRef: MatDialogRef<AboutComponent>;
+  constructor(private router: Router, private route: ActivatedRoute, private dialog: MatDialog) {
   }
+
+  openAboutDialog() {
+    this.aboutDialogRef = this.dialog.open(AboutComponent, {
+      minWidth: '60%',
+      // height: '75%'
+    });
+  }
+
 
   navigateToEventSubmit() {
     this.router.navigate([`../eventsubmission/`], { relativeTo: this.route });

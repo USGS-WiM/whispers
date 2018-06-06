@@ -89,21 +89,23 @@
                       <div class="horizontal-form-container">
 
                         <mat-form-field class="form-control">
-                          <mat-select placeholder="Country" formControlName="country" (change)="updateAdminLevelOneOptions($event)">
+                          <mat-select placeholder="Country" formControlName="country" (change)="updateAdminLevelOneOptions($event.value)">
                             <mat-option *ngFor="let country of countries" value="{{country.id}}">{{country.name}}</mat-option>
                           </mat-select>
                         </mat-form-field>
 
                         <mat-form-field class="form-control">
-                          <mat-select placeholder="State" formControlName="administrative_level_one" (change)="updateAdminLevelTwoOptions($event)">
+                          <mat-select placeholder="State" formControlName="administrative_level_one" (change)="updateAdminLevelTwoOptions($event.value)">
                             <mat-option *ngFor="let adminLevelOne of adminLevelOnes" value="{{adminLevelOne.id}}">{{adminLevelOne.name}}</mat-option>
                           </mat-select>
+                          <mat-hint align="start">Select a country to update state list </mat-hint>
                         </mat-form-field>
 
                         <mat-form-field class="form-control">
                           <mat-select placeholder="County" formControlName="administrative_level_two">
                             <mat-option *ngFor="let adminLevelTwo of adminLevelTwos" value="{{adminLevelTwo.id}}">{{adminLevelTwo.name}}</mat-option>
                           </mat-select>
+                          <mat-hint align="start">Select a state to update county list </mat-hint>
                         </mat-form-field>
                       </div>
 
@@ -233,11 +235,13 @@
                                 </mat-select>
                               </mat-form-field>
 
-                              <button mat-icon-button color="accent" aria-label="Apply species to all locations" matTooltip="Apply species to all locations" (click)="createCommonEventDataObject('species', i, j )">
+                              <button mat-icon-button color="accent" aria-label="Apply species to all locations" matTooltip="Apply species to all locations"
+                                (click)="createCommonEventDataObject('species', i, j )">
                                 <i class="material-icons">group_work</i>
                               </button>
 
-                              <button mat-icon-button color="warn" aria-label="Remove this species from this location" (click)="removeLocationSpecies(i, j)" matTooltip="Remove this species from this location">
+                              <button mat-icon-button color="warn" aria-label="Remove this species from this location" (click)="removeLocationSpecies(i, j)"
+                                matTooltip="Remove this species from this location">
                                 <i class="material-icons">remove_circle</i>
                               </button>
 
@@ -283,7 +287,8 @@
                               </mat-form-field>
 
                               <!-- <div class="button-row"> -->
-                              <button mat-icon-button color="accent" aria-label="Apply contact to all locations" matTooltip="Apply contact to all locations" (click)="createCommonEventDataObject('contact', i, k )">
+                              <button mat-icon-button color="accent" aria-label="Apply contact to all locations" matTooltip="Apply contact to all locations"
+                                (click)="createCommonEventDataObject('contact', i, k )">
                                 <i class="material-icons">group_work</i>
                               </button>
 
@@ -291,7 +296,8 @@
                                 <i class="material-icons">assignment_ind</i>
                               </button>
 
-                              <button mat-icon-button color="warn" aria-label="Remove this contact from this location" (click)="removeLocationContacts(i, k)" matTooltip="Remove this contact from this location">
+                              <button mat-icon-button color="warn" aria-label="Remove this contact from this location" (click)="removeLocationContacts(i, k)"
+                                matTooltip="Remove this contact from this location">
                                 <i class="material-icons">remove_circle</i>
                               </button>
                               <!-- </div> -->

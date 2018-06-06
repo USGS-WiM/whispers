@@ -1,14 +1,18 @@
-<div class="grid mat-typography">
-  <aside class="sidebar">
-    <mat-expansion-panel expanded>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Welcome to WHISPers
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <p>This is the Wildlife Health Information Sharing Partnership event reporting system. It is a place to explore wildlife
-        mortality data submitted by partners across North America and verified by trained biologists..</p>
-    </mat-expansion-panel>
+<div id="homeContainer">
+
+  <div class="controlsDiv">
+
+    <div id="welcome-panel-div">
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Welcome to WHISPers
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <p id="welcome-text">This is the Wildlife Health Information Sharing Partnership event reporting system. It is a place to explore wildlife
+          mortality data submitted by partners across North America and verified by trained biologists.</p>
+      </mat-expansion-panel>
+    </div>
 
     <mat-expansion-panel expanded>
       <mat-expansion-panel-header>
@@ -17,12 +21,19 @@
 
       <span class="mat-title">Current Search</span>
 
-      <mat-action-row>
-        <button mat-button>Save Filter Selection</button>
-        <button mat-button>Export Data</button>
-        <button mat-button (click)="openSearchDialog()">Update Search</button>
-        <button mat-button>Share</button>
+      <mat-action-row class="search-button-row">
+        <button mat-button color="accent">
+          <i class="material-icons">
+            save
+          </i> Save Search</button>
+
+        <button mat-button color="accent" (click)="openSearchDialog()">
+          <i class="material-icons">
+            search
+          </i> Update Search</button>
+
       </mat-action-row>
+
     </mat-expansion-panel>
 
     <mat-expansion-panel>
@@ -42,10 +53,9 @@
         Your Saved Searches
       </mat-expansion-panel-header>
     </mat-expansion-panel>
+  </div>
 
-  </aside>
-  <article class="map-and-table">
-
+  <div class="resultsDiv">
     <mat-expansion-panel expanded id="mapPanel" style="padding:0px;">
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -55,95 +65,113 @@
       <div id="map"></div>
     </mat-expansion-panel>
 
+    <mat-card>
+      <mat-card-title>
 
-    <mat-expansion-panel expanded id="mapPanel" style="padding:0px;">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <span class="text-x-large text-bold">Results</span>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div *ngIf="dataSource" class="results-table-div">
+        <div class="results-card-title-row">
+          <span class="results-card-title">Results</span>
 
-        <!-- <mat-form-field>
-          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-        </mat-form-field> -->
+          <span class="spacer"></span>
 
-        <mat-table [dataSource]="dataSource" matSort>
+          <span class="results-button-row">
+            <button mat-button color="accent">
+              <i class="material-icons">
+                  unarchive
+              </i> Export Data</button>
+            <button mat-button color="accent">
+              <i class="material-icons">
+                share
+              </i> Share</button>
+          </span>
 
-          <!-- ID Column -->
-          <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-            <mat-cell *matCellDef="let event"> {{event.id}} </mat-cell>
-          </ng-container>
-
-          <!-- Event Type Column -->
-          <ng-container matColumnDef="event_type_string">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Type </mat-header-cell>
-            <mat-cell *matCellDef="let event"> {{event.event_type_string}} </mat-cell>
-          </ng-container>
-
-          <!-- Affected Count Column -->
-          <ng-container matColumnDef="affected_count">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Affected </mat-header-cell>
-            <mat-cell *matCellDef="let event"> {{event.affected_count}} </mat-cell>
-          </ng-container>
-
-          <!-- Start Date Column -->
-          <ng-container matColumnDef="start_date">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </mat-header-cell>
-            <mat-cell *matCellDef="let event"> {{event.start_date | date:'shortDate'}} </mat-cell>
-          </ng-container>
-
-          <!-- End Date Column -->
-          <ng-container matColumnDef="end_date">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> End Date </mat-header-cell>
-            <mat-cell *matCellDef="let event"> {{event.end_date | date:'shortDate'}} </mat-cell>
-          </ng-container>
-
-          <!-- States Column -->
-          <ng-container matColumnDef="states">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> States </mat-header-cell>
-            <mat-cell *matCellDef="let event">
-              <span *ngFor="let state of event.states">{{state.name}}
-                <span *ngIf="(event.states.indexOf(state)) < (event.states.length - 1)">, </span>
-              </span>
-            </mat-cell>
-          </ng-container>
-
-          <!-- Counties Column -->
-          <ng-container matColumnDef="counties">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Counties </mat-header-cell>
-            <mat-cell *matCellDef="let event">
-              <span *ngFor="let county of event.counties">{{county.name}}
-                <span *ngIf="(event.counties.indexOf(county)) < (event.counties.length - 1)">, </span>
-              </span>
-            </mat-cell>
-          </ng-container>
-
-          <!-- Species Column -->
-          <ng-container matColumnDef="species">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Species </mat-header-cell>
-            <mat-cell *matCellDef="let event">
-              <span *ngFor="let species of event.species">{{species.name}}
-                <span *ngIf="(event.species.indexOf(species)) < (event.species.length - 1)">, </span>
-              </span>
-            </mat-cell>
-          </ng-container>
-
-          <!-- Event Diagnosis Column -->
-          <ng-container matColumnDef="event_diagnosis">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Event Diagnosis </mat-header-cell>
-            <mat-cell *matCellDef="let event"> {{event.event_diagnosis.diagnosis_string}}</mat-cell>
-          </ng-container>
-
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"></mat-row>
-        </mat-table>
-
-        <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
-      </div>
-    </mat-expansion-panel>
+        </div>
+      </mat-card-title>
+      <mat-card-content>
+        <div *ngIf="dataSource" class="results-table-div">
 
 
-  </article>
+          <!-- <mat-form-field>
+                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field> -->
+
+          <mat-table [dataSource]="dataSource" matSort>
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+              <mat-cell *matCellDef="let event"> {{event.id}} </mat-cell>
+            </ng-container>
+
+            <!-- Event Type Column -->
+            <ng-container matColumnDef="event_type_string">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Type </mat-header-cell>
+              <mat-cell *matCellDef="let event"> {{event.event_type_string}} </mat-cell>
+            </ng-container>
+
+            <!-- Affected Count Column -->
+            <ng-container matColumnDef="affected_count">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Affected </mat-header-cell>
+              <mat-cell *matCellDef="let event"> {{event.affected_count}} </mat-cell>
+            </ng-container>
+
+            <!-- Start Date Column -->
+            <ng-container matColumnDef="start_date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </mat-header-cell>
+              <mat-cell *matCellDef="let event"> {{event.start_date | date:'shortDate'}} </mat-cell>
+            </ng-container>
+
+            <!-- End Date Column -->
+            <ng-container matColumnDef="end_date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> End Date </mat-header-cell>
+              <mat-cell *matCellDef="let event"> {{event.end_date | date:'shortDate'}} </mat-cell>
+            </ng-container>
+
+            <!-- States Column -->
+            <ng-container matColumnDef="states">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> States </mat-header-cell>
+              <mat-cell *matCellDef="let event">
+                <span *ngFor="let state of event.states">{{state.name}}
+                  <span *ngIf="(event.states.indexOf(state)) < (event.states.length - 1)">, </span>
+                </span>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Counties Column -->
+            <ng-container matColumnDef="counties">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Counties </mat-header-cell>
+              <mat-cell *matCellDef="let event">
+                <span *ngFor="let county of event.counties">{{county.name}}
+                  <span *ngIf="(event.counties.indexOf(county)) < (event.counties.length - 1)">, </span>
+                </span>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Species Column -->
+            <ng-container matColumnDef="species">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Species </mat-header-cell>
+              <mat-cell *matCellDef="let event">
+                <span *ngFor="let species of event.species">{{species.name}}
+                  <span *ngIf="(event.species.indexOf(species)) < (event.species.length - 1)">, </span>
+                </span>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Event Diagnosis Column -->
+            <ng-container matColumnDef="event_diagnosis">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Event Diagnosis </mat-header-cell>
+              <mat-cell *matCellDef="let event"> {{event.event_diagnosis.diagnosis_string}}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"></mat-row>
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+
+  </div>
+
 </div>

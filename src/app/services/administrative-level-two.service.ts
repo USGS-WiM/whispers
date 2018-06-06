@@ -9,33 +9,35 @@ import { Subject } from 'rxjs/Subject';
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 
-import { County } from '@interfaces/county';
+import { AdministrativeLevelTwo } from '@interfaces/administrative-level-two';
+
 
 @Injectable()
-export class CountyService {
+export class AdministrativeLevelTwoService {
 
   constructor(private _http: Http) { }
 
-  public queryCounties(query): Observable<County[]> {
+  public queryAdminLevelTwos(adminLevelOneID): Observable<AdministrativeLevelTwo[]> {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_TWOS_URL + query, options)
-      .map((response: Response) => <County[]>response.json())
+    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_TWOS_URL + '?administrativelevelone=' + adminLevelOneID, options)
+      .map((response: Response) => <AdministrativeLevelTwo[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
-  public getCounties(): Observable<County[]> {
+
+  public getAdminLevelTwos(): Observable<AdministrativeLevelTwo[]> {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
     return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_TWOS_URL, options)
-      .map((response: Response) => <County[]>response.json())
+      .map((response: Response) => <AdministrativeLevelTwo[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
   }

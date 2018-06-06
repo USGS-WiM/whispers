@@ -57,7 +57,7 @@ import { EventTypeService } from '@services/event-type.service';
 import { DiagnosisTypeService } from '@services/diagnosis-type.service';
 import { DiagnosisService } from '@services/diagnosis.service';
 import { SpeciesService } from '@services/species.service';
-import { CountyService } from '@services/county.service';
+import { AdministrativeLevelTwoService } from '@services/administrative-level-two.service';
 import { LegalStatusService } from '@app/services/legal-status.service';
 import { CountryService } from '@app/services/country.service';
 import { LandOwnershipService } from '@app/services/land-ownership.service';
@@ -132,7 +132,7 @@ import { AboutComponent } from './about/about.component';
     LandOwnershipService,
     CountryService,
     AdministrativeLevelOneService,
-    CountyService,
+    AdministrativeLevelTwoService,
     DiagnosisTypeService,
     DiagnosisService,
     SpeciesService,

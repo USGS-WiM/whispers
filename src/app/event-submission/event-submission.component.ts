@@ -21,9 +21,6 @@ import { DiagnosisService } from '@services/diagnosis.service';
 import { DiagnosisType } from '@interfaces/diagnosis-type';
 import { DiagnosisTypeService } from '@services/diagnosis-type.service';
 
-import { County } from '@interfaces/county';
-import { CountyService } from '@services/county.service';
-
 import { Species } from '@interfaces/species';
 import { SpeciesService } from '@services/species.service';
 
@@ -33,8 +30,8 @@ import { CountryService } from '@app/services/country.service';
 import { AdministrativeLevelOne } from '@interfaces/administrative-level-one';
 import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
 
-// import { AdministrativeLevelTwo } from '@interfaces/administrative-level-two';
-// import { AdministrativeLevelTwoService } from '@services/administrative-level-two.service';
+import { AdministrativeLevelTwo } from '@interfaces/administrative-level-two';
+import { AdministrativeLevelTwoService } from '@services/administrative-level-two.service';
 
 import { LandOwnership } from '@interfaces/land-ownership';
 import { LandOwnershipService } from '@services/land-ownership.service';
@@ -72,6 +69,7 @@ export class EventSubmissionComponent implements OnInit {
 
   countries: Country[];
   adminLevelOnes: AdministrativeLevelOne[];
+  adminLevelTwos: AdministrativeLevelTwo[];
 
   species: Species[];
   sexBiases: SexBias[];
@@ -121,6 +119,7 @@ export class EventSubmissionComponent implements OnInit {
     private landOwnershipService: LandOwnershipService,
     private countryService: CountryService,
     private adminLevelOneService: AdministrativeLevelOneService,
+    private adminLevelTwoService: AdministrativeLevelTwoService,
     private speciesService: SpeciesService,
     private sexBiasService: SexBiasService,
     private ageBiasService: AgeBiasService,
@@ -468,18 +467,18 @@ export class EventSubmissionComponent implements OnInit {
   updateAdminLevelTwoOptions(selectedAdminLevelOneID) {
     const id = Number(selectedAdminLevelOneID);
 
-    // query the adminlevelones endpoint for appropriate records
-    // update the options for the adminLevelOne select with the response
+    // query the adminleveltwos endpoint for appropriate records
+    // update the options for the adminLevelTwo select with the response
 
-    // this.adminLevelTwoService.queryAdminLevelTwos(id)
-    //   .subscribe(
-    //     adminLevelTwos => {
-    //       this.adminLevelTwos = adminLevelTwos;
-    //     },
-    //     error => {
-    //       this.errorMessage = <any>error;
-    //     }
-    //   );
+    this.adminLevelTwoService.queryAdminLevelTwos(id)
+      .subscribe(
+        adminLevelTwos => {
+          this.adminLevelTwos = adminLevelTwos;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
 
 }

@@ -1,15 +1,17 @@
 <header class="header">
   <mat-toolbar color="primary" class="mat-typography whispers-header">
     <mat-toolbar-row>
-      <span class="mat-display-3 title">WHISPers&nbsp;&nbsp;
-      </span>
+      <!-- <button mat-button> -->
+        <span class="mat-display-3 title"><a href="/home" style="text-decoration:none; color:white !important;">WHISPers&nbsp;&nbsp;</a>
+        </span>
+      <!-- </button> -->
       <span class="subheading-1">
         Wildlife Health Information Sharing Partnership
         <span class="text-smaller">event reporting system</span>
       </span>
       <span class="spacer"></span>
       <span>
-        <button mat-button>
+        <button mat-button (click)="openAboutDialog()">
           <mat-icon class="icon">info_outline</mat-icon>About</button>
       </span>
 

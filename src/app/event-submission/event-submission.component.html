@@ -134,8 +134,9 @@
                         <mat-form-field class="form-control">
                           <input matInput placeholder="GNIS Standardized Location Name" formControlName="gnis_name">
                         </mat-form-field>
-
                       </div>
+
+                      <mat-divider [inset]="true"></mat-divider>
 
                       <!--Comments Section-->
                       <mat-accordion>
@@ -185,8 +186,10 @@
 
                       <!--End Comments Section-->
 
+
                       <!--Location Species Section-->
                       <div>
+                        <mat-divider [inset]="true"></mat-divider>
                         <h4>Species Affected</h4>
                         <div formArrayName="location_species">
                           <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let j = index">
@@ -230,11 +233,11 @@
                                 </mat-select>
                               </mat-form-field>
 
-                              <button mat-icon-button color="accent" matTooltip="Apply species to all locations" (click)="createCommonEventDataObject('species', i, j )">
+                              <button mat-icon-button color="accent" aria-label="Apply species to all locations" matTooltip="Apply species to all locations" (click)="createCommonEventDataObject('species', i, j )">
                                 <i class="material-icons">group_work</i>
                               </button>
 
-                              <button mat-icon-button color="warn" (click)="removeLocationSpecies(i, j)" matTooltip="Remove this species from this location">
+                              <button mat-icon-button color="warn" aria-label="Remove this species from this location" (click)="removeLocationSpecies(i, j)" matTooltip="Remove this species from this location">
                                 <i class="material-icons">remove_circle</i>
                               </button>
 
@@ -244,12 +247,13 @@
                         </div>
                       </div>
                       <div class="button-row">
-                        <button mat-button color="primary" matTooltip="Add species to this location"  (click)="addLocationSpecies(i)">
+                        <button mat-button color="primary" matTooltip="Add species to this location" (click)="addLocationSpecies(i)">
                           <i class="material-icons">add_circle</i> Add Species</button>
                       </div>
                       <!--End Location Species Section-->
 
                       <p>
+                        <mat-divider [inset]="true"></mat-divider>
 
                         <!--Location Contacts Section-->
                         <div class="contacts-section-header">
@@ -267,7 +271,8 @@
                             <div class="horizontal-form-container" [formGroupName]="k">
                               <mat-form-field class="form-control contact-select">
                                 <mat-select placeholder="Contact" formControlName="id">
-                                  <mat-option *ngFor="let contact of userContacts" [value]="contact.id">{{contact.first_name}} {{contact.last_name}} | </mat-option>
+                                  <mat-option *ngFor="let contact of userContacts" [value]="contact.id">{{contact.first_name}} {{contact.last_name}} | {{contact.organization | displayValue:'name':this.organizations}}
+                                  </mat-option>
                                 </mat-select>
                               </mat-form-field>
 
@@ -278,15 +283,15 @@
                               </mat-form-field>
 
                               <!-- <div class="button-row"> -->
-                              <button mat-icon-button color="accent" matTooltip="Apply contact to all locations" (click)="createCommonEventDataObject('contact', i, k )">
+                              <button mat-icon-button color="accent" aria-label="Apply contact to all locations" matTooltip="Apply contact to all locations" (click)="createCommonEventDataObject('contact', i, k )">
                                 <i class="material-icons">group_work</i>
                               </button>
 
-                              <button mat-icon-button color="accent" matTooltip="View contact details">
+                              <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details">
                                 <i class="material-icons">assignment_ind</i>
                               </button>
 
-                              <button mat-icon-button color="warn" (click)="removeLocationContacts(i, k)" matTooltip="Remove this contact from this location">
+                              <button mat-icon-button color="warn" aria-label="Remove this contact from this location" (click)="removeLocationContacts(i, k)" matTooltip="Remove this contact from this location">
                                 <i class="material-icons">remove_circle</i>
                               </button>
                               <!-- </div> -->
@@ -325,8 +330,11 @@
             </i>Add Another Event Location</button>
 
           <p>
-            <button mat-raised-button color="primary"><i class="material-icons">done</i> Submit Event</button>
-            <div>
+            <button mat-raised-button color="primary">
+              <i class="material-icons">done</i> Submit Event</button>
+
+            <div class="temporary-form-value-display">
+              <h3>Temporary Form Value display (not for production)</h3>
               <pre> {{eventSubmissionForm.value | json}} </pre>
             </div>
 

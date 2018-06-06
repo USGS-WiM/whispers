@@ -1,44 +1,44 @@
 @import '~@angular/material/theming';
-
 /* ngx-datatable material theming imports */
+
 @import '~@swimlane/ngx-datatable/release/index.css';
 @import '~@swimlane/ngx-datatable/release/themes/material.css';
 @import '~@swimlane/ngx-datatable/release/assets/icons.css';
-
 .spacer {
     flex: 1 1 auto;
-  }
-
-  .icon {
-    padding: 0 5px;
-  }
-
-  .mat-display-3 {
-    margin-bottom: auto !important;
-  }
-
-  .toolbar-bottom-row {
-    height: 40px;
-    background-color: #2E7D32 !important;
-  }
-
-  .whispers-header {
-    //font-family: 'Oswald', sans-serif !important;
-    font-family: 'PT Sans', sans-serif !important;
-      position: sticky;
-      top: 0;
-  }
-
-  .title {
-    //font-family: 'Oswald', sans-serif !important;
-    font-family: 'PT Sans', sans-serif !important;
-  }
-
-  .text-smaller {
-    font-size: smaller;
 }
 
+.icon {
+    padding: 0 5px;
+}
 
+.mat-display-3 {
+    margin-bottom: auto !important;
+}
 
+.toolbar-bottom-row {
+    height: 40px;
+    background-color: #2E7D32 !important;
+}
 
+.whispers-header {
+    //font-family: 'Oswald', sans-serif !important;
+    font-family: 'PT Sans', sans-serif !important;
+    position: sticky;
+    top: 0;
+}
 
+.title {
+    //font-family: 'Oswald', sans-serif !important;
+    font-family: 'PT Sans', sans-serif !important;
+    text-decoration: none;
+}
+
+.title:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.text-smaller {
+    font-size: smaller;
+}

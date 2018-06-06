@@ -24,6 +24,9 @@
       "@create-contact/*": [
         "app/create-contact/*"
       ],
+      "@about/*": [
+        "app/about/*"
+      ],
       "@pipes/*": [
         "app/pipes/*"
       ]

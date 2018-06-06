@@ -19,7 +19,8 @@ import { DiagnosisTypeService } from '@services/diagnosis-type.service';
 import { DiagnosisType } from '@interfaces/diagnosis-type';
 import { DiagnosisService } from '@services/diagnosis.service';
 import { SpeciesService } from '@services/species.service';
-import { CountyService } from '@services/county.service';
+import { AdministrativeLevelTwoService } from '@services/administrative-level-two.service';
+
 
 @Component({
   selector: 'app-search-dialog',
@@ -93,7 +94,7 @@ export class SearchDialogComponent implements OnInit {
     public searchDialogRef: MatDialogRef<SearchDialogComponent>,
     private formBuilder: FormBuilder,
     private _adminLevelOneService: AdministrativeLevelOneService,
-    private _countyService: CountyService,
+    private _adminLevelTwoService: AdministrativeLevelTwoService,
     private _eventTypeService: EventTypeService,
     private _diagnosisTypeService: DiagnosisTypeService,
     private _diagnosisService: DiagnosisService,
@@ -164,7 +165,7 @@ export class SearchDialogComponent implements OnInit {
         }
       );
     // get counties from the county service
-    this._countyService.getCounties()
+    this._adminLevelTwoService.getAdminLevelTwos()
       .subscribe(
         (counties) => {
           this.counties = counties;

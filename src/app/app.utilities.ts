@@ -6,12 +6,12 @@ import { APP_SETTINGS } from '@app/app.settings';
 @Injectable()
 export class APP_UTILITIES {
 
-    public static get DEFAULT_COUNTRY_ID(): number {
+    public static get DEFAULT_COUNTRY_ID(): string {
 
         // TODO: impove this function to actually lookup the default country id 
         // using the default country abbreviation string from APP_SETTINGS.
         // doing this quick and dirty to make quick progress now. 
-        return 30;
+        return '30';
     }
 
     public static get SAMPLE_EVENT_DATA() {

@@ -1,18 +1,22 @@
 <header class="header">
   <mat-toolbar color="primary" class="mat-typography whispers-header">
-    <mat-toolbar-row>
-      <!-- <button mat-button> -->
-        <span class="mat-display-3 title"><a href="/home" style="text-decoration:none; color:white !important;">WHISPers&nbsp;&nbsp;</a>
-        </span>
-      <!-- </button> -->
-      <span class="subheading-1">
+
+    <mat-toolbar-row class="header-top-row">
+
+      <span class="mat-display-3 title">
+        <a href="/home" style="text-decoration:none; color:white !important;">WHISPers&nbsp;&nbsp;</a>
+      </span>
+
+      <span class="subheading-1 whispers-subtitle">
         Wildlife Health Information Sharing Partnership
         <span class="text-smaller">event reporting system</span>
       </span>
-      <span class="spacer"></span>
-      <span>
-        <button mat-button (click)="openAboutDialog()">
-          <mat-icon class="icon">info_outline</mat-icon>About</button>
+      <span class="header-top-row-spacer"></span>
+      <span class="about-button-span">
+        <button mat-button (click)="openAboutDialog()" aria-label="About this application">
+          <mat-icon class="icon">info_outline</mat-icon>
+          <span class="header-button-text">About</span>
+        </button>
       </span>
 
     </mat-toolbar-row>
@@ -21,17 +25,22 @@
       <span></span>
       <span class="spacer"></span>
       <span>
-        <button mat-button (click)="navigateToEventSubmit()">
-          <i class="material-icons">library_add</i> Submit Event</button>
+        <button mat-button aria-label="Submit Event" (click)="navigateToEventSubmit()">
+          <i class="material-icons">library_add</i>
+          <span class="header-button-text">Submit Event</span>
+        </button>
       </span>
       <span>
-        <button mat-button>
-          <mat-icon class="icon">account_box</mat-icon>Login</button>
+        <button mat-button aria-label="Login">
+          <mat-icon class="icon">account_box</mat-icon>
+          <span class="header-button-text">Login</span>
+        </button>
       </span>
 
     </mat-toolbar-row>
   </mat-toolbar>
 </header>
+
 <router-outlet></router-outlet>
 
 <!-- <div class="grid">

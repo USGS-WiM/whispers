@@ -22,9 +22,10 @@
 
 
             <mat-form-field class="form-control">
-              <mat-select placeholder="Event Type" formControlName="event_type">
+              <mat-select placeholder="Event Type" formControlName="event_type" required>
                 <mat-option *ngFor="let eventType of eventTypes" value="{{eventType.id}}">{{eventType.name}}</mat-option>
               </mat-select>
+              <mat-error *ngIf="eventSubmissionForm.get('event_type').invalid">{{getErrorMessage('event_type')}}</mat-error>
             </mat-form-field>
 
             <mat-form-field class="form-control">
@@ -33,9 +34,10 @@
             </mat-form-field>
 
             <mat-form-field class="form-control">
-              <mat-select placeholder="Legal Status" formControlName="legal_status">
+              <mat-select placeholder="Legal Status" formControlName="legal_status" required>
                 <mat-option *ngFor="let legalStatus of legalStatuses" value="{{legalStatus.id}}">{{legalStatus.name}}</mat-option>
               </mat-select>
+              <mat-error *ngIf="eventSubmissionForm.get('legal_status').invalid">{{getErrorMessage('legal_status')}}</mat-error>
             </mat-form-field>
 
             <mat-form-field class="form-control">
@@ -89,10 +91,12 @@
                       <div class="horizontal-form-container">
 
                         <mat-form-field class="form-control">
-                          <mat-select placeholder="Country" formControlName="country" (change)="updateAdminLevelOneOptions($event.value)">
+                          <mat-select placeholder="Country" formControlName="country" (change)="updateAdminLevelOneOptions($event.value)" required>
                             <mat-option *ngFor="let country of countries" value="{{country.id}}">{{country.name}}</mat-option>
                           </mat-select>
                         </mat-form-field>
+
+                        (extractForm.get('new_rt').get('reaction_volume').dirty
 
                         <mat-form-field class="form-control">
                           <mat-select placeholder="State" formControlName="administrative_level_one" (change)="updateAdminLevelTwoOptions($event.value)">
@@ -155,7 +159,15 @@
                           <div class="vertical-form-container">
 
                             <mat-form-field class="comment-text-area">
-                              <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="Area Description" formControlName="area_description"></textarea>
+                              <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="Site Description" formControlName="site_description"></textarea>
+                              <mat-hint align="start" class="hint">
+                                <strong></strong>
+                              </mat-hint>
+                              <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+                            </mat-form-field>
+
+                            <mat-form-field class="comment-text-area">
+                              <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="History" formControlName="history"></textarea>
                               <mat-hint align="start" class="hint">
                                 <strong>land use, habitat types, other species present, or other additional information that may
                                   be of value such as past occurrences of disease in area, public health warnings, hunting
@@ -336,13 +348,16 @@
             </i>Add Another Event Location</button>
 
           <p>
-            <button mat-raised-button color="primary">
-              <i class="material-icons">done</i> Submit Event</button>
 
-            <div class="temporary-form-value-display">
-              <h3>Temporary Form Value display (not for production)</h3>
-              <pre> {{eventSubmissionForm.value | json}} </pre>
-            </div>
+            <mat-progress-bar mode="indeterminate" *ngIf="submitLoading" class="event-submit-progress-bar"></mat-progress-bar>
+            <p>
+              <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid" (click)="submitEvent(eventSubmissionForm.value)">
+                <i class="material-icons">done</i> Submit Event</button>
+
+              <div class="temporary-form-value-display">
+                <h3>Temporary Form Value display (not for production)</h3>
+                <pre> {{eventSubmissionForm.value | json}} </pre>
+              </div>
 
       </mat-card-content>
     </mat-card>

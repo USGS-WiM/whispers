@@ -73,3 +73,7 @@ mat-table>.mat-row:hover {
 .spacer {
     flex-grow: 1;
 }
+
+::ng-deep #mapPanel .mat-expansion-panel-content > .mat-expansion-panel-body {
+    padding: 0px 0px 0px 0px;
+}

@@ -4,10 +4,6 @@
 @import '~@swimlane/ngx-datatable/release/index.css';
 @import '~@swimlane/ngx-datatable/release/themes/material.css';
 @import '~@swimlane/ngx-datatable/release/assets/icons.css';
-.spacer {
-    flex: 1 1 auto;
-}
-
 .icon {
     padding: 0 5px;
 }
@@ -41,4 +37,35 @@
 
 .text-smaller {
     font-size: smaller;
+}
+
+@media (max-width: 870px) {
+    .whispers-subtitle {
+        display: none;
+    }
+}
+
+@media (max-width: 400px) {
+    .header-button-text {
+        display: none;
+    }
+}
+
+.header-top-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.header-top-row-spacer {
+    //flex: 1 1 auto;
+    flex-grow: 1;
+}
+
+.about-button-span {
+    float: right;
+}
+
+.spacer {
+    flex: 1 1 auto;
 }

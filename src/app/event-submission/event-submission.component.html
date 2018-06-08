@@ -94,9 +94,8 @@
                           <mat-select placeholder="Country" formControlName="country" (change)="updateAdminLevelOneOptions($event.value)" required>
                             <mat-option *ngFor="let country of countries" value="{{country.id}}">{{country.name}}</mat-option>
                           </mat-select>
+                          <mat-error *ngIf="eventSubmissionForm.get('event_locations').controls[i].get('country').invalid">Please enter a value</mat-error>
                         </mat-form-field>
-
-                        (extractForm.get('new_rt').get('reaction_volume').dirty
 
                         <mat-form-field class="form-control">
                           <mat-select placeholder="State" formControlName="administrative_level_one" (change)="updateAdminLevelTwoOptions($event.value)">
@@ -149,7 +148,7 @@
                         <mat-expansion-panel>
                           <mat-expansion-panel-header>
                             <mat-panel-title>
-                              Area Description, Environmental Factors, Clinical Signs (Optional)
+                              Site Description, History, Environmental Factors, Clinical Signs (Optional)
                             </mat-panel-title>
                             <mat-panel-description>
 
@@ -281,7 +280,7 @@
                           </div>
                         </div>
 
-                        <div formArrayName="location_contacts">
+                        <div formArrayName="event_location_contacts">
                           <div class="contacts-container" *ngFor="let locationContacts of getLocationContacts(eventLocation); let k = index">
 
                             <div class="horizontal-form-container" [formGroupName]="k">

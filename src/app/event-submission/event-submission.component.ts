@@ -289,7 +289,7 @@ export class EventSubmissionComponent implements OnInit {
     switch (objectType) {
       case 'contact':
         const contactsArray =
-          <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][eventLocationIndex].get('location_contacts');
+          <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][eventLocationIndex].get('event_location_contacts');
         const contact = contactsArray.controls[objectInstanceIndex];
         this.commonEventData.contacts.push(contact);
 
@@ -297,7 +297,7 @@ export class EventSubmissionComponent implements OnInit {
         for (let i = 0, j = eventLocations.length; i < j; i++) {
 
           if (i !== eventLocationIndex) {
-            const locationContacts = eventLocations[i].get('location_contacts');
+            const locationContacts = eventLocations[i].get('event_location_contacts');
             locationContacts.push(contact);
           }
         }
@@ -331,7 +331,7 @@ export class EventSubmissionComponent implements OnInit {
       name: '',
       start_date: '',
       end_date: '',
-      country: [APP_UTILITIES.DEFAULT_COUNTRY_ID, Validators.required],
+      country: [null, Validators.required],
       administrative_level_one: null,
       administrative_level_two: null,
       latitude: null,
@@ -345,7 +345,7 @@ export class EventSubmissionComponent implements OnInit {
       location_species: this.formBuilder.array([
         // this.initLocationSpecies()
       ]),
-      location_contacts: this.formBuilder.array([
+      event_location_contacts: this.formBuilder.array([
         // this.initLocationContacts()
       ]),
       comments: this.formBuilder.array([
@@ -403,7 +403,7 @@ export class EventSubmissionComponent implements OnInit {
     if (this.commonEventData.contacts.length > 0) {
 
       for (const contact of this.commonEventData.contacts) {
-        const locationContacts = <FormArray>newEventLocation.get('location_contacts');
+        const locationContacts = <FormArray>newEventLocation.get('event_location_contacts');
         locationContacts.push(contact);
       }
     }
@@ -436,17 +436,17 @@ export class EventSubmissionComponent implements OnInit {
 
   // location contacts
   addLocationContacts(i) {
-    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_contacts');
+    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('event_location_contacts');
     control.push(this.initLocationContacts());
   }
 
   removeLocationContacts(i, k) {
-    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_contacts');
+    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('event_location_contacts');
     control.removeAt(k);
   }
 
   getLocationContacts(form) {
-    return form.controls.location_contacts.controls;
+    return form.controls.event_location_contacts.controls;
   }
 
   // location comments

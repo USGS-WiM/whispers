@@ -20,6 +20,7 @@ import { DiagnosisType } from '@interfaces/diagnosis-type';
 import { DiagnosisService } from '@services/diagnosis.service';
 import { SpeciesService } from '@services/species.service';
 import { AdministrativeLevelTwoService } from '@services/administrative-level-two.service';
+import { id } from '@swimlane/ngx-datatable/release/utils';
 
 
 @Component({
@@ -40,7 +41,7 @@ export class SearchDialogComponent implements OnInit {
   eventTypeControl: FormControl;
   diagnosisTypeControl: FormControl;
   diagnosisControl: FormControl;
-  stateControl: FormControl;
+  adminLevelOneControl: FormControl;
   countyControl: FormControl;
   speciesControl: FormControl;
 
@@ -56,9 +57,9 @@ export class SearchDialogComponent implements OnInit {
   filteredDiagnoses: Observable<any[]>;
   selectedDiagnoses = []; // chips list
 
-  states = [];
-  filteredStates: Observable<any[]>;
-  selectedStates = []; // chips list
+  adminLevelOnes = [];
+  filteredadminLevelOnes: Observable<any[]>;
+  selectedadminLevelOnes = []; // chips list
 
   counties = [];
   filteredCounties: Observable<any[]>;
@@ -74,17 +75,16 @@ export class SearchDialogComponent implements OnInit {
       diagnosis: null,
       diagnosis_type: null,
       species: null,
-      states: null,
+      adminLevelOnes: null,
       counties: null,
-      flyway: null,
-      affected: 5,
+      affected_count: 5,
       start_date: null,
       end_date: null,
       event_type_includes_all: false,
       diagnosis_type_includes_all: false,
       diagnosis_includes_all: false,
       species_includes_all: false,
-      state_includes_all: false,
+      adminLevelOne_includes_all: false,
       county_includes_all: false,
       openEventsOnly: false
     });
@@ -104,7 +104,7 @@ export class SearchDialogComponent implements OnInit {
     this.eventTypeControl = new FormControl();
     this.diagnosisTypeControl = new FormControl();
     this.diagnosisControl = new FormControl();
-    this.stateControl = new FormControl();
+    this.adminLevelOneControl = new FormControl();
     this.countyControl = new FormControl();
     this.speciesControl = new FormControl();
 
@@ -151,14 +151,14 @@ export class SearchDialogComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
-    // get states from the state service
+    // get adminLevelOnes from the adminLevelOne service
     this._adminLevelOneService.getAdminLevelOnes()
       .subscribe(
-        (states) => {
-          this.states = states;
-          this.filteredStates = this.stateControl.valueChanges
+        (adminLevelOnes) => {
+          this.adminLevelOnes = adminLevelOnes;
+          this.filteredadminLevelOnes = this.adminLevelOneControl.valueChanges
             .startWith(null)
-            .map(val => this.filter(val, this.states, 'name'));
+            .map(val => this.filter(val, this.adminLevelOnes, 'name'));
         },
         error => {
           this.errorMessage = <any>error;
@@ -182,7 +182,7 @@ export class SearchDialogComponent implements OnInit {
       .subscribe(
         (species) => {
           this.species = species;
-          this.filteredSpecies = this.stateControl.valueChanges
+          this.filteredSpecies = this.adminLevelOneControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.species, 'name'));
         },
@@ -212,10 +212,6 @@ export class SearchDialogComponent implements OnInit {
     return diagnosis ? diagnosis.name : undefined;
   }
 
-  submitSearch() {
-    console.log(this.diagnosisControl.value);
-  }
-
   stopPropagation(event) {
     event.stopPropagation();
   }
@@ -234,7 +230,7 @@ export class SearchDialogComponent implements OnInit {
         break;
       case 'diagnosis': this.diagnosisControl.reset();
         break;
-      case 'state': this.stateControl.reset();
+      case 'adminLevelOne': this.adminLevelOneControl.reset();
         break;
       case 'county': this.countyControl.reset();
     }
@@ -243,10 +239,10 @@ export class SearchDialogComponent implements OnInit {
   addChip(event: MatAutocompleteSelectedEvent, selectedValuesArray: any, control: string): void {
     // Define selection constant
     let alreadySelected = false;
-    let selection = event.option.value;
+    const selection = event.option.value;
     if (selectedValuesArray.length > 0) {
       // check if the selection is already in the selected array
-      for (let item of selectedValuesArray) {
+      for (const item of selectedValuesArray) {
         if (item.id === selection.id) {
           alreadySelected = true;
           this.openSnackBar('Already Selected', 'OK');
@@ -276,17 +272,51 @@ export class SearchDialogComponent implements OnInit {
     }
   }
 
+  extractIDs(objectArray) {
+    const idArray = [];
+    for (const object of objectArray) {
+      idArray.push(object.id);
+    }
+    return idArray;
+  }
+
+  submitSearch(formValue) {
+
+    formValue.event_type = this.selectedEventTypes,
+      formValue.diagnosis = this.extractIDs(this.selectedDiagnoses),
+      formValue.diagnosis_type = this.extractIDs(this.selectedDiagnosisTypes),
+      formValue.species = this.extractIDs(this.selectedSpecies),
+      formValue.adminLevelOnes = this.extractIDs(this.selectedadminLevelOnes),
+      formValue.counties = this.extractIDs(this.selectedCounties)
+
+
+
+    this.searchForm.patchValue({
+      event_type: this.extractIDs(this.selectedEventTypes),
+      diagnosis: this.extractIDs(this.selectedDiagnoses),
+      diagnosis_type: this.extractIDs(this.selectedDiagnosisTypes),
+      species: this.extractIDs(this.selectedSpecies),
+      adminLevelOnes: this.extractIDs(this.selectedadminLevelOnes),
+      counties: this.extractIDs(this.selectedCounties)
+    });
+
+    formValue.diagnosis = 'WAT';
+
+    console.log(this.searchForm.value);
+  }
+
+
   // removeChip(chip: any, control: string): void {
   //   switch (control) {
-  //     case 'state':
+  //     case 'adminLevelOne':
   //       // Find key of object in array
-  //       const indexState = this.selectedStates.indexOf(chip);
+  //       const indexadminLevelOne = this.selectedadminLevelOnes.indexOf(chip);
   //       // If key exists
-  //       if (indexState >= 0) {
-  //         // Remove key from selectedStates array
-  //         this.selectedStates.splice(indexState, 1);
-  //         // Add key to states array
-  //         this.states.push(chip);
+  //       if (indexadminLevelOne >= 0) {
+  //         // Remove key from selectedadminLevelOnes array
+  //         this.selectedadminLevelOnes.splice(indexadminLevelOne, 1);
+  //         // Add key to adminLevelOnes array
+  //         this.adminLevelOnes.push(chip);
   //       }
   //       break;
   //     case 'diagnosisType':
@@ -294,7 +324,7 @@ export class SearchDialogComponent implements OnInit {
   //       const indexDiagnosisType = this.selectedDiagnosisTypes.indexOf(chip);
   //       // If key exists
   //       if (indexDiagnosisType >= 0) {
-  //         // Remove key from selectedStates array
+  //         // Remove key from selectedadminLevelOnes array
   //         this.selectedDiagnosisTypes.splice(indexDiagnosisType, 1);
   //       }
   //       break;
@@ -303,7 +333,7 @@ export class SearchDialogComponent implements OnInit {
   //       const indexDiagnosis = this.selectedDiagnoses.indexOf(chip);
   //       // If key exists
   //       if (indexDiagnosis >= 0) {
-  //         // Remove key from selectedStates array
+  //         // Remove key from selectedadminLevelOnes array
   //         this.selectedDiagnoses.splice(indexDiagnosis, 1);
   //       }
   //       break;

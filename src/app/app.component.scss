@@ -69,3 +69,18 @@
 .spacer {
     flex: 1 1 auto;
 }
+
+.colophon {
+    font-size:x-small;
+    // padding: 5px;
+    // bottom: 2px;
+    // position: absolute;
+    vertical-align: bottom;
+    // height: 50px;
+    line-height: 1.5em;
+  }
+
+  .version-span {
+      float: right;
+  }
+  

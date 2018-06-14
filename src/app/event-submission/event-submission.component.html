@@ -1,5 +1,4 @@
-<mat-spinner *ngIf="lookupDataLoading"></mat-spinner>
-<div *ngIf="!lookupDataLoading">
+<div>
 
   <div class="detailsDiv">
     <mat-card>
@@ -13,7 +12,7 @@
           Submit a wildlife mortality/morbidity or surveillance event
         </span>
       </mat-card-subtitle>
-      <mat-card-content *ngIf="!eventDataLoading">
+      <mat-card-content>
 
         <form [formGroup]="eventSubmissionForm">
 

@@ -95,6 +95,7 @@ export class EventSubmissionComponent implements OnInit {
   locationSpeciesArray: FormArray;
 
   submitLoading = false;
+  
 
   commonEventData = {
     species: [],

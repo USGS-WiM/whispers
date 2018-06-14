@@ -58,8 +58,8 @@ export class SearchDialogComponent implements OnInit {
   selectedDiagnoses = []; // chips list
 
   adminLevelOnes = [];
-  filteredadminLevelOnes: Observable<any[]>;
-  selectedadminLevelOnes = []; // chips list
+  filteredAdminLevelOnes: Observable<any[]>;
+  selectedAdminLevelOnes = []; // chips list
 
   counties = [];
   filteredCounties: Observable<any[]>;
@@ -156,7 +156,7 @@ export class SearchDialogComponent implements OnInit {
       .subscribe(
         (adminLevelOnes) => {
           this.adminLevelOnes = adminLevelOnes;
-          this.filteredadminLevelOnes = this.adminLevelOneControl.valueChanges
+          this.filteredAdminLevelOnes = this.adminLevelOneControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.adminLevelOnes, 'name'));
         },
@@ -282,26 +282,26 @@ export class SearchDialogComponent implements OnInit {
 
   submitSearch(formValue) {
 
-    formValue.event_type = this.selectedEventTypes,
-      formValue.diagnosis = this.extractIDs(this.selectedDiagnoses),
-      formValue.diagnosis_type = this.extractIDs(this.selectedDiagnosisTypes),
-      formValue.species = this.extractIDs(this.selectedSpecies),
-      formValue.adminLevelOnes = this.extractIDs(this.selectedadminLevelOnes),
-      formValue.counties = this.extractIDs(this.selectedCounties)
+    // update the formValue array with full selection objects
+    formValue.event_type = this.selectedEventTypes;
+    formValue.diagnosis = this.selectedDiagnoses;
+    formValue.diagnosis_type = this.selectedDiagnosisTypes;
+    formValue.species = this.selectedSpecies;
+    formValue.adminLevelOnes = this.selectedAdminLevelOnes;
+    formValue.counties = this.selectedCounties;
 
-
-
+    // patch the searchForm value with the IDs of the selected objects
     this.searchForm.patchValue({
       event_type: this.extractIDs(this.selectedEventTypes),
       diagnosis: this.extractIDs(this.selectedDiagnoses),
       diagnosis_type: this.extractIDs(this.selectedDiagnosisTypes),
       species: this.extractIDs(this.selectedSpecies),
-      adminLevelOnes: this.extractIDs(this.selectedadminLevelOnes),
+      adminLevelOnes: this.extractIDs(this.selectedAdminLevelOnes),
       counties: this.extractIDs(this.selectedCounties)
     });
 
-    formValue.diagnosis = 'WAT';
-
+      // use formValue to populate the Current Search panel
+      // use searchForm.value to build the web service query
     console.log(this.searchForm.value);
   }
 
@@ -310,11 +310,11 @@ export class SearchDialogComponent implements OnInit {
   //   switch (control) {
   //     case 'adminLevelOne':
   //       // Find key of object in array
-  //       const indexadminLevelOne = this.selectedadminLevelOnes.indexOf(chip);
+  //       const indexadminLevelOne = this.selectedAdminLevelOnes.indexOf(chip);
   //       // If key exists
   //       if (indexadminLevelOne >= 0) {
-  //         // Remove key from selectedadminLevelOnes array
-  //         this.selectedadminLevelOnes.splice(indexadminLevelOne, 1);
+  //         // Remove key from selectedAdminLevelOnes array
+  //         this.selectedAdminLevelOnes.splice(indexadminLevelOne, 1);
   //         // Add key to adminLevelOnes array
   //         this.adminLevelOnes.push(chip);
   //       }
@@ -324,7 +324,7 @@ export class SearchDialogComponent implements OnInit {
   //       const indexDiagnosisType = this.selectedDiagnosisTypes.indexOf(chip);
   //       // If key exists
   //       if (indexDiagnosisType >= 0) {
-  //         // Remove key from selectedadminLevelOnes array
+  //         // Remove key from selectedAdminLevelOnes array
   //         this.selectedDiagnosisTypes.splice(indexDiagnosisType, 1);
   //       }
   //       break;
@@ -333,7 +333,7 @@ export class SearchDialogComponent implements OnInit {
   //       const indexDiagnosis = this.selectedDiagnoses.indexOf(chip);
   //       // If key exists
   //       if (indexDiagnosis >= 0) {
-  //         // Remove key from selectedadminLevelOnes array
+  //         // Remove key from selectedAdminLevelOnes array
   //         this.selectedDiagnoses.splice(indexDiagnosis, 1);
   //       }
   //       break;

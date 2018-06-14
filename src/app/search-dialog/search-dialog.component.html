@@ -1,4 +1,5 @@
-<h1 mat-dialog-title><i class="material-icons">
+<h1 mat-dialog-title>
+  <i class="material-icons">
     search
   </i> Search WHISPers</h1>
 <mat-dialog-content>
@@ -185,7 +186,7 @@
       </mat-expansion-panel>
       <!--- end Species expansion panel -->
 
-      <!--- State expansion panel -->
+      <!--- Admin Level One (State) expansion panel -->
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -194,12 +195,12 @@
           <mat-panel-description>
             <span>
               <div class="chiplist">
-                <mat-chip-list #stateChipList>
-                  <span *ngFor="let state of selectedStates">
-                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(state, selectedStates, 'state')">{{state.name}}
+                <mat-chip-list #adminLevelOneChipList>
+                  <span *ngFor="let adminLevelOnes of selectedAdminLevelOnes">
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(adminLevelOne, selectedAdminLevelOnes, 'adminLevelOne')">{{adminLevelOne.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedStates.indexOf(state)) < (selectedStates.length - 1)">{{(searchForm.get('state_includes_all').value) ? "and" : "or"}}&nbsp;</span>
+                    <span *ngIf="(selectedAdminLevelOnes.indexOf(adminLevelOne)) < (selectedAdminLevelOnes.length - 1)">{{(searchForm.get('adminLevelOne_includes_all').value) ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
               </div>
@@ -209,24 +210,25 @@
         <div>
           <div class="autocomplete-input">
             <mat-form-field class="full-width">
-              <input type="text" matInput placeholder="Add State" aria-label="Add State" [matAutocomplete]="stateAutoComplete" [formControl]="stateControl">
-              <mat-autocomplete #stateAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedStates, 'state')">
-                <mat-option *ngFor="let state of filteredStates | async" [value]="state">
-                  <span>{{ state.name }}</span>
+              <input type="text" matInput placeholder="Add State" aria-label="Add State" [matAutocomplete]="adminLevelOneAutoComplete"
+                [formControl]="adminLevelOneControl">
+              <mat-autocomplete #adminLevelOneAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedAdminLevelOnes, 'adminLevelOne')">
+                <mat-option *ngFor="let adminLevelOne of filteredAdminLevelOnes | async" [value]="adminLevelOne">
+                  <span>{{ adminLevelOne.name }}</span>
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
           </div>
           <div class="search-type-radios">
             <label>Search type </label>
-            <mat-radio-group formControlName="state_includes_all">
+            <mat-radio-group formControlName="adminLevelOne_includes_all">
               <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
               <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
             </mat-radio-group>
           </div>
         </div>
       </mat-expansion-panel>
-      <!--- end State expansion panel -->
+      <!--- end Admin Level One (State) expansion panel -->
 
       <!--- County expansion panel -->
       <mat-expansion-panel>
@@ -277,12 +279,12 @@
             <b>Number Affected</b>
           </mat-panel-title>
           <mat-panel-description>
-            <span>{{searchForm.get('affected').value}}</span>
+            <span>{{searchForm.get('affected_count').value}}</span>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div>
           <mat-form-field>
-            <input matInput type="number" placeholder="Number Affected" value="5" formControlName="affected">
+            <input matInput type="number" placeholder="Number Affected" value="5" formControlName="affected_count">
           </mat-form-field>
 
         </div>
@@ -324,5 +326,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="this.searchDialogRef.close('cancel');">Cancel</button>
-  <button mat-button (click)="submitSearch()">Submit</button>
+  <button mat-button (click)="submitSearch(searchForm.value)">Submit</button>
 </mat-dialog-actions>

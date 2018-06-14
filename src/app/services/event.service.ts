@@ -45,9 +45,33 @@ export class EventService {
 
   }
 
+
+  public create(formValue): Observable<Event> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.AUTH_JSON_HEADERS
+    });
+
+    return this._http.post(APP_SETTINGS.EVENTS_URL, formValue, options)
+      .map((response: Response) => <Event[]>response.json())
+      .catch(this.handleError);
+
+  }
+
+  public update(formValue): Observable<Event> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.put(APP_SETTINGS.EVENTS_URL + formValue.id + '/', formValue, options)
+      .map((response: Response) => <Event[]>response.json())
+      .catch(this.handleError);
+  }
+
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+    return Observable.throw(JSON.stringify(error.json()) || 'Server error');
   }
 
 }

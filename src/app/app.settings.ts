@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers } from '@angular/http';
+import { environment } from 'environments/environment';
+
 
 @Injectable()
 export class APP_SETTINGS {
@@ -11,6 +13,10 @@ export class APP_SETTINGS {
     public static get API_PASSWORD(): string { return 'whispersadmin'; }
 
     public static get DEFAULT_COUNTRY(): string { return 'USA'; }
+
+    public static get VERSION() {
+        return environment.version;
+    }
 
     public static get AUTH_URL(): string { return this._API_ENDPOINT + 'auth/'; }
     public static get EVENTS_URL(): string { return this._API_ENDPOINT + 'events/'; }

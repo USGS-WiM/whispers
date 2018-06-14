@@ -2,67 +2,67 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    
 }
 
 .detailsDiv {
     flex-grow: 3;
-
 }
 
 .mapDiv {
-    width:auto;
+    width: auto;
     flex-grow: 3;
     min-width: 400px;
 }
 
-
 #map {
-    height:500px;
-  }
+    height: 800px;
+}
 
-  @media screen and (max-width:875px) {
+@media screen and (max-width:875px) {
     #eventDetailsContainer {
         flex-wrap: wrap;
         flex-direction: column;
     }
     .mapDiv,
-    .detailsDiv{
+    .detailsDiv {
         min-width: 100%;
     }
+}
 
-  }
-
-table, th, td {
+table,
+th,
+td {
     border: 1px solid black;
     border-collapse: collapse;
 }
-th, td {
-    padding: 5px;
 
+th,
+td {
+    padding: 5px;
 }
+
 td {
     text-align: center;
 }
+
 th {
     text-align: left
 }
 
- .event-header {
-     font-size: large;
- }
-
- .text-larger {
-     font-size: larger;
- }
-
- .text-smaller {
-     font-size: smaller;
- }
-
- .event-detail-label {
+.event-header {
     font-size: large;
-    //font-weight: bold;
+}
+
+.text-larger {
+    font-size: larger;
+}
+
+.text-smaller {
+    font-size: smaller;
+}
+
+.event-detail-label {
+    font-size: large; //font-weight: bold;
     // padding-top: 0;
     // padding-bottom: 1em;
     padding-left: 0;
@@ -79,21 +79,21 @@ th {
 
 tr.noBorder td {
     border: 0;
-  }
+}
 
-  .text-bold {
-      font-weight: bold;
-  }
+.text-bold {
+    font-weight: bold;
+}
 
-  .limit-width {
-      width: 3em;
-  }
+.limit-width {
+    width: 3em;
+}
 
-  #privileged-event-data {
-      padding-top: 1em;
-  }
+#privileged-event-data {
+    padding-top: 1em;
+}
 
-  .event-detail-action-bar {
+.event-detail-action-bar {
     display: -webkit-flex;
     display: flex;
     -webkit-flex-direction: row;
@@ -102,9 +102,12 @@ tr.noBorder td {
     align-items: flex-start;
     -webkit-justify-content: flex-end;
     justify-content: flex-end;
-  }
+}
 
-  .event-detail-action-button {
-    margin:5px;
-  }
- 
+.event-detail-action-button {
+    margin: 5px;
+}
+
+::ng-deep .mapDiv > .mat-card {
+    padding: 0px 0px 0px 0px;
+}

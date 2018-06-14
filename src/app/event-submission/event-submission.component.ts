@@ -6,6 +6,8 @@ import 'rxjs/add/operator/map';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 
+import { MatSnackBar } from '@angular/material';
+
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 
@@ -51,7 +53,10 @@ import { ContactTypeService } from '@app/services/contact-type.service';
 import { Organization } from '@interfaces/organization';
 import { OrganizationService } from '@services/organization.service';
 
+import { EventService } from '@app/services/event.service';
+
 import { CreateContactComponent } from '@create-contact/create-contact.component';
+
 
 
 @Component({
@@ -89,6 +94,9 @@ export class EventSubmissionComponent implements OnInit {
   locationContactsArray: FormArray;
   locationSpeciesArray: FormArray;
 
+  submitLoading = false;
+  
+
   commonEventData = {
     species: [],
     contacts: []
@@ -97,8 +105,10 @@ export class EventSubmissionComponent implements OnInit {
   buildEventSubmissionForm() {
     this.eventSubmissionForm = this.formBuilder.group({
       event_reference: '',
-      event_type: null,
-      legal_status: null,
+      event_type: [null, Validators.required],
+      complete: false,
+      event_status: 1,
+      legal_status: [null, Validators.required],
       legal_number: '',
       event_organization: null,
       comments: this.formBuilder.array([]),
@@ -125,7 +135,9 @@ export class EventSubmissionComponent implements OnInit {
     private ageBiasService: AgeBiasService,
     private contactTypeService: ContactTypeService,
     private organizationService: OrganizationService,
-    private contactService: ContactService
+    private contactService: ContactService,
+    private eventService: EventService,
+    public snackBar: MatSnackBar
   ) {
     this.buildEventSubmissionForm();
   }
@@ -264,6 +276,12 @@ export class EventSubmissionComponent implements OnInit {
 
   }
 
+  getErrorMessage(formControlName) {
+    return this.eventSubmissionForm.get(formControlName).hasError('required') ? 'Please enter a value' :
+      this.eventSubmissionForm.get(formControlName).hasError('email') ? 'Not a valid email' :
+        '';
+  }
+
   createCommonEventDataObject(objectType, eventLocationIndex, objectInstanceIndex) {
 
     const eventLocations = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'];
@@ -272,7 +290,7 @@ export class EventSubmissionComponent implements OnInit {
     switch (objectType) {
       case 'contact':
         const contactsArray =
-          <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][eventLocationIndex].get('location_contacts');
+          <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][eventLocationIndex].get('event_location_contacts');
         const contact = contactsArray.controls[objectInstanceIndex];
         this.commonEventData.contacts.push(contact);
 
@@ -280,7 +298,7 @@ export class EventSubmissionComponent implements OnInit {
         for (let i = 0, j = eventLocations.length; i < j; i++) {
 
           if (i !== eventLocationIndex) {
-            const locationContacts = eventLocations[i].get('location_contacts');
+            const locationContacts = eventLocations[i].get('event_location_contacts');
             locationContacts.push(contact);
           }
         }
@@ -314,20 +332,21 @@ export class EventSubmissionComponent implements OnInit {
       name: '',
       start_date: '',
       end_date: '',
-      country: APP_UTILITIES.DEFAULT_COUNTRY_ID,
+      country: [null, Validators.required],
       administrative_level_one: null,
       administrative_level_two: null,
       latitude: null,
       longitude: null,
-      land_ownership: null,
+      land_ownership: [null, Validators.required],
       gnis_name: '',
-      area_description: '',
+      site_description: '',
+      history: '',
       environmental_factors: '',
       clinical_signs: '',
       location_species: this.formBuilder.array([
         // this.initLocationSpecies()
       ]),
-      location_contacts: this.formBuilder.array([
+      event_location_contacts: this.formBuilder.array([
         // this.initLocationContacts()
       ]),
       comments: this.formBuilder.array([
@@ -338,7 +357,7 @@ export class EventSubmissionComponent implements OnInit {
 
   initLocationSpecies() {
     return this.formBuilder.group({
-      species: null,
+      species: [null, Validators.required],
       population: null,
       sick: null,
       dead: null,
@@ -353,8 +372,8 @@ export class EventSubmissionComponent implements OnInit {
 
   initLocationContacts() {
     return this.formBuilder.group({
-      id: null,
-      contact_type: null
+      id: [null, Validators.required],
+      contact_type: [null, Validators.required]
     });
   }
 
@@ -385,7 +404,7 @@ export class EventSubmissionComponent implements OnInit {
     if (this.commonEventData.contacts.length > 0) {
 
       for (const contact of this.commonEventData.contacts) {
-        const locationContacts = <FormArray>newEventLocation.get('location_contacts');
+        const locationContacts = <FormArray>newEventLocation.get('event_location_contacts');
         locationContacts.push(contact);
       }
     }
@@ -418,17 +437,17 @@ export class EventSubmissionComponent implements OnInit {
 
   // location contacts
   addLocationContacts(i) {
-    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_contacts');
+    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('event_location_contacts');
     control.push(this.initLocationContacts());
   }
 
   removeLocationContacts(i, k) {
-    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_contacts');
+    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('event_location_contacts');
     control.removeAt(k);
   }
 
   getLocationContacts(form) {
-    return form.controls.location_contacts.controls;
+    return form.controls.event_location_contacts.controls;
   }
 
   // location comments
@@ -479,6 +498,33 @@ export class EventSubmissionComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+
+  submitEvent(formValue) {
+
+    this.submitLoading = true;
+
+    this.eventService.create(formValue)
+      .subscribe(
+        (event) => {
+          this.submitLoading = false;
+          this.openSnackBar('Event successfully created', 'OK', 5000);
+        },
+        error => {
+          this.submitLoading = false;
+          this.openSnackBar('Error. Event not Submitted. Error message: ' + error, 'OK', 8000);
+        }
+      );
+
+
+
   }
 
 }

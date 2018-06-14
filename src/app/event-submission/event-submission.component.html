@@ -157,19 +157,20 @@
                           <div class="vertical-form-container">
 
                             <mat-form-field class="comment-text-area">
-                              <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="Site Description" formControlName="site_description"></textarea>
+                              <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="History" formControlName="history"></textarea>
                               <mat-hint align="start" class="hint">
-                                <strong></strong>
+                                <strong>chronological description of current observational information leading up to finding sick
+                                  or dead wildlife, plus historical information about past events</strong>
                               </mat-hint>
                               <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
                             </mat-form-field>
 
                             <mat-form-field class="comment-text-area">
-                              <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="History" formControlName="history"></textarea>
+                              <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="Site Description" formControlName="site_description"></textarea>
                               <mat-hint align="start" class="hint">
-                                <strong>land use, habitat types, other species present, or other additional information that may
-                                  be of value such as past occurrences of disease in area, public health warnings, hunting
-                                  and agriculture activities, etc.</strong>
+                                <strong> animal and human land use (e.g., other species present, hunting and agricultural activities),
+                                  habitat types (e.g., vegetation, water features), nearby structures (e.g., buildings, power
+                                  lines, wind turbines), public health warnings, or other major characteristics of the area</strong>
                               </mat-hint>
                               <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
                             </mat-form-field>
@@ -177,7 +178,8 @@
                             <mat-form-field class="comment-text-area">
                               <textarea matInput #envFactors maxlength="1000" placeholder="Environmental Factors" formControlName="environmental_factors"></textarea>
                               <mat-hint align="start">
-                                <strong>storms, precipitation, temperature changes, migration, or other that may contribute to stress
+                                <strong>storms, precipitation, temperature changes, migration, toxins, or other factors that may
+                                  contribute to stress in the animals
                                 </strong>
                               </mat-hint>
                               <mat-hint align="end">{{envFactors.value.length}} / 1000</mat-hint>
@@ -186,7 +188,7 @@
                             <mat-form-field class="comment-text-area">
                               <textarea matInput #clinicalSigns maxlength="1000" placeholder="Clinical Signs" formControlName="clinical_signs"></textarea>
                               <mat-hint align="start">
-                                <strong>any unusual behavior or physical appearance</strong>
+                                <strong>any unusual behavior or physical appearance in the animals</strong>
                               </mat-hint>
                               <mat-hint align="end">{{clinicalSigns.value.length}} / 1000</mat-hint>
                             </mat-form-field>
@@ -203,6 +205,9 @@
                       <div>
                         <mat-divider [inset]="true"></mat-divider>
                         <h4>Species Affected</h4>
+                        <!-- <button mat-icon-button color="accent">
+                          <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
+                        </button> -->
                         <div formArrayName="location_species">
                           <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let j = index">
 

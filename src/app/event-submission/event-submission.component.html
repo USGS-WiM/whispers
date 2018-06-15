@@ -18,8 +18,6 @@
 
           <div class="vertical-form-container">
 
-
-
             <mat-form-field class="form-control">
               <mat-select placeholder="Event Type" formControlName="event_type" required>
                 <mat-option *ngFor="let eventType of eventTypes" value="{{eventType.id}}">{{eventType.name}}</mat-option>
@@ -32,7 +30,7 @@
               <mat-hint align="start">Your name for this event </mat-hint>
             </mat-form-field>
 
-            <mat-form-field class="form-control">
+            <!-- <mat-form-field class="form-control">
               <mat-select placeholder="Legal Status" formControlName="legal_status" required>
                 <mat-option *ngFor="let legalStatus of legalStatuses" value="{{legalStatus.id}}">{{legalStatus.name}}</mat-option>
               </mat-select>
@@ -42,7 +40,7 @@
             <mat-form-field class="form-control">
               <input matInput placeholder="Legal Case Number" formControlName="legal_number">
               <mat-hint align="start">If applicable </mat-hint>
-            </mat-form-field>
+            </mat-form-field> -->
 
           </div>
 
@@ -67,7 +65,7 @@
             <p>
               <form [formGroup]="eventSubmissionForm">
 
-                <div formArrayName="event_locations">
+                <div formArrayName="new_event_locations">
                   <div class="location-container" *ngFor="let eventLocation of getEventLocations(eventSubmissionForm); let i = index">
                     <mat-card class="event-location-card" [formGroupName]="i">
                       <h5>Location {{i+1}}</h5>
@@ -93,7 +91,7 @@
                           <mat-select placeholder="Country" formControlName="country" (change)="updateAdminLevelOneOptions($event.value)" required>
                             <mat-option *ngFor="let country of countries" value="{{country.id}}">{{country.name}}</mat-option>
                           </mat-select>
-                          <mat-error *ngIf="eventSubmissionForm.get('event_locations').controls[i].get('country').invalid">Please enter a value</mat-error>
+                          <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">Please enter a value</mat-error>
                         </mat-form-field>
 
                         <mat-form-field class="form-control">

@@ -112,12 +112,12 @@ export class EventSubmissionComponent implements OnInit {
       legal_number: '',
       event_organization: null,
       comments: this.formBuilder.array([]),
-      event_locations: this.formBuilder.array([
+      new_event_locations: this.formBuilder.array([
         this.initEventLocation()
       ])
     });
 
-    this.eventLocationArray = this.eventSubmissionForm.get('event_locations') as FormArray;
+    this.eventLocationArray = this.eventSubmissionForm.get('new_event_locations') as FormArray;
 
   }
 
@@ -284,13 +284,13 @@ export class EventSubmissionComponent implements OnInit {
 
   createCommonEventDataObject(objectType, eventLocationIndex, objectInstanceIndex) {
 
-    const eventLocations = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'];
+    const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'];
 
     // check which object is being sent, parse out the specific form group instance from the form, add to the commonEventData object
     switch (objectType) {
       case 'contact':
         const contactsArray =
-          <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][eventLocationIndex].get('event_location_contacts');
+          <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('event_location_contacts');
         const contact = contactsArray.controls[objectInstanceIndex];
         this.commonEventData.contacts.push(contact);
 
@@ -306,7 +306,7 @@ export class EventSubmissionComponent implements OnInit {
         break;
       case 'species':
         const speciesArray =
-          <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][eventLocationIndex].get('location_species');
+          <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species');
         const species = speciesArray.controls[objectInstanceIndex];
         this.commonEventData.species.push(species);
 
@@ -386,12 +386,12 @@ export class EventSubmissionComponent implements OnInit {
 
   // event locations
   addEventLocation() {
-    const control = <FormArray>this.eventSubmissionForm.get('event_locations');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations');
     control.push(this.initEventLocation());
 
-    const eventLocations = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'];
+    const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'];
     const newEventLocationIndex = eventLocations.length - 1;
-    const newEventLocation = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][newEventLocationIndex]
+    const newEventLocation = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][newEventLocationIndex]
 
     if (this.commonEventData.species.length > 0) {
 
@@ -411,23 +411,23 @@ export class EventSubmissionComponent implements OnInit {
   }
 
   removeEventLocation(i) {
-    const control = <FormArray>this.eventSubmissionForm.get('event_locations');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations');
     control.removeAt(i);
 
   }
 
   getEventLocations(form) {
-    return form.controls.event_locations.controls;
+    return form.controls.new_event_locations.controls;
   }
 
   // location species
   addLocationSpecies(i) {
-    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_species');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('location_species');
     control.push(this.initLocationSpecies());
   }
 
   removeLocationSpecies(i, j) {
-    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_species');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('location_species');
     control.removeAt(j);
   }
 
@@ -437,12 +437,12 @@ export class EventSubmissionComponent implements OnInit {
 
   // location contacts
   addLocationContacts(i) {
-    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('event_location_contacts');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('event_location_contacts');
     control.push(this.initLocationContacts());
   }
 
   removeLocationContacts(i, k) {
-    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('event_location_contacts');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('event_location_contacts');
     control.removeAt(k);
   }
 
@@ -452,12 +452,12 @@ export class EventSubmissionComponent implements OnInit {
 
   // location comments
   addLocationComments(i) {
-    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_comments');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('location_comments');
     control.push(this.initLocationComments());
   }
 
   removeLocationComments(i, m) {
-    const control = <FormArray>this.eventSubmissionForm.get('event_locations')['controls'][i].get('location_comments');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('location_comments');
     control.removeAt(m);
   }
 

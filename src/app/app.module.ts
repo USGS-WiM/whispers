@@ -68,6 +68,7 @@ import { ContactTypeService } from '@services/contact-type.service';
 import { OrganizationService } from '@app/services/organization.service';
 import { ContactService } from '@app/services/contact.service';
 import { AboutComponent } from './about/about.component';
+import { ConfirmComponent } from './confirm/confirm.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { AboutComponent } from './about/about.component';
     SearchDialogComponent,
     DisplayValuePipe,
     CreateContactComponent,
-    AboutComponent
+    AboutComponent,
+    ConfirmComponent
   ],
   imports: [
     BrowserModule,
@@ -143,7 +145,7 @@ import { AboutComponent } from './about/about.component';
     OrganizationService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SearchDialogComponent, CreateContactComponent, AboutComponent]
+  entryComponents: [SearchDialogComponent, CreateContactComponent, ConfirmComponent, AboutComponent]
 })
 export class AppModule { }
 

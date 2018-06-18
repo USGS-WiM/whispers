@@ -57,6 +57,8 @@ import { EventService } from '@app/services/event.service';
 
 import { CreateContactComponent } from '@create-contact/create-contact.component';
 
+import { ConfirmComponent } from '@confirm/confirm.component';
+
 
 
 @Component({
@@ -67,6 +69,7 @@ import { CreateContactComponent } from '@create-contact/create-contact.component
 export class EventSubmissionComponent implements OnInit {
 
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
 
   eventTypes: EventType[];
   legalStatuses: LegalStatus[];
@@ -95,7 +98,7 @@ export class EventSubmissionComponent implements OnInit {
   locationSpeciesArray: FormArray;
 
   submitLoading = false;
-  
+
 
   commonEventData = {
     species: [],
@@ -140,14 +143,40 @@ export class EventSubmissionComponent implements OnInit {
     public snackBar: MatSnackBar
   ) {
     this.buildEventSubmissionForm();
+
+
+
   }
 
+
   openCreateContactDialog() {
-    this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-      // minWidth: '60%',
-      // height: '75%'
+    this.createContactDialogRef = this.dialog.open(CreateContactComponent,
+      {
+        // minWidth: '60%',
+        // height: '75%'
+      });
+  }
+
+
+
+  openEventLocationRemoveConfirm(i) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Remove Event Location',
+          message: 'Are you sure you want to remove the event location?',
+          confirmButtonText: 'Remove'
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.removeEventLocation(i);
+      }
     });
   }
+
 
   ngOnInit() {
 
@@ -308,20 +337,46 @@ export class EventSubmissionComponent implements OnInit {
         const speciesArray =
           <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species');
         const species = speciesArray.controls[objectInstanceIndex];
-        this.commonEventData.species.push(species);
+        this.commonEventData.species.push(this.formBuilder.group({
+          species: species.value.species,
+          population: null,
+          sick: null,
+          dead: null,
+          estimated_sick: null,
+          estimated_dead: null,
+          priority: null,
+          captive: null,
+          age_bias: null,
+          sex_bias: null
+        })
+        );
 
         // loop through event locations and push the new contact into each, except the one it came from (so as to avoid duplicate)
         for (let i = 0, j = eventLocations.length; i < j; i++) {
 
           if (i !== eventLocationIndex) {
             const locationSpecies = eventLocations[i].get('location_species');
-            locationSpecies.push(species);
+
+            // push a new formGroup to the locationSpecies formArray, with the same species value but all other controls null/blank
+            // note: to copy the entire formGroup value, change line below to 'locationSpecies.push(species)'
+            locationSpecies.push(this.formBuilder.group({
+              species: species.value.species,
+              population: null,
+              sick: null,
+              dead: null,
+              estimated_sick: null,
+              estimated_dead: null,
+              priority: null,
+              captive: null,
+              age_bias: null,
+              sex_bias: null
+            })
+            );
+
           }
         }
-
         break;
     }
-
 
     console.log(this.commonEventData);
 

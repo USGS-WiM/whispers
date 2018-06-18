@@ -25,7 +25,7 @@ export class EventService {
     });
 
     return this._http.get(APP_SETTINGS.EVENTS_URL + eventQuery, options)
-      .map((response: Response) => <Event[]>response.json())
+      .map((response: Response) => <EventSummary[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
   }
@@ -53,7 +53,7 @@ export class EventService {
     });
 
     return this._http.post(APP_SETTINGS.EVENTS_URL, formValue, options)
-      .map((response: Response) => <Event[]>response.json())
+      .map((response: Response) => <Event>response.json())
       .catch(this.handleError);
 
   }
@@ -65,7 +65,7 @@ export class EventService {
     });
 
     return this._http.put(APP_SETTINGS.EVENTS_URL + formValue.id + '/', formValue, options)
-      .map((response: Response) => <Event[]>response.json())
+      .map((response: Response) => <Event>response.json())
       .catch(this.handleError);
   }
 

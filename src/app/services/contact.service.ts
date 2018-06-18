@@ -24,19 +24,19 @@ export class ContactService {
     });
 
     return this._http.get(APP_SETTINGS.CONTACTS_URL, options)
-      .map((response: Response) => <Contact[]>response.json())
+      .map((response: Response) => <any[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
-  public create(formValue: Contact): Observable<Contact> {
+  public create(formValue): Observable<any> {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.AUTH_JSON_HEADERS
     });
 
     return this._http.post(APP_SETTINGS.CONTACTS_URL, formValue, options)
-      .map((response: Response) => <Contact[]>response.json())
+      .map((response: Response) => <Contact>response.json())
       .catch(this.handleError);
 
   }
@@ -48,7 +48,7 @@ export class ContactService {
     });
 
     return this._http.put(APP_SETTINGS.CONTACTS_URL + formValue.id + '/', formValue, options)
-      .map((response: Response) => <Contact[]>response.json())
+      .map((response: Response) => <Contact>response.json())
       .catch(this.handleError);
   }
 

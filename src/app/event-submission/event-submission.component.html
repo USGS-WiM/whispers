@@ -66,7 +66,7 @@
               <form [formGroup]="eventSubmissionForm">
 
                 <div formArrayName="new_event_locations">
-                  <div class="location-container" *ngFor="let eventLocation of getEventLocations(eventSubmissionForm); let i = index">
+                  <div *ngFor="let eventLocation of getEventLocations(eventSubmissionForm); let i = index">
                     <mat-card class="event-location-card" [formGroupName]="i">
                       <h5>Location {{i+1}}</h5>
 
@@ -333,8 +333,11 @@
 
                           <mat-divider [inset]="true"></mat-divider>
                           <p>
-                            <button mat-button color="warn" (click)="removeEventLocation(i)">
-                              <i class="material-icons">remove_circle</i> Remove this Event Location</button>
+                            <button mat-button color="warn" (click)="openEventLocationRemoveConfirm(i)">
+                              <i class=" material-icons ">remove_circle</i> Remove this Event Location</button>
+
+                            <!-- <button mat-button color="warn" (click)="removeEventLocation(i)">
+                              <i class=" material-icons ">remove_circle</i> Remove this Event Location</button> -->
 
                     </mat-card>
                   </div>
@@ -344,18 +347,18 @@
           <!-- End Locations Section-->
 
           <button mat-button color="primary" (click)="addEventLocation()">
-            <i class="material-icons">
+            <i class="material-icons ">
               add_location
             </i>Add Another Event Location</button>
 
           <p>
 
-            <mat-progress-bar mode="indeterminate" *ngIf="submitLoading" class="event-submit-progress-bar"></mat-progress-bar>
+            <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar "></mat-progress-bar>
             <p>
-              <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid" (click)="submitEvent(eventSubmissionForm.value)">
-                <i class="material-icons">done</i> Submit Event</button>
+              <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="submitEvent(eventSubmissionForm.value) ">
+                <i class="material-icons ">done</i> Submit Event</button>
 
-              <div class="temporary-form-value-display">
+              <div class="temporary-form-value-display ">
                 <h3>Temporary Form Value display (not for production)</h3>
                 <pre> {{eventSubmissionForm.value | json}} </pre>
               </div>

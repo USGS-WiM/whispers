@@ -391,32 +391,30 @@
                             <h3>
                               <i class="material-icons">
                                 check
-                              </i> Finished with Location {{i+1}}</h3>
+                              </i>
+                              <span class="alert-text">Finished with Location {{i+1}}</span>
+                            </h3>
                           </span>
 
-                          <span *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">
-                            <i class="material-icons">
-                              error
-                            </i> Missing country selection.
-                          </span>
+                          <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">
+                            <mat-icon class="icon">error</mat-icon>
+                            <span class="alert-text">Missing country selection.</span>
+                          </mat-error>
                           <br>
 
-                          <span *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">
-                            <i class="material-icons">
-                              error
-                            </i> Missing land ownership selection.</span>
+                          <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">
+                            <mat-icon class="icon">error</mat-icon>
+                            <span class="alert-text">Missing land ownership selection.</span>
+                          </mat-error>
+                          <p>
 
-                            <p>
-
-                          <div>
-                            <button mat-button matStepperPrevious type="button">
-                              <i class="material-icons"> arrow_back_ios </i> Back</button>
-                            <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
-                            <button mat-button color="primary" (click)="addEventLocation()">
-                              <i class="material-icons ">
-                                add_location
-                              </i>Add Another Event Location</button>
-                          </div>
+                            <div>
+                              <button mat-button matStepperPrevious type="button">
+                                <i class="material-icons"> arrow_back_ios </i> Back</button>
+                              <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
+                              <button mat-button color="primary" matTooltip="Add another location to this event" (click)="addEventLocation()">
+                                <mat-icon>add_location</mat-icon>Add Another Location</button>
+                            </div>
                         </mat-step>
 
                       </mat-vertical-stepper>
@@ -434,10 +432,8 @@
           </div>
           <!-- End Locations Section-->
 
-          <button mat-button color="primary" (click)="addEventLocation()">
-            <i class="material-icons ">
-              add_location
-            </i>Add Another Event Location</button>
+          <button mat-button color="primary" matTooltip="Add another location to this event" (click)="addEventLocation()">
+            <mat-icon>add_location</mat-icon>Add Location</button>
 
           <p>
 

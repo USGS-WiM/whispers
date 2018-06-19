@@ -67,10 +67,12 @@
               <form [formGroup]="eventSubmissionForm">
                 <div formArrayName="new_event_locations">
 
+
                   <div *ngFor="let eventLocation of getEventLocations(eventSubmissionForm); let i = index">
+                    <!-- Begin repeating Event location markup-->
+
                     <mat-card class="event-location-card" [formGroupName]="i">
                       <h3>Location {{i+1}}</h3>
-
                       <mat-vertical-stepper [linear]="false" #stepper linear>
 
                         <!-- <mat-step [stepControl]="eventSubmissionForm.get('new_event_locations').controls[i].get('country').valid"> -->
@@ -245,8 +247,8 @@
 
                             <!-- <h4>Species Affected</h4> -->
                             <!-- <button mat-icon-button color="accent">
-                                  <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
-                                </button> -->
+                                    <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
+                                  </button> -->
                             <div formArrayName="location_species">
                               <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let j = index">
 
@@ -419,13 +421,19 @@
 
                       </mat-vertical-stepper>
 
+
                       <p>
                         <mat-divider [inset]="true"></mat-divider>
                         <p>
                           <button mat-button color="warn" (click)="openEventLocationRemoveConfirm(i)">
                             <i class=" material-icons ">remove_circle</i> Remove this Event Location</button>
+
                     </mat-card>
+
+
+                    <!-- End repeating Event location markup-->
                   </div>
+
 
                 </div>
               </form>

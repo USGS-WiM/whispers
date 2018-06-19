@@ -12,6 +12,7 @@
           Submit a wildlife mortality/morbidity or surveillance event
         </span>
       </mat-card-subtitle>
+
       <mat-card-content>
 
         <form [formGroup]="eventSubmissionForm">
@@ -64,292 +65,383 @@
             <h4>Event Locations</h4>
             <p>
               <form [formGroup]="eventSubmissionForm">
-
                 <div formArrayName="new_event_locations">
+
+
                   <div *ngFor="let eventLocation of getEventLocations(eventSubmissionForm); let i = index">
+                    <!-- Begin repeating Event location markup-->
+
                     <mat-card class="event-location-card" [formGroupName]="i">
-                      <h5>Location {{i+1}}</h5>
+                      <h3>Location {{i+1}}</h3>
+                      <mat-vertical-stepper [linear]="false" #stepper linear>
 
-                      <div class="horizontal-form-container">
-                        <mat-form-field class="form-control">
-                          <input matInput [matDatepicker]="startDate" placeholder="Onset Date">
-                          <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-                          <mat-datepicker #startDate></mat-datepicker>
-                        </mat-form-field>
+                        <!-- <mat-step [stepControl]="eventSubmissionForm.get('new_event_locations').controls[i].get('country').valid"> -->
+                        <mat-step [stepControl]="eventSubmissionForm">
 
-                        <mat-form-field class="form-control">
-                          <input matInput [matDatepicker]="endDate" placeholder="End Date">
-                          <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-                          <mat-datepicker #endDate></mat-datepicker>
-                        </mat-form-field>
-                      </div>
-                      <br>
+                          <ng-template matStepLabel>Location Details</ng-template>
 
-                      <div class="horizontal-form-container">
+                          <div class="horizontal-form-container">
+                            <mat-form-field class="form-control">
+                              <input matInput [matDatepicker]="startDate" placeholder="Onset Date">
+                              <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                              <mat-datepicker #startDate></mat-datepicker>
+                            </mat-form-field>
 
-                        <mat-form-field class="form-control">
-                          <mat-select placeholder="Country" formControlName="country" (change)="updateAdminLevelOneOptions($event.value)" required>
-                            <mat-option *ngFor="let country of countries" value="{{country.id}}">{{country.name}}</mat-option>
-                          </mat-select>
-                          <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">Please enter a value</mat-error>
-                        </mat-form-field>
+                            <mat-form-field class="form-control">
+                              <input matInput [matDatepicker]="endDate" placeholder="End Date">
+                              <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                              <mat-datepicker #endDate></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <br>
 
-                        <mat-form-field class="form-control">
-                          <mat-select placeholder="State" formControlName="administrative_level_one" (change)="updateAdminLevelTwoOptions($event.value)">
-                            <mat-option *ngFor="let adminLevelOne of adminLevelOnes" value="{{adminLevelOne.id}}">{{adminLevelOne.name}}</mat-option>
-                          </mat-select>
-                          <mat-hint align="start">Select a country to update state list </mat-hint>
-                        </mat-form-field>
+                          <div class="horizontal-form-container">
 
-                        <mat-form-field class="form-control">
-                          <mat-select placeholder="County" formControlName="administrative_level_two">
-                            <mat-option *ngFor="let adminLevelTwo of adminLevelTwos" value="{{adminLevelTwo.id}}">{{adminLevelTwo.name}}</mat-option>
-                          </mat-select>
-                          <mat-hint align="start">Select a state to update county list </mat-hint>
-                        </mat-form-field>
-                      </div>
+                            <mat-form-field class="form-control">
+                              <mat-select placeholder="Country" formControlName="country" (change)="updateAdminLevelOneOptions($event.value)" required>
+                                <mat-option *ngFor="let country of countries" value="{{country.id}}">{{country.name}}</mat-option>
+                              </mat-select>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">Please enter a value</mat-error>
+                            </mat-form-field>
 
-                      <div class="vertical-form-container">
-                        <mat-form-field class="form-control">
-                          <input matInput placeholder="Location Name" formControlName="name">
-                        </mat-form-field>
+                            <mat-form-field class="form-control">
+                              <mat-select placeholder="State" formControlName="administrative_level_one" (change)="updateAdminLevelTwoOptions($event.value)">
+                                <mat-option *ngFor="let adminLevelOne of adminLevelOnes" value="{{adminLevelOne.id}}">{{adminLevelOne.name}}</mat-option>
+                              </mat-select>
+                              <mat-hint align="start">Select a country to update state list </mat-hint>
+                            </mat-form-field>
 
-                        <mat-form-field class="form-control">
-                          <mat-select placeholder="Land Ownership" formControlName="land_ownership">
-                            <mat-option *ngFor="let landOwnership of landOwnerships" value="{{landOwnership.id}}">{{landOwnership.name}}</mat-option>
-                          </mat-select>
-                        </mat-form-field>
-
-                      </div>
-
-                      <div class="horizontal-form-container">
-                        <mat-form-field class="form-control">
-                          <input matInput placeholder="Latitude" formControlName="latitude">
-                        </mat-form-field>
-
-                        <mat-form-field class="form-control">
-                          <input matInput placeholder="Longitude" formControlName="longitude">
-                        </mat-form-field>
-                      </div>
-
-                      <div class="vertical-form-container">
-                        <mat-form-field class="form-control">
-                          <input matInput placeholder="GNIS Standardized Location Name" formControlName="gnis_name">
-                        </mat-form-field>
-                      </div>
-
-                      <mat-divider [inset]="true"></mat-divider>
-
-                      <!--Comments Section-->
-                      <mat-accordion>
-                        <mat-expansion-panel>
-                          <mat-expansion-panel-header>
-                            <mat-panel-title>
-                              Site Description, History, Environmental Factors, Clinical Signs (Optional)
-                            </mat-panel-title>
-                            <mat-panel-description>
-
-                            </mat-panel-description>
-                          </mat-expansion-panel-header>
+                            <mat-form-field class="form-control">
+                              <mat-select placeholder="County" formControlName="administrative_level_two">
+                                <mat-option *ngFor="let adminLevelTwo of adminLevelTwos" value="{{adminLevelTwo.id}}">{{adminLevelTwo.name}}</mat-option>
+                              </mat-select>
+                              <mat-hint align="start">Select a state to update county list </mat-hint>
+                            </mat-form-field>
+                          </div>
 
                           <div class="vertical-form-container">
-
-                            <mat-form-field class="comment-text-area">
-                              <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="History" formControlName="history"></textarea>
-                              <mat-hint align="start" class="hint">
-                                <strong>chronological description of current observational information leading up to finding sick
-                                  or dead wildlife, plus historical information about past events</strong>
-                              </mat-hint>
-                              <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+                            <mat-form-field class="form-control">
+                              <input matInput placeholder="Location Name" formControlName="name">
                             </mat-form-field>
 
-                            <mat-form-field class="comment-text-area">
-                              <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="Site Description" formControlName="site_description"></textarea>
-                              <mat-hint align="start" class="hint">
-                                <strong> animal and human land use (e.g., other species present, hunting and agricultural activities),
-                                  habitat types (e.g., vegetation, water features), nearby structures (e.g., buildings, power
-                                  lines, wind turbines), public health warnings, or other major characteristics of the area</strong>
-                              </mat-hint>
-                              <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
-                            </mat-form-field>
-
-                            <mat-form-field class="comment-text-area">
-                              <textarea matInput #envFactors maxlength="1000" placeholder="Environmental Factors" formControlName="environmental_factors"></textarea>
-                              <mat-hint align="start">
-                                <strong>storms, precipitation, temperature changes, migration, toxins, or other factors that may
-                                  contribute to stress in the animals
-                                </strong>
-                              </mat-hint>
-                              <mat-hint align="end">{{envFactors.value.length}} / 1000</mat-hint>
-                            </mat-form-field>
-
-                            <mat-form-field class="comment-text-area">
-                              <textarea matInput #clinicalSigns maxlength="1000" placeholder="Clinical Signs" formControlName="clinical_signs"></textarea>
-                              <mat-hint align="start">
-                                <strong>any unusual behavior or physical appearance in the animals</strong>
-                              </mat-hint>
-                              <mat-hint align="end">{{clinicalSigns.value.length}} / 1000</mat-hint>
+                            <mat-form-field class="form-control">
+                              <mat-select placeholder="Land Ownership" formControlName="land_ownership" required>
+                                <mat-option *ngFor="let landOwnership of landOwnerships" value="{{landOwnership.id}}">{{landOwnership.name}}</mat-option>
+                              </mat-select>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('land_ownership').invalid">Please enter a value</mat-error>
                             </mat-form-field>
 
                           </div>
-                        </mat-expansion-panel>
 
-                      </mat-accordion>
+                          <div class="horizontal-form-container">
+                            <mat-form-field class="form-control">
+                              <input matInput placeholder="Latitude" formControlName="latitude">
+                            </mat-form-field>
 
-                      <!--End Comments Section-->
+                            <mat-form-field class="form-control">
+                              <input matInput placeholder="Longitude" formControlName="longitude">
+                            </mat-form-field>
+                          </div>
 
+                          <div class="vertical-form-container">
+                            <mat-form-field class="form-control">
+                              <input matInput placeholder="GNIS Standardized Location Name" formControlName="gnis_name">
+                            </mat-form-field>
+                          </div>
 
-                      <!--Location Species Section-->
-                      <div>
-                        <mat-divider [inset]="true"></mat-divider>
-                        <h4>Species Affected</h4>
-                        <!-- <button mat-icon-button color="accent">
-                          <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
-                        </button> -->
-                        <div formArrayName="location_species">
-                          <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let j = index">
+                          <div>
+                            <button mat-button matStepperNext type="button"> Next
+                              <i class="material-icons"> navigate_next </i>
+                            </button>
+                          </div>
 
-                            <div class="horizontal-form-container" [formGroupName]="j">
-                              <mat-form-field class="form-control ">
-                                <mat-select placeholder="Species" formControlName="species">
-                                  <mat-option *ngFor="let species of species" value="{{species.id}}">{{species.name}}</mat-option>
-                                </mat-select>
-                              </mat-form-field>
+                        </mat-step>
 
-                              <mat-form-field class="species-number-control">
-                                <input matInput placeholder="Known Dead" type="number" formControlName="dead">
-                              </mat-form-field>
+                        <mat-step [stepControl]="eventSubmissionForm">
+                          <ng-template matStepLabel>History</ng-template>
 
-                              <mat-form-field class="species-number-control">
-                                <input matInput placeholder="Estimated Dead" type="number" formControlName="estimated_dead">
-                              </mat-form-field>
+                          <mat-form-field class="comment-text-area">
+                            <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="History" formControlName="history"></textarea>
+                            <mat-hint align="start" class="hint">
+                              <strong>chronological description of current observational information leading up to finding sick or
+                                dead wildlife, plus historical information about past events</strong>
+                            </mat-hint>
+                            <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+                          </mat-form-field>
+                          <div>
+                            <button mat-button matStepperPrevious type="button">
+                              <i class="material-icons"> arrow_back_ios </i> Back</button>
+                            <button mat-button matStepperNext type="button"> Next
+                              <i class="material-icons"> navigate_next </i>
+                            </button>
+                          </div>
+                        </mat-step>
 
-                              <mat-form-field class=" species-number-control">
-                                <input matInput placeholder="Known Sick" type="number" formControlName="sick">
-                              </mat-form-field>
+                        <mat-step [stepControl]="eventSubmissionForm">
 
-                              <mat-form-field class=" species-number-control">
-                                <input matInput placeholder="Estimated Sick" type="number" formControlName="estimated_sick">
-                              </mat-form-field>
+                          <ng-template matStepLabel>Site Description</ng-template>
+                          <mat-form-field class="comment-text-area">
+                            <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="Site Description" formControlName="site_description"></textarea>
+                            <mat-hint align="start" class="hint">
+                              <strong> animal and human land use (e.g., other species present, hunting and agricultural activities),
+                                habitat types (e.g., vegetation, water features), nearby structures (e.g., buildings, power
+                                lines, wind turbines), public health warnings, or other major characteristics of the area</strong>
+                            </mat-hint>
+                            <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+                          </mat-form-field>
+                          <div>
+                            <button mat-button matStepperPrevious type="button">
+                              <i class="material-icons"> arrow_back_ios </i> Back</button>
+                            <button mat-button matStepperNext type="button"> Next
+                              <i class="material-icons"> navigate_next </i>
+                            </button>
+                          </div>
 
-                              <mat-form-field class=" species-number-control">
-                                <input matInput placeholder="Est. Population at Risk" type="number" formControlName="population">
-                              </mat-form-field>
+                        </mat-step>
 
-                              <mat-form-field class="species-number-control">
-                                <mat-select placeholder="Age Bias" formControlName="age_bias">
-                                  <mat-option *ngFor="let ageBias of ageBiases" value="{{ageBias.id}}">{{ageBias.name}}</mat-option>
-                                </mat-select>
-                              </mat-form-field>
+                        <mat-step [stepControl]="eventSubmissionForm">
 
-                              <mat-form-field class="species-number-control">
-                                <mat-select placeholder="Sex Bias" formControlName="sex_bias">
-                                  <mat-option *ngFor="let sexBias of sexBiases" value="{{sexBias.id}}">{{sexBias.name}}</mat-option>
-                                </mat-select>
-                              </mat-form-field>
+                          <ng-template matStepLabel>Environmental Factors</ng-template>
 
-                              <button mat-icon-button color="accent" aria-label="Apply species to all locations" matTooltip="Apply species to all locations"
-                                (click)="createCommonEventDataObject('species', i, j )">
-                                <i class="material-icons">group_work</i>
-                              </button>
+                          <mat-form-field class="comment-text-area">
+                            <textarea matInput #envFactors maxlength="1000" placeholder="Environmental Factors" formControlName="environmental_factors"></textarea>
+                            <mat-hint align="start">
+                              <strong>storms, precipitation, temperature changes, migration, toxins, or other factors that may contribute
+                                to stress in the animals
+                              </strong>
+                            </mat-hint>
+                            <mat-hint align="end">{{envFactors.value.length}} / 1000</mat-hint>
+                          </mat-form-field>
+                          <div>
+                            <button mat-button matStepperPrevious type="button">
+                              <i class="material-icons"> arrow_back_ios </i> Back</button>
+                            <button mat-button matStepperNext type="button"> Next
+                              <i class="material-icons"> navigate_next </i>
+                            </button>
+                          </div>
 
-                              <button mat-icon-button color="warn" aria-label="Remove this species from this location" (click)="removeLocationSpecies(i, j)"
-                                matTooltip="Remove this species from this location">
-                                <i class="material-icons">remove_circle</i>
-                              </button>
+                        </mat-step>
 
+                        <mat-step [stepControl]="eventSubmissionForm">
+                          <ng-template matStepLabel>Clinical Signs</ng-template>
+                          <mat-form-field class="comment-text-area">
+                            <textarea matInput #clinicalSigns maxlength="1000" placeholder="Clinical Signs" formControlName="clinical_signs"></textarea>
+                            <mat-hint align="start">
+                              <strong>any unusual behavior or physical appearance in the animals</strong>
+                            </mat-hint>
+                            <mat-hint align="end">{{clinicalSigns.value.length}} / 1000</mat-hint>
+                          </mat-form-field>
+                          <div>
+                            <button mat-button matStepperPrevious type="button">
+                              <i class="material-icons"> arrow_back_ios </i> Back</button>
+                            <button mat-button matStepperNext type="button"> Next
+                              <i class="material-icons"> navigate_next </i>
+                            </button>
+                          </div>
+                        </mat-step>
+
+                        <mat-step [stepControl]="eventSubmissionForm">
+
+                          <ng-template matStepLabel>Species</ng-template>
+                          <div>
+
+                            <!-- <h4>Species Affected</h4> -->
+                            <!-- <button mat-icon-button color="accent">
+                                    <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
+                                  </button> -->
+                            <div formArrayName="location_species">
+                              <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let j = index">
+
+                                <div class="horizontal-form-container" [formGroupName]="j">
+                                  <mat-form-field class="form-control ">
+                                    <mat-select placeholder="Species" formControlName="species">
+                                      <mat-option *ngFor="let species of species" value="{{species.id}}">{{species.name}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+
+                                  <mat-form-field class="species-number-control">
+                                    <input matInput placeholder="Known Dead" type="number" formControlName="dead">
+                                  </mat-form-field>
+
+                                  <mat-form-field class="species-number-control">
+                                    <input matInput placeholder="Estimated Dead" type="number" formControlName="estimated_dead">
+                                  </mat-form-field>
+
+                                  <mat-form-field class=" species-number-control">
+                                    <input matInput placeholder="Known Sick" type="number" formControlName="sick">
+                                  </mat-form-field>
+
+                                  <mat-form-field class=" species-number-control">
+                                    <input matInput placeholder="Estimated Sick" type="number" formControlName="estimated_sick">
+                                  </mat-form-field>
+
+                                  <mat-form-field class=" species-number-control">
+                                    <input matInput placeholder="Est. Population at Risk" type="number" formControlName="population">
+                                  </mat-form-field>
+
+                                  <mat-form-field class="species-number-control">
+                                    <mat-select placeholder="Age Bias" formControlName="age_bias">
+                                      <mat-option *ngFor="let ageBias of ageBiases" value="{{ageBias.id}}">{{ageBias.name}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+
+                                  <mat-form-field class="species-number-control">
+                                    <mat-select placeholder="Sex Bias" formControlName="sex_bias">
+                                      <mat-option *ngFor="let sexBias of sexBiases" value="{{sexBias.id}}">{{sexBias.name}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+
+                                  <button mat-icon-button color="accent" aria-label="Apply species to all locations" matTooltip="Apply species to all locations"
+                                    (click)="createCommonEventDataObject('species', i, j )">
+                                    <i class="material-icons">group_work</i>
+                                  </button>
+
+                                  <button mat-icon-button color="warn" aria-label="Remove this species from this location" (click)="removeLocationSpecies(i, j)"
+                                    matTooltip="Remove this species from this location">
+                                    <i class="material-icons">remove_circle</i>
+                                  </button>
+
+                                </div>
+                              </div>
                             </div>
-                            <mat-divider [inset]="true"></mat-divider>
                           </div>
-                        </div>
-                      </div>
-                      <div class="button-row">
-                        <button mat-button color="primary" matTooltip="Add species to this location" (click)="addLocationSpecies(i)">
-                          <i class="material-icons">add_circle</i> Add Species</button>
-                      </div>
-                      <!--End Location Species Section-->
+                          <div class="button-row">
+                            <button mat-button color="primary" matTooltip="Add species to this location" (click)="addLocationSpecies(i)">
+                              <i class="material-icons">add_circle</i> Add Species</button>
+                          </div>
+                          <p>
+                            <div>
+                              <button mat-button matStepperPrevious type="button">
+                                <i class="material-icons"> arrow_back_ios </i> Back</button>
+                              <button mat-button matStepperNext type="button"> Next
+                                <i class="material-icons"> navigate_next </i>
+                              </button>
+                            </div>
+
+                        </mat-step>
+
+                        <mat-step [stepControl]="eventSubmissionForm">
+
+                          <ng-template matStepLabel>Contacts</ng-template>
+
+                          <div class="contacts-section-header">
+                            <div>
+                              <h4>
+                                <button mat-button color="primary" class="event-detail-action-button" (click)="openCreateContactDialog()">
+                                  <i class="material-icons">person_add</i> Create New Contact</button>
+                              </h4>
+                            </div>
+                          </div>
+
+                          <div formArrayName="event_location_contacts">
+                            <div class="contacts-container" *ngFor="let locationContacts of getLocationContacts(eventLocation); let k = index">
+
+                              <div class="horizontal-form-container" [formGroupName]="k">
+                                <mat-form-field class="form-control contact-select">
+                                  <mat-select placeholder="Contact" formControlName="id">
+                                    <mat-option *ngFor="let contact of userContacts" [value]="contact.id">{{contact.first_name}} {{contact.last_name}} | {{contact.organization | displayValue:'name':this.organizations}}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+
+                                <mat-form-field class="form-control">
+                                  <mat-select placeholder="Type" formControlName="contact_type">
+                                    <mat-option *ngFor="let contactType of contactTypes" [value]="contactType.id">{{contactType.name}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+
+                                <button mat-icon-button color="accent" aria-label="Apply contact to all locations" matTooltip="Apply contact to all locations"
+                                  (click)="createCommonEventDataObject('contact', i, k )">
+                                  <i class="material-icons">group_work</i>
+                                </button>
+
+                                <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details">
+                                  <i class="material-icons">assignment_ind</i>
+                                </button>
+
+                                <button mat-icon-button color="warn" aria-label="Remove this contact from this location" (click)="removeLocationContacts(i, k)"
+                                  matTooltip="Remove this contact from this location">
+                                  <i class="material-icons">remove_circle</i>
+                                </button>
+
+
+
+                              </div>
+                              <mat-divider [inset]="true"></mat-divider>
+                              <br>
+                            </div>
+                          </div>
+
+                          <div class="button-row">
+                            <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContacts(i)">
+                              <i class="material-icons">add_circle</i> Add Contact</button>
+                          </div>
+                          <div>
+                            <button mat-button matStepperPrevious type="button">
+                              <i class="material-icons"> arrow_back_ios </i> Back</button>
+                            <button mat-button matStepperNext type="button"> Next
+                              <i class="material-icons"> navigate_next </i>
+                            </button>
+                          </div>
+
+                        </mat-step>
+
+                        <mat-step>
+                          <ng-template matStepLabel>Review</ng-template>
+
+                          <span *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].valid">
+                            <h3>
+                              <i class="material-icons">
+                                check
+                              </i>
+                              <span class="alert-text">Finished with Location {{i+1}}</span>
+                            </h3>
+                          </span>
+
+                          <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">
+                            <mat-icon class="icon">error</mat-icon>
+                            <span class="alert-text">Missing country selection.</span>
+                          </mat-error>
+                          <br>
+
+                          <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">
+                            <mat-icon class="icon">error</mat-icon>
+                            <span class="alert-text">Missing land ownership selection.</span>
+                          </mat-error>
+                          <p>
+
+                            <div>
+                              <button mat-button matStepperPrevious type="button">
+                                <i class="material-icons"> arrow_back_ios </i> Back</button>
+                              <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
+                              <button mat-button color="primary" matTooltip="Add another location to this event" (click)="addEventLocation()">
+                                <mat-icon>add_location</mat-icon>Add Another Location</button>
+                            </div>
+                        </mat-step>
+
+                      </mat-vertical-stepper>
+
 
                       <p>
                         <mat-divider [inset]="true"></mat-divider>
-
-                        <!--Location Contacts Section-->
-                        <div class="contacts-section-header">
-                          <div>
-                            <h4>Contacts
-                              <button mat-button color="primary" class="event-detail-action-button" (click)="openCreateContactDialog()">
-                                <i class="material-icons">person_add</i> Create New Contact</button>
-                            </h4>
-                          </div>
-                        </div>
-
-                        <div formArrayName="event_location_contacts">
-                          <div class="contacts-container" *ngFor="let locationContacts of getLocationContacts(eventLocation); let k = index">
-
-                            <div class="horizontal-form-container" [formGroupName]="k">
-                              <mat-form-field class="form-control contact-select">
-                                <mat-select placeholder="Contact" formControlName="id">
-                                  <mat-option *ngFor="let contact of userContacts" [value]="contact.id">{{contact.first_name}} {{contact.last_name}} | {{contact.organization | displayValue:'name':this.organizations}}
-                                  </mat-option>
-                                </mat-select>
-                              </mat-form-field>
-
-                              <mat-form-field class="form-control">
-                                <mat-select placeholder="Type" formControlName="contact_type">
-                                  <mat-option *ngFor="let contactType of contactTypes" [value]="contactType.id">{{contactType.name}}</mat-option>
-                                </mat-select>
-                              </mat-form-field>
-
-                              <!-- <div class="button-row"> -->
-                              <button mat-icon-button color="accent" aria-label="Apply contact to all locations" matTooltip="Apply contact to all locations"
-                                (click)="createCommonEventDataObject('contact', i, k )">
-                                <i class="material-icons">group_work</i>
-                              </button>
-
-                              <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details">
-                                <i class="material-icons">assignment_ind</i>
-                              </button>
-
-                              <button mat-icon-button color="warn" aria-label="Remove this contact from this location" (click)="removeLocationContacts(i, k)"
-                                matTooltip="Remove this contact from this location">
-                                <i class="material-icons">remove_circle</i>
-                              </button>
-                              <!-- </div> -->
-
-
-                            </div>
-                            <mat-divider [inset]="true"></mat-divider>
-                            <br>
-                          </div>
-                        </div>
-
-                        <div class="button-row">
-                          <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContacts(i)">
-                            <i class="material-icons">add_circle</i> Add Contact</button>
-
-                        </div>
-                        <!--End Location Contacts Section-->
-
                         <p>
-
-                          <mat-divider [inset]="true"></mat-divider>
-                          <p>
-                            <button mat-button color="warn" (click)="openEventLocationRemoveConfirm(i)">
-                              <i class=" material-icons ">remove_circle</i> Remove this Event Location</button>
-
-                            <!-- <button mat-button color="warn" (click)="removeEventLocation(i)">
-                              <i class=" material-icons ">remove_circle</i> Remove this Event Location</button> -->
+                          <button mat-button color="warn" (click)="openEventLocationRemoveConfirm(i)">
+                            <i class=" material-icons ">remove_circle</i> Remove this Event Location</button>
 
                     </mat-card>
+
+
+                    <!-- End repeating Event location markup-->
                   </div>
+
+
                 </div>
               </form>
           </div>
           <!-- End Locations Section-->
 
-          <button mat-button color="primary" (click)="addEventLocation()">
-            <i class="material-icons ">
-              add_location
-            </i>Add Another Event Location</button>
+          <button mat-button color="primary" matTooltip="Add another location to this event" (click)="addEventLocation()">
+            <mat-icon>add_location</mat-icon>Add Location</button>
 
           <p>
 

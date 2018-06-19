@@ -111,7 +111,7 @@ export class EventSubmissionComponent implements OnInit {
       event_type: [null, Validators.required],
       complete: false,
       event_status: 1,
-      legal_status: [null, Validators.required],
+      legal_status: null,
       legal_number: '',
       event_organization: null,
       comments: this.formBuilder.array([]),

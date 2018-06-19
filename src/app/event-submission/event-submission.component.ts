@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 
@@ -56,6 +57,7 @@ import { OrganizationService } from '@services/organization.service';
 import { EventService } from '@app/services/event.service';
 
 import { CreateContactComponent } from '@create-contact/create-contact.component';
+import { CreateContactService } from '@create-contact/create-contact.service';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
 
@@ -70,6 +72,9 @@ export class EventSubmissionComponent implements OnInit {
 
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
+
+  private subscription: Subscription;
+  createdContact;
 
   eventTypes: EventType[];
   legalStatuses: LegalStatus[];
@@ -139,12 +144,29 @@ export class EventSubmissionComponent implements OnInit {
     private contactTypeService: ContactTypeService,
     private organizationService: OrganizationService,
     private contactService: ContactService,
+    private createContactSevice: CreateContactService,
     private eventService: EventService,
     public snackBar: MatSnackBar
   ) {
     this.buildEventSubmissionForm();
 
+    this.subscription = this.createContactSevice.getCreatedContact().subscribe(
+      createdContact => {
+        this.createdContact = createdContact;
 
+        // TEMPORARY- will need to use user creds to query user contact list
+        // get contact types from the ContactTypeService
+        this.contactService.getContacts()
+          .subscribe(
+            contacts => {
+              this.userContacts = contacts;
+            },
+            error => {
+              this.errorMessage = <any>error;
+            }
+          );
+
+      });
 
   }
 
@@ -387,7 +409,7 @@ export class EventSubmissionComponent implements OnInit {
       name: '',
       start_date: '',
       end_date: '',
-      country: [null, Validators.required],
+      country: [APP_UTILITIES.DEFAULT_COUNTRY_ID, Validators.required],
       administrative_level_one: null,
       administrative_level_two: null,
       latitude: null,

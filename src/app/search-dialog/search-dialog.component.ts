@@ -20,6 +20,7 @@ import { DiagnosisType } from '@interfaces/diagnosis-type';
 import { DiagnosisService } from '@services/diagnosis.service';
 import { SpeciesService } from '@services/species.service';
 import { AdministrativeLevelTwoService } from '@services/administrative-level-two.service';
+import { SearchDialogService } from '@search-dialog/search-dialog.service';
 import { id } from '@swimlane/ngx-datatable/release/utils';
 
 
@@ -93,6 +94,7 @@ export class SearchDialogComponent implements OnInit {
   constructor(
     public searchDialogRef: MatDialogRef<SearchDialogComponent>,
     private formBuilder: FormBuilder,
+    private searchDialogService: SearchDialogService,
     private _adminLevelOneService: AdministrativeLevelOneService,
     private _adminLevelTwoService: AdministrativeLevelTwoService,
     private _eventTypeService: EventTypeService,
@@ -300,8 +302,10 @@ export class SearchDialogComponent implements OnInit {
       counties: this.extractIDs(this.selectedCounties)
     });
 
-      // use formValue to populate the Current Search panel
-      // use searchForm.value to build the web service query
+    // use formValue to populate the Current Search panel
+    // use searchForm.value to build the web service query
+
+    this.searchDialogService.setSearchQuery(this.searchForm.value);
     console.log(this.searchForm.value);
   }
 

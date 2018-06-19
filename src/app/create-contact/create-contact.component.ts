@@ -14,6 +14,7 @@ import { OrganizationService } from '@services/organization.service';
 import { Contact } from '@interfaces/contact';
 import { ContactService } from '@services/contact.service';
 
+import { CreateContactService } from '@create-contact/create-contact.service';
 
 @Component({
   selector: 'app-create-contact',
@@ -48,6 +49,7 @@ export class CreateContactComponent implements OnInit {
     public createContactDialogRef: MatDialogRef<CreateContactComponent>,
     private organizationService: OrganizationService,
     private contactService: ContactService,
+    private createContactService: CreateContactService,
     public snackBar: MatSnackBar
   ) {
     this.buildCreateContactForm();
@@ -88,6 +90,7 @@ export class CreateContactComponent implements OnInit {
       .subscribe(
         (contact) => {
           this.submitLoading = false;
+          this.createContactService.setCreatedContact(contact);
           this.openSnackBar('Contact Created', 'OK', 5000);
           this.createContactDialogRef.close();
         },

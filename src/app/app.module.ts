@@ -69,6 +69,8 @@ import { OrganizationService } from '@app/services/organization.service';
 import { ContactService } from '@app/services/contact.service';
 import { AboutComponent } from './about/about.component';
 import { ConfirmComponent } from './confirm/confirm.component';
+import { CreateContactService } from '@app/create-contact/create-contact.service';
+import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 
 @NgModule({
   declarations: [
@@ -141,8 +143,10 @@ import { ConfirmComponent } from './confirm/confirm.component';
     AgeBiasService,
     SexBiasService,
     ContactService,
+    CreateContactService,
     ContactTypeService,
-    OrganizationService
+    OrganizationService,
+    SearchDialogService
   ],
   bootstrap: [AppComponent],
   entryComponents: [SearchDialogComponent, CreateContactComponent, ConfirmComponent, AboutComponent]

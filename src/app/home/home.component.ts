@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 declare let L: any;
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 import { Event } from '@interfaces/event';
 import { EventSummary } from '@interfaces/event-summary';
@@ -12,6 +14,7 @@ import { SearchDialogComponent } from '@search-dialog/search-dialog.component';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { APP_UTILITIES } from '@app/app.utilities';
+import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 
 
 @Component({
@@ -22,6 +25,10 @@ import { APP_UTILITIES } from '@app/app.utilities';
 export class HomeComponent implements OnInit, AfterViewInit {
 
   searchDialogRef: MatDialogRef<SearchDialogComponent>;
+
+  private searchQuerySubscription: Subscription;
+
+  currentSearchQuery;
 
   map;
 
@@ -61,7 +68,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _eventService: EventService, private _dialog: MatDialog, private router: Router, private route: ActivatedRoute) { }
+  constructor(
+    private _eventService: EventService,
+    private _dialog: MatDialog,
+    private router: Router,
+    private searchDialogService: SearchDialogService,
+    private route: ActivatedRoute
+  ) {
+
+    this.searchQuerySubscription = this.searchDialogService.getSearchQuery().subscribe(
+      searchQuery => {
+        this.currentSearchQuery = searchQuery;
+        alert('New Search Query Response');
+
+      });
+  }
 
   openSearchDialog() {
     this.searchDialogRef = this._dialog.open(SearchDialogComponent, {

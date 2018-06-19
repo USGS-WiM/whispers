@@ -105,17 +105,17 @@
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
-                              <mat-select placeholder="State" formControlName="administrative_level_one" (change)="updateAdminLevelTwoOptions($event.value)">
+                              <mat-select placeholder="State" formControlName="administrative_level_one" (ngModelChange)="updateAdminLevelTwoOptions($event.value)">
                                 <mat-option *ngFor="let adminLevelOne of adminLevelOnes" value="{{adminLevelOne.id}}">{{adminLevelOne.name}}</mat-option>
                               </mat-select>
-                              <mat-hint align="start">Select a country to update state list </mat-hint>
+                              <mat-hint align="start">Select a country to populate/update state list </mat-hint>
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
                               <mat-select placeholder="County" formControlName="administrative_level_two">
                                 <mat-option *ngFor="let adminLevelTwo of adminLevelTwos" value="{{adminLevelTwo.id}}">{{adminLevelTwo.name}}</mat-option>
                               </mat-select>
-                              <mat-hint align="start">Select a state to update county list </mat-hint>
+                              <mat-hint align="start">Select a state to populate/update county list </mat-hint>
                             </mat-form-field>
                           </div>
 
@@ -391,9 +391,7 @@
 
                           <span *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].valid">
                             <h3>
-                              <i class="material-icons">
-                                check
-                              </i>
+                              <mat-icon>check</mat-icon>
                               <span class="alert-text">Finished with Location {{i+1}}</span>
                             </h3>
                           </span>
@@ -404,7 +402,7 @@
                           </mat-error>
                           <br>
 
-                          <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">
+                          <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('land_ownership').invalid">
                             <mat-icon class="icon">error</mat-icon>
                             <span class="alert-text">Missing land ownership selection.</span>
                           </mat-error>
@@ -452,6 +450,7 @@
 
               <div class="temporary-form-value-display ">
                 <h3>Temporary Form Value display (not for production)</h3>
+                <p>Form Status: {{eventSubmissionForm.status}}
                 <pre> {{eventSubmissionForm.value | json}} </pre>
               </div>
 

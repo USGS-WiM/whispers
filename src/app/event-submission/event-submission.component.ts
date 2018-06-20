@@ -49,7 +49,10 @@ import { Contact } from '@interfaces/contact';
 import { ContactService } from '@services/contact.service';
 
 import { ContactType } from '@interfaces/contact-type';
-import { ContactTypeService } from '@app/services/contact-type.service';
+import { ContactTypeService } from '@services/contact-type.service';
+
+import { CommentType } from '@interfaces/comment-type';
+import { CommentTypeService } from '@services/comment-type.service';
 
 import { Organization } from '@interfaces/organization';
 import { OrganizationService } from '@services/organization.service';
@@ -60,7 +63,6 @@ import { CreateContactComponent } from '@create-contact/create-contact.component
 import { CreateContactService } from '@create-contact/create-contact.service';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
-
 
 
 @Component({
@@ -91,6 +93,7 @@ export class EventSubmissionComponent implements OnInit {
   organizations: Organization[];
 
   contactTypes: ContactType[];
+  commentTypes: CommentType[];
 
   userContacts = [];
 
@@ -142,6 +145,7 @@ export class EventSubmissionComponent implements OnInit {
     private sexBiasService: SexBiasService,
     private ageBiasService: AgeBiasService,
     private contactTypeService: ContactTypeService,
+    private commentTypeService: CommentTypeService,
     private organizationService: OrganizationService,
     private contactService: ContactService,
     private createContactSevice: CreateContactService,
@@ -155,7 +159,7 @@ export class EventSubmissionComponent implements OnInit {
         this.createdContact = createdContact;
 
         // TEMPORARY- will need to use user creds to query user contact list
-        // get contact types from the ContactTypeService
+        // get contacts from the ContactService
         this.contactService.getContacts()
           .subscribe(
             contacts => {
@@ -302,6 +306,17 @@ export class EventSubmissionComponent implements OnInit {
         }
       );
 
+    // get comment types from the CommentTypeService
+    this.commentTypeService.getCommentTypes()
+      .subscribe(
+        commentTypes => {
+          this.commentTypes = commentTypes;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
     // get organizations from the OrganizationService
     this.organizationService.getOrganizations()
       .subscribe(
@@ -441,7 +456,7 @@ export class EventSubmissionComponent implements OnInit {
       estimated_sick: null,
       estimated_dead: null,
       priority: null,
-      captive: null,
+      captive: false,
       age_bias: null,
       sex_bias: null
     });
@@ -461,6 +476,19 @@ export class EventSubmissionComponent implements OnInit {
     });
   }
 
+  initEventComment() {
+    return this.formBuilder.group({
+      comment: '',
+      comment_type: 5
+    });
+  }
+
+  // event comments
+  addEventComment() {
+    const control = <FormArray>this.eventSubmissionForm.get('comments');
+    control.push(this.initEventComment());
+  }
+
   // event locations
   addEventLocation() {
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations');
@@ -468,7 +496,7 @@ export class EventSubmissionComponent implements OnInit {
 
     const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'];
     const newEventLocationIndex = eventLocations.length - 1;
-    const newEventLocation = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][newEventLocationIndex]
+    const newEventLocation = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][newEventLocationIndex];
 
     if (this.commonEventData.species.length > 0) {
 
@@ -485,6 +513,16 @@ export class EventSubmissionComponent implements OnInit {
         locationContacts.push(contact);
       }
     }
+  }
+
+  removeEventComment(h) {
+    const control = <FormArray>this.eventSubmissionForm.get('comments');
+    control.removeAt(h);
+
+  }
+
+  getEventComments(form) {
+    return form.controls.comments.controls;
   }
 
   removeEventLocation(i) {

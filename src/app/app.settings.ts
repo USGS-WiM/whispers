@@ -51,6 +51,7 @@ export class APP_SETTINGS {
     public static get ORGANIZATIONS_URL(): string { return this._API_ENDPOINT + 'organizations/'; }
     public static get CONTACTS_URL(): string { return this._API_ENDPOINT + 'contacts/'; }
     public static get CONTACT_TYPES_URL(): string { return this._API_ENDPOINT + 'contacttypes/'; }
+    public static get COMMENT_TYPES_URL(): string { return this._API_ENDPOINT + 'commenttypes/'; }
     public static get GROUPS_URL(): string { return this._API_ENDPOINT + 'groups/'; }
 
 

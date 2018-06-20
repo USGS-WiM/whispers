@@ -119,8 +119,7 @@ export class EventSubmissionComponent implements OnInit {
       event_type: [null, Validators.required],
       complete: false,
       event_status: 1,
-      legal_status: null,
-      legal_number: '',
+      public: [true, Validators.required],
       event_organization: null,
       comments: this.formBuilder.array([]),
       new_event_locations: this.formBuilder.array([
@@ -356,7 +355,7 @@ export class EventSubmissionComponent implements OnInit {
     switch (objectType) {
       case 'contact':
         const contactsArray =
-          <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('event_location_contacts');
+          <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_contacts');
         const contact = contactsArray.controls[objectInstanceIndex];
         this.commonEventData.contacts.push(contact);
 
@@ -364,7 +363,7 @@ export class EventSubmissionComponent implements OnInit {
         for (let i = 0, j = eventLocations.length; i < j; i++) {
 
           if (i !== eventLocationIndex) {
-            const locationContacts = eventLocations[i].get('event_location_contacts');
+            const locationContacts = eventLocations[i].get('location_contacts');
             locationContacts.push(contact);
           }
         }
@@ -438,12 +437,13 @@ export class EventSubmissionComponent implements OnInit {
       location_species: this.formBuilder.array([
         // this.initLocationSpecies()
       ]),
-      event_location_contacts: this.formBuilder.array([
+      location_contacts: this.formBuilder.array([
         // this.initLocationContacts()
       ]),
-      comments: this.formBuilder.array([
-        // this.initLocationComments()
-      ])
+      comment: this.formBuilder.group({
+        comment: '',
+        comment_type: 5
+      })
     });
   }
 
@@ -509,7 +509,7 @@ export class EventSubmissionComponent implements OnInit {
     if (this.commonEventData.contacts.length > 0) {
 
       for (const contact of this.commonEventData.contacts) {
-        const locationContacts = <FormArray>newEventLocation.get('event_location_contacts');
+        const locationContacts = <FormArray>newEventLocation.get('location_contacts');
         locationContacts.push(contact);
       }
     }
@@ -552,17 +552,17 @@ export class EventSubmissionComponent implements OnInit {
 
   // location contacts
   addLocationContacts(i) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('event_location_contacts');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('location_contacts');
     control.push(this.initLocationContacts());
   }
 
   removeLocationContacts(i, k) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('event_location_contacts');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('location_contacts');
     control.removeAt(k);
   }
 
   getLocationContacts(form) {
-    return form.controls.event_location_contacts.controls;
+    return form.controls.location_contacts.controls;
   }
 
   // location comments
@@ -625,6 +625,18 @@ export class EventSubmissionComponent implements OnInit {
   submitEvent(formValue) {
 
     this.submitLoading = true;
+
+    // check if extra event location comment is blank, if so, delete it from the object
+    for (const event_location of formValue.new_event_locations) {
+      if (event_location.comment.comment === '') {
+        delete event_location.comment;
+      }
+    }
+
+    // TEMPORARY: remove gnis_name field until backend is handling it
+    for (const event_location of formValue.new_event_locations) {
+      delete event_location.gnis_name;
+    }
 
     this.eventService.create(formValue)
       .subscribe(

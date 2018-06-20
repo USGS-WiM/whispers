@@ -34,6 +34,15 @@
               <mat-hint align="start">Reference name for this event (private) </mat-hint>
             </mat-form-field>
 
+            <mat-form-field class="form-control">
+              <mat-select placeholder="Event Visibility" formControlName="public" required>
+                <mat-option [value]="true">Visible to Public</mat-option>
+                <mat-option [value]="false">Not Visible to Public</mat-option>
+              </mat-select>
+              <mat-hint align="start"></mat-hint>
+              <mat-error *ngIf="eventSubmissionForm.get('event_type').invalid">{{getErrorMessage('event_type')}}</mat-error>
+            </mat-form-field>
+
           </div>
 
 
@@ -214,6 +223,10 @@
                           <div class="vertical-form-container">
                             <mat-form-field class="form-control">
                               <input matInput placeholder="GNIS Standardized Location Name" formControlName="gnis_name">
+                              <mat-hint align="start" matTooltip="field under development. value will not save.">
+                                <strong>
+                                  <mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT</strong>
+                              </mat-hint>
                             </mat-form-field>
                           </div>
 
@@ -320,89 +333,94 @@
                             <div formArrayName="location_species">
                               <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let j = index">
 
-                                <div class="horizontal-form-container" [formGroupName]="j">
-                                  <mat-form-field class="form-control ">
-                                    <mat-select placeholder="Species" formControlName="species">
-                                      <mat-option *ngFor="let species of species" value="{{species.id}}">{{species.name}}</mat-option>
-                                    </mat-select>
-                                    <mat-hint align="end" matTooltip="Public field">
-                                      <mat-icon>public</mat-icon>
-                                    </mat-hint>
-                                  </mat-form-field>
+                                <div [formGroupName]="j">
 
-                                  <mat-form-field class="species-number-control">
-                                    <input matInput placeholder="Known Dead" type="number" formControlName="dead">
-                                    <mat-hint align="end" matTooltip="Public field">
-                                      <mat-icon>public</mat-icon>
-                                    </mat-hint>
-                                  </mat-form-field>
+                                  <!-- <div class="horizontal-form-container"></div> -->
 
-                                  <mat-form-field class="species-number-control">
-                                    <input matInput placeholder="Estimated Dead" type="number" formControlName="estimated_dead">
-                                    <mat-hint align="end" matTooltip="Public field">
-                                      <mat-icon>public</mat-icon>
-                                    </mat-hint>
-                                  </mat-form-field>
+                                  <div class="horizontal-form-container" class="species-controls-container">
+                                    <mat-form-field class="form-control">
+                                      <mat-select placeholder="Species" formControlName="species">
+                                        <mat-option *ngFor="let species of species" value="{{species.id}}">{{species.name}}</mat-option>
+                                      </mat-select>
+                                      <mat-hint align="end" matTooltip="Public field">
+                                        <mat-icon>public</mat-icon>
+                                      </mat-hint>
+                                    </mat-form-field>
 
-                                  <mat-form-field class="species-number-control">
-                                    <input matInput placeholder="Known Sick" type="number" formControlName="sick">
-                                    <mat-hint align="end" matTooltip="Public field">
-                                      <mat-icon>public</mat-icon>
-                                    </mat-hint>
-                                  </mat-form-field>
+                                    <mat-form-field class="species-number-control">
+                                      <input matInput placeholder="Known Dead" type="number" formControlName="dead">
+                                      <mat-hint align="end" matTooltip="Public field">
+                                        <mat-icon>public</mat-icon>
+                                      </mat-hint>
+                                    </mat-form-field>
 
-                                  <mat-form-field class="species-number-control">
-                                    <input matInput placeholder="Estimated Sick" type="number" formControlName="estimated_sick">
-                                    <mat-hint align="end" matTooltip="Public field">
-                                      <mat-icon>public</mat-icon>
-                                    </mat-hint>
-                                  </mat-form-field>
+                                    <mat-form-field class="species-number-control">
+                                      <input matInput placeholder="Estimated Dead" type="number" formControlName="estimated_dead">
+                                      <mat-hint align="end" matTooltip="Public field">
+                                        <mat-icon>public</mat-icon>
+                                      </mat-hint>
+                                    </mat-form-field>
 
-                                  <mat-form-field class="species-number-control">
-                                    <input matInput placeholder="Est. Population at Risk" type="number" formControlName="population">
-                                    <mat-hint align="end" matTooltip="Public field">
-                                      <mat-icon>public</mat-icon>
-                                    </mat-hint>
-                                  </mat-form-field>
+                                    <mat-form-field class="species-number-control">
+                                      <input matInput placeholder="Known Sick" type="number" formControlName="sick">
+                                      <mat-hint align="end" matTooltip="Public field">
+                                        <mat-icon>public</mat-icon>
+                                      </mat-hint>
+                                    </mat-form-field>
 
-                                  <mat-form-field class="species-number-control">
-                                    <mat-select placeholder="Age Bias" formControlName="age_bias">
-                                      <mat-option *ngFor="let ageBias of ageBiases" value="{{ageBias.id}}">{{ageBias.name}}</mat-option>
-                                    </mat-select>
-                                    <mat-hint align="end" matTooltip="Public field">
-                                      <mat-icon>public</mat-icon>
-                                    </mat-hint>
-                                  </mat-form-field>
+                                    <mat-form-field class="species-number-control">
+                                      <input matInput placeholder="Estimated Sick" type="number" formControlName="estimated_sick">
+                                      <mat-hint align="end" matTooltip="Public field">
+                                        <mat-icon>public</mat-icon>
+                                      </mat-hint>
+                                    </mat-form-field>
 
-                                  <mat-form-field class="species-number-control">
-                                    <mat-select placeholder="Sex Bias" formControlName="sex_bias">
-                                      <mat-option *ngFor="let sexBias of sexBiases" value="{{sexBias.id}}">{{sexBias.name}}</mat-option>
-                                    </mat-select>
-                                    <mat-hint align="end" matTooltip="Public field">
-                                      <mat-icon>public</mat-icon>
-                                    </mat-hint>
-                                  </mat-form-field>
+                                    <mat-form-field class="species-number-control">
+                                      <input matInput placeholder="Est. Population at Risk" type="number" formControlName="population">
+                                      <mat-hint align="end" matTooltip="Public field">
+                                        <mat-icon>public</mat-icon>
+                                      </mat-hint>
+                                    </mat-form-field>
 
-                                  <mat-form-field class="species-number-control">
-                                    <mat-select placeholder="Captivity" formControlName="captive">
-                                      <mat-option [value]="true">Captive</mat-option>
-                                      <mat-option [value]="false">Free-Ranging</mat-option>
-                                    </mat-select>
-                                    <mat-hint align="end" matTooltip="Public field">
-                                      <mat-icon>public</mat-icon>
-                                    </mat-hint>
-                                  </mat-form-field>
+                                    <mat-form-field class="species-number-control">
+                                      <mat-select placeholder="Age Bias" formControlName="age_bias">
+                                        <mat-option *ngFor="let ageBias of ageBiases" value="{{ageBias.id}}">{{ageBias.name}}</mat-option>
+                                      </mat-select>
+                                      <mat-hint align="end" matTooltip="Public field">
+                                        <mat-icon>public</mat-icon>
+                                      </mat-hint>
+                                    </mat-form-field>
 
-                                  <button mat-icon-button color="accent" aria-label="Apply species to all locations" matTooltip="Apply species to all locations"
-                                    (click)="createCommonEventDataObject('species', i, j )">
-                                    <i class="material-icons">group_work</i>
-                                  </button>
+                                    <mat-form-field class="species-number-control">
+                                      <mat-select placeholder="Sex Bias" formControlName="sex_bias">
+                                        <mat-option *ngFor="let sexBias of sexBiases" value="{{sexBias.id}}">{{sexBias.name}}</mat-option>
+                                      </mat-select>
+                                      <mat-hint align="end" matTooltip="Public field">
+                                        <mat-icon>public</mat-icon>
+                                      </mat-hint>
+                                    </mat-form-field>
 
-                                  <button mat-icon-button color="warn" aria-label="Remove this species from this location" (click)="removeLocationSpecies(i, j)"
-                                    matTooltip="Remove this species from this location">
-                                    <i class="material-icons">remove_circle</i>
-                                  </button>
+                                    <mat-form-field class="species-number-control">
+                                      <mat-select placeholder="Captivity" formControlName="captive">
+                                        <mat-option [value]="true">Captive</mat-option>
+                                        <mat-option [value]="false">Free-Ranging</mat-option>
+                                      </mat-select>
+                                      <mat-hint align="end" matTooltip="Public field">
+                                        <mat-icon>public</mat-icon>
+                                      </mat-hint>
+                                    </mat-form-field>
 
+                                    <button mat-icon-button color="accent" aria-label="Apply species to all locations" matTooltip="Apply species to all locations"
+                                      (click)="createCommonEventDataObject('species', i, j )">
+                                      <i class="material-icons">group_work</i>
+                                    </button>
+
+                                    <button mat-icon-button color="warn" aria-label="Remove this species from this location" (click)="removeLocationSpecies(i, j)"
+                                      matTooltip="Remove this species from this location">
+                                      <i class="material-icons">remove_circle</i>
+                                    </button>
+
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -435,10 +453,10 @@
                             </div>
                           </div>
 
-                          <div formArrayName="event_location_contacts">
+                          <div formArrayName="location_contacts">
                             <div class="contacts-container" *ngFor="let locationContacts of getLocationContacts(eventLocation); let k = index">
 
-                              <div class="horizontal-form-container" [formGroupName]="k">
+                              <div class="horizontal-form-container contact-controls-container" [formGroupName]="k">
                                 <mat-form-field class="form-control contact-select">
                                   <mat-select placeholder="Contact" formControlName="id">
                                     <mat-option *ngFor="let contact of userContacts" [value]="contact.id">{{contact.first_name}} {{contact.last_name}} | {{contact.organization | displayValue:'name':this.organizations}}
@@ -446,25 +464,31 @@
                                   </mat-select>
                                 </mat-form-field>
 
-                                <mat-form-field class="form-control">
+                                <mat-form-field class="form-control  contact-type-select">
                                   <mat-select placeholder="Type" formControlName="contact_type">
                                     <mat-option *ngFor="let contactType of contactTypes" [value]="contactType.id">{{contactType.name}}</mat-option>
                                   </mat-select>
                                 </mat-form-field>
 
-                                <button mat-icon-button color="accent" aria-label="Apply contact to all locations" matTooltip="Apply contact to all locations"
-                                  (click)="createCommonEventDataObject('contact', i, k )">
-                                  <i class="material-icons">group_work</i>
-                                </button>
+                                <div class="contact-button-div">
 
-                                <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details">
-                                  <i class="material-icons">assignment_ind</i>
-                                </button>
+                                  <button mat-icon-button color="accent" aria-label="Apply contact to all locations" matTooltip="Apply contact to all locations"
+                                    (click)="createCommonEventDataObject('contact', i, k )">
+                                    <i class="material-icons">group_work</i>
+                                  </button>
 
-                                <button mat-icon-button color="warn" aria-label="Remove this contact from this location" (click)="removeLocationContacts(i, k)"
-                                  matTooltip="Remove this contact from this location">
-                                  <i class="material-icons">remove_circle</i>
-                                </button>
+
+
+                                  <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details">
+                                    <i class="material-icons">assignment_ind</i>
+                                  </button>
+
+                                  <button mat-icon-button color="warn" aria-label="Remove this contact from this location" (click)="removeLocationContacts(i, k)"
+                                    matTooltip="Remove this contact from this location">
+                                    <i class="material-icons">remove_circle</i>
+                                  </button>
+
+                                </div>
 
 
 
@@ -589,7 +613,7 @@
                 </div>
 
                 <div class="button-row">
-                  <button mat-button color="primary" matTooltip="Add comment to this event" (click)="addEventComment(h)">
+                  <button mat-button color="primary" matTooltip="Add comment to this event" (click)="addEventComment()">
                     <i class="material-icons">add_circle</i> Add Comment</button>
                 </div>
 

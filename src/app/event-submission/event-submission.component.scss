@@ -35,6 +35,15 @@
 
 .contact-select {
     width: 40em;
+    flex-grow: 2;
+}
+
+.contact-type-select {
+    flex-grow: 1;
+}
+
+.contact-button-div {
+    flex-grow: 1;
 }
 
 .hint {
@@ -59,6 +68,46 @@
     margin-top: 10px;
     margin-bottom: 10px;
     margin-left: 5px;
+    flex-grow: 1;
+}
+
+.species-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-style: groove;
+    border-radius: 5px;
+    margin-bottom: 1em;
+}
+
+.contacts-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-style: groove;
+    border-radius: 5px;
+    margin-bottom: 1em;
+    width: auto;
+    display: inline-block;
+}
+
+.species-control-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+// .species-control-container>* {
+//     flex: 1 1 8em;
+// }
+.contact-controls-container {
+    display: flex;
+    flex-direction: row; // min-width: 0;
+    flex-wrap: wrap;
+}
+
+.contact-controls-container>* {
+    flex: 1 1;
 }
 
 .field-help-button {

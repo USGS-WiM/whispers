@@ -13,10 +13,14 @@
       </span>
       <span class="header-top-row-spacer"></span>
       <span class="about-button-span">
-        <button mat-button (click)="openAboutDialog()" aria-label="About this application">
-          <mat-icon class="icon">info_outline</mat-icon>
-          <span class="header-button-text">About</span>
+        <button mat-button (click)="openUserDashboard()" aria-label="User information">
+          <mat-icon class="icon">account_box</mat-icon>
+          <span class="header-button-text">User Dashboard</span>
         </button>
+        <button mat-button (click)="openAboutDialog()" aria-label="About this application">
+            <mat-icon class="icon">info_outline</mat-icon>
+            <span class="header-button-text">About</span>
+          </button>
       </span>
 
     </mat-toolbar-row>

@@ -26,6 +26,10 @@ export class AppComponent implements OnInit {
     this.whispersVersion = APP_SETTINGS.VERSION;
   }
 
+  openUserDashboard() {
+    this.router.navigate([`../userdashboard/`], {relativeTo: this.route});
+  }
+
   openAboutDialog() {
     this.aboutDialogRef = this.dialog.open(AboutComponent, {
       minWidth: '60%',

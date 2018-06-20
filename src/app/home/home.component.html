@@ -76,7 +76,7 @@
           <span class="results-button-row">
             <button mat-button color="accent">
               <i class="material-icons">
-                  unarchive
+                unarchive
               </i> Export Data</button>
             <button mat-button color="accent">
               <i class="material-icons">
@@ -127,21 +127,21 @@
             </ng-container>
 
             <!-- States Column -->
-            <ng-container matColumnDef="states">
+            <ng-container matColumnDef="administrativelevelones">
               <mat-header-cell *matHeaderCellDef mat-sort-header> States </mat-header-cell>
               <mat-cell *matCellDef="let event">
-                <span *ngFor="let state of event.states">{{state.name}}
-                  <span *ngIf="(event.states.indexOf(state)) < (event.states.length - 1)">, </span>
+                <span *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}
+                  <span *ngIf="(event.administrativelevelones.indexOf(administrativelevelone)) < (event.administrativelevelones.length - 1)">, </span>
                 </span>
               </mat-cell>
             </ng-container>
 
             <!-- Counties Column -->
-            <ng-container matColumnDef="counties">
+            <ng-container matColumnDef="administrativeleveltwos">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Counties </mat-header-cell>
               <mat-cell *matCellDef="let event">
-                <span *ngFor="let county of event.counties">{{county.name}}
-                  <span *ngIf="(event.counties.indexOf(county)) < (event.counties.length - 1)">, </span>
+                <span *ngFor="let administrativeleveltwo of event.administrativeleveltwos">{{administrativeleveltwo.name}}
+                  <span *ngIf="(event.administrativeleveltwos.indexOf(administrativeleveltwo)) < (event.administrativeleveltwos.length - 1)">, </span>
                 </span>
               </mat-cell>
             </ng-container>
@@ -157,9 +157,14 @@
             </ng-container>
 
             <!-- Event Diagnosis Column -->
-            <ng-container matColumnDef="event_diagnosis">
+            <ng-container matColumnDef="event_diagnoses">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Event Diagnosis </mat-header-cell>
-              <mat-cell *matCellDef="let event"> {{event.event_diagnosis.diagnosis_string}}</mat-cell>
+              <mat-cell *matCellDef="let event">
+                <span *ngFor="let diagnosis of event.event_diagnoses">{{diagnosis.diagnosis_string}}
+                  <span *ngIf="(event.event_diagnoses.indexOf(diagnosis)) < (event.event_diagnoses.length - 1)">, </span>
+                </span>
+                <!-- {{event.event_diagnosis.diagnosis_string}} -->
+              </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

@@ -65,12 +65,14 @@ import { AgeBiasService } from '@app/services/age-bias.service';
 import { SexBiasService } from '@app/services/sex-bias.service';
 import { CreateContactComponent } from './create-contact/create-contact.component';
 import { ContactTypeService } from '@services/contact-type.service';
+import { CommentTypeService } from '@app/services/comment-type.service';
 import { OrganizationService } from '@app/services/organization.service';
 import { ContactService } from '@app/services/contact.service';
 import { AboutComponent } from './about/about.component';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { CreateContactService } from '@app/create-contact/create-contact.service';
 import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
+
 
 @NgModule({
   declarations: [
@@ -145,6 +147,7 @@ import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
     ContactService,
     CreateContactService,
     ContactTypeService,
+    CommentTypeService,
     OrganizationService,
     SearchDialogService
   ],

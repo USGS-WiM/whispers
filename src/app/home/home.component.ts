@@ -38,13 +38,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     'affected_count',
     'start_date',
     'end_date',
-    'states',
-    'counties',
+    'administrativelevelones',
+    'administrativeleveltwos',
     'species',
-    'event_diagnosis'
+    'event_diagnoses'
   ];
 
-  dataSource: MatTableDataSource<Event>;
+  dataSource: MatTableDataSource<EventSummary>;
 
   // ngx-datatable ///////////////
 

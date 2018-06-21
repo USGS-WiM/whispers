@@ -149,7 +149,8 @@ import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
     ContactTypeService,
     CommentTypeService,
     OrganizationService,
-    SearchDialogService
+    SearchDialogService,
+    DisplayValuePipe
   ],
   bootstrap: [AppComponent],
   entryComponents: [SearchDialogComponent, CreateContactComponent, ConfirmComponent, AboutComponent]

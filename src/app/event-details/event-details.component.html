@@ -46,7 +46,7 @@
                   <th [attr.rowspan]="eventData.event_locations.length + 1 ">Locations</th>
                 </tr>
                 <tr *ngFor="let eventLocation of eventData.event_locations">
-                  <td>{{eventLocation.county_string}}, {{eventLocation.state_string}}, {{eventLocation.country_string}}</td>
+                  <td>{{eventLocation.administrative_level_two_string}}, {{eventLocation.administrative_level_one_string}}, {{eventLocation.country_string}}</td>
                 </tr>
               </table>
             </div>
@@ -69,7 +69,7 @@
                   <tr *ngFor="let loc_species of eventLocationSpecies">
                     <td>{{loc_species.species_string}}</td>
                     <td>
-                      <span>{{loc_species.county_string}}, {{loc_species.state_string}}</span>
+                      <span>{{loc_species.administrative_level_two_string}}, {{loc_species.administrative_level_one_string}}</span>
                       <br>
                       <span>{{loc_species.country_string}}</span>
                     </td>
@@ -155,7 +155,7 @@
                   <tr *ngFor="let loc_species of eventLocationSpecies">
                     <td>{{loc_species.species_string}}</td>
                     <td>
-                      <span>{{loc_species.county_string}}, {{loc_species.state_string}}</span>
+                      <span>{{loc_species.administrative_level_two_string}}, {{loc_species.administrative_level_one_string}}</span>
                       <br>
                       <span>{{loc_species.country_string}}</span>
                     </td>

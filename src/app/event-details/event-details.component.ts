@@ -56,10 +56,10 @@ export class EventDetailsComponent implements OnInit {
 
       this.eventData = this.eventService.getSampleEventDetail(this.id);
 
-      for (let event_location of this.eventData.event_locations) {
-        for (let location_species of event_location.location_species) {
-          location_species.county_string = event_location.county_string;
-          location_species.state_string = event_location.state_string;
+      for (const event_location of this.eventData.event_locations) {
+        for (const location_species of event_location.location_species) {
+          location_species.administrative_level_two_string = event_location.administrative_level_two_string;
+          location_species.administrative_level_one_string = event_location.administrative_level_one_string;
           location_species.country_string = event_location.country_string;
           this.eventLocationSpecies.push(location_species);
         }

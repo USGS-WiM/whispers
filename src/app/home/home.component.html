@@ -130,9 +130,12 @@
             <ng-container matColumnDef="administrativelevelones">
               <mat-header-cell *matHeaderCellDef mat-sort-header> States </mat-header-cell>
               <mat-cell *matCellDef="let event">
-                <span *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}
+                <ul class="table-cell-list">
+                  <li *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}</li>
+                </ul>
+                <!-- <span *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}
                   <span *ngIf="(event.administrativelevelones.indexOf(administrativelevelone)) < (event.administrativelevelones.length - 1)">, </span>
-                </span>
+                </span> -->
               </mat-cell>
             </ng-container>
 
@@ -140,9 +143,12 @@
             <ng-container matColumnDef="administrativeleveltwos">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Counties </mat-header-cell>
               <mat-cell *matCellDef="let event">
-                <span *ngFor="let administrativeleveltwo of event.administrativeleveltwos">{{administrativeleveltwo.name}}
+                <ul class="table-cell-list">
+                  <li *ngFor="let administrativeleveltwo of event.administrativeleveltwos">{{administrativeleveltwo.name}}</li>
+                </ul>
+                <!-- <span *ngFor="let administrativeleveltwo of event.administrativeleveltwos">{{administrativeleveltwo.name}}
                   <span *ngIf="(event.administrativeleveltwos.indexOf(administrativeleveltwo)) < (event.administrativeleveltwos.length - 1)">, </span>
-                </span>
+                </span> -->
               </mat-cell>
             </ng-container>
 
@@ -150,9 +156,12 @@
             <ng-container matColumnDef="species">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Species </mat-header-cell>
               <mat-cell *matCellDef="let event">
-                <span *ngFor="let species of event.species">{{species.name}}
+                <ul class="table-cell-list">
+                  <li *ngFor="let species of event.species">{{species.name}}</li>
+                </ul>
+                <!-- <span *ngFor="let species of event.species">{{species.name}}
                   <span *ngIf="(event.species.indexOf(species)) < (event.species.length - 1)">, </span>
-                </span>
+                </span> -->
               </mat-cell>
             </ng-container>
 
@@ -160,10 +169,12 @@
             <ng-container matColumnDef="event_diagnoses">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Event Diagnosis </mat-header-cell>
               <mat-cell *matCellDef="let event">
-                <span *ngFor="let diagnosis of event.event_diagnoses">{{diagnosis.diagnosis_string}}
+                <ul class="table-cell-list">
+                  <li *ngFor="let diagnosis of event.event_diagnoses">{{diagnosis.diagnosis_string}}</li>
+                </ul>
+                <!-- <span *ngFor="let diagnosis of event.event_diagnoses">{{diagnosis.diagnosis_string}}
                   <span *ngIf="(event.event_diagnoses.indexOf(diagnosis)) < (event.event_diagnoses.length - 1)">, </span>
-                </span>
-                <!-- {{event.event_diagnosis.diagnosis_string}} -->
+                </span> -->
               </mat-cell>
             </ng-container>
 

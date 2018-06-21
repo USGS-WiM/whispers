@@ -23,6 +23,8 @@ import { AdministrativeLevelTwoService } from '@services/administrative-level-tw
 import { SearchDialogService } from '@search-dialog/search-dialog.service';
 import { id } from '@swimlane/ngx-datatable/release/utils';
 
+import { DisplayValuePipe } from '@pipes/display-value.pipe';
+
 
 @Component({
   selector: 'app-search-dialog',
@@ -43,7 +45,7 @@ export class SearchDialogComponent implements OnInit {
   diagnosisTypeControl: FormControl;
   diagnosisControl: FormControl;
   adminLevelOneControl: FormControl;
-  countyControl: FormControl;
+  adminLevelTwoControl: FormControl;
   speciesControl: FormControl;
 
   eventTypes: EventType[];
@@ -62,9 +64,9 @@ export class SearchDialogComponent implements OnInit {
   filteredAdminLevelOnes: Observable<any[]>;
   selectedAdminLevelOnes = []; // chips list
 
-  counties = [];
-  filteredCounties: Observable<any[]>;
-  selectedCounties = []; // chips list
+  adminLevelTwos = [];
+  filteredAdminLevelTwos: Observable<any[]>;
+  selectedAdminLevelTwos = []; // chips list
 
   species = [];
   filteredSpecies: Observable<any[]>;
@@ -76,8 +78,8 @@ export class SearchDialogComponent implements OnInit {
       diagnosis: null,
       diagnosis_type: null,
       species: null,
-      adminLevelOnes: null,
-      counties: null,
+      administrative_level_one: null,
+      administrative_level_two: null,
       affected_count: 5,
       start_date: null,
       end_date: null,
@@ -85,8 +87,8 @@ export class SearchDialogComponent implements OnInit {
       diagnosis_type_includes_all: false,
       diagnosis_includes_all: false,
       species_includes_all: false,
-      adminLevelOne_includes_all: false,
-      county_includes_all: false,
+      administrative_level_one_includes_all: false,
+      administrative_level_two_includes_all: false,
       openEventsOnly: false
     });
   }
@@ -101,13 +103,14 @@ export class SearchDialogComponent implements OnInit {
     private _diagnosisTypeService: DiagnosisTypeService,
     private _diagnosisService: DiagnosisService,
     private _speciesService: SpeciesService,
+    private displayValuePipe: DisplayValuePipe,
     public snackBar: MatSnackBar) {
 
     this.eventTypeControl = new FormControl();
     this.diagnosisTypeControl = new FormControl();
     this.diagnosisControl = new FormControl();
     this.adminLevelOneControl = new FormControl();
-    this.countyControl = new FormControl();
+    this.adminLevelTwoControl = new FormControl();
     this.speciesControl = new FormControl();
 
     this.buildSearchForm();
@@ -166,14 +169,14 @@ export class SearchDialogComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
-    // get counties from the county service
+    // get adminLevelTwos from the adminLevelTwo service
     this._adminLevelTwoService.getAdminLevelTwos()
       .subscribe(
-        (counties) => {
-          this.counties = counties;
-          this.filteredCounties = this.countyControl.valueChanges
+        (adminLevelTwos) => {
+          this.adminLevelTwos = adminLevelTwos;
+          this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
             .startWith(null)
-            .map(val => this.filter(val, this.counties, 'name'));
+            .map(val => this.filter(val, this.adminLevelTwos, 'name'));
         },
         error => {
           this.errorMessage = <any>error;
@@ -234,7 +237,7 @@ export class SearchDialogComponent implements OnInit {
         break;
       case 'adminLevelOne': this.adminLevelOneControl.reset();
         break;
-      case 'county': this.countyControl.reset();
+      case 'adminLevelTwo': this.adminLevelTwoControl.reset();
     }
   }
 
@@ -284,13 +287,40 @@ export class SearchDialogComponent implements OnInit {
 
   submitSearch(formValue) {
 
+    const displayQuery = {
+      event_type: [],
+      diagnosis: [],
+      diagnosis_type: [],
+      species: [],
+      adminLevelOnes: [],
+      adminLevelTwos: [],
+      affected_count: formValue.affected_count,
+      start_date: formValue.start_date,
+      end_date: formValue.end_date,
+      event_type_includes_all: formValue.event_type_includes_all,
+      diagnosis_type_includes_all: formValue.diagnosis_type_includes_all,
+      diagnosis_includes_all: formValue.diagnosis_includes_all,
+      species_includes_all: formValue.species_includes_all,
+      administrative_level_one_includes_all: formValue.administrative_level_one_includes_all,
+      administrative_level_two_includes_all: formValue.administrative_level_two_includes_all,
+      openEventsOnly: formValue.openEventsOnly
+    };
+
+
     // update the formValue array with full selection objects
     formValue.event_type = this.selectedEventTypes;
     formValue.diagnosis = this.selectedDiagnoses;
     formValue.diagnosis_type = this.selectedDiagnosisTypes;
     formValue.species = this.selectedSpecies;
     formValue.adminLevelOnes = this.selectedAdminLevelOnes;
-    formValue.counties = this.selectedCounties;
+    formValue.adminLevelTwos = this.selectedAdminLevelTwos;
+
+
+    // use formValue to populate the Current Search panel
+    // TODO: finish this for each array field
+    for (const event_type of formValue.event_type) {
+      displayQuery.event_type.push(event_type.name);
+    }
 
     // patch the searchForm value with the IDs of the selected objects
     this.searchForm.patchValue({
@@ -299,10 +329,13 @@ export class SearchDialogComponent implements OnInit {
       diagnosis_type: this.extractIDs(this.selectedDiagnosisTypes),
       species: this.extractIDs(this.selectedSpecies),
       adminLevelOnes: this.extractIDs(this.selectedAdminLevelOnes),
-      counties: this.extractIDs(this.selectedCounties)
+      adminLevelTwos: this.extractIDs(this.selectedAdminLevelTwos)
     });
 
-    // use formValue to populate the Current Search panel
+
+
+
+
     // use searchForm.value to build the web service query
 
     this.searchDialogService.setSearchQuery(this.searchForm.value);

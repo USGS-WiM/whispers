@@ -7,10 +7,10 @@ export interface EventLocation extends History {
     start_date: string;
     end_date: string;
     country: number;
-    state: number;
-    county: number;
-    county_multiple: boolean;
-    county_unknown: boolean;
+    administrative_level_one: number;
+    administrative_level_two: number;
+    // county_multiple: boolean;
+    // county_unknown: boolean;
     latitude: number;
     longitude: number;
     priority: number;
@@ -18,7 +18,7 @@ export interface EventLocation extends History {
     flyway: string;
     gnis_name: number;
     location_species: LocationSpecies[];
-    county_string?: string;
-    state_string?: string;
+    administrative_level_two_string?: string;
+    administrative_level_one_string?: string;
     country_string?: string;
 }

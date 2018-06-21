@@ -200,7 +200,7 @@
                     <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(adminLevelOne, selectedAdminLevelOnes, 'adminLevelOne')">{{adminLevelOne.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedAdminLevelOnes.indexOf(adminLevelOne)) < (selectedAdminLevelOnes.length - 1)">{{(searchForm.get('adminLevelOne_includes_all').value) ? "and" : "or"}}&nbsp;</span>
+                    <span *ngIf="(selectedAdminLevelOnes.indexOf(adminLevelOne)) < (selectedAdminLevelOnes.length - 1)">{{(searchForm.get('administrative_level_one_includes_all').value) ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
               </div>
@@ -221,7 +221,7 @@
           </div>
           <div class="search-type-radios">
             <label>Search type </label>
-            <mat-radio-group formControlName="adminLevelOne_includes_all">
+            <mat-radio-group formControlName="administrative_level_one_includes_all">
               <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
               <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
             </mat-radio-group>
@@ -230,7 +230,7 @@
       </mat-expansion-panel>
       <!--- end Admin Level One (State) expansion panel -->
 
-      <!--- County expansion panel -->
+      <!--- Admin Level Two (County) expansion panel -->
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -239,12 +239,12 @@
           <mat-panel-description>
             <span>
               <div class="chiplist">
-                <mat-chip-list #countyChipList>
-                  <span *ngFor="let county of selectedCounties">
-                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(county, selectedCounties, 'county')">{{county.name}}
+                <mat-chip-list #adminLevelTwoChipList>
+                  <span *ngFor="let adminLevelTwo of selectedAdminLevelTwos">
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(adminLevelTwo, selectedAdminLevelTwos, 'adminLevelTwo')">{{adminLevelTwo.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedCounties.indexOf(county)) < (selectedCounties.length - 1)">{{(searchForm.get('county_includes_all').value) ? "and" : "or"}}&nbsp;</span>
+                    <span *ngIf="(selectedAdminLevelTwos.indexOf(adminLevelTwo)) < (selectedAdminLevelTwos.length - 1)">{{(searchForm.get('administrative_level_two_includes_all').value) ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
               </div>
@@ -254,23 +254,25 @@
         <div>
           <div class="autocomplete-input">
             <mat-form-field class="full-width">
-              <input type="text" matInput placeholder="Add County" aria-label="Add County" [matAutocomplete]="countyAutoComplete" [formControl]="countyControl">
-              <mat-autocomplete #countyAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedCounties, 'county')">
-                <mat-option *ngFor="let county of filteredCounties | async" [value]="county">
-                  <span>{{ county.name }}</span>
+              <input type="text" matInput placeholder="Add County" aria-label="Add County" [matAutocomplete]="adminLevelTwoAutoComplete"
+                [formControl]="adminLevelTwoControl">
+              <mat-autocomplete #adminLevelTwoAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedAdminLevelTwos, 'adminLevelTwo')">
+                <mat-option *ngFor="let adminLevelTwo of filteredAdminLevelTwos | async" [value]="adminLevelTwo">
+                  <span>{{ adminLevelTwo.name }}</span>
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
           </div>
           <div class="search-type-radios">
             <label>Search type </label>
-            <mat-radio-group formControlName="county_includes_all">
+            <mat-radio-group formControlName="administrative_level_two_includes_all">
               <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
               <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
             </mat-radio-group>
           </div>
         </div>
       </mat-expansion-panel>
+      <!--- end Admin Level Two (County) expansion panel -->
 
       <!-- Number Affected expansion panel -->
       <mat-expansion-panel>

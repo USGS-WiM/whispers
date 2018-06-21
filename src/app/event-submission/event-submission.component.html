@@ -72,7 +72,7 @@
             <!-- <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  Event Comments (Optional)
+                   <mat-icon>comment</mat-icon>&nbsp;Event Comments (Optional)
                 </mat-panel-title>
                 <mat-panel-description>
                   Comments on the Event
@@ -176,23 +176,26 @@
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
-                              <mat-select placeholder="State" formControlName="administrative_level_one" (ngModelChange)="updateAdminLevelTwoOptions($event)">
+                              <mat-select placeholder="State" formControlName="administrative_level_one" (ngModelChange)="updateAdminLevelTwoOptions($event)"
+                                required>
                                 <mat-option *ngFor="let adminLevelOne of adminLevelOnes" value="{{adminLevelOne.id}}">{{adminLevelOne.name}}</mat-option>
                               </mat-select>
                               <mat-hint align="start">Select a country to populate/update state list </mat-hint>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('administrative_level_one').invalid">Please enter a value</mat-error>
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
-                              <mat-select placeholder="County" formControlName="administrative_level_two">
+                              <mat-select placeholder="County" formControlName="administrative_level_two" required>
                                 <mat-option *ngFor="let adminLevelTwo of adminLevelTwos" value="{{adminLevelTwo.id}}">{{adminLevelTwo.name}}</mat-option>
                               </mat-select>
                               <mat-hint align="start">Select a state to populate/update county list </mat-hint>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('administrative_level_two').invalid">Please enter a value</mat-error>
                             </mat-form-field>
                           </div>
 
@@ -348,35 +351,35 @@
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control">
-                                      <input matInput placeholder="Known Dead" type="number" formControlName="dead">
+                                      <input matInput placeholder="Known Dead" type="number" formControlName="dead_count">
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control">
-                                      <input matInput placeholder="Estimated Dead" type="number" formControlName="estimated_dead">
+                                      <input matInput placeholder="Estimated Dead" type="number" formControlName="dead_count_estimated">
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control">
-                                      <input matInput placeholder="Known Sick" type="number" formControlName="sick">
+                                      <input matInput placeholder="Known Sick" type="number" formControlName="sick_count">
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control">
-                                      <input matInput placeholder="Estimated Sick" type="number" formControlName="estimated_sick">
+                                      <input matInput placeholder="Estimated Sick" type="number" formControlName="sick_count_estimated">
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control">
-                                      <input matInput placeholder="Est. Population at Risk" type="number" formControlName="population">
+                                      <input matInput placeholder="Est. Population at Risk" type="number" formControlName="population_count">
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
@@ -403,7 +406,7 @@
                                     <mat-form-field class="species-number-control">
                                       <mat-select placeholder="Captivity" formControlName="captive">
                                         <mat-option [value]="true">Captive</mat-option>
-                                        <mat-option [value]="false">Free-Ranging</mat-option>
+                                        <mat-option [value]="false">Wild and/or free-ranging</mat-option>
                                       </mat-select>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
@@ -527,21 +530,31 @@
                             <mat-icon class="icon">error</mat-icon>
                             <span class="alert-text">Missing country selection.</span>
                           </mat-error>
-                          <br>
-
-                          <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('land_ownership').invalid">
-                            <mat-icon class="icon">error</mat-icon>
-                            <span class="alert-text">Missing land ownership selection.</span>
-                          </mat-error>
                           <p>
+                            <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('administrative_level_one').invalid">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">Missing state selection.</span>
+                            </mat-error>
+                            <p>
+                              <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('administrative_level_one').invalid">
+                                <mat-icon class="icon">error</mat-icon>
+                                <span class="alert-text">Missing county selection.</span>
+                              </mat-error>
+                              <p>
 
-                            <div>
-                              <button mat-button matStepperPrevious type="button">
-                                <i class="material-icons"> arrow_back_ios </i> Back</button>
-                              <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
-                              <button mat-button color="primary" matTooltip="Add another location to this event" (click)="addEventLocation()">
-                                <mat-icon>add_location</mat-icon>Add Another Location</button>
-                            </div>
+                                <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('land_ownership').invalid">
+                                  <mat-icon class="icon">error</mat-icon>
+                                  <span class="alert-text">Missing land ownership selection.</span>
+                                </mat-error>
+                                <p>
+
+                                  <div>
+                                    <button mat-button matStepperPrevious type="button">
+                                      <i class="material-icons"> arrow_back_ios </i> Back</button>
+                                    <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
+                                    <button mat-button color="primary" matTooltip="Add another location to this event" (click)="addEventLocation()">
+                                      <mat-icon>add_location</mat-icon>Add Another Location</button>
+                                  </div>
                         </mat-step>
 
                       </mat-vertical-stepper>
@@ -575,7 +588,7 @@
               <mat-expansion-panel>
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                    Event Comments (Optional)
+                    <mat-icon>comment</mat-icon>&nbsp;Event Comments (Optional)
                   </mat-panel-title>
                   <mat-panel-description>
                     Comments on the Event
@@ -614,7 +627,7 @@
 
                 <div class="button-row">
                   <button mat-button color="primary" matTooltip="Add comment to this event" (click)="addEventComment()">
-                    <i class="material-icons">add_circle</i> Add Comment</button>
+                    <mat-icon>add_comment</mat-icon> Add Comment</button>
                 </div>
 
               </mat-expansion-panel>

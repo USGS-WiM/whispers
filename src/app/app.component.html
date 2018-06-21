@@ -31,10 +31,25 @@
         </button>
       </span>
       <span>
-        <button mat-button aria-label="Login">
+        <!-- <button mat-button aria-label="Login">
           <mat-icon class="icon">account_box</mat-icon>
           <span class="header-button-text">Login</span>
+        </button> -->
+
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon class="icon">account_box</mat-icon>
         </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item aria-label="Login">
+            <mat-icon>account_box</mat-icon>
+            <span class="header-button-text">Login</span>
+          </button>
+          <button mat-menu-item aria-label="User Dashboard">
+            <mat-icon>dashboard</mat-icon>
+            <span>User Dashboard</span>
+          </button>
+        </mat-menu>
+
       </span>
 
     </mat-toolbar-row>

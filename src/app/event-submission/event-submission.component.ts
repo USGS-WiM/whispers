@@ -626,12 +626,13 @@ export class EventSubmissionComponent implements OnInit {
 
     this.submitLoading = true;
 
+    // KEEP. Bring this back pending introduction of generic event location comment.
     // check if extra event location comment is blank, if so, delete it from the object
-    for (const event_location of formValue.new_event_locations) {
-      if (event_location.comment.comment === '') {
-        delete event_location.comment;
-      }
-    }
+    // for (const event_location of formValue.new_event_locations) {
+    //   if (event_location.comment.comment === '') {
+    //     delete event_location.comment;
+    //   }
+    // }
 
     // TEMPORARY: remove gnis_name field until backend is handling it
     for (const event_location of formValue.new_event_locations) {
@@ -642,7 +643,7 @@ export class EventSubmissionComponent implements OnInit {
       .subscribe(
         (event) => {
           this.submitLoading = false;
-          this.openSnackBar('Event successfully created', 'OK', 5000);
+          this.openSnackBar('Event successfully created', 'OK', 8000);
         },
         error => {
           this.submitLoading = false;

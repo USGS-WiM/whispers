@@ -6,6 +6,7 @@ import { Subject } from 'rxjs/Subject';
 export class SearchDialogService {
 
   private searchQuery = new Subject<any>();
+  private displayQuery = new Subject<any>();
 
   setSearchQuery(query: any) {
     this.searchQuery.next(query);
@@ -13,6 +14,14 @@ export class SearchDialogService {
 
   getSearchQuery(): Observable<any> {
     return this.searchQuery.asObservable();
+  }
+
+  setDisplayQuery(query: any) {
+    this.displayQuery.next(query);
+  }
+
+  getDisplayQuery(): Observable<any> {
+    return this.displayQuery.asObservable();
   }
 
 

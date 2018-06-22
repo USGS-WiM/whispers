@@ -16,6 +16,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { APP_UTILITIES } from '@app/app.utilities';
 import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 
+import { DisplayQuery } from '@interfaces/display-query';
+
 
 @Component({
   selector: 'app-home',
@@ -29,6 +31,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   private searchQuerySubscription: Subscription;
 
   currentSearchQuery;
+  currentDisplayQuery: DisplayQuery;
 
   map;
 
@@ -80,6 +83,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       searchQuery => {
         this.currentSearchQuery = searchQuery;
         alert('New Search Query Response');
+
+      });
+
+    this.searchQuerySubscription = this.searchDialogService.getDisplayQuery().subscribe(
+      displayQuery => {
+        this.currentDisplayQuery = displayQuery;
 
       });
   }

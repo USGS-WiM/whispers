@@ -196,7 +196,7 @@
             <span>
               <div class="chiplist">
                 <mat-chip-list #adminLevelOneChipList>
-                  <span *ngFor="let adminLevelOnes of selectedAdminLevelOnes">
+                  <span *ngFor="let adminLevelOne of selectedAdminLevelOnes">
                     <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(adminLevelOne, selectedAdminLevelOnes, 'adminLevelOne')">{{adminLevelOne.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>

@@ -45,6 +45,18 @@ export class EventService {
 
   }
 
+  public getUserDashboardEventSummaries(): Observable<EventSummary[]> {
+    
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    })
+
+    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL, options)
+      .map((response: Response) => <EventSummary[]>response.json())
+      .catch(this.handleError);
+
+  }
+
 
   public create(formValue): Observable<Event> {
 

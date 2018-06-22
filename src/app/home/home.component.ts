@@ -95,6 +95,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     const events: EventSummary[] = this._eventService.getTestData();
 
+  
     // this.eventsTableRows = events;
 
     this.dataSource = new MatTableDataSource(events);

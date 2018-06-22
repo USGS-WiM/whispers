@@ -30,114 +30,114 @@
   
   <mat-tab label="Your Events">
 
-      <mat-card>
-          <mat-card-title>
-    
-            <div class="results-card-title-row">
-              <span class="results-button-row">
-                <button mat-button color="accent">
-                  <i class="material-icons">
-                      unarchive
-                  </i> Export Data</button>
-              </span>
-    
-            </div>
-          </mat-card-title>
-          <mat-card-content>
-            <div *ngIf="dataSource" class="results-table-div">
-    
-    
-              <!-- <mat-form-field>
-                      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-                    </mat-form-field> -->
-    
-              <mat-table [dataSource]="dataSource" matSort>
-    
-                <!-- ID Column -->
-                <ng-container matColumnDef="id">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-                  <mat-cell *matCellDef="let event"> {{event.id}} </mat-cell>
-                </ng-container>
-    
-                <!-- Event Type Column -->
-                <ng-container matColumnDef="event_type_string">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> Type </mat-header-cell>
-                  <mat-cell *matCellDef="let event"> {{event.event_type_string}} </mat-cell>
-                </ng-container>
-    
-                <!-- Affected Count Column -->
-                <ng-container matColumnDef="affected_count">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> Affected </mat-header-cell>
-                  <mat-cell *matCellDef="let event"> {{event.affected_count}} </mat-cell>
-                </ng-container>
-    
-                <!-- Start Date Column -->
-                <ng-container matColumnDef="start_date">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </mat-header-cell>
-                  <mat-cell *matCellDef="let event"> {{event.start_date | date:'shortDate'}} </mat-cell>
-                </ng-container>
-    
-                <!-- End Date Column -->
-                <ng-container matColumnDef="end_date">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> End Date </mat-header-cell>
-                  <mat-cell *matCellDef="let event"> {{event.end_date | date:'shortDate'}} </mat-cell>
-                </ng-container>
-    
-                <!-- States Column -->
-                <ng-container matColumnDef="administrativelevelones">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> States </mat-header-cell>
-                  <mat-cell *matCellDef="let event">
-                    <span *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}
-                      <span *ngIf="(event.administrativelevelones.indexOf(administrativelevelone)) < (event.administrativelevelones.length - 1)">, </span>
-                    </span>
-                  </mat-cell>
-                </ng-container>
-    
-                <!-- Counties Column -->
-                <ng-container matColumnDef="administrativeleveltwos">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> Counties </mat-header-cell>
-                  <mat-cell *matCellDef="let event">
-                    <span *ngFor="let administrativeleveltwo of event.administrativeleveltwos">{{administrativeleveltwo.name}}
-                      <span *ngIf="(event.administrativeleveltwos.indexOf(administrativeleveltwo)) < (event.administrativeleveltwos.length - 1)">, </span>
-                    </span>
-                  </mat-cell>
-                </ng-container>
-    
-                <!-- Species Column -->
-                <ng-container matColumnDef="species">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> Species </mat-header-cell>
-                  <mat-cell *matCellDef="let event">
-                    <span *ngFor="let species of event.species">{{species.name}}
-                      <span *ngIf="(event.species.indexOf(species)) < (event.species.length - 1)">, </span>
-                    </span>
-                  </mat-cell>
-                </ng-container>
-    
-                <!-- Event Diagnosis Column -->
-                <ng-container matColumnDef="eventdiagnoses">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> Event Diagnosis </mat-header-cell>
-                  <mat-cell *matCellDef="let event">
-                    <span *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}
-                      <span *ngIf="(event.eventdiagnoses.indexOf(diagnosis)) < (event.eventdiagnoses.length - 1)">, </span>
-                    </span>
-                    <span *ngIf="event.eventdiagnoses.length == 0">TBD</span>
-                  </mat-cell>
-                </ng-container>
-    
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"></mat-row>
-              </mat-table>
-    
-              <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
-            </div>
-          </mat-card-content>
-        </mat-card>
+    <mat-card>
+      <mat-card-title>
+
+        <div class="results-card-title-row">
+          <span class="results-button-row">
+            <button mat-button color="accent">
+              <i class="material-icons">
+                  unarchive
+              </i> Export Data</button>
+          </span>
+
+        </div>
+      </mat-card-title>
+      <mat-card-content>
+        <div *ngIf="dataSource" class="results-table-div">
+
+
+          <!-- <mat-form-field>
+                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field> -->
+
+          <mat-table [dataSource]="dataSource" matSort>
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+              <mat-cell *matCellDef="let event"> {{event.id}} </mat-cell>
+            </ng-container>
+
+            <!-- Event Type Column -->
+            <ng-container matColumnDef="event_type_string">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Type </mat-header-cell>
+              <mat-cell *matCellDef="let event"> {{event.event_type_string}} </mat-cell>
+            </ng-container>
+
+            <!-- Affected Count Column -->
+            <ng-container matColumnDef="affected_count">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Affected </mat-header-cell>
+              <mat-cell *matCellDef="let event"> {{event.affected_count}} </mat-cell>
+            </ng-container>
+
+            <!-- Start Date Column -->
+            <ng-container matColumnDef="start_date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </mat-header-cell>
+              <mat-cell *matCellDef="let event"> {{event.start_date | date:'shortDate'}} </mat-cell>
+            </ng-container>
+
+            <!-- End Date Column -->
+            <ng-container matColumnDef="end_date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> End Date </mat-header-cell>
+              <mat-cell *matCellDef="let event"> {{event.end_date | date:'shortDate'}} </mat-cell>
+            </ng-container>
+
+            <!-- States Column -->
+            <ng-container matColumnDef="administrativelevelones">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> States </mat-header-cell>
+              <mat-cell *matCellDef="let event">
+                <span *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}
+                  <span *ngIf="(event.administrativelevelones.indexOf(administrativelevelone)) < (event.administrativelevelones.length - 1)">, </span>
+                </span>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Counties Column -->
+            <ng-container matColumnDef="administrativeleveltwos">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Counties </mat-header-cell>
+              <mat-cell *matCellDef="let event">
+                <span *ngFor="let administrativeleveltwo of event.administrativeleveltwos">{{administrativeleveltwo.name}}
+                  <span *ngIf="(event.administrativeleveltwos.indexOf(administrativeleveltwo)) < (event.administrativeleveltwos.length - 1)">, </span>
+                </span>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Species Column -->
+            <ng-container matColumnDef="species">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Species </mat-header-cell>
+              <mat-cell *matCellDef="let event">
+                <span *ngFor="let species of event.species">{{species.name}}
+                  <span *ngIf="(event.species.indexOf(species)) < (event.species.length - 1)">, </span>
+                </span>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Event Diagnosis Column -->
+            <ng-container matColumnDef="eventdiagnoses">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Event Diagnosis </mat-header-cell>
+              <mat-cell *matCellDef="let event">
+                <span *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}
+                  <span *ngIf="(event.eventdiagnoses.indexOf(diagnosis)) < (event.eventdiagnoses.length - 1)">, </span>
+                </span>
+                <span *ngIf="event.eventdiagnoses.length == 0">TBD</span>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"></mat-row>
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
 
   </mat-tab>
   
   <mat-tab label="Saved Searches">
 
-    Content 3 
+    <app-saved-searches></app-saved-searches>
 
   </mat-tab>
 </mat-tab-group>

@@ -72,6 +72,8 @@ import { AboutComponent } from './about/about.component';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { CreateContactService } from '@app/create-contact/create-contact.service';
 import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
+import { SearchService } from '@app/services/search.service';
+import { SavedSearchesComponent } from './saved-searches/saved-searches.component';
 
 
 @NgModule({
@@ -86,7 +88,8 @@ import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
     DisplayValuePipe,
     CreateContactComponent,
     AboutComponent,
-    ConfirmComponent
+    ConfirmComponent,
+    SavedSearchesComponent,
   ],
   imports: [
     BrowserModule,
@@ -149,6 +152,7 @@ import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
     ContactTypeService,
     CommentTypeService,
     OrganizationService,
+    SearchService,
     SearchDialogService,
     DisplayValuePipe
   ],

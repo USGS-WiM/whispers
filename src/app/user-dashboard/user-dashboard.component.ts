@@ -62,7 +62,7 @@ export class UserDashboardComponent implements OnInit {
         }
       );
 
-      this.dataSource = new MatTableDataSource(this.events);
+    this.dataSource = new MatTableDataSource(this.events);
 
   }
 

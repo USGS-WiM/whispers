@@ -54,6 +54,7 @@ export class APP_SETTINGS {
     public static get CONTACT_TYPES_URL(): string { return this._API_ENDPOINT + 'contacttypes/'; }
     public static get COMMENT_TYPES_URL(): string { return this._API_ENDPOINT + 'commenttypes/'; }
     public static get GROUPS_URL(): string { return this._API_ENDPOINT + 'groups/'; }
+    public static get SEARCH_URL(): string { return this._API_ENDPOINT + 'searches/'; }
 
 
     public static get MIN_JSON_HEADERS() { return new Headers({ 'Accept': 'application/json' }) }

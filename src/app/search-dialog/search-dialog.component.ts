@@ -27,6 +27,7 @@ import { DisplayQuery } from '@interfaces/display-query';
 import { SearchQuery } from '@interfaces/search-query';
 
 import { DisplayValuePipe } from '@pipes/display-value.pipe';
+import { EventService } from '@app/services/event.service';
 
 
 @Component({
@@ -106,6 +107,7 @@ export class SearchDialogComponent implements OnInit {
     private _diagnosisTypeService: DiagnosisTypeService,
     private _diagnosisService: DiagnosisService,
     private _speciesService: SpeciesService,
+    private eventService: EventService,
     private displayValuePipe: DisplayValuePipe,
     public snackBar: MatSnackBar) {
 
@@ -347,45 +349,14 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_two: this.extractIDs(this.selectedAdminLevelTwos)
     });
 
+    // TODO: query the eventService with the searchForm value, on success,
+    // pass results to home component for display via searchDialogService
+
     // use displayQuery for display of current query in markup, send to searchDialogService
     this.searchDialogService.setDisplayQuery(displayQuery);
     // use searchForm.value to build the web service query, send to searchDialogService
     this.searchDialogService.setSearchQuery(this.searchForm.value);
+
   }
 
-
-  // removeChip(chip: any, control: string): void {
-  //   switch (control) {
-  //     case 'adminLevelOne':
-  //       // Find key of object in array
-  //       const indexadminLevelOne = this.selectedAdminLevelOnes.indexOf(chip);
-  //       // If key exists
-  //       if (indexadminLevelOne >= 0) {
-  //         // Remove key from selectedAdminLevelOnes array
-  //         this.selectedAdminLevelOnes.splice(indexadminLevelOne, 1);
-  //         // Add key to adminLevelOnes array
-  //         this.adminLevelOnes.push(chip);
-  //       }
-  //       break;
-  //     case 'diagnosisType':
-  //       // Find key of object in array
-  //       const indexDiagnosisType = this.selectedDiagnosisTypes.indexOf(chip);
-  //       // If key exists
-  //       if (indexDiagnosisType >= 0) {
-  //         // Remove key from selectedAdminLevelOnes array
-  //         this.selectedDiagnosisTypes.splice(indexDiagnosisType, 1);
-  //       }
-  //       break;
-  //     case 'diagnosis':
-  //       // Find key of object in array
-  //       const indexDiagnosis = this.selectedDiagnoses.indexOf(chip);
-  //       // If key exists
-  //       if (indexDiagnosis >= 0) {
-  //         // Remove key from selectedAdminLevelOnes array
-  //         this.selectedDiagnoses.splice(indexDiagnosis, 1);
-  //       }
-  //       break;
-  //     default:
-  //   }
-  // }
 }

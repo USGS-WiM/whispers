@@ -23,6 +23,9 @@ import { AdministrativeLevelTwoService } from '@services/administrative-level-tw
 import { SearchDialogService } from '@search-dialog/search-dialog.service';
 import { id } from '@swimlane/ngx-datatable/release/utils';
 
+import { DisplayQuery } from '@interfaces/display-query';
+import { SearchQuery } from '@interfaces/search-query';
+
 import { DisplayValuePipe } from '@pipes/display-value.pipe';
 
 
@@ -60,11 +63,11 @@ export class SearchDialogComponent implements OnInit {
   filteredDiagnoses: Observable<any[]>;
   selectedDiagnoses = []; // chips list
 
-  adminLevelOnes = [];
+  administrative_level_one = [];
   filteredAdminLevelOnes: Observable<any[]>;
   selectedAdminLevelOnes = []; // chips list
 
-  adminLevelTwos = [];
+  administrative_level_two = [];
   filteredAdminLevelTwos: Observable<any[]>;
   selectedAdminLevelTwos = []; // chips list
 
@@ -160,10 +163,10 @@ export class SearchDialogComponent implements OnInit {
     this._adminLevelOneService.getAdminLevelOnes()
       .subscribe(
         (adminLevelOnes) => {
-          this.adminLevelOnes = adminLevelOnes;
+          this.administrative_level_one = adminLevelOnes;
           this.filteredAdminLevelOnes = this.adminLevelOneControl.valueChanges
             .startWith(null)
-            .map(val => this.filter(val, this.adminLevelOnes, 'name'));
+            .map(val => this.filter(val, this.administrative_level_one, 'name'));
         },
         error => {
           this.errorMessage = <any>error;
@@ -173,10 +176,10 @@ export class SearchDialogComponent implements OnInit {
     this._adminLevelTwoService.getAdminLevelTwos()
       .subscribe(
         (adminLevelTwos) => {
-          this.adminLevelTwos = adminLevelTwos;
+          this.administrative_level_two = adminLevelTwos;
           this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
             .startWith(null)
-            .map(val => this.filter(val, this.adminLevelTwos, 'name'));
+            .map(val => this.filter(val, this.administrative_level_two, 'name'));
         },
         error => {
           this.errorMessage = <any>error;
@@ -287,13 +290,13 @@ export class SearchDialogComponent implements OnInit {
 
   submitSearch(formValue) {
 
-    const displayQuery = {
+    const displayQuery: DisplayQuery = {
       event_type: [],
       diagnosis: [],
       diagnosis_type: [],
       species: [],
-      adminLevelOnes: [],
-      adminLevelTwos: [],
+      administrative_level_one: [],
+      administrative_level_two: [],
       affected_count: formValue.affected_count,
       start_date: formValue.start_date,
       end_date: formValue.end_date,
@@ -306,20 +309,32 @@ export class SearchDialogComponent implements OnInit {
       openEventsOnly: formValue.openEventsOnly
     };
 
-
     // update the formValue array with full selection objects
     formValue.event_type = this.selectedEventTypes;
     formValue.diagnosis = this.selectedDiagnoses;
     formValue.diagnosis_type = this.selectedDiagnosisTypes;
     formValue.species = this.selectedSpecies;
-    formValue.adminLevelOnes = this.selectedAdminLevelOnes;
-    formValue.adminLevelTwos = this.selectedAdminLevelTwos;
-
+    formValue.administrative_level_one = this.selectedAdminLevelOnes;
+    formValue.administrative_level_two = this.selectedAdminLevelTwos;
 
     // use formValue to populate the Current Search panel
-    // TODO: finish this for each array field
     for (const event_type of formValue.event_type) {
       displayQuery.event_type.push(event_type.name);
+    }
+    for (const diagnosis of formValue.diagnosis) {
+      displayQuery.diagnosis.push(diagnosis.name);
+    }
+    for (const diagnosis_type of formValue.diagnosis_type) {
+      displayQuery.diagnosis_type.push(diagnosis_type.name);
+    }
+    for (const species of formValue.species) {
+      displayQuery.species.push(species.name);
+    }
+    for (const adminLevelOne of formValue.administrative_level_one) {
+      displayQuery.administrative_level_one.push(adminLevelOne.name);
+    }
+    for (const adminLevelTwo of formValue.administrative_level_two) {
+      displayQuery.administrative_level_two.push(adminLevelTwo.name);
     }
 
     // patch the searchForm value with the IDs of the selected objects
@@ -328,18 +343,14 @@ export class SearchDialogComponent implements OnInit {
       diagnosis: this.extractIDs(this.selectedDiagnoses),
       diagnosis_type: this.extractIDs(this.selectedDiagnosisTypes),
       species: this.extractIDs(this.selectedSpecies),
-      adminLevelOnes: this.extractIDs(this.selectedAdminLevelOnes),
-      adminLevelTwos: this.extractIDs(this.selectedAdminLevelTwos)
+      administrative_level_one: this.extractIDs(this.selectedAdminLevelOnes),
+      administrative_level_two: this.extractIDs(this.selectedAdminLevelTwos)
     });
 
-
-
-
-
-    // use searchForm.value to build the web service query
-
+    // use displayQuery for display of current query in markup, send to searchDialogService
+    this.searchDialogService.setDisplayQuery(displayQuery);
+    // use searchForm.value to build the web service query, send to searchDialogService
     this.searchDialogService.setSearchQuery(this.searchForm.value);
-    console.log(this.searchForm.value);
   }
 
 

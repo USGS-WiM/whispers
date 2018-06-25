@@ -25,7 +25,7 @@
                     <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (remove)="removeChip(eventType, selectedEventTypes, 'eventType')">{{eventType.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedEventTypes.indexOf(eventType)) < (selectedEventTypes.length - 1)">{{(searchForm.get('event_type_includes_all').value) ? "and" : "or"}}&nbsp;</span>
+                    <span *ngIf="(selectedEventTypes.indexOf(eventType)) < (selectedEventTypes.length - 1)">or&nbsp;</span>
                   </span>
                 </mat-chip-list>
               </div>

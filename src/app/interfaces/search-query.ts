@@ -8,7 +8,6 @@ export interface SearchQuery {
     affected_count: number;
     start_date: number;
     end_date: number;
-    event_type_includes_all: boolean;
     diagnosis_type_includes_all: boolean;
     diagnosis_includes_all: boolean;
     species_includes_all: boolean;

@@ -20,6 +20,13 @@ export class EventService {
 
   public queryEvents(eventQuery): Observable<EventSummary[]> {
 
+    let queryString = '?';
+
+    // example of query string concat from lili
+    // if (eventQuery.from_id !== null) {
+    //   queryString = queryString + '&from_id=' + eventQuery.from_id.toString();
+    // }
+
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
@@ -46,7 +53,7 @@ export class EventService {
   }
 
   public getUserDashboardEventSummaries(): Observable<EventSummary[]> {
-    
+
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     })

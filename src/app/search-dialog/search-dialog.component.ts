@@ -87,7 +87,6 @@ export class SearchDialogComponent implements OnInit {
       affected_count: 5,
       start_date: null,
       end_date: null,
-      event_type_includes_all: false,
       diagnosis_type_includes_all: false,
       diagnosis_includes_all: false,
       species_includes_all: false,
@@ -302,7 +301,6 @@ export class SearchDialogComponent implements OnInit {
       affected_count: formValue.affected_count,
       start_date: formValue.start_date,
       end_date: formValue.end_date,
-      event_type_includes_all: formValue.event_type_includes_all,
       diagnosis_type_includes_all: formValue.diagnosis_type_includes_all,
       diagnosis_includes_all: formValue.diagnosis_includes_all,
       species_includes_all: formValue.species_includes_all,
@@ -310,6 +308,8 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_two_includes_all: formValue.administrative_level_two_includes_all,
       openEventsOnly: formValue.openEventsOnly
     };
+
+    // TODO: check for 'true' on 'includes_all" properties, add to a 'and_params' proprrty for the web service query
 
     // update the formValue array with full selection objects
     formValue.event_type = this.selectedEventTypes;
@@ -351,6 +351,19 @@ export class SearchDialogComponent implements OnInit {
 
     // TODO: query the eventService with the searchForm value, on success,
     // pass results to home component for display via searchDialogService
+
+    this.eventService.queryEvents(this.searchForm.value)
+      .subscribe(
+        (queryResults) => {
+          console.log(queryResults);
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    
 
     // use displayQuery for display of current query in markup, send to searchDialogService
     this.searchDialogService.setDisplayQuery(displayQuery);

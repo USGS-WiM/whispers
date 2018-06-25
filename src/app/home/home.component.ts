@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currentDisplayQuery: DisplayQuery;
 
   map;
+  icon;
 
   displayedColumns = [
     'id',
@@ -118,6 +119,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(this.map);
+
+      this.icon = L.icon({iconUrl: '../../assets/icons/marker-icon.png', shadowUrl: '../../assets/icons/marker-shadow.png'})
+
+      for (let event in events) {
+        if (events[event]['administrativeleveltwos'].length > 0) {
+          for (let adminleveltwo in events[event]['administrativeleveltwos']) {
+            console.log('is it here?');
+            L.marker([Number(events[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']),Number(events[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])], {icon: this.icon}).addTo(this.map);
+          }
+        }
+      }
 
     }, 500);
   }

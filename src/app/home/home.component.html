@@ -59,7 +59,7 @@
             </h4>
             <p mat-line>
               <span *ngFor="let item of currentDisplayQuery.event_type">{{item}}
-                <span *ngIf="(currentDisplayQuery.event_type.indexOf(item)) < (currentDisplayQuery.event_type.length - 1)">{{(currentDisplayQuery.event_type_includes_all) ? "and" : "or"}}&nbsp;</span>
+                <span *ngIf="(currentDisplayQuery.event_type.indexOf(item)) < (currentDisplayQuery.event_type.length - 1)">or&nbsp;</span>
               </span>
             </p>
           </mat-list-item>

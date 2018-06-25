@@ -8,7 +8,6 @@ export interface DisplayQuery {
     affected_count: number;
     start_date: string;
     end_date: string;
-    event_type_includes_all: boolean;
     diagnosis_type_includes_all: boolean;
     diagnosis_includes_all: boolean;
     species_includes_all: boolean;

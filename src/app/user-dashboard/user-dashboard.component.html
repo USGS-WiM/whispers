@@ -24,7 +24,81 @@
 <mat-tab-group>
   <mat-tab label="Contacts"> 
     
-    Content 1 
+    <mat-card>
+      <mat-card-title>
+    
+        <div class="results-card-title-row">
+          <span class="results-button-row">
+            <button mat-button color="accent" (click)="openSearchDialog()">
+              <i class="material-icons">
+                  add_box
+              </i>  Add</button>
+            <button mat-button color="accent">
+                <i class="material-icons">
+                    edit
+                </i>  Edit</button>
+            <button mat-button color="accent">
+                <i class="material-icons">
+                    remove_circle
+                </i>  Delete</button>
+          </span>
+    
+        </div>
+      </mat-card-title>
+      <mat-card-content>
+        <div *ngIf="contactsDataSource" class="results-table-div">
+
+
+          <!-- <mat-form-field>
+                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field> -->
+
+          <mat-table [dataSource]="contactsDataSource" matSort>
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+              <mat-cell *matCellDef="let contact"> {{contact.id}} </mat-cell>
+            </ng-container>
+
+            <!-- Last Name Column -->
+            <ng-container matColumnDef="last_name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </mat-header-cell>
+              <mat-cell *matCellDef="let contact"> {{contact.last_name}} </mat-cell>
+            </ng-container>
+
+            <!-- First Name Column -->
+            <ng-container matColumnDef="first_name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> First Name </mat-header-cell>
+              <mat-cell *matCellDef="let contact"> {{contact.first_name}} </mat-cell>
+            </ng-container>
+
+            <!-- Phone Number Column -->
+            <ng-container matColumnDef="phone_number">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Phone Number </mat-header-cell>
+              <mat-cell *matCellDef="let contact"> {{formatPhone(contact.phone)}} </mat-cell>
+            </ng-container>
+
+            <!-- Email Address Column -->
+            <ng-container matColumnDef="email_address">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Email Address </mat-header-cell>
+              <mat-cell *matCellDef="let contact"> {{contact.email}} </mat-cell>
+            </ng-container>
+
+            <!-- Organization Column -->
+            <ng-container matColumnDef="organization">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Organization </mat-header-cell>
+              <mat-cell *matCellDef="let contact"> {{contact.organization}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="contactDisplayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let event; columns: contactDisplayedColumns;"></mat-row>
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
 
   </mat-tab>
   

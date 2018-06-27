@@ -24,15 +24,15 @@
 
       <mat-table [dataSource]="savedSearchesDataSource" matSort>
 
-        <!-- ID Column -->
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-          <mat-cell *matCellDef="let search"> {{search.name}} </mat-cell>
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="search-select"> Select </mat-header-cell>
+          <mat-cell *matCellDef="let search" [ngClass]="search-select"><mat-checkbox id='search-{{search.id}}'></mat-checkbox></mat-cell>
         </ng-container>
 
-        <!-- Event Type Column -->
+        <!-- Search Data Column -->
         <ng-container matColumnDef="data">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Data </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Search </mat-header-cell>
           <mat-cell *matCellDef="let search"> {{search.data}} </mat-cell>
         </ng-container>
 

@@ -74,6 +74,7 @@ import { CreateContactService } from '@app/create-contact/create-contact.service
 import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 import { SearchService } from '@app/services/search.service';
 import { SavedSearchesComponent } from './saved-searches/saved-searches.component';
+import { DatePipe } from '@angular/common';
 
 
 @NgModule({
@@ -154,7 +155,8 @@ import { SavedSearchesComponent } from './saved-searches/saved-searches.componen
     OrganizationService,
     SearchService,
     SearchDialogService,
-    DisplayValuePipe
+    DisplayValuePipe,
+    DatePipe
   ],
   bootstrap: [AppComponent],
   entryComponents: [SearchDialogComponent, CreateContactComponent, ConfirmComponent, AboutComponent]

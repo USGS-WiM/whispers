@@ -121,7 +121,7 @@ export class EventSubmissionComponent implements OnInit {
       event_status: 1,
       public: [true, Validators.required],
       event_organization: null,
-      comments: this.formBuilder.array([]),
+      new_comments: this.formBuilder.array([]),
       new_event_locations: this.formBuilder.array([
         this.initEventLocation()
       ])
@@ -434,16 +434,17 @@ export class EventSubmissionComponent implements OnInit {
       history: '',
       environmental_factors: '',
       clinical_signs: '',
+      comments: [],
       location_species: this.formBuilder.array([
         // this.initLocationSpecies()
       ]),
       location_contacts: this.formBuilder.array([
         // this.initLocationContacts()
       ]),
-      comment: this.formBuilder.group({
-        comment: '',
-        comment_type: 5
-      })
+      // comment: this.formBuilder.group({
+      //   comment: '',
+      //   comment_type: 5
+      // })
     });
   }
 
@@ -485,7 +486,7 @@ export class EventSubmissionComponent implements OnInit {
 
   // event comments
   addEventComment() {
-    const control = <FormArray>this.eventSubmissionForm.get('comments');
+    const control = <FormArray>this.eventSubmissionForm.get('new_comments');
     control.push(this.initEventComment());
   }
 
@@ -516,13 +517,13 @@ export class EventSubmissionComponent implements OnInit {
   }
 
   removeEventComment(h) {
-    const control = <FormArray>this.eventSubmissionForm.get('comments');
+    const control = <FormArray>this.eventSubmissionForm.get('new_comments');
     control.removeAt(h);
 
   }
 
   getEventComments(form) {
-    return form.controls.comments.controls;
+    return form.controls.new_comments.controls;
   }
 
   removeEventLocation(i) {

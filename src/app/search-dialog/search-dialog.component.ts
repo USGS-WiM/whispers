@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
@@ -76,6 +77,7 @@ export class SearchDialogComponent implements OnInit {
   filteredSpecies: Observable<any[]>;
   selectedSpecies = []; // chips list
 
+
   buildSearchForm() {
     this.searchForm = this.formBuilder.group({
       event_type: null,
@@ -92,6 +94,7 @@ export class SearchDialogComponent implements OnInit {
       species_includes_all: false,
       administrative_level_one_includes_all: false,
       administrative_level_two_includes_all: false,
+      and_params: [],
       openEventsOnly: false
     });
   }
@@ -108,7 +111,9 @@ export class SearchDialogComponent implements OnInit {
     private _speciesService: SpeciesService,
     private eventService: EventService,
     private displayValuePipe: DisplayValuePipe,
-    public snackBar: MatSnackBar) {
+    private datePipe: DatePipe,
+    public snackBar: MatSnackBar
+  ) {
 
     this.eventTypeControl = new FormControl();
     this.diagnosisTypeControl = new FormControl();
@@ -291,6 +296,25 @@ export class SearchDialogComponent implements OnInit {
 
   submitSearch(formValue) {
 
+    const searchQuery: SearchQuery = {
+      event_type: [],
+      diagnosis: [],
+      diagnosis_type: [],
+      species: [],
+      administrative_level_one: [],
+      administrative_level_two: [],
+      affected_count: formValue.affected_count,
+      start_date: this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd'),
+      end_date: this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd'),
+      diagnosis_type_includes_all: formValue.diagnosis_type_includes_all,
+      diagnosis_includes_all: formValue.diagnosis_includes_all,
+      species_includes_all: formValue.species_includes_all,
+      administrative_level_one_includes_all: formValue.administrative_level_one_includes_all,
+      administrative_level_two_includes_all: formValue.administrative_level_two_includes_all,
+      and_params: [],
+      openEventsOnly: formValue.openEventsOnly
+    };
+
     const displayQuery: DisplayQuery = {
       event_type: [],
       diagnosis: [],
@@ -300,16 +324,33 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_two: [],
       affected_count: formValue.affected_count,
       start_date: formValue.start_date,
+      // start_date: this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd'),
       end_date: formValue.end_date,
+      //end_date: this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd'),
       diagnosis_type_includes_all: formValue.diagnosis_type_includes_all,
       diagnosis_includes_all: formValue.diagnosis_includes_all,
       species_includes_all: formValue.species_includes_all,
       administrative_level_one_includes_all: formValue.administrative_level_one_includes_all,
       administrative_level_two_includes_all: formValue.administrative_level_two_includes_all,
+      and_params: [],
       openEventsOnly: formValue.openEventsOnly
     };
 
-    // TODO: check for 'true' on 'includes_all" properties, add to a 'and_params' proprrty for the web service query
+    if (searchQuery.diagnosis_type_includes_all === true) {
+      searchQuery.and_params.push('diagnosis_type');
+    }
+    if (searchQuery.diagnosis_includes_all === true) {
+      searchQuery.and_params.push('diagnosis_type');
+    }
+    if (searchQuery.species_includes_all === true) {
+      searchQuery.and_params.push('species');
+    }
+    if (searchQuery.administrative_level_one_includes_all === true) {
+      searchQuery.and_params.push('administrative_level_one');
+    }
+    if (searchQuery.administrative_level_two_includes_all === true) {
+      searchQuery.and_params.push('administrative_level_two');
+    }
 
     // update the formValue array with full selection objects
     formValue.event_type = this.selectedEventTypes;
@@ -340,19 +381,25 @@ export class SearchDialogComponent implements OnInit {
     }
 
     // patch the searchForm value with the IDs of the selected objects
-    this.searchForm.patchValue({
-      event_type: this.extractIDs(this.selectedEventTypes),
-      diagnosis: this.extractIDs(this.selectedDiagnoses),
-      diagnosis_type: this.extractIDs(this.selectedDiagnosisTypes),
-      species: this.extractIDs(this.selectedSpecies),
-      administrative_level_one: this.extractIDs(this.selectedAdminLevelOnes),
-      administrative_level_two: this.extractIDs(this.selectedAdminLevelTwos)
-    });
+    // this.searchForm.patchValue({
+    //   event_type: this.extractIDs(this.selectedEventTypes),
+    //   diagnosis: this.extractIDs(this.selectedDiagnoses),
+    //   diagnosis_type: this.extractIDs(this.selectedDiagnosisTypes),
+    //   species: this.extractIDs(this.selectedSpecies),
+    //   administrative_level_one: this.extractIDs(this.selectedAdminLevelOnes),
+    //   administrative_level_two: this.extractIDs(this.selectedAdminLevelTwos)
+    // });
+
+    searchQuery.event_type = this.extractIDs(this.selectedEventTypes);
+    searchQuery.diagnosis = this.extractIDs(this.selectedDiagnoses);
+    searchQuery.diagnosis_type = this.extractIDs(this.selectedDiagnosisTypes);
+    searchQuery.species = this.extractIDs(this.selectedSpecies);
+    searchQuery.administrative_level_one = this.extractIDs(this.selectedAdminLevelOnes);
+    searchQuery.administrative_level_two = this.extractIDs(this.selectedAdminLevelTwos);
 
     // TODO: query the eventService with the searchForm value, on success,
     // pass results to home component for display via searchDialogService
-
-    this.eventService.queryEvents(this.searchForm.value)
+    this.eventService.queryEvents(searchQuery)
       .subscribe(
         (queryResults) => {
           console.log(queryResults);
@@ -363,7 +410,7 @@ export class SearchDialogComponent implements OnInit {
         }
       );
 
-    
+
 
     // use displayQuery for display of current query in markup, send to searchDialogService
     this.searchDialogService.setDisplayQuery(displayQuery);

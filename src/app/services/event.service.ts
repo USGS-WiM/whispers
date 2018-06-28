@@ -23,17 +23,50 @@ export class EventService {
     let queryString = '?';
 
     // example of query string concat from lili
-    // if (eventQuery.from_id !== null) {
-    //   queryString = queryString + '&from_id=' + eventQuery.from_id.toString();
-    // }
+    if (eventQuery.affected_count !== null && eventQuery.affected_count !== '') {
+      queryString = queryString + '&affected_count=' + eventQuery.affected_count.toString();
+    }
+    if (eventQuery.start_date !== null && eventQuery.start_date !== '') {
+      queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
+    }
+    if (eventQuery.end_date !== null && eventQuery.end_date !== '') {
+      queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
+    }
+
+    if (eventQuery.event_type.length > 0) {
+      queryString = queryString + '&event_type=' + eventQuery.event_type;
+    }
+
+    if (eventQuery.diagnosis.length > 0) {
+      queryString = queryString + '&diagnosis=' + eventQuery.diagnosis;
+    }
+
+    if (eventQuery.diagnosis_type.length > 0) {
+      queryString = queryString + '&diagnosis_type=' + eventQuery.diagnosis_type;
+    }
+
+    if (eventQuery.species.length > 0) {
+      queryString = queryString + '&species=' + eventQuery.species;
+    }
+
+    if (eventQuery.administrative_level_one.length > 0) {
+      queryString = queryString + '&administrative_level_one=' + eventQuery.administrative_level_one;
+    }
+
+    if (eventQuery.administrative_level_two.length > 0) {
+      queryString = queryString + '&administrative_level_two=' + eventQuery.administrative_level_two;
+    }
+
+    if (eventQuery.and_params.length > 0) {
+      queryString = queryString + '&and_params=' + eventQuery.and_params;
+    }
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.EVENTS_URL + eventQuery, options)
+    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString, options)
       .map((response: Response) => <EventSummary[]>response.json())
-      // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 

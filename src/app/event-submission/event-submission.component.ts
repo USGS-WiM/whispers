@@ -6,6 +6,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatBottomSheetModule, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
 
 import { MatSnackBar } from '@angular/material';
 
@@ -64,6 +65,8 @@ import { CreateContactService } from '@create-contact/create-contact.service';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
 
+import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
+
 
 @Component({
   selector: 'app-event-submission',
@@ -74,6 +77,8 @@ export class EventSubmissionComponent implements OnInit {
 
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
+
+  eventSubmitConfirm: MatBottomSheetRef<EventSubmissionConfirmComponent>;
 
   private subscription: Subscription;
   createdContact;
@@ -121,7 +126,7 @@ export class EventSubmissionComponent implements OnInit {
       event_status: 1,
       public: [true, Validators.required],
       event_organization: null,
-      comments: this.formBuilder.array([]),
+      new_comments: this.formBuilder.array([]),
       new_event_locations: this.formBuilder.array([
         this.initEventLocation()
       ])
@@ -134,6 +139,7 @@ export class EventSubmissionComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
+    private bottomSheet: MatBottomSheet,
     private eventTypeService: EventTypeService,
     private legalStatusService: LegalStatusService,
     private landOwnershipService: LandOwnershipService,
@@ -171,6 +177,20 @@ export class EventSubmissionComponent implements OnInit {
 
       });
 
+      // this.eventSubmitConfirm.afterDismissed().subscribe(() => {
+      //   console.log('Bottom sheet has been dismissed.');
+      // });
+
+  }
+
+  openEventSubmitConfirm(formValue): void {
+    this.bottomSheet.open(EventSubmissionConfirmComponent, {
+      data: {
+        formValue: formValue,
+        eventTypes: this.eventTypes,
+        organizations: this.organizations,
+      }
+    });
   }
 
 
@@ -434,16 +454,17 @@ export class EventSubmissionComponent implements OnInit {
       history: '',
       environmental_factors: '',
       clinical_signs: '',
+      comments: [],
       location_species: this.formBuilder.array([
         // this.initLocationSpecies()
       ]),
       location_contacts: this.formBuilder.array([
         // this.initLocationContacts()
       ]),
-      comment: this.formBuilder.group({
-        comment: '',
-        comment_type: 5
-      })
+      // comment: this.formBuilder.group({
+      //   comment: '',
+      //   comment_type: 5
+      // })
     });
   }
 
@@ -485,7 +506,7 @@ export class EventSubmissionComponent implements OnInit {
 
   // event comments
   addEventComment() {
-    const control = <FormArray>this.eventSubmissionForm.get('comments');
+    const control = <FormArray>this.eventSubmissionForm.get('new_comments');
     control.push(this.initEventComment());
   }
 
@@ -516,13 +537,13 @@ export class EventSubmissionComponent implements OnInit {
   }
 
   removeEventComment(h) {
-    const control = <FormArray>this.eventSubmissionForm.get('comments');
+    const control = <FormArray>this.eventSubmissionForm.get('new_comments');
     control.removeAt(h);
 
   }
 
   getEventComments(form) {
-    return form.controls.comments.controls;
+    return form.controls.new_comments.controls;
   }
 
   removeEventLocation(i) {

@@ -1,0 +1,41 @@
+<mat-card-title>
+  Event Submission Confirmation</mat-card-title>
+
+<mat-list>
+  <mat-list-item>
+    <h4 mat-line>
+      <strong>Event Type</strong>
+    </h4>
+    <p mat-line>
+      <span>{{data.formValue.event_type | displayValue:'name':data.eventTypes}}</span>
+    </p>
+  </mat-list-item>
+  <mat-list-item>
+    <h4 mat-line>
+      <strong>Event Reference</strong>
+    </h4>
+    <p mat-line>
+      <span>{{data.formValue.event_reference}}</span>
+    </p>
+  </mat-list-item>
+  <mat-list-item>
+    <h4 mat-line>
+      <strong>Event Visibility</strong>
+    </h4>
+    <p mat-line>
+      <span>{{data.formValue.public ? "Visible to Public" : "Not Visible to Public"}}</span>
+    </p>
+  </mat-list-item>
+  <mat-list-item>
+    <h4 mat-line>
+      <strong>Event Organization</strong>
+    </h4>
+    <p mat-line>
+      <span>{{data.formValue.event_organization | displayValue:'name':data.organizations}}</span>
+    </p>
+  </mat-list-item>
+</mat-list>
+<div>
+  <button mat-raised-button color="primary" (click)="submitEvent();">
+    <i class="material-icons ">done</i> Submit Event</button>
+</div>

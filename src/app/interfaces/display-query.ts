@@ -13,5 +13,6 @@ export interface DisplayQuery {
     species_includes_all: boolean;
     administrative_level_one_includes_all: boolean;
     administrative_level_two_includes_all: boolean;
+    and_params: string[];
     openEventsOnly: boolean;
 }

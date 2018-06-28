@@ -468,7 +468,7 @@
                                 </mat-form-field>
 
                                 <mat-form-field class="form-control  contact-type-select">
-                                  <mat-select placeholder="Type" formControlName="contact_type">
+                                  <mat-select placeholder="Type" formControlName="contact_type" required>
                                     <mat-option *ngFor="let contactType of contactTypes" [value]="contactType.id">{{contactType.name}}</mat-option>
                                   </mat-select>
                                 </mat-form-field>
@@ -547,6 +547,10 @@
                                   <span class="alert-text">Missing land ownership selection.</span>
                                 </mat-error>
                                 <p>
+                                  <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('location_contacts').invalid">
+                                    <mat-icon class="icon">error</mat-icon>
+                                    <span class="alert-text">Missing contact type selection.</span>
+                                  </mat-error>
 
                                   <div>
                                     <button mat-button matStepperPrevious type="button">
@@ -595,7 +599,7 @@
                   </mat-panel-description>
                 </mat-expansion-panel-header>
 
-                <div formArrayName="comments">
+                <div formArrayName="new_comments">
                   <div *ngFor="let comments of getEventComments(eventSubmissionForm); let h = index">
 
                     <div [formGroupName]="h">
@@ -636,8 +640,11 @@
 
             <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar "></mat-progress-bar>
             <p>
-              <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="submitEvent(eventSubmissionForm.value) ">
+              <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="submitEvent(eventSubmissionForm.value)">
                 <i class="material-icons ">done</i> Submit Event</button>
+              <p>
+              <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="openEventSubmitConfirm(eventSubmissionForm.value)">
+                <i class="material-icons ">pageview</i> Review Event</button>
 
               <div class="temporary-form-value-display ">
                 <h3>Temporary Form Value display (not for production)</h3>

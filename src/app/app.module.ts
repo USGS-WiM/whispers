@@ -38,7 +38,8 @@ import {
   MatTableModule,
   MatTabsModule,
   MatToolbarModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatBottomSheetModule
 } from '@angular/material';
 
 
@@ -75,6 +76,7 @@ import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 import { SearchService } from '@app/services/search.service';
 import { SavedSearchesComponent } from './saved-searches/saved-searches.component';
 import { DatePipe } from '@angular/common';
+import { EventSubmissionConfirmComponent } from './event-submission/event-submission-confirm/event-submission-confirm.component';
 
 
 @NgModule({
@@ -91,6 +93,7 @@ import { DatePipe } from '@angular/common';
     AboutComponent,
     ConfirmComponent,
     SavedSearchesComponent,
+    EventSubmissionConfirmComponent,
   ],
   imports: [
     BrowserModule,
@@ -133,7 +136,8 @@ import { DatePipe } from '@angular/common';
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatBottomSheetModule
   ],
   providers: [
     EventService,
@@ -159,7 +163,13 @@ import { DatePipe } from '@angular/common';
     DatePipe
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SearchDialogComponent, CreateContactComponent, ConfirmComponent, AboutComponent]
+  entryComponents: [
+    SearchDialogComponent,
+    CreateContactComponent,
+    ConfirmComponent,
+    EventSubmissionConfirmComponent,
+    AboutComponent
+  ]
 })
 export class AppModule { }
 

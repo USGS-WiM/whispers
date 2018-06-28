@@ -6,6 +6,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatBottomSheetModule, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
 
 import { MatSnackBar } from '@angular/material';
 
@@ -64,6 +65,8 @@ import { CreateContactService } from '@create-contact/create-contact.service';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
 
+import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
+
 
 @Component({
   selector: 'app-event-submission',
@@ -74,6 +77,8 @@ export class EventSubmissionComponent implements OnInit {
 
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
+
+  eventSubmitConfirm: MatBottomSheetRef<EventSubmissionConfirmComponent>;
 
   private subscription: Subscription;
   createdContact;
@@ -134,6 +139,7 @@ export class EventSubmissionComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
+    private bottomSheet: MatBottomSheet,
     private eventTypeService: EventTypeService,
     private legalStatusService: LegalStatusService,
     private landOwnershipService: LandOwnershipService,
@@ -171,6 +177,20 @@ export class EventSubmissionComponent implements OnInit {
 
       });
 
+      // this.eventSubmitConfirm.afterDismissed().subscribe(() => {
+      //   console.log('Bottom sheet has been dismissed.');
+      // });
+
+  }
+
+  openEventSubmitConfirm(formValue): void {
+    this.bottomSheet.open(EventSubmissionConfirmComponent, {
+      data: {
+        formValue: formValue,
+        eventTypes: this.eventTypes,
+        organizations: this.organizations,
+      }
+    });
   }
 
 

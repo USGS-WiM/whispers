@@ -4,7 +4,7 @@
     <mat-card>
       <mat-card-title>
         <span>
-          <b>Event Submission</b>
+          <b>Create Event</b>
         </span>
       </mat-card-title>
       <mat-card-subtitle>
@@ -135,7 +135,7 @@
 
                     <mat-card class="event-location-card" [formGroupName]="i">
                       <h3>Location {{i+1}}</h3>
-                      <mat-vertical-stepper [linear]="false" #stepper linear>
+                      <mat-horizontal-stepper [linear]="false" #stepper linear>
 
                         <!-- <mat-step [stepControl]="eventSubmissionForm.get('new_event_locations').controls[i].get('country').valid"> -->
                         <mat-step [stepControl]="eventSubmissionForm">
@@ -242,86 +242,71 @@
                         </mat-step>
 
                         <mat-step [stepControl]="eventSubmissionForm">
-                          <ng-template matStepLabel>History</ng-template>
+                          <ng-template matStepLabel>Comments</ng-template>
+                          <p>
 
-                          <mat-form-field class="comment-text-area">
-                            <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="History" formControlName="history"></textarea>
-                            <mat-hint align="start" class="hint">
-                              <strong>chronological description of current observational information leading up to finding sick or
-                                dead wildlife, plus historical information about past events</strong>
-                            </mat-hint>
-                            <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
-                          </mat-form-field>
-                          <div>
-                            <button mat-button matStepperPrevious type="button">
-                              <i class="material-icons"> arrow_back_ios </i> Back</button>
-                            <button mat-button matStepperNext type="button"> Next
-                              <i class="material-icons"> navigate_next </i>
-                            </button>
-                          </div>
-                        </mat-step>
+                            <mat-form-field class="comment-text-area">
+                              <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="History" formControlName="history"></textarea>
+                              <mat-hint align="start" class="hint">
+                                <strong>chronological description of current observational information leading up to finding sick
+                                  or dead wildlife, plus historical information about past events</strong>
+                              </mat-hint>
+                              <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+                            </mat-form-field>
+                            <p>
 
-                        <mat-step [stepControl]="eventSubmissionForm">
+                              <mat-form-field class="comment-text-area">
+                                <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="Site Description" formControlName="site_description"></textarea>
+                                <mat-hint align="start" class="hint">
+                                  <strong> animal and human land use (e.g., other species present, hunting and agricultural activities),
+                                    habitat types (e.g., vegetation, water features), nearby structures (e.g., buildings,
+                                    power lines, wind turbines), public health warnings, or other major characteristics of
+                                    the area</strong>
+                                </mat-hint>
+                                <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+                              </mat-form-field>
+                              <p>
 
-                          <ng-template matStepLabel>Site Description</ng-template>
-                          <mat-form-field class="comment-text-area">
-                            <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="Site Description" formControlName="site_description"></textarea>
-                            <mat-hint align="start" class="hint">
-                              <strong> animal and human land use (e.g., other species present, hunting and agricultural activities),
-                                habitat types (e.g., vegetation, water features), nearby structures (e.g., buildings, power
-                                lines, wind turbines), public health warnings, or other major characteristics of the area</strong>
-                            </mat-hint>
-                            <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
-                          </mat-form-field>
-                          <div>
-                            <button mat-button matStepperPrevious type="button">
-                              <i class="material-icons"> arrow_back_ios </i> Back</button>
-                            <button mat-button matStepperNext type="button"> Next
-                              <i class="material-icons"> navigate_next </i>
-                            </button>
-                          </div>
+                                <mat-form-field class="comment-text-area">
+                                  <textarea matInput #envFactors maxlength="1000" placeholder="Environmental Factors" formControlName="environmental_factors"></textarea>
+                                  <mat-hint align="start">
+                                    <strong>storms, precipitation, temperature changes, migration, toxins, or other factors that
+                                      may contribute to stress in the animals
+                                    </strong>
+                                  </mat-hint>
+                                  <mat-hint align="end">{{envFactors.value.length}} / 1000</mat-hint>
+                                </mat-form-field>
+                                <p>
 
-                        </mat-step>
+                                  <mat-form-field class="comment-text-area">
+                                    <textarea matInput #clinicalSigns maxlength="1000" placeholder="Clinical Signs" formControlName="clinical_signs"></textarea>
+                                    <mat-hint align="start">
+                                      <strong>any unusual behavior or physical appearance in the animals</strong>
+                                    </mat-hint>
+                                    <mat-hint align="end">{{clinicalSigns.value.length}} / 1000</mat-hint>
+                                  </mat-form-field>
+                                  <p>
 
-                        <mat-step [stepControl]="eventSubmissionForm">
+                                    <div formArrayName="comments">
+                                      <div *ngFor="let comments of getLocationComments(eventLocation); let c = index">
 
-                          <ng-template matStepLabel>Environmental Factors</ng-template>
+                                        <mat-form-field class="comment-text-area">
+                                          <textarea matInput #generalComment maxlength="1000" placeholder="Additonal Comment"></textarea>
+                                          <mat-hint align="start">
+                                            <strong>any additional comment not covered by the fields above</strong>
+                                          </mat-hint>
+                                          <mat-hint align="end">{{generalComment.value.length}} / 1000</mat-hint>
+                                        </mat-form-field>
+                                      </div>
+                                    </div>
 
-                          <mat-form-field class="comment-text-area">
-                            <textarea matInput #envFactors maxlength="1000" placeholder="Environmental Factors" formControlName="environmental_factors"></textarea>
-                            <mat-hint align="start">
-                              <strong>storms, precipitation, temperature changes, migration, toxins, or other factors that may contribute
-                                to stress in the animals
-                              </strong>
-                            </mat-hint>
-                            <mat-hint align="end">{{envFactors.value.length}} / 1000</mat-hint>
-                          </mat-form-field>
-                          <div>
-                            <button mat-button matStepperPrevious type="button">
-                              <i class="material-icons"> arrow_back_ios </i> Back</button>
-                            <button mat-button matStepperNext type="button"> Next
-                              <i class="material-icons"> navigate_next </i>
-                            </button>
-                          </div>
-
-                        </mat-step>
-
-                        <mat-step [stepControl]="eventSubmissionForm">
-                          <ng-template matStepLabel>Clinical Signs</ng-template>
-                          <mat-form-field class="comment-text-area">
-                            <textarea matInput #clinicalSigns maxlength="1000" placeholder="Clinical Signs" formControlName="clinical_signs"></textarea>
-                            <mat-hint align="start">
-                              <strong>any unusual behavior or physical appearance in the animals</strong>
-                            </mat-hint>
-                            <mat-hint align="end">{{clinicalSigns.value.length}} / 1000</mat-hint>
-                          </mat-form-field>
-                          <div>
-                            <button mat-button matStepperPrevious type="button">
-                              <i class="material-icons"> arrow_back_ios </i> Back</button>
-                            <button mat-button matStepperNext type="button"> Next
-                              <i class="material-icons"> navigate_next </i>
-                            </button>
-                          </div>
+                                    <div>
+                                      <button mat-button matStepperPrevious type="button">
+                                        <i class="material-icons"> arrow_back_ios </i> Back</button>
+                                      <button mat-button matStepperNext type="button"> Next
+                                        <i class="material-icons"> navigate_next </i>
+                                      </button>
+                                    </div>
                         </mat-step>
 
                         <mat-step [stepControl]="eventSubmissionForm">
@@ -561,7 +546,7 @@
                                   </div>
                         </mat-step>
 
-                      </mat-vertical-stepper>
+                      </mat-horizontal-stepper>
 
 
                       <p>
@@ -641,16 +626,16 @@
             <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar "></mat-progress-bar>
             <p>
               <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="submitEvent(eventSubmissionForm.value)">
-                <i class="material-icons ">done</i> Submit Event</button>
+                <i class="material-icons ">done</i> Create Event</button>
               <p>
-              <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="openEventSubmitConfirm(eventSubmissionForm.value)">
-                <i class="material-icons ">pageview</i> Review Event</button>
+                <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="openEventSubmitConfirm(eventSubmissionForm.value)">
+                  <i class="material-icons ">pageview</i> Review Event</button>
 
-              <div class="temporary-form-value-display ">
-                <h3>Temporary Form Value display (not for production)</h3>
-                <p>Form Status: {{eventSubmissionForm.status}}
-                  <pre> {{eventSubmissionForm.value | json}} </pre>
-              </div>
+                <div class="temporary-form-value-display ">
+                  <h3>Temporary Form Value display (not for production)</h3>
+                  <p>Form Status: {{eventSubmissionForm.status}}
+                    <pre> {{eventSubmissionForm.value | json}} </pre>
+                </div>
 
       </mat-card-content>
     </mat-card>

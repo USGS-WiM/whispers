@@ -2227,7 +2227,7 @@ export class APP_UTILITIES {
     public static get SAMPLE_EVENT_DETAIL_DATA() {
         return [
             {
-                "id": 1000,
+                "id": 3,
                 "superevent": null,
                 "legal_number": null,
                 "legal_status": 1,

@@ -195,7 +195,6 @@
           <!-- <mat-form-field>
                   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
                 </mat-form-field> -->
-
           <mat-table [dataSource]="dataSource" matSort>
 
             <!-- ID Column -->
@@ -280,9 +279,12 @@
               </mat-cell>
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-header-row *matHeaderRowDef="displayedColumns;"></mat-header-row>
             <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"></mat-row>
           </mat-table>
+          <!-- <div class="spinner-container" *ngIf="testDataSource.loading$ | async">
+            <mat-spinner></mat-spinner>
+          </div> -->
 
           <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
         </div>

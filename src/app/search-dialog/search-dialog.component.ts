@@ -86,7 +86,7 @@ export class SearchDialogComponent implements OnInit {
       species: null,
       administrative_level_one: null,
       administrative_level_two: null,
-      affected_count: 5,
+      affected_count: null,
       start_date: null,
       end_date: null,
       diagnosis_type_includes_all: false,
@@ -399,23 +399,21 @@ export class SearchDialogComponent implements OnInit {
 
     // TODO: query the eventService with the searchForm value, on success,
     // pass results to home component for display via searchDialogService
-    this.eventService.queryEvents(searchQuery)
-      .subscribe(
-        (queryResults) => {
-          console.log(queryResults);
+    // this.eventService.queryEvents(searchQuery)
+    //   .subscribe(
+    //     (queryResults) => {
+    //       console.log(queryResults);
 
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-
-
+    //     },
+    //     error => {
+    //       this.errorMessage = <any>error;
+    //     }
+    //   );
 
     // use displayQuery for display of current query in markup, send to searchDialogService
     this.searchDialogService.setDisplayQuery(displayQuery);
     // use searchForm.value to build the web service query, send to searchDialogService
-    this.searchDialogService.setSearchQuery(this.searchForm.value);
+    this.searchDialogService.setSearchQuery(searchQuery);
 
   }
 

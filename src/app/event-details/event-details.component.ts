@@ -54,6 +54,7 @@ export class EventDetailsComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
 
+      // TODO: replace this line with actual request to eventDetails service, using id
       this.eventData = this.eventService.getSampleEventDetail(this.id);
 
       for (const event_location of this.eventData.event_locations) {

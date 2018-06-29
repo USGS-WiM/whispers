@@ -20,9 +20,10 @@ export class EventService {
 
   public queryEvents(eventQuery): Observable<EventSummary[]> {
 
+    // console.log(JSON.stringify(eventQuery));
+
     let queryString = '?';
 
-    // example of query string concat from lili
     if (eventQuery.affected_count !== null && eventQuery.affected_count !== '') {
       queryString = queryString + '&affected_count=' + eventQuery.affected_count.toString();
     }
@@ -57,8 +58,11 @@ export class EventService {
       queryString = queryString + '&administrative_level_two=' + eventQuery.administrative_level_two;
     }
 
-    if (eventQuery.and_params.length > 0) {
-      queryString = queryString + '&and_params=' + eventQuery.and_params;
+    if (eventQuery.and_params) {
+      if (eventQuery.and_params.length > 0) {
+        queryString = queryString + '&and_params=' + eventQuery.and_params;
+      }
+
     }
 
     const options = new RequestOptions({

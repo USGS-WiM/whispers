@@ -177,9 +177,9 @@ export class EventSubmissionComponent implements OnInit {
 
       });
 
-      // this.eventSubmitConfirm.afterDismissed().subscribe(() => {
-      //   console.log('Bottom sheet has been dismissed.');
-      // });
+    // this.eventSubmitConfirm.afterDismissed().subscribe(() => {
+    //   console.log('Bottom sheet has been dismissed.');
+    // });
 
   }
 
@@ -454,7 +454,11 @@ export class EventSubmissionComponent implements OnInit {
       history: '',
       environmental_factors: '',
       clinical_signs: '',
-      comments: [],
+      comments: this.formBuilder.array([
+        this.formBuilder.group({
+          comment: ''
+        })
+      ]),
       location_species: this.formBuilder.array([
         // this.initLocationSpecies()
       ]),
@@ -588,17 +592,17 @@ export class EventSubmissionComponent implements OnInit {
 
   // location comments
   addLocationComments(i) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('location_comments');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('comments');
     control.push(this.initLocationComments());
   }
 
   removeLocationComments(i, m) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('location_comments');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('comments');
     control.removeAt(m);
   }
 
   getLocationComments(form) {
-    return form.controls.location_comments.controls;
+    return form.controls.comments.controls;
   }
 
 

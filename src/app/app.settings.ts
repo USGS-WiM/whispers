@@ -78,4 +78,26 @@ export class APP_SETTINGS {
         );
     }
 
+    // default event query for initial load of home page (may eventutally come from some other source)
+    public static get DEFAULT_EVENT_QUERY() {
+        return {
+            'event_type': [],
+            'diagnosis': [],
+            'diagnosis_type': [],
+            'species': [],
+            'administrative_level_one': [],
+            'administrative_level_two': [],
+            'affected_count': null,
+            'start_date': null,
+            'end_date': null,
+            'diagnosis_type_includes_all': false,
+            'diagnosis_includes_all': false,
+            'species_includes_all': false,
+            'administrative_level_one_includes_all': false,
+            'administrative_level_two_includes_all': false,
+            'and_params': [],
+            'openEventsOnly': false
+        };
+    }
+
 }

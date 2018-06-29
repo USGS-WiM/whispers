@@ -454,11 +454,12 @@ export class EventSubmissionComponent implements OnInit {
       history: '',
       environmental_factors: '',
       clinical_signs: '',
-      comments: this.formBuilder.array([
-        this.formBuilder.group({
-          comment: ''
-        })
-      ]),
+      comment: '',
+      // comments: this.formBuilder.array([
+      //   this.formBuilder.group({
+      //     comment: ''
+      //   })
+      // ]),
       location_species: this.formBuilder.array([
         // this.initLocationSpecies()
       ]),

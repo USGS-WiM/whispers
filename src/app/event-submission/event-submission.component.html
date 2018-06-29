@@ -287,18 +287,18 @@
                                   </mat-form-field>
                                   <p>
 
-                                    <div formArrayName="comments">
-                                      <div *ngFor="let comments of getLocationComments(eventLocation); let c = index">
+                                    <!-- <div formArrayName="comments">
+                                      <div *ngFor="let comments of getLocationComments(eventLocation); let c = index"> -->
 
-                                        <mat-form-field class="comment-text-area">
-                                          <textarea matInput #generalComment maxlength="1000" placeholder="Additonal Comment"></textarea>
-                                          <mat-hint align="start">
-                                            <strong>any additional comment not covered by the fields above</strong>
-                                          </mat-hint>
-                                          <mat-hint align="end">{{generalComment.value.length}} / 1000</mat-hint>
-                                        </mat-form-field>
-                                      </div>
-                                    </div>
+                                    <mat-form-field class="comment-text-area">
+                                      <textarea matInput #generalComment maxlength="1000" placeholder="Additonal Comment" formControlName="comment"></textarea>
+                                      <mat-hint align="start">
+                                        <strong>any additional comment not covered by the fields above</strong>
+                                      </mat-hint>
+                                      <mat-hint align="end">{{generalComment.value.length}} / 1000</mat-hint>
+                                    </mat-form-field>
+                                    <!-- </div>
+                                    </div> -->
 
                                     <div>
                                       <button mat-button matStepperPrevious type="button">

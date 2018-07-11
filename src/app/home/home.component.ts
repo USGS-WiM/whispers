@@ -109,7 +109,6 @@ export class HomeComponent implements OnInit {
                 for (const event in this.currentResults) {
                   if (this.currentResults[event]['administrativeleveltwos'].length > 0) {
                     for (let adminleveltwo in this.currentResults[event]['administrativeleveltwos']) {
-                      console.log('is it here?');
                       L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']), Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])], { icon: this.icon }).addTo(this.map);
                     }
                   }
@@ -181,7 +180,6 @@ export class HomeComponent implements OnInit {
             for (const event in this.currentResults) {
               if (this.currentResults[event]['administrativeleveltwos'].length > 0) {
                 for (let adminleveltwo in this.currentResults[event]['administrativeleveltwos']) {
-                  console.log('is it here?');
                   L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']), Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])], { icon: this.icon }).addTo(this.map);
                 }
               }

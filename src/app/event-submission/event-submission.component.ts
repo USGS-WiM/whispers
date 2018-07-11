@@ -394,17 +394,17 @@ export class EventSubmissionComponent implements OnInit {
           <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species');
         const species = speciesArray.controls[objectInstanceIndex];
         this.commonEventData.species.push(this.formBuilder.group({
-          species: species.value.species,
-          population_count: null,
-          sick_count: null,
-          dead_count: null,
-          sick_count_estimated: null,
-          dead_count_estimated: null,
-          priority: null,
-          captive: null,
-          age_bias: null,
-          sex_bias: null
-        })
+            species: species.value.species,
+            population_count: null,
+            sick_count: null,
+            dead_count: null,
+            sick_count_estimated: null,
+            dead_count_estimated: null,
+            priority: null,
+            captive: null,
+            age_bias: null,
+            sex_bias: null
+          })
         );
 
         // loop through event locations and push the new contact into each, except the one it came from (so as to avoid duplicate)

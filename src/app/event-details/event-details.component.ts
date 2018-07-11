@@ -42,7 +42,7 @@ export class EventDetailsComponent implements OnInit {
   errorMessage;
 
   constructor(private route: ActivatedRoute,
-    private eventService: EventService,
+    private _eventService: EventService,
     private adminLevelOneService: AdministrativeLevelOneService) {
     this.eventLocationSpecies = [];
   }
@@ -55,20 +55,30 @@ export class EventDetailsComponent implements OnInit {
       this.id = params.get('id');
 
       // TODO: replace this line with actual request to eventDetails service, using id
-      this.eventData = this.eventService.getSampleEventDetail(this.id);
+      //this.eventData = this.eventService.getSampleEventDetail(this.id);
+      // Actual request to event details service, using id
+      this._eventService.getEventDetails(this.id)
+      .subscribe(
+        (eventdetails) => {
+          this.eventData = eventdetails;
 
-      for (const event_location of this.eventData.event_locations) {
-        for (const location_species of event_location.location_species) {
-          location_species.administrative_level_two_string = event_location.administrative_level_two_string;
-          location_species.administrative_level_one_string = event_location.administrative_level_one_string;
-          location_species.country_string = event_location.country_string;
-          this.eventLocationSpecies.push(location_species);
+          for (const event_location of this.eventData.event_locations) {
+            for (const location_species of event_location.location_species) {
+              location_species.administrative_level_two_string = event_location.administrative_level_two_string;
+              location_species.administrative_level_one_string = event_location.administrative_level_one_string;
+              location_species.country_string = event_location.country_string;
+              this.eventLocationSpecies.push(location_species);
+            }
+    
+          }
+          console.log('eventLocationSpecies:', this.eventLocationSpecies);
+          //this.speciesTableRows = this.eventLocationSpecies;
+          this.eventDataLoading = false;
+        },
+        error => {
+          this.errorMessage = <any>error;
         }
-
-      }
-      console.log('eventLocationSpecies:', this.eventLocationSpecies);
-      //this.speciesTableRows = this.eventLocationSpecies;
-      this.eventDataLoading = false;
+      );
 
     });
 
@@ -83,7 +93,7 @@ export class EventDetailsComponent implements OnInit {
         }
       );
 
-    setTimeout(() => {
+    /*setTimeout(() => {
       this.map = new L.Map('map', {
         center: new L.LatLng(39.8283, -98.5795),
         zoom: 4,
@@ -93,7 +103,7 @@ export class EventDetailsComponent implements OnInit {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(this.map);
 
-    }, 500);
+    }, 500);*/
   }
 
 

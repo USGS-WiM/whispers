@@ -21,7 +21,7 @@
   </mat-card-actions>
 </mat-card>
 
-<mat-tab-group>
+<mat-tab-group (selectedIndexChange)="_setDataSource($event)" >
   <mat-tab label="Contacts"> 
     
     <mat-card>
@@ -125,7 +125,7 @@
                   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
                 </mat-form-field> -->
 
-          <mat-table [dataSource]="dataSource" matSort>
+          <mat-table #eventSort='matSort' [dataSource]="dataSource" matSort>
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
@@ -202,7 +202,7 @@
             <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"></mat-row>
           </mat-table>
 
-          <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+          <mat-paginator #eventPaginator='matPaginator' [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
         </div>
       </mat-card-content>
     </mat-card>

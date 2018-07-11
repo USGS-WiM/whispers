@@ -36,10 +36,10 @@
                   <td>{{eventData.affected_count}}</td>
                 </tr>
                 <tr>
-                  <th [attr.rowspan]="eventData.event_diagnosis.length + 1 ">Diagnosis</th>
+                  <th [attr.rowspan]="eventData.event_diagnoses.length + 1 ">Diagnosis</th>
                   <!-- <td *ngFor="let diagnosis of eventData.event_diagnosis">{{diagnosis.diagnosis_string}}</td> -->
                 </tr>
-                <tr *ngFor="let diagnosis of eventData.event_diagnosis" class="noBorder">
+                <tr *ngFor="let diagnosis of eventData.event_diagnoses" class="noBorder">
                   <td>{{diagnosis.diagnosis_string}}</td>
                 </tr>
                 <tr>
@@ -109,7 +109,8 @@
               <table>
                 <tr>
                   <th>Event Owner</th>
-                  <td>{{eventData.event_organization[0].private_name}}</td>
+                  <td>no data from service yet</td>
+                  <!--<td>no data yet{{eventData.event_organization[0].private_name}}</td>-->
                 </tr>
                 <tr>
                   <th>Event Reference</th>

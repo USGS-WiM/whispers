@@ -1,3 +1,4 @@
+import {SelectionModel} from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -61,13 +62,6 @@ export class SavedSearchesComponent implements OnInit {
 
     this.savedSearchesDataSource = new MatTableDataSource(this.searches);
 
-  }
-
-  openSearchDialog() {
-    this.searchDialogRef = this._dialog.open(SearchDialogComponent, {
-      minWidth: '60%',
-      // height: '75%'
-    });
   }
 
 }

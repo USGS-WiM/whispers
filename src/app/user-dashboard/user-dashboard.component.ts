@@ -47,8 +47,11 @@ export class UserDashboardComponent implements OnInit {
     'organization'
   ];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('eventPaginator') paginator: MatPaginator;
+  @ViewChild('eventSort') sort: MatSort;
+
+  @ViewChild(MatPaginator) contactPaginator: MatPaginator;
+  @ViewChild(MatSort) contactSort: MatSort;
 
   constructor(
     private _eventService: EventService,
@@ -62,29 +65,14 @@ export class UserDashboardComponent implements OnInit {
   ngOnInit() {
     
     //const events: EventSummary[] = this._eventService.getTestData();
-    
-    this._eventService.getUserDashboardEventSummaries()
-      .subscribe(
-        (eventsummaries) => {
-          this.events = eventsummaries;
-          this.dataSource = new MatTableDataSource(this.events);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-
-    this.dataSource = new MatTableDataSource(this.events);
 
     this._contactService.getContacts()
       .subscribe(
         (usercontacts) => {
           this.contacts = usercontacts;
           this.contactsDataSource = new MatTableDataSource(this.contacts);
-          this.contactsDataSource.paginator = this.paginator;
-          this.contactsDataSource.sort = this.sort;
+          this.contactsDataSource.paginator = this.contactPaginator;
+          this.contactsDataSource.sort = this.contactSort;
         },
         error => {
           this.errorMessage = <any>error;
@@ -93,7 +81,31 @@ export class UserDashboardComponent implements OnInit {
 
     this.contactsDataSource = new MatTableDataSource(this.contacts);
 
+    this._eventService.getUserDashboardEventSummaries()
+      .subscribe(
+        (eventsummaries) => {
+          this.events = eventsummaries;
+          this.dataSource = new MatTableDataSource(this.events);
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
+    this.dataSource = new MatTableDataSource(this.events);
+  }
+
+  _setDataSource(indexNumber) {
+    setTimeout(() => {
+      switch (indexNumber) {
+        case 0:
+          !this.contactsDataSource.paginator ? this.contactsDataSource.paginator = this.contactPaginator : null;
+          break;
+        case 1:
+          !this.dataSource.paginator ? this.dataSource.paginator = this.paginator : null;
+          !this.dataSource.sort ? this.dataSource.sort = this.sort : null;
+      }
+    });
   }
 
   applyFilter(filterValue: string) {
@@ -103,7 +115,7 @@ export class UserDashboardComponent implements OnInit {
   }
 
   selectEvent(event) {
-    //this.router.navigate([`../event/${event.id}`], { relativeTo: this.route });
+    this.router.navigate([`../event/${event.id}`], { relativeTo: this.route });
   }
 
   formatPhone(phone) {

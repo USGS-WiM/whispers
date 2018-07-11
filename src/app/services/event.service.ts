@@ -89,6 +89,17 @@ export class EventService {
 
   }
 
+  // Function for retrieving event details given event id
+  public getEventDetails(eventID): Observable<EventDetail> {
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    })
+
+    return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL+eventID, options)
+      .map((response: Response) => <EventDetail>response.json())
+      .catch(this.handleError);
+  }
+
   public getUserDashboardEventSummaries(): Observable<EventSummary[]> {
 
     const options = new RequestOptions({

@@ -1,15 +1,14 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { ContactService } from '@app/services/contact.service';
 
 import { Contact } from '@interfaces/contact';
 import { EventSummary } from '@interfaces/event-summary';
-import { ContactService } from '@app/services/contact.service';
+
 import { EventService } from '@services/event.service';
-
-import { Router, ActivatedRoute } from '@angular/router';
-
-import { APP_UTILITIES } from '@app/app.utilities';
 
 
 @Component({
@@ -26,6 +25,8 @@ export class UserDashboardComponent implements OnInit {
   events;
   contacts;
 
+  selection;
+
   displayedColumns = [
     'id',
     'event_type_string',
@@ -39,6 +40,7 @@ export class UserDashboardComponent implements OnInit {
   ];
 
   contactDisplayedColumns = [
+    'select',
     'id',
     'first_name',
     'last_name',
@@ -65,6 +67,9 @@ export class UserDashboardComponent implements OnInit {
   ngOnInit() {
     
     //const events: EventSummary[] = this._eventService.getTestData();
+    const initialSelection = [];
+    const allowMultiSelect = true;
+    this.selection = new SelectionModel<Contact>(allowMultiSelect, initialSelection);
 
     this._contactService.getContacts()
       .subscribe(
@@ -116,6 +121,21 @@ export class UserDashboardComponent implements OnInit {
 
   selectEvent(event) {
     this.router.navigate([`../event/${event.id}`], { relativeTo: this.route });
+  }
+
+  // From angular material table sample on material api reference site
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.contactsDataSource.data.length;
+    return numSelected == numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.contactsDataSource.data.forEach(row => this.selection.select(row));
   }
 
   formatPhone(phone) {

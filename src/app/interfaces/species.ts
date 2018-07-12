@@ -2,6 +2,7 @@ import { History } from '@interfaces/history';
 
 export interface Species extends History {
     id: number;
+    name: string;
     class_name: string;
     order_name: string;
     family_name: string;

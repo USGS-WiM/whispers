@@ -36,7 +36,7 @@
           <div class="autocomplete-input">
             <mat-form-field class="full-width">
               <input type="text" matInput placeholder="Add Event Type" aria-label="Add Event Type" [matAutocomplete]="eventTypeAutoComplete"
-                [formControl]="eventTypeControl">
+                [formControl]="eventTypeControl"  (valueChanges)="addChip($event, selectedEventTypes, 'eventType')">
               <mat-autocomplete #eventTypeAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedEventTypes, 'eventType')">
                 <mat-option *ngFor="let eventType of filteredEventTypes | async" [value]="eventType">
                   <span>{{ eventType.name }}</span>
@@ -286,7 +286,7 @@
         </mat-expansion-panel-header>
         <div>
           <mat-form-field>
-            <input matInput type="number" placeholder="Number Affected" value="5" formControlName="affected_count">
+            <input matInput type="number" placeholder="Number Affected" formControlName="affected_count">
           </mat-form-field>
 
         </div>

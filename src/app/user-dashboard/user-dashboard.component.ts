@@ -41,7 +41,6 @@ export class UserDashboardComponent implements OnInit {
 
   contactDisplayedColumns = [
     'select',
-    'id',
     'first_name',
     'last_name',
     'phone_number',

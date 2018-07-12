@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
@@ -6,6 +7,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 
 import { MatSnackBar } from '@angular/material';
+import {MAT_DIALOG_DATA} from '@angular/material';
 
 import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocompleteTrigger } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -112,7 +114,8 @@ export class SearchDialogComponent implements OnInit {
     private eventService: EventService,
     private displayValuePipe: DisplayValuePipe,
     private datePipe: DatePipe,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
 
     this.eventTypeControl = new FormControl();
@@ -126,6 +129,7 @@ export class SearchDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+
     // get event types from the eventType service
     this._eventTypeService.getEventTypes()
       .subscribe(
@@ -134,6 +138,14 @@ export class SearchDialogComponent implements OnInit {
           this.filteredEventTypes = this.eventTypeControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.eventTypes, 'name'));
+          
+          if (this.data.query && this.data.query["event_type"].length > 0) {
+            for (const index in eventTypes) {
+              if (this.data.query["event_type"].some(function(el){ return el === eventTypes[index].name})) {
+                this.dropdownSetup(this.eventTypeControl, this.selectedEventTypes, eventTypes[index]);
+              }
+            }
+          }
         },
         error => {
           this.errorMessage = <any>error;
@@ -147,6 +159,14 @@ export class SearchDialogComponent implements OnInit {
           this.filteredDiagnosisTypes = this.diagnosisTypeControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.diagnosisTypes, 'name'));
+            
+          if (this.data.query && this.data.query["diagnosis_type"].length > 0) {
+            for (const index in diagnosisTypes) {
+              if (this.data.query["diagnosis_type"].some(function(el){ return el === diagnosisTypes[index].name})) {
+                this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, diagnosisTypes[index]);
+              }
+            }
+          }
         },
         error => {
           this.errorMessage = <any>error;
@@ -160,6 +180,14 @@ export class SearchDialogComponent implements OnInit {
           this.filteredDiagnoses = this.diagnosisControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.diagnoses, 'diagnosis'));
+            
+          if (this.data.query && this.data.query["diagnosis"].length > 0) {
+            for (const index in diagnoses) {
+              if (this.data.query["diagnosis"].some(function(el){ return el === diagnoses[index].name})) {
+                this.dropdownSetup(this.diagnosisControl, this.selectedDiagnoses, diagnoses[index]);
+              }
+            }
+          }
         },
         error => {
           this.errorMessage = <any>error;
@@ -173,6 +201,14 @@ export class SearchDialogComponent implements OnInit {
           this.filteredAdminLevelOnes = this.adminLevelOneControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.administrative_level_one, 'name'));
+            
+          if (this.data.query && this.data.query["administrative_level_one"].length > 0) {
+            for (const index in adminLevelOnes) {
+              if (this.data.query["administrative_level_one"].some(function(el){ return el === adminLevelOnes[index].name})) {
+                this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, adminLevelOnes[index]);
+              }
+            }
+          }
         },
         error => {
           this.errorMessage = <any>error;
@@ -186,6 +222,7 @@ export class SearchDialogComponent implements OnInit {
           this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.administrative_level_two, 'name'));
+
         },
         error => {
           this.errorMessage = <any>error;
@@ -199,12 +236,58 @@ export class SearchDialogComponent implements OnInit {
           this.filteredSpecies = this.adminLevelOneControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.species, 'name'));
+
+          //console.log(species);
+
+          if (this.data.query && this.data.query["species"].length > 0) {
+            for (const index in species) {
+              if (this.data.query["species"].some(function(el){ return el === species[index].name})) {
+                this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
+              }
+            }
+          }
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
 
+      const query: SearchQuery = this.data.query;
+
+      if (query && query["affected_count"]) {
+        this.searchForm.controls['affected_count'].setValue(query["affected_count"]);
+      }
+
+      if (query && query["start_date"]) {
+        this.searchForm.controls['start_date'].setValue(query["start_date"]);
+      }
+
+      if (query && query["end_date"]) {
+        this.searchForm.controls['end_date'].setValue(query["end_date"]);
+      }
+      
+      // Handling of and_params
+      if (query && query["diagnosis_type_includes_all"] == true) {
+        this.searchForm.controls['diagnosis_type_includes_all'].setValue(true);
+      }
+      if (query && query["diagnosis_includes_all"] == true) {
+        this.searchForm.controls['diagnosis_includes_all'].setValue(true);
+      }
+      if (query && query["species_includes_all"] == true) {
+        this.searchForm.controls['species_includes_all'].setValue(true);
+      }
+      if (query && query["administrative_level_one_includes_all"] == true) {
+        this.searchForm.controls['administrative_level_one_includes_all'].setValue(true);
+      }
+      if (query && query["administrative_level_two_includes_all"] == true) {
+        this.searchForm.controls['administrative_level_two_includes_all'].setValue(true);
+      }
+
+  }
+
+  dropdownSetup(formControl: FormControl, selectedValues: any, value: any) {
+    selectedValues.push(value);
+    this.resetFormControl(formControl);
   }
 
   filter(val: any, searchArray: any, searchProperty: string): string[] {

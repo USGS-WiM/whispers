@@ -127,7 +127,7 @@ export class HomeComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
-        // this.currentSearchQuery = searchQuery;
+        this.currentSearchQuery = searchQuery;
         // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
         // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
         // this.testDataSource.loadResults(searchQuery);
@@ -146,6 +146,9 @@ export class HomeComponent implements OnInit {
   openSearchDialog() {
     this.searchDialogRef = this.dialog.open(SearchDialogComponent, {
       minWidth: '60%',
+      data: {
+        query: this.currentDisplayQuery
+      }
       // height: '75%'
     });
   }

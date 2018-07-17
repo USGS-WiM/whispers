@@ -6,6 +6,7 @@ import { EventDetailsComponent } from './event-details/event-details.component';
 import { EventSubmissionComponent } from './event-submission/event-submission.component';
 import { DiagnosticServicesComponent } from './diagnostic-services/diagnostic-services.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { CreateContactComponent } from '@app/create-contact/create-contact.component';
 
 export const ROUTES: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -13,7 +14,8 @@ export const ROUTES: Routes = [
     { path: 'event/:id', component: EventDetailsComponent },
     { path: 'eventsubmission', component: EventSubmissionComponent },
     { path: 'diagnostic', component: DiagnosticServicesComponent },
-    { path: 'userdashboard', component: UserDashboardComponent }
+    { path: 'userdashboard', component: UserDashboardComponent },
+    { path: 'createcontact', component: CreateContactComponent }
     // {
     //     path: 'admin', 
     //     component: AdminComponent,

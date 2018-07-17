@@ -7,7 +7,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 
 import { MatSnackBar } from '@angular/material';
-import {MAT_DIALOG_DATA} from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocompleteTrigger } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -79,6 +79,8 @@ export class SearchDialogComponent implements OnInit {
   filteredSpecies: Observable<any[]>;
   selectedSpecies = []; // chips list
 
+  adminLevelTwosLoading = false;
+
 
   buildSearchForm() {
     this.searchForm = this.formBuilder.group({
@@ -105,8 +107,8 @@ export class SearchDialogComponent implements OnInit {
     public searchDialogRef: MatDialogRef<SearchDialogComponent>,
     private formBuilder: FormBuilder,
     private searchDialogService: SearchDialogService,
-    private _adminLevelOneService: AdministrativeLevelOneService,
-    private _adminLevelTwoService: AdministrativeLevelTwoService,
+    private adminLevelOneService: AdministrativeLevelOneService,
+    private adminLevelTwoService: AdministrativeLevelTwoService,
     private _eventTypeService: EventTypeService,
     private _diagnosisTypeService: DiagnosisTypeService,
     private _diagnosisService: DiagnosisService,
@@ -138,10 +140,10 @@ export class SearchDialogComponent implements OnInit {
           this.filteredEventTypes = this.eventTypeControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.eventTypes, 'name'));
-          
+
           if (this.data.query && this.data.query["event_type"].length > 0) {
             for (const index in eventTypes) {
-              if (this.data.query["event_type"].some(function(el){ return el === eventTypes[index].name})) {
+              if (this.data.query["event_type"].some(function (el) { return el === eventTypes[index].name })) {
                 this.dropdownSetup(this.eventTypeControl, this.selectedEventTypes, eventTypes[index]);
               }
             }
@@ -159,10 +161,10 @@ export class SearchDialogComponent implements OnInit {
           this.filteredDiagnosisTypes = this.diagnosisTypeControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.diagnosisTypes, 'name'));
-            
+
           if (this.data.query && this.data.query["diagnosis_type"].length > 0) {
             for (const index in diagnosisTypes) {
-              if (this.data.query["diagnosis_type"].some(function(el){ return el === diagnosisTypes[index].name})) {
+              if (this.data.query["diagnosis_type"].some(function (el) { return el === diagnosisTypes[index].name })) {
                 this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, diagnosisTypes[index]);
               }
             }
@@ -180,10 +182,10 @@ export class SearchDialogComponent implements OnInit {
           this.filteredDiagnoses = this.diagnosisControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.diagnoses, 'diagnosis'));
-            
+
           if (this.data.query && this.data.query["diagnosis"].length > 0) {
             for (const index in diagnoses) {
-              if (this.data.query["diagnosis"].some(function(el){ return el === diagnoses[index].name})) {
+              if (this.data.query["diagnosis"].some(function (el) { return el === diagnoses[index].name })) {
                 this.dropdownSetup(this.diagnosisControl, this.selectedDiagnoses, diagnoses[index]);
               }
             }
@@ -194,17 +196,17 @@ export class SearchDialogComponent implements OnInit {
         }
       );
     // get adminLevelOnes from the adminLevelOne service
-    this._adminLevelOneService.getAdminLevelOnes()
+    this.adminLevelOneService.getAdminLevelOnes()
       .subscribe(
         (adminLevelOnes) => {
           this.administrative_level_one = adminLevelOnes;
           this.filteredAdminLevelOnes = this.adminLevelOneControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.administrative_level_one, 'name'));
-            
+
           if (this.data.query && this.data.query["administrative_level_one"].length > 0) {
             for (const index in adminLevelOnes) {
-              if (this.data.query["administrative_level_one"].some(function(el){ return el === adminLevelOnes[index].name})) {
+              if (this.data.query["administrative_level_one"].some(function (el) { return el === adminLevelOnes[index].name })) {
                 this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, adminLevelOnes[index]);
               }
             }
@@ -215,20 +217,21 @@ export class SearchDialogComponent implements OnInit {
         }
       );
     // get adminLevelTwos from the adminLevelTwo service
-    this._adminLevelTwoService.getAdminLevelTwos()
-      .subscribe(
-        (adminLevelTwos) => {
-          this.administrative_level_two = adminLevelTwos;
-          this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
-            .startWith(null)
-            .map(val => this.filter(val, this.administrative_level_two, 'name'));
+    // TODO: remove this from ngOnInit. Not performant. Move to the updateAdminLevelTwoOptions function
+    // this.adminLevelTwoService.getAdminLevelTwos()
+    //   .subscribe(
+    //     (adminLevelTwos) => {
+    //       this.administrative_level_two = adminLevelTwos;
+    //       this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
+    //         .startWith(null)
+    //         .map(val => this.filter(val, this.administrative_level_two, 'name'));
 
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-    // get species from the sspecies service
+    //     },
+    //     error => {
+    //       this.errorMessage = <any>error;
+    //     }
+    //   );
+    // get species from the species service
     this._speciesService.getSpecies()
       .subscribe(
         (species) => {
@@ -241,7 +244,7 @@ export class SearchDialogComponent implements OnInit {
 
           if (this.data.query && this.data.query["species"].length > 0) {
             for (const index in species) {
-              if (this.data.query["species"].some(function(el){ return el === species[index].name})) {
+              if (this.data.query["species"].some(function (el) { return el === species[index].name })) {
                 this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
               }
             }
@@ -252,36 +255,36 @@ export class SearchDialogComponent implements OnInit {
         }
       );
 
-      const query: SearchQuery = this.data.query;
+    const query: SearchQuery = this.data.query;
 
-      if (query && query["affected_count"]) {
-        this.searchForm.controls['affected_count'].setValue(query["affected_count"]);
-      }
+    if (query && query["affected_count"]) {
+      this.searchForm.controls['affected_count'].setValue(query["affected_count"]);
+    }
 
-      if (query && query["start_date"]) {
-        this.searchForm.controls['start_date'].setValue(query["start_date"]);
-      }
+    if (query && query["start_date"]) {
+      this.searchForm.controls['start_date'].setValue(query["start_date"]);
+    }
 
-      if (query && query["end_date"]) {
-        this.searchForm.controls['end_date'].setValue(query["end_date"]);
-      }
-      
-      // Handling of and_params
-      if (query && query["diagnosis_type_includes_all"] == true) {
-        this.searchForm.controls['diagnosis_type_includes_all'].setValue(true);
-      }
-      if (query && query["diagnosis_includes_all"] == true) {
-        this.searchForm.controls['diagnosis_includes_all'].setValue(true);
-      }
-      if (query && query["species_includes_all"] == true) {
-        this.searchForm.controls['species_includes_all'].setValue(true);
-      }
-      if (query && query["administrative_level_one_includes_all"] == true) {
-        this.searchForm.controls['administrative_level_one_includes_all'].setValue(true);
-      }
-      if (query && query["administrative_level_two_includes_all"] == true) {
-        this.searchForm.controls['administrative_level_two_includes_all'].setValue(true);
-      }
+    if (query && query["end_date"]) {
+      this.searchForm.controls['end_date'].setValue(query["end_date"]);
+    }
+
+    // Handling of and_params
+    if (query && query["diagnosis_type_includes_all"] == true) {
+      this.searchForm.controls['diagnosis_type_includes_all'].setValue(true);
+    }
+    if (query && query["diagnosis_includes_all"] == true) {
+      this.searchForm.controls['diagnosis_includes_all'].setValue(true);
+    }
+    if (query && query["species_includes_all"] == true) {
+      this.searchForm.controls['species_includes_all'].setValue(true);
+    }
+    if (query && query["administrative_level_one_includes_all"] == true) {
+      this.searchForm.controls['administrative_level_one_includes_all'].setValue(true);
+    }
+    if (query && query["administrative_level_two_includes_all"] == true) {
+      this.searchForm.controls['administrative_level_two_includes_all'].setValue(true);
+    }
 
   }
 
@@ -334,6 +337,8 @@ export class SearchDialogComponent implements OnInit {
   }
 
   addChip(event: MatAutocompleteSelectedEvent, selectedValuesArray: any, control: string): void {
+
+    const self = this;
     // Define selection constant
     let alreadySelected = false;
     const selection = event.option.value;
@@ -357,6 +362,29 @@ export class SearchDialogComponent implements OnInit {
       // reset the form
       this.resetFormControl(control);
     }
+
+    if (control === 'adminLevelOne') {
+
+      this.adminLevelTwosLoading = true;
+
+      this.adminLevelTwoService.queryAdminLevelTwos(selection.id)
+        .subscribe(
+          adminLevelTwos => {
+            // self.administrative_level_two.push(adminLevelTwos);
+            self.administrative_level_two = self.administrative_level_two.concat(adminLevelTwos);
+            //this.administrative_level_two = adminLevelTwos;
+            this.adminLevelTwosLoading = false;
+            this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
+              .startWith(null)
+              .map(val => this.filter(val, self.administrative_level_two, 'name'));
+          },
+          error => {
+            this.errorMessage = <any>error;
+            this.adminLevelTwosLoading = false;
+          }
+        );
+
+    }
   }
 
   removeChip(chip: any, selectedValuesArray: any, control: string): void {
@@ -375,6 +403,26 @@ export class SearchDialogComponent implements OnInit {
       idArray.push(object.id);
     }
     return idArray;
+  }
+
+  updateAdminLevelTwoOptions(selectedAdminLevelOneID) {
+    const id = Number(selectedAdminLevelOneID);
+
+    // query the adminleveltwos endpoint for appropriate records
+    // update the options for the adminLevelTwo select with the response
+
+    this.adminLevelTwoService.queryAdminLevelTwos(id)
+      .subscribe(
+        adminLevelTwos => {
+          this.administrative_level_two.push(adminLevelTwos);
+          this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
+            .startWith(null)
+            .map(val => this.filter(val, this.administrative_level_two, 'name'));
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
 
   submitSearch(formValue) {

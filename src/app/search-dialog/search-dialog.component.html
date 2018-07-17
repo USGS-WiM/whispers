@@ -36,7 +36,7 @@
           <div class="autocomplete-input">
             <mat-form-field class="full-width">
               <input type="text" matInput placeholder="Add Event Type" aria-label="Add Event Type" [matAutocomplete]="eventTypeAutoComplete"
-                [formControl]="eventTypeControl"  (valueChanges)="addChip($event, selectedEventTypes, 'eventType')">
+                [formControl]="eventTypeControl" (valueChanges)="addChip($event, selectedEventTypes, 'eventType')">
               <mat-autocomplete #eventTypeAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedEventTypes, 'eventType')">
                 <mat-option *ngFor="let eventType of filteredEventTypes | async" [value]="eventType">
                   <span>{{ eventType.name }}</span>
@@ -256,11 +256,13 @@
             <mat-form-field class="full-width">
               <input type="text" matInput placeholder="Add County" aria-label="Add County" [matAutocomplete]="adminLevelTwoAutoComplete"
                 [formControl]="adminLevelTwoControl">
+              <mat-spinner *ngIf="adminLevelTwosLoading" [diameter]="20"></mat-spinner>
               <mat-autocomplete #adminLevelTwoAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedAdminLevelTwos, 'adminLevelTwo')">
                 <mat-option *ngFor="let adminLevelTwo of filteredAdminLevelTwos | async" [value]="adminLevelTwo">
                   <span>{{ adminLevelTwo.name }}</span>
                 </mat-option>
               </mat-autocomplete>
+              <mat-hint align="start">Select a state to populate/update county list </mat-hint>
             </mat-form-field>
           </div>
           <div class="search-type-radios">

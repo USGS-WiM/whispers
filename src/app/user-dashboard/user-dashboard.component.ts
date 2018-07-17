@@ -1,5 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -7,6 +8,8 @@ import { ContactService } from '@app/services/contact.service';
 
 import { Contact } from '@interfaces/contact';
 import { EventSummary } from '@interfaces/event-summary';
+
+import { CreateContactComponent } from '@create-contact/create-contact.component';
 
 import { EventService } from '@services/event.service';
 
@@ -20,6 +23,8 @@ export class UserDashboardComponent implements OnInit {
 
   dataSource: MatTableDataSource<EventSummary>;
   contactsDataSource: MatTableDataSource<Contact>;
+
+  createContactDialogRef: MatDialogRef<CreateContactComponent>;
 
   errorMessage;
   events;
@@ -58,6 +63,7 @@ export class UserDashboardComponent implements OnInit {
   constructor(
     private _eventService: EventService,
     private _contactService: ContactService,
+    private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -110,6 +116,13 @@ export class UserDashboardComponent implements OnInit {
           !this.dataSource.paginator ? this.dataSource.paginator = this.paginator : null;
           !this.dataSource.sort ? this.dataSource.sort = this.sort : null;
       }
+    });
+  }
+
+  openCreateContactDialog() {
+    this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      minWidth: '60%',
+      // height: '75%'
     });
   }
 

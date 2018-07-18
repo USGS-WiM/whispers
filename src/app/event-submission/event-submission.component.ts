@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
+import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
@@ -88,8 +89,14 @@ export class EventSubmissionComponent implements OnInit {
   landOwnerships: LandOwnership[];
 
   countries: Country[];
+
   adminLevelOnes: AdministrativeLevelOne[];
+  // expermental, for autocomplete
+  filteredAdminLevelOnes: Observable<any[]>;
+
   adminLevelTwos: AdministrativeLevelTwo[];
+  // expermental, for autocomplete
+  //filteredAdminLevelTwos: Observable<any[]>;
 
   species: Species[];
   sexBiases: SexBias[];
@@ -140,6 +147,7 @@ export class EventSubmissionComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private bottomSheet: MatBottomSheet,
+    private datePipe: DatePipe,
     private eventTypeService: EventTypeService,
     private legalStatusService: LegalStatusService,
     private landOwnershipService: LandOwnershipService,
@@ -222,6 +230,21 @@ export class EventSubmissionComponent implements OnInit {
     });
   }
 
+  filter(val: any, searchArray: any, searchProperty: string): string[] {
+    const realval = val && typeof val === 'object' ? val.searchProperty : val;
+    const result = [];
+    let lastOption = null;
+    for (let i = 0; i < searchArray.length; i++) {
+      if (!realval || searchArray[i][searchProperty].toLowerCase().startsWith(realval.toLowerCase())) {
+        if (searchArray[i][searchProperty] !== lastOption) {
+          lastOption = searchArray[i][searchProperty];
+          result.push(searchArray[i]);
+        }
+      }
+    }
+    return result;
+  }
+
 
   ngOnInit() {
 
@@ -275,6 +298,13 @@ export class EventSubmissionComponent implements OnInit {
       .subscribe(
         adminLevelOnes => {
           this.adminLevelOnes = adminLevelOnes;
+
+          // experimental
+          // this.filteredAdminLevelOnes = this.eventSubmissionForm.get('').valueChanges
+          //   .startWith(null)
+          //   .map(val => this.filter(val, this.administrative_level_one, 'name'));
+
+          // end experimental
         },
         error => {
           this.errorMessage = <any>error;
@@ -394,17 +424,17 @@ export class EventSubmissionComponent implements OnInit {
           <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species');
         const species = speciesArray.controls[objectInstanceIndex];
         this.commonEventData.species.push(this.formBuilder.group({
-            species: species.value.species,
-            population_count: null,
-            sick_count: null,
-            dead_count: null,
-            sick_count_estimated: null,
-            dead_count_estimated: null,
-            priority: null,
-            captive: null,
-            age_bias: null,
-            sex_bias: null
-          })
+          species: species.value.species,
+          population_count: null,
+          sick_count: null,
+          dead_count: null,
+          sick_count_estimated: null,
+          dead_count_estimated: null,
+          priority: null,
+          captive: null,
+          age_bias: null,
+          sex_bias: null
+        })
         );
 
         // loop through event locations and push the new contact into each, except the one it came from (so as to avoid duplicate)
@@ -441,7 +471,7 @@ export class EventSubmissionComponent implements OnInit {
   initEventLocation() {
     return this.formBuilder.group({
       name: '',
-      start_date: null,
+      start_date: '',
       end_date: null,
       country: [APP_UTILITIES.DEFAULT_COUNTRY_ID, Validators.required],
       administrative_level_one: [null, Validators.required],
@@ -665,11 +695,19 @@ export class EventSubmissionComponent implements OnInit {
       delete event_location.gnis_name;
     }
 
+    // convert start_date and end_date of event_locations to 'yyyy-MM-dd' before submission
+    // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
+    for (const event_location of formValue.new_event_locations) {
+      event_location.start_date = this.datePipe.transform(event_location.start_date, 'yyyy-MM-dd');
+      event_location.end_date = this.datePipe.transform(event_location.end_date, 'yyyy-MM-dd');
+    }
+
     this.eventService.create(formValue)
       .subscribe(
         (event) => {
           this.submitLoading = false;
           this.openSnackBar('Event successfully created', 'OK', 8000);
+          this.eventSubmissionForm.reset();
         },
         error => {
           this.submitLoading = false;

@@ -185,7 +185,7 @@ export class SearchDialogComponent implements OnInit {
 
           if (this.data.query && this.data.query["diagnosis"].length > 0) {
             for (const index in diagnoses) {
-              if (this.data.query["diagnosis"].some(function (el) { return el === diagnoses[index].name })) {
+              if (this.data.query["diagnosis"].some(function (el) { return el === diagnoses[index].name; })) {
                 this.dropdownSetup(this.diagnosisControl, this.selectedDiagnoses, diagnoses[index]);
               }
             }
@@ -236,15 +236,13 @@ export class SearchDialogComponent implements OnInit {
       .subscribe(
         (species) => {
           this.species = species;
-          this.filteredSpecies = this.adminLevelOneControl.valueChanges
+          this.filteredSpecies = this.speciesControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.species, 'name'));
 
-          //console.log(species);
-
           if (this.data.query && this.data.query["species"].length > 0) {
             for (const index in species) {
-              if (this.data.query["species"].some(function (el) { return el === species[index].name })) {
+              if (this.data.query["species"].some(function (el) { return el === species[index].name; })) {
                 this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
               }
             }

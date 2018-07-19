@@ -43,7 +43,8 @@ export class UserDashboardComponent implements OnInit {
     'administrativelevelones',
     'administrativeleveltwos',
     'species',
-    'eventdiagnoses'
+    'eventdiagnoses',
+    'permission_source'
   ];
 
   contactDisplayedColumns = [
@@ -52,7 +53,8 @@ export class UserDashboardComponent implements OnInit {
     'first_name',
     'phone_number',
     'email_address',
-    'organization'
+    'organization',
+    'permission_source'
   ];
 
   @ViewChild('eventPaginator') paginator: MatPaginator;

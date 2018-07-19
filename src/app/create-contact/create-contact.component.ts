@@ -39,8 +39,8 @@ export class CreateContactComponent implements OnInit {
     this.createContactForm = this.formBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      phone_number: [''],
-      email_address: ['', [Validators.required, Validators.email]],
+      phone: [''],
+      email: ['', [Validators.required, Validators.email]],
       title: '',
       position: '',
       organization: null,
@@ -63,7 +63,6 @@ export class CreateContactComponent implements OnInit {
 
   ngOnInit() {
 
-    console.log(this.data.contact_action);
     if (this.data.contact_action == 'create') {
       this.dialogTitle = 'Create New';
       this.action_button_text = 'Submit';
@@ -74,8 +73,8 @@ export class CreateContactComponent implements OnInit {
       // Access the form here and set the value to the objects property/value
       this.createContactForm.get('first_name').setValue(this.data.contact.first_name);
       this.createContactForm.get('last_name').setValue(this.data.contact.last_name);
-      this.createContactForm.get('email_address').setValue(this.data.contact.email);
-      this.createContactForm.get('phone_number').setValue(this.data.contact.phone);
+      this.createContactForm.get('email').setValue(this.data.contact.email);
+      this.createContactForm.get('phone').setValue(this.data.contact.phone);
       this.createContactForm.get('title').setValue(this.data.contact.title);
       this.createContactForm.get('position').setValue(this.data.contact.position);
       this.createContactForm.get('affiliation').setValue(this.data.contact.affiliation);

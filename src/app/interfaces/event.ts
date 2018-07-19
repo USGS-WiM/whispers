@@ -15,4 +15,5 @@ export interface Event extends History {
     event_type_string: string;
     event_type: number;
     id: number;
+    permission_source: string;
 }

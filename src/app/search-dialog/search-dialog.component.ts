@@ -418,6 +418,14 @@ export class SearchDialogComponent implements OnInit {
           this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.administrative_level_two, 'name'));
+
+          if (this.data.query && this.data.query["administrative_level_two"].length > 0) {
+            for (const index in adminLevelTwos) {
+              if (this.data.query["administrative_level_two"].some(function (el) { return el === adminLevelTwos[index] })) {
+                this.dropdownSetup(this.adminLevelTwoControl, this.selectedAdminLevelTwos, adminLevelTwos[index]);
+              }
+            }
+          }
         },
         error => {
           this.errorMessage = <any>error;

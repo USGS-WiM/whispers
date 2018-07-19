@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>
-  <i class="material-icons">person_add</i> Create New Contact</h1>
+  <i class="material-icons">person_add</i> {{dialogTitle}} Contact</h1>
 <mat-dialog-content>
   <form [formGroup]="createContactForm">
 
@@ -51,6 +51,6 @@
 <mat-dialog-actions>
 
   <button mat-button (click)="this.createContactDialogRef.close('cancel');">Cancel</button>
-  <button mat-button type="submit" [disabled]="createContactForm.invalid" (click)="onSubmit(createContactForm.value)">Submit</button>
+  <button mat-button type="submit" [disabled]="createContactForm.invalid" (click)="onSubmit(createContactForm.value)">{{action_button_text}}</button>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

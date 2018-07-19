@@ -33,11 +33,11 @@
               <i class="material-icons">
                   add_box
               </i>  Add</button>
-            <button mat-button color="accent">
+            <button mat-button color="accent" (click)="openEditContactDialog()">
                 <i class="material-icons">
                     edit
                 </i>  Edit</button>
-            <button mat-button color="accent">
+            <button mat-button color="accent" (click)="removeContact()">
                 <i class="material-icons">
                     remove_circle
                 </i>  Delete</button>
@@ -53,7 +53,7 @@
                   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
                 </mat-form-field> -->
 
-          <mat-table [dataSource]="contactsDataSource" matSort>
+          <mat-table [dataSource]="contactsDataSource" matSort matSortActive="last_name" matSortDirection="asc">
 
             <!-- Selection column -->
             <ng-container matColumnDef="select">

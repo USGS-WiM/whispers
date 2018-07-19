@@ -101,6 +101,12 @@
               <mat-cell *matCellDef="let contact"> {{contact.organization}} </mat-cell>
             </ng-container>
 
+            <!-- Permission Source Column -->
+            <ng-container matColumnDef="permission_source">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Permission Source </mat-header-cell>
+              <mat-cell *matCellDef="let contact"> {{contact.permission_source}} </mat-cell>
+            </ng-container>
+
             <mat-header-row *matHeaderRowDef="contactDisplayedColumns"></mat-header-row>
             <mat-row *matRowDef="let event; columns: contactDisplayedColumns;"></mat-row>
           </mat-table>
@@ -206,6 +212,12 @@
                 </span>
                 <span *ngIf="event.eventdiagnoses.length == 0">TBD</span>
               </mat-cell>
+            </ng-container>
+
+            <!-- Permission Source Column -->
+            <ng-container matColumnDef="permission_source">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Permission Source </mat-header-cell>
+              <mat-cell *matCellDef="let event"> {{event.permission_source}} </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

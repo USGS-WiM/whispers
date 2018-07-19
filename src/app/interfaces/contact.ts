@@ -10,4 +10,5 @@ export interface Contact extends History {
     organization: number;
     owner_organization: number;
     affiliation: string;
+    permission_source: string;
 }

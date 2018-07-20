@@ -101,7 +101,12 @@
         </div>
         <p>
 
+
+
           <div id="privileged-event-data" class="privileged-event-data">
+
+            <mat-divider [inset]="true"></mat-divider>
+            <br>
             <label class="event-detail-label">Privileged Event Data</label>
             <p>
               <span class="text-larger">You have
@@ -151,6 +156,7 @@
                     <th class="limit-width">Sick Estimate </th>
                     <th class="limit-width">Dead Estimate</th>
                     <th>Diagnosis</th>
+                    <th>Diagnosis Basis</th>
                   </tr>
 
                   <tr *ngFor="let loc_species of eventLocationSpecies">
@@ -179,6 +185,19 @@
                       </span>
                       <span *ngIf="loc_species.species_diagnosis.length === 0">To Be Determined</span>
                     </td>
+
+                    <td>
+                      <span *ngIf="loc_species.species_diagnosis.length > 0">
+                        <span *ngFor="let species_diagnosis of loc_species.species_diagnosis">
+            
+                          <span *ngIf="species_diagnosis.basis_of_dx">{{species_diagnosis.basis_of_dx}}</span>
+                        
+      
+                        </span>
+                      </span>
+                      <span *ngIf="loc_species.species_diagnosis.length === 0">To Be Determined</span>
+                    </td>
+
                   </tr>
                 </table>
 

@@ -95,7 +95,7 @@ export class EventService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     })
 
-    return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL+eventID, options)
+    return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL + eventID, options)
       .map((response: Response) => <EventDetail>response.json())
       .catch(this.handleError);
   }

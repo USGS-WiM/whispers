@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>
-  <i class="material-icons">person_add</i> Create New Contact</h1>
+  <i class="material-icons">person_add</i> {{dialogTitle}} Contact</h1>
 <mat-dialog-content>
   <form [formGroup]="createContactForm">
 
@@ -16,12 +16,12 @@
       </mat-form-field>
 
       <mat-form-field class="form-control">
-        <input matInput placeholder="Email Address" formControlName="email_address" required>
-        <mat-error *ngIf="createContactForm.get('email_address').invalid">{{getErrorMessage('email_address')}}</mat-error>
+        <input matInput placeholder="Email Address" formControlName="email" required>
+        <mat-error *ngIf="createContactForm.get('email').invalid">{{getErrorMessage('email')}}</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-control">
-        <input matInput placeholder="Phone Number" formControlName="phone_number">
+        <input matInput placeholder="Phone Number" formControlName="phone">
       </mat-form-field>
 
       <mat-form-field class="form-control">
@@ -51,6 +51,6 @@
 <mat-dialog-actions>
 
   <button mat-button (click)="this.createContactDialogRef.close('cancel');">Cancel</button>
-  <button mat-button type="submit" [disabled]="createContactForm.invalid" (click)="onSubmit(createContactForm.value)">Submit</button>
+  <button mat-button type="submit" [disabled]="createContactForm.invalid" (click)="onSubmit(createContactForm.value)">{{action_button_text}}</button>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

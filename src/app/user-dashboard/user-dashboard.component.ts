@@ -1,12 +1,17 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
+
+import { MatSnackBar } from '@angular/material';
 
 import { ContactService } from '@app/services/contact.service';
 
 import { Contact } from '@interfaces/contact';
 import { EventSummary } from '@interfaces/event-summary';
+
+import { CreateContactComponent } from '@create-contact/create-contact.component';
 
 import { EventService } from '@services/event.service';
 
@@ -20,6 +25,8 @@ export class UserDashboardComponent implements OnInit {
 
   dataSource: MatTableDataSource<EventSummary>;
   contactsDataSource: MatTableDataSource<Contact>;
+
+  createContactDialogRef: MatDialogRef<CreateContactComponent>;
 
   errorMessage;
   events;
@@ -36,16 +43,18 @@ export class UserDashboardComponent implements OnInit {
     'administrativelevelones',
     'administrativeleveltwos',
     'species',
-    'eventdiagnoses'
+    'eventdiagnoses',
+    'permission_source'
   ];
 
   contactDisplayedColumns = [
     'select',
-    'first_name',
     'last_name',
+    'first_name',
     'phone_number',
     'email_address',
-    'organization'
+    'organization',
+    'permission_source'
   ];
 
   @ViewChild('eventPaginator') paginator: MatPaginator;
@@ -57,8 +66,10 @@ export class UserDashboardComponent implements OnInit {
   constructor(
     private _eventService: EventService,
     private _contactService: ContactService,
+    private dialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public snackBar: MatSnackBar
   ) {
 
   }
@@ -110,6 +121,122 @@ export class UserDashboardComponent implements OnInit {
           !this.dataSource.sort ? this.dataSource.sort = this.sort : null;
       }
     });
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+  openCreateContactDialog() {
+    this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      minWidth: '60%',
+      data: {
+        contact_action: 'create'
+      }
+      // height: '75%'
+    });
+
+    this.createContactDialogRef.afterClosed()
+        .subscribe(
+          () => {
+            this._contactService.getContacts()
+              .subscribe(
+                (usercontacts) => {
+                  this.selection.clear();
+
+                  this.contacts = usercontacts;
+                  this.contactsDataSource = new MatTableDataSource(this.contacts);
+                  this.contactsDataSource.paginator = this.contactPaginator;
+                  this.contactsDataSource.sort = this.contactSort;
+                },
+                error => {
+                  this.errorMessage = <any>error;
+                }
+              );
+          },
+          error => {
+            this.errorMessage = <any>error;
+          }
+        );
+  }
+
+  openEditContactDialog() {
+    
+    // Add code to determine how many are selected
+    
+    console.log(this.selection.selected);
+
+    if (this.selection.selected.length > 1) {
+      alert('you have too many contacts selected for edit. select only one.');
+    } else if (this.selection.selected.length == 1) {
+      this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+        minWidth: '60%',
+        data: {
+          contact_action: 'edit',
+          contact: this.selection.selected[0]
+        }
+        // height: '75%'
+      });
+
+      // Add listener here that updates contacts when dialog is close?
+      this.createContactDialogRef.afterClosed()
+        .subscribe(
+          () => {
+            this._contactService.getContacts()
+              .subscribe(
+                (usercontacts) => {
+                  this.selection.clear();
+
+                  this.contacts = usercontacts;
+                  this.contactsDataSource = new MatTableDataSource(this.contacts);
+                  this.contactsDataSource.paginator = this.contactPaginator;
+                  this.contactsDataSource.sort = this.contactSort;
+                },
+                error => {
+                  this.errorMessage = <any>error;
+                }
+              );
+          },
+          error => {
+            this.errorMessage = <any>error;
+          }
+        );
+      ////////////////////////////////////////////////////////////////////
+    } 
+  }
+
+  removeContact() {
+
+    if (this.selection.selected.length > 1) {
+      alert('you have too many contacts selected for edit. select only one.');
+    } else if (this.selection.selected.length == 1) {
+      this._contactService.remove(this.selection.selected[0])
+      .subscribe(
+        () => {
+          this._contactService.getContacts()
+            .subscribe(
+              (usercontacts) => {
+                this.selection.clear();
+
+                this.contacts = usercontacts;
+                this.contactsDataSource = new MatTableDataSource(this.contacts);
+                this.contactsDataSource.paginator = this.contactPaginator;
+                this.contactsDataSource.sort = this.contactSort;
+
+                this.openSnackBar('Contact Removed', 'OK', 5000);
+              },
+              error => {
+                this.errorMessage = <any>error;
+              }
+            );
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      )
+    }
   }
 
   applyFilter(filterValue: string) {

@@ -23,7 +23,7 @@ export class ContactService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.CONTACTS_URL, options)
+    return this._http.get(APP_SETTINGS.CONTACTS_URL + 'user_contacts', options)
       .map((response: Response) => <any[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
@@ -48,6 +48,17 @@ export class ContactService {
     });
 
     return this._http.put(APP_SETTINGS.CONTACTS_URL + formValue.id + '/', formValue, options)
+      .map((response: Response) => <Contact>response.json())
+      .catch(this.handleError);
+  }
+
+  public remove(formValue: Contact): Observable<Contact> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.delete(APP_SETTINGS.CONTACTS_URL + formValue.id + '/', options)
       .map((response: Response) => <Contact>response.json())
       .catch(this.handleError);
   }

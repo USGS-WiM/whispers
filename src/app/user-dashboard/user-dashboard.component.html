@@ -29,15 +29,15 @@
     
         <div class="results-card-title-row">
           <span class="results-button-row">
-            <button mat-button color="accent" (click)="openSearchDialog()">
+            <button mat-button color="accent" (click)="openCreateContactDialog()">
               <i class="material-icons">
                   add_box
               </i>  Add</button>
-            <button mat-button color="accent">
+            <button mat-button color="accent" (click)="openEditContactDialog()">
                 <i class="material-icons">
                     edit
                 </i>  Edit</button>
-            <button mat-button color="accent">
+            <button mat-button color="accent" (click)="removeContact()">
                 <i class="material-icons">
                     remove_circle
                 </i>  Delete</button>
@@ -53,7 +53,7 @@
                   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
                 </mat-form-field> -->
 
-          <mat-table [dataSource]="contactsDataSource" matSort>
+          <mat-table [dataSource]="contactsDataSource" matSort matSortActive="last_name" matSortDirection="asc">
 
             <!-- Selection column -->
             <ng-container matColumnDef="select">
@@ -99,6 +99,12 @@
             <ng-container matColumnDef="organization">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Organization </mat-header-cell>
               <mat-cell *matCellDef="let contact"> {{contact.organization}} </mat-cell>
+            </ng-container>
+
+            <!-- Permission Source Column -->
+            <ng-container matColumnDef="permission_source">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Permission Source </mat-header-cell>
+              <mat-cell *matCellDef="let contact"> {{contact.permission_source}} </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="contactDisplayedColumns"></mat-header-row>
@@ -206,6 +212,12 @@
                 </span>
                 <span *ngIf="event.eventdiagnoses.length == 0">TBD</span>
               </mat-cell>
+            </ng-container>
+
+            <!-- Permission Source Column -->
+            <ng-container matColumnDef="permission_source">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Permission Source </mat-header-cell>
+              <mat-cell *matCellDef="let event"> {{event.permission_source}} </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

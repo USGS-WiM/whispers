@@ -12,6 +12,8 @@ export class APP_SETTINGS {
     public static get API_USERNAME(): string { return 'bdraper'; }
     public static get API_PASSWORD(): string { return '12347890'; }
 
+    public static get IS_LOGGEDIN(): boolean { return (!!sessionStorage.getItem('username') && !!sessionStorage.getItem('password')); }
+
     public static get DEFAULT_COUNTRY(): string { return 'USA'; }
 
     public static get VERSION() {

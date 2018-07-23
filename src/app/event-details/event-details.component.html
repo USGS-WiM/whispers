@@ -101,12 +101,16 @@
         </div>
         <p>
 
-
-
           <div id="privileged-event-data" class="privileged-event-data">
 
             <mat-divider [inset]="true"></mat-divider>
             <br>
+            <div class="event-detail-action-bar">
+              <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEvent(id)">
+                <i class="material-icons">edit</i> Edit Event</button>
+              <button mat-raised-button color="primary" class="event-detail-action-button">
+                <i class="material-icons">add</i> Add Event Diagnosis</button>
+            </div>
             <label class="event-detail-label">Privileged Event Data</label>
             <p>
               <span class="text-larger">You have

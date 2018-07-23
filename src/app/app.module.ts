@@ -78,6 +78,7 @@ import { SavedSearchesComponent } from './saved-searches/saved-searches.componen
 import { DatePipe } from '@angular/common';
 import { EventSubmissionConfirmComponent } from './event-submission/event-submission-confirm/event-submission-confirm.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
+import { EditEventComponent } from './edit-event/edit-event.component';
 
 
 @NgModule({
@@ -96,6 +97,7 @@ import { AuthenticationComponent } from './authentication/authentication.compone
     SavedSearchesComponent,
     EventSubmissionConfirmComponent,
     AuthenticationComponent,
+    EditEventComponent,
   ],
   imports: [
     BrowserModule,

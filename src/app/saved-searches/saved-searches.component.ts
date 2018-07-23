@@ -47,7 +47,7 @@ export class SavedSearchesComponent implements OnInit {
 
   ngOnInit() {
     
-    this._searchService.getSearches()
+    this._searchService.getUserDashboardSearches()
       .subscribe(
         (searches) => {
           this.searches = searches;

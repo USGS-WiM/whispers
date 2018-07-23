@@ -15,6 +15,8 @@ import { CreateContactComponent } from '@create-contact/create-contact.component
 
 import { EventService } from '@services/event.service';
 
+import { APP_SETTINGS } from '@app/app.settings';
+
 
 @Component({
   selector: 'app-user-dashboard',
@@ -33,6 +35,8 @@ export class UserDashboardComponent implements OnInit {
   contacts;
 
   selection;
+
+  username = APP_SETTINGS.API_USERNAME;
 
   displayedColumns = [
     'id',

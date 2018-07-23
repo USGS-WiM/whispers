@@ -30,6 +30,9 @@
       "@about/*": [
         "app/about/*"
       ],
+      "@authentication/*": [
+        "app/authentication/*"
+      ],
       "@pipes/*": [
         "app/pipes/*"
       ]

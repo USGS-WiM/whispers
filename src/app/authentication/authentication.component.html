@@ -1,3 +1,27 @@
-<p>
-  authentication works!
-</p>
+<h1 mat-dialog-title>
+  <i class="material-icons">input</i> Login to WHISPers</h1>
+<mat-dialog-content>
+  <form [formGroup]="loginForm">
+
+    <div class="vertical-form-container">
+
+      <mat-form-field class="form-control">
+        <input matInput placeholder="Username" formControlName="username">
+        <mat-error *ngIf="loginForm.get('username').invalid">{{getErrorMessage('username')}}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-control">
+        <input matInput placeholder="Password" formControlName="password" required required [type]="hide ? 'password' : 'text'">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+        <mat-error *ngIf="loginForm.get('password').invalid">{{getErrorMessage('password')}}</mat-error>
+      </mat-form-field>
+    </div>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+
+  <button mat-button (click)="this.authenticationDialogRef.close('cancel');">Cancel</button>
+  <button mat-button type="submit" [disabled]="loginForm.invalid" (click)="onSubmit(loginForm.value)">Login</button>
+  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+</mat-dialog-actions>

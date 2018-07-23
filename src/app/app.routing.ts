@@ -7,15 +7,16 @@ import { EventSubmissionComponent } from './event-submission/event-submission.co
 import { DiagnosticServicesComponent } from './diagnostic-services/diagnostic-services.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { CreateContactComponent } from '@app/create-contact/create-contact.component';
+import { AuthenticationGuard } from '@authentication/authentication.guard';
 
 export const ROUTES: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
     { path: 'event/:id', component: EventDetailsComponent },
-    { path: 'eventsubmission', component: EventSubmissionComponent },
-    { path: 'diagnostic', component: DiagnosticServicesComponent },
-    { path: 'userdashboard', component: UserDashboardComponent },
-    { path: 'createcontact', component: CreateContactComponent }
+    { path: 'eventsubmission', component: EventSubmissionComponent, canActivate: [AuthenticationGuard] },
+    { path: 'diagnostic', component: DiagnosticServicesComponent, canActivate: [AuthenticationGuard] },
+    { path: 'userdashboard', component: UserDashboardComponent, canActivate: [AuthenticationGuard] },
+    { path: 'createcontact', component: CreateContactComponent, canActivate: [AuthenticationGuard] }
     // {
     //     path: 'admin', 
     //     component: AdminComponent,

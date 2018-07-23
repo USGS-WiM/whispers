@@ -63,10 +63,10 @@ export class CreateContactComponent implements OnInit {
 
   ngOnInit() {
 
-    if (this.data.contact_action == 'create') {
+    if (this.data.contact_action === 'create') {
       this.dialogTitle = 'Create New';
       this.action_button_text = 'Submit';
-    } else if (this.data.contact_action == 'edit') {
+    } else if (this.data.contact_action === 'edit') {
       this.dialogTitle = 'Edit';
       this.action_button_text = 'Update';
 
@@ -86,9 +86,8 @@ export class CreateContactComponent implements OnInit {
     this.organizationService.getOrganizations()
       .subscribe(
         organizations => {
-          this.organizations = organizations
-          
-          if (this.data.contact_action == 'edit') {
+          this.organizations = organizations;
+          if (this.data.contact_action === 'edit') {
             contactForm.get('organization').setValue(this.data.contact.organization.toString());
           }
         },
@@ -115,7 +114,7 @@ export class CreateContactComponent implements OnInit {
 
     this.submitLoading = true;
 
-    if (this.data.contact_action == 'create') {
+    if (this.data.contact_action === 'create') {
       this.contactService.create(formValue)
         .subscribe(
           (contact) => {
@@ -129,7 +128,7 @@ export class CreateContactComponent implements OnInit {
             this.openSnackBar('Error. Contact not Created. Error message: ' + error, 'OK', 8000);
           }
         );
-    } else if (this.data.contact_action == 'edit') {
+    } else if (this.data.contact_action === 'edit') {
       formValue.id = this.data.contact.id;
       this.contactService.update(formValue)
         .subscribe(

@@ -1,0 +1,13 @@
+.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-control {
+    width: 18em; // margin: 10px;
+}

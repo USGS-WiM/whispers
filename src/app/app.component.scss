@@ -71,19 +71,21 @@
 }
 
 .colophon {
-    font-size:x-small;
-    // padding: 5px;
+    font-size: x-small; // padding: 5px;
     // bottom: 2px;
     // position: absolute;
-    vertical-align: bottom;
-    // height: 50px;
+    vertical-align: bottom; // height: 50px;
     line-height: 1.5em;
-  }
+}
 
-  .version-span {
-      float: right;
-  }
-  
-  .test-data-warning {
-      color: darkred;
-  }
+.version-span {
+    float: right;
+}
+
+.test-data-warning {
+    color: darkred;
+}
+
+.text-small {
+    font-size: small;
+}

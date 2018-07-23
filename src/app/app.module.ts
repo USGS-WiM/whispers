@@ -99,6 +99,7 @@ import { CurrentUserService } from '@app/services/current-user.service';
     SavedSearchesComponent,
     EventSubmissionConfirmComponent,
     AuthenticationComponent,
+    EditEventComponent,
   ],
   imports: [
     BrowserModule,

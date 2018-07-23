@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { MatDialog, MatDialogRef } from '@angular/material';
 declare let L: any;
 
 import 'rxjs/add/operator/switchMap';
 import { EventService } from '@services/event.service';
 import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
-
 
 import { EventDetail } from '@interfaces/event-detail';
 import { LocationSpecies } from '@interfaces/location-species';
@@ -21,6 +21,8 @@ export class EventDetailsComponent implements OnInit {
   id: string;
   map;
   states = [];
+
+  editEventDialogRef: MatDialogRef<EditEventComponent>;
 
   eventData: EventDetail;
   eventLocationSpecies: LocationSpecies[] = [];
@@ -54,8 +56,6 @@ export class EventDetailsComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
 
-      // TODO: replace this line with actual request to eventDetails service, using id
-      //this.eventData = this.eventService.getSampleEventDetail(this.id);
       // Actual request to event details service, using id
       this._eventService.getEventDetails(this.id)
       .subscribe(
@@ -104,6 +104,11 @@ export class EventDetailsComponent implements OnInit {
       }).addTo(this.map);
 
     }, 500);*/
+  }
+
+  editEvent(id:string){
+    // Open dialog for editing event
+    
   }
 
 

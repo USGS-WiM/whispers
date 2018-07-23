@@ -9,8 +9,8 @@ export class APP_SETTINGS {
     private static _environment: string = 'development';
     private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersdev.wim.usgs.gov/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
     public static set environment(env: string) { this._environment = env; }
-    public static get API_USERNAME(): string { return 'bdraper'; }
-    public static get API_PASSWORD(): string { return '12347890'; }
+    public static get API_USERNAME(): string { return 'admin'; }
+    public static get API_PASSWORD(): string { return 'whispersadmin'; }
 
     public static get IS_LOGGEDIN(): boolean { return (!!sessionStorage.getItem('username') && !!sessionStorage.getItem('password')); }
 

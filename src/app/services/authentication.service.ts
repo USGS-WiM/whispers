@@ -17,34 +17,39 @@ export class AuthenticationService {
 
   user: User;
 
-  constructor(private _http: Http, private router: Router, private currentUserService: CurrentUserService) {
+  constructor(
+    private _http: Http,
+    private router: Router,
+    private currentUserService: CurrentUserService
+  ) {
 
   }
 
   login(username: string, password: string) {
     const options = new RequestOptions({ headers: new Headers({ 'Authorization': 'Basic ' + btoa(username + ':' + password) }) });
 
+    const self = this;
     return this._http.post(APP_SETTINGS.AUTH_URL, null, options)
       .map((res: any) => {
-        this.user = res.json();
-        if (this.user.is_staff) {
+        self.user = res.json();
+        if (self.user.is_staff) {
           sessionStorage.setItem('username', username);
           sessionStorage.setItem('password', password);
-          sessionStorage.setItem('first_name', this.user.first_name);
-          sessionStorage.setItem('last_name', this.user.last_name);
-          sessionStorage.setItem('email', this.user.email);
-          sessionStorage.setItem('is_staff', this.user.is_staff.toString());
-          sessionStorage.setItem('is_superuser', this.user.is_superuser.toString());
-          sessionStorage.setItem('is_active', this.user.is_active.toString());
-          sessionStorage.setItem('role', this.user.role.toString());
-          sessionStorage.setItem('organization', this.user.organization.toString());
-          sessionStorage.setItem('last_login', this.user.last_login);
-          sessionStorage.setItem('active_key', this.user.active_key);
-          sessionStorage.setItem('user_status', this.user.user_status);
+          sessionStorage.setItem('first_name', self.user.first_name);
+          sessionStorage.setItem('last_name', self.user.last_name);
+          sessionStorage.setItem('email', self.user.email);
+          sessionStorage.setItem('is_staff', self.user.is_staff.toString());
+          sessionStorage.setItem('is_superuser', self.user.is_superuser.toString());
+          sessionStorage.setItem('is_active', self.user.is_active.toString());
+          sessionStorage.setItem('role', self.user.role.toString());
+          sessionStorage.setItem('organization', self.user.organization.toString());
+          sessionStorage.setItem('last_login', self.user.last_login);
+          sessionStorage.setItem('active_key', self.user.active_key);
+          sessionStorage.setItem('user_status', self.user.user_status);
 
-          // this.userLoggedIn$.emit(res);
+          // self.userLoggedIn$.emit(res);
           // this.currentUser.emit(res);
-          this.currentUserService.updateCurrentUser(this.user);
+          this.currentUserService.updateCurrentUser(self.user);
         } else {
           // TODO: do something more professional here
           alert('This user is not authorized!');
@@ -55,10 +60,10 @@ export class AuthenticationService {
 
   logout() {
 
-    this.router.navigate(['/login']);
+    //this.router.navigate(['/login']);
     // this.router.navigateByUrl('login');
     this.user = undefined;
-    this.currentUserService.updateCurrentUser({ 'first_name': 'Logged Out' });
+    this.currentUserService.updateCurrentUser({ 'username': '' });
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('password');
     sessionStorage.removeItem('first_name');

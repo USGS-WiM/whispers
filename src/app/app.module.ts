@@ -78,6 +78,9 @@ import { SavedSearchesComponent } from './saved-searches/saved-searches.componen
 import { DatePipe } from '@angular/common';
 import { EventSubmissionConfirmComponent } from './event-submission/event-submission-confirm/event-submission-confirm.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
+import { AuthenticationService } from '@app/services/authentication.service';
+import { AuthenticationGuard } from '@authentication/authentication.guard';
+import { CurrentUserService } from '@app/services/current-user.service';
 
 
 @NgModule({
@@ -142,6 +145,9 @@ import { AuthenticationComponent } from './authentication/authentication.compone
     MatBottomSheetModule
   ],
   providers: [
+    AuthenticationService,
+    AuthenticationGuard,
+    CurrentUserService,
     EventService,
     EventTypeService,
     LegalStatusService,
@@ -170,7 +176,8 @@ import { AuthenticationComponent } from './authentication/authentication.compone
     CreateContactComponent,
     ConfirmComponent,
     EventSubmissionConfirmComponent,
-    AboutComponent
+    AboutComponent,
+    AuthenticationComponent
   ]
 })
 export class AppModule { }

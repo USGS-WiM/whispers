@@ -25,6 +25,10 @@
       <span class="test-data-warning">DEVELOPMENT VERSION. DATA FOR TESTING PURPOSES ONLY.</span>
       <span class="spacer"></span>
       <span>
+        <span *ngIf="currentUser.username == ''" class="text-small">Logged Out</span>
+        <span *ngIf="currentUser.username !== ''" class="text-small">{{currentUser.first_name}} {{currentUser.last_name}}</span>
+      </span>
+      <span>
         <button mat-button aria-label="Create Event" (click)="navigateToEventSubmit()">
           <i class="material-icons">library_add</i>
           <span class="header-button-text">Create Event</span>
@@ -40,10 +44,16 @@
           <mat-icon class="icon">account_box</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item aria-label="Login">
+          <button mat-menu-item aria-label="Login" (click)="openAuthenticationDialog()" *ngIf="currentUser.username == ''">
             <mat-icon>account_box</mat-icon>
             <span class="header-button-text">Login</span>
           </button>
+
+          <button mat-menu-item aria-label="Logout" (click)="logout()" *ngIf="currentUser.username !== ''">
+            <mat-icon>account_box</mat-icon>
+            <span class="header-button-text">Logout</span>
+          </button>
+
           <button mat-menu-item aria-label="User Dashboard" (click)="openUserDashboard()">
             <mat-icon>dashboard</mat-icon>
             <span>User Dashboard</span>

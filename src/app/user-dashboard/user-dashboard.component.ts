@@ -22,7 +22,6 @@ import { RoleService } from '@services/role.service';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
 
-
 @Component({
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
@@ -43,7 +42,6 @@ export class UserDashboardComponent implements OnInit {
   roles;
 
   selection;
-
   currentUser;
 
   username = APP_SETTINGS.API_USERNAME;

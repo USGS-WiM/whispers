@@ -60,27 +60,27 @@ export class EventDetailsComponent implements OnInit {
 
       // Actual request to event details service, using id
       this._eventService.getEventDetails(this.id)
-      .subscribe(
-        (eventdetails) => {
-          this.eventData = eventdetails;
+        .subscribe(
+          (eventdetails) => {
+            this.eventData = eventdetails;
 
-          for (const event_location of this.eventData.event_locations) {
-            for (const location_species of event_location.location_species) {
-              location_species.administrative_level_two_string = event_location.administrative_level_two_string;
-              location_species.administrative_level_one_string = event_location.administrative_level_one_string;
-              location_species.country_string = event_location.country_string;
-              this.eventLocationSpecies.push(location_species);
+            for (const event_location of this.eventData.event_locations) {
+              for (const location_species of event_location.location_species) {
+                location_species.administrative_level_two_string = event_location.administrative_level_two_string;
+                location_species.administrative_level_one_string = event_location.administrative_level_one_string;
+                location_species.country_string = event_location.country_string;
+                this.eventLocationSpecies.push(location_species);
+              }
+      
             }
-    
+            console.log('eventLocationSpecies:', this.eventLocationSpecies);
+            //this.speciesTableRows = this.eventLocationSpecies;
+            this.eventDataLoading = false;
+          },
+          error => {
+            this.errorMessage = <any>error;
           }
-          console.log('eventLocationSpecies:', this.eventLocationSpecies);
-          //this.speciesTableRows = this.eventLocationSpecies;
-          this.eventDataLoading = false;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+        );
 
     });
 
@@ -117,6 +117,38 @@ export class EventDetailsComponent implements OnInit {
       // minWidth: 200
       // height: '75%'
     });
+    
+    this.editEventDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this._eventService.getEventDetails(this.id)
+            .subscribe(
+              (eventdetails) => {
+                this.eventData = eventdetails;
+
+                this.eventLocationSpecies = [];
+                for (const event_location of this.eventData.event_locations) {
+                  for (const location_species of event_location.location_species) {
+                    location_species.administrative_level_two_string = event_location.administrative_level_two_string;
+                    location_species.administrative_level_one_string = event_location.administrative_level_one_string;
+                    location_species.country_string = event_location.country_string;
+                    this.eventLocationSpecies.push(location_species);
+                  }
+          
+                }
+                console.log('eventLocationSpecies:', this.eventLocationSpecies);
+                //this.speciesTableRows = this.eventLocationSpecies;
+                this.eventDataLoading = false;
+                    },
+                    error => {
+                      this.errorMessage = <any>error;
+                    }
+                  );
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
 
 

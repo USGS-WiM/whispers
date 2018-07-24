@@ -45,11 +45,11 @@
         </mat-radio-group>
       </div>
 
-      <!-- Complete -->
-      <!--<mat-form-field class="form-control">
-        <input matInput placeholder="Complete" formControlName="complete" required>
-        <mat-error *ngIf="editEventForm.get('complete').invalid">{{getErrorMessage('complete')}}</mat-error>
-      </mat-form-field>-->
+      <!-- Need to add more fields Legal status, etc -->
+
+      <!---------------------------------------------
+      
+      -------------------------------------------------->
 
       <!-- Event Owner -->
       <!--<mat-form-field class="form-control org-select">
@@ -66,6 +66,6 @@
 <mat-dialog-actions>
 
   <button mat-button (click)="this.editEventDialogRef.close('cancel');">Cancel</button>
-  <button mat-button type="submit" [disabled]="editEventForm.invalid" (click)="onSubmit(editEventForm.value)">{{action_button_text}}</button>
+  <button mat-button type="submit" [disabled]="editEventForm.invalid" (click)="updateEvent(editEventForm.value)">Update</button>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

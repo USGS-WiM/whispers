@@ -91,6 +91,9 @@ export class AppComponent implements OnInit {
     });
   }
 
+  navigateToHome() {
+    this.router.navigate([`../home/`], { relativeTo: this.route });
+  }
 
 
   navigateToEventSubmit() {

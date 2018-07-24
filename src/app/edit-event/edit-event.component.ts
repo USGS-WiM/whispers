@@ -98,8 +98,26 @@ export class EditEventComponent implements OnInit {
         );
   }
 
-  onSubmit(formValue) {
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
 
+  updateEvent(formValue) {
+    formValue.id = this.data.eventData.id;
+    this.eventService.update(formValue)
+      .subscribe(
+        (event) => {
+          this.submitLoading = false;
+          this.openSnackBar('Event Updated', 'OK', 5000);
+          this.editEventDialogRef.close();
+        },
+        error => {
+          this.submitLoading = false;
+          this.openSnackBar('Error. Event not updated. Error message: ' + error, 'OK', 8000);
+        }
+      );
   }
 
   getErrorMessage(formControlName) {

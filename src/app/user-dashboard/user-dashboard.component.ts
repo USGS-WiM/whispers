@@ -223,7 +223,7 @@ export class UserDashboardComponent implements OnInit {
         // height: '75%'
       });
 
-      // Add listener here that updates contacts when dialog is close?
+      // Add listener here that updates contacts when dialog is closed
       this.createContactDialogRef.afterClosed()
         .subscribe(
           () => {

@@ -10,6 +10,9 @@ import { AdministrativeLevelOneService } from '@services/administrative-level-on
 import { EventDetail } from '@interfaces/event-detail';
 import { LocationSpecies } from '@interfaces/location-species';
 import { EditEventComponent } from '@app/edit-event/edit-event.component';
+import { AddEventDiagnosisComponent } from '@app/add-event-diagnosis/add-event-diagnosis.component';
+import { EditSpeciesComponent } from '@app/edit-species/edit-species.component';
+import { AddSpeciesDiagnosisComponent } from '@app/add-species-diagnosis/add-species-diagnosis.component';
 
 @Component({
   selector: 'app-event-details',
@@ -24,6 +27,9 @@ export class EventDetailsComponent implements OnInit {
   states = [];
 
   editEventDialogRef: MatDialogRef<EditEventComponent>;
+  addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
+  editSpeciesDialogRef: MatDialogRef<EditSpeciesComponent>;
+  addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>;
 
   eventData: EventDetail;
   eventLocationSpecies: LocationSpecies[] = [];
@@ -149,6 +155,30 @@ export class EventDetailsComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
+  }
+
+  addEventDiagnosis(id:string){
+    // Open dialog for adding event diagnosis
+    this.addEventDiagnosisDialogRef = this.dialog.open(AddEventDiagnosisComponent, {
+      // minWidth: 200
+      // height: '75%'
+    });
+  }
+
+  editSpecies(id:string){
+    // Open dialog for adding event diagnosis
+    this.editSpeciesDialogRef = this.dialog.open(EditSpeciesComponent, {
+      // minWidth: 200
+      // height: '75%'
+    });
+  }
+
+  addSpeciesDiagnosis(id:string){
+    // Open dialog for adding event diagnosis
+    this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
+      // minWidth: 200
+      // height: '75%'
+    });
   }
 
 

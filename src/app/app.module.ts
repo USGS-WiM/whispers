@@ -83,6 +83,9 @@ import { AuthenticationService } from '@app/services/authentication.service';
 import { AuthenticationGuard } from '@authentication/authentication.guard';
 import { CurrentUserService } from '@app/services/current-user.service';
 import { RoleService } from '@app/services/role.service';
+import { AddEventDiagnosisComponent } from './add-event-diagnosis/add-event-diagnosis.component';
+import { EditSpeciesComponent } from './edit-species/edit-species.component';
+import { AddSpeciesDiagnosisComponent } from './add-species-diagnosis/add-species-diagnosis.component';
 
 
 @NgModule({
@@ -102,6 +105,9 @@ import { RoleService } from '@app/services/role.service';
     EventSubmissionConfirmComponent,
     AuthenticationComponent,
     EditEventComponent,
+    AddEventDiagnosisComponent,
+    EditSpeciesComponent,
+    AddSpeciesDiagnosisComponent,
   ],
   imports: [
     BrowserModule,
@@ -182,7 +188,10 @@ import { RoleService } from '@app/services/role.service';
     EventSubmissionConfirmComponent,
     AboutComponent,
     AuthenticationComponent,
-    EditEventComponent
+    EditEventComponent,
+    AddEventDiagnosisComponent,
+    EditSpeciesComponent,
+    AddSpeciesDiagnosisComponent
   ]
 })
 export class AppModule { }

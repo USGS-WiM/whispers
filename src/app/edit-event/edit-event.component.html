@@ -1,0 +1,71 @@
+<h1 mat-dialog-title>
+  <i class="material-icons">edit</i> Edit Event</h1>
+<mat-dialog-content>
+  <form [formGroup]="editEventForm">
+
+    <div class="vertical-form-container">
+
+      <!-- Event Reference -->
+      <mat-form-field class="form-control">
+        <input matInput placeholder="Event Reference" formControlName="event_reference" required>
+        <mat-error *ngIf="editEventForm.get('event_reference').invalid">{{getErrorMessage('event_reference')}}</mat-error>
+      </mat-form-field>
+
+      <!-- Event Type -->
+      <mat-form-field class="form-control org-select">
+        <mat-select placeholder="Event Type" formControlName="event_type">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let event_type of event_types" value="{{event_type.id}}">{{event_type.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Event Status -->
+      <mat-form-field class="form-control org-select">
+        <mat-select placeholder="Event Status" formControlName="event_status">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let event_status of event_statuses" value="{{event_status.id}}">{{event_status.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <!-- Public -->
+      <div class="form-control">
+        <mat-label>Public: </mat-label>
+        <mat-radio-group formControlName="public">
+          <mat-radio-button value="true"> Yes </mat-radio-button>
+          <mat-radio-button value="false"> No </mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <!-- Complete -->
+      <div class="form-control">
+        <mat-label>Complete: </mat-label>
+        <mat-radio-group formControlName="complete">
+          <mat-radio-button value="true"> Yes </mat-radio-button>
+          <mat-radio-button value="false"> No </mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <!-- Complete -->
+      <!--<mat-form-field class="form-control">
+        <input matInput placeholder="Complete" formControlName="complete" required>
+        <mat-error *ngIf="editEventForm.get('complete').invalid">{{getErrorMessage('complete')}}</mat-error>
+      </mat-form-field>-->
+
+      <!-- Event Owner -->
+      <!--<mat-form-field class="form-control org-select">
+        <mat-select placeholder="Event Owner" formControlName="event_organization">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>-->
+
+    </div>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+
+  <button mat-button (click)="this.editEventDialogRef.close('cancel');">Cancel</button>
+  <button mat-button type="submit" [disabled]="editEventForm.invalid" (click)="onSubmit(editEventForm.value)">{{action_button_text}}</button>
+  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+</mat-dialog-actions>

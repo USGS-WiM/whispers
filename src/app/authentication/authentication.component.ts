@@ -30,6 +30,8 @@ export class AuthenticationComponent implements OnInit {
 
   currentUser;
 
+  submitLoading = false;
+
   constructor(
     formBuilder: FormBuilder,
     public authenticationService: AuthenticationService,
@@ -65,7 +67,7 @@ export class AuthenticationComponent implements OnInit {
   }
 
   onSubmit(formValue: any) {
-    console.log(formValue);
+    this.submitLoading = true;
     if (sessionStorage.getItem('username')) {
       this.authenticationService.logout();
     }
@@ -73,11 +75,12 @@ export class AuthenticationComponent implements OnInit {
     this.authenticationService.login(formValue.username, formValue.password)
       .subscribe(
         (user: any) => {
-          // this.router.navigateByUrl('home')
+          this.submitLoading = false;
           this.authenticationDialogRef.close();
           this.openSnackBar('Successfully logged in!', 'OK', 5000);
         },
         (error) => {
+          this.submitLoading = false;
           this.authenticationErrorFlag = true;
           this.openSnackBar('Error. Failed to login. Error message: ' + error, 'OK', 8000);
         }

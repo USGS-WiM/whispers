@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   title = 'app';
 
   public whispersVersion = '';
+  //public isLoggedIn;
 
   public currentUser;
 
@@ -44,19 +45,17 @@ export class AppComponent implements OnInit {
 
     this.whispersVersion = APP_SETTINGS.VERSION;
 
+    //this.isLoggedIn = APP_SETTINGS.IS_LOGGEDIN;
+
     // if (sessionStorage.getItem('username') === '' || sessionStorage.getItem('username') === undefined) {
     //   this.currentUserService.updateCurrentUser({
     //     'username': ''
     //   });
     // }
 
-    if ((!!sessionStorage.getItem('username') && !!sessionStorage.getItem('password'))) {
-
-      this.currentUserService.updateCurrentUser({
-        'first_name': sessionStorage.getItem('first_name'),
-        'last_name': sessionStorage.getItem('last_name')
-      });
-
+    if (sessionStorage.getItem('currentUser')) {
+      const currentUserObj = JSON.parse(sessionStorage.getItem('currentUser'));
+      this.currentUserService.updateCurrentUser(currentUserObj);
     } else {
       this.currentUserService.updateCurrentUser({
         'first_name': '',
@@ -64,6 +63,21 @@ export class AppComponent implements OnInit {
         'username': ''
       });
     }
+
+    // if ((!!sessionStorage.getItem('username') && !!sessionStorage.getItem('password'))) {
+
+    //   this.currentUserService.updateCurrentUser({
+    //     'first_name': sessionStorage.getItem('first_name'),
+    //     'last_name': sessionStorage.getItem('last_name')
+    //   });
+
+    // } else {
+    //   this.currentUserService.updateCurrentUser({
+    //     'first_name': '',
+    //     'last_name': '',
+    //     'username': ''
+    //   });
+    // }
   }
 
   openUserDashboard() {

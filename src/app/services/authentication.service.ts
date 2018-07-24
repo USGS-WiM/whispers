@@ -47,6 +47,8 @@ export class AuthenticationService {
           sessionStorage.setItem('active_key', self.user.active_key);
           sessionStorage.setItem('user_status', self.user.user_status);
 
+          sessionStorage.setItem('currentUser', JSON.stringify(self.user));
+
           // self.userLoggedIn$.emit(res);
           // this.currentUser.emit(res);
           this.currentUserService.updateCurrentUser(self.user);
@@ -77,6 +79,8 @@ export class AuthenticationService {
     sessionStorage.removeItem('last_login');
     sessionStorage.removeItem('active_key');
     sessionStorage.removeItem('user_status');
+
+    sessionStorage.removeItem('currentUser');
 
     return Observable.of(true);
 

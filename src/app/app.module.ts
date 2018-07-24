@@ -82,6 +82,7 @@ import { AuthenticationComponent } from './authentication/authentication.compone
 import { AuthenticationService } from '@app/services/authentication.service';
 import { AuthenticationGuard } from '@authentication/authentication.guard';
 import { CurrentUserService } from '@app/services/current-user.service';
+import { RoleService } from '@app/services/role.service';
 
 
 @NgModule({
@@ -167,6 +168,7 @@ import { CurrentUserService } from '@app/services/current-user.service';
     ContactTypeService,
     CommentTypeService,
     OrganizationService,
+    RoleService,
     SearchService,
     SearchDialogService,
     DisplayValuePipe,

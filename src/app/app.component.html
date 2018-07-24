@@ -25,7 +25,11 @@
       <button mat-icon-button (click)="navigateToHome()">
         <mat-icon class="icon">home</mat-icon>
       </button>
-      <span class="test-data-warning">DEVELOPMENT VERSION. DATA FOR TESTING PURPOSES ONLY.</span>
+      <span class="test-data-warning">This website is under development and
+        <span>
+          <b>CONTAINS FICTICIOUS DATA</b>
+        </span>. Please see
+        <a href="http://www.nwhc.usgs.gov/WHISPers">nwhc.usgs.gov/WHISPers</a> for the current production version of WHISPers</span>
       <span class="spacer"></span>
       <span>
         <span *ngIf="currentUser.username == ''" class="text-small">Logged Out</span>

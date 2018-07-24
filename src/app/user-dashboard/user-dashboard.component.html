@@ -2,47 +2,62 @@
 
 <mat-card class="user-info-card">
   <mat-card-header>
-    <mat-card-title><b><span>{{ username }}</span></b></mat-card-title>
+    <mat-card-title>Username:
+      <b>
+        <span>{{ currentUser.username }} </span>
+      </b>
+    </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <span><label>Role: Partner User</label></span><br/>
-    <span><label>Affiliation: WI DNR</label></span><br/>
-    <span><label>Title: Biologist</label></span><br/>
-    <span><label>Positon: </label></span><br/>
-    <span><label>Address: 3456 State Hwy 67</label></span><br/>
-    <span><label>City: Ashland</label></span><br/>
-    <span><label>State: WI</label></span><br/>
-    <span><label>Postal Code: 53478</label></span><br/>
-    <span><label>Email: jsmith@dnr.mn.gov</label></span><br/>
-    <span><label>Phone: 608-456-3888, Ext 210</label></span><br/>
+    <span>
+      <label>First Name: {{currentUser.first_name}}</label>
+    </span>
+    <br/>
+    <span>
+      <label>Last Name: {{currentUser.last_name}}</label>
+    </span>
+    <br/>
+    <span>
+      <label>Role: {{currentUser.role | displayValue:'name':roles}}</label>
+    </span>
+    <br/>
+    <span>
+      <label>Organization: {{currentUser.organization | displayValue:'name':organizations}}</label>
+    </span>
+    <br/>
+    <span>
+      <label>Email: {{currentUser.email}}</label>
+    </span>
+    <br/>
+
   </mat-card-content>
   <mat-card-actions>
     <button mat-button>Update user information</button>
   </mat-card-actions>
 </mat-card>
 
-<mat-tab-group (selectedIndexChange)="_setDataSource($event)" >
-  <mat-tab label="Contacts"> 
-    
+<mat-tab-group (selectedIndexChange)="_setDataSource($event)">
+  <mat-tab label="Contacts">
+
     <mat-card>
       <mat-card-title>
-    
+
         <div class="results-card-title-row">
           <span class="results-button-row">
             <button mat-button color="accent" (click)="openCreateContactDialog()">
               <i class="material-icons">
-                  add_box
-              </i>  Add</button>
+                add_box
+              </i> Add</button>
             <button mat-button color="accent" (click)="openEditContactDialog()">
-                <i class="material-icons">
-                    edit
-                </i>  Edit</button>
-            <button mat-button color="accent" (click)="removeContact()">
-                <i class="material-icons">
-                    remove_circle
-                </i>  Delete</button>
+              <i class="material-icons">
+                edit
+              </i> Edit</button>
+            <button mat-button color="accent" (click)="openContactRemoveConfirm()">
+              <i class="material-icons">
+                remove_circle
+              </i> Delete</button>
           </span>
-    
+
         </div>
       </mat-card-title>
       <mat-card-content>
@@ -58,15 +73,11 @@
             <!-- Selection column -->
             <ng-container matColumnDef="select">
               <mat-header-cell *matHeaderCellDef>
-                <mat-checkbox (change)="$event ? masterToggle() : null"
-                              [checked]="selection.hasValue() && isAllSelected()"
-                              [indeterminate]="selection.hasValue() && !isAllSelected()">
+                <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
                 </mat-checkbox>
               </mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <mat-checkbox (click)="$event.stopPropagation()"
-                              (change)="$event ? selection.toggle(row) : null"
-                              [checked]="selection.isSelected(row)">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
                 </mat-checkbox>
               </mat-cell>
             </ng-container>
@@ -117,7 +128,7 @@
     </mat-card>
 
   </mat-tab>
-  
+
   <mat-tab label="Your Events">
 
     <mat-card>
@@ -127,7 +138,7 @@
           <span class="results-button-row">
             <button mat-button color="accent">
               <i class="material-icons">
-                  unarchive
+                unarchive
               </i> Export Data</button>
           </span>
 
@@ -230,7 +241,7 @@
     </mat-card>
 
   </mat-tab>
-  
+
   <mat-tab label="Saved Searches">
 
     <app-saved-searches></app-saved-searches>

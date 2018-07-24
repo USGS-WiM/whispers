@@ -9,6 +9,7 @@ import { AdministrativeLevelOneService } from '@services/administrative-level-on
 
 import { EventDetail } from '@interfaces/event-detail';
 import { LocationSpecies } from '@interfaces/location-species';
+import { EditEventComponent } from '@app/edit-event/edit-event.component';
 
 @Component({
   selector: 'app-event-details',
@@ -45,6 +46,7 @@ export class EventDetailsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private _eventService: EventService,
+    private dialog: MatDialog,
     private adminLevelOneService: AdministrativeLevelOneService) {
     this.eventLocationSpecies = [];
   }
@@ -108,7 +110,13 @@ export class EventDetailsComponent implements OnInit {
 
   editEvent(id:string){
     // Open dialog for editing event
-    
+    this.editEventDialogRef = this.dialog.open(EditEventComponent, {
+      data: {
+        eventData: this.eventData
+      }
+      // minWidth: 200
+      // height: '75%'
+    });
   }
 
 

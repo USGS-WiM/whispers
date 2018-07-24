@@ -77,6 +77,7 @@ import { SearchService } from '@app/services/search.service';
 import { SavedSearchesComponent } from './saved-searches/saved-searches.component';
 import { DatePipe } from '@angular/common';
 import { EventSubmissionConfirmComponent } from './event-submission/event-submission-confirm/event-submission-confirm.component';
+import { EditEventComponent } from './edit-event/edit-event.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { AuthenticationService } from '@app/services/authentication.service';
 import { AuthenticationGuard } from '@authentication/authentication.guard';
@@ -178,7 +179,8 @@ import { CurrentUserService } from '@app/services/current-user.service';
     ConfirmComponent,
     EventSubmissionConfirmComponent,
     AboutComponent,
-    AuthenticationComponent
+    AuthenticationComponent,
+    EditEventComponent
   ]
 })
 export class AppModule { }

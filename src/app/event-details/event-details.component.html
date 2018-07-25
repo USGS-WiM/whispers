@@ -113,8 +113,8 @@
             </div>
             <label class="event-detail-label">Privileged Event Data</label>
             <p>
-              <span class="text-larger">You have
-                <span>edit</span> privileges for this event</span>
+              <!-- <span class="text-larger">You have
+                <span>edit</span> privileges for this event</span> -->
               <table>
                 <tr>
                   <th>Event Owner</th>
@@ -149,7 +149,7 @@
               </table>
 
               <p>
-                <mat-card-subtitle>Privileged Species and Diagnosis Details</mat-card-subtitle>
+                <mat-card-subtitle>Affected Species Summary</mat-card-subtitle>
                 <div class="event-detail-action-bar-left">
                   <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpecies(id)">
                     <i class="material-icons">edit</i> Edit Species</button>
@@ -201,10 +201,10 @@
                     <td>
                       <span *ngIf="loc_species.species_diagnosis.length > 0">
                         <span *ngFor="let species_diagnosis of loc_species.species_diagnosis">
-            
+
                           <span *ngIf="species_diagnosis.basis_of_dx">{{species_diagnosis.basis_of_dx}}</span>
-                        
-      
+
+
                         </span>
                       </span>
                       <span *ngIf="loc_species.species_diagnosis.length === 0">To Be Determined</span>
@@ -215,6 +215,7 @@
 
                 <p>
                   <mat-card-subtitle>Contacts</mat-card-subtitle>
+                  <mat-card-subtitle>Event Location Details</mat-card-subtitle>
 
           </div>
 

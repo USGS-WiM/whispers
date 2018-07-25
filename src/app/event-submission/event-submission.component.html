@@ -217,10 +217,12 @@
                           <div class="horizontal-form-container">
                             <mat-form-field class="form-control">
                               <input matInput placeholder="Latitude" formControlName="latitude">
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('latitude').invalid">Invalid latitude</mat-error>
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
                               <input matInput placeholder="Longitude" formControlName="longitude">
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('longitude').invalid">Invalid longitude</mat-error>
                             </mat-form-field>
                           </div>
 

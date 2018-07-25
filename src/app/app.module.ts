@@ -86,6 +86,8 @@ import { RoleService } from '@app/services/role.service';
 import { AddEventDiagnosisComponent } from './add-event-diagnosis/add-event-diagnosis.component';
 import { EditSpeciesComponent } from './edit-species/edit-species.component';
 import { AddSpeciesDiagnosisComponent } from './add-species-diagnosis/add-species-diagnosis.component';
+import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
+import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 
 
 @NgModule({
@@ -166,6 +168,8 @@ import { AddSpeciesDiagnosisComponent } from './add-species-diagnosis/add-specie
     AdministrativeLevelTwoService,
     DiagnosisTypeService,
     DiagnosisService,
+    DiagnosisBasisService,
+    DiagnosisCauseService,
     SpeciesService,
     AgeBiasService,
     SexBiasService,

@@ -44,6 +44,8 @@ export class APP_SETTINGS {
     public static get SEX_BIASES_URL(): string { return this._API_ENDPOINT + 'sexbiases/'; }
     public static get DIAGNOSES_URL(): string { return this._API_ENDPOINT + 'diagnoses/'; }
     public static get DIAGNOSIS_TYPES_URL(): string { return this._API_ENDPOINT + 'diagnosistypes/'; }
+    public static get DIAGNOSIS_BASES_URL(): string { return this._API_ENDPOINT + 'diagnosisbases/'; }
+    public static get DIAGNOSIS_CAUSES_URL(): string { return this._API_ENDPOINT + 'diagnosiscauses/'; }
     public static get EVENT_DIAGNOSES_URL(): string { return this._API_ENDPOINT + 'eventdiagnoses/'; }
     public static get SPECIES_DIAGNOSIS_URL(): string { return this._API_ENDPOINT + 'speciesdiagnosis/'; }
     public static get PERMISSIONS_URL(): string { return this._API_ENDPOINT + 'permissions/'; }

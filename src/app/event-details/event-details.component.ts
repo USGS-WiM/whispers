@@ -160,6 +160,9 @@ export class EventDetailsComponent implements OnInit {
   addEventDiagnosis(id: string) {
     // Open dialog for adding event diagnosis
     this.addEventDiagnosisDialogRef = this.dialog.open(AddEventDiagnosisComponent, {
+      data: {
+        event_id: id
+      }
       // minWidth: 200
       // height: '75%'
     });

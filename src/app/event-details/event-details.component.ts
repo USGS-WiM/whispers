@@ -77,7 +77,7 @@ export class EventDetailsComponent implements OnInit {
                 location_species.country_string = event_location.country_string;
                 this.eventLocationSpecies.push(location_species);
               }
-      
+
             }
             console.log('eventLocationSpecies:', this.eventLocationSpecies);
             //this.speciesTableRows = this.eventLocationSpecies;
@@ -114,7 +114,7 @@ export class EventDetailsComponent implements OnInit {
     }, 500);*/
   }
 
-  editEvent(id:string){
+  editEvent(id: string) {
     // Open dialog for editing event
     this.editEventDialogRef = this.dialog.open(EditEventComponent, {
       data: {
@@ -123,7 +123,7 @@ export class EventDetailsComponent implements OnInit {
       // minWidth: 200
       // height: '75%'
     });
-    
+
     this.editEventDialogRef.afterClosed()
       .subscribe(
         () => {
@@ -140,16 +140,16 @@ export class EventDetailsComponent implements OnInit {
                     location_species.country_string = event_location.country_string;
                     this.eventLocationSpecies.push(location_species);
                   }
-          
+
                 }
                 console.log('eventLocationSpecies:', this.eventLocationSpecies);
                 //this.speciesTableRows = this.eventLocationSpecies;
                 this.eventDataLoading = false;
-                    },
-                    error => {
-                      this.errorMessage = <any>error;
-                    }
-                  );
+              },
+              error => {
+                this.errorMessage = <any>error;
+              }
+            );
         },
         error => {
           this.errorMessage = <any>error;
@@ -157,7 +157,7 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
-  addEventDiagnosis(id:string){
+  addEventDiagnosis(id: string) {
     // Open dialog for adding event diagnosis
     this.addEventDiagnosisDialogRef = this.dialog.open(AddEventDiagnosisComponent, {
       // minWidth: 200
@@ -165,7 +165,7 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
-  editSpecies(id:string){
+  editSpecies(id: string) {
     // Open dialog for adding event diagnosis
     this.editSpeciesDialogRef = this.dialog.open(EditSpeciesComponent, {
       // minWidth: 200
@@ -173,7 +173,7 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
-  addSpeciesDiagnosis(id:string){
+  addSpeciesDiagnosis(id: string) {
     // Open dialog for adding event diagnosis
     this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
       // minWidth: 200

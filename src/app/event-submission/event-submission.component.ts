@@ -119,6 +119,8 @@ export class EventSubmissionComponent implements OnInit {
 
   submitLoading = false;
 
+  latitudePattern: RegExp = (/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/);
+  longitudePattern: RegExp = (/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/);
 
   commonEventData = {
     species: [],
@@ -476,8 +478,8 @@ export class EventSubmissionComponent implements OnInit {
       country: [APP_UTILITIES.DEFAULT_COUNTRY_ID, Validators.required],
       administrative_level_one: [null, Validators.required],
       administrative_level_two: [null, Validators.required],
-      latitude: null,
-      longitude: null,
+      latitude: [null, Validators.pattern(this.latitudePattern)],
+      longitude: [null, Validators.pattern(this.longitudePattern)],
       land_ownership: [null, Validators.required],
       gnis_name: '',
       site_description: '',

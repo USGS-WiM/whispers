@@ -1,3 +1,18 @@
-<p>
-  edit-species works!
-</p>
+<h1 mat-dialog-title>
+    <i class="material-icons">edit</i> Edit Species</h1>
+  <mat-dialog-content>
+    <form [formGroup]="editSpeciesForm">
+  
+      <div class="vertical-form-container">
+  
+        <label>Edit the {{species}}</label>
+  
+      </div>
+  
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button (click)="this.editSpeciesDialogRef.close('cancel');">Cancel</button>
+    <button mat-button type="submit" [disabled]="editSpeciesForm.invalid" (click)="updateEvent(editSpeciesForm.value)">Update</button>
+    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+  </mat-dialog-actions>

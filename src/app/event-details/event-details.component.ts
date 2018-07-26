@@ -1,7 +1,11 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare let L: any;
+
+import { MatSnackBar } from '@angular/material';
 
 import 'rxjs/add/operator/switchMap';
 import { EventService } from '@services/event.service';
@@ -26,6 +30,8 @@ export class EventDetailsComponent implements OnInit {
   map;
   states = [];
 
+  locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
+
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
   editSpeciesDialogRef: MatDialogRef<EditSpeciesComponent>;
@@ -33,6 +39,8 @@ export class EventDetailsComponent implements OnInit {
 
   eventData: EventDetail;
   eventLocationSpecies: LocationSpecies[] = [];
+
+  selection;
 
   eventDataLoading = true;
 
@@ -50,14 +58,34 @@ export class EventDetailsComponent implements OnInit {
 
   errorMessage;
 
+  locationSpeciesDisplayedColumns = [
+    'select',
+    'species',
+    'location',
+    'population',
+    'sick',
+    'dead',
+    'sick_estimated',
+    'dead_estimated'
+  ];
+
+  @ViewChild(MatPaginator) locationSpeciesPaginator: MatPaginator;
+  @ViewChild(MatSort) locationSpeciesSort: MatSort;
+
   constructor(private route: ActivatedRoute,
     private _eventService: EventService,
     private dialog: MatDialog,
-    private adminLevelOneService: AdministrativeLevelOneService) {
+    private adminLevelOneService: AdministrativeLevelOneService,
+    public snackBar: MatSnackBar
+  ) {
     this.eventLocationSpecies = [];
   }
 
   ngOnInit() {
+
+    const initialSelection = [];
+    const allowMultiSelect = true;
+    this.selection = new SelectionModel<LocationSpecies>(allowMultiSelect, initialSelection);
 
     this.eventLocationSpecies = [];
 
@@ -79,7 +107,9 @@ export class EventDetailsComponent implements OnInit {
               }
 
             }
-            console.log('eventLocationSpecies:', this.eventLocationSpecies);
+            console.log('eventLocationSpecies:', this.eventData.event_locations);
+
+            this.locationSpeciesDataSource = new MatTableDataSource(this.eventLocationSpecies);
             //this.speciesTableRows = this.eventLocationSpecies;
             this.eventDataLoading = false;
           },
@@ -112,6 +142,12 @@ export class EventDetailsComponent implements OnInit {
       }).addTo(this.map);
 
     }, 500);*/
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
   }
 
   editEvent(id: string) {
@@ -160,17 +196,27 @@ export class EventDetailsComponent implements OnInit {
   addEventDiagnosis(id: string) {
     // Open dialog for adding event diagnosis
     this.addEventDiagnosisDialogRef = this.dialog.open(AddEventDiagnosisComponent, {
+      data: {
+        event_id: id
+      }
       // minWidth: 200
       // height: '75%'
     });
   }
 
   editSpecies(id: string) {
-    // Open dialog for adding event diagnosis
-    this.editSpeciesDialogRef = this.dialog.open(EditSpeciesComponent, {
-      // minWidth: 200
-      // height: '75%'
-    });
+    if (this.selection.selected.length > 1 || this.selection.selected.length == 0) {
+      this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
+    } else if (this.selection.selected.length === 1) {
+      // Open dialog for adding event diagnosis
+      this.editSpeciesDialogRef = this.dialog.open(EditSpeciesComponent, {
+        data: {
+          species: this.selection.selected[0]
+        }
+        // minWidth: 200
+        // height: '75%'
+      });
+    }
   }
 
   addSpeciesDiagnosis(id: string) {
@@ -179,6 +225,21 @@ export class EventDetailsComponent implements OnInit {
       // minWidth: 200
       // height: '75%'
     });
+  }
+
+  // From angular material table sample on material api reference site
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.locationSpeciesDataSource.data.length;
+    return numSelected == numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.locationSpeciesDataSource.data.forEach(row => this.selection.select(row));
   }
 
 

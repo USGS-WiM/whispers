@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList} from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare let L: any;
 
@@ -41,9 +41,11 @@ export class EventDetailsComponent implements OnInit {
   eventData: EventDetail;
   eventLocationSpecies: LocationSpecies[] = [];
 
-  selection;
+  selection = [];
 
   eventDataLoading = true;
+
+  viewPanelStates: Object;
 
   // speciesTableRows = [];
   // expanded: any = {};
@@ -73,6 +75,8 @@ export class EventDetailsComponent implements OnInit {
   @ViewChild(MatPaginator) locationSpeciesPaginator: MatPaginator;
   @ViewChild(MatSort) locationSpeciesSort: MatSort;
 
+  @ViewChildren(MatExpansionPanel) viewPanels: QueryList<MatExpansionPanel>;
+
   constructor(private route: ActivatedRoute,
     private _eventService: EventService,
     private dialog: MatDialog,
@@ -86,8 +90,7 @@ export class EventDetailsComponent implements OnInit {
 
     const initialSelection = [];
     const allowMultiSelect = true;
-    this.selection = new SelectionModel<LocationSpecies>(allowMultiSelect, initialSelection);
-
+    
     this.eventLocationSpecies = [];
 
     this.route.paramMap.subscribe(params => {
@@ -106,6 +109,10 @@ export class EventDetailsComponent implements OnInit {
                 location_species.country_string = event_location.country_string;
                 this.eventLocationSpecies.push(location_species);
               }
+            }
+            
+            for (let i = 0; i < this.eventData.event_locations.length; i++) {
+              this.selection[i] = new SelectionModel<LocationSpecies>(allowMultiSelect, initialSelection);
             }
             
             this.locationSpeciesDataSource = new MatTableDataSource(this.eventLocationSpecies);
@@ -177,6 +184,7 @@ export class EventDetailsComponent implements OnInit {
                   }
 
                 }
+
                 console.log('eventLocationSpecies:', this.eventLocationSpecies);
                 //this.speciesTableRows = this.eventLocationSpecies;
                 this.eventDataLoading = false;
@@ -203,14 +211,14 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
-  editSpecies(id: string) {
-    if (this.selection.selected.length > 1 || this.selection.selected.length == 0) {
+  editSpecies(id: string, index:number) {
+    if (this.selection[index].selected.length > 1 || this.selection[index].selected.length == 0) {
       this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
-    } else if (this.selection.selected.length === 1) {
+    } else if (this.selection[index].selected.length === 1) {
       // Open dialog for adding event diagnosis
       this.editSpeciesDialogRef = this.dialog.open(EditSpeciesComponent, {
         data: {
-          species: this.selection.selected[0]
+          species: this.selection[index].selected[0]
         }
         // minWidth: 200
         // height: '75%'
@@ -220,7 +228,9 @@ export class EventDetailsComponent implements OnInit {
         .subscribe(
           () => {
             this.refreshEvent();
-            this.selection.clear();
+            for (let i=0; i < this.selection.length; i++) {
+              this.selection[i].clear();
+            }
           },
           error => {
             this.errorMessage = <any>error;
@@ -230,6 +240,8 @@ export class EventDetailsComponent implements OnInit {
   }
 
   refreshEvent() {
+    this.viewPanelStates = new Object();
+    this.getViewPanelState(this.viewPanels);
     this._eventService.getEventDetails(this.id)
       .subscribe(
         (eventdetails) => {
@@ -248,11 +260,29 @@ export class EventDetailsComponent implements OnInit {
           //console.log('eventLocationSpecies:', this.eventLocationSpecies);
           //this.speciesTableRows = this.eventLocationSpecies;
           this.eventDataLoading = false;
+
+          setTimeout(() => {
+            this.setViewPanelState(this.viewPanels);
+          });
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
+  }
+
+  getViewPanelState(viewPanels: QueryList<MatExpansionPanel>) {
+    viewPanels.forEach((element, index) => {
+      this.viewPanelStates[index] = element.expanded;
+    });
+  }
+
+  setViewPanelState(viewPanels: QueryList<MatExpansionPanel>) {
+    viewPanels.forEach((element, index) => {
+      if (this.viewPanelStates[index]) {
+        element.open();
+      }
+    });
   }
 
   addSpeciesDiagnosis(id: string) {
@@ -288,17 +318,17 @@ export class EventDetailsComponent implements OnInit {
 
   // From angular material table sample on material api reference site
   /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
+  isAllSelected(i:number) {
+    const numSelected = this.selection[i].selected.length;
     const numRows = this.locationSpeciesDataSource.data.length;
     return numSelected == numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.locationSpeciesDataSource.data.forEach(row => this.selection.select(row));
+  masterToggle(i:number) {
+    this.isAllSelected(i) ?
+      this.selection[i].clear() :
+      this.locationSpeciesDataSource.data.forEach(row => this.selection[i].select(row));
   }
 
 

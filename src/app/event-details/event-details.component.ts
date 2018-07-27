@@ -12,6 +12,7 @@ import { EventService } from '@services/event.service';
 import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
 
 import { EventDetail } from '@interfaces/event-detail';
+import { EventLocation } from '@interfaces/event-location';
 import { LocationSpecies } from '@interfaces/location-species';
 import { EditEventComponent } from '@app/edit-event/edit-event.component';
 import { AddEventDiagnosisComponent } from '@app/add-event-diagnosis/add-event-diagnosis.component';
@@ -105,10 +106,8 @@ export class EventDetailsComponent implements OnInit {
                 location_species.country_string = event_location.country_string;
                 this.eventLocationSpecies.push(location_species);
               }
-
             }
-            console.log('eventLocationSpecies:', this.eventData.event_locations);
-
+            
             this.locationSpeciesDataSource = new MatTableDataSource(this.eventLocationSpecies);
             //this.speciesTableRows = this.eventLocationSpecies;
             this.eventDataLoading = false;
@@ -225,6 +224,29 @@ export class EventDetailsComponent implements OnInit {
       // minWidth: 200
       // height: '75%'
     });
+  }
+
+  // Determine comment type based on id, return for display in app along side comment
+  getCommentType(comment_id) {
+    let comment_type;
+    switch(comment_id) {
+      case 1:
+        comment_type = "Site description";
+        break;
+      case 2:
+        comment_type = "History";
+        break;
+      case 3:
+        comment_type = "Environmental factors";
+        break;
+      case 4:
+        comment_type = "Clinical signs";
+        break;
+      case 5:
+        comment_type = "General";
+        break;
+  }
+    return comment_type;
   }
 
   // From angular material table sample on material api reference site

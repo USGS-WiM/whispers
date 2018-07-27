@@ -149,6 +149,103 @@
               </table>
 
               <p>
+                <mat-card-subtitle>Event Location Details</mat-card-subtitle>
+                <mat-expansion-panel *ngFor="let eventLocation of eventData.event_locations">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{eventLocation.name}}
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  Onset date: {{eventLocation.start_date}}<br/>
+                  End date: {{eventLocation.end_date}}<br/>
+                  Location: {{eventLocation.administrative_level_one_string}}, {{eventLocation.administrative_level_two_string}}, {{eventLocation.country_string}}<br/>
+                  Land ownership: {{eventLocation.land_ownership}}<br/>
+                  <p>
+                  <div *ngIf="eventLocation.comments.length > 0" >
+                    <label *ngIf="eventLocation.comments" class="event-detail-label">Comments</label><br/>
+
+                    <span *ngFor="let comment of eventLocation.comments">
+                      <b>{{getCommentType(comment.comment_type)}}:</b> {{comment.comment}}<br/>
+                    </span>
+                  </div>
+                  <p> 
+                  <div *ngIf="eventLocation.location_species.length > 0">
+                    <label *ngIf="eventLocation.location_species" class="event-detail-label">Species</label><br/>
+
+                    <div class="results-table-div">
+                    
+                      <mat-table [dataSource]="eventLocation.location_species" matSort matSortActive="species" matSortDirection="asc">
+                        
+                        <div>
+                          <!-- Selection column -->
+                          <ng-container matColumnDef="select">
+                            <mat-header-cell *matHeaderCellDef>
+                              <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                              </mat-checkbox>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                              </mat-checkbox>
+                            </mat-cell>
+                          </ng-container>
+                          
+                          <!-- Species Column -->
+                          <ng-container matColumnDef="species">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Species </mat-header-cell>
+                            <mat-cell *matCellDef="let loc_species"> {{loc_species.species_string}} </mat-cell>
+                          </ng-container>
+              
+                          <!-- Location Column -->
+                          <ng-container matColumnDef="location">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Location </mat-header-cell>
+                            <mat-cell *matCellDef="let loc_species">
+                              <span>{{loc_species.administrative_level_two_string}}, {{loc_species.administrative_level_one_string}}</span>
+                              <br>
+                              <span>{{loc_species.country_string}}</span>
+                            </mat-cell>
+                          </ng-container>
+              
+                          <!-- Population Column -->
+                          <ng-container matColumnDef="population">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Population </mat-header-cell>
+                            <mat-cell *matCellDef="let loc_species"> {{loc_species.population_count}} </mat-cell>
+                          </ng-container>
+              
+                          <!-- Sick Count Column -->
+                          <ng-container matColumnDef="sick">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Sick </mat-header-cell>
+                            <mat-cell *matCellDef="let loc_species"> {{loc_species.sick_count}} </mat-cell>
+                          </ng-container>
+              
+                          <!-- Dead Count Column -->
+                          <ng-container matColumnDef="dead">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Dead </mat-header-cell>
+                            <mat-cell *matCellDef="let loc_species"> {{loc_species.dead_count}} </mat-cell>
+                          </ng-container>
+              
+                          <!-- Sick Count Estimated Column -->
+                          <ng-container matColumnDef="sick_estimated">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Sick Estimate </mat-header-cell>
+                            <mat-cell *matCellDef="let loc_species"> {{loc_species.sick_count_estimated}} </mat-cell>
+                          </ng-container>
+              
+                          <!-- Dead Count Estimated Column -->
+                          <ng-container matColumnDef="dead_estimated">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Dead Estimate </mat-header-cell>
+                            <mat-cell *matCellDef="let loc_species"> {{loc_species.dead_count_estimated}} </mat-cell>
+                          </ng-container>
+                        </div>
+            
+                        <mat-header-row *matHeaderRowDef="locationSpeciesDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let loc_species; columns: locationSpeciesDisplayedColumns;"></mat-row>
+                      </mat-table>
+            
+                      <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+
+              <p>
                 <mat-card-subtitle>Affected Species Summary</mat-card-subtitle>
                 <div class="event-detail-action-bar-left">
                   <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpecies(id)">
@@ -291,10 +388,7 @@
                         <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
                       </div>
                     </mat-card-content>
-                  </mat-card>   
-
-                <p>
-                  <mat-card-subtitle>Event Location Details</mat-card-subtitle>
+                  </mat-card>
 
           </div>
 

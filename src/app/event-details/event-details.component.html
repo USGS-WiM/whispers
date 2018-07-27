@@ -150,15 +150,8 @@
 
               <p>
                 <mat-card-subtitle>Event Location Details</mat-card-subtitle>
-                <div class="event-detail-action-bar-left">
-                  <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpecies(id)">
-                    <i class="material-icons">edit</i> Edit Species</button>
-                  <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addSpeciesDiagnosis(id)">
-                    <i class="material-icons">add</i> Add Species Diagnosis</button>
-                  <button mat-raised-button color="primary" class="event-detail-action-button">
-                    <i class="material-icons">edit</i> Edit Species Diagnosis</button>
-                </div>
-                <mat-expansion-panel *ngFor="let eventLocation of eventData.event_locations">
+                
+                <mat-expansion-panel *ngFor="let eventLocation of eventData.event_locations; let i = index" [attr.data-index]="i" (change)="panelDataChange()">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       {{eventLocation.name}}
@@ -178,6 +171,14 @@
                   </div>
                   <p> 
                   <div *ngIf="eventLocation.location_species.length > 0">
+                    <div class="event-detail-action-bar-left">
+                      <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpecies(id, i)">
+                        <i class="material-icons">edit</i> Edit Species</button>
+                      <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addSpeciesDiagnosis(id)">
+                        <i class="material-icons">add</i> Add Species Diagnosis</button>
+                      <button mat-raised-button color="primary" class="event-detail-action-button">
+                        <i class="material-icons">edit</i> Edit Species Diagnosis</button>
+                    </div>
                     <label *ngIf="eventLocation.location_species" class="event-detail-label">Species</label><br/>
 
                     <div class="results-table-div">
@@ -188,11 +189,11 @@
                           <!-- Selection column -->
                           <ng-container matColumnDef="select">
                             <mat-header-cell *matHeaderCellDef>
-                              <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                              <mat-checkbox (change)="$event ? masterToggle(i) : null" [checked]="selection[i].hasValue() && isAllSelected(i)" [indeterminate]="selection[i].hasValue() && !isAllSelected(i)">
                               </mat-checkbox>
                             </mat-header-cell>
                             <mat-cell *matCellDef="let row">
-                              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection[i].toggle(row) : null" [checked]="selection[i].isSelected(row)">
                               </mat-checkbox>
                             </mat-cell>
                           </ng-container>

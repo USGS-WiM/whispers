@@ -109,7 +109,7 @@
             <!-- Organization Column -->
             <ng-container matColumnDef="organization">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Organization </mat-header-cell>
-              <mat-cell *matCellDef="let contact"> {{contact.organization}} </mat-cell>
+              <mat-cell *matCellDef="let contact"> {{contact.organization | displayValue:'name':organizations}} </mat-cell>
             </ng-container>
 
             <!-- Permission Source Column -->

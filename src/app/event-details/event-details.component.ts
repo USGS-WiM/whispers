@@ -217,6 +217,16 @@ export class EventDetailsComponent implements OnInit {
       // minWidth: 200
       // height: '75%'
     });
+
+    this.addEventDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
 
   editSpecies(id: string, index:number) {

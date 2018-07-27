@@ -6,7 +6,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 
-//import { LocationSpeciesService } from '@services/location-species';
+import { LocationSpeciesService } from '@services/location-species.service';
 
 @Component({
   selector: 'app-edit-species',
@@ -23,6 +23,7 @@ export class EditSpeciesComponent implements OnInit {
 
   buildEditSpeciesForm() {
     this.editSpeciesForm = this.formBuilder.group({
+      population_count: null,
       dead_count: null,
       sick_count: null,
       dead_count_estimated: null,
@@ -33,6 +34,7 @@ export class EditSpeciesComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     public editSpeciesDialogRef: MatDialogRef<EditSpeciesComponent>,
+    private locationSpeciesService: LocationSpeciesService,
     public snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -41,6 +43,7 @@ export class EditSpeciesComponent implements OnInit {
 
   ngOnInit() {
     this.species = this.data.species.species_string;
+    this.editSpeciesForm.get('population_count').setValue(this.data.species.population_count);
     this.editSpeciesForm.get('dead_count').setValue(this.data.species.dead_count);
     this.editSpeciesForm.get('sick_count').setValue(this.data.species.sick_count);
     this.editSpeciesForm.get('dead_count_estimated').setValue(this.data.species.dead_count_estimated);
@@ -57,7 +60,9 @@ export class EditSpeciesComponent implements OnInit {
     console.log(formValue);
 
     formValue.id = this.data.species.id;
-    /*this.locationSpeciesService.update(formValue)
+    formValue.event_location = this.data.species.event_location;
+    formValue.species = this.data.species.species;
+    this.locationSpeciesService.update(formValue)
       .subscribe(
         (event) => {
           this.submitLoading = false;
@@ -68,7 +73,7 @@ export class EditSpeciesComponent implements OnInit {
           this.submitLoading = false;
           this.openSnackBar('Error. Event not updated. Error message: ' + error, 'OK', 8000);
         }
-      );*/
+      );
   }
 
 }

@@ -5,9 +5,18 @@
   
       <div class="vertical-form-container">
   
-        <label><b>{{species}} Details</b></label>
+        <h2><b>{{species}} Details</b></h2>
 
         <p>
+
+        <mat-form-field class="species-number-control">
+          <input matInput placeholder="Population" type="number" formControlName="population_count">
+          <mat-hint align="end" matTooltip="Public field">
+            <mat-icon>public</mat-icon>
+          </mat-hint>
+        </mat-form-field>
+
+        <br/>
 
         <mat-form-field class="species-number-control">
           <input matInput placeholder="Known Dead" type="number" formControlName="dead_count">

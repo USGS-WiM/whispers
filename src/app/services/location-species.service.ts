@@ -10,7 +10,9 @@ import { APP_SETTINGS } from '@app/app.settings';
 
 import { LocationSpecies } from '@interfaces/location-species';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class LocationSpeciesService {
 
   constructor(private _http: Http) { }

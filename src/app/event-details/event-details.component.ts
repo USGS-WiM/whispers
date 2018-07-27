@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material';
 import 'rxjs/add/operator/switchMap';
 import { EventService } from '@services/event.service';
 import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
+import { CurrentUserService } from '@services/current-user.service';
 
 import { EventDetail } from '@interfaces/event-detail';
 import { EventLocation } from '@interfaces/event-location';
@@ -47,6 +48,8 @@ export class EventDetailsComponent implements OnInit {
 
   viewPanelStates: Object;
 
+  currentUser;
+
   // speciesTableRows = [];
   // expanded: any = {};
   // timeout: any;
@@ -79,11 +82,16 @@ export class EventDetailsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private _eventService: EventService,
+    private currentUserService: CurrentUserService,
     private dialog: MatDialog,
     private adminLevelOneService: AdministrativeLevelOneService,
     public snackBar: MatSnackBar
   ) {
     this.eventLocationSpecies = [];
+
+    currentUserService.currentUser.subscribe(user => {
+      this.currentUser = user;
+    });
   }
 
   ngOnInit() {

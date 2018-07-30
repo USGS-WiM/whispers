@@ -8,6 +8,8 @@ export class APP_SETTINGS {
 
     private static _environment: string = 'development';
     private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersdev.wim.usgs.gov/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
+    //private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whisperstest.wim.usgs.gov/whispersservices/' : 'https://whisperstest.wim.usgs.gov/whispersservices/';
+
     public static set environment(env: string) { this._environment = env; }
     public static get API_USERNAME(): string { return 'admin'; }
     public static get API_PASSWORD(): string { return 'whispersadmin'; }
@@ -47,7 +49,7 @@ export class APP_SETTINGS {
     public static get DIAGNOSIS_BASES_URL(): string { return this._API_ENDPOINT + 'diagnosisbases/'; }
     public static get DIAGNOSIS_CAUSES_URL(): string { return this._API_ENDPOINT + 'diagnosiscauses/'; }
     public static get EVENT_DIAGNOSES_URL(): string { return this._API_ENDPOINT + 'eventdiagnoses/'; }
-    public static get SPECIES_DIAGNOSIS_URL(): string { return this._API_ENDPOINT + 'speciesdiagnosis/'; }
+    public static get LOCATION_SPECIES_DIAGNOSIS_URL(): string { return this._API_ENDPOINT + 'speciesdiagnosis/'; }
     public static get PERMISSIONS_URL(): string { return this._API_ENDPOINT + 'permissions/'; }
     public static get PERMISSION_TYPES_URL(): string { return this._API_ENDPOINT + 'permissionstypes'; }
     public static get COMMENTS_URL(): string { return this._API_ENDPOINT + 'comments/'; }
@@ -93,8 +95,8 @@ export class APP_SETTINGS {
             'administrative_level_one': [],
             'administrative_level_two': [],
             'affected_count': null,
-            'start_date': null,
-            'end_date': null,
+            'start_date': '2018-03-31',
+            'end_date': '2018-07-31',
             'diagnosis_type_includes_all': false,
             'diagnosis_includes_all': false,
             'species_includes_all': false,

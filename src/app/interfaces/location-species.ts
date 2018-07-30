@@ -1,5 +1,5 @@
 import { History } from '@interfaces/history';
-import { SpeciesDiagnosis } from '@interfaces/species-diagnosis';
+import { LocationSpeciesDiagnosis } from '@interfaces/location-species-diagnosis';
 export interface LocationSpecies extends History {
     event_location: number;
     species: number;
@@ -13,7 +13,7 @@ export interface LocationSpecies extends History {
     captive: boolean;
     age_bias: number;
     sex_bias: number;
-    species_diagnosis: SpeciesDiagnosis[];
+    species_diagnosis: LocationSpeciesDiagnosis[];
     administrative_level_two_string?: string;
     administrative_level_one_string?: string;
     country_string?: string;

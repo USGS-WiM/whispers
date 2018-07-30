@@ -17,6 +17,7 @@ import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 
 import { DiagnosisBasis } from '@interfaces/diagnosis-basis';
 import { DiagnosisCause } from '@interfaces/diagnosis-cause';
+import { LocationSpeciesDiagnosisService } from '@app/services/location-species-diagnosis.service';
 
 @Component({
   selector: 'app-add-species-diagnosis',
@@ -58,6 +59,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
     public addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>,
     private diagnosisBasisService: DiagnosisBasisService,
     private diagnosisCauseService: DiagnosisCauseService,
+    private locationSpeciesDiagnosisService: LocationSpeciesDiagnosisService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.buildAddSpeciesDiagnosisForm();
@@ -106,6 +108,23 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
 
   onSubmit(formValue) {
 
+    this.submitLoading = true;
+
+    // formValue.location_species = this.data.event_id;
+    // this.locationSpeciesDiagnosisService.create(formValue)
+    //   .subscribe(
+    //     (contact) => {
+    //       this.submitLoading = false;
+    //       this.openSnackBar('Event Diagnosis Added', 'OK', 5000);
+    //       this.addSpeciesDiagnosisDialogRef.close();
+    //     },
+    //     error => {
+    //       this.submitLoading = false;
+    //       this.openSnackBar('Error. Species Diagnosis not created. Error message: ' + error, 'OK', 8000);
+    //     }
+    //   );
+
   }
 
 }
+

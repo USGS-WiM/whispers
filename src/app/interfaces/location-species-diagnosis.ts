@@ -1,7 +1,7 @@
 import { Diagnosis } from '@interfaces/diagnosis';
 import { OrganizationSummary } from '@interfaces/organization-summary';
 
-export interface SpeciesDiagnosis extends History {
+export interface LocationSpeciesDiagnosis extends History {
     id: number;
     location_species: number;
     diagnosis: Diagnosis;

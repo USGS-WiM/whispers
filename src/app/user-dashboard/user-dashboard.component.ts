@@ -38,7 +38,7 @@ export class UserDashboardComponent implements OnInit {
   errorMessage;
   events;
   contacts;
-  organizations = [];
+  organizations;
   roles;
 
   selection;

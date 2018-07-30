@@ -88,6 +88,7 @@ import { EditSpeciesComponent } from './edit-species/edit-species.component';
 import { AddSpeciesDiagnosisComponent } from './add-species-diagnosis/add-species-diagnosis.component';
 import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
 import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
+import { LocationSpeciesDiagnosisService } from '@app/services/location-species-diagnosis.service';
 
 
 @NgModule({
@@ -181,6 +182,7 @@ import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
     RoleService,
     SearchService,
     SearchDialogService,
+    LocationSpeciesDiagnosisService,
     DisplayValuePipe,
     DatePipe
   ],

@@ -72,7 +72,8 @@ export class EventDetailsComponent implements OnInit {
     'sick',
     'dead',
     'sick_estimated',
-    'dead_estimated'
+    'dead_estimated',
+    'diagnosis'
   ];
 
   @ViewChild(MatPaginator) locationSpeciesPaginator: MatPaginator;

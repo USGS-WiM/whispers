@@ -76,8 +76,8 @@
                     <td>{{loc_species.population_count}}</td>
                     <td>{{loc_species.sick_count}}</td>
                     <td>{{loc_species.dead_count}}</td>
-                    <td>{{sick_count_estimated}}</td>
-                    <td>{{dead_count_estimated}}</td>
+                    <td>{{loc_species.sick_count_estimated}}</td>
+                    <td>{{loc_species.dead_count_estimated}}</td>
                     <td>
                       <span *ngIf="loc_species.species_diagnosis.length > 0">
                         <span *ngFor="let species_diagnosis of loc_species.species_diagnosis">
@@ -171,6 +171,9 @@
                   </div>
                   <p> 
                   <div *ngIf="eventLocation.location_species.length > 0">
+                    
+                    <label *ngIf="eventLocation.location_species" class="event-detail-label">Species</label><br/>
+                    
                     <div class="event-detail-action-bar-left">
                       <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpecies(id, i)">
                         <i class="material-icons">edit</i> Edit Species</button>
@@ -179,8 +182,7 @@
                       <button mat-raised-button color="primary" class="event-detail-action-button">
                         <i class="material-icons">edit</i> Edit Species Diagnosis</button>
                     </div>
-                    <label *ngIf="eventLocation.location_species" class="event-detail-label">Species</label><br/>
-
+                    
                     <div class="results-table-div">
                     
                       <mat-table [dataSource]="eventLocation.location_species" matSort matSortActive="species" matSortDirection="asc">
@@ -243,6 +245,12 @@
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Dead Estimate </mat-header-cell>
                             <mat-cell *matCellDef="let loc_species"> {{loc_species.dead_count_estimated}} </mat-cell>
                           </ng-container>
+
+                          <!-- Diagnosis Column -->
+                          <ng-container matColumnDef="diagnosis">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header> Diagnosis </mat-header-cell>
+                              <mat-cell *matCellDef="let loc_species"> {{loc_species.diagnosis}} </mat-cell>
+                            </ng-container>
                         </div>
             
                         <mat-header-row *matHeaderRowDef="locationSpeciesDisplayedColumns"></mat-header-row>
@@ -255,7 +263,7 @@
                 </mat-expansion-panel>
 
               <p>
-                <mat-card-subtitle>Affected Species Summary</mat-card-subtitle>
+                <!--<mat-card-subtitle>Affected Species Summary</mat-card-subtitle>
                 
                 <table id="speciesList">
                   <tr>
@@ -310,11 +318,9 @@
                     </td>
 
                   </tr>
-                </table>
+                </table>-->
 
           </div>
-
-          <p>
       </mat-card-content>
     </mat-card>
   </div>

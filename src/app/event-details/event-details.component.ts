@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild, ViewChildren, QueryList} from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -19,6 +19,8 @@ import { EditEventComponent } from '@app/edit-event/edit-event.component';
 import { AddEventDiagnosisComponent } from '@app/add-event-diagnosis/add-event-diagnosis.component';
 import { EditSpeciesComponent } from '@app/edit-species/edit-species.component';
 import { AddSpeciesDiagnosisComponent } from '@app/add-species-diagnosis/add-species-diagnosis.component';
+import { LandOwnershipService } from '@services/land-ownership.service';
+
 
 @Component({
   selector: 'app-event-details',
@@ -31,6 +33,7 @@ export class EventDetailsComponent implements OnInit {
   id: string;
   map;
   states = [];
+  landownerships;
 
   locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
 
@@ -86,6 +89,7 @@ export class EventDetailsComponent implements OnInit {
     private currentUserService: CurrentUserService,
     private dialog: MatDialog,
     private adminLevelOneService: AdministrativeLevelOneService,
+    private landownershipService: LandOwnershipService,
     public snackBar: MatSnackBar
   ) {
     this.eventLocationSpecies = [];
@@ -99,7 +103,7 @@ export class EventDetailsComponent implements OnInit {
 
     const initialSelection = [];
     const allowMultiSelect = true;
-    
+
     this.eventLocationSpecies = [];
 
     this.route.paramMap.subscribe(params => {
@@ -119,11 +123,11 @@ export class EventDetailsComponent implements OnInit {
                 this.eventLocationSpecies.push(location_species);
               }
             }
-            
+
             for (let i = 0; i < this.eventData.event_locations.length; i++) {
               this.selection[i] = new SelectionModel<LocationSpecies>(allowMultiSelect, initialSelection);
             }
-            
+
             this.locationSpeciesDataSource = new MatTableDataSource(this.eventLocationSpecies);
             //this.speciesTableRows = this.eventLocationSpecies;
             this.eventDataLoading = false;
@@ -140,6 +144,17 @@ export class EventDetailsComponent implements OnInit {
       .subscribe(
         (states) => {
           this.states = states;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get landownerships from the landownership servce
+    this.landownershipService.getLandOwnerships()
+      .subscribe(
+        (landownerships) => {
+          this.landownerships = landownerships;
         },
         error => {
           this.errorMessage = <any>error;
@@ -230,7 +245,7 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
-  editSpecies(id: string, index:number) {
+  editSpecies(id: string, index: number) {
     if (this.selection[index].selected.length > 1 || this.selection[index].selected.length == 0) {
       this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
     } else if (this.selection[index].selected.length === 1) {
@@ -247,7 +262,7 @@ export class EventDetailsComponent implements OnInit {
         .subscribe(
           () => {
             this.refreshEvent();
-            for (let i=0; i < this.selection.length; i++) {
+            for (let i = 0; i < this.selection.length; i++) {
               this.selection[i].clear();
             }
           },
@@ -327,7 +342,7 @@ export class EventDetailsComponent implements OnInit {
   // Determine comment type based on id, return for display in app along side comment
   getCommentType(comment_id) {
     let comment_type;
-    switch(comment_id) {
+    switch (comment_id) {
       case 1:
         comment_type = "Site description";
         break;
@@ -343,20 +358,20 @@ export class EventDetailsComponent implements OnInit {
       case 5:
         comment_type = "General";
         break;
-  }
+    }
     return comment_type;
   }
 
   // From angular material table sample on material api reference site
   /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected(i:number) {
+  isAllSelected(i: number) {
     const numSelected = this.selection[i].selected.length;
     const numRows = this.locationSpeciesDataSource.data.length;
     return numSelected == numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle(i:number) {
+  masterToggle(i: number) {
     this.isAllSelected(i) ?
       this.selection[i].clear() :
       this.locationSpeciesDataSource.data.forEach(row => this.selection[i].select(row));

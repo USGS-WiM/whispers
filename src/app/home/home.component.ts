@@ -216,6 +216,18 @@ export class HomeComponent implements OnInit {
 
   }
 
+  exportEventSummaries() {
+    this.eventService.getEventSummaryCSV(this.currentSearchQuery)
+    .subscribe(
+      eventSummaries => {
+      
+      },
+      error => {
+        this.errorMessage = <any>error;
+      }
+    )
+  }
+
   /**
    * Set the paginator and sort after the view init since this component will
    * be able to query its view for the initialized paginator and sort.

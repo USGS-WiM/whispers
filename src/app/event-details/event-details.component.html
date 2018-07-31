@@ -46,7 +46,8 @@
                   <th [attr.rowspan]="eventData.event_locations.length + 1 ">Locations</th>
                 </tr>
                 <tr *ngFor="let eventLocation of eventData.event_locations">
-                  <td>{{eventLocation.administrative_level_two_string}}, {{eventLocation.administrative_level_one_string}}, {{eventLocation.country_string}}</td>
+                  <td>{{eventLocation.administrative_level_two_string}}, {{eventLocation.administrative_level_one_string}}
+                    <br>{{eventLocation.country_string}}</td>
                 </tr>
               </table>
             </div>
@@ -150,120 +151,125 @@
 
               <p>
                 <mat-card-subtitle>Event Location Details</mat-card-subtitle>
-                
+
                 <mat-expansion-panel *ngFor="let eventLocation of eventData.event_locations; let i = index" [attr.data-index]="i" (change)="panelDataChange()">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       {{determineLocationName(eventLocation.name,i+1)}}
                     </mat-panel-title>
                   </mat-expansion-panel-header>
-                  Onset date: {{eventLocation.start_date}}<br/>
-                  End date: {{eventLocation.end_date}}<br/>
-                  Location: {{eventLocation.administrative_level_one_string}}, {{eventLocation.administrative_level_two_string}}, {{eventLocation.country_string}}<br/>
-                  Land ownership: {{eventLocation.land_ownership}}<br/>
+                  Onset date: {{eventLocation.start_date  | date:'mediumDate'}}
+                  <br/> End date: {{eventLocation.end_date  | date:'mediumDate'}}
+                  <br/> Location: {{eventLocation.administrative_level_one_string}}, {{eventLocation.administrative_level_two_string}},
+                  {{eventLocation.country_string}}
+                  <br/> Land ownership: {{eventLocation.land_ownership | displayValue:'name':this.landownerships }}
+                  <br/>
                   <p>
-                  <div *ngIf="eventLocation.comments.length > 0" >
-                    <label *ngIf="eventLocation.comments" class="event-detail-label">Comments</label><br/>
+                    <div *ngIf="eventLocation.comments.length > 0">
+                      <label *ngIf="eventLocation.comments" class="event-detail-label">Comments</label>
+                      <br/>
 
-                    <span *ngFor="let comment of eventLocation.comments">
-                      <b>{{getCommentType(comment.comment_type)}}:</b> {{comment.comment}}<br/>
-                    </span>
-                  </div>
-                  <p> 
-                  <div *ngIf="eventLocation.location_species.length > 0">
-                    
-                    <label *ngIf="eventLocation.location_species" class="event-detail-label">Species</label><br/>
-                    
-                    <div class="event-detail-action-bar-left">
-                      <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpecies(id, i)">
-                        <i class="material-icons">edit</i> Edit Species</button>
-                      <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addSpeciesDiagnosis(id)">
-                        <i class="material-icons">add</i> Add Species Diagnosis</button>
-                      <button mat-raised-button color="primary" class="event-detail-action-button">
-                        <i class="material-icons">edit</i> Edit Species Diagnosis</button>
+                      <span *ngFor="let comment of eventLocation.comments">
+                        <b>{{getCommentType(comment.comment_type)}}:</b> {{comment.comment}}
+                        <br/>
+                      </span>
                     </div>
-                    
-                    <div class="results-table-div">
-                    
-                      <mat-table [dataSource]="eventLocation.location_species" matSort matSortActive="species" matSortDirection="asc">
-                        
-                        <div>
-                          <!-- Selection column -->
-                          <ng-container matColumnDef="select">
-                            <mat-header-cell *matHeaderCellDef>
-                              <mat-checkbox (change)="$event ? masterToggle(i) : null" [checked]="selection[i].hasValue() && isAllSelected(i)" [indeterminate]="selection[i].hasValue() && !isAllSelected(i)">
-                              </mat-checkbox>
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let row">
-                              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection[i].toggle(row) : null" [checked]="selection[i].isSelected(row)">
-                              </mat-checkbox>
-                            </mat-cell>
-                          </ng-container>
-                          
-                          <!-- Species Column -->
-                          <ng-container matColumnDef="species">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Species </mat-header-cell>
-                            <mat-cell *matCellDef="let loc_species"> {{loc_species.species_string}} </mat-cell>
-                          </ng-container>
-              
-                          <!-- Location Column -->
-                          <ng-container matColumnDef="location">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Location </mat-header-cell>
-                            <mat-cell *matCellDef="let loc_species">
-                              <span>{{loc_species.administrative_level_two_string}}, {{loc_species.administrative_level_one_string}}</span>
-                              <br>
-                              <span>{{loc_species.country_string}}</span>
-                            </mat-cell>
-                          </ng-container>
-              
-                          <!-- Population Column -->
-                          <ng-container matColumnDef="population">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Population </mat-header-cell>
-                            <mat-cell *matCellDef="let loc_species"> {{loc_species.population_count}} </mat-cell>
-                          </ng-container>
-              
-                          <!-- Sick Count Column -->
-                          <ng-container matColumnDef="sick">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Sick </mat-header-cell>
-                            <mat-cell *matCellDef="let loc_species"> {{loc_species.sick_count}} </mat-cell>
-                          </ng-container>
-              
-                          <!-- Dead Count Column -->
-                          <ng-container matColumnDef="dead">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Dead </mat-header-cell>
-                            <mat-cell *matCellDef="let loc_species"> {{loc_species.dead_count}} </mat-cell>
-                          </ng-container>
-              
-                          <!-- Sick Count Estimated Column -->
-                          <ng-container matColumnDef="sick_estimated">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Sick Estimate </mat-header-cell>
-                            <mat-cell *matCellDef="let loc_species"> {{loc_species.sick_count_estimated}} </mat-cell>
-                          </ng-container>
-              
-                          <!-- Dead Count Estimated Column -->
-                          <ng-container matColumnDef="dead_estimated">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Dead Estimate </mat-header-cell>
-                            <mat-cell *matCellDef="let loc_species"> {{loc_species.dead_count_estimated}} </mat-cell>
-                          </ng-container>
+                    <p>
+                      <div *ngIf="eventLocation.location_species.length > 0">
 
-                          <!-- Diagnosis Column -->
-                          <ng-container matColumnDef="diagnosis">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header> Diagnosis </mat-header-cell>
-                              <mat-cell *matCellDef="let loc_species"> {{species_diagnosis}} </mat-cell>
-                            </ng-container>
+                        <label *ngIf="eventLocation.location_species" class="event-detail-label">Species</label>
+                        <br/>
+
+                        <div class="event-detail-action-bar-left">
+                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpecies(id, i)">
+                            <i class="material-icons">edit</i> Edit Species</button>
+                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addSpeciesDiagnosis(id)">
+                            <i class="material-icons">add</i> Add Species Diagnosis</button>
+                          <button mat-raised-button color="primary" class="event-detail-action-button">
+                            <i class="material-icons">edit</i> Edit Species Diagnosis</button>
                         </div>
-            
-                        <mat-header-row *matHeaderRowDef="locationSpeciesDisplayedColumns"></mat-header-row>
-                        <mat-row *matRowDef="let loc_species; columns: locationSpeciesDisplayedColumns;"></mat-row>
-                      </mat-table>
-            
-                      <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
-                    </div>
-                  </div>
+
+                        <div class="results-table-div">
+
+                          <mat-table [dataSource]="eventLocation.location_species" matSort matSortActive="species" matSortDirection="asc">
+
+                            <div>
+                              <!-- Selection column -->
+                              <ng-container matColumnDef="select">
+                                <mat-header-cell *matHeaderCellDef>
+                                  <mat-checkbox (change)="$event ? masterToggle(i) : null" [checked]="selection[i].hasValue() && isAllSelected(i)" [indeterminate]="selection[i].hasValue() && !isAllSelected(i)">
+                                  </mat-checkbox>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let row">
+                                  <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection[i].toggle(row) : null" [checked]="selection[i].isSelected(row)">
+                                  </mat-checkbox>
+                                </mat-cell>
+                              </ng-container>
+
+                              <!-- Species Column -->
+                              <ng-container matColumnDef="species">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Species </mat-header-cell>
+                                <mat-cell *matCellDef="let loc_species"> {{loc_species.species_string}} </mat-cell>
+                              </ng-container>
+
+                              <!-- Location Column -->
+                              <ng-container matColumnDef="location">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Location </mat-header-cell>
+                                <mat-cell *matCellDef="let loc_species">
+                                  <span>{{loc_species.administrative_level_two_string}}, {{loc_species.administrative_level_one_string}}</span>
+                                  <br>
+                                  <span>{{loc_species.country_string}}</span>
+                                </mat-cell>
+                              </ng-container>
+
+                              <!-- Population Column -->
+                              <ng-container matColumnDef="population">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Population </mat-header-cell>
+                                <mat-cell *matCellDef="let loc_species"> {{loc_species.population_count}} </mat-cell>
+                              </ng-container>
+
+                              <!-- Sick Count Column -->
+                              <ng-container matColumnDef="sick">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Sick </mat-header-cell>
+                                <mat-cell *matCellDef="let loc_species"> {{loc_species.sick_count}} </mat-cell>
+                              </ng-container>
+
+                              <!-- Dead Count Column -->
+                              <ng-container matColumnDef="dead">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Dead </mat-header-cell>
+                                <mat-cell *matCellDef="let loc_species"> {{loc_species.dead_count}} </mat-cell>
+                              </ng-container>
+
+                              <!-- Sick Count Estimated Column -->
+                              <ng-container matColumnDef="sick_estimated">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Sick Estimate </mat-header-cell>
+                                <mat-cell *matCellDef="let loc_species"> {{loc_species.sick_count_estimated}} </mat-cell>
+                              </ng-container>
+
+                              <!-- Dead Count Estimated Column -->
+                              <ng-container matColumnDef="dead_estimated">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Dead Estimate </mat-header-cell>
+                                <mat-cell *matCellDef="let loc_species"> {{loc_species.dead_count_estimated}} </mat-cell>
+                              </ng-container>
+
+                              <!-- Diagnosis Column -->
+                              <ng-container matColumnDef="diagnosis">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Diagnosis </mat-header-cell>
+                                <mat-cell *matCellDef="let loc_species"> {{species_diagnosis}} </mat-cell>
+                              </ng-container>
+                            </div>
+
+                            <mat-header-row *matHeaderRowDef="locationSpeciesDisplayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let loc_species; columns: locationSpeciesDisplayedColumns;"></mat-row>
+                          </mat-table>
+
+                          <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+                        </div>
+                      </div>
                 </mat-expansion-panel>
 
-              <p>
-                <!--<mat-card-subtitle>Affected Species Summary</mat-card-subtitle>
+                <p>
+                  <!--<mat-card-subtitle>Affected Species Summary</mat-card-subtitle>
                 
                 <table id="speciesList">
                   <tr>

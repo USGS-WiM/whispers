@@ -9,6 +9,8 @@ import 'rxjs/add/operator/map';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MatBottomSheetModule, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
 
+import { MatAutocompleteSelectedEvent } from '@angular/material';
+
 import { MatSnackBar } from '@angular/material';
 
 import { APP_SETTINGS } from '@app/app.settings';
@@ -99,6 +101,8 @@ export class EventSubmissionComponent implements OnInit {
   //filteredAdminLevelTwos: Observable<any[]>;
 
   species: Species[];
+  filteredSpecies: Observable<any[]>;
+
   sexBiases: SexBias[];
   ageBiases: AgeBias[];
 
@@ -318,11 +322,19 @@ export class EventSubmissionComponent implements OnInit {
       .subscribe(
         species => {
           this.species = species;
+          // TODO: lines below commented out are for species autocomplete. more complex on this component since species is part of a form array
+          // line below is copied from search dialog component, but does not work here.
+          // this.filteredSpecies = this.eventSubmissionForm.get('species').valueChanges
+          // line below is does not work, but is the beginning of the solution.
+          // this.filteredSpecies = this.eventSubmissionForm.get('new_event_locations').get('location_species').get('species').valueChanges
+          //   .startWith(null)
+          //   .map(val => this.filter(val, this.species, 'name'));
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
+
 
     // get sexBiases from the sexBias service
     this.sexBiasService.getSexBiases()

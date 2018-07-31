@@ -329,6 +329,7 @@
                                   <!-- <div class="horizontal-form-container"></div> -->
 
                                   <div class="horizontal-form-container" class="species-controls-container">
+
                                     <mat-form-field class="form-control">
                                       <mat-select placeholder="Species" formControlName="species">
                                         <mat-option *ngFor="let species of species" value="{{species.id}}">{{species.name}}</mat-option>
@@ -337,6 +338,17 @@
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
                                     </mat-form-field>
+
+
+                                    <!-- TODO: implement autocomplete for species later -->
+                                    <!-- <mat-form-field>
+                                      <input type="text" matInput placeholder="Species" aria-label="Species" [matAutocomplete]="speciesAutoComplete" formControlName="species">
+                                      <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn">
+                                        <mat-option *ngFor="let species of filteredSpecies | async" [value]="species">
+                                          <span>{{ species.name }}</span>
+                                        </mat-option>
+                                      </mat-autocomplete>
+                                    </mat-form-field> -->
 
                                     <mat-form-field class="species-number-control">
                                       <input matInput placeholder="Known Dead" type="number" formControlName="dead_count">

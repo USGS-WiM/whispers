@@ -319,12 +319,29 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
-  addSpeciesDiagnosis(id: string) {
-    // Open dialog for adding event diagnosis
-    this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
-      // minWidth: 200
-      // height: '75%'
-    });
+  addSpeciesDiagnosis(id: string, index: number) {
+    if (this.selection[index].selected.length > 1 || this.selection[index].selected.length == 0) {
+      this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
+    } else if (this.selection[index].selected.length === 1) {
+      // Open dialog for adding event diagnosis
+      this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
+        // minWidth: 200
+        // height: '75%'
+      });
+
+      this.addSpeciesDiagnosisDialogRef.afterClosed()
+        .subscribe(
+          () => {
+            this.refreshEvent();
+            for (let i = 0; i < this.selection.length; i++) {
+              this.selection[i].clear();
+            }
+          },
+          error => {
+            this.errorMessage = <any>error;
+          }
+        );
+    }
   }
 
   determineLocationName(name, i) {

@@ -1,4 +1,6 @@
-<mat-spinner *ngIf="eventDataLoading"></mat-spinner>
+<div class="page-loader" *ngIf="eventDataLoading">
+  <mat-spinner></mat-spinner>
+</div>
 <div id="eventDetailsContainer" *ngIf="!eventDataLoading">
 
   <div class="detailsDiv">
@@ -11,17 +13,14 @@
         <button mat-raised-button color="primary" class="event-detail-action-button">
           <i class="material-icons">unarchive</i> Export Event Data</button>
       </div>
-      <mat-card-title>
-        <span>
-          <b>Event {{eventData.id}}</b>
-        </span>
-        <br> {{eventData.event_type_string}}
-        <br>
-        <span class="text-smaller">
+      <mat-card-title class="details-info">
+        <div class="title">Event {{eventData.id}}</div>
+        <div class="subtitle">{{eventData.event_type_string}}</div>
+        <div class="meta">
           <span>{{eventData.start_date | date:'mediumDate'}}</span>
           <span> thru </span>
           <span>{{eventData.end_date | date:'mediumDate'}}</span>
-        </span>
+        </div>
 
       </mat-card-title>
       <!-- <mat-card-subtitle>{{eventData.event_type_string}}</mat-card-subtitle> -->

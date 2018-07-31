@@ -87,7 +87,7 @@
                           <span class="text-smaller">{{species_diagnosis.tested_count}} specimens tested |</span>
                           <span class="text-smaller">{{species_diagnosis.positive_count}} positive</span>
                           <br>
-                          <span class="text-smaller"> by {{species_diagnosis.organizations_string[0]}}</span>
+                          <span class="text-smaller" *ngIf="species_diagnosis.organizations_string"> by {{species_diagnosis.organizations_string[0]}}</span>
                         </span>
                       </span>
                       <span *ngIf="loc_species.species_diagnosis.length === 0">To Be Determined</span>
@@ -164,7 +164,7 @@
                   <br/> Land ownership: {{eventLocation.land_ownership | displayValue:'name':this.landownerships }}
                   <br/>
                   <p>
-                    <div *ngIf="eventLocation.comments.length > 0">
+                    <div *ngIf="eventLocation.comments && eventLocation.comments.length > 0">
                       <label *ngIf="eventLocation.comments" class="event-detail-label">Comments</label>
                       <br/>
 

@@ -208,9 +208,12 @@
             <ng-container matColumnDef="species">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Species </mat-header-cell>
               <mat-cell *matCellDef="let event">
-                <span *ngFor="let species of event.species">{{species.name}}
-                  <span *ngIf="(event.species.indexOf(species)) < (event.species.length - 1)">, </span>
-                </span>
+                <!--<span *ngFor="let species of event.species">{{species.name}}
+                  <span *ngIf="(event.species.indexOf(species)) < (event.species.length - 1)"> </span>
+                </span>-->
+                <ul>
+                    <li *ngFor="let species of event.species">{{species.name}}</li>
+                </ul>
               </mat-cell>
             </ng-container>
 
@@ -218,9 +221,12 @@
             <ng-container matColumnDef="eventdiagnoses">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Event Diagnosis </mat-header-cell>
               <mat-cell *matCellDef="let event">
-                <span *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}
+                <!--<span *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}
                   <span *ngIf="(event.eventdiagnoses.indexOf(diagnosis)) < (event.eventdiagnoses.length - 1)">, </span>
-                </span>
+                </span>-->
+                <ul>
+                    <li *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}</li>
+                </ul>
                 <span *ngIf="event.eventdiagnoses.length == 0">TBD</span>
               </mat-cell>
             </ng-container>

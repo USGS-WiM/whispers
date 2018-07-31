@@ -330,7 +330,7 @@ export class EventDetailsComponent implements OnInit {
   determineLocationName(name, i) {
     let locationName;
 
-    if (name == "") {
+    if (name == "" || name == undefined) {
       locationName = "Location " + i;
     } else {
       locationName = name;

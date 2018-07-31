@@ -312,6 +312,18 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
+  determineLocationName(name, i) {
+    let locationName;
+
+    if (name == "") {
+      locationName = "Location " + i;
+    } else {
+      locationName = name;
+    }
+
+    return locationName;
+  }
+
   // Determine comment type based on id, return for display in app along side comment
   getCommentType(comment_id) {
     let comment_type;

@@ -57,6 +57,8 @@ export class HomeComponent implements OnInit {
 
   testDataSource: EventSearchResultsDataSource;
 
+  locationMarkers;
+
   displayedColumns = [
     'id',
     'event_type_string',
@@ -95,24 +97,33 @@ export class HomeComponent implements OnInit {
               this.dataSource.sort = this.sort;
 
               setTimeout(() => {
-                this.map = new L.Map('map', {
+                /*this.map = new L.Map('map', {
                   center: new L.LatLng(39.8283, -98.5795),
                   zoom: 4,
-                });
+                });*/
 
+                
+                this.locationMarkers.clearLayers();
+                
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                   attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(this.map);
 
-                this.icon = L.icon({ iconUrl: '../../assets/icons/marker-icon.png', shadowUrl: '../../assets/icons/marker-shadow.png' })
+
+                this.icon = L.icon({ iconUrl: '../../assets/icons/marker-icon.png', 
+                                shadowUrl: '../../assets/icons/marker-shadow.png',
+                                iconSize: [25,41],
+                                iconAnchor: [13,40]});
 
                 for (const event in this.currentResults) {
                   if (this.currentResults[event]['administrativeleveltwos'].length > 0) {
                     for (let adminleveltwo in this.currentResults[event]['administrativeleveltwos']) {
-                      L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']), Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])], { icon: this.icon }).addTo(this.map);
+                      L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']), Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])], { icon: this.icon }).addTo(this.locationMarkers);
                     }
                   }
                 }
+
+                //this.map.fitBounds(this.locationMarkers.getBounds());
 
               }, 500);
 
@@ -178,12 +189,17 @@ export class HomeComponent implements OnInit {
               attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(this.map);
 
-            this.icon = L.icon({ iconUrl: '../../assets/icons/marker-icon.png', shadowUrl: '../../assets/icons/marker-shadow.png' })
+            this.locationMarkers = L.layerGroup().addTo(this.map);
+
+            this.icon = L.icon({ iconUrl: '../../assets/icons/marker-icon.png', 
+                                shadowUrl: '../../assets/icons/marker-shadow.png',
+                                iconSize: [25,41],
+                                iconAnchor: [13,40]})
 
             for (const event in this.currentResults) {
               if (this.currentResults[event]['administrativeleveltwos'].length > 0) {
                 for (let adminleveltwo in this.currentResults[event]['administrativeleveltwos']) {
-                  L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']), Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])], { icon: this.icon }).addTo(this.map);
+                  L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']), Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])], { icon: this.icon }).addTo(this.locationMarkers);
                 }
               }
             }

@@ -154,7 +154,7 @@
                 <mat-expansion-panel *ngFor="let eventLocation of eventData.event_locations; let i = index" [attr.data-index]="i" (change)="panelDataChange()">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                      {{eventLocation.name}}
+                      {{determineLocationName(eventLocation.name,i+1)}}
                     </mat-panel-title>
                   </mat-expansion-panel-header>
                   Onset date: {{eventLocation.start_date}}<br/>

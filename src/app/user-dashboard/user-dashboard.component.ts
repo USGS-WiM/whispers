@@ -38,8 +38,8 @@ export class UserDashboardComponent implements OnInit {
   errorMessage;
   events;
   contacts;
-  organizations;
-  roles;
+  organizations = [];
+  roles = [];
 
   selection;
   currentUser;
@@ -326,7 +326,7 @@ export class UserDashboardComponent implements OnInit {
   formatPhone(phone) {
     let formatted_phone = '';
 
-    if (phone.length == 10) {
+    if (phone != null && phone.length == 10) {
       let temp_phone = phone.split('');
       formatted_phone = '(' + temp_phone.slice(0, 3).join('') + ') ' + temp_phone.slice(3, 6).join('') + '-' + temp_phone.slice(6, 10).join('');
     } else {

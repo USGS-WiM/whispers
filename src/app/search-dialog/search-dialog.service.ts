@@ -24,6 +24,5 @@ export class SearchDialogService {
     return this.displayQuery.asObservable();
   }
 
-
   constructor() { }
 }

@@ -12,3 +12,67 @@ body {
 // .mat-button {
 //     text-transform: uppercase;
 // }
+
+
+// Sidebar 
+.controlsDiv .mat-expansion-panel-header{
+    background-color: rgba(247,247,255,1);
+    border-bottom: 1px solid rgba(230,230,240,1);
+    color: rgba(40,40,60,1) !important;
+    font-weight: 500;
+}
+.controlsDiv .mat-expansion-panel-header:not([aria-disabled='true']):hover,
+.controlsDiv .mat-expansion-panel-header:not([aria-disabled='true']):focus{
+    background-color: rgba(237,237,245,1) !important;
+}
+.mat-expansion-panel:not([class*=mat-elevation-z]){
+    box-shadow: none !important;
+}
+.controlsDiv .mat-expansion-indicator{
+    position: relative;
+    top: -2px;
+}
+.controlsDiv .mat-expanded .mat-expansion-indicator{
+    top: 2px;
+}
+
+.controlsDiv .mat-expansion-panel-body{
+    padding: 15px !important;
+
+    p{
+        font-size: 13px;
+        line-height: 20px;
+        font-weight: 400;
+        color: rgba(40,40,60,0.9);
+        margin: 0;
+    }
+}
+
+
+// Mat Tables
+.mat-table{
+
+    .mat-header-row{
+        background-color: rgba(238,238,248,1);
+        border-bottom: 1px solid rgba(230,230,240,1);
+        color: rgba(40,40,60,0.5) !important;
+    }
+    .mat-row{
+        border-bottom: 1px solid rgba(230,230,240,0.75);
+        color: rgba(40,40,60,1) !important;
+
+        &:nth-child(odd){
+            background-color: rgba(247,247,255,1);
+        }
+    }
+}
+.page-loader{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 90vh;
+
+    mat-spinner{
+        margin: 0 auto;
+    }
+}

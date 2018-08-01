@@ -110,19 +110,19 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
 
     this.submitLoading = true;
 
-    // formValue.location_species = this.data.event_id;
-    // this.locationSpeciesDiagnosisService.create(formValue)
-    //   .subscribe(
-    //     (contact) => {
-    //       this.submitLoading = false;
-    //       this.openSnackBar('Event Diagnosis Added', 'OK', 5000);
-    //       this.addSpeciesDiagnosisDialogRef.close();
-    //     },
-    //     error => {
-    //       this.submitLoading = false;
-    //       this.openSnackBar('Error. Species Diagnosis not created. Error message: ' + error, 'OK', 8000);
-    //     }
-    //   );
+    formValue.location_species = this.data.event_id;
+    this.locationSpeciesDiagnosisService.create(formValue)
+      .subscribe(
+        (contact) => {
+          this.submitLoading = false;
+          this.openSnackBar('Event Diagnosis Added', 'OK', 5000);
+          this.addSpeciesDiagnosisDialogRef.close();
+        },
+        error => {
+          this.submitLoading = false;
+          this.openSnackBar('Error. Species Diagnosis not created. Error message: ' + error, 'OK', 8000);
+        }
+      );
 
   }
 

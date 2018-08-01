@@ -102,18 +102,20 @@ export class HomeComponent implements OnInit {
                   zoom: 4,
                 });*/
 
-                
+
                 this.locationMarkers.clearLayers();
-                
+
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                   attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(this.map);
 
 
-                this.icon = L.icon({ iconUrl: '../../assets/icons/marker-icon.png', 
-                                shadowUrl: '../../assets/icons/marker-shadow.png',
-                                iconSize: [25,41],
-                                iconAnchor: [13,40]});
+                this.icon = L.icon({
+                  iconUrl: '../../assets/icons/marker-icon.png',
+                  shadowUrl: '../../assets/icons/marker-shadow.png',
+                  iconSize: [25, 41],
+                  iconAnchor: [13, 40]
+                });
 
                 for (const event in this.currentResults) {
                   if (this.currentResults[event]['administrativeleveltwos'].length > 0) {
@@ -191,10 +193,12 @@ export class HomeComponent implements OnInit {
 
             this.locationMarkers = L.layerGroup().addTo(this.map);
 
-            this.icon = L.icon({ iconUrl: '../../assets/icons/marker-icon.png', 
-                                shadowUrl: '../../assets/icons/marker-shadow.png',
-                                iconSize: [25,41],
-                                iconAnchor: [13,40]})
+            this.icon = L.icon({
+              iconUrl: '../../assets/icons/marker-icon.png',
+              shadowUrl: '../../assets/icons/marker-shadow.png',
+              iconSize: [25, 41],
+              iconAnchor: [13, 40]
+            })
 
             for (const event in this.currentResults) {
               if (this.currentResults[event]['administrativeleveltwos'].length > 0) {
@@ -217,15 +221,15 @@ export class HomeComponent implements OnInit {
   }
 
   exportEventSummaries() {
-    this.eventService.getEventSummaryCSV(this.currentSearchQuery)
-    .subscribe(
-      eventSummaries => {
-      
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    )
+    this.eventService.getEventSummaryCSV(this.currentSearchQuery);
+    // .subscribe(
+    //   eventSummaries => {
+
+    //   },
+    //   error => {
+    //     this.errorMessage = <any>error;
+    //   }
+    // )
   }
 
   /**

@@ -7,7 +7,7 @@ import { environment } from 'environments/environment';
 export class APP_SETTINGS {
 
     private static _environment: string = 'development';
-     private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersdev.wim.usgs.gov/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
+    private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersdev.wim.usgs.gov/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
     // private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whisperstest.wim.usgs.gov/whispersservices/' : 'https://whisperstest.wim.usgs.gov/whispersservices/';
 
     public static set environment(env: string) { this._environment = env; }

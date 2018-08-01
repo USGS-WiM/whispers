@@ -19,7 +19,7 @@ export class CountryService {
   public queryCountries(stateQuery): Observable<Country[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.JSON_HEADERS
     });
 
     return this._http.get(APP_SETTINGS.COUNTRIES_URL + stateQuery, options)
@@ -31,7 +31,7 @@ export class CountryService {
   public getCountries(): Observable<Country[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.JSON_HEADERS
     });
 
     return this._http.get(APP_SETTINGS.COUNTRIES_URL, options)

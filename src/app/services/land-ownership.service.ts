@@ -19,7 +19,7 @@ export class LandOwnershipService {
   public getLandOwnerships(): Observable<LandOwnership[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.JSON_HEADERS
     });
 
     return this._http.get(APP_SETTINGS.LAND_OWNERSHIPS_URL, options)

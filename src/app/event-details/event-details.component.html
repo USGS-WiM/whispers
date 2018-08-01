@@ -85,10 +85,10 @@
                           <br>
                           <span *ngIf="species_diagnosis.causal">(Causal)</span>
                           <br>
-                          <span class="text-smaller">{{species_diagnosis.tested_count}} specimens tested |</span>
-                          <span class="text-smaller">{{species_diagnosis.positive_count}} positive</span>
+                          <span>{{species_diagnosis.tested_count}} specimens tested |</span>
+                          <span>{{species_diagnosis.positive_count}} positive</span>
                           <br>
-                          <span class="text-smaller" *ngIf="species_diagnosis.organizations_string"> by {{species_diagnosis.organizations_string[0]}}</span>
+                          <span *ngIf="species_diagnosis.organizations_string"> by {{species_diagnosis.organizations_string[0]}}</span>
                         </span>
                       </span>
                       <span *ngIf="loc_species.species_diagnosis.length === 0">To Be Determined</span>

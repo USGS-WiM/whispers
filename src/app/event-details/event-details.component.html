@@ -81,13 +81,14 @@
                     <td>
                       <span *ngIf="loc_species.species_diagnosis.length > 0">
                         <span *ngFor="let species_diagnosis of loc_species.species_diagnosis">
-                          <span class="text-bold">{{species_diagnosis.diagnosis.name}}</span>
+                          <span class="text-bold" *ngIf="species_diagnosis">{{species_diagnosis.diagnosis_string}}</span>
+                          <br>
                           <span *ngIf="species_diagnosis.causal">(Causal)</span>
                           <br>
                           <span>{{species_diagnosis.tested_count}} specimens tested |</span>
                           <span>{{species_diagnosis.positive_count}} positive</span>
                           <br>
-                          <span> by {{species_diagnosis.organizations_string[0]}}</span>
+                          <span class="text-smaller" *ngIf="species_diagnosis.organizations_string"> by {{species_diagnosis.organizations_string[0]}}</span>
                         </span>
                       </span>
                       <span *ngIf="loc_species.species_diagnosis.length === 0">To Be Determined</span>
@@ -164,7 +165,7 @@
                   <br/> Land ownership: {{eventLocation.land_ownership | displayValue:'name':this.landownerships }}
                   <br/>
                   <p>
-                    <div *ngIf="eventLocation.comments.length > 0">
+                    <div *ngIf="eventLocation.comments && eventLocation.comments.length > 0">
                       <label *ngIf="eventLocation.comments" class="event-detail-label">Comments</label>
                       <br/>
 
@@ -182,7 +183,7 @@
                         <div class="event-detail-action-bar-left">
                           <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpecies(id, i)">
                             <i class="material-icons">edit</i> Edit Species</button>
-                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addSpeciesDiagnosis(id)">
+                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addSpeciesDiagnosis(id, i)">
                             <i class="material-icons">add</i> Add Species Diagnosis</button>
                           <button mat-raised-button color="primary" class="event-detail-action-button">
                             <i class="material-icons">edit</i> Edit Species Diagnosis</button>
@@ -254,7 +255,9 @@
                               <!-- Diagnosis Column -->
                               <ng-container matColumnDef="diagnosis">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Diagnosis </mat-header-cell>
-                                <mat-cell *matCellDef="let loc_species"> {{species_diagnosis}} </mat-cell>
+                                <mat-cell *matCellDef="let loc_species"> 
+                                  <span *ngIf="loc_species.species_diagnosis">test{{loc_species.species_diagnosis.diagnosis_string}}</span> 
+                                </mat-cell>
                               </ng-container>
                             </div>
 

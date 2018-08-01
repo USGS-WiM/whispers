@@ -48,7 +48,9 @@ export class HomeComponent implements OnInit {
 
   private searchQuerySubscription: Subscription;
 
-  currentSearchQuery;
+  isloggedIn = APP_SETTINGS.IS_LOGGEDIN;
+
+  currentSearchQuery = APP_SETTINGS.DEFAULT_EVENT_QUERY;
   currentDisplayQuery: DisplayQuery;
 
   currentResults: EventSummary[];

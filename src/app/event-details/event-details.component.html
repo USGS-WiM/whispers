@@ -186,7 +186,7 @@
                             <i class="material-icons">edit</i> Edit Species</button>
                           <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addSpeciesDiagnosis(id, i)">
                             <i class="material-icons">add</i> Add Species Diagnosis</button>
-                          <button mat-raised-button color="primary" class="event-detail-action-button">
+                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpeciesDiagnosis(id, i)">
                             <i class="material-icons">edit</i> Edit Species Diagnosis</button>
                         </div>
 
@@ -256,8 +256,8 @@
                               <!-- Diagnosis Column -->
                               <ng-container matColumnDef="diagnosis">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Diagnosis </mat-header-cell>
-                                <mat-cell *matCellDef="let loc_species">
-                                  <span *ngIf="loc_species.species_diagnosis">test{{loc_species.species_diagnosis.diagnosis_string}}</span>
+                                <mat-cell *matCellDef="let loc_species"> 
+                                  <span *ngIf="loc_species.species_diagnosis[0]">{{loc_species.species_diagnosis[0].diagnosis_string}}</span> 
                                 </mat-cell>
                               </ng-container>
                             </div>

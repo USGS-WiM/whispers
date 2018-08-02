@@ -116,7 +116,8 @@ export class HomeComponent implements OnInit {
                   iconUrl: '../../assets/icons/marker-icon.png',
                   shadowUrl: '../../assets/icons/marker-shadow.png',
                   iconSize: [25, 41],
-                  iconAnchor: [13, 40]
+                  iconAnchor: [13, 40],
+                  popupAnchor: [0, -40]
                 });
 
                 for (const event in this.currentResults) {
@@ -199,7 +200,8 @@ export class HomeComponent implements OnInit {
               iconUrl: '../../assets/icons/marker-icon.png',
               shadowUrl: '../../assets/icons/marker-shadow.png',
               iconSize: [25, 41],
-              iconAnchor: [13, 40]
+              iconAnchor: [13, 40],
+              popupAnchor: [0, -40]
             })
 
             for (const event in this.currentResults) {

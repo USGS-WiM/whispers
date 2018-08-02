@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>
-  <i class="material-icons"></i> Add Species Diagnosis</h1>
+  <i class="material-icons"></i> {{action_text}} Species Diagnosis</h1>
 <mat-dialog-content>
   <form [formGroup]="addSpeciesDiagnosisForm">
 
@@ -75,6 +75,6 @@
 <mat-dialog-actions>
 
   <button mat-button (click)="this.addSpeciesDiagnosisDialogRef.close('cancel');">Cancel</button>
-  <button mat-button type="submit" [disabled]="addSpeciesDiagnosisForm.invalid" (click)="onSubmit(addSpeciesDiagnosisForm.value)">Submit</button>
+  <button mat-button type="submit" [disabled]="addSpeciesDiagnosisForm.invalid" (click)="onSubmit(addSpeciesDiagnosisForm.value)">{{action_button_text}}</button>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

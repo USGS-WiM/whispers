@@ -30,7 +30,7 @@ import { LandOwnershipService } from '@services/land-ownership.service';
 export class EventDetailsComponent implements OnInit {
 
   //@ViewChild('speciesTable') table: any;
-  id: string;
+  id: string;cd ..
   map;
   states = [];
   landownerships;
@@ -325,6 +325,10 @@ export class EventDetailsComponent implements OnInit {
     } else if (this.selection[index].selected.length === 1) {
       // Open dialog for adding event diagnosis
       this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
+        data: {
+          species: this.selection[index].selected[0],
+          species_diagnosis_action: 'add'
+        }
         // minWidth: 200
         // height: '75%'
       });
@@ -341,6 +345,39 @@ export class EventDetailsComponent implements OnInit {
             this.errorMessage = <any>error;
           }
         );
+    }
+  }
+
+  editSpeciesDiagnosis(id: string, index: number) {
+    if (this.selection[index].selected.length > 1 || this.selection[index].selected.length == 0) {
+      this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
+    } else if (this.selection[index].selected.length === 1) {
+      // Open dialog for adding event diagnosis
+      if (this.selection[index].selected[0].species_diagnosis[0] !== undefined) {
+        this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
+          data: {
+            species: this.selection[index].selected[0],
+            species_diagnosis_action: 'edit'
+          }
+          // minWidth: 200
+          // height: '75%'
+        });
+
+        this.addSpeciesDiagnosisDialogRef.afterClosed()
+          .subscribe(
+            () => {
+              this.refreshEvent();
+              for (let i = 0; i < this.selection.length; i++) {
+                this.selection[i].clear();
+              }
+            },
+            error => {
+              this.errorMessage = <any>error;
+            }
+          );
+      } else {
+        this.openSnackBar('This species has no existing diagnosis', 'OK', 5000);
+      }
     }
   }
 

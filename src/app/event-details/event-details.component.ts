@@ -30,7 +30,7 @@ import { LandOwnershipService } from '@services/land-ownership.service';
 export class EventDetailsComponent implements OnInit {
 
   //@ViewChild('speciesTable') table: any;
-  id: string;cd ..
+  id: string;
   map;
   states = [];
   landownerships;
@@ -206,7 +206,6 @@ export class EventDetailsComponent implements OnInit {
                     location_species.country_string = event_location.country_string;
                     this.eventLocationSpecies.push(location_species);
                   }
-
                 }
 
                 console.log('eventLocationSpecies:', this.eventLocationSpecies);

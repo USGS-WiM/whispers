@@ -1,3 +1,5 @@
+@import url("https://rawgit.com/USGS-WiM/marker-creator/master/stylesheets/markers.css");
+
 #homeContainer {
     display: flex;
     flex-direction: row;
@@ -89,3 +91,4 @@ mat-table>.mat-row:hover {
 .spinner-container mat-spinner {
     margin: 40px auto 0 auto;
 }
+

@@ -21,7 +21,7 @@ export class EventDiagnosisService {
   public getEventDiagnoses(): Observable<EventDiagnosis[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.JSON_HEADERS
     });
 
     return this._http.get(APP_SETTINGS.EVENT_DIAGNOSES_URL, options)

@@ -18,7 +18,7 @@ export class EventService {
 
   constructor(private _http: Http) { }
 
-  public getEventSummaryCSV(eventQuery): Observable<any> {
+  public getEventSummaryCSV(eventQuery) {
 
 
     let queryString = '?';
@@ -72,16 +72,10 @@ export class EventService {
 
     }
 
-    queryString = queryString +  'format=csv';
+    queryString = queryString + '&format=csv';
 
-    const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
-    });
+    window.location.href = APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString;
 
-
-    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString, options)
-      .map((response: Response) => <EventSummary[]>response.json())
-      .catch(this.handleError);
   }
 
   public queryEvents(eventQuery): Observable<EventSummary[]> {
@@ -140,7 +134,7 @@ export class EventService {
     }
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.JSON_HEADERS
     });
 
     return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString, options)
@@ -166,7 +160,7 @@ export class EventService {
   // Function for retrieving event details given event id
   public getEventDetails(eventID): Observable<EventDetail> {
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.JSON_HEADERS
     })
 
     return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL + eventID, options)

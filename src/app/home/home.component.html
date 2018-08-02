@@ -149,11 +149,11 @@
       </mat-expansion-panel-header>
     </mat-expansion-panel>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel *ngIf="isloggedIn">
       <mat-expansion-panel-header>
         Your Saved Searches
       </mat-expansion-panel-header>
-      <app-saved-searches></app-saved-searches>
+      <app-saved-searches ></app-saved-searches>
     </mat-expansion-panel>
   </div>
 

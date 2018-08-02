@@ -20,7 +20,7 @@ export class AdministrativeLevelTwoService {
   public queryAdminLevelTwos(adminLevelOneID): Observable<AdministrativeLevelTwo[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.JSON_HEADERS
     });
 
     return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_TWOS_URL + '?administrativelevelone=' + adminLevelOneID, options)
@@ -33,7 +33,7 @@ export class AdministrativeLevelTwoService {
   public getAdminLevelTwos(): Observable<AdministrativeLevelTwo[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.JSON_HEADERS
     });
 
     return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_TWOS_URL, options)

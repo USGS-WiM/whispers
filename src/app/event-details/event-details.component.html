@@ -85,10 +85,10 @@
                           <br>
                           <span *ngIf="species_diagnosis.causal">(Causal)</span>
                           <br>
-                          <span class="text-smaller">{{species_diagnosis.tested_count}} specimens tested |</span>
-                          <span class="text-smaller">{{species_diagnosis.positive_count}} positive</span>
+                          <span>{{species_diagnosis.tested_count}} specimens tested |</span>
+                          <span>{{species_diagnosis.positive_count}} positive</span>
                           <br>
-                          <span class="text-smaller" *ngIf="species_diagnosis.organizations_string"> by {{species_diagnosis.organizations_string[0]}}</span>
+                          <span *ngIf="species_diagnosis.organizations_string"> by {{species_diagnosis.organizations_string[0]}}</span>
                         </span>
                       </span>
                       <span *ngIf="loc_species.species_diagnosis.length === 0">To Be Determined</span>
@@ -103,6 +103,7 @@
         <p>
 
           <div id="privileged-event-data" class="privileged-event-data" *ngIf="currentUser.role != 7 && currentUser.role != undefined">
+
 
             <mat-divider [inset]="true"></mat-divider>
             <br>
@@ -158,8 +159,8 @@
                       {{determineLocationName(eventLocation.name,i+1)}}
                     </mat-panel-title>
                   </mat-expansion-panel-header>
-                  Onset date: {{eventLocation.start_date  | date:'mediumDate'}}
-                  <br/> End date: {{eventLocation.end_date  | date:'mediumDate'}}
+                  Onset date: {{eventLocation.start_date | date:'mediumDate'}}
+                  <br/> End date: {{eventLocation.end_date | date:'mediumDate'}}
                   <br/> Location: {{eventLocation.administrative_level_one_string}}, {{eventLocation.administrative_level_two_string}},
                   {{eventLocation.country_string}}
                   <br/> Land ownership: {{eventLocation.land_ownership | displayValue:'name':this.landownerships }}

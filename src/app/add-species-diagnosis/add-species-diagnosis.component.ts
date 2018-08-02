@@ -107,7 +107,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
       .subscribe(
         (diagnosisBases) => {
           this.diagnosisBases = diagnosisBases;
-          if (this.data.species.species_diagnosis[0].diagnosis_basis !== undefined) {
+          if (this.data.species.species_diagnosis[0] !== undefined && this.data.species.species_diagnosis[0].diagnosis_basis !== undefined) {
             this.addSpeciesDiagnosisForm.get('diagnosis_basis').setValue(this.data.species.species_diagnosis[0].diagnosis_basis.toString());
           }
         },
@@ -120,7 +120,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
       .subscribe(
         (diagnosisCauses) => {
           this.diagnosisCauses = diagnosisCauses;
-          if (this.data.species.species_diagnosis[0].diagnosis_cause !== undefined) {
+          if (this.data.species.species_diagnosis[0] !== undefined && this.data.species.species_diagnosis[0].diagnosis_cause !== undefined) {
             this.addSpeciesDiagnosisForm.get('diagnosis_cause').setValue(this.data.species.species_diagnosis[0].diagnosis_cause.toString());
           }
         },

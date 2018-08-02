@@ -119,32 +119,67 @@ export class HomeComponent implements OnInit {
 
                         this.locationMarkers.clearLayers();
 
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                        }).addTo(this.map);
-
-
-                        /*this.icon = L.icon({
-                          iconUrl: '../../assets/icons/marker-icon.png',
-                          shadowUrl: '../../assets/icons/marker-shadow.png',
-                          iconSize: [25, 41],
-                          iconAnchor: [13, 40],
-                          popupAnchor: [0, -40]
-                        });*/
-
-                        this.icon = L.divIcon({
-                          className: 'wmm-circle wmm-green wmm-icon-circle wmm-icon-white wmm-size-25'
-                        });
-
                         for (const event in this.currentResults) {
+
+                          let wimClass;
+                          if (this.currentResults[event]['eventdiagnoses'][0] !== undefined) {
+                            switch (this.currentResults[event]['eventdiagnoses'][0].diagnosis_type) {
+                              case 1: {
+                                wimClass = 'wmm-green';
+                                break;
+                              }
+                              case 2: {
+                                wimClass = 'wmm-blue';
+                                break;
+                              }
+                              case 3: {
+                                wimClass = 'wmm-red';
+                                break;
+                              }
+                              case 4: {
+                                wimClass = 'wmm-orange';
+                                break;
+                              }
+                              case 5: {
+                                wimClass = 'wmm-yellow';
+                                break;
+                              }
+                              case 6: {
+                                wimClass = 'wmm-purple';
+                                break;
+                              }
+                              case 7: {
+                                wimClass = 'wmm-sky';
+                                break;
+                              }
+                              case 8: {
+                                wimClass = 'wmm-mutedpink';
+                                break;
+                              }
+                            }
+                          }
+            
+                          this.icon = L.divIcon({
+                            className: 'wmm-circle ' + wimClass + ' wmm-icon-circle wmm-icon-white wmm-size-25',
+                            popupAnchor: [12, 12]
+                          });
+            
                           if (this.currentResults[event]['administrativeleveltwos'].length > 0) {
                             for (let adminleveltwo in this.currentResults[event]['administrativeleveltwos']) {
-                              L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']), Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])], { icon: this.icon }).addTo(this.locationMarkers);
+                              L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']),
+                              Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])],
+                                { icon: this.icon })
+                                .addTo(this.locationMarkers)
+                                .bindPopup("<h3>Event " + this.testForUndefined(this.currentResults[event]['id']) + "</h3><br/>" +
+                                  "Type: " + this.testForUndefined(this.currentResults[event]['event_type_string']) + "<br/>" +
+                                  "Dates: " + this.testForUndefined(this.currentResults[event]['start_date']) + this.currentResults[event]['end_date'] + "<br/>" +
+                                  "Location: " + this.testForUndefined(this.currentResults[event]['administrativeleveltwos'][0]) + ", " + this.testForUndefined(this.currentResults[event]['administrativelevelones'][0]) + "<br/>" +
+                                  "Species: " + this.testForUndefined(this.currentResults[event]['species'][0], 'name') + "<br/>" +
+                                  "Affected: " + this.testForUndefined(this.currentResults[event]['affected_count']) + "<br/>" +
+                                  "Diagnosis: " + this.testForUndefined(this.currentResults[event]['eventdiagnoses'][0], 'diagnosis_string'));
                             }
                           }
                         }
-
-                        //this.map.fitBounds(this.locationMarkers.getBounds());
 
                       }, 500);
 

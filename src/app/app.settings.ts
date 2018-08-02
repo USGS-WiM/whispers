@@ -7,8 +7,8 @@ import { environment } from 'environments/environment';
 export class APP_SETTINGS {
 
     private static _environment: string = 'development';
-    private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersdev.wim.usgs.gov/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
-    // private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whisperstest.wim.usgs.gov/whispersservices/' : 'https://whisperstest.wim.usgs.gov/whispersservices/';
+    //private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersdev.wim.usgs.gov/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
+    private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whisperstest.wim.usgs.gov/whispersservices/' : 'https://whisperstest.wim.usgs.gov/whispersservices/';
 
     public static set environment(env: string) { this._environment = env; }
     public static get API_USERNAME(): string { return 'admin'; }
@@ -111,8 +111,8 @@ export class APP_SETTINGS {
             'administrative_level_one': [],
             'administrative_level_two': [],
             'affected_count': null,
-            'start_date': null,
-            'end_date': null,
+            'start_date': '2018-03-31',
+            'end_date': '2018-07-31',
             'diagnosis_type_includes_all': false,
             'diagnosis_includes_all': false,
             'species_includes_all': false,

@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Event } from '@interfaces/event';
 import { EventSummary } from '@interfaces/event-summary';
 import { EventService } from '@services/event.service';
+import { MatSnackBar } from '@angular/material';
 
 import { SearchDialogComponent } from '@search-dialog/search-dialog.component';
 
@@ -80,6 +81,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private eventService: EventService,
     private dialog: MatDialog,
+    public snackBar: MatSnackBar,
     private router: Router,
     private searchDialogService: SearchDialogService,
     private route: ActivatedRoute
@@ -88,53 +90,83 @@ export class HomeComponent implements OnInit {
     this.searchQuerySubscription = this.searchDialogService.getSearchQuery().subscribe(
       searchQuery => {
 
+        const countLimit = 300;
+
         // this is the listener for a new search query
 
-        this.eventService.queryEvents(searchQuery)
+        this.eventService.queryEventsCount(searchQuery)
           .subscribe(
-            eventSummaries => {
-              this.currentResults = eventSummaries;
-              this.dataSource = new MatTableDataSource(this.currentResults);
-              this.dataSource.paginator = this.paginator;
-              this.dataSource.sort = this.sort;
+            count => {
+              if (count.count >= countLimit) {
+                //this.sampleQuerySizeErrorFlag = true;
+                this.openSnackBar('Your Query result is too large. Please narrow your search and try again', 'OK', 8000);
+              } else if (count.count < countLimit) {
 
-              setTimeout(() => {
-                /*this.map = new L.Map('map', {
-                  center: new L.LatLng(39.8283, -98.5795),
-                  zoom: 4,
-                });*/
+                this.eventService.queryEvents(searchQuery)
+                  .subscribe(
+                    eventSummaries => {
+                      this.currentResults = eventSummaries;
+                      this.dataSource = new MatTableDataSource(this.currentResults);
+                      this.dataSource.paginator = this.paginator;
+                      this.dataSource.sort = this.sort;
+
+                      setTimeout(() => {
+                        /*this.map = new L.Map('map', {
+                          center: new L.LatLng(39.8283, -98.5795),
+                          zoom: 4,
+                        });*/
 
 
-                this.locationMarkers.clearLayers();
+                        this.locationMarkers.clearLayers();
 
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(this.map);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        }).addTo(this.map);
 
 
-                /*this.icon = L.icon({
-                  iconUrl: '../../assets/icons/marker-icon.png',
-                  shadowUrl: '../../assets/icons/marker-shadow.png',
-                  iconSize: [25, 41],
-                  iconAnchor: [13, 40],
-                  popupAnchor: [0, -40]
-                });*/
+                        /*this.icon = L.icon({
+                          iconUrl: '../../assets/icons/marker-icon.png',
+                          shadowUrl: '../../assets/icons/marker-shadow.png',
+                          iconSize: [25, 41],
+                          iconAnchor: [13, 40],
+                          popupAnchor: [0, -40]
+                        });*/
 
-                this.icon = L.divIcon({
-                  className: 'wmm-circle wmm-green wmm-icon-circle wmm-icon-white wmm-size-25'
-                });
+                        this.icon = L.divIcon({
+                          className: 'wmm-circle wmm-green wmm-icon-circle wmm-icon-white wmm-size-25'
+                        });
 
-                for (const event in this.currentResults) {
-                  if (this.currentResults[event]['administrativeleveltwos'].length > 0) {
-                    for (let adminleveltwo in this.currentResults[event]['administrativeleveltwos']) {
-                      L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']), Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])], { icon: this.icon }).addTo(this.locationMarkers);
+                        for (const event in this.currentResults) {
+                          if (this.currentResults[event]['administrativeleveltwos'].length > 0) {
+                            for (let adminleveltwo in this.currentResults[event]['administrativeleveltwos']) {
+                              L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']), Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])], { icon: this.icon }).addTo(this.locationMarkers);
+                            }
+                          }
+                        }
+
+                        //this.map.fitBounds(this.locationMarkers.getBounds());
+
+                      }, 500);
+
+                    },
+                    error => {
+                      this.errorMessage = <any>error;
                     }
-                  }
-                }
+                  );
 
-                //this.map.fitBounds(this.locationMarkers.getBounds());
 
-              }, 500);
+                this.dataSource = new MatTableDataSource(this.currentResults);
+                this.dataSource.paginator = this.paginator;
+                this.dataSource.sort = this.sort;
+
+                this.currentSearchQuery = searchQuery;
+                // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
+                // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
+                // this.testDataSource.loadResults(searchQuery);
+
+                this.searchDialogRef.close();
+
+              }
 
             },
             error => {
@@ -142,17 +174,6 @@ export class HomeComponent implements OnInit {
             }
           );
 
-
-        this.dataSource = new MatTableDataSource(this.currentResults);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-
-        this.currentSearchQuery = searchQuery;
-        // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
-        // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
-        // this.testDataSource.loadResults(searchQuery);
-
-        this.searchDialogRef.close();
 
       });
 
@@ -207,44 +228,44 @@ export class HomeComponent implements OnInit {
               iconAnchor: [13, 40],
               popupAnchor: [0, -40]
             });*/
-            
+
 
             for (const event in this.currentResults) {
 
               let wimClass;
               if (this.currentResults[event]['eventdiagnoses'][0] !== undefined) {
                 switch (this.currentResults[event]['eventdiagnoses'][0].diagnosis_type) {
-                  case 1: { 
+                  case 1: {
                     wimClass = 'wmm-green';
-                    break; 
+                    break;
                   }
-                  case 2: { 
+                  case 2: {
                     wimClass = 'wmm-blue';
-                    break; 
+                    break;
                   }
-                  case 3: { 
+                  case 3: {
                     wimClass = 'wmm-red';
-                    break; 
+                    break;
                   }
-                  case 4: { 
+                  case 4: {
                     wimClass = 'wmm-orange';
-                    break; 
+                    break;
                   }
-                  case 5: { 
+                  case 5: {
                     wimClass = 'wmm-yellow';
-                    break; 
+                    break;
                   }
-                  case 6: { 
+                  case 6: {
                     wimClass = 'wmm-purple';
-                    break; 
+                    break;
                   }
-                  case 7: { 
+                  case 7: {
                     wimClass = 'wmm-sky';
-                    break; 
+                    break;
                   }
-                  case 8: { 
+                  case 8: {
                     wimClass = 'wmm-mutedpink';
-                    break; 
+                    break;
                   }
                 }
               }
@@ -256,17 +277,17 @@ export class HomeComponent implements OnInit {
 
               if (this.currentResults[event]['administrativeleveltwos'].length > 0) {
                 for (let adminleveltwo in this.currentResults[event]['administrativeleveltwos']) {
-                  L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']), 
-                    Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])], 
+                  L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']),
+                  Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])],
                     { icon: this.icon })
-                      .addTo(this.locationMarkers)
-                      .bindPopup("<h3>Event " + this.testForUndefined(this.currentResults[event]['id']) + "</h3><br/>" +
-                        "Type: " + this.testForUndefined(this.currentResults[event]['event_type_string']) + "<br/>" +
-                        "Dates: " + this.testForUndefined(this.currentResults[event]['start_date']) + this.currentResults[event]['end_date'] + "<br/>" +
-                        "Location: " + this.testForUndefined(this.currentResults[event]['administrativeleveltwos'][0]) + ", " + this.testForUndefined(this.currentResults[event]['administrativelevelones'][0]) + "<br/>" +
-                        "Species: " + this.testForUndefined(this.currentResults[event]['species'][0], 'name') + "<br/>" +
-                        "Affected: " + this.testForUndefined(this.currentResults[event]['affected_count']) + "<br/>" +
-                        "Diagnosis: " + this.testForUndefined(this.currentResults[event]['eventdiagnoses'][0], 'diagnosis_string'));
+                    .addTo(this.locationMarkers)
+                    .bindPopup("<h3>Event " + this.testForUndefined(this.currentResults[event]['id']) + "</h3><br/>" +
+                      "Type: " + this.testForUndefined(this.currentResults[event]['event_type_string']) + "<br/>" +
+                      "Dates: " + this.testForUndefined(this.currentResults[event]['start_date']) + this.currentResults[event]['end_date'] + "<br/>" +
+                      "Location: " + this.testForUndefined(this.currentResults[event]['administrativeleveltwos'][0]) + ", " + this.testForUndefined(this.currentResults[event]['administrativelevelones'][0]) + "<br/>" +
+                      "Species: " + this.testForUndefined(this.currentResults[event]['species'][0], 'name') + "<br/>" +
+                      "Affected: " + this.testForUndefined(this.currentResults[event]['affected_count']) + "<br/>" +
+                      "Diagnosis: " + this.testForUndefined(this.currentResults[event]['eventdiagnoses'][0], 'diagnosis_string'));
                 }
               }
             }
@@ -292,11 +313,18 @@ export class HomeComponent implements OnInit {
       } else {
         valueReturned = value;
       }
-    } 
+    }
 
     return valueReturned;
 
   }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
 
   exportEventSummaries() {
     this.eventService.getEventSummaryCSV(this.currentSearchQuery);

@@ -205,7 +205,17 @@ export class HomeComponent implements OnInit {
             for (const event in this.currentResults) {
               if (this.currentResults[event]['administrativeleveltwos'].length > 0) {
                 for (let adminleveltwo in this.currentResults[event]['administrativeleveltwos']) {
-                  L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']), Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])], { icon: this.icon }).addTo(this.locationMarkers);
+                  L.marker([Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']), 
+                    Number(this.currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])], 
+                    { icon: this.icon })
+                      .addTo(this.locationMarkers)
+                      .bindPopup("<h3>Event " + this.testForUndefined(this.currentResults[event]['id']) + "</h3><br/>" +
+                        "Type: " + this.testForUndefined(this.currentResults[event]['event_type_string']) + "<br/>" +
+                        "Dates: " + this.testForUndefined(this.currentResults[event]['start_date']) + this.currentResults[event]['end_date'] + "<br/>" +
+                        "Location: " + this.testForUndefined(this.currentResults[event]['administrativeleveltwos'][0]) + ", " + this.testForUndefined(this.currentResults[event]['administrativelevelones'][0]) + "<br/>" +
+                        "Species: " + this.testForUndefined(this.currentResults[event]['species'][0], 'name') + "<br/>" +
+                        "Affected: " + this.testForUndefined(this.currentResults[event]['affected_count']) + "<br/>" +
+                        "Diagnosis: " + this.testForUndefined(this.currentResults[event]['eventdiagnoses'][0], 'diagnosis_string'));
                 }
               }
             }
@@ -219,6 +229,21 @@ export class HomeComponent implements OnInit {
       );
 
     this.dataSource = new MatTableDataSource(this.currentResults);
+
+  }
+
+  testForUndefined(value: any, property?: any) {
+    let valueReturned = 'n/a';
+
+    if (value !== undefined) {
+      if (property !== undefined) {
+        valueReturned = value[property];
+      } else {
+        valueReturned = value;
+      }
+    } 
+
+    return valueReturned;
 
   }
 

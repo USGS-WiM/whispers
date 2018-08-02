@@ -78,6 +78,70 @@ export class EventService {
 
   }
 
+  public queryEventsCount(eventQuery): Observable<any> {
+
+    // console.log(JSON.stringify(eventQuery));
+
+    let queryString = '?';
+
+    if (eventQuery.affected_count !== null && eventQuery.affected_count !== '') {
+      queryString = queryString + '&affected_count=' + eventQuery.affected_count.toString();
+    }
+    if (eventQuery.startdate !== null && eventQuery.startdate !== '' && eventQuery.startdate !== undefined) {
+      queryString = queryString + '&startdate=' + eventQuery.startdate.toString();
+    }
+    if (eventQuery.enddate !== null && eventQuery.enddate !== '' && eventQuery.enddate !== undefined) {
+      queryString = queryString + '&enddate=' + eventQuery.enddate.toString();
+    }
+
+    //attempt to handle start date and end date that are referred to differently throughout the app
+    if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
+      queryString = queryString + '&startdate=' + eventQuery.start_date.toString();
+    }
+    if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
+      queryString = queryString + '&enddate=' + eventQuery.end_date.toString();
+    }
+
+    if (eventQuery.event_type.length > 0) {
+      queryString = queryString + '&event_type=' + eventQuery.event_type;
+    }
+
+    if (eventQuery.diagnosis.length > 0) {
+      queryString = queryString + '&diagnosis=' + eventQuery.diagnosis;
+    }
+
+    if (eventQuery.diagnosis_type.length > 0) {
+      queryString = queryString + '&diagnosis_type=' + eventQuery.diagnosis_type;
+    }
+
+    if (eventQuery.species.length > 0) {
+      queryString = queryString + '&species=' + eventQuery.species;
+    }
+
+    if (eventQuery.administrative_level_one.length > 0) {
+      queryString = queryString + '&administrative_level_one=' + eventQuery.administrative_level_one;
+    }
+
+    if (eventQuery.administrative_level_two.length > 0) {
+      queryString = queryString + '&administrative_level_two=' + eventQuery.administrative_level_two;
+    }
+
+    if (eventQuery.and_params) {
+      if (eventQuery.and_params.length > 0) {
+        queryString = queryString + '&and_params=' + eventQuery.and_params;
+      }
+
+    }
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.JSON_HEADERS
+    });
+
+    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'get_count/' + queryString, options)
+      .map((response: Response) => <any>response.json())
+      .catch(this.handleError);
+  }
+
   public queryEvents(eventQuery): Observable<EventSummary[]> {
 
     // console.log(JSON.stringify(eventQuery));
@@ -141,6 +205,7 @@ export class EventService {
       .map((response: Response) => <EventSummary[]>response.json())
       .catch(this.handleError);
   }
+
 
   // TEMPORARY function to retrieve hard-coded sample event data from local disk
   public getTestData(): any[] {

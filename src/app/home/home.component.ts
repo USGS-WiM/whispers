@@ -60,6 +60,8 @@ export class HomeComponent implements OnInit {
 
   testDataSource: EventSearchResultsDataSource;
 
+  resultsLoading = false;
+
   locationMarkers;
 
   displayedColumns = [
@@ -92,6 +94,8 @@ export class HomeComponent implements OnInit {
 
         const countLimit = 300;
 
+        this.resultsLoading = true;
+
         // this is the listener for a new search query
 
         this.eventService.queryEventsCount(searchQuery)
@@ -100,6 +104,7 @@ export class HomeComponent implements OnInit {
               if (count.count >= countLimit) {
                 //this.sampleQuerySizeErrorFlag = true;
                 this.openSnackBar('Your Query result is too large. Please narrow your search and try again', 'OK', 8000);
+                this.resultsLoading = false;
               } else if (count.count < countLimit) {
 
                 this.eventService.queryEvents(searchQuery)
@@ -109,6 +114,7 @@ export class HomeComponent implements OnInit {
                       this.dataSource = new MatTableDataSource(this.currentResults);
                       this.dataSource.paginator = this.paginator;
                       this.dataSource.sort = this.sort;
+                      this.resultsLoading = false;
 
                       setTimeout(() => {
                         /*this.map = new L.Map('map', {
@@ -119,12 +125,15 @@ export class HomeComponent implements OnInit {
 
                         this.locationMarkers.clearLayers();
 
+
                         this.mapResults(this.currentResults);
+                      
 
                       }, 500);
 
                     },
                     error => {
+                      this.resultsLoading = false;
                       this.errorMessage = <any>error;
                     }
                   );

@@ -194,16 +194,33 @@ export class HomeComponent implements OnInit {
           this.dataSource.sort = this.sort;
 
           setTimeout(() => {
+            
+            var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+              '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+              'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+
+            var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            });
+            var grayscale   = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr});
+            var streets  = L.tileLayer(mbUrl, {id: 'mapbox.streets',   attribution: mbAttr});
+            
             this.map = new L.Map('map', {
               center: new L.LatLng(39.8283, -98.5795),
               zoom: 4,
+              layers: [osm]
             });
+            
+            this.locationMarkers = L.featureGroup().addTo(this.map);
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(this.map);
+            let baseMaps = {
+              "Open Street Map": osm,
+              "Grayscale": grayscale,
+              "Streets": streets
+            }
 
-            this.locationMarkers = L.layerGroup().addTo(this.map);
+            L.control.layers(baseMaps).addTo(this.map);
 
             /*this.icon = L.icon({
               iconUrl: '../../assets/icons/marker-icon.png',
@@ -287,6 +304,8 @@ export class HomeComponent implements OnInit {
               "Diagnosis: " + this.testForUndefined(currentResults[event]['eventdiagnoses'][0], 'diagnosis_string'));
         }
       }
+
+      this.map.fitBounds(this.locationMarkers.getBounds(),{padding: [50,50]});
     }
   }
 

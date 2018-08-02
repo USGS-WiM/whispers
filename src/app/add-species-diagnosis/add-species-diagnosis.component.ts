@@ -94,7 +94,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
       .subscribe(
         (diagnoses) => {
           this.diagnoses = diagnoses;
-          if (this.data.species.species_diagnosis[0].diagnosis !== undefined) {
+          if (this.data.species.species_diagnosis[0] !== undefined && this.data.species.species_diagnosis[0].diagnosis !== undefined) {
             this.addSpeciesDiagnosisForm.get('diagnosis').setValue(this.data.species.species_diagnosis[0].diagnosis.toString());
           }
         },

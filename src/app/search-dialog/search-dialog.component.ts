@@ -181,7 +181,7 @@ export class SearchDialogComponent implements OnInit {
           this.diagnoses = diagnoses;
           this.filteredDiagnoses = this.diagnosisControl.valueChanges
             .startWith(null)
-            .map(val => this.filter(val, this.diagnoses, 'diagnosis'));
+            .map(val => this.filter(val, this.diagnoses, 'name'));
 
           if (this.data.query && this.data.query['diagnosis'].length > 0) {
             for (const index in diagnoses) {

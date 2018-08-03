@@ -70,7 +70,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
 
   ngOnInit() {
 
-    
+
 
     if (this.data.species_diagnosis_action == 'add') {
       this.action_text = 'Add';
@@ -147,7 +147,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
         .subscribe(
           (contact) => {
             this.submitLoading = false;
-            this.openSnackBar('Event Diagnosis Added', 'OK', 5000);
+            this.openSnackBar('Species Diagnosis Added', 'OK', 5000);
             this.addSpeciesDiagnosisDialogRef.close();
           },
           error => {
@@ -162,17 +162,17 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
         .subscribe(
           (contact) => {
             this.submitLoading = false;
-            this.openSnackBar('Event Diagnosis Updated', 'OK', 5000);
+            this.openSnackBar('Species Diagnosis Updated', 'OK', 5000);
             this.addSpeciesDiagnosisDialogRef.close();
           },
           error => {
             this.submitLoading = false;
-            this.openSnackBar('Error. Contact not Created. Error message: ' + error, 'OK', 8000);
+            this.openSnackBar('Error. Species diagnosis not created. Error message: ' + error, 'OK', 8000);
           }
         );
 
     }
-    
+
   }
 
 }

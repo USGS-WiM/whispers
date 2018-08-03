@@ -2,12 +2,142 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import "./whispers-theme.scss";
 
-@import url('https://fonts.googleapis.com/css?family=Oswald|PT+Sans');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,700');
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700');
+
+
+@import "./app/app.variables.scss";
 
 
 body { 
     margin: 0px !important;
 }
+
+*{
+    font-family: 'Lato', sans-serif;
+    outline: none;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    -webkit-overflow-scrolling: touch;
+    -webkit-appearance: none;
+    -webkit-overflow-scrolling: touch;
+    text-rendering: optimizeLegibility;
+
+
+    &:hover{
+        outline: none;
+    }
+    &:focus{
+        outline: none;
+    }
+    &:active{
+        outline: none;
+    }
+
+    @media (max-width: 550px) {
+        &:not([contenteditable="true"]),
+        &:not(input){
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    }
+}
+
+
+
+// Expansion Panels
+// Expansion Panels
+// Expansion Panels
+.mat-expansion-panel{
+    box-shadow: none !important;
+
+    &:hover{
+        background-color: white !important;
+    }
+
+    .mat-expansion-panel-header{
+        font-size: 15px;
+        transition: $transition;
+        font-weight: 500;
+        padding: 0 15px;
+        font-weight: 700;
+        color: fade-out($black, 0.2);
+
+        .mat-expansion-panel-header-title{
+            color: fade-out($black, 0.2);
+            transition: $transition;
+        }
+    
+        &:not([aria-disabled=true]){
+            border-bottom: 1px solid $border-color;
+        }
+    
+        .mat-expansion-indicator{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 0 4px 0;
+            box-sizing: border-box;
+        }
+
+        &:hover{
+            text-decoration: underline;
+            color: $black;
+            transition: $transition;
+            background-color: white !important;
+            padding-right: 18px;
+
+            .mat-expansion-panel-header-title{
+                color: $black;
+                transition: $transition;
+            }
+        }
+    
+        // Expanded
+        &.mat-expanded{
+            color: $black;
+            &:hover{
+                color: fade-out($black, 0.2);
+                text-decoration: underline;
+            }
+        }
+    }
+
+    // Panel Body
+    .mat-expansion-panel-body{
+        padding: 15px;
+        background-color: $bg;
+        border-bottom: 1px solid $border-color;
+
+        // Paragraphs
+
+        p{
+            font-size: 13px;
+            line-height: 16px;
+            letter-spacing: 0.2px;
+            margin: 5px auto;
+            color: $text;
+
+            // Welcome text 
+            &#welcome-text{
+                line-height: 24px;
+            }
+        }
+    }
+
+    // Action / button row
+    .mat-action-row{
+        border-top: none;
+        border-bottom: 1px solid $border-color;
+        background-color: $bg;
+        margin-top: -1px;
+    }
+}
+
 
 // .mat-button {
 //     text-transform: uppercase;
@@ -15,38 +145,38 @@ body {
 
 
 // Sidebar 
-.controlsDiv .mat-expansion-panel-header{
-    background-color: rgba(247,247,255,1);
-    border-bottom: 1px solid rgba(230,230,240,1);
-    color: rgba(40,40,60,1) !important;
-    font-weight: 500;
-}
-.controlsDiv .mat-expansion-panel-header:not([aria-disabled='true']):hover,
-.controlsDiv .mat-expansion-panel-header:not([aria-disabled='true']):focus{
-    background-color: rgba(237,237,245,1) !important;
-}
-.mat-expansion-panel:not([class*=mat-elevation-z]){
-    box-shadow: none !important;
-}
-.controlsDiv .mat-expansion-indicator{
-    position: relative;
-    top: -2px;
-}
-.controlsDiv .mat-expanded .mat-expansion-indicator{
-    top: 2px;
-}
+// .controlsDiv .mat-expansion-panel-header{
+//     background-color: rgba(247,247,255,1);
+//     border-bottom: 1px solid rgba(230,230,240,1);
+//     color: rgba(40,40,60,1) !important;
+//     font-weight: 500;
+// }
+// .controlsDiv .mat-expansion-panel-header:not([aria-disabled='true']):hover,
+// .controlsDiv .mat-expansion-panel-header:not([aria-disabled='true']):focus{
+//     background-color: rgba(237,237,245,1) !important;
+// }
+// .mat-expansion-panel:not([class*=mat-elevation-z]){
+//     box-shadow: none !important;
+// }
+// .controlsDiv .mat-expansion-indicator{
+//     position: relative;
+//     top: -2px;
+// }
+// .controlsDiv .mat-expanded .mat-expansion-indicator{
+//     top: 2px;
+// }
 
-.controlsDiv .mat-expansion-panel-body{
-    padding: 15px !important;
+// .controlsDiv .mat-expansion-panel-body{
+//     padding: 15px !important;
 
-    p{
-        font-size: 13px;
-        line-height: 20px;
-        font-weight: 400;
-        color: rgba(40,40,60,0.9);
-        margin: 0;
-    }
-}
+//     p{
+//         font-size: 13px;
+//         line-height: 20px;
+//         font-weight: 400;
+//         color: rgba(40,40,60,0.9);
+//         margin: 0;
+//     }
+// }
 
 
 // Mat Tables
@@ -75,4 +205,11 @@ body {
     mat-spinner{
         margin: 0 auto;
     }
+}
+
+
+
+// Remove ugly box shadows from defaults cards
+.mat-card{
+    box-shadow: none !important;
 }

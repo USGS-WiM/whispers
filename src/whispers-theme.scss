@@ -1,9 +1,14 @@
 @import "~@angular/material/theming";
 @include mat-core();
 
-$whispers-app-primary: mat-palette($mat-green, 900, 800, 700);
-$whispers-app-accent:  mat-palette($mat-green, 700, 200, 500);
+// $whispers-app-primary: mat-palette($mat-green, 900, 800, 700);
+// $whispers-app-accent:  mat-palette($mat-green, 700, 200, 500);
+// $whispers-app-warn:    mat-palette($mat-red);
+
+$whispers-app-primary: mat-palette($mat-indigo, A700, A400, A200);
+$whispers-app-accent:  mat-palette($mat-indigo, A700, A400, A200);
 $whispers-app-warn:    mat-palette($mat-red);
+
 
 $whispers-app-theme: mat-light-theme($whispers-app-primary, $whispers-app-accent, $whispers-app-warn);
 

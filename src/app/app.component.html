@@ -3,71 +3,89 @@
 
     <mat-toolbar-row class="header-top-row">
 
-      <span class="mat-display-3 title">
-        <a href="/" style="text-decoration:none; color:white !important;">WHISPers&nbsp;&nbsp;</a>
-      </span>
+      <div class="whispers-branding">
+          <a href="/" class="whispers-title">WHISPers&nbsp;&nbsp;</a>
+          <span class="whispers-subtitle">
+            <span>Wildlife Health Information Sharing Partnership</span>
+            <small>event reporting system</small>
+          </span>
+      </div>
 
-      <span class="subheading-1 whispers-subtitle">
-        Wildlife Health Information Sharing Partnership
-        <span class="text-smaller">event reporting system</span>
-      </span>
-      <span class="header-top-row-spacer"></span>
-      <span class="about-button-span">
-        <button mat-button (click)="openAboutDialog()" aria-label="About this application">
-          <mat-icon class="icon">info_outline</mat-icon>
-          <span class="header-button-text">About</span>
-        </button>
-      </span>
+      <div class="nav-buttons">
+          <span class="about-button-span">
+            <button mat-button (click)="openAboutDialog()" aria-label="About this application">
+              <mat-icon class="icon">info_outline</mat-icon>
+              <span class="header-button-text">About</span>
+            </button>
+          </span>
+      </div>
+      
 
     </mat-toolbar-row>
 
+
+    <!-- Bottom Header Bar -->
     <mat-toolbar-row class="toolbar-bottom-row">
-      <button mat-icon-button (click)="navigateToHome()">
-        <mat-icon class="icon">home</mat-icon>
-      </button>
-      <span class="test-data-warning">This website is under development and
-        <span>
-          <b>CONTAINS FICTICIOUS DATA</b>
-        </span>. Please see
-        <a href="http://www.nwhc.usgs.gov/WHISPers">nwhc.usgs.gov/WHISPers</a> for the current production version of WHISPers</span>
-      <span class="spacer"></span>
-      <span>
-        <span *ngIf="currentUser.username == ''" class="text-small">Logged Out</span>
-        <span *ngIf="currentUser.username !== ''" class="text-small">{{currentUser.first_name}} {{currentUser.last_name}}</span>
-      </span>
-      <span>
+
+      <!-- Left Side of bottom toolbar -->
+      <div class="left">
+
+        <!-- Home -->
+        <button mat-icon-button (click)="navigateToHome()">
+          <mat-icon class="icon">home</mat-icon>
+        </button>
+
+        <!-- Create Event -->
         <button mat-button aria-label="Create Event" (click)="navigateToEventSubmit()">
           <i class="material-icons">library_add</i>
           <span class="header-button-text">Create Event</span>
         </button>
+        
+      </div>
+
+      <!-- App alert -->
+      <span class="app-header-alert">
+        This website is under development and <b>CONTAINS FICTICIOUS DATA.</b> Please see
+        <a href="http://www.nwhc.usgs.gov/WHISPers">nwhc.usgs.gov/WHISPers</a> for the current production version of WHISPers
       </span>
-      <span>
+      
+      <!-- Right side of bottom toolbar -->
+      <div class="right">
+
+        <!-- Login Status -->
+        <span *ngIf="currentUser.username == ''" class="login-status">Logged Out</span>
+        <span *ngIf="currentUser.username !== ''" class="login-status">{{currentUser.first_name}} {{currentUser.last_name}}</span>
+      
+        <!-- Account Menu -->
         <!-- <button mat-button aria-label="Login">
           <mat-icon class="icon">account_box</mat-icon>
           <span class="header-button-text">Login</span>
-        </button> -->
-
+          </button> -->
         <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon class="icon">account_box</mat-icon>
         </button>
+    
         <mat-menu #menu="matMenu">
           <button mat-menu-item aria-label="Login" (click)="openAuthenticationDialog()" *ngIf="currentUser.username == ''">
             <mat-icon>account_box</mat-icon>
             <span class="header-button-text">Login</span>
           </button>
-
+  
           <button mat-menu-item aria-label="Logout" (click)="logout()" *ngIf="currentUser.username !== ''">
             <mat-icon>account_box</mat-icon>
             <span class="header-button-text">Logout</span>
           </button>
-
+  
           <button mat-menu-item aria-label="User Dashboard" (click)="openUserDashboard()">
             <mat-icon>dashboard</mat-icon>
             <span>User Dashboard</span>
           </button>
         </mat-menu>
 
-      </span>
+      </div>
+      
+
+
 
     </mat-toolbar-row>
   </mat-toolbar>
@@ -85,14 +103,15 @@
 
 <footer class="footer">
   <mat-toolbar color="primary" class="mat-typography whispers-header">
-    <mat-toolbar-row>
-      <span class="">USGS National Wildlife Health Center</span>
-      <span class="spacer"></span>
-      <span class="colophon">
-        <span class="version-span">Version {{whispersVersion}}</span>
-        <br>
-        <span>Developed by USGS Web Informatics and Mapping (WIM)</span>
+    <mat-toolbar-row class="whispers-footer">
+
+      <span class="org">USGS National Wildlife Health Center</span>
+
+      <span class="app-meta">
+        <span>Version {{whispersVersion}}</span>
+        <span>Developed by <a href="https://wim.usgs.gov" target="_blank">USGS Web Informatics and Mapping (WIM)</a></span>
       </span>
+
     </mat-toolbar-row>
   </mat-toolbar>
 </footer>

@@ -143,7 +143,7 @@
       </mat-expansion-panel-header>
     </mat-expansion-panel>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel id='mapTools'>
       <mat-expansion-panel-header>
         Map Tools and Explanation
       </mat-expansion-panel-header>
@@ -189,12 +189,12 @@
       </span>
     </mat-expansion-panel>
 
-    <mat-expansion-panel *ngIf="isloggedIn">
+    <!--<mat-expansion-panel *ngIf="isloggedIn">
       <mat-expansion-panel-header>
         Your Saved Searches
       </mat-expansion-panel-header>
-      <app-saved-searches></app-saved-searches>
-    </mat-expansion-panel>
+      <app-saved-searches ></app-saved-searches>
+    </mat-expansion-panel>-->
   </div>
 
   <div class="resultsDiv">
@@ -229,13 +229,7 @@
         </div>
       </mat-card-title>
       <mat-card-content>
-
-        <div class="spinner-container" *ngIf="resultsLoading">
-          <mat-spinner></mat-spinner>
-        </div>
-
         <div *ngIf="dataSource" class="results-table-div">
-          <!-- <div *ngIf="!resultsLoading && dataSource" class="results-table-div"> -->
 
 
           <!-- <mat-form-field>
@@ -334,9 +328,6 @@
 
           <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
         </div>
-
-
-
       </mat-card-content>
     </mat-card>
 

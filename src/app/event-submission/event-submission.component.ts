@@ -209,11 +209,12 @@ export class EventSubmissionComponent implements OnInit {
 
 
   openCreateContactDialog() {
-    this.createContactDialogRef = this.dialog.open(CreateContactComponent,
-      {
-        // minWidth: '60%',
-        // height: '75%'
-      });
+    this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      data: {
+        contact_action: 'create'
+      }
+      // height: '75%'
+    });
   }
 
 

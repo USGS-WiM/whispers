@@ -208,9 +208,11 @@ export class SearchDialogComponent implements OnInit {
             for (const index in adminLevelOnes) {
               if (this.data.query['administrative_level_one'].some(function (el) { return el === adminLevelOnes[index].name })) {
                 this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, adminLevelOnes[index]);
+                this.updateAdminLevelTwoOptions(adminLevelOnes[index].id)
               }
             }
           }
+
         },
         error => {
           this.errorMessage = <any>error;
@@ -218,20 +220,21 @@ export class SearchDialogComponent implements OnInit {
       );
     // get adminLevelTwos from the adminLevelTwo service
     // TODO: remove this from ngOnInit. Not performant. Move to the updateAdminLevelTwoOptions function
-    // this.adminLevelTwoService.getAdminLevelTwos()
-    //   .subscribe(
-    //     (adminLevelTwos) => {
-    //       this.administrative_level_two = adminLevelTwos;
-    //       this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
-    //         .startWith(null)
-    //         .map(val => this.filter(val, this.administrative_level_two, 'name'));
+    /* if (this.data.query && this.data.query['administrative_level_two'].length > 0) {
+      this.adminLevelTwoService.getAdminLevelTwos()
+        .subscribe(
+          (adminLevelTwos) => {
+            this.administrative_level_two = adminLevelTwos;
+            this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
+              .startWith(null)
+              .map(val => this.filter(val, this.administrative_level_two, 'name'));
 
-    //     },
-    //     error => {
-    //       this.errorMessage = <any>error;
-    //     }
-    //   );
-    // get species from the species service
+          },
+          error => {
+            this.errorMessage = <any>error;
+          }
+        ); */
+    //get species from the species service
     this._speciesService.getSpecies()
       .subscribe(
         (species) => {
@@ -411,15 +414,16 @@ export class SearchDialogComponent implements OnInit {
 
     this.adminLevelTwoService.queryAdminLevelTwos(id)
       .subscribe(
-        adminLevelTwos => {
-          this.administrative_level_two.push(adminLevelTwos);
+        (adminLevelTwos) => {
+          //this.administrative_level_two.push(adminLevelTwos);
+          this.administrative_level_two = this.administrative_level_two.concat(adminLevelTwos);
           this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.administrative_level_two, 'name'));
 
           if (this.data.query && this.data.query['administrative_level_two'].length > 0) {
             for (const index in adminLevelTwos) {
-              if (this.data.query['administrative_level_two'].some(function (el) { return el === adminLevelTwos[index] })) {
+              if (this.data.query['administrative_level_two'].some(function (el) { return el === adminLevelTwos[index]['name'] })) {
                 this.dropdownSetup(this.adminLevelTwoControl, this.selectedAdminLevelTwos, adminLevelTwos[index]);
               }
             }

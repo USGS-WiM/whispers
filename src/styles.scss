@@ -213,3 +213,7 @@ body {
 .mat-card{
     box-shadow: none !important;
 }
+
+input[type=radio]{
+	-webkit-appearance: radio !important;
+}

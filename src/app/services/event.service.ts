@@ -18,6 +18,12 @@ export class EventService {
 
   constructor(private _http: Http) { }
 
+  public getEventDetailsCSV(eventID) {
+
+    window.location.href = APP_SETTINGS.EVENT_DETAILS_URL + eventID + '/flat/?format=csv';
+
+  }
+
   public getEventSummaryCSV(eventQuery) {
 
 

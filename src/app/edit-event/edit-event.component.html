@@ -26,24 +26,12 @@
           <mat-option *ngFor="let event_status of event_statuses" value="{{event_status.id}}">{{event_status.name}}</mat-option>
         </mat-select>
       </mat-form-field>
-      
-      <!-- Public -->
-      <div class="form-control">
-        <mat-label>Public: </mat-label>
-        <mat-radio-group formControlName="public">
-          <mat-radio-button value="true"> Yes </mat-radio-button>
-          <mat-radio-button value="false"> No </mat-radio-button>
-        </mat-radio-group>
-      </div>
 
+      <!-- Public -->
+      <mat-checkbox formControlName="public">Public</mat-checkbox>
       <!-- Complete -->
-      <div class="form-control">
-        <mat-label>Complete: </mat-label>
-        <mat-radio-group formControlName="complete">
-          <mat-radio-button value="true"> Yes </mat-radio-button>
-          <mat-radio-button value="false"> No </mat-radio-button>
-        </mat-radio-group>
-      </div>
+      <mat-checkbox formControlName="complete">Complete</mat-checkbox>
+    
 
       <!-- Need to add more fields Legal status, etc -->
 

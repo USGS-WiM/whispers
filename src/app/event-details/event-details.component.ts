@@ -430,6 +430,10 @@ export class EventDetailsComponent implements OnInit {
       this.locationSpeciesDataSource.data.forEach(row => this.selection[i].select(row));
   }
 
+  exportEventDetails() {
+    this._eventService.getEventDetailsCSV(this.id);
+  }
+
 
   // toggleExpandRow(row) {
   //   console.log('Toggled Expand Row!', row);

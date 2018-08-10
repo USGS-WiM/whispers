@@ -213,3 +213,26 @@ body {
 .mat-card{
     box-shadow: none !important;
 }
+
+
+// Float number above icon marker
+.leaflet-marker-icon:after {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    z-index: -2 !important;
+}
+.leaflet-marker-icon:before {
+    position: absolute !important;
+    top: 50%;
+    left: 50%;
+    margin-left: -6px !important;
+    margin-top: -8.5px !important;
+    z-index: -1 !important;
+}
+.leaflet-marker-icon {
+    line-height: 24px !important;
+    text-align: center;
+    font-weight: bolder !important;
+    font-size: 11px !important;
+}

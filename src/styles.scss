@@ -216,13 +216,13 @@ body {
 
 
 // Float number above icon marker
-.leaflet-marker-icon:after {
+.wmm-size-25:after {
     position: absolute !important;
     top: 0;
     left: 0;
     z-index: -2 !important;
 }
-.leaflet-marker-icon:before {
+.wmm-size-25:before {
     position: absolute !important;
     top: 50%;
     left: 50%;
@@ -230,11 +230,39 @@ body {
     margin-top: -8.5px !important;
     z-index: -1 !important;
 }
-.leaflet-marker-icon {
+.wmm-size-25 {
     line-height: 24px !important;
     text-align: center;
     font-weight: bolder !important;
     padding-right: 1px !important;
     font-size: 9px !important;
     padding-top: 1px !important;
+}
+// Larger - size 35
+.wmm-size-35:after {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    z-index: -2 !important;
+}
+.wmm-size-35:before {
+    position: absolute !important;
+    top: 50%;
+    left: 50%;
+    height: 21px !important;
+    width: 21px !important;
+    margin-left: -11px !important;
+    margin-top: -15px !important;
+    z-index: -1 !important;
+}
+.wmm-size-35 {
+    line-height: 33px !important;
+    text-align: center;
+    font-weight: bolder !important;
+    padding-right: 1px !important;
+    font-size: 10px !important;
+    padding-top: 1px !important;
+}
+.wmm-mutedblue:after{
+    background-color: #A7A9B2 !important;
 }

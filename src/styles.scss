@@ -266,3 +266,6 @@ body {
 .wmm-mutedblue:after{
     background-color: #A7A9B2 !important;
 }
+input[type=radio]{
+	-webkit-appearance: radio !important;
+}

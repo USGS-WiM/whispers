@@ -381,7 +381,7 @@ export class HomeComponent implements OnInit {
 
       let colorClass;
       let iconClasses = ' wmm-icon-circle wmm-icon-white ';
-      const sizeClass = 'wmm-size-25';
+      let sizeClass = 'wmm-size-25';
       if (marker['event_diagnoses'][0] !== undefined) {
         switch (marker['event_diagnoses'][0].diagnosis_type) {
           case 1: {
@@ -423,7 +423,18 @@ export class HomeComponent implements OnInit {
         iconClasses = ' wmm-icon-noicon wmm-icon-white ';
       }
 
-      const eventCount = marker.events.length;
+      // eventCount var keeps track of number of events at the location. Do not show if less than 2.
+      let eventCount;
+      if (marker.events.length > 1) {
+        // for location with multiple events, show event count on symbol, make larger and gray
+        eventCount = marker.events.length;
+        iconClasses = ' wmm-icon-circle wmm-icon-white ';
+        colorClass = 'wmm-mutedblue';
+        sizeClass = 'wmm-size-35';
+      } else {
+        // eventCount set to empty string if just one event at location
+        eventCount = '';
+      }
 
       this.icon = L.divIcon({
         className: 'wmm-circle ' + colorClass + iconClasses + sizeClass,
@@ -434,21 +445,27 @@ export class HomeComponent implements OnInit {
 
       for (const event of marker.events) {
 
-        let locationString = '';
+        let locationContent = '';
+        let speciesContent = '';
 
         for (const administrativeleveltwo of event.administrativeleveltwos) {
-          locationString = locationString + administrativeleveltwo['name'] + ', ' +
+          locationContent = locationContent + administrativeleveltwo['name'] + ', ' +
             this.displayValuePipe.transform(administrativeleveltwo['administrative_level_one'], 'name', this.adminLevelOnes) + '</br>';
+        }
+
+        for (const species of event.species) {
+          speciesContent = speciesContent + species['name'] + '</br>';
         }
 
         popupContent = popupContent + '<h4>Event ' + this.testForUndefined(event['id']) + '</h4>' +
           'Type: ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
           'Dates: ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
-          'Location: ' + locationString +
+          'Location: ' + locationContent +
           // 'Location: ' + this.testForUndefined(event['administrativeleveltwos'][0]['name']) + ', ' + this.testForUndefined(event['administrativelevelones'][0]['name']) + '<br/>' +
-          'Species: ' + this.testForUndefined(event['species'][0], 'name') + '<br/>' +
+          'Species: ' + speciesContent +
+          // 'Species: ' + this.testForUndefined(event['species'][0], 'name') + '<br/>' +
           'Affected: ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-          'Diagnosis: ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string';
+          'Diagnosis: ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string');
       }
 
       L.marker([marker.lat, marker.long],

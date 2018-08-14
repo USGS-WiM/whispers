@@ -468,10 +468,13 @@ export class HomeComponent implements OnInit {
           'Diagnosis: ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string');
       }
 
+      const popup = L.popup({minWidth: 400})
+      .setContent(popupContent);
+
       L.marker([marker.lat, marker.long],
         { icon: this.icon })
         .addTo(this.locationMarkers)
-        .bindPopup(popupContent);
+        .bindPopup(popup);
     }
 
     this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50] });

@@ -267,7 +267,7 @@ export class HomeComponent implements OnInit {
   searchInArray(array, field: string, value) {
     for (const item of array) {
       if (item[field] === value) {
-        console.log("Duplicate detected. Already existing ID: " + value);
+        // console.log('Duplicate detected. Already existing ID: ' + value);
         return true;
       }
     }
@@ -275,69 +275,22 @@ export class HomeComponent implements OnInit {
 
   mapResults(currentResults: any) {
 
-    let currentResultsMarkers = [];
+    // set/reset currentResultsMarker var to an empty array
+    const currentResultsMarkers = [];
     // tslint:disable-next-line:forin
-    for (let event in currentResults) {
+    // loop through currentResults repsonse from a search query
+    for (const event in currentResults) {
 
-      let colorClass;
-      let iconClasses = ' wmm-icon-circle wmm-icon-white ';
-      const sizeClass = 'wmm-size-25';
-      if (currentResults[event]['eventdiagnoses'][0] !== undefined) {
-        switch (currentResults[event]['eventdiagnoses'][0].diagnosis_type) {
-          case 1: {
-            colorClass = 'wmm-green';
-            break;
-          }
-          case 2: {
-            colorClass = 'wmm-blue';
-            break;
-          }
-          case 3: {
-            colorClass = 'wmm-red';
-            break;
-          }
-          case 4: {
-            colorClass = 'wmm-orange';
-            break;
-          }
-          case 5: {
-            colorClass = 'wmm-yellow';
-            break;
-          }
-          case 6: {
-            colorClass = 'wmm-purple';
-            break;
-          }
-          case 7: {
-            colorClass = 'wmm-sky';
-            break;
-          }
-          case 8: {
-            colorClass = 'wmm-mutedpink';
-            break;
-          }
-        }
-      }
-
-      if (currentResults[event]['complete'] === true) {
-        iconClasses = ' wmm-icon-noicon wmm-icon-white ';
-      }
-
-      const eventCount = currentResults[event]['administrativeleveltwos'].length;
-
-      this.icon = L.divIcon({
-        className: 'wmm-circle ' + colorClass + iconClasses + sizeClass,
-        html: eventCount
-      });
-
-
-
+      // if event has any administrativeleveltwos (counties), add them to the currentResultsMarkers array
       if (currentResults[event]['administrativeleveltwos'].length > 0) {
-
 
         // tslint:disable-next-line:forin
         for (const adminleveltwo in currentResults[event]['administrativeleveltwos']) {
 
+          // check if the administrativeleveltwo (county) of the event has already been placed into the currentResultsMarkers array.
+          // If it has, push its events array into the existing marker for that administrativeleveltwo. This is to ensure one
+          // marker per administrativeleveltwo, with events nested
+          // tslint:disable-next-line:max-line-length
           if (this.searchInArray(currentResultsMarkers, 'adminleveltwo', currentResults[event]['administrativeleveltwos'][adminleveltwo]['id'])) {
             for (const marker of currentResultsMarkers) {
               if (marker.adminleveltwo === currentResults[event]['administrativeleveltwos'][adminleveltwo]['id']) {
@@ -355,34 +308,22 @@ export class HomeComponent implements OnInit {
               complete: currentResults[event]['complete']
             });
 
-
-
           }
 
-          // Good code below, works to display markers
-          // L.marker([Number(currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']),
-          // Number(currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude'])],
-          //   { icon: this.icon })
-          //   .addTo(this.locationMarkers)
-          //   .bindPopup('<h3>Event ' + this.testForUndefined(currentResults[event]['id']) + '</h3><br/>' +
-          //     'Type: ' + this.testForUndefined(currentResults[event]['event_type_string']) + '<br/>' +
-          //     'Dates: ' + this.testForUndefined(currentResults[event]['start_date']) + ' to ' + this.currentResults[event]['end_date'] + '<br/>' +
-          //     'Location: ' + this.testForUndefined(currentResults[event]['administrativeleveltwos'][0]['name']) + ', ' + this.testForUndefined(currentResults[event]['administrativelevelones'][0]['name']) + '<br/>' +
-          //     'Species: ' + this.testForUndefined(currentResults[event]['species'][0], 'name') + '<br/>' +
-          //     'Affected: ' + this.testForUndefined(currentResults[event]['affected_count']) + '<br/>' +
-          //     'Diagnosis: ' + this.testForUndefined(currentResults[event]['eventdiagnoses'][0], 'diagnosis_string'));
         }
       }
-      //this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50] });
     }
 
-
+    // loop through currentResultsMarkers 
     for (const marker of currentResultsMarkers) {
 
+      // set vars for classes that will define the marker icons, per WIM markermaker CSS
       let colorClass;
+      let shapeClass = 'wmm-circle ';
       let iconClasses = ' wmm-icon-circle wmm-icon-white ';
       let sizeClass = 'wmm-size-25';
       if (marker['event_diagnoses'][0] !== undefined) {
+        // set color of marker based on diagnosis type
         switch (marker['event_diagnoses'][0].diagnosis_type) {
           case 1: {
             colorClass = 'wmm-green';
@@ -419,6 +360,7 @@ export class HomeComponent implements OnInit {
         }
       }
 
+      // if event is complete, remove the white center to indicate 'closed'
       if (marker['complete'] === true) {
         iconClasses = ' wmm-icon-noicon wmm-icon-white ';
       }
@@ -434,80 +376,101 @@ export class HomeComponent implements OnInit {
       } else {
         // eventCount set to empty string if just one event at location
         eventCount = '';
+        // set icon shaoe to a triangle if event_type = 2 (surveillance)
+        if (marker.events[0].event_type === 2) {
+          shapeClass = 'wmm-triangle ';
+        }
       }
-
+      // set icon to the proper combination of classnames set above (from WIM markermaker and some custom css)
       this.icon = L.divIcon({
-        className: 'wmm-circle ' + colorClass + iconClasses + sizeClass,
+        className: shapeClass + colorClass + iconClasses + sizeClass,
         html: eventCount
       });
 
+      // establish an empty string as the variable for the popup HTML markup content
       let popupContent = '';
 
+      // loop through the events that are part of each single marker
       for (const event of marker.events) {
 
+        // establish an empty string as the variable for the location list HTML markup content
         let locationContent = '';
+        // establish an empty string as the variable for the species list HTML markup content
         let speciesContent = '';
 
+        // loop through the adminleveltwos (counties) for location display, attaching it's related adminlevelone (state)
         for (const administrativeleveltwo of event.administrativeleveltwos) {
           locationContent = locationContent + administrativeleveltwo['name'] + ', ' +
             this.displayValuePipe.transform(administrativeleveltwo['administrative_level_one'], 'name', this.adminLevelOnes) + '</br>';
         }
 
+        // loop through the species for location display
         for (const species of event.species) {
           speciesContent = speciesContent + species['name'] + '</br>';
         }
 
-        popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
-          //'<h4>Event ' + this.testForUndefined(event['id']) + '</h4>' +
-          '<div class="panel">' + 
-            'Type: ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
-            'Dates: ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
-            'Location: ' + locationContent +
-            // 'Location: ' + this.testForUndefined(event['administrativeleveltwos'][0]['name']) + ', ' + this.testForUndefined(event['administrativelevelones'][0]['name']) + '<br/>' +
-            'Species: ' + speciesContent +
-            // 'Species: ' + this.testForUndefined(event['species'][0], 'name') + '<br/>' +
-            'Affected: ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-            'Diagnosis: ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') +
-          '</div>';
+        // if one event represented by marker, do a simple display. If multiple, display in collapsing panels
+        if (marker.events.length === 1) {
+          popupContent = popupContent + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
+            '<span class="popupLabel">Type:</span> ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
+            '<span class="popupLabel">Dates:</span> ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
+            '<span class="popupLabel">Location:</span> ' + locationContent +
+            '<span class="popupLabel">Species:</span> ' + speciesContent +
+            '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
+            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string');
+        } else if (marker.events.length > 1) {
 
+          popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
+            // '<h4>Event ' + this.testForUndefined(event['id']) + '</h4>' +
+            '<div class="panel">' +
+            '<span class="popupLabel">Type:</span> ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
+            '<span class="popupLabel">Dates:</span> ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
+            '<span class="popupLabel">Location:</span> ' + locationContent +
+            '<span class="popupLabel">Species:</span> ' + speciesContent +
+            '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
+            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') +
+            '<p></div>';
+        }
       }
 
-      const popup = L.popup({minWidth: 400, maxHeight: document.getElementById("mapPanel").offsetHeight - 150})
-      .setContent(popupContent);
+      // establish leaflet popup var for binding to marker (include check for mapPanel height, to set max popup height)
+      const popup = L.popup({ maxHeight: document.getElementById("mapPanel").offsetHeight - 150 })
+        .setContent(popupContent);
 
+      // establish leaflet marker var, passing in icon var from above, including on popupopen logic for accordion style collapsing panels
       L.marker([marker.lat, marker.long],
         { icon: this.icon })
         .addTo(this.locationMarkers)
         .bindPopup(popup)
         .on('popupopen', function (popup) {
 
-          var acc = document.getElementsByClassName("accordion");
-          var i;
+          const acc = document.getElementsByClassName('accordion');
+          let i;
 
           for (i = 0; i < acc.length; i++) {
-            acc[i].addEventListener("click", function() {
+            acc[i].addEventListener('click', function () {
               for (let j = 0; j < acc.length; j++) {
-                acc[j].classList.toggle("active");
+                acc[j].classList.toggle('active');
               }
-              this.classList.toggle("active");
-              var panel = this.nextElementSibling;
-              if (panel.style.maxHeight){
+              this.classList.toggle('active');
+              const panel = this.nextElementSibling;
+              if (panel.style.maxHeight) {
                 panel.style.maxHeight = null;
               } else {
-                panel.style.maxHeight = panel.scrollHeight + "px";
-              } 
+                panel.style.maxHeight = panel.scrollHeight + 'px';
+              }
             });
           }
 
           // let acc = document.getElementsByClassName("accordion");
           // let i;
-          
+
           // for (i = 0; i < acc.length; i++) {
           //     acc[i].addEventListener("click", function() {
           //         /* Toggle between adding and removing the "active" class,
           //         to highlight the button that controls the panel */
           //         this.classList.toggle("active");
-          
+
           //         /*Toggle between hiding and showing the active panel */
           //         var panel = this.nextElementSibling;
           //         if (panel.style.display === "block") {
@@ -517,13 +480,10 @@ export class HomeComponent implements OnInit {
           //         }
           //     });
           // }
-        });;
+        });
     }
 
     this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50] });
-
-    console.log(currentResultsMarkers);
-
   }
 
   testForUndefined(value: any, property?: any) {

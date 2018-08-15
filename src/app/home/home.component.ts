@@ -457,29 +457,73 @@ export class HomeComponent implements OnInit {
           speciesContent = speciesContent + species['name'] + '</br>';
         }
 
-        popupContent = popupContent + '<h4>Event ' + this.testForUndefined(event['id']) + '</h4>' +
-          'Type: ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
-          'Dates: ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
-          'Location: ' + locationContent +
-          // 'Location: ' + this.testForUndefined(event['administrativeleveltwos'][0]['name']) + ', ' + this.testForUndefined(event['administrativelevelones'][0]['name']) + '<br/>' +
-          'Species: ' + speciesContent +
-          // 'Species: ' + this.testForUndefined(event['species'][0], 'name') + '<br/>' +
-          'Affected: ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-          'Diagnosis: ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string');
+        popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
+          //'<h4>Event ' + this.testForUndefined(event['id']) + '</h4>' +
+          '<div class="panel">' + 
+            'Type: ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
+            'Dates: ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
+            'Location: ' + locationContent +
+            // 'Location: ' + this.testForUndefined(event['administrativeleveltwos'][0]['name']) + ', ' + this.testForUndefined(event['administrativelevelones'][0]['name']) + '<br/>' +
+            'Species: ' + speciesContent +
+            // 'Species: ' + this.testForUndefined(event['species'][0], 'name') + '<br/>' +
+            'Affected: ' + this.testForUndefined(event['affected_count']) + '<br/>' +
+            'Diagnosis: ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') +
+          '</div>';
+
       }
 
-      const popup = L.popup({minWidth: 400})
+      const popup = L.popup({minWidth: 400, maxHeight: document.getElementById("mapPanel").offsetHeight - 150})
       .setContent(popupContent);
 
       L.marker([marker.lat, marker.long],
         { icon: this.icon })
         .addTo(this.locationMarkers)
-        .bindPopup(popup);
+        .bindPopup(popup)
+        .on('popupopen', function (popup) {
+
+          var acc = document.getElementsByClassName("accordion");
+          var i;
+
+          for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+              for (let j = 0; j < acc.length; j++) {
+                acc[j].classList.toggle("active");
+              }
+              this.classList.toggle("active");
+              var panel = this.nextElementSibling;
+              if (panel.style.maxHeight){
+                panel.style.maxHeight = null;
+              } else {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+              } 
+            });
+          }
+
+          // let acc = document.getElementsByClassName("accordion");
+          // let i;
+          
+          // for (i = 0; i < acc.length; i++) {
+          //     acc[i].addEventListener("click", function() {
+          //         /* Toggle between adding and removing the "active" class,
+          //         to highlight the button that controls the panel */
+          //         this.classList.toggle("active");
+          
+          //         /*Toggle between hiding and showing the active panel */
+          //         var panel = this.nextElementSibling;
+          //         if (panel.style.display === "block") {
+          //             panel.style.display = "none";
+          //         } else {
+          //             panel.style.display = "block";
+          //         }
+          //     });
+          // }
+        });;
     }
 
     this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50] });
 
     console.log(currentResultsMarkers);
+
   }
 
   testForUndefined(value: any, property?: any) {

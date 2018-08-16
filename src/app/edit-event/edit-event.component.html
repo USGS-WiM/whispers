@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>
-  <i class="material-icons">edit</i> Edit Event</h1>
+  <i class="material-icons">edit</i> Edit Event {{eventID}}</h1>
 <mat-dialog-content>
   <form [formGroup]="editEventForm">
 
@@ -7,7 +7,7 @@
 
       <!-- Event Reference -->
       <mat-form-field class="form-control">
-        <input matInput placeholder="Event Reference" formControlName="event_reference" required>
+        <input matInput placeholder="Event Reference" formControlName="event_reference">
         <mat-error *ngIf="editEventForm.get('event_reference').invalid">{{getErrorMessage('event_reference')}}</mat-error>
       </mat-form-field>
 

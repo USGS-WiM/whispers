@@ -27,6 +27,8 @@ export class EditEventComponent implements OnInit {
   organizations: Organization[];
   event_types: EventType[];
   event_statuses: EventStatus[];
+
+  eventID;
   
   editEventForm: FormGroup;
 
@@ -39,7 +41,7 @@ export class EditEventComponent implements OnInit {
       event_status: null,
       public: null,
       complete: null
-      //event_organization: null
+      // event_organization: null
     });
   }
 
@@ -58,6 +60,7 @@ export class EditEventComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.data.eventData);
+    this.eventID = this.data.eventData.id;
     this.editEventForm.get('event_reference').setValue(this.data.eventData.event_reference);
     this.editEventForm.get('public').setValue(this.data.eventData.public.toString());
     this.editEventForm.get('complete').setValue(this.data.eventData.complete.toString());

@@ -217,11 +217,13 @@ body {
 
 // Float number above icon marker
 .wmm-size-25:after {
+// .wmm-circle.wmm-size-25:after {
     position: absolute !important;
     top: 0;
     left: 0;
     z-index: -2 !important;
 }
+// .wmm-circle.wmm-size-25:before {
 .wmm-size-25:before {
     position: absolute !important;
     top: 50%;
@@ -231,6 +233,7 @@ body {
     z-index: -1 !important;
 }
 .wmm-size-25 {
+// .wmm-circle.wmm-size-25 {
     line-height: 24px !important;
     text-align: center;
     font-weight: bolder !important;
@@ -268,6 +271,11 @@ body {
 }
 input[type=radio]{
 	-webkit-appearance: radio !important;
+}
+.wmm-triangle.wmm-size-25:after{
+    // border: 3px solid rgba(0,0,0,0.5) !important;
+    left: -12px !important;
+    top: 4px !important;
 }
 
 /* Style the buttons that are used to open and close the accordion panel */
@@ -333,4 +341,72 @@ input[type=radio]{
 
 .active:after {
     content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+.popupLabel {
+    font-weight: bold;
+    font-size: larger;
+}
+
+// Leaflet Content Popup / map clicks
+// Leaflet Content Popup / map clicks
+// Leaflet Content Popup / map clicks
+.leaflet-popup-content-wrapper{
+    box-shadow: 0 3px 14px rgba(10,20,40,0.1) !important;
+
+    .leaflet-popup-content{
+        margin: 0px auto;
+        box-sizing: border-box;
+        padding: 10px;
+        line-height: 15px;
+
+        h3{
+            margin: 0 auto 10px auto;
+        }
+        .popupLabel{
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .accButton{
+            padding: 10px;
+            background-color: transparent;
+            font-size: 14px;
+            font-weight: 700;
+            transition: $transition;
+
+            &:hover{
+                cursor: pointer;
+                transition: $transition;
+                background-color: $bg;
+            }
+
+            &:after{
+                position: relative;
+                top: -3px;
+            }
+        }
+        .panel{
+            box-sizing: border-box;
+            padding: 0 10px 0 15px;            
+        }
+    }
+}
+.leaflet-popup-close-button {
+    position: absolute;
+    top: -7px !important;
+    right: -5px !important;
+    background-color: white !important;
+    padding: 5.5px 0 0 0 !important;
+    box-sizing: border-box !important;
+    text-align: center;
+    width: 28px !important;
+    height: 28px !important;
+    font: 16px/14px Tahoma, Verdana, sans-serif;
+    color: #c3c3c3;
+    box-shadow: 0 1px 4px rgba(10,20,40,0.05) !important;
+    text-decoration: none;
+    font-weight: bold;
+    color: $text;
+    border-radius: 50% !important;
 }

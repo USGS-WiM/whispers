@@ -246,6 +246,11 @@
 
                         <mat-step [stepControl]="eventSubmissionForm">
                           <ng-template matStepLabel>Comments</ng-template>
+
+                          <span>Text in at least one of the comment categories below is required. Please be as thorough as possible
+                            to aid interpretation of data and to potentially guide cause of death determination and management
+                            actions.
+                          </span>
                           <p>
 
                             <mat-form-field class="comment-text-area">
@@ -405,7 +410,7 @@
 
                                     <mat-form-field class="species-number-control">
                                       <mat-select placeholder="Captivity" formControlName="captive">
-                                        <mat-option [value]="true">Captive</mat-option>
+                                        <mat-option [value]="true">Captive > 72 hours</mat-option>
                                         <mat-option [value]="false">Wild and/or free-ranging</mat-option>
                                       </mat-select>
                                       <mat-hint align="end" matTooltip="Public field">
@@ -638,19 +643,38 @@
             </form>
             <!-- End event comments section-->
 
-            <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar "></mat-progress-bar>
+            <mat-divider [inset]="true"></mat-divider>
+
+            <!-- Begin Specimen Submission Request section-->
+            <div>
+              <h4>
+                <mat-icon>assistant</mat-icon> Specimen Consultation and Diagnostic Services Request &nbsp;&nbsp;&nbsp;&nbsp;<strong>
+                    <mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT</strong></h4>
+
+              <mat-radio-group>
+                <mat-radio-button value="1">Request diagnostic and consultative services </mat-radio-button>
+                <mat-radio-button value="2">Request consultative services ONLY </mat-radio-button>
+                <mat-radio-button value="3">Request no services </mat-radio-button>
+              </mat-radio-group>
+            </div>
             <p>
-              <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="submitEvent(eventSubmissionForm.value)">
-                <i class="material-icons ">done</i> Create Event</button>
+              <!-- End Specimen Submission Request section-->
+
+              <mat-divider [inset]="true"></mat-divider>
+
+              <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar "></mat-progress-bar>
               <p>
                 <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="openEventSubmitConfirm(eventSubmissionForm.value)">
-                  <i class="material-icons ">pageview</i> Review Event</button>
+                  <i class="material-icons ">pageview</i> Review Event Submission</button>
+                <p>
+                  <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="submitEvent(eventSubmissionForm.value)">
+                    <i class="material-icons ">done</i> Create Event</button>
 
-                <div class="temporary-form-value-display ">
-                  <h3>Temporary Form Value display (not for production)</h3>
-                  <p>Form Status: {{eventSubmissionForm.status}}
-                    <pre> {{eventSubmissionForm.value | json}} </pre>
-                </div>
+                  <div class="temporary-form-value-display ">
+                    <h3>Temporary Form Value display (not for production)</h3>
+                    <p>Form Status: {{eventSubmissionForm.status}}
+                      <pre> {{eventSubmissionForm.value | json}} </pre>
+                  </div>
 
       </mat-card-content>
     </mat-card>

@@ -521,6 +521,29 @@
 
                         </mat-step>
 
+                        <mat-step [stepControl]="eventSubmissionForm">
+                          <ng-template matStepLabel>Service Request</ng-template>
+
+                          <div>
+                            <h3>
+                              Specimen Consultation and Diagnostic Services Request &nbsp;&nbsp;&nbsp;&nbsp;
+                              <strong>
+                                <mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT</strong>
+                            </h3>
+
+                            <h4>Request consultation and diagnostic services for specimens of affected species at this location.
+                            </h4>
+
+                            <mat-radio-group>
+                              <mat-radio-button value="1">Request diagnostic and consultative services </mat-radio-button>
+                              <p>
+                                <mat-radio-button value="2">Request consultative services ONLY </mat-radio-button>
+                                <p>
+                                  <mat-radio-button value="3">Request no services </mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                        </mat-step>
+
                         <mat-step>
                           <ng-template matStepLabel>Review</ng-template>
 
@@ -646,10 +669,12 @@
             <mat-divider [inset]="true"></mat-divider>
 
             <!-- Begin Specimen Submission Request section-->
-            <div>
+            <!-- <div>
               <h4>
-                <mat-icon>assistant</mat-icon> Specimen Consultation and Diagnostic Services Request &nbsp;&nbsp;&nbsp;&nbsp;<strong>
-                    <mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT</strong></h4>
+                <mat-icon>assistant</mat-icon> Specimen Consultation and Diagnostic Services Request &nbsp;&nbsp;&nbsp;&nbsp;
+                <strong>
+                  <mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT</strong>
+              </h4>
 
               <mat-radio-group>
                 <mat-radio-button value="1">Request diagnostic and consultative services </mat-radio-button>
@@ -657,7 +682,7 @@
                 <mat-radio-button value="3">Request no services </mat-radio-button>
               </mat-radio-group>
             </div>
-            <p>
+            <p> -->
               <!-- End Specimen Submission Request section-->
 
               <mat-divider [inset]="true"></mat-divider>

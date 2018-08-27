@@ -25,6 +25,12 @@ import { APP_SETTINGS } from '@app/app.settings';
 import { EventSearchResultsDataSource } from '@app/event-search-results-data-source';
 import { isNgTemplate } from '@angular/compiler';
 import { AdministrativeLevelOneService } from '@app/services/administrative-level-one.service';
+import { SearchService } from '@app/services/search.service';
+import { AdministrativeLevelTwoService } from '@app/services/administrative-level-two.service';
+import { EventTypeService } from '@app/services/event-type.service';
+import { DiagnosisTypeService } from '@app/services/diagnosis-type.service';
+import { DiagnosisService } from '@app/services/diagnosis.service';
+import { SpeciesService } from '@app/services/species.service';
 
 // export class ResultsDataSource extends MatTableDataSource<any> {
 //   constructor(private userService: EventService) {
@@ -62,9 +68,20 @@ export class HomeComponent implements OnInit {
 
   adminLevelOnes;
 
+  eventTypes = [];
+  diagnosisTypes = [];
+  diagnoses = [];
+  species = [];
+  administrative_level_one = [];
+  administrative_level_two = [];
+
+
   dataSource: MatTableDataSource<EventSummary>;
 
   testDataSource: EventSearchResultsDataSource;
+
+  popularSearches = [];
+  parsedPopularSearches = [];
 
   resultsLoading = false;
 
@@ -94,6 +111,12 @@ export class HomeComponent implements OnInit {
     private searchDialogService: SearchDialogService,
     private displayValuePipe: DisplayValuePipe,
     private adminLevelOneService: AdministrativeLevelOneService,
+    private adminLevelTwoService: AdministrativeLevelTwoService,
+    private eventTypeService: EventTypeService,
+    private diagnosisTypeService: DiagnosisTypeService,
+    private diagnosisService: DiagnosisService,
+    private speciesService: SpeciesService,
+    private searchService: SearchService,
     private route: ActivatedRoute
   ) {
 
@@ -142,6 +165,7 @@ export class HomeComponent implements OnInit {
                     },
                     error => {
                       this.resultsLoading = false;
+                      this.openSnackBar('Query failed due to web service error. Please try again later.', 'OK', 8000);
                       this.errorMessage = <any>error;
                     }
                   );
@@ -163,6 +187,7 @@ export class HomeComponent implements OnInit {
             },
             error => {
               this.errorMessage = <any>error;
+              this.openSnackBar('Query failed due to web service error. Please try again later.', 'OK', 8000);
             }
           );
 
@@ -262,6 +287,76 @@ export class HomeComponent implements OnInit {
         }
       );
 
+
+    // get top ten searches from the SearchService
+    this.searchService.getPopularSearches()
+      .subscribe(
+        (searches) => {
+          this.popularSearches = searches;
+
+          for (const search of this.popularSearches) {
+            const parsedSearch = APP_UTILITIES.parseSearch(search);
+            this.parsedPopularSearches.push(parsedSearch);
+          }
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get event types from the eventType service
+    this.eventTypeService.getEventTypes()
+      .subscribe(
+        eventTypes => {
+          this.eventTypes = eventTypes;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get diagnosis types from the diagnosisType service
+    this.diagnosisTypeService.getDiagnosisTypes()
+      .subscribe(
+        (diagnosisTypes) => {
+          this.diagnosisTypes = diagnosisTypes;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get diagnoses from the diagnoses service
+    this.diagnosisService.getDiagnoses()
+      .subscribe(
+        (diagnoses) => {
+          this.diagnoses = diagnoses;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get adminLevelOnes from the adminLevelOne service
+    this.adminLevelOneService.getAdminLevelOnes()
+      .subscribe(
+        (adminLevelOnes) => {
+          this.administrative_level_one = adminLevelOnes;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get species from the species service
+    this.speciesService.getSpecies()
+      .subscribe(
+        (species) => {
+          this.species = species;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+
   }
 
   searchInArray(array, field: string, value) {
@@ -314,7 +409,7 @@ export class HomeComponent implements OnInit {
       }
     }
 
-    // loop through currentResultsMarkers 
+    // loop through currentResultsMarkers
     for (const marker of currentResultsMarkers) {
 
       // set vars for classes that will define the marker icons, per WIM markermaker CSS

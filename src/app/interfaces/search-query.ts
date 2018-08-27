@@ -1,4 +1,6 @@
 export interface SearchQuery {
+    id?: number;
+    name?: string;
     event_type: number[];
     diagnosis: number[];
     diagnosis_type: number[];

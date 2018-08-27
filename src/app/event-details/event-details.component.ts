@@ -6,6 +6,8 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare let L: any;
 
 import { MatSnackBar } from '@angular/material';
+import {TooltipPosition} from '@angular/material';
+
 
 import 'rxjs/add/operator/switchMap';
 import { EventService } from '@services/event.service';
@@ -20,6 +22,7 @@ import { AddEventDiagnosisComponent } from '@app/add-event-diagnosis/add-event-d
 import { EditSpeciesComponent } from '@app/edit-species/edit-species.component';
 import { AddSpeciesDiagnosisComponent } from '@app/add-species-diagnosis/add-species-diagnosis.component';
 import { LandOwnershipService } from '@services/land-ownership.service';
+import { marker } from 'leaflet';
 
 
 @Component({
@@ -32,6 +35,7 @@ export class EventDetailsComponent implements OnInit {
   //@ViewChild('speciesTable') table: any;
   id: string;
   map;
+  icon;
   states = [];
   landownerships;
 
@@ -52,6 +56,10 @@ export class EventDetailsComponent implements OnInit {
   viewPanelStates: Object;
 
   currentUser;
+
+  locationMarkers;
+
+  unMappables = [];
 
   // speciesTableRows = [];
   // expanded: any = {};
@@ -190,7 +198,7 @@ export class EventDetailsComponent implements OnInit {
         layers: [osm]
       });
 
-      //this.locationMarkers = L.featureGroup().addTo(this.map);
+      this.locationMarkers = L.featureGroup().addTo(this.map);
 
       const baseMaps = {
         'Open Street Map': osm,
@@ -200,15 +208,52 @@ export class EventDetailsComponent implements OnInit {
 
       L.control.layers(baseMaps).addTo(this.map);
 
+      this.mapEvent(this.eventData);
 
-
-    }, 500);
+    }, 1000);
   }
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {
       duration: duration,
     });
+  }
+
+  mapEvent(eventData) {
+
+    const markers = [];
+    this.unMappables = [];
+    for (const eventlocation of eventData.event_locations) {
+      markers.push(eventlocation);
+    }
+
+    for (const marker of markers) {
+
+      if (marker.latitude === null || marker.longitude === null) {
+        this.unMappables.push(marker);
+      } else if (marker.latitude !== null || marker.longitude !== null) {
+
+        this.icon = L.divIcon({
+          className: 'wmm-pin wmm-white wmm-icon-circle wmm-icon-black wmm-size-25'
+        });
+
+        L.marker([Number(marker.latitude), Number(marker.longitude)],
+          { icon: this.icon })
+          .addTo(this.locationMarkers);
+      }
+
+    }
+
+    if (this.unMappables.length > 0) {
+
+    }
+
+    if (markers.length > this.unMappables.length) {
+      this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [500, 500] });
+    }
+
+
+
   }
 
   editEvent(id: string) {

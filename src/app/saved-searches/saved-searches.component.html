@@ -7,7 +7,7 @@
           <i class="material-icons">
             edit
           </i> Edit</button> -->
-        <button mat-button color="accent">
+        <button mat-button color="accent" (click)="openSearchDeleteConfirm()">
           <i class="material-icons">
             remove_circle
           </i> Delete</button>
@@ -20,13 +20,24 @@
 
       <mat-table [dataSource]="savedSearchesDataSource" matSort>
 
-        <!-- Checkbox Column -->
-        <ng-container matColumnDef="id">
+        <!-- Selection Column -->
+        <!-- <ng-container matColumnDef="select">
           <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="search-select"> Select </mat-header-cell>
           <mat-cell *matCellDef="let search" [ngClass]="search-select">
             <mat-checkbox id='search-{{search.id}}'></mat-checkbox>
           </mat-cell>
-        </ng-container>
+        </ng-container> -->
+
+        <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+              </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+              </mat-checkbox>
+            </mat-cell>
+          </ng-container>
 
         <!-- Search Name Column -->
         <ng-container matColumnDef="name">
@@ -81,7 +92,7 @@
               </span>
               <span *ngFor="let adminLevel2 of search.administrative_level_two">{{adminLevel2}} <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span><br></span>
-                  
+
           </mat-cell>
         </ng-container>
 

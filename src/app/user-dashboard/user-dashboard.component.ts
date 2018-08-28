@@ -268,7 +268,7 @@ export class UserDashboardComponent implements OnInit {
   removeContact() {
 
     if (this.selection.selected.length > 1) {
-      alert('you have too many contacts selected for edit. select only one.');
+      alert('you have too many contacts selected for removal. select only one.');
     } else if (this.selection.selected.length === 1) {
       this._contactService.remove(this.selection.selected[0])
         .subscribe(
@@ -293,7 +293,7 @@ export class UserDashboardComponent implements OnInit {
           error => {
             this.errorMessage = <any>error;
           }
-        )
+        );
     }
   }
 

@@ -8,6 +8,7 @@ import { Search } from '@interfaces/search';
 import { SearchService } from '@services/search.service';
 
 import { SearchDialogComponent } from '@search-dialog/search-dialog.component';
+import { MatSnackBar } from '@angular/material';
 
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -21,6 +22,8 @@ import { DiagnosisService } from '@app/services/diagnosis.service';
 import { SpeciesService } from '@app/services/species.service';
 import { SearchQuery } from '@app/interfaces/search-query';
 
+import { ConfirmComponent } from '@confirm/confirm.component';
+
 
 @Component({
   selector: 'app-saved-searches',
@@ -32,6 +35,8 @@ export class SavedSearchesComponent implements OnInit {
   savedSearchesDataSource: MatTableDataSource<Search>;
 
   searchDialogRef: MatDialogRef<SearchDialogComponent>;
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
+
 
   errorMessage;
   searches;
@@ -44,9 +49,11 @@ export class SavedSearchesComponent implements OnInit {
   administrative_level_one = [];
   administrative_level_two = [];
 
+  selection;
+
 
   searchDisplayedColumns = [
-    'id',
+    'select',
     'name',
     'search'
   ];
@@ -56,19 +63,24 @@ export class SavedSearchesComponent implements OnInit {
 
   constructor(
     private _searchService: SearchService,
-    private _dialog: MatDialog,
+    private dialog: MatDialog,
     private searchDialogService: SearchDialogService,
     private adminLevelOneService: AdministrativeLevelOneService,
     private adminLevelTwoService: AdministrativeLevelTwoService,
     private eventTypeService: EventTypeService,
     private diagnosisTypeService: DiagnosisTypeService,
     private diagnosisService: DiagnosisService,
-    private speciesService: SpeciesService
+    private speciesService: SpeciesService,
+    private snackBar: MatSnackBar
   ) {
 
   }
 
   ngOnInit() {
+
+    const initialSelection = [];
+    const allowMultiSelect = true;
+    this.selection = new SelectionModel<any>(allowMultiSelect, initialSelection);
 
     this._searchService.getUserDashboardSearches()
       .subscribe(
@@ -90,7 +102,7 @@ export class SavedSearchesComponent implements OnInit {
         }
       );
 
-    this.savedSearchesDataSource = new MatTableDataSource(this.searches);
+    // this.savedSearchesDataSource = new MatTableDataSource(this.searches);
 
 
     // get event types from the eventType service
@@ -145,6 +157,85 @@ export class SavedSearchesComponent implements OnInit {
       );
 
 
+  }
+
+  openSearchDeleteConfirm() {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Search',
+          message: 'Are you sure you want to delete the saved search "' + this.selection.selected[0].name + '" from your profile?',
+          confirmButtonText: 'Yes, Delete'
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteSearch();
+      }
+    });
+  }
+
+  deleteSearch() {
+
+    if (this.selection.selected.length > 1) {
+      alert('you have too many searches selected for removal. select only one.');
+    } else if (this.selection.selected.length === 1) {
+      this._searchService.delete(this.selection.selected[0])
+        .subscribe(
+          () => {
+            this._searchService.getSearches()
+              .subscribe(
+                (searches) => {
+                  this.selection.clear();
+
+                  this.searches = searches;
+
+                  this.parsedSearches = [];
+
+                  for (const search of this.searches) {
+                    const parsedSearch = APP_UTILITIES.parseSearch(search);
+                    this.parsedSearches.push(parsedSearch);
+                  }
+
+                  this.savedSearchesDataSource = new MatTableDataSource(this.parsedSearches);
+                  this.savedSearchesDataSource.paginator = this.paginator;
+                  this.savedSearchesDataSource.sort = this.sort;
+
+                  this.openSnackBar('Contact Removed', 'OK', 5000);
+                },
+                error => {
+                  this.errorMessage = <any>error;
+                }
+              );
+          },
+          error => {
+            this.errorMessage = <any>error;
+          }
+        );
+    }
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+  // From angular material table sample on material api reference site
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.savedSearchesDataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.savedSearchesDataSource.data.forEach(row => this.selection.select(row));
   }
 
 }

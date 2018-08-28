@@ -78,6 +78,17 @@ export class SearchService {
       .catch(this.handleError);
   }
 
+  public delete(formValue: Search): Observable<Search> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.delete(APP_SETTINGS.SEARCH_URL + formValue.id + '/', options)
+      .map((response: Response) => <Search>response.json())
+      .catch(this.handleError);
+  }
+
   private handleError(error: Response) {
     console.error(error);
     return Observable.throw(JSON.stringify(error.json()) || 'Server error');

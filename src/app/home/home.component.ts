@@ -87,6 +87,11 @@ export class HomeComponent implements OnInit {
 
   locationMarkers;
 
+  mapScale;
+  latitude;
+  longitude;
+  zoomLevel;
+
   displayedColumns = [
     'id',
     'event_type_string',
@@ -265,6 +270,46 @@ export class HomeComponent implements OnInit {
 
             this.mapResults(this.currentResults);
 
+            //begin latLngScale utility logic/////////////////////////////////////////////////////////////////////////////////////////
+            //grabbed from FEV
+            //displays map scale on map load
+            //map.on( 'load', function() {
+            this.map.whenReady( function() {
+              var mapScale =  this.scaleLookup(this.map.getZoom());
+              this.mapScale = mapScale;
+              console.log('Initial Map scale registered as ' + mapScale, this.map.getZoom());
+
+              var initMapCenter = this.map.getCenter();
+              this.latitude = initMapCenter.lat.toFixed(4);
+              this.longitudeinitMapCenter.lng.toFixed(4);
+            });
+
+            //displays map scale on scale change (i.e. zoom level)
+            this.map.on( 'zoomend', function () {
+              var mapZoom = this.map.getZoom();
+              var mapScale = this.scaleLookup(mapZoom);
+              this.mapScale = mapScale;
+              this.zoomLevel = mapZoom;
+            });
+
+            //updates lat/lng indicator on mouse move. does not apply on devices w/out mouse. removes 'map center' label
+            this.map.on( 'mousemove', function (cursorPosition) {
+              //$('#mapCenterLabel').css('display', 'none');
+              if (cursorPosition.latlng !== null) {
+                this.latitude = cursorPosition.latlng.lat.toFixed(4);
+                this.longitude = cursorPosition.latlng.lng.toFixed(4);
+              }
+            });
+            //updates lat/lng indicator to map center after pan and shows 'map center' label.
+            this.map.on( 'dragend', function () {
+              //displays latitude and longitude of map center
+              //$('#mapCenterLabel').css('display', 'inline');
+              var geographicMapCenter = this.map.getCenter();
+              this.latitude = geographicMapCenter.lat.toFixed(4);
+              this.longitude = geographicMapCenter.lng.toFixed(4);
+            });
+            //end latLngScale utility logic/////////
+
           }, 500);
 
         },
@@ -357,6 +402,31 @@ export class HomeComponent implements OnInit {
       );
 
 
+  }
+
+  scaleLookup(mapZoom) {
+    switch (mapZoom) {
+      case 19: return '1,128';
+      case 18: return '2,256';
+      case 17: return '4,513';
+      case 16: return '9,027';
+      case 15: return '18,055';
+      case 14: return '36,111';
+      case 13: return '72,223';
+      case 12: return '144,447';
+      case 11: return '288,895';
+      case 10: return '577,790';
+      case 9: return '1,155,581';
+      case 8: return '2,311,162';
+      case 7: return '4,622,324';
+      case 6: return '9,244,649';
+      case 5: return '18,489,298';
+      case 4: return '36,978,596';
+      case 3: return '73,957,193';
+      case 2: return '147,914,387';
+      case 1: return '295,828,775';
+      case 0: return '591,657,550';
+    }
   }
 
   searchInArray(array, field: string, value) {

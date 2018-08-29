@@ -208,6 +208,26 @@ mat-table>.mat-row:hover {
     opacity: 0.9;
 }
 
+.latLngScale {
+    position: absolute;
+    padding: 4px;
+    bottom: 15px !important;
+    left: 15px;
+    /*width:250px*/
+    /*height:320px;*/
+    z-index: 1000;
+    color: black;
+    background-color: rgb(255,255,255);
+    background-color: rgba(255,255,255,0.8);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.latLngScale:hover .hover-content {
+    display:inline-block;
+}
+
 .data-loading-shade {
     position: absolute;
     top: 0;
@@ -220,3 +240,4 @@ mat-table>.mat-row:hover {
     align-items: center;
     justify-content: center;
   }
+

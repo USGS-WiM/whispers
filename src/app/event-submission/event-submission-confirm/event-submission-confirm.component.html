@@ -28,12 +28,33 @@
   </mat-list-item>
   <mat-list-item>
     <h4 mat-line>
-      <strong>Event Organization</strong>
+      <strong>Event Organizations</strong>
     </h4>
     <p mat-line>
-      <span>{{data.formValue.event_organization | displayValue:'name':data.organizations}}</span>
+      <span *ngFor="let organization of data.formValue.new_organizations">{{organization | displayValue:'name':data.organizations}}<br
+        /></span>
     </p>
   </mat-list-item>
+  <p>
+
+  <div *ngFor="let event_location of data.formValue.new_event_locations">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Location X</mat-card-title>
+        <mat-card-subtitle>{{event_location.administrative_level_two | displayValue:'name':data.adminLevelTwos}}, {{event_location.administrative_level_one | displayValue:'name':data.adminLevelOnes}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+
+      </mat-card-content>
+
+    </mat-card>
+
+  </div>
+
+
+
+
+
 </mat-list>
 <div>
   <button mat-raised-button color="primary" (click)="submitEvent();">

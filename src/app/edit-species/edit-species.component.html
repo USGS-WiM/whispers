@@ -5,7 +5,7 @@
   
       <div class="vertical-form-container">
   
-        <h2><b>{{species}} Details</b></h2>
+        <h3><b>{{species}} at {{administrative_level_two}}, {{administrative_level_one}}</b></h3>
 
         <p>
 
@@ -57,7 +57,7 @@
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-button (click)="this.editSpeciesDialogRef.close('cancel');">Cancel</button>
-    <button mat-button type="submit" [disabled]="editSpeciesForm.invalid" (click)="updateSpecies(editSpeciesForm.value)">Update</button>
+    <button mat-button color="warn" (click)="this.editSpeciesDialogRef.close('cancel');"><mat-icon>cancel</mat-icon>&nbsp;Cancel</button>
+    <button mat-button color="primary" type="submit" [disabled]="editSpeciesForm.invalid" (click)="updateSpecies(editSpeciesForm.value)"><mat-icon>send</mat-icon>&nbsp;Submit</button>
     <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
   </mat-dialog-actions>

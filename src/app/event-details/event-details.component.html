@@ -337,9 +337,9 @@
   <div class="mapDiv">
     <mat-card>
       <div id="map">
-        <mat-card class="unmappable-warning"  *ngIf="unMappables.length > 0" matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database." [matTooltipPosition]="'above'">
-          <span><mat-icon>warning</mat-icon>&nbsp;Some location data absent.
-            The following locations are not mapped:
+        <mat-card class="unmappable-warning" *ngIf="unMappables.length > 0" matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
+          [matTooltipPosition]="'above'">
+          <span><mat-icon>warning</mat-icon>&nbsp;Some location data absent. The following locations are not mapped:
             <!-- <ul>
               <li *ngFor="let unmappable of unMappables">{{unmappable.name}} ({{unmappable.administrative_level_two_string}},
                 {{unmappable.administrative_level_one_string}})

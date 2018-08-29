@@ -48,7 +48,7 @@
 
           <div class="horizontal-form-container">
 
-            <mat-form-field class=" form-control event-org-select">
+            <mat-form-field class="form-control event-org-select">
               <mat-select placeholder="Event Organization" formControlName="new_organizations" multiple>
                 <mat-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</mat-option>
               </mat-select>

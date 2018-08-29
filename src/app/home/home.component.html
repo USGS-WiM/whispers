@@ -161,32 +161,33 @@
               </span><span *ngIf="search.end_date"><span class="text-bold">
                   END DATE
                 </span> {{search.end_date|date:'mediumDate'}}</span></span><br *ngIf="search.start_date || search.end_date"
-            /><span *ngIf="search.affected_count"> <span class="text-bold">AFFECTED
-                COUNT &nbsp;</span> {{search.affected_count}} </span>
+            /><span *ngIf="search.affected_count"> <span class="text-bold">AFFECTED COUNT &nbsp;</span> {{search.affected_count}}
+            </span>
 
-            <span *ngIf="search.event_type"> <span class="text-bold">EVENT
-                TYPE&nbsp;
+            <span *ngIf="search.event_type"> <span class="text-bold">EVENT TYPE&nbsp;
               </span> <span *ngFor="let eventType of search.event_type">{{eventType | displayValue:'name':this.eventTypes}}
                 <span *ngIf="(search.event_type.indexOf(eventType)) < (search.event_type.length - 1)">or&nbsp;</span></span>
               <br *ngIf="search.event_type" />
             </span>
-            <span *ngIf="search.diagnosis_type"> <span class="text-bold">DIAGNOSIS TYPE &nbsp;</span> <span *ngFor="let diagnosisType of search.diagnosis_type">{{diagnosisType| displayValue:'name':this.diagnosisTypes}}
+            <span *ngIf="search.diagnosis_type"> <span class="text-bold">DIAGNOSIS TYPE &nbsp;</span> <span *ngFor="let diagnosisType of search.diagnosis_type">{{diagnosisType|
+                displayValue:'name':this.diagnosisTypes}}
                 <span *ngIf="(search.diagnosis_type.indexOf(diagnosisType)) < (search.diagnosis_type.length - 1)">{{(search.diagnosis_type_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.diagnosis_type" />
 
-            <span *ngIf="search.diagnosis"> <span class="text-bold">DIAGNOSIS&nbsp;</span> <span *ngFor="let diagnosis of search.diagnosis">{{diagnosis | displayValue:'name':this.diagnoses}} <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)">{{(search.diagnosis_includes_all)
+            <span *ngIf="search.diagnosis"> <span class="text-bold">DIAGNOSIS&nbsp;</span> <span *ngFor="let diagnosis of search.diagnosis">{{diagnosis
+                | displayValue:'name':this.diagnoses}} <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)">{{(search.diagnosis_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.diagnosis" />
 
             <span *ngIf="search.species"> <span class="text-bold">SPECIES &nbsp;</span>
               <span *ngFor="let species of search.species">{{species | displayValue:'name':this.species}} <span *ngIf="(search.species.indexOf(species)) < (search.species.length - 1)">{{(search.species_includes_all)
-                  ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.species"/>
+                  ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.species" />
 
-            <span *ngIf="search.administrative_level_one"> <span class="text-bold">STATE&nbsp;</span><span *ngFor="let adminLevel1 of search.administrative_level_one">{{adminLevel1 | displayValue:'name':this.administrative_level_one}}
+            <span *ngIf="search.administrative_level_one"> <span class="text-bold">STATE&nbsp;</span><span *ngFor="let adminLevel1 of search.administrative_level_one">{{adminLevel1
+                | displayValue:'name':this.administrative_level_one}}
                 <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.administrative_level_one" />
 
-            <span *ngIf="search.administrative_level_two"> <span class="text-bold">COUNTY
-                &nbsp;
+            <span *ngIf="search.administrative_level_two"> <span class="text-bold">COUNTY &nbsp;
               </span>
               <span *ngFor="let adminLevel2 of search.administrative_level_two">{{adminLevel2}} <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span><br /></span>
@@ -276,6 +277,7 @@
           Results Map
         </mat-panel-title>
       </mat-expansion-panel-header>
+      <div class="data-loading-shade" *ngIf="resultsLoading"></div>
       <div id="map"></div>
     </mat-expansion-panel>
 
@@ -301,9 +303,13 @@
         </div>
       </mat-card-title>
       <mat-card-content>
+
+
         <div *ngIf="dataSource" class="results-table-div">
 
-
+          <div class="data-loading-shade" *ngIf="resultsLoading">
+            <mat-spinner *ngIf="resultsLoading"></mat-spinner>
+          </div>
           <!-- <mat-form-field>
                   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
                 </mat-form-field> -->
@@ -394,9 +400,6 @@
             <mat-header-row *matHeaderRowDef="displayedColumns;"></mat-header-row>
             <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"></mat-row>
           </mat-table>
-          <!-- <div class="spinner-container" *ngIf="testDataSource.loading$ | async">
-            <mat-spinner></mat-spinner>
-          </div> -->
 
           <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
         </div>

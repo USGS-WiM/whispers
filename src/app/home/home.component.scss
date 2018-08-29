@@ -207,3 +207,16 @@ mat-table>.mat-row:hover {
     background-color: gray;
     opacity: 0.9;
 }
+
+.data-loading-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }

@@ -93,7 +93,7 @@ export class EditEventComponent implements OnInit {
         .subscribe(
           event_statuses => {
             this.event_statuses = event_statuses;
-            this.editEventForm.get('event_status').setValue(this.data.eventData.event_status.toString());
+            this.editEventForm.get('event_status').setValue(this.data.eventData.event_status);
           },
           error => {
             this.errorMessage = <any>error;

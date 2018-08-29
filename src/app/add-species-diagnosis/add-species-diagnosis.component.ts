@@ -35,6 +35,10 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
 
   addSpeciesDiagnosisForm: FormGroup;
 
+  species;
+  administrative_level_one;
+  administrative_level_two;
+
   action_text;
   action_button_text;
 
@@ -69,6 +73,10 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.species = this.data.species.species_string;
+    this.administrative_level_one = this.data.species.administrative_level_one_string;
+    this.administrative_level_two = this.data.species.administrative_level_two_string;
 
 
 

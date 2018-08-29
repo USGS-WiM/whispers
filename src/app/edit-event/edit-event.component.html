@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>
-  <i class="material-icons">edit</i> Edit Event</h1>
+  <i class="material-icons">edit</i> Edit Event {{eventID}}</h1>
 <mat-dialog-content>
   <form [formGroup]="editEventForm">
 
@@ -7,7 +7,7 @@
 
       <!-- Event Reference -->
       <mat-form-field class="form-control">
-        <input matInput placeholder="Event Reference" formControlName="event_reference" required>
+        <input matInput placeholder="Event Reference" formControlName="event_reference">
         <mat-error *ngIf="editEventForm.get('event_reference').invalid">{{getErrorMessage('event_reference')}}</mat-error>
       </mat-form-field>
 
@@ -53,7 +53,7 @@
 </mat-dialog-content>
 <mat-dialog-actions>
 
-  <button mat-button (click)="this.editEventDialogRef.close('cancel');">Cancel</button>
-  <button mat-button type="submit" [disabled]="editEventForm.invalid" (click)="updateEvent(editEventForm.value)">Update</button>
+  <button mat-button color="warn" (click)="this.editEventDialogRef.close('cancel');"><mat-icon>cancel</mat-icon>&nbsp;Cancel</button>
+  <button mat-button color="primary" type="submit" [disabled]="editEventForm.invalid" (click)="updateEvent(editEventForm.value)"><mat-icon>send</mat-icon>&nbsp;Submit</button>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

@@ -203,6 +203,8 @@ export class EventSubmissionComponent implements OnInit {
         formValue: formValue,
         eventTypes: this.eventTypes,
         organizations: this.organizations,
+        adminLevelOnes: this.adminLevelOnes,
+        adminLevelTwos: this.adminLevelTwos
       }
     });
   }

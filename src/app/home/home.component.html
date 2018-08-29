@@ -9,8 +9,8 @@
             Welcome to WHISPers
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <p id="welcome-text">This is the Wildlife Health Information Sharing Partnership event reporting system. It is a place to explore wildlife
-          mortality data submitted by partners across North America and verified by trained biologists.</p>
+        <p id="welcome-text">This is the Wildlife Health Information Sharing Partnership event reporting system. It is a
+          place to explore wildlife mortality data submitted by partners across North America and verified by trained biologists.</p>
       </mat-expansion-panel>
     </div>
 
@@ -70,7 +70,8 @@
             </h4>
             <p mat-line>
               <span *ngFor="let item of currentDisplayQuery.diagnosis_type">{{item}}
-                <span *ngIf="(currentDisplayQuery.diagnosis_type.indexOf(item)) < (currentDisplayQuery.diagnosis_type.length - 1)">{{(currentDisplayQuery.diagnosis_type_includes_all) ? "and" : "or"}}&nbsp;</span>
+                <span *ngIf="(currentDisplayQuery.diagnosis_type.indexOf(item)) < (currentDisplayQuery.diagnosis_type.length - 1)">{{(currentDisplayQuery.diagnosis_type_includes_all)
+                  ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
@@ -81,7 +82,8 @@
             </h4>
             <p mat-line>
               <span *ngFor="let item of currentDisplayQuery.diagnosis">{{item}}
-                <span *ngIf="(currentDisplayQuery.diagnosis.indexOf(item)) < (currentDisplayQuery.diagnosis.length - 1)">{{(currentDisplayQuery.diagnosis_includes_all) ? "and" : "or"}}&nbsp;</span>
+                <span *ngIf="(currentDisplayQuery.diagnosis.indexOf(item)) < (currentDisplayQuery.diagnosis.length - 1)">{{(currentDisplayQuery.diagnosis_includes_all)
+                  ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
@@ -92,7 +94,8 @@
             </h4>
             <p mat-line>
               <span *ngFor="let item of currentDisplayQuery.species">{{item}}
-                <span *ngIf="(currentDisplayQuery.species.indexOf(item)) < (currentDisplayQuery.species.length - 1)">{{(currentDisplayQuery.species_includes_all) ? "and" : "or"}}&nbsp;</span>
+                <span *ngIf="(currentDisplayQuery.species.indexOf(item)) < (currentDisplayQuery.species.length - 1)">{{(currentDisplayQuery.species_includes_all)
+                  ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
@@ -103,7 +106,8 @@
             </h4>
             <p mat-line>
               <span *ngFor="let item of currentDisplayQuery.administrative_level_one">{{item}}
-                <span *ngIf="(currentDisplayQuery.administrative_level_one.indexOf(item)) < (currentDisplayQuery.administrative_level_one.length - 1)">{{(currentDisplayQuery.administrative_level_one_includes_all) ? "and" : "or"}}&nbsp;</span>
+                <span *ngIf="(currentDisplayQuery.administrative_level_one.indexOf(item)) < (currentDisplayQuery.administrative_level_one.length - 1)">{{(currentDisplayQuery.administrative_level_one_includes_all)
+                  ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
@@ -114,7 +118,8 @@
             </h4>
             <p mat-line>
               <span *ngFor="let item of currentDisplayQuery.administrative_level_two">{{item}}
-                <span *ngIf="(currentDisplayQuery.administrative_level_two.indexOf(item)) < (currentDisplayQuery.administrative_level_two.length - 1)">{{(currentDisplayQuery.administrative_level_two_includes_all) ? "and" : "or"}}&nbsp;</span>
+                <span *ngIf="(currentDisplayQuery.administrative_level_two.indexOf(item)) < (currentDisplayQuery.administrative_level_two.length - 1)">{{(currentDisplayQuery.administrative_level_two_includes_all)
+                  ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
@@ -136,7 +141,7 @@
         </button>
 
       </mat-action-row>
-      
+
 
     </mat-expansion-panel>
 
@@ -144,6 +149,55 @@
       <mat-expansion-panel-header>
         Popular Searches
       </mat-expansion-panel-header>
+
+      <!-- <div *ngIf="popularSearches"> -->
+      <div>
+
+        <div class="button-row" *ngFor="let search of parsedPopularSearches">
+          <button mat-button>
+            <span *ngIf="search.start_date || search.end_date"><span *ngIf="search.start_date"><span class="text-bold"> START
+                  DATE
+                </span> {{search.start_date | date:'mediumDate'}}
+              </span><span *ngIf="search.end_date"><span class="text-bold">
+                  END DATE
+                </span> {{search.end_date|date:'mediumDate'}}</span></span><br *ngIf="search.start_date || search.end_date"
+            /><span *ngIf="search.affected_count"> <span class="text-bold">AFFECTED COUNT &nbsp;</span> {{search.affected_count}}
+            </span>
+
+            <span *ngIf="search.event_type"> <span class="text-bold">EVENT TYPE&nbsp;
+              </span> <span *ngFor="let eventType of search.event_type">{{eventType | displayValue:'name':this.eventTypes}}
+                <span *ngIf="(search.event_type.indexOf(eventType)) < (search.event_type.length - 1)">or&nbsp;</span></span>
+              <br *ngIf="search.event_type" />
+            </span>
+            <span *ngIf="search.diagnosis_type"> <span class="text-bold">DIAGNOSIS TYPE &nbsp;</span> <span *ngFor="let diagnosisType of search.diagnosis_type">{{diagnosisType|
+                displayValue:'name':this.diagnosisTypes}}
+                <span *ngIf="(search.diagnosis_type.indexOf(diagnosisType)) < (search.diagnosis_type.length - 1)">{{(search.diagnosis_type_includes_all)
+                  ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.diagnosis_type" />
+
+            <span *ngIf="search.diagnosis"> <span class="text-bold">DIAGNOSIS&nbsp;</span> <span *ngFor="let diagnosis of search.diagnosis">{{diagnosis
+                | displayValue:'name':this.diagnoses}} <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)">{{(search.diagnosis_includes_all)
+                  ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.diagnosis" />
+
+            <span *ngIf="search.species"> <span class="text-bold">SPECIES &nbsp;</span>
+              <span *ngFor="let species of search.species">{{species | displayValue:'name':this.species}} <span *ngIf="(search.species.indexOf(species)) < (search.species.length - 1)">{{(search.species_includes_all)
+                  ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.species" />
+
+            <span *ngIf="search.administrative_level_one"> <span class="text-bold">STATE&nbsp;</span><span *ngFor="let adminLevel1 of search.administrative_level_one">{{adminLevel1
+                | displayValue:'name':this.administrative_level_one}}
+                <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
+                  ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.administrative_level_one" />
+
+            <span *ngIf="search.administrative_level_two"> <span class="text-bold">COUNTY &nbsp;
+              </span>
+              <span *ngFor="let adminLevel2 of search.administrative_level_two">{{adminLevel2}} <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
+                  ? "and" : "or"}}&nbsp;</span></span><br /></span>
+          </button>
+          <mat-divider [inset]="true"></mat-divider>
+        </div>
+
+
+      </div>
+
     </mat-expansion-panel>
 
     <mat-expansion-panel id='mapTools'>
@@ -152,42 +206,58 @@
       </mat-expansion-panel-header>
       <h3>Explanation</h3>
       <span>
-        <div id='iconHolder'><div class='wmm-circle wmm-green wmm-icon-circle wmm-icon-white wmm-size-25'></div></div>
+        <div id='iconHolder'>
+          <div class='wmm-circle wmm-green wmm-icon-circle wmm-icon-white wmm-size-25'></div>
+        </div>
         <label id='expLabel'>Bacteria</label>
       </span>
       <br/>
       <span>
-        <div id='iconHolder'><div class='wmm-circle wmm-blue wmm-icon-circle wmm-icon-white wmm-size-25'></div></div>
+        <div id='iconHolder'>
+          <div class='wmm-circle wmm-blue wmm-icon-circle wmm-icon-white wmm-size-25'></div>
+        </div>
         <label id='expLabel'>Fungus</label>
       </span>
       <br/>
       <span>
-        <div id='iconHolder'><div class='wmm-circle wmm-red wmm-icon-circle wmm-icon-white wmm-size-25'></div></div>
+        <div id='iconHolder'>
+          <div class='wmm-circle wmm-red wmm-icon-circle wmm-icon-white wmm-size-25'></div>
+        </div>
         <label id='expLabel'>Nut/Met/Dev</label>
       </span>
       <br/>
       <span>
-        <div id='iconHolder'><div class='wmm-circle wmm-orange wmm-icon-circle wmm-icon-white wmm-size-25'></div></div>
+        <div id='iconHolder'>
+          <div class='wmm-circle wmm-orange wmm-icon-circle wmm-icon-white wmm-size-25'></div>
+        </div>
         <label id='expLabel'>Other</label>
       </span>
       <br/>
       <span>
-        <div id='iconHolder'><div class='wmm-circle wmm-yellow wmm-icon-circle wmm-icon-white wmm-size-25'></div></div>
+        <div id='iconHolder'>
+          <div class='wmm-circle wmm-yellow wmm-icon-circle wmm-icon-white wmm-size-25'></div>
+        </div>
         <label id='expLabel'>Parasite</label>
       </span>
       <br/>
       <span>
-        <div id='iconHolder'><div class='wmm-circle wmm-purple wmm-icon-circle wmm-icon-white wmm-size-25'></div></div>
+        <div id='iconHolder'>
+          <div class='wmm-circle wmm-purple wmm-icon-circle wmm-icon-white wmm-size-25'></div>
+        </div>
         <label id='expLabel'>Toxin</label>
       </span>
       <br/>
       <span>
-        <div id='iconHolder'><div class='wmm-circle wmm-sky wmm-icon-circle wmm-icon-white wmm-size-25'></div></div>
+        <div id='iconHolder'>
+          <div class='wmm-circle wmm-sky wmm-icon-circle wmm-icon-white wmm-size-25'></div>
+        </div>
         <label id='expLabel'>Virus</label>
       </span>
       <br/>
       <span>
-        <div id='iconHolder'><div class='wmm-circle wmm-mutedpink wmm-icon-circle wmm-icon-white wmm-size-25'></div></div>
+        <div id='iconHolder'>
+          <div class='wmm-circle wmm-mutedpink wmm-icon-circle wmm-icon-white wmm-size-25'></div>
+        </div>
         <label id='expLabel'>Trauma</label>
       </span>
     </mat-expansion-panel>
@@ -207,6 +277,8 @@
           Results Map
         </mat-panel-title>
       </mat-expansion-panel-header>
+      
+      <div class="data-loading-shade" *ngIf="resultsLoading"></div>
       <div id="map">
         <div id="latLngScale" class="latLngScale">
           <span class="hover-content"> <b>Map scale </b></span>
@@ -242,9 +314,13 @@
         </div>
       </mat-card-title>
       <mat-card-content>
+
+
         <div *ngIf="dataSource" class="results-table-div">
 
-
+          <div class="data-loading-shade" *ngIf="resultsLoading">
+            <mat-spinner *ngIf="resultsLoading"></mat-spinner>
+          </div>
           <!-- <mat-form-field>
                   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
                 </mat-form-field> -->
@@ -335,9 +411,6 @@
             <mat-header-row *matHeaderRowDef="displayedColumns;"></mat-header-row>
             <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"></mat-row>
           </mat-table>
-          <!-- <div class="spinner-container" *ngIf="testDataSource.loading$ | async">
-            <mat-spinner></mat-spinner>
-          </div> -->
 
           <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
         </div>

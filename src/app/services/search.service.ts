@@ -31,6 +31,18 @@ export class SearchService {
       .catch(this.handleError);
   }
 
+  public getPopularSearches(): Observable<Search[]> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.get(APP_SETTINGS.SEARCH_URL + '/top_ten', options)
+      .map((response: Response) => <any[]>response.json())
+      // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
   public getUserDashboardSearches(): Observable<Search[]> {
 
     const options = new RequestOptions({
@@ -62,6 +74,17 @@ export class SearchService {
     });
 
     return this._http.put(APP_SETTINGS.SEARCH_URL + formValue.id + '/', formValue, options)
+      .map((response: Response) => <Search>response.json())
+      .catch(this.handleError);
+  }
+
+  public delete(formValue: Search): Observable<Search> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.delete(APP_SETTINGS.SEARCH_URL + formValue.id + '/', options)
       .map((response: Response) => <Search>response.json())
       .catch(this.handleError);
   }

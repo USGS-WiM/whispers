@@ -214,19 +214,19 @@ export class EventService {
 
 
   // TEMPORARY function to retrieve hard-coded sample event data from local disk
-  public getTestData(): any[] {
-    return APP_UTILITIES.SAMPLE_EVENT_DATA;
-  }
+  // public getTestData(): any[] {
+  //   return APP_UTILITIES.SAMPLE_EVENT_DATA;
+  // }
 
-  public getSampleEventDetail(eventID): any {
+  // public getSampleEventDetail(eventID): any {
 
-    for (const event of APP_UTILITIES.SAMPLE_EVENT_DETAIL_DATA) {
-      if (event.id === Number(eventID)) {
-        return event;
-      }
-    }
+  //   for (const event of APP_UTILITIES.SAMPLE_EVENT_DETAIL_DATA) {
+  //     if (event.id === Number(eventID)) {
+  //       return event;
+  //     }
+  //   }
 
-  }
+  // }
 
   // Function for retrieving event details given event id
   public getEventDetails(eventID): Observable<EventDetail> {

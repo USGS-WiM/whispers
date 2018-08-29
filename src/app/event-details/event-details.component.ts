@@ -6,6 +6,8 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare let L: any;
 
 import { MatSnackBar } from '@angular/material';
+import {TooltipPosition} from '@angular/material';
+
 
 import 'rxjs/add/operator/switchMap';
 import { EventService } from '@services/event.service';
@@ -20,6 +22,7 @@ import { AddEventDiagnosisComponent } from '@app/add-event-diagnosis/add-event-d
 import { EditSpeciesComponent } from '@app/edit-species/edit-species.component';
 import { AddSpeciesDiagnosisComponent } from '@app/add-species-diagnosis/add-species-diagnosis.component';
 import { LandOwnershipService } from '@services/land-ownership.service';
+import { marker } from 'leaflet';
 
 
 @Component({
@@ -32,6 +35,7 @@ export class EventDetailsComponent implements OnInit {
   //@ViewChild('speciesTable') table: any;
   id: string;
   map;
+  icon;
   states = [];
   landownerships;
 
@@ -52,6 +56,10 @@ export class EventDetailsComponent implements OnInit {
   viewPanelStates: Object;
 
   currentUser;
+
+  locationMarkers;
+
+  unMappables = [];
 
   // speciesTableRows = [];
   // expanded: any = {};
@@ -129,7 +137,7 @@ export class EventDetailsComponent implements OnInit {
             }
 
             this.locationSpeciesDataSource = new MatTableDataSource(this.eventLocationSpecies);
-            //this.speciesTableRows = this.eventLocationSpecies;
+            // this.speciesTableRows = this.eventLocationSpecies;
             this.eventDataLoading = false;
           },
           error => {
@@ -161,23 +169,91 @@ export class EventDetailsComponent implements OnInit {
         }
       );
 
-    /*setTimeout(() => {
+    setTimeout(() => {
+      // this.map = new L.Map('map', {
+      //   center: new L.LatLng(39.8283, -98.5795),
+      //   zoom: 4,
+      // });
+
+      // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      //   attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      // }).addTo(this.map);
+
+
+      const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        // tslint:disable-next-line:max-line-length
+        mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+
+      const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      });
+      const grayscale = L.tileLayer(mbUrl, { id: 'mapbox.light', attribution: mbAttr });
+      const streets = L.tileLayer(mbUrl, { id: 'mapbox.streets', attribution: mbAttr });
+
       this.map = new L.Map('map', {
         center: new L.LatLng(39.8283, -98.5795),
         zoom: 4,
+        layers: [osm]
       });
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(this.map);
+      this.locationMarkers = L.featureGroup().addTo(this.map);
 
-    }, 500);*/
+      const baseMaps = {
+        'Open Street Map': osm,
+        'Grayscale': grayscale,
+        'Streets': streets
+      };
+
+      L.control.layers(baseMaps).addTo(this.map);
+
+      this.mapEvent(this.eventData);
+
+    }, 1000);
   }
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {
       duration: duration,
     });
+  }
+
+  mapEvent(eventData) {
+
+    const markers = [];
+    this.unMappables = [];
+    for (const eventlocation of eventData.event_locations) {
+      markers.push(eventlocation);
+    }
+
+    for (const marker of markers) {
+
+      if (marker.latitude === null || marker.longitude === null) {
+        this.unMappables.push(marker);
+      } else if (marker.latitude !== null || marker.longitude !== null) {
+
+        this.icon = L.divIcon({
+          className: 'wmm-pin wmm-white wmm-icon-circle wmm-icon-black wmm-size-25'
+        });
+
+        L.marker([Number(marker.latitude), Number(marker.longitude)],
+          { icon: this.icon })
+          .addTo(this.locationMarkers);
+      }
+
+    }
+
+    if (this.unMappables.length > 0) {
+
+    }
+
+    if (markers.length > this.unMappables.length) {
+      this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [500, 500] });
+    }
+
+
+
   }
 
   editEvent(id: string) {
@@ -290,8 +366,8 @@ export class EventDetailsComponent implements OnInit {
             }
 
           }
-          //console.log('eventLocationSpecies:', this.eventLocationSpecies);
-          //this.speciesTableRows = this.eventLocationSpecies;
+          // console.log('eventLocationSpecies:', this.eventLocationSpecies);
+          // this.speciesTableRows = this.eventLocationSpecies;
           this.eventDataLoading = false;
 
           setTimeout(() => {

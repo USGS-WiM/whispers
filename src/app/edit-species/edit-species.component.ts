@@ -18,6 +18,8 @@ export class EditSpeciesComponent implements OnInit {
   editSpeciesForm: FormGroup;
 
   species;
+  administrative_level_one;
+  administrative_level_two;
 
   submitLoading = false;
 
@@ -43,6 +45,8 @@ export class EditSpeciesComponent implements OnInit {
 
   ngOnInit() {
     this.species = this.data.species.species_string;
+    this.administrative_level_one = this.data.species.administrative_level_one_string;
+    this.administrative_level_two = this.data.species.administrative_level_two_string;
     this.editSpeciesForm.get('population_count').setValue(this.data.species.population_count);
     this.editSpeciesForm.get('dead_count').setValue(this.data.species.dead_count);
     this.editSpeciesForm.get('sick_count').setValue(this.data.species.sick_count);

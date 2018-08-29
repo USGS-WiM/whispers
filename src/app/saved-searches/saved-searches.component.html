@@ -3,14 +3,14 @@
 
     <div class="results-card-title-row">
       <span class="results-button-row">
-        <button mat-button color="accent">
-            <i class="material-icons">
-                edit
-            </i>  Edit</button>
-        <button mat-button color="accent">
-            <i class="material-icons">
-                remove_circle
-            </i>  Delete</button>
+        <!-- <button mat-button color="accent">
+          <i class="material-icons">
+            edit
+          </i> Edit</button> -->
+        <button mat-button color="accent" (click)="openSearchDeleteConfirm()">
+          <i class="material-icons">
+            remove_circle
+          </i> Delete</button>
       </span>
 
     </div>
@@ -20,16 +20,80 @@
 
       <mat-table [dataSource]="savedSearchesDataSource" matSort>
 
-        <!-- Checkbox Column -->
-        <ng-container matColumnDef="id">
+        <!-- Selection Column -->
+        <!-- <ng-container matColumnDef="select">
           <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="search-select"> Select </mat-header-cell>
-          <mat-cell *matCellDef="let search" [ngClass]="search-select"><mat-checkbox id='search-{{search.id}}'></mat-checkbox></mat-cell>
+          <mat-cell *matCellDef="let search" [ngClass]="search-select">
+            <mat-checkbox id='search-{{search.id}}'></mat-checkbox>
+          </mat-cell>
+        </ng-container> -->
+
+        <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+              </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+              </mat-checkbox>
+            </mat-cell>
+          </ng-container>
+
+        <!-- Search Name Column -->
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="search-select"> Name </mat-header-cell>
+          <mat-cell *matCellDef="let search" [ngClass]="search-select">{{search.name}}</mat-cell>
         </ng-container>
 
         <!-- Search Data Column -->
-        <ng-container matColumnDef="data">
+        <ng-container matColumnDef="search">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Search </mat-header-cell>
-          <mat-cell *matCellDef="let search"> {{search.data}} </mat-cell>
+          <mat-cell *matCellDef="let search">
+
+            <span *ngIf="search.start_date">
+              <span class="text-bold"> START DATE</span> {{search.start_date | date:'mediumDate'}}
+            </span><span *ngIf="search.end_date"><span class="text-bold text-larger"> | </span><span class="text-bold"> END
+                DATE
+              </span> {{search.end_date|date:'mediumDate'}}</span>
+            <span *ngIf="search.affected_count"><span class="text-bold text-larger"> | </span> <span class="text-bold">AFFECTED
+                COUNT &nbsp;</span> {{search.affected_count}} </span>
+
+            <span *ngIf="search.event_type"><span class="text-bold text-larger"> | </span> <span class="text-bold">EVENT
+                TYPE&nbsp;
+              </span> <span *ngFor="let eventType of search.event_type">{{eventType | displayValue:'name':this.eventTypes}}
+                <span *ngIf="(search.event_type.indexOf(eventType)) < (search.event_type.length - 1)">or&nbsp;</span></span>
+              <br>
+            </span>
+            <span *ngIf="search.diagnosis_type"><span class="text-bold text-larger"> | </span> <span class="text-bold">DIAGNOSIS
+                TYPE &nbsp;</span> <span *ngFor="let diagnosisType of search.diagnosis_type">{{diagnosisType| displayValue:'name':this.diagnosisTypes}}
+                <span *ngIf="(search.diagnosis_type.indexOf(diagnosisType)) < (search.diagnosis_type.length - 1)">{{(search.diagnosis_type_includes_all)
+                  ? "and" : "or"}}&nbsp;</span></span><br></span>
+
+            <span *ngIf="search.diagnosis"><span class="text-bold text-larger"> | </span> <span class="text-bold">DIAGNOSIS
+                &nbsp;
+              </span>
+              <span *ngFor="let diagnosis of search.diagnosis">{{diagnosis | displayValue:'name':this.diagnoses}} <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)">{{(search.diagnosis_includes_all)
+                  ? "and" : "or"}}&nbsp;</span></span>
+              <br>
+            </span>
+            <span *ngIf="search.species"><span class="text-bold text-larger"> | </span> <span class="text-bold">SPECIES &nbsp;</span>
+              <span *ngFor="let species of search.species">{{species | displayValue:'name':this.species}} <span *ngIf="(search.species.indexOf(species)) < (search.species.length - 1)">{{(search.species_includes_all)
+                  ? "and" : "or"}}&nbsp;</span></span><br></span>
+
+            <span *ngIf="search.administrative_level_one"><span class="text-bold text-larger"> | </span> <span class="text-bold">STATE
+                &nbsp;
+              </span>
+              <span *ngFor="let adminLevel1 of search.administrative_level_one">{{adminLevel1 | displayValue:'name':this.administrative_level_one}}
+                <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
+                  ? "and" : "or"}}&nbsp;</span></span><br></span>
+
+            <span *ngIf="search.administrative_level_two"><span class="text-bold text-larger"> | </span> <span class="text-bold">COUNTY
+                &nbsp;
+              </span>
+              <span *ngFor="let adminLevel2 of search.administrative_level_two">{{adminLevel2}} <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
+                  ? "and" : "or"}}&nbsp;</span></span><br></span>
+
+          </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="searchDisplayedColumns"></mat-header-row>

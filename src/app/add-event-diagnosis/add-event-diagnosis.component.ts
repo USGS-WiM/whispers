@@ -24,6 +24,8 @@ export class AddEventDiagnosisComponent implements OnInit {
 
   addEventDiagnosisForm: FormGroup;
 
+  eventID;
+
   submitLoading = false;
 
   buildAddEventDiagnosisForm() {
@@ -44,6 +46,8 @@ export class AddEventDiagnosisComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.eventID = this.data.event_id;
 
     // get diagnoses from the DiagnosisService
     this.diagnosisService.getDiagnoses()

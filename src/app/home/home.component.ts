@@ -259,6 +259,7 @@ export class HomeComponent implements OnInit {
             };
 
             L.control.layers(baseMaps).addTo(this.map);
+            L.control.scale({position: "bottomright"}).addTo(this.map);
 
             /*this.icon = L.icon({
               iconUrl: '../../assets/icons/marker-icon.png',

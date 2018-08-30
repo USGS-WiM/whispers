@@ -324,7 +324,7 @@
           <!-- <mat-form-field>
                   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
                 </mat-form-field> -->
-          <mat-table [dataSource]="dataSource" matSort>
+          <mat-table [dataSource]="dataSource" matSort matSortActive="start_date" matSortDirection="desc">
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">

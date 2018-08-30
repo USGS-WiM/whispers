@@ -33,11 +33,11 @@ export class SearchService {
 
   public getPopularSearches(): Observable<Search[]> {
 
-    const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
-    });
+    // const options = new RequestOptions({
+    //   headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    // });
 
-    return this._http.get(APP_SETTINGS.SEARCH_URL + '/top_ten', options)
+    return this._http.get(APP_SETTINGS.SEARCH_URL + '/top_ten')
       .map((response: Response) => <any[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

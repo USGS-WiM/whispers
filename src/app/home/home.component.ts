@@ -274,18 +274,18 @@ export class HomeComponent implements OnInit {
             //grabbed from FEV
             //displays map scale on map load
             //map.on( 'load', function() {
-            this.map.whenReady( function() {
-              var mapScale =  this.scaleLookup(this.map.getZoom());
-              this.mapScale = mapScale;
-              console.log('Initial Map scale registered as ' + mapScale, this.map.getZoom());
-
+            this.map.whenReady(() => {
+              var mapZoom = this.map.getZoom();
+              var tempMapScale =  this.scaleLookup(this.map.getZoom());
+              this.zoomLevel = mapZoom;
+              this.mapScale = tempMapScale;
               var initMapCenter = this.map.getCenter();
               this.latitude = initMapCenter.lat.toFixed(4);
-              this.longitudeinitMapCenter.lng.toFixed(4);
+              this.longitude = initMapCenter.lng.toFixed(4);
             });
 
             //displays map scale on scale change (i.e. zoom level)
-            this.map.on( 'zoomend', function () {
+            this.map.on( 'zoomend', () => {
               var mapZoom = this.map.getZoom();
               var mapScale = this.scaleLookup(mapZoom);
               this.mapScale = mapScale;
@@ -293,7 +293,7 @@ export class HomeComponent implements OnInit {
             });
 
             //updates lat/lng indicator on mouse move. does not apply on devices w/out mouse. removes 'map center' label
-            this.map.on( 'mousemove', function (cursorPosition) {
+            this.map.on( 'mousemove', (cursorPosition) => {
               //$('#mapCenterLabel').css('display', 'none');
               if (cursorPosition.latlng !== null) {
                 this.latitude = cursorPosition.latlng.lat.toFixed(4);
@@ -301,7 +301,7 @@ export class HomeComponent implements OnInit {
               }
             });
             //updates lat/lng indicator to map center after pan and shows 'map center' label.
-            this.map.on( 'dragend', function () {
+            this.map.on( 'dragend', () => {
               //displays latitude and longitude of map center
               //$('#mapCenterLabel').css('display', 'inline');
               var geographicMapCenter = this.map.getCenter();

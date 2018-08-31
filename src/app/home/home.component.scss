@@ -1,85 +1,64 @@
 @import "../app.variables.scss";
-
-
 // Main body wrapper
 #homeContainer {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     background-color: $white;
-    box-sizing: border-box;
-
-    // Left sidebar
+    box-sizing: border-box; // Left sidebar
     .controlsDiv {
         flex-grow: 1;
         max-width: 25%;
         box-sizing: border-box;
-        border-right: 1px solid $border-color;
-
-
-        // Search and save search
+        border-right: 1px solid $border-color; // Search and save search
         .search-button-row {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
             padding: 10px;
             justify-content: center;
-
-            button{
+            button {
                 min-width: 50%;
                 margin: 0 auto;
             }
         }
-    }
-
-    // Right side
+    } // Right side
     .resultsDiv {
         flex-grow: 3;
         width: auto;
         min-width: 550px;
-
-        #resultsMapHeader{
+        #resultsMapHeader {
             justify-content: flex-end;
-        }
-
-        // Table
-        .mat-table{
-
+        } // Table
+        .mat-table {
             .mat-header-row {
                 border-top-left-radius: 4px;
                 border-top-right-radius: 4px;
-
-                .mat-header-cell{
+                .mat-header-cell {
                     box-sizing: border-box;
                     padding: 3px;
-
-                    &:first-child{
+                    &:first-child {
                         padding-left: 15px;
                     }
-                    &:last-child{
+                    &:last-child {
                         padding-right: 15px;
                     }
                 }
             }
-
-            .mat-row{
-
-                .mat-cell{
+            .mat-row {
+                .mat-cell {
                     font-size: 12px;
                     box-sizing: border-box;
                     padding: 3px;
-
-                    &:first-child{
+                    &:first-child {
                         padding-left: 15px;
                     }
-                    &:last-child{
+                    &:last-child {
                         padding-right: 15px;
                     }
-
-                    ul{
+                    ul {
                         padding-left: 15px;
-
-                        li{
+                        li {
                             line-height: 12px;
                             padding: 3px 0;
                             word-break: break-word;
@@ -89,11 +68,7 @@
             }
         }
     }
-    
 }
-
-
-
 
 @media screen and (max-width:875px) {
     #homeContainer {
@@ -105,8 +80,6 @@
         min-width: 100%;
     }
 }
-
-
 
 .results-card-title-row {
     display: flex;
@@ -150,7 +123,7 @@ mat-table>.mat-row:hover {
     flex-grow: 1;
 }
 
-::ng-deep #mapPanel .mat-expansion-panel-content > .mat-expansion-panel-body {
+::ng-deep #mapPanel .mat-expansion-panel-content>.mat-expansion-panel-body {
     padding: 0px 0px 0px 0px;
 }
 
@@ -158,9 +131,7 @@ mat-table>.mat-row:hover {
     // list-style: none;
 }
 
-.spinner-container {
-    
-}
+.spinner-container {}
 
 .spinner-container mat-spinner {
     margin: 40px auto 0 auto;
@@ -177,6 +148,7 @@ mat-table>.mat-row:hover {
 }
 
 /* Style the buttons that are used to open and close the accordion panel */
+
 .accordion {
     background-color: #eee;
     color: #444;
@@ -190,11 +162,14 @@ mat-table>.mat-row:hover {
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-.active, .accordion:hover {
+
+.active,
+.accordion:hover {
     background-color: #ccc;
 }
 
 /* Style the accordion panel. Note: hidden by default */
+
 .panel {
     padding: 0 18px;
     background-color: white;
@@ -202,7 +177,7 @@ mat-table>.mat-row:hover {
     overflow: hidden;
 }
 
-.leaflet-popup-content-wrapper{
+.leaflet-popup-content-wrapper {
     background-color: gray;
     opacity: 0.9;
 }
@@ -216,15 +191,15 @@ mat-table>.mat-row:hover {
     /*height:320px;*/
     z-index: 1000;
     color: black;
-    background-color: rgb(255,255,255);
-    background-color: rgba(255,255,255,0.8);
-    box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
     border-radius: 4px;
     cursor: pointer;
 }
 
 .latLngScale:hover .hover-content {
-    display:inline-block;
+    display: inline-block;
 }
 
 .data-loading-shade {
@@ -238,5 +213,10 @@ mat-table>.mat-row:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
+}
 
+#iconHolder .wmm-circle,
+#iconHolder .wmm-size-25 {
+    z-index: 0 !important;
+    margin-top: -4px;
+}

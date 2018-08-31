@@ -235,13 +235,15 @@ export class HomeComponent implements OnInit {
 
             const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
               '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-              'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+              'Imagery © <a href="https://www.mapbox.com/">Mapbox</a> | Map shows centroid of county where event occured.',
               // tslint:disable-next-line:max-line-length
               mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
             const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors | Map shows centroid of county where event occured.'
+
             });
+
             const grayscale = L.tileLayer(mbUrl, { id: 'mapbox.light', attribution: mbAttr });
             const streets = L.tileLayer(mbUrl, { id: 'mapbox.streets', attribution: mbAttr });
 
@@ -259,7 +261,73 @@ export class HomeComponent implements OnInit {
             };
 
             L.control.layers(baseMaps).addTo(this.map);
-            L.control.scale({position: "bottomright"}).addTo(this.map);
+            L.control.scale({ position: "bottomright" }).addTo(this.map);
+
+            // const legend = L.control({ position: 'bottomright' });
+
+            // legend.onAdd = function (map) {
+            //   const div = L.DomUtil.create('div', 'legend');
+            //   div.innerHTML = "<h3>Explanation</h3>" +
+            //     "<span><div id='iconHolder'>" +
+            //     "<div class='wmm-circle wmm-green wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
+            //     "</div>" +
+            //     "<label id='expLabel'>Bacteria</label>" +
+            //     "</span>" +
+            //     "<br/>" +
+            //     "<span>" +
+            //     "<div id='iconHolder'>" +
+            //     "<div class='wmm-circle wmm-blue wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
+            //     "</div>" +
+            //     "<label id='expLabel'>Fungus</label>" +
+            //     "</span>" +
+            //     "<br/>" +
+            //     "<span>" +
+            //     "<div id='iconHolder'>" +
+            //     "<div class='wmm-circle wmm-red wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
+            //     "</div>" +
+            //     "<label id='expLabel'>Nut/Met/Dev</label>" +
+            //     "</span>" +
+            //     "<br/>" +
+            //     "<span>" +
+            //     "<div id='iconHolder'>" +
+            //     "<div class='wmm-circle wmm-orange wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
+            //     "</div>" +
+            //     "<label id='expLabel'>Other</label>" +
+            //     "</span>" +
+            //     "<br/>" +
+            //     "<span>" +
+            //     "<div id='iconHolder'>" +
+            //     "<div class='wmm-circle wmm-yellow wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
+            //     "</div>" +
+            //     "<label id='expLabel'>Parasite</label>" +
+            //     "</span>" +
+            //     "<br/>" +
+            //     "<span>" +
+            //     "<div id='iconHolder'>" +
+            //     "<div class='wmm-circle wmm-purple wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
+            //     "</div>" +
+            //     "<label id='expLabel'>Toxin</label>" +
+            //     "</span>" +
+            //     "<br/>" +
+            //     "<span>" +
+            //     "<div id='iconHolder'>" +
+            //     "<div class='wmm-circle wmm-sky wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
+            //     "</div>" +
+            //     "<label id='expLabel'>Virus</label>" +
+            //     "</span>" +
+            //     "<br/>" +
+            //     "<span>" +
+            //     "<div id='iconHolder'>" +
+            //     "<div class='wmm-circle wmm-mutedpink wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
+            //     "</div>" +
+            //     "<label id='expLabel'>Trauma</label>" +
+            //     "</span>";
+
+            //     return div;
+            // };
+
+            // legend.addTo(this.map);
+
 
             /*this.icon = L.icon({
               iconUrl: '../../assets/icons/marker-icon.png',
@@ -277,7 +345,7 @@ export class HomeComponent implements OnInit {
             //map.on( 'load', function() {
             this.map.whenReady(() => {
               var mapZoom = this.map.getZoom();
-              var tempMapScale =  this.scaleLookup(this.map.getZoom());
+              var tempMapScale = this.scaleLookup(this.map.getZoom());
               this.zoomLevel = mapZoom;
               this.mapScale = tempMapScale;
               var initMapCenter = this.map.getCenter();
@@ -286,7 +354,7 @@ export class HomeComponent implements OnInit {
             });
 
             //displays map scale on scale change (i.e. zoom level)
-            this.map.on( 'zoomend', () => {
+            this.map.on('zoomend', () => {
               var mapZoom = this.map.getZoom();
               var mapScale = this.scaleLookup(mapZoom);
               this.mapScale = mapScale;
@@ -294,7 +362,7 @@ export class HomeComponent implements OnInit {
             });
 
             //updates lat/lng indicator on mouse move. does not apply on devices w/out mouse. removes 'map center' label
-            this.map.on( 'mousemove', (cursorPosition) => {
+            this.map.on('mousemove', (cursorPosition) => {
               //$('#mapCenterLabel').css('display', 'none');
               if (cursorPosition.latlng !== null) {
                 this.latitude = cursorPosition.latlng.lat.toFixed(4);
@@ -302,7 +370,7 @@ export class HomeComponent implements OnInit {
               }
             });
             //updates lat/lng indicator to map center after pan and shows 'map center' label.
-            this.map.on( 'dragend', () => {
+            this.map.on('dragend', () => {
               //displays latitude and longitude of map center
               //$('#mapCenterLabel').css('display', 'inline');
               var geographicMapCenter = this.map.getCenter();
@@ -542,9 +610,11 @@ export class HomeComponent implements OnInit {
       } else {
         // eventCount set to empty string if just one event at location
         eventCount = '';
-        // set icon shaoe to a triangle if event_type = 2 (surveillance)
+        // set icon shape to a diamond if event_type = 2 (surveillance)
         if (marker.events[0].event_type === 2) {
-          shapeClass = 'wmm-triangle ';
+          shapeClass = 'wmm-diamond ';
+          iconClasses = ' wmm-icon-diamond wmm-icon-white ';
+          sizeClass = 'wmm-size-25';
         }
       }
       // set icon to the proper combination of classnames set above (from WIM markermaker and some custom css)

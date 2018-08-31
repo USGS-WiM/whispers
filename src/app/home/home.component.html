@@ -204,7 +204,7 @@
       <mat-expansion-panel-header>
         Map Tools and Explanation
       </mat-expansion-panel-header>
-      <h3>Explanation</h3>
+      <!-- <h3>Explanation</h3>
       <span>
         <div id='iconHolder'>
           <div class='wmm-circle wmm-green wmm-icon-circle wmm-icon-white wmm-size-25'></div>
@@ -259,7 +259,7 @@
           <div class='wmm-circle wmm-mutedpink wmm-icon-circle wmm-icon-white wmm-size-25'></div>
         </div>
         <label id='expLabel'>Trauma</label>
-      </span>
+      </span> -->
     </mat-expansion-panel>
 
     <!--<mat-expansion-panel *ngIf="isloggedIn">
@@ -277,18 +277,147 @@
           Results Map
         </mat-panel-title>
       </mat-expansion-panel-header>
-      
+
       <div class="data-loading-shade" *ngIf="resultsLoading"></div>
       <div id="map">
         <div id="latLngScale" class="latLngScale">
           <span class="hover-content"> <b>Map scale </b></span>
-          1:<span id="scale">{{mapScale}}</span> | <span class="hover-content"> <b>Zoom level </b></span> <span id="zoomLevel"> {{zoomLevel}}</span><br>
+          1:<span id="scale">{{mapScale}}</span> | <span class="hover-content"> <b>Zoom level </b></span> <span id="zoomLevel">
+            {{zoomLevel}}</span><br>
           <span class="hover-content"><b>Latitude</b></span>
           <span id="latitude"> {{latitude}}</span> |
           <span class="hover-content"> <b>Longitude</b></span>
           <span id="longitude"> {{longitude}}</span>
-          <span id="mapCenterLabel"  class="hover-content"></span>
+          <span id="mapCenterLabel" class="hover-content"></span>
         </div>
+
+        <div id="legend" class="legend">
+          <label>Explanation</label>
+
+          <label>Mortality/Morbidity Events</label>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-circle wmm-green wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Bacteria</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-circle wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Fungus</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-circle wmm-red wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Nut/Met/Dev</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-circle wmm-orange wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Other</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-circle wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Parasite</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-circle wmm-purple wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Toxin</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-circle wmm-sky wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Virus</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-circle wmm-mutedpink wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Trauma</label>
+          </span>
+
+          <!-- Below is section for Surveillance events. Needs some help in the CSS department (icons squished together) -->
+          <!-- <label>Surveillance Events</label>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-diamond wmm-green wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Bacteria</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-diamond wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Fungus</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-diamond wmm-red wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Nut/Met/Dev</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-diamond wmm-orange wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Other</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-diamond wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Parasite</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-diamond wmm-purple wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Toxin</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-diamond wmm-sky wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Virus</label>
+          </span>
+          <br/>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-diamond wmm-mutedpink wmm-icon-noicon wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>Trauma</label>
+          </span>
+
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-diamond wmm-mutedblue wmm-icon-circle wmm-icon-white wmm-size-25'></div>
+            </div>
+            <label id='expLabel'>White center indicates open event</label>
+          </span>-->
+        </div>
+
+
       </div>
     </mat-expansion-panel>
 

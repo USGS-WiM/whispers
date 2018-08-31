@@ -95,7 +95,7 @@
 }
 
 #map {
-    height: 400px;
+    height: 500px;
 }
 
 #mapPanel .mat-expansion-panel-body {
@@ -142,6 +142,12 @@ mat-table>.mat-row:hover {
     padding-top: 10px;
 }
 
+#iconHolder .wmm-circle,
+#iconHolder .wmm-size-25 {
+    z-index: 0 !important;
+    margin-top: -4px;
+}
+
 #expLabel {
     margin-left: 35px;
     padding-top: 10px;
@@ -185,7 +191,23 @@ mat-table>.mat-row:hover {
 .latLngScale {
     position: absolute;
     padding: 4px;
-    bottom: 15px !important;
+    bottom: 10px !important;
+    left: 15px;
+    /*width:250px*/
+    /*height:320px;*/
+    z-index: 1000;
+    color: black;
+    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.legend {
+    position: absolute;
+    padding: 4px;
+    bottom: 60px !important;
     left: 15px;
     /*width:250px*/
     /*height:320px;*/
@@ -215,8 +237,7 @@ mat-table>.mat-row:hover {
     justify-content: center;
 }
 
-#iconHolder .wmm-circle,
-#iconHolder .wmm-size-25 {
-    z-index: 0 !important;
-    margin-top: -4px;
+.legendIcon {
+    display: inline-block;
 }
+

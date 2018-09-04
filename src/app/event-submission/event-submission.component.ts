@@ -325,6 +325,11 @@ export class EventSubmissionComponent implements OnInit {
       .subscribe(
         species => {
           this.species = species;
+          this.species.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
           // TODO: lines below commented out are for species autocomplete. more complex on this component since species is part of a form array
           // line below is copied from search dialog component, but does not work here.
           // this.filteredSpecies = this.eventSubmissionForm.get('species').valueChanges
@@ -400,6 +405,11 @@ export class EventSubmissionComponent implements OnInit {
       .subscribe(
         contacts => {
           this.userContacts = contacts;
+          this.userContacts.sort(function (a, b) {
+            if (a.last_name < b.last_name) { return -1; }
+            if (a.last_name > b.last_name) { return 1; }
+            return 0;
+          });
         },
         error => {
           this.errorMessage = <any>error;
@@ -681,6 +691,11 @@ export class EventSubmissionComponent implements OnInit {
       .subscribe(
         adminLevelTwos => {
           this.adminLevelTwos = adminLevelTwos;
+          this.adminLevelTwos.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
         },
         error => {
           this.errorMessage = <any>error;

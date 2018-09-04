@@ -95,7 +95,7 @@
 }
 
 #map {
-    height: 500px;
+    height: 550px;
 }
 
 #mapPanel .mat-expansion-panel-body {
@@ -148,11 +148,30 @@ mat-table>.mat-row:hover {
     margin-top: -4px;
 }
 
+#iconHolder-inline {}
+
+.left-icon {
+    float: left;
+    display: inline-block;
+    position: relative;
+}
+
+.right-icon {
+    float: left;
+    margin-left: 15px;
+    display: inline-block;
+    position: relative;
+}
+
 #expLabel {
     margin-left: 35px;
     padding-top: 10px;
 }
 
+#expLabel2 {
+    margin-left: 15px;
+    padding-top: 10px;
+}
 /* Style the buttons that are used to open and close the accordion panel */
 
 .accordion {
@@ -240,4 +259,3 @@ mat-table>.mat-row:hover {
 .legendIcon {
     display: inline-block;
 }
-

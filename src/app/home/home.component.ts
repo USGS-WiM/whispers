@@ -614,7 +614,7 @@ export class HomeComponent implements OnInit {
         if (marker.events[0].event_type === 2) {
           shapeClass = 'wmm-diamond ';
           iconClasses = ' wmm-icon-diamond wmm-icon-white ';
-          sizeClass = 'wmm-size-25';
+          sizeClass = 'wmm-size-20';
         }
       }
       // set icon to the proper combination of classnames set above (from WIM markermaker and some custom css)

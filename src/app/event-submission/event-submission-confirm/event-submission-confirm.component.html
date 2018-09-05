@@ -40,10 +40,24 @@
   <div *ngFor="let event_location of data.formValue.new_event_locations">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Location X</mat-card-title>
+        <mat-card-title>Location {{data.formValue.new_event_locations.indexOf(event_location) + 1}}  {{event_location.name}}</mat-card-title>
+       
         <mat-card-subtitle>{{event_location.administrative_level_two | displayValue:'name':data.adminLevelTwos}}, {{event_location.administrative_level_one | displayValue:'name':data.adminLevelOnes}}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
+        <ul>
+          <li>Latitude: {{event_location.latitude}} | Longitude: {{event_location.longitude}} </li>
+          <li>Start Date: {{event_location.start_date}} | End Date: {{event_location.end_date}}</li>
+          <li>Land ownership: {{event_location.land_ownership | displayValue:'name':data.landOwnerships}}</li>
+          <li>History: {{event_location.history}}</li>
+          <li>Environmental Factors: {{event_location.environmental_factors}}</li>
+          <li>Site Description: {{event_location.site_description}}</li>
+          <li>Clinical Signs: {{event_location.clinical_signs}}</li>
+          <label>Species</label>
+          <ul>
+            <li *ngFor="let location_species of event_location.location_species">{{location_species.species | displayValue:'name':data.species}}</li>
+          </ul>
+        </ul>
 
       </mat-card-content>
 

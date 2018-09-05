@@ -202,9 +202,11 @@ export class EventSubmissionComponent implements OnInit {
       data: {
         formValue: formValue,
         eventTypes: this.eventTypes,
+        species: this.species,
         organizations: this.organizations,
         adminLevelOnes: this.adminLevelOnes,
-        adminLevelTwos: this.adminLevelTwos
+        adminLevelTwos: this.adminLevelTwos,
+        landOwnerships: this.landOwnerships
       }
     });
   }

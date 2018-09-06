@@ -140,6 +140,7 @@ export class EventSubmissionComponent implements OnInit {
       public: [true, Validators.required],
       new_organizations: null,
       new_comments: this.formBuilder.array([]),
+      new_superevents: this.formBuilder.array([]),
       new_event_locations: this.formBuilder.array([
         this.initEventLocation()
       ])

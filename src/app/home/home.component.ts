@@ -260,8 +260,10 @@ export class HomeComponent implements OnInit {
               'Streets': streets
             };
 
-            L.control.layers(baseMaps).addTo(this.map);
-            L.control.scale({ position: "bottomright" }).addTo(this.map);
+            const x = { position: 'topleft'};
+
+            L.control.layers(baseMaps, null, x ).addTo(this.map);
+            L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
             // const legend = L.control({ position: 'bottomright' });
 
@@ -339,45 +341,45 @@ export class HomeComponent implements OnInit {
 
             this.mapResults(this.currentResults);
 
-            //begin latLngScale utility logic/////////////////////////////////////////////////////////////////////////////////////////
-            //grabbed from FEV
-            //displays map scale on map load
-            //map.on( 'load', function() {
+            // begin latLngScale utility logic/////////////////////////////////////////////////////////////////////////////////////////
+            // grabbed from FEV
+            // displays map scale on map load
+            // map.on( 'load', function() {
             this.map.whenReady(() => {
-              var mapZoom = this.map.getZoom();
-              var tempMapScale = this.scaleLookup(this.map.getZoom());
+              const mapZoom = this.map.getZoom();
+              const tempMapScale = this.scaleLookup(this.map.getZoom());
               this.zoomLevel = mapZoom;
               this.mapScale = tempMapScale;
-              var initMapCenter = this.map.getCenter();
+              const initMapCenter = this.map.getCenter();
               this.latitude = initMapCenter.lat.toFixed(4);
               this.longitude = initMapCenter.lng.toFixed(4);
             });
 
-            //displays map scale on scale change (i.e. zoom level)
+            // displays map scale on scale change (i.e. zoom level)
             this.map.on('zoomend', () => {
-              var mapZoom = this.map.getZoom();
-              var mapScale = this.scaleLookup(mapZoom);
+              const mapZoom = this.map.getZoom();
+              const mapScale = this.scaleLookup(mapZoom);
               this.mapScale = mapScale;
               this.zoomLevel = mapZoom;
             });
 
-            //updates lat/lng indicator on mouse move. does not apply on devices w/out mouse. removes 'map center' label
+            // updates lat/lng indicator on mouse move. does not apply on devices w/out mouse. removes 'map center' label
             this.map.on('mousemove', (cursorPosition) => {
-              //$('#mapCenterLabel').css('display', 'none');
+              // $('#mapCenterLabel').css('display', 'none');
               if (cursorPosition.latlng !== null) {
                 this.latitude = cursorPosition.latlng.lat.toFixed(4);
                 this.longitude = cursorPosition.latlng.lng.toFixed(4);
               }
             });
-            //updates lat/lng indicator to map center after pan and shows 'map center' label.
+            // updates lat/lng indicator to map center after pan and shows 'map center' label.
             this.map.on('dragend', () => {
-              //displays latitude and longitude of map center
-              //$('#mapCenterLabel').css('display', 'inline');
-              var geographicMapCenter = this.map.getCenter();
+              // displays latitude and longitude of map center
+              // $('#mapCenterLabel').css('display', 'inline');
+              const geographicMapCenter = this.map.getCenter();
               this.latitude = geographicMapCenter.lat.toFixed(4);
               this.longitude = geographicMapCenter.lng.toFixed(4);
             });
-            //end latLngScale utility logic/////////
+            // end latLngScale utility logic/////////
 
           }, 500);
 
@@ -607,6 +609,7 @@ export class HomeComponent implements OnInit {
         iconClasses = ' wmm-icon-circle wmm-icon-white ';
         colorClass = 'wmm-mutedblue';
         sizeClass = 'wmm-size-35';
+
       } else {
         // eventCount set to empty string if just one event at location
         eventCount = '';

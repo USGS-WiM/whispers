@@ -415,6 +415,8 @@ export class HomeComponent implements OnInit {
             this.parsedPopularSearches.push(parsedSearch);
           }
 
+          console.log("wat");
+
         },
         error => {
           this.errorMessage = <any>error;

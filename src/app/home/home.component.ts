@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-declare let L: any;
+//declare let L: any;
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
@@ -31,6 +31,9 @@ import { EventTypeService } from '@app/services/event-type.service';
 import { DiagnosisTypeService } from '@app/services/diagnosis-type.service';
 import { DiagnosisService } from '@app/services/diagnosis.service';
 import { SpeciesService } from '@app/services/species.service';
+
+import * as L from 'leaflet';
+import * as esri from 'esri-leaflet';
 
 // export class ResultsDataSource extends MatTableDataSource<any> {
 //   constructor(private userService: EventService) {
@@ -260,11 +263,36 @@ export class HomeComponent implements OnInit {
               'Streets': streets
             };
 
+            // Flyways hosted by Fish and Wildlife Service
+            var flyways = esri.featureLayer({url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0'}).addTo(this.map);
+            //L.control.layers(flyways).addTo(this.map);
+
+            // Watersheds hosted by The National Map (USGS)
+            var watersheds = esri.dynamicMapLayer({
+              url: 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer',
+              opacity: 0.7
+            }).addTo(this.map);
+            //L.control.layers(watersheds).addTo(this.map);
+            
+            // Land use hosted by USGS
+            var landUse = esri.dynamicMapLayer({
+              url: 'https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer',
+              opacity: 0.7
+            }).addTo(this.map);
+            //L.control.layers(landUse).addTo(this.map);
+
+            const overlays = {
+              'Flyways': flyways,
+              'Watersheds (HUC 2)': watersheds,
+              'Land Use': landUse
+            }
+
             const x = { position: 'topleft'};
 
-            L.control.layers(baseMaps, null, x ).addTo(this.map);
+            L.control.layers(baseMaps, overlays, x).addTo(this.map);
             L.control.scale({ position: 'bottomright' }).addTo(this.map);
-
+            
+            
             // const legend = L.control({ position: 'bottomright' });
 
             // legend.onAdd = function (map) {

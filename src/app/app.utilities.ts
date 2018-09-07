@@ -40,6 +40,17 @@ export class APP_UTILITIES {
         parsedSearch.id = search.id;
         parsedSearch.name = search.name;
 
+
+        // TODO: may need to add logic for adding openEventsOnly to the search
+        if (search.data.startdate) {
+            parsedSearch.start_date =  search.data.startdate;
+        }
+        if (search.data.enddate) {
+            parsedSearch.end_date = search.data.enddate;
+        }
+        if (search.data.affected_count) {
+            parsedSearch.affected_count = search.data.affected_count;
+        }
         if (search.data.event_type) {
             parsedSearch.event_type = JSON.parse('[' + search.data.event_type + ']');
         }

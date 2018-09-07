@@ -287,11 +287,8 @@ export class HomeComponent implements OnInit {
               'Land Use': landUse
             }
 
-            const x = { position: 'topleft'};
-
-            L.control.layers(baseMaps, overlays, x).addTo(this.map);
+            L.control.layers(baseMaps, overlays, { position: 'topleft'}).addTo(this.map);
             L.control.scale({ position: 'bottomright' }).addTo(this.map);
-            
             
             // const legend = L.control({ position: 'bottomright' });
 
@@ -442,6 +439,8 @@ export class HomeComponent implements OnInit {
             const parsedSearch = APP_UTILITIES.parseSearch(search);
             this.parsedPopularSearches.push(parsedSearch);
           }
+
+          console.log("wat");
 
         },
         error => {

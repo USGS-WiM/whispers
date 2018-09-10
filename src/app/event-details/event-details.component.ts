@@ -10,7 +10,7 @@ import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
 
 import { MatSnackBar } from '@angular/material';
-import {TooltipPosition} from '@angular/material';
+import { TooltipPosition } from '@angular/material';
 
 
 import 'rxjs/add/operator/switchMap';
@@ -54,6 +54,8 @@ export class EventDetailsComponent implements OnInit {
   eventLocationSpecies: LocationSpecies[] = [];
 
   selection = [];
+
+  possibleEventDiagnoses = [];
 
   eventDataLoading = true;
 
@@ -133,6 +135,12 @@ export class EventDetailsComponent implements OnInit {
                 location_species.administrative_level_one_string = event_location.administrative_level_one_string;
                 location_species.country_string = event_location.country_string;
                 this.eventLocationSpecies.push(location_species);
+
+                for (const species_diagnosis of location_species.species_diagnosis) {
+                  if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', species_diagnosis.diagnosis)) {
+                    this.possibleEventDiagnoses.push(species_diagnosis);
+                  }
+                }
               }
             }
 
@@ -262,6 +270,15 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
+  searchInArray(array, field: string, value) {
+    for (const item of array) {
+      if (item[field] === value) {
+        // console.log('Duplicate detected. Already existing ID: ' + value);
+        return true;
+      }
+    }
+  }
+
   mapEvent(eventData) {
 
     const markers = [];
@@ -346,7 +363,8 @@ export class EventDetailsComponent implements OnInit {
     // Open dialog for adding event diagnosis
     this.addEventDiagnosisDialogRef = this.dialog.open(AddEventDiagnosisComponent, {
       data: {
-        event_id: id
+        event_id: id,
+        diagnosis_options: this.possibleEventDiagnoses
       }
       // minWidth: 200
       // height: '75%'

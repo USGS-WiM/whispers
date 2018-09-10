@@ -8,7 +8,7 @@
         <mat-form-field class="form-control event-diagnosis-select">
           <mat-select placeholder="Diagnosis" formControlName="diagnosis">
             <mat-option>--</mat-option>
-            <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}</mat-option>
+            <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.diagnosis}}">{{diagnosis.diagnosis_string}}</mat-option>
           </mat-select>
         </mat-form-field>
   

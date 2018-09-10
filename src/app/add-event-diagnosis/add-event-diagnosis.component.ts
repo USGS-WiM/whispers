@@ -48,17 +48,18 @@ export class AddEventDiagnosisComponent implements OnInit {
   ngOnInit() {
 
     this.eventID = this.data.event_id;
+    this.diagnoses = this.data.diagnosis_options;
 
     // get diagnoses from the DiagnosisService
-    this.diagnosisService.getDiagnoses()
-      .subscribe(
-        diagnoses => {
-          this.diagnoses = diagnoses;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    // this.diagnosisService.getDiagnoses()
+    //   .subscribe(
+    //     diagnoses => {
+    //       this.diagnoses = diagnoses;
+    //     },
+    //     error => {
+    //       this.errorMessage = <any>error;
+    //     }
+    //   );
 
   }
 

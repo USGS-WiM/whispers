@@ -114,6 +114,17 @@
                 <i class="material-icons">add</i> Add Event Diagnosis</button>
             </div>
             <label class="event-detail-label">Privileged Event Data</label>
+            <br />
+
+           
+              <mat-chip-list [selectable]="false">
+                  <label>You have these permissions on this event:</label>
+                <mat-chip color="accent" *ngIf="eventData.permissions.read === true">Read</mat-chip>
+                <mat-chip color="primary" *ngIf="eventData.permissions.update === true">Update</mat-chip>
+                <mat-chip color="primary" *ngIf="eventData.permissions.write=== true">Write/Create</mat-chip>
+                <mat-chip color="warn" *ngIf="eventData.permissions.destroy === true">Delete</mat-chip>
+              </mat-chip-list>
+            
             <p>
               <!-- <span class="text-larger">You have
                 <span>edit</span> privileges for this event</span> -->

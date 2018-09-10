@@ -193,6 +193,7 @@
               <span *ngFor="let adminLevel2 of search.administrative_level_two">{{adminLevel2}} <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span><br /></span>
           </button>
+          
           <mat-divider [inset]="true"></mat-divider>
         </div>
 

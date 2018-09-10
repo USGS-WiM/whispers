@@ -639,7 +639,7 @@ export class HomeComponent implements OnInit {
         iconClasses = ' wmm-icon-circle wmm-icon-white ';
         colorClass = 'wmm-mutedblue';
         sizeClass = 'wmm-size-35';
-
+        
       } else {
         // eventCount set to empty string if just one event at location
         eventCount = '';

@@ -273,6 +273,9 @@ body {
 input[type=radio]{
 	-webkit-appearance: radio !important;
 }
+input[type=checkbox]{
+    -webkit-appearance: checkbox !important;
+}
 .wmm-triangle.wmm-size-25:after{
     // border: 3px solid rgba(0,0,0,0.5) !important;
     left: -12px !important;
@@ -383,7 +386,7 @@ input[type=radio]{
             }
 
             &:after{
-                position: relative;
+                position: refive;
                 top: -3px;
             }
         }

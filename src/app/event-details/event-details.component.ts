@@ -3,7 +3,11 @@ import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-declare let L: any;
+
+//declare let L: any;
+
+import * as L from 'leaflet';
+import * as esri from 'esri-leaflet';
 
 import { MatSnackBar } from '@angular/material';
 import { TooltipPosition } from '@angular/material';
@@ -214,7 +218,46 @@ export class EventDetailsComponent implements OnInit {
         'Streets': streets
       };
 
-      L.control.layers(baseMaps).addTo(this.map);
+      // Flyways hosted by Fish and Wildlife Service
+      var flyways = esri.featureLayer({
+        url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
+        style: function (feature) {
+          if (feature.properties.NAME === 'Atlantic Flyway') {
+            return {color: 'blue', weight: 2 };
+          } else if (feature.properties.NAME === 'Pacific Flyway') {
+            return { color: 'red', weight: 2 };
+          } else if (feature.properties.NAME === 'Mississippi Flyway') {
+            return { color: 'green', weight: 2 };
+          } else if (feature.properties.NAME === 'Central Flyway') {
+            return { color: 'yellow', weight: 2 };
+          }
+        }
+      });
+      
+      // Watersheds hosted by The National Map (USGS)
+      var watersheds = esri.dynamicMapLayer({
+        url: 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer',
+        opacity: 0.7
+      });
+      
+      // Land use hosted by USGS
+      var landUse = esri.dynamicMapLayer({
+        url: 'https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer',
+        opacity: 0.7
+      });
+
+      const overlays = {
+        'Flyways': flyways,
+        'Watersheds (HUC 2)': watersheds,
+        'Land Use': landUse
+      }
+
+      //const x = { position: 'topleft'};
+
+      L.control.layers(baseMaps, overlays, { position: 'topleft'}).addTo(this.map);
+      L.control.scale({ position: 'bottomright' }).addTo(this.map);
+
+      //L.control.layers(baseMaps).addTo(this.map);
 
       this.mapEvent(this.eventData);
 

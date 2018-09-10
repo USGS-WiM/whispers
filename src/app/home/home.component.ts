@@ -264,27 +264,30 @@ export class HomeComponent implements OnInit {
             };
 
             // Flyways hosted by Fish and Wildlife Service
-            var flyways = esri.featureLayer({url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0'}).addTo(this.map);
-            //L.control.layers(flyways).addTo(this.map);
-
+            var flyways = esri.featureLayer({
+              url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
+              style: function (feature) {
+                if (feature.properties.NAME === 'Atlantic Flyway') {
+                  return {color: 'blue', weight: 2 };
+                } else if (feature.properties.NAME === 'Pacific Flyway') {
+                  return { color: 'red', weight: 2 };
+                } else if (feature.properties.NAME === 'Mississippi Flyway') {
+                  return { color: 'green', weight: 2 };
+                } else if (feature.properties.NAME === 'Central Flyway') {
+                  return { color: 'yellow', weight: 2 };
+                }
+              }
+            });
+            
             // Watersheds hosted by The National Map (USGS)
             var watersheds = esri.dynamicMapLayer({
               url: 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer',
               opacity: 0.7
-            }).addTo(this.map);
-            //L.control.layers(watersheds).addTo(this.map);
+            });
             
-            // Land use hosted by USGS
-            var landUse = esri.dynamicMapLayer({
-              url: 'https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer',
-              opacity: 0.7
-            }).addTo(this.map);
-            //L.control.layers(landUse).addTo(this.map);
-
             const overlays = {
               'Flyways': flyways,
-              'Watersheds (HUC 2)': watersheds,
-              'Land Use': landUse
+              'Watersheds (HUC 2)': watersheds
             }
 
             L.control.layers(baseMaps, overlays, { position: 'topleft'}).addTo(this.map);

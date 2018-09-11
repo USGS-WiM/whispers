@@ -23,6 +23,7 @@ import { EventLocation } from '@interfaces/event-location';
 import { LocationSpecies } from '@interfaces/location-species';
 import { EditEventComponent } from '@app/edit-event/edit-event.component';
 import { AddEventDiagnosisComponent } from '@app/add-event-diagnosis/add-event-diagnosis.component';
+import { EditEventLocationComponent } from '@app/edit-event-location/edit-event-location.component';
 import { EditSpeciesComponent } from '@app/edit-species/edit-species.component';
 import { AddSpeciesDiagnosisComponent } from '@app/add-species-diagnosis/add-species-diagnosis.component';
 import { LandOwnershipService } from '@services/land-ownership.service';
@@ -47,6 +48,7 @@ export class EventDetailsComponent implements OnInit {
 
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
+  editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
   editSpeciesDialogRef: MatDialogRef<EditSpeciesComponent>;
   addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>;
 
@@ -223,7 +225,7 @@ export class EventDetailsComponent implements OnInit {
         url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
         style: function (feature) {
           if (feature.properties.NAME === 'Atlantic Flyway') {
-            return {color: 'blue', weight: 2 };
+            return { color: 'blue', weight: 2 };
           } else if (feature.properties.NAME === 'Pacific Flyway') {
             return { color: 'red', weight: 2 };
           } else if (feature.properties.NAME === 'Mississippi Flyway') {
@@ -233,13 +235,13 @@ export class EventDetailsComponent implements OnInit {
           }
         }
       });
-      
+
       // Watersheds hosted by The National Map (USGS)
       var watersheds = esri.dynamicMapLayer({
         url: 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer',
         opacity: 0.7
       });
-      
+
       // Land use hosted by USGS
       var landUse = esri.dynamicMapLayer({
         url: 'https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer',
@@ -254,7 +256,7 @@ export class EventDetailsComponent implements OnInit {
 
       //const x = { position: 'topleft'};
 
-      L.control.layers(baseMaps, overlays, { position: 'topleft'}).addTo(this.map);
+      L.control.layers(baseMaps, overlays, { position: 'topleft' }).addTo(this.map);
       L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
       //L.control.layers(baseMaps).addTo(this.map);
@@ -379,6 +381,25 @@ export class EventDetailsComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
+  }
+
+  addEventLocation(id: string) {
+
+  }
+
+  editEventLocation(eventLocationData: Object) {
+    // Open dialog for editing event location
+    this.editEventLocationDialogRef = this.dialog.open(EditEventLocationComponent, {
+      data: {
+        eventLocationData: eventLocationData
+      }
+      // minWidth: 200
+      // height: '75%'
+    });
+  }
+
+  deleteEventLocation(id: string) {
+
   }
 
   editSpecies(id: string, index: number) {

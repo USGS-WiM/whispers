@@ -91,6 +91,6 @@ export class SearchService {
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(JSON.stringify(error.json()) || 'Server error');
+    return Observable.throw(JSON.stringify(error.json().error) || 'Server error');
   }
 }

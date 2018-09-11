@@ -89,6 +89,8 @@ import { AddSpeciesDiagnosisComponent } from './add-species-diagnosis/add-specie
 import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
 import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 import { LocationSpeciesDiagnosisService } from '@app/services/location-species-diagnosis.service';
+import { EditEventLocationComponent } from './edit-event-location/edit-event-location.component';
+import { AddEventLocationComponent } from './add-event-location/add-event-location.component';
 
 
 @NgModule({
@@ -111,6 +113,8 @@ import { LocationSpeciesDiagnosisService } from '@app/services/location-species-
     AddEventDiagnosisComponent,
     EditSpeciesComponent,
     AddSpeciesDiagnosisComponent,
+    EditEventLocationComponent,
+    AddEventLocationComponent,
   ],
   imports: [
     BrowserModule,
@@ -197,7 +201,9 @@ import { LocationSpeciesDiagnosisService } from '@app/services/location-species-
     EditEventComponent,
     AddEventDiagnosisComponent,
     EditSpeciesComponent,
-    AddSpeciesDiagnosisComponent
+    AddSpeciesDiagnosisComponent,
+    EditEventLocationComponent,
+    AddEventLocationComponent
   ]
 })
 export class AppModule { }

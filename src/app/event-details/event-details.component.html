@@ -108,9 +108,9 @@
             <mat-divider [inset]="true"></mat-divider>
             <br>
             <div class="event-detail-action-bar">
-              <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEvent(id)">
+              <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEvent(id)" [disabled]="!eventData.permissions.update">
                 <i class="material-icons">edit</i> Edit Event</button>
-              <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addEventDiagnosis(id)">
+              <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addEventDiagnosis(id)" [disabled]="!eventData.permissions.write">
                 <i class="material-icons">add</i> Add Event Diagnosis</button>
             </div>
             <label class="event-detail-label">Privileged Event Data</label>
@@ -186,6 +186,13 @@
                         <br/>
                       </span>
                     </div>
+
+                    <div class="event-detail-action-bar-left">
+                      <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEventLocation(eventData.event_locations[i])" [disabled]="!eventData.permissions.update">
+                        <i class="material-icons">edit</i> Edit Event Location Details</button>
+                      <button mat-raised-button color="warn" class="event-detail-action-button" (click)="deleteEventLocation(eventlocation)" [disabled]="!eventData.permissions.write">
+                        <i class="material-icons">delete</i> Delete Event Location</button>
+                    </div>
                     <p>
                       <div *ngIf="eventLocation.location_species.length > 0">
 
@@ -193,11 +200,11 @@
                         <br/>
 
                         <div class="event-detail-action-bar-left">
-                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpecies(id, i)">
+                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpecies(id, i)" [disabled]="!eventData.permissions.update">
                             <i class="material-icons">edit</i> Edit Species</button>
-                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addSpeciesDiagnosis(id, i)">
+                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addSpeciesDiagnosis(id, i)" [disabled]="!eventData.permissions.write">
                             <i class="material-icons">add</i> Add Species Diagnosis</button>
-                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpeciesDiagnosis(id, i)">
+                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpeciesDiagnosis(id, i)" [disabled]="!eventData.permissions.update">
                             <i class="material-icons">edit</i> Edit Species Diagnosis</button>
                         </div>
 

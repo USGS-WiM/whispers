@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>
+  <i class="material-icons">search</i> GNIS Feature Lookup</h1>
+<mat-dialog-content>
+
+  <div id="search-api-div">
+
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+
+  <button mat-button color="warn" (click)="this.gnisLookupDialogRef.close('cancel');">
+    <mat-icon>cancel</mat-icon>&nbsp;Cancel
+  </button>
+  <button mat-button color="primary" type="submit">
+    <mat-icon>send</mat-icon>&nbsp;Use
+  </button>
+
+</mat-dialog-actions>

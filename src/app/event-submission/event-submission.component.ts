@@ -69,6 +69,7 @@ import { CreateContactService } from '@create-contact/create-contact.service';
 import { ConfirmComponent } from '@confirm/confirm.component';
 
 import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
+import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
 
 @Component({
@@ -78,6 +79,7 @@ import { EventSubmissionConfirmComponent } from '@app/event-submission/event-sub
 })
 export class EventSubmissionComponent implements OnInit {
 
+  gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
 
@@ -222,6 +224,11 @@ export class EventSubmissionComponent implements OnInit {
     });
   }
 
+  openGNISLookupDialog() {
+    this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
+      data: {}
+    });
+  }
 
 
   openEventLocationRemoveConfirm(i) {
@@ -510,6 +517,7 @@ export class EventSubmissionComponent implements OnInit {
       longitude: [null, Validators.pattern(this.longitudePattern)],
       land_ownership: [null, Validators.required],
       gnis_name: '',
+      gnis_id: '',
       site_description: '',
       history: '',
       environmental_factors: '',

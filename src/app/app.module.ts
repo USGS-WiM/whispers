@@ -91,6 +91,7 @@ import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 import { LocationSpeciesDiagnosisService } from '@app/services/location-species-diagnosis.service';
 import { EditEventLocationComponent } from './edit-event-location/edit-event-location.component';
 import { AddEventLocationComponent } from './add-event-location/add-event-location.component';
+import { GnisLookupComponent } from './gnis-lookup/gnis-lookup.component';
 
 
 @NgModule({
@@ -115,6 +116,7 @@ import { AddEventLocationComponent } from './add-event-location/add-event-locati
     AddSpeciesDiagnosisComponent,
     EditEventLocationComponent,
     AddEventLocationComponent,
+    GnisLookupComponent,
   ],
   imports: [
     BrowserModule,
@@ -203,7 +205,8 @@ import { AddEventLocationComponent } from './add-event-location/add-event-locati
     EditSpeciesComponent,
     AddSpeciesDiagnosisComponent,
     EditEventLocationComponent,
-    AddEventLocationComponent
+    AddEventLocationComponent,
+    GnisLookupComponent
   ]
 })
 export class AppModule { }

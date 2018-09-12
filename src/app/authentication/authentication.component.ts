@@ -78,6 +78,7 @@ export class AuthenticationComponent implements OnInit {
           this.submitLoading = false;
           this.authenticationDialogRef.close();
           this.openSnackBar('Successfully logged in!', 'OK', 5000);
+          location.reload();
         },
         (error) => {
           this.submitLoading = false;

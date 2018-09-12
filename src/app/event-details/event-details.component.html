@@ -121,7 +121,7 @@
                   <label>You have these permissions on this event:</label>
                 <mat-chip color="accent" *ngIf="eventData.permissions.read === true">Read</mat-chip>
                 <mat-chip color="primary" *ngIf="eventData.permissions.update === true">Update</mat-chip>
-                <mat-chip color="primary" *ngIf="eventData.permissions.write=== true">Write/Create</mat-chip>
+                <mat-chip color="primary" *ngIf="eventData.permissions.write=== true">Create</mat-chip>
                 <mat-chip color="warn" *ngIf="eventData.permissions.destroy === true">Delete</mat-chip>
               </mat-chip-list>
             
@@ -190,7 +190,7 @@
                     <div class="event-detail-action-bar-left">
                       <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEventLocation(eventData.event_locations[i])" [disabled]="!eventData.permissions.update">
                         <i class="material-icons">edit</i> Edit Event Location Details</button>
-                      <button mat-raised-button color="warn" class="event-detail-action-button" (click)="deleteEventLocation(eventlocation)" [disabled]="!eventData.permissions.write">
+                      <button mat-raised-button color="warn" class="event-detail-action-button" (click)="openEventLocationDeleteConfirm(eventData.event_locations[i].id)" [disabled]="!eventData.permissions.destroy">
                         <i class="material-icons">delete</i> Delete Event Location</button>
                     </div>
                     <p>

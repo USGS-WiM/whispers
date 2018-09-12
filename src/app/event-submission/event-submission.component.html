@@ -144,7 +144,8 @@
 
                           <div class="horizontal-form-container">
                             <mat-form-field class="form-control">
-                              <input matInput [matDatepicker]="startDate" placeholder="Location Start Date" formControlName="start_date">
+                              <input matInput [matDatepicker]="startDate" placeholder="Location Start Date"
+                                formControlName="start_date">
                               <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
                               <mat-datepicker #startDate></mat-datepicker>
                               <mat-hint align="end" matTooltip="Public field">
@@ -166,25 +167,28 @@
                           <div class="horizontal-form-container">
 
                             <mat-form-field class="form-control">
-                              <mat-select placeholder="Country" formControlName="country" (ngModelChange)="updateAdminLevelOneOptions($event)" required>
+                              <mat-select placeholder="Country" formControlName="country" (ngModelChange)="updateAdminLevelOneOptions($event)"
+                                required>
                                 <mat-option *ngFor="let country of countries" value="{{country.id}}">{{country.name}}</mat-option>
                               </mat-select>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
-                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">Please enter a value</mat-error>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">Please
+                                enter a value</mat-error>
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
-                              <mat-select placeholder="State" formControlName="administrative_level_one" (ngModelChange)="updateAdminLevelTwoOptions($event)"
-                                required>
+                              <mat-select placeholder="State" formControlName="administrative_level_one"
+                                (ngModelChange)="updateAdminLevelTwoOptions($event)" required>
                                 <mat-option *ngFor="let adminLevelOne of adminLevelOnes" value="{{adminLevelOne.id}}">{{adminLevelOne.name}}</mat-option>
                               </mat-select>
                               <mat-hint align="start">Select a country to populate/update state list </mat-hint>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
-                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('administrative_level_one').invalid">Please enter a value</mat-error>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('administrative_level_one').invalid">Please
+                                enter a value</mat-error>
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
@@ -195,7 +199,8 @@
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
-                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('administrative_level_two').invalid">Please enter a value</mat-error>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('administrative_level_two').invalid">Please
+                                enter a value</mat-error>
                             </mat-form-field>
 
                           </div>
@@ -209,7 +214,8 @@
                               <mat-select placeholder="Land Ownership" formControlName="land_ownership" required>
                                 <mat-option *ngFor="let landOwnership of landOwnerships" value="{{landOwnership.id}}">{{landOwnership.name}}</mat-option>
                               </mat-select>
-                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('land_ownership').invalid">Please enter a value</mat-error>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('land_ownership').invalid">Please
+                                enter a value</mat-error>
                             </mat-form-field>
 
                           </div>
@@ -217,23 +223,44 @@
                           <div class="horizontal-form-container">
                             <mat-form-field class="form-control">
                               <input matInput placeholder="Latitude" formControlName="latitude">
-                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('latitude').invalid">Invalid latitude</mat-error>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('latitude').invalid">Invalid
+                                latitude</mat-error>
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
                               <input matInput placeholder="Longitude" formControlName="longitude">
-                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('longitude').invalid">Invalid longitude</mat-error>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('longitude').invalid">Invalid
+                                longitude</mat-error>
                             </mat-form-field>
                           </div>
 
-                          <div class="vertical-form-container">
+                          <div class="horizontal-form-container">
                             <mat-form-field class="form-control">
-                              <input matInput placeholder="GNIS Standardized Location Name" formControlName="gnis_name">
+                              <input matInput placeholder="GNIS Fetaure Name" formControlName="gnis_name">
                               <mat-hint align="start" matTooltip="field under development. value will not save.">
                                 <strong>
-                                  <mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT</strong>
+                                  <mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT
+                                </strong>
                               </mat-hint>
                             </mat-form-field>
+                            <mat-form-field class="form-control">
+                              <input matInput placeholder="GNIS Feature ID" formControlName="gnis_id">
+                              <mat-hint align="start" matTooltip="field under development. value will not save.">
+                                <strong>
+                                  <mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT
+                                </strong>
+                              </mat-hint>
+                            </mat-form-field>
+
+                            <div class="contact-button-div">
+
+                              <button mat-stroked-button color="primary" aria-label="Lookup GNIS feature" matTooltip="Lookup GNIS feature"
+                                (click)="openGNISLookupDialog()">
+                                <mat-icon>search</mat-icon>Lookup GNIS
+                              </button>
+
+                            </div>
+
                           </div>
 
                           <div>
@@ -247,16 +274,20 @@
                         <mat-step [stepControl]="eventSubmissionForm">
                           <ng-template matStepLabel>Comments</ng-template>
 
-                          <span>Text in at least one of the comment categories below is required. Please be as thorough as possible
-                            to aid interpretation of data and to potentially guide cause of death determination and management
+                          <span>Text in at least one of the comment categories below is required. Please be as thorough
+                            as possible
+                            to aid interpretation of data and to potentially guide cause of death determination and
+                            management
                             actions.
                           </span>
                           <p>
 
                             <mat-form-field class="comment-text-area">
-                              <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="History" formControlName="history"></textarea>
+                              <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="History"
+                                formControlName="history"></textarea>
                               <mat-hint align="start" class="hint">
-                                <strong>chronological description of current observational information leading up to finding sick
+                                <strong>chronological description of current observational information leading up to
+                                  finding sick
                                   or dead wildlife, plus historical information about past events</strong>
                               </mat-hint>
                               <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
@@ -264,11 +295,15 @@
                             <p>
 
                               <mat-form-field class="comment-text-area">
-                                <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="Site Description" formControlName="site_description"></textarea>
+                                <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="Site Description"
+                                  formControlName="site_description"></textarea>
                                 <mat-hint align="start" class="hint">
-                                  <strong> animal and human land use (e.g., other species present, hunting and agricultural activities),
-                                    habitat types (e.g., vegetation, water features), nearby structures (e.g., buildings,
-                                    power lines, wind turbines), public health warnings, or other major characteristics of
+                                  <strong> animal and human land use (e.g., other species present, hunting and
+                                    agricultural activities),
+                                    habitat types (e.g., vegetation, water features), nearby structures (e.g.,
+                                    buildings,
+                                    power lines, wind turbines), public health warnings, or other major characteristics
+                                    of
                                     the area</strong>
                                 </mat-hint>
                                 <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
@@ -276,9 +311,11 @@
                               <p>
 
                                 <mat-form-field class="comment-text-area">
-                                  <textarea matInput #envFactors maxlength="1000" placeholder="Environmental Factors" formControlName="environmental_factors"></textarea>
+                                  <textarea matInput #envFactors maxlength="1000" placeholder="Environmental Factors"
+                                    formControlName="environmental_factors"></textarea>
                                   <mat-hint align="start">
-                                    <strong>storms, precipitation, temperature changes, migration, toxins, or other factors that
+                                    <strong>storms, precipitation, temperature changes, migration, toxins, or other
+                                      factors that
                                       may contribute to stress in the animals
                                     </strong>
                                   </mat-hint>
@@ -287,7 +324,8 @@
                                 <p>
 
                                   <mat-form-field class="comment-text-area">
-                                    <textarea matInput #clinicalSigns maxlength="1000" placeholder="Clinical Signs" formControlName="clinical_signs"></textarea>
+                                    <textarea matInput #clinicalSigns maxlength="1000" placeholder="Clinical Signs"
+                                      formControlName="clinical_signs"></textarea>
                                     <mat-hint align="start">
                                       <strong>any unusual behavior or physical appearance in the animals</strong>
                                     </mat-hint>
@@ -299,7 +337,8 @@
                                       <div *ngFor="let comments of getLocationComments(eventLocation); let c = index"> -->
 
                                     <mat-form-field class="comment-text-area">
-                                      <textarea matInput #generalComment maxlength="1000" placeholder="Additonal Comment" formControlName="comment"></textarea>
+                                      <textarea matInput #generalComment maxlength="1000" placeholder="Additonal Comment"
+                                        formControlName="comment"></textarea>
                                       <mat-hint align="start">
                                         <strong>any additional comment not covered by the fields above</strong>
                                       </mat-hint>
@@ -384,7 +423,8 @@
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control">
-                                      <input matInput placeholder="Est. Population at Risk" type="number" formControlName="population_count">
+                                      <input matInput placeholder="Est. Population at Risk" type="number"
+                                        formControlName="population_count">
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
@@ -418,13 +458,13 @@
                                       </mat-hint>
                                     </mat-form-field>
 
-                                    <button mat-icon-button color="accent" aria-label="Apply species to all locations" matTooltip="Apply species to all locations"
-                                      (click)="createCommonEventDataObject('species', i, j )">
+                                    <button mat-icon-button color="accent" aria-label="Apply species to all locations"
+                                      matTooltip="Apply species to all locations" (click)="createCommonEventDataObject('species', i, j )">
                                       <i class="material-icons">group_work</i>
                                     </button>
 
-                                    <button mat-icon-button color="warn" aria-label="Remove this species from this location" (click)="removeLocationSpecies(i, j)"
-                                      matTooltip="Remove this species from this location">
+                                    <button mat-icon-button color="warn" aria-label="Remove this species from this location"
+                                      (click)="removeLocationSpecies(i, j)" matTooltip="Remove this species from this location">
                                       <i class="material-icons">remove_circle</i>
                                     </button>
 
@@ -467,7 +507,9 @@
                               <div class="horizontal-form-container contact-controls-container" [formGroupName]="k">
                                 <mat-form-field class="form-control contact-select">
                                   <mat-select placeholder="Contact" formControlName="id">
-                                    <mat-option *ngFor="let contact of userContacts" [value]="contact.id">{{contact.first_name}} {{contact.last_name}} | {{contact.organization | displayValue:'name':this.organizations}}
+                                    <mat-option *ngFor="let contact of userContacts" [value]="contact.id">{{contact.first_name}}
+                                      {{contact.last_name}} | {{contact.organization |
+                                      displayValue:'name':this.organizations}}
                                     </mat-option>
                                   </mat-select>
                                 </mat-form-field>
@@ -480,8 +522,8 @@
 
                                 <div class="contact-button-div">
 
-                                  <button mat-icon-button color="accent" aria-label="Apply contact to all locations" matTooltip="Apply contact to all locations"
-                                    (click)="createCommonEventDataObject('contact', i, k )">
+                                  <button mat-icon-button color="accent" aria-label="Apply contact to all locations"
+                                    matTooltip="Apply contact to all locations" (click)="createCommonEventDataObject('contact', i, k )">
                                     <i class="material-icons">group_work</i>
                                   </button>
 
@@ -491,8 +533,8 @@
                                     <i class="material-icons">assignment_ind</i>
                                   </button>
 
-                                  <button mat-icon-button color="warn" aria-label="Remove this contact from this location" (click)="removeLocationContacts(i, k)"
-                                    matTooltip="Remove this contact from this location">
+                                  <button mat-icon-button color="warn" aria-label="Remove this contact from this location"
+                                    (click)="removeLocationContacts(i, k)" matTooltip="Remove this contact from this location">
                                     <i class="material-icons">remove_circle</i>
                                   </button>
 
@@ -528,14 +570,17 @@
                             <h3>
                               Specimen Consultation and Diagnostic Services Request &nbsp;&nbsp;&nbsp;&nbsp;
                               <strong>
-                                <mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT</strong>
+                                <mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT
+                              </strong>
                             </h3>
 
-                            <h4>Request consultation and diagnostic services for specimens of affected species at this location.
+                            <h4>Request consultation and diagnostic services for specimens of affected species at this
+                              location.
                             </h4>
 
                             <mat-radio-group>
-                              <mat-radio-button value="1">Request diagnostic and consultative services </mat-radio-button>
+                              <mat-radio-button value="1">Request diagnostic and consultative services
+                              </mat-radio-button>
                               <p>
                                 <mat-radio-button value="2">Request consultative services ONLY </mat-radio-button>
                                 <p>
@@ -544,12 +589,12 @@
                           </div>
 
                           <div>
-                              <button mat-button matStepperPrevious type="button">
-                                <i class="material-icons"> arrow_back_ios </i> Back</button>
-                              <button mat-button matStepperNext type="button"> Next
-                                <i class="material-icons"> navigate_next </i>
-                              </button>
-                            </div>
+                            <button mat-button matStepperPrevious type="button">
+                              <i class="material-icons"> arrow_back_ios </i> Back</button>
+                            <button mat-button matStepperNext type="button"> Next
+                              <i class="material-icons"> navigate_next </i>
+                            </button>
+                          </div>
                         </mat-step>
 
                         <mat-step>
@@ -592,8 +637,10 @@
                                     <button mat-button matStepperPrevious type="button">
                                       <i class="material-icons"> arrow_back_ios </i> Back</button>
                                     <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
-                                    <button mat-button color="primary" matTooltip="Add another location to this event" (click)="addEventLocation()">
-                                      <mat-icon>add_location</mat-icon>Add Another Location</button>
+                                    <button mat-button color="primary" matTooltip="Add another location to this event"
+                                      (click)="addEventLocation()">
+                                      <mat-icon>add_location</mat-icon>Add Another Location
+                                    </button>
                                   </div>
                         </mat-step>
 
@@ -619,7 +666,8 @@
           <!-- End Locations Section-->
 
           <button mat-button color="primary" matTooltip="Add another location to this event" (click)="addEventLocation()">
-            <mat-icon>add_location</mat-icon>Add Location</button>
+            <mat-icon>add_location</mat-icon>Add Location
+          </button>
 
           <p>
 
@@ -653,7 +701,8 @@
                           </mat-select>
                         </mat-form-field>
 
-                        <button mat-icon-button color="warn" aria-label="Remove this comment" (click)="removeEventComment(h)" matTooltip="Remove this comment">
+                        <button mat-icon-button color="warn" aria-label="Remove this comment" (click)="removeEventComment(h)"
+                          matTooltip="Remove this comment">
                           <i class="material-icons">remove_circle</i>
                         </button>
                       </div>
@@ -667,7 +716,8 @@
 
                 <div class="button-row">
                   <button mat-button color="primary" matTooltip="Add comment to this event" (click)="addEventComment()">
-                    <mat-icon>add_comment</mat-icon> Add Comment</button>
+                    <mat-icon>add_comment</mat-icon> Add Comment
+                  </button>
                 </div>
 
               </mat-expansion-panel>
@@ -691,23 +741,23 @@
               </mat-radio-group>
             </div>
             <p> -->
-              <!-- End Specimen Submission Request section-->
+            <!-- End Specimen Submission Request section-->
 
-              <mat-divider [inset]="true"></mat-divider>
+            <mat-divider [inset]="true"></mat-divider>
 
-              <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar "></mat-progress-bar>
+            <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar "></mat-progress-bar>
+            <p>
+              <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="openEventSubmitConfirm(eventSubmissionForm.value)">
+                <i class="material-icons ">pageview</i> Review Event Submission</button>
               <p>
-                <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="openEventSubmitConfirm(eventSubmissionForm.value)">
-                  <i class="material-icons ">pageview</i> Review Event Submission</button>
-                <p>
-                  <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="submitEvent(eventSubmissionForm.value)">
-                    <i class="material-icons ">done</i> Create Event</button>
+                <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="submitEvent(eventSubmissionForm.value)">
+                  <i class="material-icons ">done</i> Create Event</button>
 
-                  <div class="temporary-form-value-display ">
-                    <h3>Temporary Form Value display (not for production)</h3>
-                    <p>Form Status: {{eventSubmissionForm.status}}
-                      <pre> {{eventSubmissionForm.value | json}} </pre>
-                  </div>
+                <div class="temporary-form-value-display ">
+                  <h3>Temporary Form Value display (not for production)</h3>
+                  <p>Form Status: {{eventSubmissionForm.status}}
+                    <pre> {{eventSubmissionForm.value | json}} </pre>
+                </div>
 
       </mat-card-content>
     </mat-card>

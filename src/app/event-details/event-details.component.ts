@@ -27,7 +27,9 @@ import { EditEventLocationComponent } from '@app/edit-event-location/edit-event-
 import { EditSpeciesComponent } from '@app/edit-species/edit-species.component';
 import { AddSpeciesDiagnosisComponent } from '@app/add-species-diagnosis/add-species-diagnosis.component';
 import { LandOwnershipService } from '@services/land-ownership.service';
+import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { marker } from 'leaflet';
+import { EventLocationService } from '@app/services/event-location.service';
 
 
 @Component({
@@ -54,6 +56,8 @@ export class EventDetailsComponent implements OnInit {
 
   eventData: EventDetail;
   eventLocationSpecies: LocationSpecies[] = [];
+
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
 
   selection = [];
 
@@ -106,6 +110,7 @@ export class EventDetailsComponent implements OnInit {
     private dialog: MatDialog,
     private adminLevelOneService: AdministrativeLevelOneService,
     private landownershipService: LandOwnershipService,
+    private eventLocationService: EventLocationService,
     public snackBar: MatSnackBar
   ) {
     this.eventLocationSpecies = [];
@@ -398,8 +403,34 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
-  deleteEventLocation(id: string) {
+  deleteEventLocation(id: number) {
+    this.eventLocationService.delete(id)
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
 
+  openEventLocationDeleteConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Event Location Confirm',
+          message: 'Are you sure you want to delete this event location, and all its associated species, contacts, and comments? This action cannot be undone.',
+          confirmButtonText: 'Yes, Delete location and all associated data'
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventLocation(id);
+      }
+    });
   }
 
   editSpecies(id: string, index: number) {

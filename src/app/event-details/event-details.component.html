@@ -170,8 +170,8 @@
                       {{determineLocationName(eventLocation.name,i+1)}}
                     </mat-panel-title>
                   </mat-expansion-panel-header>
-                  Onset date: {{eventLocation.start_date | date:'mediumDate'}}
-                  <br/> End date: {{eventLocation.end_date | date:'mediumDate'}}
+                  Location Start Date: {{eventLocation.start_date | date:'mediumDate'}}
+                  <br/> Location End Date: {{eventLocation.end_date | date:'mediumDate'}}
                   <br/> Location: {{eventLocation.administrative_level_two_string}}, {{eventLocation.administrative_level_one_string}},
                   {{eventLocation.country_string}}
                   <br/> Land ownership: {{eventLocation.land_ownership | displayValue:'name':this.landownerships }}

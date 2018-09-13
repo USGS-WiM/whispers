@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import { DatePipe } from '@angular/common';
@@ -71,13 +71,16 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
+import * as search_api from 'usgs-search-api';
+declare const search_api: search_api;
+
 
 @Component({
   selector: 'app-event-submission',
   templateUrl: './event-submission.component.html',
   styleUrls: ['./event-submission.component.scss']
 })
-export class EventSubmissionComponent implements OnInit {
+export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
@@ -132,6 +135,8 @@ export class EventSubmissionComponent implements OnInit {
     species: [],
     contacts: []
   };
+
+  usgsSearch;
 
   buildEventSubmissionForm() {
     this.eventSubmissionForm = this.formBuilder.group({
@@ -194,6 +199,8 @@ export class EventSubmissionComponent implements OnInit {
 
       });
 
+
+
     // this.eventSubmitConfirm.afterDismissed().subscribe(() => {
     //   console.log('Bottom sheet has been dismissed.');
     // });
@@ -224,9 +231,20 @@ export class EventSubmissionComponent implements OnInit {
     });
   }
 
-  openGNISLookupDialog() {
+  openGNISLookupDialog(i) {
     this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
-      data: {}
+      height: '400px',
+      width: '600px',
+      data: {
+        event_location_index: i
+      }
+    });
+
+    this.gnisLookupDialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      this.eventSubmissionForm.get('new_event_locations')['controls'][result.event_location_index].get('gnis_id').setValue(result.id);
+      this.eventSubmissionForm.get('new_event_locations')['controls'][result.event_location_index].get('gnis_name').setValue(result.name);
+
     });
   }
 
@@ -264,8 +282,24 @@ export class EventSubmissionComponent implements OnInit {
     return result;
   }
 
+  ngAfterViewInit() {
+    this.usgsSearch = search_api.create('search-api-div', {
+      'verbose': true,
+      'placeholder': 'Search for GNIS place name',
+      'tooltip': "Type to search GNIS database",
+      'on_result': function (event) {
+        // do something with the result
+        // o.result is a geojson point feature object with location information set as properties 
+        console.warn(event.result);
+
+      }
+    });
+
+  }
+
 
   ngOnInit() {
+
 
     // get event types from the EventTypeService
     this.eventTypeService.getEventTypes()
@@ -607,6 +641,20 @@ export class EventSubmissionComponent implements OnInit {
         locationContacts.push(contact);
       }
     }
+
+    this.usgsSearch = search_api.create('search-api-div', {
+      'verbose': true,
+      'placeholder': 'Search for GNIS place name',
+      'tooltip': "Type to search GNIS database",
+      'on_result': function (event) {
+        // do something with the result
+        // o.result is a geojson point feature object with location information set as properties 
+        console.warn(event.result);
+
+      }
+    });
+
+
   }
 
   removeEventComment(h) {
@@ -718,6 +766,10 @@ export class EventSubmissionComponent implements OnInit {
     this.snackBar.open(message, action, {
       duration: duration,
     });
+  }
+
+  setEventLocationForGNISSelect(i) {
+    console.log('Selecting GNIS record for Event Location Number' + (i + 1));
   }
 
 

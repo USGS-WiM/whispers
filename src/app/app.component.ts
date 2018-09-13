@@ -13,6 +13,7 @@ import { APP_SETTINGS } from '@app/app.settings';
 import { AuthenticationService } from '@app/services/authentication.service';
 
 import * as $ from 'jquery';
+import * as search_api from 'usgs-search-api';
 
 @Component({
   selector: 'app-root',

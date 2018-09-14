@@ -15,8 +15,8 @@ declare const search_api: search_api;
 export class GnisLookupComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   usgsSearch;
-  name: string;
-  id: string;
+  name = '';
+  id = '';
 
   constructor(
     public gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>,

@@ -17,6 +17,8 @@ export class GnisLookupComponent implements OnInit, AfterViewInit, AfterViewChec
   usgsSearch;
   name = '';
   id = '';
+  county = '';
+  state = '';
 
   constructor(
     public gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>,
@@ -30,9 +32,11 @@ export class GnisLookupComponent implements OnInit, AfterViewInit, AfterViewChec
   ngAfterViewChecked() {
   }
 
-  updateSelectedFeature(id, name) {
+  updateSelectedFeature(id, name, county, state) {
     this.id = id;
     this.name = name;
+    this.county = county;
+    this.state = state;
   }
 
   ngAfterViewInit() {
@@ -58,7 +62,12 @@ export class GnisLookupComponent implements OnInit, AfterViewInit, AfterViewChec
         this.name = event.result.properties.Name;
         console.log('GNIS Feature selected. ' + this.name + ' (' + this.id + ')');
 
-        self.updateSelectedFeature(event.result.properties.GnisId, event.result.properties.Name);
+        self.updateSelectedFeature(
+          event.result.properties.GnisId,
+          event.result.properties.Name,
+          event.result.properties.County,
+          event.result.properties.State
+        );
       }
     });
   }
@@ -70,7 +79,10 @@ export class GnisLookupComponent implements OnInit, AfterViewInit, AfterViewChec
     const result = {
       event_location_index: this.data.event_location_index,
       id: this.id,
-      name: this.name
+      name: this.name,
+      county: this.county,
+      state: this.state
+
     };
 
     this.gnisLookupDialogRef.close(result);

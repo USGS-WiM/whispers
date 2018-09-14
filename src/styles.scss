@@ -423,9 +423,49 @@ input[type=checkbox]{
     font-size: larger;
 }
 
+
+// Styles for GNIS-Lookup Component
+// They don't work if they're in the gnis-lookup-component.scss
+// So they're here instead.
 .search-api-menu.search-api-md.search-api-menu-down {
+    width: 300px !important;
     position: fixed !important;
     top: 50% !important;
     left: 50% !important;
     margin-left:-150px;
+
+    .search-api-menu-content{
+        max-height: 40vh !important;
+    }
+
+    .search-api-menu-title{
+        background-color: #182141;
+    }
+}
+
+#search-api-div{
+
+    .search-api-container{
+        border:none;
+        position: relative;
+
+        .search-api-icon{
+            border: none;
+            padding-right: 2px;
+            position:absolute;
+            background-color: transparent;
+            padding-top: 2px;
+        }
+
+        input{
+            border: none;
+            border-bottom: 1px solid #949494;
+            border-radius: 0;
+            padding-left: 40px;
+
+            &:focus{
+                border-bottom: 2px solid #3456FA;
+            }
+        }
+    }
 }

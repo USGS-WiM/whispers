@@ -233,8 +233,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   openGNISLookupDialog(i) {
     this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
-      height: '400px',
-      width: '600px',
+      //height: '80%',
       data: {
         event_location_index: i
       }

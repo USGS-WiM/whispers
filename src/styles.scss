@@ -422,3 +422,10 @@ input[type=checkbox]{
 .text-larger {
     font-size: larger;
 }
+
+.search-api-menu.search-api-md.search-api-menu-down {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-left:-150px;
+}

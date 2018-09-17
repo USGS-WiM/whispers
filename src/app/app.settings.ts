@@ -16,6 +16,8 @@ export class APP_SETTINGS {
 
     public static get IS_LOGGEDIN(): boolean { return (!!sessionStorage.getItem('username') && !!sessionStorage.getItem('password')); }
 
+    public static get APP_URL(): string { return 'https://test.wim.usgs.gov/whispersdev' };
+
     public static get DEFAULT_COUNTRY(): string { return 'USA'; }
 
     public static get VERSION() {
@@ -63,9 +65,13 @@ export class APP_SETTINGS {
     public static get GROUPS_URL(): string { return this._API_ENDPOINT + 'groups/'; }
     public static get SEARCH_URL(): string { return this._API_ENDPOINT + 'searches/'; }
 
+    public static get GO_USA_GOV_SHORTEN_URL(): string { return 'https://go.usa.gov/api/shorten.json'; }
+    public static get GO_USA_GOV_USER(): string { return 'bdraper'; }
+    public static get GO_USA_GOV_API_KEY(): string { return 'c9f06b2f3be4a9f764a4421df159a2e0'; }
 
-    public static get MIN_JSON_HEADERS() { return new Headers({ 'Accept': 'application/json' }) }
-    public static get JSON_HEADERS() { return new Headers({ 'Accept': 'application/json', 'Content-Type': 'application/json' }) }
+
+    public static get MIN_JSON_HEADERS() { return new Headers({ 'Accept': 'application/json' }); }
+    public static get JSON_HEADERS() { return new Headers({ 'Accept': 'application/json', 'Content-Type': 'application/json' }); }
     // line below is for headers stored in local storage. todo: revisit and implement this
     // public static get AUTH_HEADERS() { return new Headers({ 'Authorization': 'Basic ' + btoa(sessionStorage.getItem('username') + ':' + sessionStorage.getItem('password'))}) }
 

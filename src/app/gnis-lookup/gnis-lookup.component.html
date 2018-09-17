@@ -2,34 +2,15 @@
 
 <mat-dialog-content>
 
-  <div id="search-api-div"></div> <br />
 
-  <label class="text-bold">Current Selection:</label><br />
-  <span *ngIf="name === '' && id === ''"><i>None</i></span> <span class="text-larger">{{name}} </span><br />
-  <span class="county-state-label">{{county}}<span *ngIf="county !== ''">, </span>{{state}}</span><br />
-  <span *ngIf="id !== ''">GNIS ID: {{id}}</span>
-<!-- </mat-dialog-content> -->
+</mat-dialog-content>
+<mat-dialog-actions>
 
-<p>
+  <button mat-button color="warn" (click)="this.gnisLookupDialogRef.close('cancel');">
+    <mat-icon>cancel</mat-icon>&nbsp;Cancel
+  </button>
+  <button mat-button color="primary" type="submit" (click)="submitGNISSelection()">
+    <mat-icon>check</mat-icon>&nbsp;Done
+  </button>
 
-  <div class="citation">
-    <span class="text-x-small">This lookup is powered by the <a href="https://txpub.usgs.gov/dss/search_api/2.1/doc/#overview">USGS
-        Search JavaScript API</a> developed by the <a href="https://webapps.usgs.gov/">Geospatial Science + Cyber
-        Innovation
-        Branch</a> of the USGS Texas Water Science Center. It searches about 3.7 million location records from a
-      variety of
-      sources, including <a href="https://geonames.usgs.gov/domestic/">GNIS</a>. Source code can be on GitHub at:
-      <a href="https://github.com/usgs/search_api/">https://github.com/usgs/search_api/</a>.</span>
-  </div>
-
-  </mat-dialog-content>
-  <mat-dialog-actions>
-
-    <button mat-button color="warn" (click)="this.gnisLookupDialogRef.close('cancel');">
-      <mat-icon>cancel</mat-icon>&nbsp;Cancel
-    </button>
-    <button mat-button color="primary" type="submit" (click)="submitGNISSelection()">
-      <mat-icon>send</mat-icon>&nbsp;Finish
-    </button>
-
-  </mat-dialog-actions>
+</mat-dialog-actions>

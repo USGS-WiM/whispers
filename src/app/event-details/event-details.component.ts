@@ -30,6 +30,7 @@ import { LandOwnershipService } from '@services/land-ownership.service';
 import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { marker } from 'leaflet';
 import { EventLocationService } from '@app/services/event-location.service';
+import { EventDetailsShareComponent } from '@app/event-details/event-details-share/event-details-share.component';
 
 
 @Component({
@@ -53,6 +54,8 @@ export class EventDetailsComponent implements OnInit {
   editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
   editSpeciesDialogRef: MatDialogRef<EditSpeciesComponent>;
   addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>;
+
+  eventDetailsShareDialogRef: MatDialogRef<EventDetailsShareComponent>;
 
   eventData: EventDetail;
   eventLocationSpecies: LocationSpecies[] = [];
@@ -389,6 +392,16 @@ export class EventDetailsComponent implements OnInit {
   }
 
   addEventLocation(id: string) {
+
+  }
+
+  openEventDetailsShare() {
+
+    this.eventDetailsShareDialogRef = this.dialog.open(EventDetailsShareComponent, {
+      data: {
+        eventID : this.id,
+      }
+    });
 
   }
 

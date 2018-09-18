@@ -8,12 +8,20 @@
     <h4>
       <mat-icon>link</mat-icon> Create sharing link
     </h4>
-    This event's details page can always be found at <code>{{appURL}}/event/{{eventID}}</code>. This URL can be shared as is. <br />
+    This event's details page can always be found at <code>{{appURL}}/event/{{eventID}}</code>. This URL can be shared
+    as is. <br />
 
     To create a short, more easily shareable link that uses the <a href="https://go.usa.gov/">go.usa.gov</a> URL
-    shortening service, click below. <br />
+    shortening service, click below.
+    <p>
 
-    <button mat-stroked-button (click)="generateShortURL()"> <mat-icon>link</mat-icon> Generate shortened link</button>
+      <button mat-stroked-button (click)="generateShortURL()">
+        <mat-icon>link</mat-icon> Generate shortened link
+      </button>
+      <p>
+
+        <mat-progress-bar mode="indeterminate " *ngIf="submitLoading"></mat-progress-bar>
+        <span *ngIf="shortURL !== ''">Short Shareable Link: {{shortURL}}</span>
   </div>
 
 
@@ -30,10 +38,10 @@
 </mat-dialog-content>
 <mat-dialog-actions>
 
-  <button mat-button color="warn" (click)="this.gnisLookupDialogRef.close('cancel');">
+  <!-- <button mat-button color="warn" (click)="this.gnisLookupDialogRef.close('cancel');">
     <mat-icon>cancel</mat-icon>&nbsp;Cancel
-  </button>
-  <button mat-button color="primary" type="submit" (click)="submitGNISSelection()">
+  </button> -->
+  <button mat-button color="primary" type="submit" (click)="this.eventDetailsShareDialogRef.close('cancel');">
     <mat-icon>check</mat-icon>&nbsp;Done
   </button>
 

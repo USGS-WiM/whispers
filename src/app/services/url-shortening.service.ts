@@ -21,6 +21,9 @@ export class UrlShorteningService {
 
     const encodedLongURL = encodeURIComponent(window.location.href);
 
+    // Temporary, for testing
+    // const encodedLongURL = encodeURIComponent('https://test.wim.usgs.gov/whispersdev/event/160587');
+
     const options = new RequestOptions({
       headers: APP_SETTINGS.JSON_HEADERS
     });

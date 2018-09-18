@@ -20,6 +20,8 @@ export class EventDetailsShareComponent implements OnInit {
   eventID = this.data.eventID;
   shortURL = '';
 
+  submitLoading = false;
+
   errorMessage;
 
   constructor(
@@ -33,14 +35,21 @@ export class EventDetailsShareComponent implements OnInit {
 
   generateShortURL() {
 
+    this.shortURL = '';
+
+    this.submitLoading = true;
+
     this.urlShorteningService.generateShortURL()
       .subscribe(
         response => {
           console.log(response);
-          console.log('Shortened URL is: ' +  response.response.data.entry.short_url);
+          console.log('Shortened URL is: ' + response.response.data.entry[0].short_url);
+          this.shortURL = response.response.data.entry[0].short_url;
+          this.submitLoading = false;
         },
         error => {
           this.errorMessage = <any>error;
+          this.submitLoading = false;
         }
       );
 

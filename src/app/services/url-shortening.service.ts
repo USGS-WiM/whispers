@@ -25,7 +25,7 @@ export class UrlShorteningService {
     // const encodedLongURL = encodeURIComponent('https://test.wim.usgs.gov/whispersdev/event/160587');
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.JSON_HEADERS
+      headers: APP_SETTINGS.GO_USA_GOV_JSON_HEADERS
     });
 
     return this.http.get(APP_SETTINGS.GO_USA_GOV_SHORTEN_URL + '?login=' +

@@ -9,8 +9,10 @@
             Welcome to WHISPers
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <p id="welcome-text">This is the Wildlife Health Information Sharing Partnership event reporting system. It is a
-          place to explore wildlife mortality data submitted by partners across North America and verified by trained biologists.</p>
+        <p id="welcome-text">This is the Wildlife Health Information Sharing Partnership event reporting system. It is
+          a
+          place to explore wildlife mortality data submitted by partners across North America and verified by trained
+          biologists.</p>
       </mat-expansion-panel>
     </div>
 
@@ -151,49 +153,56 @@
       </mat-expansion-panel-header>
 
       <!-- <div *ngIf="popularSearches"> -->
-      <div >
+      <div>
 
         <div class="button-row" *ngFor="let search of parsedPopularSearches">
           <button mat-button>
-            <span class="search-param" *ngIf="search.start_date || search.end_date"><span *ngIf="search.start_date"><span class="text-bold"> START
+            <span class="search-param" *ngIf="search.start_date || search.end_date"><span *ngIf="search.start_date"><span
+                  class="text-bold"> START
                   DATE
                 </span> {{search.start_date | date:'mediumDate'}}
               </span><span *ngIf="search.end_date"><span class="text-bold">
                   END DATE
                 </span> {{search.end_date|date:'mediumDate'}}</span></span>
             <div *ngIf="search.start_date || search.end_date"><br /></div>
-            <span *ngIf="search.affected_count"> <span class="text-bold">AFFECTED COUNT &nbsp;</span> {{search.affected_count}}
+            <span *ngIf="search.affected_count"> <span class="text-bold">AFFECTED COUNT &nbsp;</span>
+              {{search.affected_count}}
             </span>
 
             <span class="search-param" *ngIf="search.event_type"> <span class="text-bold">EVENT TYPE&nbsp;
-              </span> <span *ngFor="let eventType of search.event_type">{{eventType | displayValue:'name':this.eventTypes}}
-                <span *ngIf="(search.event_type.indexOf(eventType)) < (search.event_type.length - 1)">or&nbsp;</span></span>  
+              </span> <span *ngFor="let eventType of search.event_type">{{eventType |
+                displayValue:'name':this.eventTypes}}
+                <span *ngIf="(search.event_type.indexOf(eventType)) < (search.event_type.length - 1)">or&nbsp;</span></span>
             </span>
-            <br *ngIf="search.event_type"/>
+            <br *ngIf="search.event_type" />
 
-            <span class="search-param" *ngIf="search.diagnosis_type"> <span class="text-bold">DIAGNOSIS TYPE &nbsp;</span> <span *ngFor="let diagnosisType of search.diagnosis_type">{{diagnosisType|
+            <span class="search-param" *ngIf="search.diagnosis_type"> <span class="text-bold">DIAGNOSIS TYPE &nbsp;</span>
+              <span *ngFor="let diagnosisType of search.diagnosis_type">{{diagnosisType|
                 displayValue:'name':this.diagnosisTypes}}
                 <span *ngIf="(search.diagnosis_type.indexOf(diagnosisType)) < (search.diagnosis_type.length - 1)">{{(search.diagnosis_type_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.diagnosis_type" />
 
-            <span class="search-param" *ngIf="search.diagnosis"> <span class="text-bold">DIAGNOSIS&nbsp;</span> <span *ngFor="let diagnosis of search.diagnosis">{{diagnosis
+            <span class="search-param" *ngIf="search.diagnosis"> <span class="text-bold">DIAGNOSIS&nbsp;</span> <span
+                *ngFor="let diagnosis of search.diagnosis">{{diagnosis
                 | displayValue:'name':this.diagnoses}} <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)">{{(search.diagnosis_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.diagnosis" />
 
-            <span class="search-param" *ngIf="search.species"> <span class="text-bold">SPECIES &nbsp;</span><span *ngFor="let species of search.species">{{species | displayValue:'name':this.species}} <span *ngIf="(search.species.indexOf(species)) < (search.species.length - 1)">{{(search.species_includes_all)
+            <span class="search-param" *ngIf="search.species"> <span class="text-bold">SPECIES &nbsp;</span><span
+                *ngFor="let species of search.species">{{species | displayValue:'name':this.species}} <span *ngIf="(search.species.indexOf(species)) < (search.species.length - 1)">{{(search.species_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.species" />
 
-            <span class="search-param" *ngIf="search.administrative_level_one"> <span class="text-bold">STATE&nbsp;</span><span *ngFor="let adminLevel1 of search.administrative_level_one">{{adminLevel1
+            <span class="search-param" *ngIf="search.administrative_level_one"> <span class="text-bold">STATE&nbsp;</span><span
+                *ngFor="let adminLevel1 of search.administrative_level_one">{{adminLevel1
                 | displayValue:'name':this.administrative_level_one}}
                 <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.administrative_level_one" />
 
-            <span  class="search-param" *ngIf="search.administrative_level_two"> <span class="text-bold">COUNTY &nbsp;
+            <span class="search-param" *ngIf="search.administrative_level_two"> <span class="text-bold">COUNTY &nbsp;
               </span>
               <span *ngFor="let adminLevel2 of search.administrative_level_two">{{adminLevel2}} <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span><br /></span>
           </button>
-          
+
           <mat-divider [inset]="true"></mat-divider>
         </div>
 
@@ -305,64 +314,6 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-          <div class="legend-label"><label>Diagnosis Type</label></div>
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Bacteria</label>
-          </span>
-          <br/>
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Fungus</label>
-          </span>
-          <br/>
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Nut/Met/Dev</label>
-          </span>
-          <br/>
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-orange wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Other</label>
-          </span>
-          <br/>
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Parasite</label>
-          </span>
-          <br/>
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-purple wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Toxin</label>
-          </span>
-          <br/>
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-mutedpink wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Trauma</label>
-          </span>
-          <br/>
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-sky wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Virus</label>
-          </span>
-          <br/>
-
           <div class="legend-label"><label>Event Type</label></div>
           <div id='iconHolder'>
             <div class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
@@ -372,18 +323,81 @@
             <div class='wmm-diamond wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
           </div>
           <label id='expLabel'>Surveillance</label>
-          <br/>
+          <br />
 
-          <div class="legend-label"><label>Multiples and Ongoing</label></div>
+          <div class="legend-label"><label>Diagnosis Type</label></div>
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            </div>
+            <label id='expLabel'>Bacteria</label>
+          </span>
+          <br />
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            </div>
+            <label id='expLabel'>Fungus</label>
+          </span>
+          <br />
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            </div>
+            <label id='expLabel'>Nut/Met/Dev</label>
+          </span>
+          <br />
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-square wmm-orange wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            </div>
+            <label id='expLabel'>Other</label>
+          </span>
+          <br />
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            </div>
+            <label id='expLabel'>Parasite</label>
+          </span>
+          <br />
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-square wmm-purple wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            </div>
+            <label id='expLabel'>Toxin</label>
+          </span>
+          <br />
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-square wmm-mutedpink wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            </div>
+            <label id='expLabel'>Trauma</label>
+          </span>
+          <br />
+          <span>
+            <div id='iconHolder'>
+              <div class='wmm-square wmm-sky wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            </div>
+            <label id='expLabel'>Virus</label>
+          </span>
+          <br />
           <span>
             <div id='iconHolder'>
               <div class='wmm-square wmm-mutedblue wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
             </div>
             <label id='expLabel'>Multiple Events at location</label>
           </span>
-
+          <br />
+          <label class="text-smaller text-italic">Number indicates event count</label>
           <br />
           <span>
+            <div id='iconHolder'>
+              <div class='wmm-circle wmm-black wmm-icon-circle wmm-icon-white wmm-size-20 left-icon'></div>
+            </div>
+            <label id='expLabel'>Open Event </label>
+          </span>
+          <!-- <span>
             <div id='iconHolder' class="left-icon">
               <div class='wmm-circle wmm-black wmm-icon-circle wmm-icon-white wmm-size-20 left-icon'></div>
             </div>
@@ -391,8 +405,8 @@
             <div id='iconHolder' class="right-icon">
               <div class='wmm-diamond wmm-black wmm-icon-diamond wmm-icon-white wmm-size-15 right-icon'></div>
             </div>
-            <label id='expLabel2'>Ongoing Event</label>
-          </span>
+            <label id='expLabel2'>Open Event</label>
+          </span> -->
 
         </mat-expansion-panel>
 

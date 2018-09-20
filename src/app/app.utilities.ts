@@ -42,11 +42,11 @@ export class APP_UTILITIES {
 
 
         // TODO: may need to add logic for adding openEventsOnly to the search
-        if (search.data.startdate) {
-            parsedSearch.start_date =  search.data.startdate;
+        if (search.data.start_date) {
+            parsedSearch.start_date =  search.data.start_date;
         }
-        if (search.data.enddate) {
-            parsedSearch.end_date = search.data.enddate;
+        if (search.data.end_date) {
+            parsedSearch.end_date = search.data.end_date;
         }
         if (search.data.affected_count) {
             parsedSearch.affected_count = search.data.affected_count;

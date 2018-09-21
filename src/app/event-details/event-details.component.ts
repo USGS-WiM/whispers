@@ -31,7 +31,7 @@ import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { marker } from 'leaflet';
 import { EventLocationService } from '@app/services/event-location.service';
 import { EventDetailsShareComponent } from '@app/event-details/event-details-share/event-details-share.component';
-
+import { AddEventLocationComponent } from '@app/add-event-location/add-event-location.component';
 
 @Component({
   selector: 'app-event-details',
@@ -52,6 +52,7 @@ export class EventDetailsComponent implements OnInit {
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
   editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
+  addEventLocationDialogRef: MatDialogRef<AddEventLocationComponent>;
   editSpeciesDialogRef: MatDialogRef<EditSpeciesComponent>;
   addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>;
 
@@ -355,7 +356,7 @@ export class EventDetailsComponent implements OnInit {
                 }
 
                 console.log('eventLocationSpecies:', this.eventLocationSpecies);
-                //this.speciesTableRows = this.eventLocationSpecies;
+                //  this.speciesTableRows = this.eventLocationSpecies;
                 this.eventDataLoading = false;
               },
               error => {
@@ -391,7 +392,13 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
-  addEventLocation(id: string) {
+  addEventLocation() {
+    // Open dialog for adding an event location
+    this.addEventLocationDialogRef = this.dialog.open(AddEventLocationComponent, {
+      data: {
+        eventData: this.eventData
+      }
+    });
 
   }
 
@@ -399,7 +406,7 @@ export class EventDetailsComponent implements OnInit {
 
     this.eventDetailsShareDialogRef = this.dialog.open(EventDetailsShareComponent, {
       data: {
-        eventID : this.id,
+        eventID: this.id,
       }
     });
 

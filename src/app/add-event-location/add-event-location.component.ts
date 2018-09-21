@@ -1,4 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { Inject } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
+import { Observable } from 'rxjs/Observable';
+
+import { MatDialog, MatDialogRef } from '@angular/material';
+
+import { MatSnackBar } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material';
+import { EventLocationService } from '@app/services/event-location.service';
 
 @Component({
   selector: 'app-add-event-location',
@@ -7,9 +16,32 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddEventLocationComponent implements OnInit {
 
-  constructor() { }
+  errorMessage = '';
+  addEventLocationForm: FormGroup;
+
+  eventID;
+
+  submitLoading = false;
+
+  buildAddEventLocationForm() {
+    this.addEventLocationForm = this.formBuilder.group({
+      event: null
+    });
+  }
+
+  constructor(
+    private formBuilder: FormBuilder,
+    public addEventDiagnosisDialogRef: MatDialogRef<AddEventLocationComponent>,
+    private eventLocationService: EventLocationService,
+    public snackBar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.buildAddEventLocationForm();
+  }
 
   ngOnInit() {
+
+    this.eventID = this.data.eventData.id;
   }
 
 }

@@ -45,7 +45,8 @@
                   <th [attr.rowspan]="eventData.event_locations.length + 1 ">Locations</th>
                 </tr>
                 <tr *ngFor="let eventLocation of eventData.event_locations">
-                  <td>{{eventLocation.administrative_level_two_string}}, {{eventLocation.administrative_level_one_string}}
+                  <td>{{eventLocation.administrative_level_two_string}},
+                    {{eventLocation.administrative_level_one_string}}
                     <br>{{eventLocation.country_string}}</td>
                 </tr>
               </table>
@@ -69,7 +70,8 @@
                   <tr *ngFor="let loc_species of eventLocationSpecies">
                     <td>{{loc_species.species_string}}</td>
                     <td>
-                      <span>{{loc_species.administrative_level_two_string}}, {{loc_species.administrative_level_one_string}}</span>
+                      <span>{{loc_species.administrative_level_two_string}},
+                        {{loc_species.administrative_level_one_string}}</span>
                       <br>
                       <span>{{loc_species.country_string}}</span>
                     </td>
@@ -88,7 +90,8 @@
                           <span>{{species_diagnosis.tested_count}} specimens tested |</span>
                           <span>{{species_diagnosis.positive_count}} positive</span>
                           <br>
-                          <span *ngIf="species_diagnosis.organizations_string"> by {{species_diagnosis.organizations_string[0]}}</span>
+                          <span *ngIf="species_diagnosis.organizations_string"> by
+                            {{species_diagnosis.organizations_string[0]}}</span>
                         </span>
                       </span>
                       <span *ngIf="loc_species.species_diagnosis.length === 0">To Be Determined</span>
@@ -108,23 +111,25 @@
             <mat-divider [inset]="true"></mat-divider>
             <br>
             <div class="event-detail-action-bar">
-              <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEvent(id)" [disabled]="!eventData.permissions.update">
+              <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEvent(id)"
+                [disabled]="!eventData.permissions.update">
                 <i class="material-icons">edit</i> Edit Event</button>
-              <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addEventDiagnosis(id)" [disabled]="!eventData.permissions.write">
+              <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addEventDiagnosis(id)"
+                [disabled]="!eventData.permissions.write">
                 <i class="material-icons">add</i> Add Event Diagnosis</button>
             </div>
             <label class="event-detail-label">Privileged Event Data</label>
             <br />
 
-           
-              <mat-chip-list [selectable]="false">
-                  <label>You have these permissions on this event:</label>
-                <mat-chip color="accent" *ngIf="eventData.permissions.read === true">Read</mat-chip>
-                <mat-chip color="primary" *ngIf="eventData.permissions.update === true">Update</mat-chip>
-                <mat-chip color="primary" *ngIf="eventData.permissions.write=== true">Create</mat-chip>
-                <mat-chip color="warn" *ngIf="eventData.permissions.destroy === true">Delete</mat-chip>
-              </mat-chip-list>
-            
+
+            <mat-chip-list [selectable]="false">
+              <label>You have these permissions on this event:</label>
+              <mat-chip color="accent" *ngIf="eventData.permissions.read === true">Read</mat-chip>
+              <mat-chip color="primary" *ngIf="eventData.permissions.update === true">Update</mat-chip>
+              <mat-chip color="primary" *ngIf="eventData.permissions.write=== true">Create</mat-chip>
+              <mat-chip color="warn" *ngIf="eventData.permissions.destroy === true">Delete</mat-chip>
+            </mat-chip-list>
+
             <p>
               <!-- <span class="text-larger">You have
                 <span>edit</span> privileges for this event</span> -->
@@ -164,63 +169,73 @@
               <p>
                 <mat-card-subtitle>Event Location Details</mat-card-subtitle>
 
-                <mat-expansion-panel *ngFor="let eventLocation of eventData.event_locations; let i = index" [attr.data-index]="i" (change)="panelDataChange()">
+                <mat-expansion-panel *ngFor="let eventLocation of eventData.event_locations; let i = index"
+                  [attr.data-index]="i" (change)="panelDataChange()">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       {{determineLocationName(eventLocation.name,i+1)}}
                     </mat-panel-title>
                   </mat-expansion-panel-header>
                   Location Start Date: {{eventLocation.start_date | date:'mediumDate'}}
-                  <br/> Location End Date: {{eventLocation.end_date | date:'mediumDate'}}
-                  <br/> Location: {{eventLocation.administrative_level_two_string}}, {{eventLocation.administrative_level_one_string}},
+                  <br /> Location End Date: {{eventLocation.end_date | date:'mediumDate'}}
+                  <br /> Location: {{eventLocation.administrative_level_two_string}},
+                  {{eventLocation.administrative_level_one_string}},
                   {{eventLocation.country_string}}
-                  <br/> Land ownership: {{eventLocation.land_ownership | displayValue:'name':this.landownerships }}
-                  <br/>
+                  <br /> Land ownership: {{eventLocation.land_ownership | displayValue:'name':this.landownerships }}
+                  <br />
                   <p>
                     <div *ngIf="eventLocation.comments && eventLocation.comments.length > 0">
                       <label *ngIf="eventLocation.comments" class="event-detail-label">Comments</label>
-                      <br/>
+                      <br />
 
                       <span *ngFor="let comment of eventLocation.comments">
                         <b>{{getCommentType(comment.comment_type)}}:</b> {{comment.comment}}
-                        <br/>
+                        <br />
                       </span>
                     </div>
 
                     <div class="event-detail-action-bar-left">
-                      <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEventLocation(eventData.event_locations[i])" [disabled]="!eventData.permissions.update">
+                      <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEventLocation(eventData.event_locations[i])"
+                        [disabled]="!eventData.permissions.update">
                         <i class="material-icons">edit</i> Edit Event Location Details</button>
-                      <button mat-raised-button color="warn" class="event-detail-action-button" (click)="openEventLocationDeleteConfirm(eventData.event_locations[i].id)" [disabled]="!eventData.permissions.destroy">
+                      <button mat-raised-button color="warn" class="event-detail-action-button" (click)="openEventLocationDeleteConfirm(eventData.event_locations[i].id)"
+                        [disabled]="!eventData.permissions.destroy">
                         <i class="material-icons">delete</i> Delete Event Location</button>
                     </div>
                     <p>
                       <div *ngIf="eventLocation.location_species.length > 0">
 
                         <label *ngIf="eventLocation.location_species" class="event-detail-label">Species</label>
-                        <br/>
+                        <br />
 
                         <div class="event-detail-action-bar-left">
-                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpecies(id, i)" [disabled]="!eventData.permissions.update">
+                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpecies(id, i)"
+                            [disabled]="!eventData.permissions.update">
                             <i class="material-icons">edit</i> Edit Species</button>
-                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addSpeciesDiagnosis(id, i)" [disabled]="!eventData.permissions.write">
+                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addSpeciesDiagnosis(id, i)"
+                            [disabled]="!eventData.permissions.write">
                             <i class="material-icons">add</i> Add Species Diagnosis</button>
-                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpeciesDiagnosis(id, i)" [disabled]="!eventData.permissions.update">
+                          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpeciesDiagnosis(id, i)"
+                            [disabled]="!eventData.permissions.update">
                             <i class="material-icons">edit</i> Edit Species Diagnosis</button>
                         </div>
 
                         <div class="results-table-div">
 
-                          <mat-table [dataSource]="eventLocation.location_species" matSort matSortActive="species" matSortDirection="asc">
+                          <mat-table [dataSource]="eventLocation.location_species" matSort matSortActive="species"
+                            matSortDirection="asc">
 
                             <div>
                               <!-- Selection column -->
                               <ng-container matColumnDef="select">
                                 <mat-header-cell *matHeaderCellDef>
-                                  <mat-checkbox (change)="$event ? masterToggle(i) : null" [checked]="selection[i].hasValue() && isAllSelected(i)" [indeterminate]="selection[i].hasValue() && !isAllSelected(i)">
+                                  <mat-checkbox (change)="$event ? masterToggle(i) : null" [checked]="selection[i].hasValue() && isAllSelected(i)"
+                                    [indeterminate]="selection[i].hasValue() && !isAllSelected(i)">
                                   </mat-checkbox>
                                 </mat-header-cell>
                                 <mat-cell *matCellDef="let row">
-                                  <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection[i].toggle(row) : null" [checked]="selection[i].isSelected(row)">
+                                  <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection[i].toggle(row) : null"
+                                    [checked]="selection[i].isSelected(row)">
                                   </mat-checkbox>
                                 </mat-cell>
                               </ng-container>
@@ -235,7 +250,8 @@
                               <ng-container matColumnDef="location">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Location </mat-header-cell>
                                 <mat-cell *matCellDef="let loc_species">
-                                  <span>{{loc_species.administrative_level_two_string}}, {{loc_species.administrative_level_one_string}}</span>
+                                  <span>{{loc_species.administrative_level_two_string}},
+                                    {{loc_species.administrative_level_one_string}}</span>
                                   <br>
                                   <span>{{loc_species.country_string}}</span>
                                 </mat-cell>
@@ -262,13 +278,15 @@
                               <!-- Sick Count Estimated Column -->
                               <ng-container matColumnDef="sick_estimated">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Sick Estimate </mat-header-cell>
-                                <mat-cell *matCellDef="let loc_species"> {{loc_species.sick_count_estimated}} </mat-cell>
+                                <mat-cell *matCellDef="let loc_species"> {{loc_species.sick_count_estimated}}
+                                </mat-cell>
                               </ng-container>
 
                               <!-- Dead Count Estimated Column -->
                               <ng-container matColumnDef="dead_estimated">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Dead Estimate </mat-header-cell>
-                                <mat-cell *matCellDef="let loc_species"> {{loc_species.dead_count_estimated}} </mat-cell>
+                                <mat-cell *matCellDef="let loc_species"> {{loc_species.dead_count_estimated}}
+                                </mat-cell>
                               </ng-container>
 
                               <!-- Diagnosis Column -->
@@ -290,6 +308,12 @@
                 </mat-expansion-panel>
 
                 <p>
+
+                  <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addEventLocation()"
+                    [disabled]="!eventData.permissions.write">
+                    <mat-icon>add_location</mat-icon> Add New Event Location</button>
+
+
                   <!--<mat-card-subtitle>Affected Species Summary</mat-card-subtitle>
                 
                 <table id="speciesList">
@@ -357,14 +381,16 @@
       <div id="map">
         <mat-card class="unmappable-warning" *ngIf="unMappables.length > 0" matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
           [matTooltipPosition]="'above'">
-          <span><mat-icon>warning</mat-icon>&nbsp;Some location data absent. The following locations are not mapped:
+          <span>
+            <mat-icon>warning</mat-icon>&nbsp;Some location data absent. The following locations are not mapped:
             <!-- <ul>
               <li *ngFor="let unmappable of unMappables">{{unmappable.name}} ({{unmappable.administrative_level_two_string}},
                 {{unmappable.administrative_level_one_string}})
               </li>
             </ul> -->
 
-            <span *ngFor="let unmappable of unMappables">{{unmappable.name}} ({{unmappable.administrative_level_two_string}},
+            <span *ngFor="let unmappable of unMappables">{{unmappable.name}}
+              ({{unmappable.administrative_level_two_string}},
               {{unmappable.administrative_level_one_string}})
               <span *ngIf="(unMappables.indexOf(unmappable)) < (unMappables.length - 1)">;</span></span>
 
@@ -388,56 +414,56 @@
             </div>
             <label id='expLabel'>Bacteria</label>
           </span>
-          <br/>
+          <br />
           <span>
             <div id='iconHolder'>
               <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
             </div>
             <label id='expLabel'>Fungus</label>
           </span>
-          <br/>
+          <br />
           <span>
             <div id='iconHolder'>
               <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
             </div>
             <label id='expLabel'>Nut/Met/Dev</label>
           </span>
-          <br/>
+          <br />
           <span>
             <div id='iconHolder'>
               <div class='wmm-square wmm-orange wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
             </div>
             <label id='expLabel'>Other</label>
           </span>
-          <br/>
+          <br />
           <span>
             <div id='iconHolder'>
               <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
             </div>
             <label id='expLabel'>Parasite</label>
           </span>
-          <br/>
+          <br />
           <span>
             <div id='iconHolder'>
               <div class='wmm-square wmm-purple wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
             </div>
             <label id='expLabel'>Toxin</label>
           </span>
-          <br/>
+          <br />
           <span>
             <div id='iconHolder'>
               <div class='wmm-square wmm-mutedpink wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
             </div>
             <label id='expLabel'>Trauma</label>
           </span>
-          <br/>
+          <br />
           <span>
             <div id='iconHolder'>
               <div class='wmm-square wmm-sky wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
             </div>
             <label id='expLabel'>Virus</label>
           </span>
-          <br/>
+          <br />
 
           <div class="legend-label"><label>Event Type</label></div>
           <div id='iconHolder'>
@@ -448,7 +474,7 @@
             <div class='wmm-diamond wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
           </div>
           <label id='expLabel'>Surveillance</label>
-          <br/>
+          <br />
 
           <div class="legend-label"><label>Multiples and Ongoing</label></div>
           <span>

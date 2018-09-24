@@ -299,7 +299,7 @@ export class SearchDialogComponent implements OnInit {
     const result = [];
     let lastOption = null;
     for (let i = 0; i < searchArray.length; i++) {
-      if (!realval || searchArray[i][searchProperty].toLowerCase().startsWith(realval.toLowerCase())) {
+      if (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase())) {
         if (searchArray[i][searchProperty] !== lastOption) {
           lastOption = searchArray[i][searchProperty];
           result.push(searchArray[i]);

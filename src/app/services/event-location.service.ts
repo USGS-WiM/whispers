@@ -16,6 +16,18 @@ export class EventLocationService {
 
   constructor(private _http: Http) { }
 
+  public create(formValue): Observable<Event> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.AUTH_JSON_HEADERS
+    });
+
+    return this._http.post(APP_SETTINGS.EVENT_LOCATIONS_URL, formValue, options)
+      .map((response: Response) => <Event>response.json())
+      .catch(this.handleError);
+
+  }
+
   public update(formValue): Observable<Event> {
 
     const options = new RequestOptions({

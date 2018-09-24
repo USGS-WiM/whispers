@@ -311,7 +311,15 @@
 
                   <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addEventLocation()"
                     [disabled]="!eventData.permissions.write">
-                    <mat-icon>add_location</mat-icon> Add New Event Location</button>
+                    <mat-icon>add_location</mat-icon> Add New Event Location
+                  </button>
+
+                  <app-add-event-location *ngIf="showAddEventLocation"></app-add-event-location>
+
+                  <!-- Add new event location card -->
+
+
+
 
 
                   <!--<mat-card-subtitle>Affected Species Summary</mat-card-subtitle>

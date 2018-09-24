@@ -47,12 +47,14 @@ export class EventDetailsComponent implements OnInit {
   states = [];
   landownerships;
 
+  showAddEventLocation = false;
+
   locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
 
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
   editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
-  addEventLocationDialogRef: MatDialogRef<AddEventLocationComponent>;
+  // addEventLocationDialogRef: MatDialogRef<AddEventLocationComponent>;
   editSpeciesDialogRef: MatDialogRef<EditSpeciesComponent>;
   addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>;
 
@@ -230,7 +232,7 @@ export class EventDetailsComponent implements OnInit {
       };
 
       // Flyways hosted by Fish and Wildlife Service
-      var flyways = esri.featureLayer({
+      const flyways = esri.featureLayer({
         url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
         style: function (feature) {
           if (feature.properties.NAME === 'Atlantic Flyway') {
@@ -246,13 +248,13 @@ export class EventDetailsComponent implements OnInit {
       });
 
       // Watersheds hosted by The National Map (USGS)
-      var watersheds = esri.dynamicMapLayer({
+      const watersheds = esri.dynamicMapLayer({
         url: 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer',
         opacity: 0.7
       });
 
       // Land use hosted by USGS
-      var landUse = esri.dynamicMapLayer({
+      const landUse = esri.dynamicMapLayer({
         url: 'https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer',
         opacity: 0.7
       });
@@ -393,12 +395,14 @@ export class EventDetailsComponent implements OnInit {
   }
 
   addEventLocation() {
+
+    this.showAddEventLocation = true;
     // Open dialog for adding an event location
-    this.addEventLocationDialogRef = this.dialog.open(AddEventLocationComponent, {
-      data: {
-        eventData: this.eventData
-      }
-    });
+    // this.addEventLocationDialogRef = this.dialog.open(AddEventLocationComponent, {
+    //   data: {
+    //     eventData: this.eventData
+    //   }
+    // });
 
   }
 

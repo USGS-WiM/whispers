@@ -227,7 +227,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       data: {
         contact_action: 'create'
       }
-      // height: '75%'
     });
   }
 
@@ -271,7 +270,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     const result = [];
     let lastOption = null;
     for (let i = 0; i < searchArray.length; i++) {
-      if (!realval || searchArray[i][searchProperty].toLowerCase().startsWith(realval.toLowerCase())) {
+      if (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase())) {
         if (searchArray[i][searchProperty] !== lastOption) {
           lastOption = searchArray[i][searchProperty];
           result.push(searchArray[i]);
@@ -285,7 +284,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     this.usgsSearch = search_api.create('search-api-div', {
       'verbose': true,
       'placeholder': 'Search for GNIS place name',
-      'tooltip': "Type to search GNIS database",
+      'tooltip': 'Type to search GNIS database',
       'on_result': function (event) {
         // do something with the result
         // o.result is a geojson point feature object with location information set as properties 
@@ -644,7 +643,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     this.usgsSearch = search_api.create('search-api-div', {
       'verbose': true,
       'placeholder': 'Search for GNIS place name',
-      'tooltip': "Type to search GNIS database",
+      'tooltip': 'Type to search GNIS database',
       'on_result': function (event) {
         // do something with the result
         // o.result is a geojson point feature object with location information set as properties 

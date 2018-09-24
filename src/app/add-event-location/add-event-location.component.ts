@@ -31,7 +31,7 @@ export class AddEventLocationComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    public addEventDiagnosisDialogRef: MatDialogRef<AddEventLocationComponent>,
+    public addEventLocationDialogRef: MatDialogRef<AddEventLocationComponent>,
     private eventLocationService: EventLocationService,
     public snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -42,6 +42,10 @@ export class AddEventLocationComponent implements OnInit {
   ngOnInit() {
 
     this.eventID = this.data.eventData.id;
+  }
+
+  onSubmit(formValue) {
+
   }
 
 }

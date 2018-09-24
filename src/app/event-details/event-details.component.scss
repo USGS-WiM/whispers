@@ -205,3 +205,94 @@ tr.noBorder td {
 .legend-label {
     padding-top: 1em;
 }
+
+.event-location-card {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.contacts-section-header {
+    display: flex;
+    flex-direction: row;
+    margin-right: 10em;
+}
+
+.form-control {
+    width: 18em;
+    margin: 10px;
+}
+
+.comment-text-area {
+    width: 60em;
+    margin-bottom: 2em;
+}
+
+.general-comment-text-area {
+    width: 40em;
+    margin-bottom: 2em;
+}
+
+.hint {
+    max-width: 90%;
+}
+
+.species-number-control {
+    width: 8em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    flex-grow: 1;
+}
+
+.species-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-style: groove;
+    border-radius: 5px;
+    margin-bottom: 1em;
+}
+
+.contacts-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-style: groove;
+    border-radius: 5px;
+    margin-bottom: 1em;
+    width: auto;
+    display: inline-block;
+}
+
+.species-control-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.contact-select {
+    width: 40em;
+    flex-grow: 2;
+}
+
+.contact-type-select {
+    flex-grow: 1;
+}
+
+.contact-button-div {
+    flex-grow: 1;
+}
+
+.alert-text {
+    vertical-align: middle;
+}

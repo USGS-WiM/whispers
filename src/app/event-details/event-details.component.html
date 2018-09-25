@@ -313,14 +313,14 @@
                     [disabled]="!eventData.permissions.write">
                     <mat-icon>add_location</mat-icon> Add New Event Location
                   </button>
+                  <button mat-raised-button color="warn" *ngIf="showAddEventLocation" class="event-detail-action-button"
+                    (click)="showAddEventLocation = false;">
+                    <mat-icon>remove_circle</mat-icon> Cancel
+                  </button>
 
-                  <app-add-event-location *ngIf="showAddEventLocation"></app-add-event-location>
+                  <app-add-event-location *ngIf="showAddEventLocation" [eventID]="eventID"></app-add-event-location>
 
                   <!-- Add new event location card -->
-
-
-
-
 
                   <!--<mat-card-subtitle>Affected Species Summary</mat-card-subtitle>
                 

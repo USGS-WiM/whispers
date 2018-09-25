@@ -271,19 +271,19 @@ export class SearchDialogComponent implements OnInit {
     }
 
     // Handling of and_params
-    if (query && query['diagnosis_type_includes_all'] == true) {
+    if (query && query['diagnosis_type_includes_all'] === true) {
       this.searchForm.controls['diagnosis_type_includes_all'].setValue(true);
     }
-    if (query && query['diagnosis_includes_all'] == true) {
+    if (query && query['diagnosis_includes_all'] === true) {
       this.searchForm.controls['diagnosis_includes_all'].setValue(true);
     }
-    if (query && query['species_includes_all'] == true) {
+    if (query && query['species_includes_all'] === true) {
       this.searchForm.controls['species_includes_all'].setValue(true);
     }
-    if (query && query['administrative_level_one_includes_all'] == true) {
+    if (query && query['administrative_level_one_includes_all'] === true) {
       this.searchForm.controls['administrative_level_one_includes_all'].setValue(true);
     }
-    if (query && query['administrative_level_two_includes_all'] == true) {
+    if (query && query['administrative_level_two_includes_all'] === true) {
       this.searchForm.controls['administrative_level_two_includes_all'].setValue(true);
     }
 

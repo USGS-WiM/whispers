@@ -83,7 +83,7 @@ export class AddEventDiagnosisComponent implements OnInit {
         },
         error => {
           this.submitLoading = false;
-          this.openSnackBar('Error. Contact not Created. Error message: ' + error, 'OK', 8000);
+          this.openSnackBar('Error. Event Diagnosis not added. Error message: ' + error, 'OK', 8000);
         }
       );
 

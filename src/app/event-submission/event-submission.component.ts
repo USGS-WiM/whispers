@@ -783,11 +783,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     //   }
     // }
 
-    // TEMPORARY: remove gnis_name field until backend is handling it
-    for (const event_location of formValue.new_event_locations) {
-      delete event_location.gnis_name;
-    }
-
     // convert start_date and end_date of event_locations to 'yyyy-MM-dd' before submission
     // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
     for (const event_location of formValue.new_event_locations) {

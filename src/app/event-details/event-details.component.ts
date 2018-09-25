@@ -41,7 +41,7 @@ import { AddEventLocationComponent } from '@app/add-event-location/add-event-loc
 export class EventDetailsComponent implements OnInit {
 
   //@ViewChild('speciesTable') table: any;
-  id: string;
+  eventID: string;
   map;
   icon;
   states = [];
@@ -134,10 +134,10 @@ export class EventDetailsComponent implements OnInit {
     this.eventLocationSpecies = [];
 
     this.route.paramMap.subscribe(params => {
-      this.id = params.get('id');
+      this.eventID = params.get('id');
 
       // Actual request to event details service, using id
-      this._eventService.getEventDetails(this.id)
+      this._eventService.getEventDetails(this.eventID)
         .subscribe(
           (eventdetails) => {
             this.eventData = eventdetails;
@@ -274,7 +274,7 @@ export class EventDetailsComponent implements OnInit {
 
       this.mapEvent(this.eventData);
 
-    }, 1000);
+    }, 2000);
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -342,7 +342,7 @@ export class EventDetailsComponent implements OnInit {
     this.editEventDialogRef.afterClosed()
       .subscribe(
         () => {
-          this._eventService.getEventDetails(this.id)
+          this._eventService.getEventDetails(this.eventID)
             .subscribe(
               (eventdetails) => {
                 this.eventData = eventdetails;
@@ -410,7 +410,7 @@ export class EventDetailsComponent implements OnInit {
 
     this.eventDetailsShareDialogRef = this.dialog.open(EventDetailsShareComponent, {
       data: {
-        eventID: this.id,
+        eventID: this.eventID,
       }
     });
 
@@ -488,7 +488,7 @@ export class EventDetailsComponent implements OnInit {
   refreshEvent() {
     this.viewPanelStates = new Object();
     this.getViewPanelState(this.viewPanels);
-    this._eventService.getEventDetails(this.id)
+    this._eventService.getEventDetails(this.eventID)
       .subscribe(
         (eventdetails) => {
           this.eventData = eventdetails;
@@ -644,7 +644,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   exportEventDetails() {
-    this._eventService.getEventDetailsCSV(this.id);
+    this._eventService.getEventDetailsCSV(this.eventID);
   }
 
 

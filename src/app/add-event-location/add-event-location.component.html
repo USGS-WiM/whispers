@@ -23,7 +23,7 @@
 </mat-dialog-actions> -->
 
 <mat-card class="event-location-card">
-  <h3>New Event Location</h3>
+  <h3>New Event Location (Event {{eventID}})</h3>
   <form [formGroup]="addEventLocationForm">
     <mat-horizontal-stepper [linear]="false" #stepper linear>
 
@@ -130,7 +130,7 @@
 
             <div>
               <button mat-stroked-button color="primary" aria-label="Look up feature in Geographic Names Information System (GNIS) database"
-                matTooltip="Look up feature in Geographic Names Information System (GNIS) database" (click)="openGNISLookupDialog(i)">
+                matTooltip="Look up feature in Geographic Names Information System (GNIS) database" (click)="openGNISLookupDialog()">
                 <mat-icon>search</mat-icon>Look Up GNIS
               </button>
             </div>
@@ -249,7 +249,9 @@
                   <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
                 </button> -->
           <div formArrayName="new_location_species">
-            <div class="species-container" *ngFor="let locationSpecies of addEventLocationForm.get('new_location_species').controls; let j = index">
+            <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(); let j = index">
+
+
 
               <div [formGroupName]="j">
 
@@ -384,7 +386,7 @@
         </div>
 
         <div formArrayName="new_location_contacts">
-          <div class="contacts-container" *ngFor="let locationContacts of addEventLocationForm.get('new_location_contacts').controls; let k = index">
+          <div class="contacts-container" *ngFor="let locationContacts of getLocationContacts(); let k = index">
 
             <div class="horizontal-form-container contact-controls-container" [formGroupName]="k">
               <mat-form-field class="form-control contact-select">
@@ -429,7 +431,7 @@
         </div>
 
         <div class="button-row">
-          <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContacts(i)">
+          <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContacts()">
             <i class="material-icons">add_circle</i> Add Contact</button>
         </div>
 
@@ -514,8 +516,12 @@
                 </mat-error>
 
                 <div>
-                    <button mat-button type="submit" color="primary" [disabled]="addEventLocationForm.invalid" (click)="onSubmit(addEventLocationForm.value)"><mat-icon>send</mat-icon>&nbsp;Submit</button>
+                  <button mat-button type="submit" color="primary" [disabled]="addEventLocationForm.invalid" (click)="onSubmit(addEventLocationForm.value)">
+                    <mat-icon>send</mat-icon>&nbsp;Submit
+                  </button>
                 </div>
+
+                <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 
                 <div>
                   <button mat-button matStepperPrevious type="button">
@@ -525,12 +531,4 @@
 
     </mat-horizontal-stepper>
   </form>
-
-
-  <p>
-    <mat-divider [inset]="true"></mat-divider>
-    <p>
-      <button mat-button color="warn" (click)="openEventLocationRemoveConfirm(i)">
-        <i class=" material-icons ">remove_circle</i> Cancel</button>
-
 </mat-card>

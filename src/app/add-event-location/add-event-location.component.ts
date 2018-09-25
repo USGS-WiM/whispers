@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Inject } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 
@@ -64,6 +65,7 @@ declare const search_api: search_api;
   styleUrls: ['./add-event-location.component.scss']
 })
 export class AddEventLocationComponent implements OnInit {
+  @Input('eventID') eventID: string;
 
   errorMessage = '';
   addEventLocationForm: FormGroup;
@@ -91,7 +93,7 @@ export class AddEventLocationComponent implements OnInit {
 
   userContacts = [];
 
-  eventID;
+  //eventID;
 
   submitLoading = false;
 
@@ -100,7 +102,7 @@ export class AddEventLocationComponent implements OnInit {
 
   buildAddEventLocationForm() {
     this.addEventLocationForm = this.formBuilder.group({
-      event_id: null,
+      event: null,
       name: '',
       start_date: '',
       end_date: null,
@@ -129,6 +131,7 @@ export class AddEventLocationComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
+    private datePipe: DatePipe,
     // public addEventLocationDialogRef: MatDialogRef<AddEventLocationComponent>,
     private landOwnershipService: LandOwnershipService,
     private countryService: CountryService,
@@ -291,15 +294,27 @@ export class AddEventLocationComponent implements OnInit {
 
   onSubmit(formValue) {
 
+    this.submitLoading = true;
+
+    formValue.event = this.eventID;
+
+    // convert start_date and end_date of event_locations to 'yyyy-MM-dd' before submission
+    // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
+    formValue.start_date = this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd');
+    formValue.end_date = this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd');
+
     this.eventLocationService.create(formValue)
       .subscribe(
         newEventLocation => {
-
-          console.log (newEventLocation);
-
+          this.submitLoading = false;
+          this.openSnackBar('New event location successfully created. Page will reload.', 'OK', 5000);
+          this.addEventLocationForm.reset();
+          location.reload();
         },
         error => {
           this.errorMessage = <any>error;
+          this.submitLoading = false;
+          this.openSnackBar('Error. Event location not created. Error message: ' + error, 'OK', 8000);
         }
       );
 
@@ -335,7 +350,7 @@ export class AddEventLocationComponent implements OnInit {
   }
 
   // location species
-  addLocationSpecies(i) {
+  addLocationSpecies() {
     const control = <FormArray>this.addEventLocationForm.get('new_location_species');
     control.push(this.initLocationSpecies());
   }
@@ -344,12 +359,12 @@ export class AddEventLocationComponent implements OnInit {
     const control = <FormArray>this.addEventLocationForm.get('new_location_species');
     control.removeAt(j);
   }
-  getLocationSpecies(form) {
-    return form.controls.location_species.controls;
+  getLocationSpecies() {
+    return this.addEventLocationForm.controls.new_location_species['controls'];
   }
 
   // location contacts
-  addLocationContacts(i) {
+  addLocationContacts() {
     const control = <FormArray>this.addEventLocationForm.get('new_location_contacts');
     control.push(this.initLocationContacts());
   }
@@ -359,8 +374,8 @@ export class AddEventLocationComponent implements OnInit {
     control.removeAt(k);
   }
 
-  getLocationContacts(form) {
-    return form.controls.location_contacts.controls;
+  getLocationContacts() {
+    return this.addEventLocationForm.controls.new_location_contacts['controls'];
   }
 
   // location comments
@@ -427,24 +442,6 @@ export class AddEventLocationComponent implements OnInit {
     console.log('Selecting GNIS record for Event Location Number' + (i + 1));
   }
 
-  openEventLocationRemoveConfirm(i) {
-    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-      {
-        data: {
-          title: 'Cancel Adding Event Location',
-          message: 'Are you sure you want to cancel adding this event location? All data entered will be lost.',
-          confirmButtonText: 'Yes, Cancel'
-        }
-      }
-    );
-
-    this.confirmDialogRef.afterClosed().subscribe(result => {
-      if (result === true) {
-        //this.removeEventLocation(i);
-      }
-    });
-  }
-
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
       data: {
@@ -453,11 +450,9 @@ export class AddEventLocationComponent implements OnInit {
     });
   }
 
-  openGNISLookupDialog(i) {
+  openGNISLookupDialog() {
     this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
-      data: {
-        event_location_index: i
-      }
+      data: {}
     });
 
     this.gnisLookupDialogRef.afterClosed().subscribe(result => {

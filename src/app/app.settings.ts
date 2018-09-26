@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Headers } from '@angular/http';
 import { environment } from 'environments/environment';
 
+import { DisplayQuery } from '@interfaces/display-query';
+
 
 @Injectable()
 export class APP_SETTINGS {
@@ -113,8 +115,30 @@ export class APP_SETTINGS {
         );
     }
 
-    // default event query for initial load of home page (may eventually come from some other source)
-    public static get DEFAULT_EVENT_QUERY() {
+    // default search query for initial load of home page (may eventually come from some other source)
+    public static get DEFAULT_SEARCH_QUERY() {
+        return {
+            'event_type': [],
+            'diagnosis': [],
+            'diagnosis_type': [],
+            'species': [],
+            'administrative_level_one': [],
+            'administrative_level_two': [],
+            'affected_count': null,
+            'start_date': '2018-03-31',
+            'end_date': '2018-07-31',
+            'diagnosis_type_includes_all': false,
+            'diagnosis_includes_all': false,
+            'species_includes_all': false,
+            'administrative_level_one_includes_all': false,
+            'administrative_level_two_includes_all': false,
+            'and_params': [],
+            'openEventsOnly': false
+        };
+    }
+
+    // default display query (display verison of search query above) for initial load of home page
+    public static get DEFAULT_DISPLAY_QUERY(): DisplayQuery {
         return {
             'event_type': [],
             'diagnosis': [],

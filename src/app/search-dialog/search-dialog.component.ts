@@ -32,6 +32,8 @@ import { SearchQuery } from '@interfaces/search-query';
 import { DisplayValuePipe } from '@pipes/display-value.pipe';
 import { EventService } from '@app/services/event.service';
 
+import { APP_SETTINGS } from '@app/app.settings';
+
 
 @Component({
   selector: 'app-search-dialog',
@@ -45,6 +47,9 @@ export class SearchDialogComponent implements OnInit {
   selectable = true;
   removable = true;
   addOnBlur = true;
+
+  defaultSearchQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
+  defaultDisplayQuery = APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
 
   searchForm: FormGroup;
   // independent controls - values do not persist - used to select the value and add to a selection array
@@ -143,7 +148,7 @@ export class SearchDialogComponent implements OnInit {
 
           if (this.data.query && this.data.query['event_type'].length > 0) {
             for (const index in eventTypes) {
-              if (this.data.query['event_type'].some(function (el) { return el === eventTypes[index].name })) {
+              if (this.data.query['event_type'].some(function (el) { return el === eventTypes[index].name; })) {
                 this.dropdownSetup(this.eventTypeControl, this.selectedEventTypes, eventTypes[index]);
               }
             }
@@ -158,13 +163,19 @@ export class SearchDialogComponent implements OnInit {
       .subscribe(
         (diagnosisTypes) => {
           this.diagnosisTypes = diagnosisTypes;
+          // alphabetize the diagnosis type options list
+          this.diagnosisTypes.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
           this.filteredDiagnosisTypes = this.diagnosisTypeControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.diagnosisTypes, 'name'));
 
           if (this.data.query && this.data.query['diagnosis_type'].length > 0) {
             for (const index in diagnosisTypes) {
-              if (this.data.query['diagnosis_type'].some(function (el) { return el === diagnosisTypes[index].name })) {
+              if (this.data.query['diagnosis_type'].some(function (el) { return el === diagnosisTypes[index].name; })) {
                 this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, diagnosisTypes[index]);
               }
             }
@@ -179,6 +190,12 @@ export class SearchDialogComponent implements OnInit {
       .subscribe(
         (diagnoses) => {
           this.diagnoses = diagnoses;
+          // alphabetize the diagnosis options list
+          this.diagnoses.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
           this.filteredDiagnoses = this.diagnosisControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.diagnoses, 'name'));
@@ -206,9 +223,9 @@ export class SearchDialogComponent implements OnInit {
 
           if (this.data.query && this.data.query['administrative_level_one'].length > 0) {
             for (const index in adminLevelOnes) {
-              if (this.data.query['administrative_level_one'].some(function (el) { return el === adminLevelOnes[index].name })) {
+              if (this.data.query['administrative_level_one'].some(function (el) { return el === adminLevelOnes[index].name; })) {
                 this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, adminLevelOnes[index]);
-                this.updateAdminLevelTwoOptions(adminLevelOnes[index].id)
+                this.updateAdminLevelTwoOptions(adminLevelOnes[index].id);
               }
             }
           }
@@ -239,6 +256,12 @@ export class SearchDialogComponent implements OnInit {
       .subscribe(
         (species) => {
           this.species = species;
+          // alphabetize the species options list
+          this.species.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
           this.filteredSpecies = this.speciesControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.species, 'name'));
@@ -371,9 +394,14 @@ export class SearchDialogComponent implements OnInit {
       this.adminLevelTwoService.queryAdminLevelTwos(selection.id)
         .subscribe(
           adminLevelTwos => {
-            // self.administrative_level_two.push(adminLevelTwos);
+            // needed to use the 'self' proxy for 'this' because of a not fully understood scoping issue
             self.administrative_level_two = self.administrative_level_two.concat(adminLevelTwos);
-            //this.administrative_level_two = adminLevelTwos;
+            // alphabetize the admmin level twos list
+            self.administrative_level_two.sort(function (a, b) {
+              if (a.name < b.name) { return -1; }
+              if (a.name > b.name) { return 1; }
+              return 0;
+            });
             this.adminLevelTwosLoading = false;
             this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
               .startWith(null)
@@ -443,6 +471,11 @@ export class SearchDialogComponent implements OnInit {
     this.selectedSpecies = [];
     this.selectedAdminLevelOnes = [];
     this.selectedAdminLevelTwos = [];
+
+    // use defaault displayQuery for display in markup, send to searchDialogService
+    this.searchDialogService.setDisplayQuery(this.defaultDisplayQuery);
+    // use default search query, send to searchDialogService
+    this.searchDialogService.setSearchQuery(this.defaultSearchQuery);
 
   }
 

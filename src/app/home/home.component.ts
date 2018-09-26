@@ -64,8 +64,8 @@ export class HomeComponent implements OnInit {
 
   isloggedIn = APP_SETTINGS.IS_LOGGEDIN;
 
-  currentSearchQuery = APP_SETTINGS.DEFAULT_EVENT_QUERY;
-  currentDisplayQuery: DisplayQuery;
+  currentSearchQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
+  currentDisplayQuery: DisplayQuery = APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
 
   currentResults: EventSummary[];
 
@@ -202,11 +202,12 @@ export class HomeComponent implements OnInit {
 
       });
 
-    this.searchQuerySubscription = this.searchDialogService.getDisplayQuery().subscribe(
-      displayQuery => {
-        this.currentDisplayQuery = displayQuery;
+    this.searchQuerySubscription = this.searchDialogService.getDisplayQuery()
+      .subscribe(
+        displayQuery => {
+          this.currentDisplayQuery = displayQuery;
 
-      });
+        });
   }
 
   openSearchDialog() {
@@ -221,7 +222,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
 
-    const defaultEventQuery = APP_SETTINGS.DEFAULT_EVENT_QUERY;
+    const defaultEventQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
 
     // two lines below for the DataSource as separate class method (possibly revisit)
     // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
@@ -264,11 +265,11 @@ export class HomeComponent implements OnInit {
             };
 
             // Flyways hosted by Fish and Wildlife Service
-            var flyways = esri.featureLayer({
+            const flyways = esri.featureLayer({
               url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
               style: function (feature) {
                 if (feature.properties.NAME === 'Atlantic Flyway') {
-                  return {color: 'blue', weight: 2 };
+                  return { color: 'blue', weight: 2 };
                 } else if (feature.properties.NAME === 'Pacific Flyway') {
                   return { color: 'red', weight: 2 };
                 } else if (feature.properties.NAME === 'Mississippi Flyway') {
@@ -278,21 +279,21 @@ export class HomeComponent implements OnInit {
                 }
               }
             });
-            
+
             // Watersheds hosted by The National Map (USGS)
-            var watersheds = esri.dynamicMapLayer({
+            const watersheds = esri.dynamicMapLayer({
               url: 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer',
               opacity: 0.7
             });
-            
+
             const overlays = {
               'Flyways': flyways,
               'Watersheds (HUC 2)': watersheds
             }
 
-            L.control.layers(baseMaps, overlays, { position: 'topleft'}).addTo(this.map);
+            L.control.layers(baseMaps, overlays, { position: 'topleft' }).addTo(this.map);
             L.control.scale({ position: 'bottomright' }).addTo(this.map);
-            
+
             // const legend = L.control({ position: 'bottomright' });
 
             // legend.onAdd = function (map) {
@@ -639,7 +640,7 @@ export class HomeComponent implements OnInit {
         iconClasses = ' wmm-icon-circle wmm-icon-white ';
         colorClass = 'wmm-mutedblue';
         sizeClass = 'wmm-size-35';
-        
+
       } else {
         // eventCount set to empty string if just one event at location
         eventCount = '';

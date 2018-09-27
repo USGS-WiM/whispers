@@ -504,6 +504,47 @@
             <label id='expLabel2'>Ongoing Event</label>
           </span>
 
+          <div id="flywaysLegend" *ngIf="flywaysVisible">                                                                  
+            <div class="legend-label"><label>Flyways</label></div>                                  
+            <span>                                                                                  
+              <div id='iconHolder'>                                                                 
+                <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-blue'></div>  
+              </div>                                                                                
+              <label id='expLabel'>Atlantic Flyway</label>                                          
+            </span>                                                                                 
+            <br/>                                                                                   
+            <span>                                                                                  
+              <div id='iconHolder'>                                                                 
+                <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-yellow'></div>
+              </div>                                                                                
+              <label id='expLabel'>Central Flyway</label>                                           
+            </span>                                                                                 
+            <br/>                                                                                   
+            <span>                                                                                  
+              <div id='iconHolder'>                                                                 
+                <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-green'></div> 
+              </div>                                                                                
+              <label id='expLabel'>Mississippi Flyway</label>                                       
+            </span>                                                                                 
+            <br/>                                                                                   
+            <span>                                                                                  
+              <div id='iconHolder'>                                                                 
+                <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-red'></div>   
+              </div>                                                                                
+              <label id='expLabel'>Pacific Flyway</label>                                           
+            </span>  
+          </div>        
+          
+          <div id="watershedsLegend" *ngIf="watershedsVisible">
+            <div class="legend-label"><label>Watersheds</label></div>
+            <span>                                                                                  
+              <div id='iconHolder'>                                                                 
+                <div class='wmm-square wmm-white wmm-icon-circle wmm-icon-white wmm-size-20 huc-icon'></div>   
+              </div>                                                                                
+              <label id='expLabel'>HUC 2</label>                                           
+            </span>
+          </div>
+
         </mat-expansion-panel>
       </div>
     </mat-card>

@@ -93,6 +93,9 @@ export class EventDetailsComponent implements OnInit {
 
   errorMessage;
 
+  flywaysVisible = false;
+  watershedsVisible = false;
+
   locationSpeciesDisplayedColumns = [
     'select',
     'species',
@@ -273,6 +276,24 @@ export class EventDetailsComponent implements OnInit {
       //L.control.layers(baseMaps).addTo(this.map);
 
       this.mapEvent(this.eventData);
+
+      this.map.on('overlayadd', (e) => {
+        console.log('overlayadd');
+        if (e.name == "Flyways") {
+          this.flywaysVisible = true;
+        } else if (e.name == "Watersheds (HUC 2)") {
+          this.watershedsVisible = true;
+        }
+      });
+
+      this.map.on('overlayremove', (e) => {
+        console.log('overlayremove');
+        if (e.name == "Flyways") {
+          this.flywaysVisible = false;
+        } else if (e.name == "Watersheds (HUC 2)") {
+          this.watershedsVisible = false;
+        }
+      });
 
     }, 2000);
   }

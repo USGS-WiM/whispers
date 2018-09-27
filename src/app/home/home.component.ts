@@ -95,6 +95,9 @@ export class HomeComponent implements OnInit {
   longitude;
   zoomLevel;
 
+  flywaysVisible = false;
+  watershedsVisible = false;
+
   displayedColumns = [
     'id',
     'event_type_string',
@@ -409,6 +412,24 @@ export class HomeComponent implements OnInit {
               this.longitude = geographicMapCenter.lng.toFixed(4);
             });
             // end latLngScale utility logic/////////
+
+            this.map.on('overlayadd', (e) => {
+              console.log('overlayadd');
+              if (e.name == "Flyways") {
+                this.flywaysVisible = true;
+              } else if (e.name == "Watersheds (HUC 2)") {
+                this.watershedsVisible = true;
+              }
+            });
+
+            this.map.on('overlayremove', (e) => {
+              console.log('overlayremove');
+              if (e.name == "Flyways") {
+                this.flywaysVisible = false;
+              } else if (e.name == "Watersheds (HUC 2)") {
+                this.watershedsVisible = false;
+              }
+            });
 
           }, 500);
 

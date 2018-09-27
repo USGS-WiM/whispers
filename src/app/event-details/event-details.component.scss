@@ -196,6 +196,7 @@ tr.noBorder td {
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
     border-radius: 4px;
     cursor: pointer;
+    opacity: 0.87;
 }
 
 .legendIcon {
@@ -205,6 +206,29 @@ tr.noBorder td {
 .legend-label {
     padding-top: 1em;
 }
+
+#iconHolder {
+    margin-left: 15px;
+    padding-top: 2px;
+}
+
+#expLabel {
+    margin-left: 35px;
+    padding-top: 10px;
+}
+
+#expLabel2 {
+    margin-left: 15px;
+    padding-top: 10px;
+}
+
+#iconHolder .wmm-circle,
+#iconHolder .wmm-size-25 {
+    z-index: 0 !important;
+    margin-top: -4px;
+}
+
+#iconHolder-inline {}
 
 .flyway-blue:after {
     background-color: rgba(0,0,255,0.3);

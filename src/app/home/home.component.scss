@@ -263,6 +263,30 @@ mat-table>.mat-row:hover {
     display: inline-block;
 }
 
+.flyway-blue:after {
+    background-color: rgba(0,0,255,0.3);
+    border: 3px solid blue;
+}
+
+.flyway-yellow:after {
+    background-color: rgba(255,255,0,0.3);
+    border: 3px solid yellow;
+}
+
+.flyway-green:after {
+    background-color: rgba(0,255,0,0.3);
+    border: 3px solid green;
+}
+
+.flyway-red:after {
+    background-color: rgba(255, 238, 0, 0.3);
+    border: 3px solid red;
+}
+
+.huc-icon:after {
+    border: 3px solid #b57dcf;
+}
+
 .legend-label {
     padding-top: 1em;
 }

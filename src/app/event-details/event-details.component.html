@@ -415,94 +415,145 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-          <div class="legend-label"><label>Diagnosis Type</label></div>
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Bacteria</label>
-          </span>
-          <br />
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Fungus</label>
-          </span>
-          <br />
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Nut/Met/Dev</label>
-          </span>
-          <br />
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-orange wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Other</label>
-          </span>
-          <br />
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Parasite</label>
-          </span>
-          <br />
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-purple wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Toxin</label>
-          </span>
-          <br />
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-mutedpink wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Trauma</label>
-          </span>
-          <br />
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-sky wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Virus</label>
-          </span>
-          <br />
+          <div class="legend-panel-content">
+          
+            <!--<div class="legend-label"><label>Diagnosis Type</label></div>
+            <span>
+              <div id='iconHolder'>
+                <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+              </div>
+              <label id='expLabel'>Bacteria</label>
+            </span>
+            <br />
+            <span>
+              <div id='iconHolder'>
+                <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+              </div>
+              <label id='expLabel'>Fungus</label>
+            </span>
+            <br />
+            <span>
+              <div id='iconHolder'>
+                <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+              </div>
+              <label id='expLabel'>Nut/Met/Dev</label>
+            </span>
+            <br />
+            <span>
+              <div id='iconHolder'>
+                <div class='wmm-square wmm-orange wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+              </div>
+              <label id='expLabel'>Other</label>
+            </span>
+            <br />
+            <span>
+              <div id='iconHolder'>
+                <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+              </div>
+              <label id='expLabel'>Parasite</label>
+            </span>
+            <br />
+            <span>
+              <div id='iconHolder'>
+                <div class='wmm-square wmm-purple wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+              </div>
+              <label id='expLabel'>Toxin</label>
+            </span>
+            <br />
+            <span>
+              <div id='iconHolder'>
+                <div class='wmm-square wmm-mutedpink wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+              </div>
+              <label id='expLabel'>Trauma</label>
+            </span>
+            <br />
+            <span>
+              <div id='iconHolder'>
+                <div class='wmm-square wmm-sky wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+              </div>
+              <label id='expLabel'>Virus</label>
+            </span>
+            <br />
 
-          <div class="legend-label"><label>Event Type</label></div>
-          <div id='iconHolder'>
-            <div class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            <div class="legend-label"><label>Event Type</label></div>
+            <div id='iconHolder'>
+              <div class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            </div>
+            <label id='expLabel'>Mortality/Morbidity</label>
+            <div id='iconHolder'>
+              <div class='wmm-diamond wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
+            </div>
+            <label id='expLabel'>Surveillance</label>
+            <br />
+
+            <div class="legend-label"><label>Multiples and Ongoing</label></div>
+            <span>
+              <div id='iconHolder'>
+                <div class='wmm-square wmm-mutedblue wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+              </div>
+              <label id='expLabel'>Multiple Events at location</label>
+            </span>
+
+            <br />
+            <span>
+              <div id='iconHolder' class="left-icon">
+                <div class='wmm-circle wmm-black wmm-icon-circle wmm-icon-white wmm-size-20 left-icon'></div>
+              </div>
+              <div id='iconHolder' class="left-icon"> <span class="text-large text-bold">/</span> </div>
+              <div id='iconHolder' class="right-icon">
+                <div class='wmm-diamond wmm-black wmm-icon-diamond wmm-icon-white wmm-size-15 right-icon'></div>
+              </div>
+              <label id='expLabel2'>Ongoing Event</label>
+            </span>-->
+
+            <span>
+              <div id='iconHolder'>
+                <div class='wmm-pin wmm-white wmm-icon-circle wmm-icon-black wmm-size-25'></div>
+              </div>
+              <label id='expLabel'>Event Location</label>
+            </span>
+
+            <div id="flywaysLegend" *ngIf="flywaysVisible">                                                                  
+              <div class="legend-label"><label>Flyways</label></div>                                  
+              <span>                                                                                  
+                <div id='iconHolder'>                                                                 
+                  <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-blue'></div>  
+                </div>                                                                                
+                <label id='expLabel'>Atlantic Flyway</label>                                          
+              </span>                                                                                 
+              <br/>                                                                                   
+              <span>                                                                                  
+                <div id='iconHolder'>                                                                 
+                  <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-yellow'></div>
+                </div>                                                                                
+                <label id='expLabel'>Central Flyway</label>                                           
+              </span>                                                                                 
+              <br/>                                                                                   
+              <span>                                                                                  
+                <div id='iconHolder'>                                                                 
+                  <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-green'></div> 
+                </div>                                                                                
+                <label id='expLabel'>Mississippi Flyway</label>                                       
+              </span>                                                                                 
+              <br/>                                                                                   
+              <span>                                                                                  
+                <div id='iconHolder'>                                                                 
+                  <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-red'></div>   
+                </div>                                                                                
+                <label id='expLabel'>Pacific Flyway</label>                                           
+              </span>  
+            </div>        
+            
+            <div id="watershedsLegend" *ngIf="watershedsVisible">
+              <div class="legend-label"><label>Watersheds</label></div>
+              <span>                                                                                  
+                <div id='iconHolder'>                                                                 
+                  <div class='wmm-square wmm-white wmm-icon-circle wmm-icon-white wmm-size-20 huc-icon'></div>   
+                </div>                                                                                
+                <label id='expLabel'>HUC 2</label>                                           
+              </span>
+            </div>
           </div>
-          <label id='expLabel'>Mortality/Morbidity</label>
-          <div id='iconHolder'>
-            <div class='wmm-diamond wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
-          </div>
-          <label id='expLabel'>Surveillance</label>
-          <br />
-
-          <div class="legend-label"><label>Multiples and Ongoing</label></div>
-          <span>
-            <div id='iconHolder'>
-              <div class='wmm-square wmm-mutedblue wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            </div>
-            <label id='expLabel'>Multiple Events at location</label>
-          </span>
-
-          <br />
-          <span>
-            <div id='iconHolder' class="left-icon">
-              <div class='wmm-circle wmm-black wmm-icon-circle wmm-icon-white wmm-size-20 left-icon'></div>
-            </div>
-            <div id='iconHolder' class="left-icon"> <span class="text-large text-bold">/</span> </div>
-            <div id='iconHolder' class="right-icon">
-              <div class='wmm-diamond wmm-black wmm-icon-diamond wmm-icon-white wmm-size-15 right-icon'></div>
-            </div>
-            <label id='expLabel2'>Ongoing Event</label>
-          </span>
 
         </mat-expansion-panel>
       </div>

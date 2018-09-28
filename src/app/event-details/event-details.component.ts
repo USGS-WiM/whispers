@@ -8,6 +8,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
+//import * as esrilegend from 'esri-leaflet-legend';
 
 import { MatSnackBar } from '@angular/material';
 import { TooltipPosition } from '@angular/material';
@@ -92,6 +93,9 @@ export class EventDetailsComponent implements OnInit {
   // ];
 
   errorMessage;
+
+  flywaysVisible = false;
+  watershedsVisible = false;
 
   locationSpeciesDisplayedColumns = [
     'select',
@@ -254,7 +258,7 @@ export class EventDetailsComponent implements OnInit {
       });
 
       // Land use hosted by USGS
-      const landUse = esri.dynamicMapLayer({
+      var landUse = esri.dynamicMapLayer({
         url: 'https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer',
         opacity: 0.7
       });
@@ -273,6 +277,24 @@ export class EventDetailsComponent implements OnInit {
       //L.control.layers(baseMaps).addTo(this.map);
 
       this.mapEvent(this.eventData);
+
+      this.map.on('overlayadd', (e) => {
+        console.log('overlayadd');
+        if (e.name == "Flyways") {
+          this.flywaysVisible = true;
+        } else if (e.name == "Watersheds (HUC 2)") {
+          this.watershedsVisible = true;
+        }
+      });
+
+      this.map.on('overlayremove', (e) => {
+        console.log('overlayremove');
+        if (e.name == "Flyways") {
+          this.flywaysVisible = false;
+        } else if (e.name == "Watersheds (HUC 2)") {
+          this.watershedsVisible = false;
+        }
+      });
 
     }, 2000);
   }

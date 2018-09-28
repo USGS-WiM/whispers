@@ -310,6 +310,11 @@ input[type=checkbox]{
 //     transition: max-height 0.2s ease-out;
 // }
 
+.legend-home {
+    max-height: 525px;
+    overflow-y: auto;
+}
+
 .accordion {
     background-color: #eee;
     color: #444;

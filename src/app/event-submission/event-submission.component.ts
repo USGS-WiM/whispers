@@ -68,6 +68,8 @@ import { CreateContactService } from '@create-contact/create-contact.service';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
 
+import { AddSpeciesDiagnosisComponent } from '@app/add-species-diagnosis/add-species-diagnosis.component';
+
 import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
@@ -84,6 +86,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
+  addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
 
   eventSubmitConfirm: MatBottomSheetRef<EventSubmissionConfirmComponent>;
@@ -232,7 +235,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   openGNISLookupDialog(i) {
     this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
-      //height: '80%',
       data: {
         event_location_index: i
       }
@@ -584,7 +586,24 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       priority: null,
       captive: false,
       age_bias: null,
-      sex_bias: null
+      sex_bias: null,
+      species_diagnoses: this.formBuilder.array([])
+    });
+  }
+
+  initSpeciesDiagnosis() {
+    return this.formBuilder.group({
+      //diagnosis: [null, Validators.required],
+      diagnosis: null,
+      diagnosis_cause: null,
+      diagnosis_basis: null,
+      confirmed: false,
+      tested_count: null,
+      diagnosis_count: null,
+      positive_count: null,
+      suspect_count: null,
+      pooled: false,
+      organizations: null
     });
   }
 
@@ -690,6 +709,29 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     return form.controls.location_species.controls;
   }
 
+  ////// Begin WIP ///////////////////////////////////////
+  // species diagnosis
+  // TODO: add an additional level of index
+  addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex) {
+    // tslint:disable-next-line:max-line-length
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species')['controls'][locationSpeciesIndex].get('species_diagnoses');
+    control.push(this.initSpeciesDiagnosis());
+    // tslint:disable-next-line:max-line-length
+    const speciesDiagnosisIndex = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species')['controls'][locationSpeciesIndex].get('species_diagnoses').length - 1;
+    return speciesDiagnosisIndex;
+  }
+
+  removeSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex) {
+    // tslint:disable-next-line:max-line-length
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species')['controls'][locationSpeciesIndex].get('species_diagnoses');
+    control.removeAt(speciesDiagnosisIndex);
+  }
+
+  getSpeciesDiagnosis(form) {
+    return form.controls.location_species.controls.species_diagnoses.controls;
+  }
+  //////  End WIP ///////////////////////////////////////
+
   // location contacts
   addLocationContacts(i) {
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('location_contacts');
@@ -768,6 +810,48 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   setEventLocationForGNISSelect(i) {
     console.log('Selecting GNIS record for Event Location Number' + (i + 1));
+  }
+
+  openAddSpeciesDiagnosisDialog(eventLocationIndex, locationSpeciesIndex) {
+
+    // TODO: add an additional level of index
+    const speciesDiagnosisIndex = this.addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex);
+
+    // Open dialog for adding species diagnosis
+    this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
+      data: {
+        species_diagnosis_action: 'addToFormArray',
+        eventLocationIndex: eventLocationIndex,
+        locationSpeciesIndex: locationSpeciesIndex
+      }
+    });
+
+    this.addSpeciesDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        (speciesDiagnosisObj) => {
+
+          // tslint:disable-next-line:max-line-length
+          this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventLocationIndex]
+            .get('location_species')['controls'][speciesDiagnosisObj.locationSpeciesIndex]
+            .get('species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
+              diagnosis: speciesDiagnosisObj.formValue.diagnosis,
+              diagnosis_cause: speciesDiagnosisObj.formValue.diagnosis_cause,
+              diagnosis_basis: speciesDiagnosisObj.formValue.diagnosis_basis,
+              confirmed: speciesDiagnosisObj.formValue.confirmed,
+              tested_count: speciesDiagnosisObj.formValue.tested_count,
+              diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
+              positive_count: speciesDiagnosisObj.formValue.positive_count,
+              suspect_count: speciesDiagnosisObj.formValue.suspect_count,
+              pooled: speciesDiagnosisObj.formValue.pooled,
+              organizations: speciesDiagnosisObj.formValue.organizations
+            });
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
   }
 
 

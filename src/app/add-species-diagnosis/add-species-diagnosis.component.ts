@@ -35,9 +35,14 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
 
   addSpeciesDiagnosisForm: FormGroup;
 
+  // these variables are for use when direct adding a species diagnosis
   species;
   administrative_level_one;
   administrative_level_two;
+
+  // these varaiables are for use when adding a species diagnosis to the event submit form
+  eventLocationIndex;
+  locationSpeciesIndex;
 
   action_text;
   action_button_text;
@@ -45,7 +50,8 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
   buildAddSpeciesDiagnosisForm() {
     this.addSpeciesDiagnosisForm = this.formBuilder.group({
       location_species: null,
-      diagnosis: [null, Validators.required],
+      // diagnosis: [null, Validators.required],
+      diagnosis: null,
       diagnosis_cause: null,
       diagnosis_basis: null,
       confirmed: false,
@@ -74,16 +80,19 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
 
   ngOnInit() {
 
-    this.species = this.data.species.species_string;
-    this.administrative_level_one = this.data.species.administrative_level_one_string;
-    this.administrative_level_two = this.data.species.administrative_level_two_string;
+    if (this.data.species) {
+      this.species = this.data.species.species_string;
+      this.administrative_level_one = this.data.species.administrative_level_one_string;
+      this.administrative_level_two = this.data.species.administrative_level_two_string;
+    }
 
-
-
-    if (this.data.species_diagnosis_action == 'add') {
+    if (this.data.species_diagnosis_action === 'add') {
       this.action_text = 'Add';
       this.action_button_text = 'Submit';
-    } else if (this.data.species_diagnosis_action == 'edit') {
+    } else if (this.data.species_diagnosis_action === 'addToFormArray') {
+      this.action_text = 'Add';
+      this.action_button_text = 'Add';
+    } else if (this.data.species_diagnosis_action === 'edit') {
       this.action_text = 'Edit';
       this.action_button_text = 'Update';
 
@@ -92,7 +101,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
       this.addSpeciesDiagnosisForm.get('diagnosis_count').setValue(this.data.species.species_diagnosis[0].diagnosis_count);
       this.addSpeciesDiagnosisForm.get('positive_count').setValue(this.data.species.species_diagnosis[0].positive_count);
       this.addSpeciesDiagnosisForm.get('suspect_count').setValue(this.data.species.species_diagnosis[0].suspect_count);
-      //this.addSpeciesDiagnosisForm.get('organizations').setValue(this.data.contact.affiliation);
+      // this.addSpeciesDiagnosisForm.get('organizations').setValue(this.data.contact.affiliation);
       this.addSpeciesDiagnosisForm.get('confirmed').setValue(this.data.species.species_diagnosis[0].confirmed);
       this.addSpeciesDiagnosisForm.get('pooled').setValue(this.data.species.species_diagnosis[0].pooled);
     }
@@ -115,6 +124,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
       .subscribe(
         (diagnosisBases) => {
           this.diagnosisBases = diagnosisBases;
+          // tslint:disable-next-line:max-line-length
           if (this.data.species.species_diagnosis[0] !== undefined && this.data.species.species_diagnosis[0].diagnosis_basis !== undefined) {
             this.addSpeciesDiagnosisForm.get('diagnosis_basis').setValue(this.data.species.species_diagnosis[0].diagnosis_basis.toString());
           }
@@ -128,6 +138,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
       .subscribe(
         (diagnosisCauses) => {
           this.diagnosisCauses = diagnosisCauses;
+          // tslint:disable-next-line:max-line-length
           if (this.data.species.species_diagnosis[0] !== undefined && this.data.species.species_diagnosis[0].diagnosis_cause !== undefined) {
             this.addSpeciesDiagnosisForm.get('diagnosis_cause').setValue(this.data.species.species_diagnosis[0].diagnosis_cause.toString());
           }
@@ -149,7 +160,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
 
     this.submitLoading = true;
 
-    if (this.data.species_diagnosis_action == 'add') {
+    if (this.data.species_diagnosis_action === 'add') {
       formValue.location_species = this.data.species.id;
       this.locationSpeciesDiagnosisService.create(formValue)
         .subscribe(
@@ -163,7 +174,17 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
             this.openSnackBar('Error. Species Diagnosis not created. Error message: ' + error, 'OK', 8000);
           }
         );
-    } else if (this.data.species_diagnosis_action == 'edit') {
+    } else if (this.data.species_diagnosis_action === 'addToFormArray') {
+
+      const speciesDiagnosisObj = {
+        eventLocationIndex: this.data.eventLocationIndex,
+        locationSpeciesIndex: this.data.locationSpeciesIndex,
+        formValue: formValue
+      };
+
+      this.addSpeciesDiagnosisDialogRef.close(speciesDiagnosisObj);
+
+    } else if (this.data.species_diagnosis_action === 'edit') {
       formValue.location_species = this.data.species.id;
       formValue.id = this.data.species.species_diagnosis[0].id;
       this.locationSpeciesDiagnosisService.update(formValue)
@@ -178,7 +199,6 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
             this.openSnackBar('Error. Species diagnosis not created. Error message: ' + error, 'OK', 8000);
           }
         );
-
     }
 
   }

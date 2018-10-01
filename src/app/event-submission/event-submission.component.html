@@ -98,7 +98,7 @@
                       </mat-form-field>
 
                       <button mat-icon-button color="warn" aria-label="Remove this comment" (click)="removeEventComment(h)" matTooltip="Remove this comment">
-                        <i class="material-icons">remove_circle</i>
+                        <mat-iconremove_circle</mat-icon>
                       </button>
                     </div>
 
@@ -112,7 +112,7 @@
 
               <div class="button-row">
                 <button mat-button color="primary" matTooltip="Add comment to this event" (click)="addEventComment(h)">
-                  <i class="material-icons">add_circle</i> Add Comment</button>
+                  <mat-iconadd_circle</mat-icon> Add Comment</button>
               </div>
 
             </mat-expansion-panel> -->
@@ -130,14 +130,14 @@
                 <div formArrayName="new_event_locations">
 
 
-                  <div *ngFor="let eventLocation of getEventLocations(eventSubmissionForm); let i = index">
+                  <div *ngFor="let eventLocation of getEventLocations(eventSubmissionForm); let eventLocationIndex = index">
                     <!-- Begin repeating Event location markup-->
 
-                    <mat-card class="event-location-card" [formGroupName]="i">
-                      <h3>Location {{i+1}}</h3>
+                    <mat-card class="event-location-card" [formGroupName]="eventLocationIndex">
+                      <h3>Location {{eventLocationIndex+1}}</h3>
                       <mat-horizontal-stepper [linear]="false" #stepper linear>
 
-                        <!-- <mat-step [stepControl]="eventSubmissionForm.get('new_event_locations').controls[i].get('country').valid"> -->
+                        <!-- <mat-step [stepControl]="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('country').valid"> -->
                         <mat-step [stepControl]="eventSubmissionForm">
 
                           <ng-template matStepLabel>Location Details</ng-template>
@@ -174,7 +174,7 @@
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
-                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">Please
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('country').invalid">Please
                                 enter a value</mat-error>
                             </mat-form-field>
 
@@ -187,7 +187,7 @@
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
-                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('administrative_level_one').invalid">Please
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_one').invalid">Please
                                 enter a value</mat-error>
                             </mat-form-field>
 
@@ -199,7 +199,7 @@
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
-                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('administrative_level_two').invalid">Please
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_two').invalid">Please
                                 enter a value</mat-error>
                             </mat-form-field>
 
@@ -214,7 +214,7 @@
                               <mat-select placeholder="Land Ownership" formControlName="land_ownership" required>
                                 <mat-option *ngFor="let landOwnership of landOwnerships" value="{{landOwnership.id}}">{{landOwnership.name}}</mat-option>
                               </mat-select>
-                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('land_ownership').invalid">Please
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('land_ownership').invalid">Please
                                 enter a value</mat-error>
                             </mat-form-field>
 
@@ -223,13 +223,13 @@
                           <div class="horizontal-form-container">
                             <mat-form-field class="form-control">
                               <input matInput placeholder="Latitude" formControlName="latitude">
-                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('latitude').invalid">Invalid
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('latitude').invalid">Invalid
                                 latitude</mat-error>
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
                               <input matInput placeholder="Longitude" formControlName="longitude">
-                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('longitude').invalid">Invalid
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('longitude').invalid">Invalid
                                 longitude</mat-error>
                             </mat-form-field>
                           </div>
@@ -241,8 +241,9 @@
                             <mat-card-content>
 
                               <div>
-                                <button mat-stroked-button color="primary" aria-label="Look up feature in Geographic Names Information System (GNIS) database" matTooltip="Look up feature in Geographic Names Information System (GNIS) database"
-                                  (click)="openGNISLookupDialog(i)">
+                                <button mat-stroked-button color="primary" aria-label="Look up feature in Geographic Names Information System (GNIS) database"
+                                  matTooltip="Look up feature in Geographic Names Information System (GNIS) database"
+                                  (click)="openGNISLookupDialog(eventLocationIndex)">
                                   <mat-icon>search</mat-icon>Look Up GNIS
                                 </button>
                               </div>
@@ -264,7 +265,7 @@
 
                           <div>
                             <button mat-button matStepperNext type="button"> Next
-                              <i class="material-icons"> navigate_next </i>
+                              <mat-icon> navigate_next </mat-icon>
                             </button>
                           </div>
 
@@ -348,9 +349,10 @@
 
                                     <div>
                                       <button mat-button matStepperPrevious type="button">
-                                        <i class="material-icons"> arrow_back_ios </i> Back</button>
+                                        <mat-icon> arrow_back_ios </mat-icon> Back
+                                      </button>
                                       <button mat-button matStepperNext type="button"> Next
-                                        <i class="material-icons"> navigate_next </i>
+                                        <mat-icon> navigate_next </mat-icon>
                                       </button>
                                     </div>
                         </mat-step>
@@ -365,9 +367,9 @@
                                     <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
                                   </button> -->
                             <div formArrayName="location_species">
-                              <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let j = index">
+                              <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index">
 
-                                <div [formGroupName]="j">
+                                <div [formGroupName]="locationSpeciesIndex">
 
                                   <!-- <div class="horizontal-form-container"></div> -->
 
@@ -457,15 +459,23 @@
                                       </mat-hint>
                                     </mat-form-field>
 
-                                    <button mat-icon-button color="accent" aria-label="Apply species to all locations"
-                                      matTooltip="Apply species to all locations" (click)="createCommonEventDataObject('species', i, j )">
-                                      <i class="material-icons">group_work</i>
-                                    </button>
-
-                                    <button mat-icon-button color="warn" aria-label="Remove this species from this location"
-                                      (click)="removeLocationSpecies(i, j)" matTooltip="Remove this species from this location">
-                                      <i class="material-icons">remove_circle</i>
-                                    </button>
+                                    <div class="contact-button-div">
+                                      <button mat-icon-button color="accent" aria-label="Apply species to all locations"
+                                        matTooltip="Apply species to all locations" (click)="createCommonEventDataObject('species', eventLocationIndex, locationSpeciesIndex )">
+                                        <mat-icon>group_work</mat-icon>
+                                      </button>
+                                      <button mat-icon-button color="accent" aria-label="Add Species Diagnosis"
+                                        matTooltip="Add Species Diagnosis" (click)="openAddSpeciesDiagnosisDialog(eventLocationIndex,locationSpeciesIndex)">
+                                        <mat-icon>note_add</mat-icon>
+                                      </button>
+                                      <button mat-icon-button color="warn" aria-label="Remove this species from this location"
+                                        (click)="removeLocationSpecies(eventLocationIndex, locationSpeciesIndex)" matTooltip="Remove this species from this location">
+                                        <mat-icon>remove_circle</mat-icon>
+                                      </button>
+                                    </div>
+                                    <br />
+                                    <!-- div for displaying species diagnoses added to the location species -->
+                                    <div></div>
 
                                   </div>
                                 </div>
@@ -473,15 +483,17 @@
                             </div>
                           </div>
                           <div class="button-row">
-                            <button mat-button color="primary" matTooltip="Add species to this location" (click)="addLocationSpecies(i)">
-                              <i class="material-icons">add_circle</i> Add Species</button>
+                            <button mat-button color="primary" matTooltip="Add species to this location" (click)="addLocationSpecies(eventLocationIndex)">
+                              <mat-icon>add_circle</mat-icon> Add Species
+                            </button>
                           </div>
                           <p>
                             <div>
                               <button mat-button matStepperPrevious type="button">
-                                <i class="material-icons"> arrow_back_ios </i> Back</button>
+                                <mat-icon> arrow_back_ios </mat-icon> Back
+                              </button>
                               <button mat-button matStepperNext type="button"> Next
-                                <i class="material-icons"> navigate_next </i>
+                                <mat-icon> navigate_next </mat-icon>
                               </button>
                             </div>
 
@@ -495,7 +507,8 @@
                             <div>
                               <h4>
                                 <button mat-button color="primary" class="event-detail-action-button" (click)="openCreateContactDialog()">
-                                  <i class="material-icons">person_add</i> Create New Contact</button>
+                                  <mat-icon>person_add</mat-icon> Create New Contact
+                                </button>
                               </h4>
                             </div>
                           </div>
@@ -520,26 +533,18 @@
                                 </mat-form-field>
 
                                 <div class="contact-button-div">
-
                                   <button mat-icon-button color="accent" aria-label="Apply contact to all locations"
-                                    matTooltip="Apply contact to all locations" (click)="createCommonEventDataObject('contact', i, k )">
-                                    <i class="material-icons">group_work</i>
+                                    matTooltip="Apply contact to all locations" (click)="createCommonEventDataObject('contact', eventLocationIndex, k )">
+                                    <mat-icon>group_work</mat-icon>
                                   </button>
-
-
-
                                   <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details">
-                                    <i class="material-icons">assignment_ind</i>
+                                    <mat-icon>assignment_ind</mat-icon>
                                   </button>
-
                                   <button mat-icon-button color="warn" aria-label="Remove this contact from this location"
-                                    (click)="removeLocationContacts(i, k)" matTooltip="Remove this contact from this location">
-                                    <i class="material-icons">remove_circle</i>
+                                    (click)="removeLocationContacts(eventLocationIndex, k)" matTooltip="Remove this contact from this location">
+                                    <mat-icon>remove_circle</mat-icon>
                                   </button>
-
                                 </div>
-
-
 
                               </div>
                               <mat-divider [inset]="true"></mat-divider>
@@ -548,15 +553,17 @@
                           </div>
 
                           <div class="button-row">
-                            <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContacts(i)">
-                              <i class="material-icons">add_circle</i> Add Contact</button>
+                            <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContacts(eventLocationIndex)">
+                              <mat-icon>add_circle</mat-icon> Add Contact
+                            </button>
                           </div>
 
                           <div>
                             <button mat-button matStepperPrevious type="button">
-                              <i class="material-icons"> arrow_back_ios </i> Back</button>
+                              <mat-icon> arrow_back_ios </mat-icon> Back
+                            </button>
                             <button mat-button matStepperNext type="button"> Next
-                              <i class="material-icons"> navigate_next </i>
+                              <mat-icon> navigate_next </mat-icon>
                             </button>
                           </div>
 
@@ -589,9 +596,10 @@
 
                           <div>
                             <button mat-button matStepperPrevious type="button">
-                              <i class="material-icons"> arrow_back_ios </i> Back</button>
+                              <mat-icon> arrow_back_ios </mat-icon> Back
+                            </button>
                             <button mat-button matStepperNext type="button"> Next
-                              <i class="material-icons"> navigate_next </i>
+                              <mat-icon> navigate_next </mat-icon>
                             </button>
                           </div>
                         </mat-step>
@@ -599,42 +607,43 @@
                         <mat-step>
                           <ng-template matStepLabel>Review</ng-template>
 
-                          <span *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].valid">
+                          <span *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].valid">
                             <h3>
                               <mat-icon>check</mat-icon>
-                              <span class="alert-text">Finished with Location {{i+1}}</span>
+                              <span class="alert-text">Finished with Location {{eventLocationIndex+1}}</span>
                             </h3>
                           </span>
 
-                          <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('country').invalid">
+                          <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('country').invalid">
                             <mat-icon class="icon">error</mat-icon>
                             <span class="alert-text">Missing country selection.</span>
                           </mat-error>
                           <p>
-                            <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('administrative_level_one').invalid">
+                            <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_one').invalid">
                               <mat-icon class="icon">error</mat-icon>
                               <span class="alert-text">Missing state selection.</span>
                             </mat-error>
                             <p>
-                              <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('administrative_level_one').invalid">
+                              <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_one').invalid">
                                 <mat-icon class="icon">error</mat-icon>
                                 <span class="alert-text">Missing county selection.</span>
                               </mat-error>
                               <p>
 
-                                <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('land_ownership').invalid">
+                                <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('land_ownership').invalid">
                                   <mat-icon class="icon">error</mat-icon>
                                   <span class="alert-text">Missing land ownership selection.</span>
                                 </mat-error>
                                 <p>
-                                  <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[i].get('location_contacts').invalid">
+                                  <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('location_contacts').invalid">
                                     <mat-icon class="icon">error</mat-icon>
                                     <span class="alert-text">Missing contact type selection.</span>
                                   </mat-error>
 
                                   <div>
                                     <button mat-button matStepperPrevious type="button">
-                                      <i class="material-icons"> arrow_back_ios </i> Back</button>
+                                      <mat-icon> arrow_back_ios </mat-icon> Back
+                                    </button>
                                     <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
                                     <button mat-button color="primary" matTooltip="Add another location to this event"
                                       (click)="addEventLocation()">
@@ -649,8 +658,9 @@
                       <p>
                         <mat-divider [inset]="true"></mat-divider>
                         <p>
-                          <button mat-button color="warn" (click)="openEventLocationRemoveConfirm(i)">
-                            <i class=" material-icons ">remove_circle</i> Remove this Event Location</button>
+                          <button mat-button color="warn" (click)="openEventLocationRemoveConfirm(eventLocationIndex)">
+                            <mat-icon>remove_circle</mat-icon> Remove this Event Location
+                          </button>
 
                     </mat-card>
 
@@ -702,7 +712,7 @@
 
                         <button mat-icon-button color="warn" aria-label="Remove this comment" (click)="removeEventComment(h)"
                           matTooltip="Remove this comment">
-                          <i class="material-icons">remove_circle</i>
+                          <mat-icon>remove_circle</mat-icon>
                         </button>
                       </div>
 
@@ -747,10 +757,12 @@
             <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar "></mat-progress-bar>
             <p>
               <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="openEventSubmitConfirm(eventSubmissionForm.value)">
-                <i class="material-icons ">pageview</i> Review Event Submission</button>
+                <mat-icon>pageview</mat-icon> Review Event Submission
+              </button>
               <p>
                 <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="submitEvent(eventSubmissionForm.value)">
-                  <i class="material-icons ">done</i> Save Event</button>
+                  <mat-icon>done</mat-icon> Save Event
+                </button>
 
                 <div class="temporary-form-value-display ">
                   <h3>Temporary Form Value display (not for production)</h3>

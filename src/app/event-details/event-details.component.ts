@@ -280,18 +280,18 @@ export class EventDetailsComponent implements OnInit {
 
       this.map.on('overlayadd', (e) => {
         console.log('overlayadd');
-        if (e.name == "Flyways") {
+        if (e.name === 'Flyways') {
           this.flywaysVisible = true;
-        } else if (e.name == "Watersheds (HUC 2)") {
+        } else if (e.name === 'Watersheds (HUC 2)') {
           this.watershedsVisible = true;
         }
       });
 
       this.map.on('overlayremove', (e) => {
         console.log('overlayremove');
-        if (e.name == "Flyways") {
+        if (e.name == 'Flyways') {
           this.flywaysVisible = false;
-        } else if (e.name == "Watersheds (HUC 2)") {
+        } else if (e.name == 'Watersheds (HUC 2)') {
           this.watershedsVisible = false;
         }
       });
@@ -554,10 +554,10 @@ export class EventDetailsComponent implements OnInit {
   }
 
   addSpeciesDiagnosis(id: string, index: number) {
-    if (this.selection[index].selected.length > 1 || this.selection[index].selected.length == 0) {
+    if (this.selection[index].selected.length > 1 || this.selection[index].selected.length === 0) {
       this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
     } else if (this.selection[index].selected.length === 1) {
-      // Open dialog for adding event diagnosis
+      // Open dialog for adding species diagnosis
       this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
         data: {
           species: this.selection[index].selected[0],
@@ -618,8 +618,8 @@ export class EventDetailsComponent implements OnInit {
   determineLocationName(name, i) {
     let locationName;
 
-    if (name == "" || name == undefined) {
-      locationName = "Location " + i;
+    if (name === '' || name === undefined) {
+      locationName = 'Location ' + i;
     } else {
       locationName = name;
     }
@@ -632,19 +632,19 @@ export class EventDetailsComponent implements OnInit {
     let comment_type;
     switch (comment_id) {
       case 1:
-        comment_type = "Site description";
+        comment_type = 'Site description';
         break;
       case 2:
-        comment_type = "History";
+        comment_type = 'History';
         break;
       case 3:
-        comment_type = "Environmental factors";
+        comment_type = 'Environmental factors';
         break;
       case 4:
-        comment_type = "Clinical signs";
+        comment_type = 'Clinical signs';
         break;
       case 5:
-        comment_type = "General";
+        comment_type = 'General';
         break;
     }
     return comment_type;

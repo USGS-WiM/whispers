@@ -3,7 +3,7 @@
 <mat-dialog-content>
   <form [formGroup]="addSpeciesDiagnosisForm">
 
-    <h3><b>{{species}} at {{administrative_level_two}}, {{administrative_level_one}}</b></h3>
+    <div *ngIf="species"><h3><b>{{species}} at {{administrative_level_two}}, {{administrative_level_one}}</b></h3></div>
 
     <p>
 

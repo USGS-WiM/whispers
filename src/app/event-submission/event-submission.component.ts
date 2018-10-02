@@ -150,6 +150,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       event_status: 1,
       public: [true, Validators.required],
       new_organizations: null,
+      new_event_diagnoses: this.formBuilder.array([]),
       new_comments: this.formBuilder.array([]),
       new_superevents: this.formBuilder.array([]),
       new_event_locations: this.formBuilder.array([
@@ -235,10 +236,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
   }
 
-  openGNISLookupDialog(i) {
+  openGNISLookupDialog(eventLocationIndex) {
     this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
       data: {
-        event_location_index: i
+        event_location_index: eventLocationIndex
       }
     });
 
@@ -251,7 +252,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   }
 
 
-  openEventLocationRemoveConfirm(i) {
+  openEventLocationRemoveConfirm(eventLocationIndex) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
         data: {
@@ -264,7 +265,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.removeEventLocation(i);
+        this.removeEventLocation(eventLocationIndex);
       }
     });
   }
@@ -302,7 +303,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-
     // get event types from the EventTypeService
     this.eventTypeService.getEventTypes()
       .subscribe(
@@ -314,12 +314,22 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         }
       );
 
-
     // get legal statues from the LegalStatusService
     this.legalStatusService.getLegalStatuses()
       .subscribe(
         legalStatuses => {
           this.legalStatuses = legalStatuses;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get diagnoses from the diagnoses service
+    this.diagnosisService.getDiagnoses()
+      .subscribe(
+        (diagnoses) => {
+          this.diagnoses = diagnoses;
         },
         error => {
           this.errorMessage = <any>error;
@@ -462,17 +472,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         }
       );
 
-    // get diagnoses from the diagnoses service
-    this.diagnosisService.getDiagnoses()
-      .subscribe(
-        (diagnoses) => {
-          this.diagnoses = diagnoses;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-
   }
 
   getErrorMessage(formControlName) {
@@ -570,21 +569,12 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       environmental_factors: '',
       clinical_signs: '',
       comment: '',
-      // comments: this.formBuilder.array([
-      //   this.formBuilder.group({
-      //     comment: ''
-      //   })
-      // ]),
       location_species: this.formBuilder.array([
         // this.initLocationSpecies()
       ]),
       location_contacts: this.formBuilder.array([
         // this.initLocationContacts()
-      ]),
-      // comment: this.formBuilder.group({
-      //   comment: '',
-      //   comment_type: 5
-      // })
+      ])
     });
   }
 
@@ -641,10 +631,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // event comments
-  addEventComment() {
-    const control = <FormArray>this.eventSubmissionForm.get('new_comments');
-    control.push(this.initEventComment());
+  initEventDiagnosis() {
+    return this.formBuilder.group({
+      diagnosis: null
+    });
   }
 
   // event locations
@@ -680,19 +670,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         // do something with the result
         // o.result is a geojson point feature object with location information set as properties 
         console.warn(event.result);
-
       }
     });
 
-  }
-
-  removeEventComment(h) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_comments');
-    control.removeAt(h);
-  }
-
-  getEventComments(form) {
-    return form.controls.new_comments.controls;
   }
 
   removeEventLocation(eventLocationIndex) {
@@ -702,6 +682,36 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   getEventLocations(form) {
     return form.controls.new_event_locations.controls;
+  }
+
+  // event comments
+  addEventComment() {
+    const control = <FormArray>this.eventSubmissionForm.get('new_comments');
+    control.push(this.initEventComment());
+  }
+
+  removeEventComment(eventCommentIndex) {
+    const control = <FormArray>this.eventSubmissionForm.get('new_comments');
+    control.removeAt(eventCommentIndex);
+  }
+
+  getEventComments(form) {
+    return form.controls.new_comments.controls;
+  }
+
+  // event diagnoses
+  addEventDiagnosis() {
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_diagnoses');
+    control.push(this.initEventDiagnosis());
+  }
+
+  removeEventDiagnosis(eventDiagnosisIndex) {
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_diagnoses');
+    control.removeAt(eventDiagnosisIndex);
+  }
+
+  getEventDiagnoses(form) {
+    return form.controls.new_event_diagnoses.controls;
   }
 
   // location species
@@ -743,13 +753,13 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   //////  End WIP ///////////////////////////////////////
 
   // location contacts
-  addLocationContacts(i) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('location_contacts');
+  addLocationContacts(eventLocationIndex) {
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_contacts');
     control.push(this.initLocationContacts());
   }
 
-  removeLocationContacts(i, k) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('location_contacts');
+  removeLocationContacts(eventLocationIndex, k) {
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_contacts');
     control.removeAt(k);
   }
 
@@ -758,13 +768,13 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   }
 
   // location comments
-  addLocationComments(i) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('comments');
+  addLocationComments(eventLocationIndex) {
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('comments');
     control.push(this.initLocationComments());
   }
 
-  removeLocationComments(i, m) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('comments');
+  removeLocationComments(eventLocationIndex, m) {
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('comments');
     control.removeAt(m);
   }
 
@@ -817,8 +827,8 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
   }
 
-  setEventLocationForGNISSelect(i) {
-    console.log('Selecting GNIS record for Event Location Number' + (i + 1));
+  setEventLocationForGNISSelect(eventLocationIndex) {
+    console.log('Selecting GNIS record for Event Location Number' + (eventLocationIndex + 1));
   }
 
   openAddSpeciesDiagnosisDialog(eventLocationIndex, locationSpeciesIndex) {

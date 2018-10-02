@@ -61,62 +61,44 @@
             </mat-form-field>
           </div>
 
+          <!-- Begin event diagnoses section-->
+          <form [formGroup]="eventSubmissionForm">
 
-          <!-- <div class="horizontal-form-container">
-            <mat-slide-toggle>Visible Publicly in WHISPers</mat-slide-toggle>
-          </div> -->
+            <div formArrayName="new_event_diagnoses">
+              <div *ngFor="let eventDiagnosis of getEventDiagnoses(eventSubmissionForm); let eventDiagnosisIndex = index">
 
-          <p>
+                <div [formGroupName]="eventDiagnosisIndex">
 
-            <!-- Begin event comments section-->
-            <!-- <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                   <mat-icon>comment</mat-icon>&nbsp;Event Comments (Optional)
-                </mat-panel-title>
-                <mat-panel-description>
-                  Comments on the Event
-                </mat-panel-description>
-              </mat-expansion-panel-header>
+                  <div class="vertical-form-container">
 
-              <div formArrayName="comments">
-                <div *ngFor="let comments of getEventComments(eventSubmissionForm); let h = index">
+                    <mat-form-field class="form-control event-diagnosis-select">
+                      <mat-select placeholder="Event Diagnosis" formControlName="diagnosis">
+                        <mat-option>--</mat-option>
+                        <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
 
-                  <div [formGroupName]="h">
-
-                    <div class="horizontal-form-container">
-
-                      <mat-form-field class="general-comment-text-area">
-                        <textarea matInput maxlength="1000" #comment placeholder="Comment" formControlName="comment"></textarea>
-                        <mat-hint align="end">{{comment.value.length}} / 1000</mat-hint>
-                      </mat-form-field>
-
-                      <mat-form-field class="form-control">
-                        <mat-select placeholder="Type" formControlName="comment_type">
-                          <mat-option *ngFor="let commentType of commentTypes" [value]="commentType.id">{{commentType.name}}</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-
-                      <button mat-icon-button color="warn" aria-label="Remove this comment" (click)="removeEventComment(h)" matTooltip="Remove this comment">
-                        <mat-iconremove_circle</mat-icon>
-                      </button>
-                    </div>
-
-
+                    <button mat-icon-button color="warn" aria-label="Remove this diagnosis" (click)="removeEventDiagnosis(eventDiagnosisIndex)"
+                      matTooltip="Remove this diagnosis">
+                      <mat-icon>remove_circle</mat-icon>
+                    </button>
                   </div>
 
-                  <mat-divider [inset]="true"></mat-divider>
-                  <br>
                 </div>
-              </div>
 
-              <div class="button-row">
-                <button mat-button color="primary" matTooltip="Add comment to this event" (click)="addEventComment(h)">
-                  <mat-iconadd_circle</mat-icon> Add Comment</button>
+                <mat-divider [inset]="true"></mat-divider>
+                <br>
               </div>
+            </div>
 
-            </mat-expansion-panel> -->
-            <!-- End event comments section-->
+            <div class="button-row">
+              <button mat-button color="primary" matTooltip="Add event diagnosis" (click)="addEventDiagnosis()">
+                <mat-icon>note_add</mat-icon> Add Event Diagnosis
+              </button>
+            </div>
+
+          </form>
+          <!-- End event diagnoses section-->
 
         </form>
 
@@ -713,9 +695,9 @@
                 </mat-expansion-panel-header>
 
                 <div formArrayName="new_comments">
-                  <div *ngFor="let comments of getEventComments(eventSubmissionForm); let h = index">
+                  <div *ngFor="let comments of getEventComments(eventSubmissionForm); let eventCommentIndex = index">
 
-                    <div [formGroupName]="h">
+                    <div [formGroupName]="eventCommentIndex">
 
                       <div class="horizontal-form-container">
 
@@ -730,7 +712,7 @@
                           </mat-select>
                         </mat-form-field>
 
-                        <button mat-icon-button color="warn" aria-label="Remove this comment" (click)="removeEventComment(h)"
+                        <button mat-icon-button color="warn" aria-label="Remove this comment" (click)="removeEventComment(eventCommentIndex)"
                           matTooltip="Remove this comment">
                           <mat-icon>remove_circle</mat-icon>
                         </button>

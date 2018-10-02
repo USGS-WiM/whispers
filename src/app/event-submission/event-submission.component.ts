@@ -97,6 +97,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   eventTypes: EventType[];
   legalStatuses: LegalStatus[];
   landOwnerships: LandOwnership[];
+  diagnoses: Diagnosis[];
 
   countries: Country[];
 
@@ -171,6 +172,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     private countryService: CountryService,
     private adminLevelOneService: AdministrativeLevelOneService,
     private adminLevelTwoService: AdministrativeLevelTwoService,
+    private diagnosisService: DiagnosisService,
     private speciesService: SpeciesService,
     private sexBiasService: SexBiasService,
     private ageBiasService: AgeBiasService,
@@ -460,6 +462,17 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         }
       );
 
+    // get diagnoses from the diagnoses service
+    this.diagnosisService.getDiagnoses()
+      .subscribe(
+        (diagnoses) => {
+          this.diagnoses = diagnoses;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
   }
 
   getErrorMessage(formControlName) {
@@ -671,23 +684,20 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       }
     });
 
-
   }
 
   removeEventComment(h) {
     const control = <FormArray>this.eventSubmissionForm.get('new_comments');
     control.removeAt(h);
-
   }
 
   getEventComments(form) {
     return form.controls.new_comments.controls;
   }
 
-  removeEventLocation(i) {
+  removeEventLocation(eventLocationIndex) {
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations');
-    control.removeAt(i);
-
+    control.removeAt(eventLocationIndex);
   }
 
   getEventLocations(form) {
@@ -695,14 +705,14 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   }
 
   // location species
-  addLocationSpecies(i) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('location_species');
+  addLocationSpecies(eventLocationIndex) {
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species');
     control.push(this.initLocationSpecies());
   }
 
-  removeLocationSpecies(i, j) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('location_species');
-    control.removeAt(j);
+  removeLocationSpecies(eventLocationIndex, locationSpeciesIndex) {
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species');
+    control.removeAt(locationSpeciesIndex);
   }
 
   getLocationSpecies(form) {
@@ -727,8 +737,8 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     control.removeAt(speciesDiagnosisIndex);
   }
 
-  getSpeciesDiagnosis(form) {
-    return form.controls.location_species.controls.species_diagnoses.controls;
+  getSpeciesDiagnoses(form) {
+    return form.controls.species_diagnoses.controls;
   }
   //////  End WIP ///////////////////////////////////////
 
@@ -761,7 +771,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   getLocationComments(form) {
     return form.controls.comments.controls;
   }
-
 
   updateAdminLevelOneOptions(selectedCountryID) {
     const id = Number(selectedCountryID);

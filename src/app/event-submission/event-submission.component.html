@@ -469,13 +469,33 @@
                                         <mat-icon>note_add</mat-icon>
                                       </button>
                                       <button mat-icon-button color="warn" aria-label="Remove this species from this location"
-                                        (click)="removeLocationSpecies(eventLocationIndex, locationSpeciesIndex)" matTooltip="Remove this species from this location">
+                                        (click)="removeLocationSpecies(eventLocationIndex, locationSpeciesIndex)"
+                                        matTooltip="Remove this species from this location">
                                         <mat-icon>remove_circle</mat-icon>
                                       </button>
                                     </div>
                                     <br />
                                     <!-- div for displaying species diagnoses added to the location species -->
-                                    <div></div>
+                                    <!-- *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index" -->
+                                    <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
+                                      <mat-card>
+                                        <mat-card-header>
+                                          <mat-card-title class="text-bold text-larger">Diagnoses for this Species</mat-card-title>
+                                        </mat-card-header>
+                                        <mat-card-content>
+                                          <mat-list dense>
+                                            <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
+                                              {{speciesDiagnosis.get('diagnosis').value |
+                                              displayValue:'name':this.diagnoses}}
+                                              <button mat-icon-button color="warn" aria-label="Remove this diagnosis"
+                                                matTooltip="Remove this diagnosis" (click)="removeSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
+                                                <mat-icon>remove_circle</mat-icon>
+                                              </button>
+                                            </mat-list-item>
+                                          </mat-list>
+                                        </mat-card-content>
+                                      </mat-card>
+                                    </div>
 
                                   </div>
                                 </div>

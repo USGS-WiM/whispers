@@ -111,8 +111,10 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
       .subscribe(
         (diagnoses) => {
           this.diagnoses = diagnoses;
-          if (this.data.species.species_diagnosis[0] !== undefined && this.data.species.species_diagnosis[0].diagnosis !== undefined) {
-            this.addSpeciesDiagnosisForm.get('diagnosis').setValue(this.data.species.species_diagnosis[0].diagnosis.toString());
+          if (this.data.species) {
+            if (this.data.species.species_diagnosis[0] !== undefined && this.data.species.species_diagnosis[0].diagnosis !== undefined) {
+              this.addSpeciesDiagnosisForm.get('diagnosis').setValue(this.data.species.species_diagnosis[0].diagnosis.toString());
+            }
           }
         },
         error => {
@@ -125,9 +127,13 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
         (diagnosisBases) => {
           this.diagnosisBases = diagnosisBases;
           // tslint:disable-next-line:max-line-length
-          if (this.data.species.species_diagnosis[0] !== undefined && this.data.species.species_diagnosis[0].diagnosis_basis !== undefined) {
-            this.addSpeciesDiagnosisForm.get('diagnosis_basis').setValue(this.data.species.species_diagnosis[0].diagnosis_basis.toString());
+          if (this.data.species) {
+            if (this.data.species.species_diagnosis[0] !== undefined && this.data.species.species_diagnosis[0].diagnosis_basis !== undefined) {
+              // tslint:disable-next-line:max-line-length
+              this.addSpeciesDiagnosisForm.get('diagnosis_basis').setValue(this.data.species.species_diagnosis[0].diagnosis_basis.toString());
+            }
           }
+
         },
         error => {
           this.errorMessage = <any>error;
@@ -139,8 +145,11 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
         (diagnosisCauses) => {
           this.diagnosisCauses = diagnosisCauses;
           // tslint:disable-next-line:max-line-length
-          if (this.data.species.species_diagnosis[0] !== undefined && this.data.species.species_diagnosis[0].diagnosis_cause !== undefined) {
-            this.addSpeciesDiagnosisForm.get('diagnosis_cause').setValue(this.data.species.species_diagnosis[0].diagnosis_cause.toString());
+          if (this.data.species) {
+            if (this.data.species.species_diagnosis[0] !== undefined && this.data.species.species_diagnosis[0].diagnosis_cause !== undefined) {
+              // tslint:disable-next-line:max-line-length
+              this.addSpeciesDiagnosisForm.get('diagnosis_cause').setValue(this.data.species.species_diagnosis[0].diagnosis_cause.toString());
+            }
           }
         },
         error => {

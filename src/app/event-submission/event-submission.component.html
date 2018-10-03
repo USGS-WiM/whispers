@@ -62,42 +62,51 @@
           </div>
 
           <!-- Begin event diagnoses section-->
-          <form [formGroup]="eventSubmissionForm">
+          <mat-card>
+            <mat-card-header>
 
-            <div formArrayName="new_event_diagnoses">
-              <div *ngFor="let eventDiagnosis of getEventDiagnoses(eventSubmissionForm); let eventDiagnosisIndex = index">
+              <mat-card-title>Event Diagnosis</mat-card-title>
 
-                <div [formGroupName]="eventDiagnosisIndex">
+            </mat-card-header>
+            <mat-card-content>
+              <form [formGroup]="eventSubmissionForm">
 
-                  <div class="vertical-form-container">
+                <div formArrayName="new_event_diagnoses">
+                  <div *ngFor="let eventDiagnosis of getEventDiagnoses(eventSubmissionForm); let eventDiagnosisIndex = index">
 
-                    <mat-form-field class="form-control event-diagnosis-select">
-                      <mat-select placeholder="Event Diagnosis" formControlName="diagnosis">
-                        <mat-option>--</mat-option>
-                        <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
+                    <div [formGroupName]="eventDiagnosisIndex">
 
-                    <button mat-icon-button color="warn" aria-label="Remove this diagnosis" (click)="removeEventDiagnosis(eventDiagnosisIndex)"
-                      matTooltip="Remove this diagnosis">
-                      <mat-icon>remove_circle</mat-icon>
-                    </button>
+                      <div class="horizontal-form-container">
+
+                        <mat-form-field class="form-control event-diagnosis-select">
+                          <mat-select placeholder="Event Diagnosis" formControlName="diagnosis">
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+
+                        <button mat-icon-button color="warn" aria-label="Remove this diagnosis" (click)="removeEventDiagnosis(eventDiagnosisIndex)"
+                          matTooltip="Remove this diagnosis">
+                          <mat-icon>remove_circle</mat-icon>
+                        </button>
+                      </div>
+
+                    </div>
+
+                    <mat-divider [inset]="true"></mat-divider>
+                    <br>
                   </div>
-
                 </div>
 
-                <mat-divider [inset]="true"></mat-divider>
-                <br>
-              </div>
-            </div>
+                <div class="button-row">
+                  <button mat-button color="primary" matTooltip="Add event diagnosis" (click)="addEventDiagnosis()">
+                    <mat-icon>note_add</mat-icon> Add Event Diagnosis
+                  </button>
+                </div>
 
-            <div class="button-row">
-              <button mat-button color="primary" matTooltip="Add event diagnosis" (click)="addEventDiagnosis()">
-                <mat-icon>note_add</mat-icon> Add Event Diagnosis
-              </button>
-            </div>
-
-          </form>
+              </form>
+            </mat-card-content>
+          </mat-card>
           <!-- End event diagnoses section-->
 
         </form>
@@ -456,30 +465,31 @@
                                         <mat-icon>remove_circle</mat-icon>
                                       </button>
                                     </div>
-                                    <br />
-                                    <!-- div for displaying species diagnoses added to the location species -->
-                                    <!-- *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index" -->
-                                    <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
-                                      <mat-card>
-                                        <mat-card-header>
-                                          <mat-card-title class="text-bold text-larger">Diagnoses for this Species</mat-card-title>
-                                        </mat-card-header>
-                                        <mat-card-content>
-                                          <mat-list dense>
-                                            <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
-                                              {{speciesDiagnosis.get('diagnosis').value |
-                                              displayValue:'name':this.diagnoses}}
-                                              <button mat-icon-button color="warn" aria-label="Remove this diagnosis"
-                                                matTooltip="Remove this diagnosis" (click)="removeSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
-                                                <mat-icon>remove_circle</mat-icon>
-                                              </button>
-                                            </mat-list-item>
-                                          </mat-list>
-                                        </mat-card-content>
-                                      </mat-card>
-                                    </div>
-
                                   </div>
+
+                                  <br />
+                                  <!-- div for displaying species diagnoses added to the location species -->
+                                  <!-- *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index" -->
+                                  <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
+                                    <mat-card>
+                                      <mat-card-header>
+                                        <mat-card-title class="text-bold text-larger">Diagnoses for this Species</mat-card-title>
+                                      </mat-card-header>
+                                      <mat-card-content>
+                                        <mat-list dense>
+                                          <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
+                                            {{speciesDiagnosis.get('diagnosis').value |
+                                            displayValue:'name':this.diagnoses}}
+                                            <button mat-icon-button color="warn" aria-label="Remove this diagnosis"
+                                              matTooltip="Remove this diagnosis" (click)="removeSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
+                                              <mat-icon>remove_circle</mat-icon>
+                                            </button>
+                                          </mat-list-item>
+                                        </mat-list>
+                                      </mat-card-content>
+                                    </mat-card>
+                                  </div>
+
                                 </div>
                               </div>
                             </div>

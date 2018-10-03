@@ -93,6 +93,7 @@ import { EditEventLocationComponent } from './edit-event-location/edit-event-loc
 import { AddEventLocationComponent } from './add-event-location/add-event-location.component';
 import { GnisLookupComponent } from './gnis-lookup/gnis-lookup.component';
 import { EventDetailsShareComponent } from './event-details/event-details-share/event-details-share.component';
+import { UserService } from '@services/user.service';
 
 
 @NgModule({
@@ -190,6 +191,7 @@ import { EventDetailsShareComponent } from './event-details/event-details-share/
     RoleService,
     SearchService,
     SearchDialogService,
+    UserService,
     LocationSpeciesDiagnosisService,
     DisplayValuePipe,
     DatePipe

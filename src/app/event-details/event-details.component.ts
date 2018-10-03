@@ -33,6 +33,12 @@ import { marker } from 'leaflet';
 import { EventLocationService } from '@app/services/event-location.service';
 import { EventDetailsShareComponent } from '@app/event-details/event-details-share/event-details-share.component';
 import { AddEventLocationComponent } from '@app/add-event-location/add-event-location.component';
+import { UserService } from '@app/services/user.service';
+import { User } from '@interfaces/user';
+import { SexBiasService } from '@app/services/sex-bias.service';
+import { SexBias } from '@interfaces/sex-bias';
+import { AgeBiasService } from '@app/services/age-bias.service';
+import { AgeBias } from '@interfaces/age-bias';
 
 @Component({
   selector: 'app-event-details',
@@ -45,8 +51,10 @@ export class EventDetailsComponent implements OnInit {
   eventID: string;
   map;
   icon;
-  states = [];
+  administrative_level_one = [];
   landownerships;
+
+  eventOwner;
 
   showAddEventLocation = false;
 
@@ -75,6 +83,9 @@ export class EventDetailsComponent implements OnInit {
   viewPanelStates: Object;
 
   currentUser;
+
+  sexBiases: SexBias[];
+  ageBiases: AgeBias[];
 
   locationMarkers;
 
@@ -106,6 +117,9 @@ export class EventDetailsComponent implements OnInit {
     'dead',
     'sick_estimated',
     'dead_estimated',
+    'captive',
+    'age_bias',
+    'sex_bias',
     'diagnosis'
   ];
 
@@ -116,11 +130,14 @@ export class EventDetailsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private _eventService: EventService,
+    private userService: UserService,
     private currentUserService: CurrentUserService,
     private dialog: MatDialog,
     private adminLevelOneService: AdministrativeLevelOneService,
     private landownershipService: LandOwnershipService,
     private eventLocationService: EventLocationService,
+    private ageBiasService: AgeBiasService,
+    private sexBiasService: SexBiasService,
     public snackBar: MatSnackBar
   ) {
     this.eventLocationSpecies = [];
@@ -167,6 +184,18 @@ export class EventDetailsComponent implements OnInit {
 
             this.locationSpeciesDataSource = new MatTableDataSource(this.eventLocationSpecies);
             // this.speciesTableRows = this.eventLocationSpecies;
+
+            // TODO: lookup user for created_by
+            this.userService.getUserDetail(eventdetails.created_by)
+              .subscribe(
+                (userDetail) => {
+                  this.eventOwner = userDetail;
+                },
+                error => {
+                  this.errorMessage = <any>error;
+                }
+              );
+
             this.eventDataLoading = false;
           },
           error => {
@@ -176,11 +205,11 @@ export class EventDetailsComponent implements OnInit {
 
     });
 
-    // get states from the state service
+    // get administrative_level_one  from the adminLevelOne service
     this.adminLevelOneService.getAdminLevelOnes()
       .subscribe(
-        (states) => {
-          this.states = states;
+        (administrative_level_one) => {
+          this.administrative_level_one = administrative_level_one;
         },
         error => {
           this.errorMessage = <any>error;
@@ -192,6 +221,28 @@ export class EventDetailsComponent implements OnInit {
       .subscribe(
         (landownerships) => {
           this.landownerships = landownerships;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get sexBiases from the sexBias service
+    this.sexBiasService.getSexBiases()
+      .subscribe(
+        sexBiases => {
+          this.sexBiases = sexBiases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get ageBiases from the ageBias service
+    this.ageBiasService.getAgeBiases()
+      .subscribe(
+        ageBiases => {
+          this.ageBiases = ageBiases;
         },
         error => {
           this.errorMessage = <any>error;

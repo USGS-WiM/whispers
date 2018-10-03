@@ -1,5 +1,6 @@
 
 import { Event } from '@interfaces/event';
+import { History } from '@interfaces/history';
 import { EventLocation } from '@interfaces/event-location';
 import { EventDiagnosis } from '@app/interfaces/event-diagnosis';
 import { SuperEvent } from '@app/interfaces/super-event';

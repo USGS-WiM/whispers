@@ -639,3 +639,7 @@
   
   .wmm-triangle.wmm-mutedpink:after {
     color: #ffb3ff; }
+
+  .wmm-square .wmm-green .wmm-icon-noicon .wmm-icon-white .wmm-size-20 {
+      background-color: green;
+  }

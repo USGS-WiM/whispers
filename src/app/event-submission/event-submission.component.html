@@ -380,8 +380,8 @@
                                     <!-- <mat-form-field>
                                       <input type="text" matInput placeholder="Species" aria-label="Species" [matAutocomplete]="speciesAutoComplete" formControlName="species">
                                       <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn">
-                                        <mat-option *ngFor="let species of filteredSpecies | async" [value]="species">
-                                          <span>{{ species.name }}</span>
+                                        <mat-option *ngFor="let species of filteredSpecies[locationSpeciesIndex] | async" [value]="species">
+                                          <span>{{species.name}}</span>
                                         </mat-option>
                                       </mat-autocomplete>
                                     </mat-form-field> -->
@@ -478,8 +478,7 @@
                                       <mat-card-content>
                                         <mat-list dense>
                                           <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
-                                            {{speciesDiagnosis.get('diagnosis').value |
-                                            displayValue:'name':this.diagnoses}}
+                                            {{speciesDiagnosis.get('diagnosis').value |displayValue:'name':this.diagnoses}}
                                             <button mat-icon-button color="warn" aria-label="Remove this diagnosis"
                                               matTooltip="Remove this diagnosis" (click)="removeSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
                                               <mat-icon>remove_circle</mat-icon>
@@ -532,8 +531,7 @@
                                 <mat-form-field class="form-control contact-select">
                                   <mat-select placeholder="Contact" formControlName="id">
                                     <mat-option *ngFor="let contact of userContacts" [value]="contact.id">{{contact.first_name}}
-                                      {{contact.last_name}} | {{contact.organization |
-                                      displayValue:'name':this.organizations}}
+                                      {{contact.last_name}} | {{contact.organization |displayValue:'name':this.organizations}}
                                     </mat-option>
                                   </mat-select>
                                 </mat-form-field>

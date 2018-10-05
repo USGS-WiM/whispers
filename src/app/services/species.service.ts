@@ -22,7 +22,7 @@ export class SpeciesService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.SPECIES_URL + speciesQuery, options)
+    return this._http.get(APP_SETTINGS.SPECIES_URL + speciesQuery + '?no_page', options)
       .map((response: Response) => <Species[]>response.json())
       .catch(this.handleError);
   }
@@ -33,7 +33,7 @@ export class SpeciesService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.SPECIES_URL, options)
+    return this._http.get(APP_SETTINGS.SPECIES_URL + '?no_page', options)
       .map((response: Response) => <Species[]>response.json())
       .catch(this.handleError);
   }

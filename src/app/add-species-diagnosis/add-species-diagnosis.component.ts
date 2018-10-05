@@ -50,11 +50,10 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
   buildAddSpeciesDiagnosisForm() {
     this.addSpeciesDiagnosisForm = this.formBuilder.group({
       location_species: null,
-      // diagnosis: [null, Validators.required],
-      diagnosis: null,
+      diagnosis: [null, Validators.required],
       diagnosis_cause: null,
       diagnosis_basis: null,
-      confirmed: false,
+      suspect: false,
       // priority: null,
       tested_count: null,
       diagnosis_count: null,
@@ -102,7 +101,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
       this.addSpeciesDiagnosisForm.get('positive_count').setValue(this.data.species.species_diagnosis[0].positive_count);
       this.addSpeciesDiagnosisForm.get('suspect_count').setValue(this.data.species.species_diagnosis[0].suspect_count);
       // this.addSpeciesDiagnosisForm.get('organizations').setValue(this.data.contact.affiliation);
-      this.addSpeciesDiagnosisForm.get('confirmed').setValue(this.data.species.species_diagnosis[0].confirmed);
+      this.addSpeciesDiagnosisForm.get('suspect').setValue(this.data.species.species_diagnosis[0].suspect);
       this.addSpeciesDiagnosisForm.get('pooled').setValue(this.data.species.species_diagnosis[0].pooled);
     }
 

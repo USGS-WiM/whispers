@@ -3,8 +3,9 @@ import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternVali
 import { Observable } from 'rxjs/Observable';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/operator/map';
+import { startWith } from 'rxjs-compat/operator/startWith';
+import { map } from 'rxjs/operators';
+
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MatBottomSheetModule, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
@@ -74,6 +75,7 @@ import { EventSubmissionConfirmComponent } from '@app/event-submission/event-sub
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
 import * as search_api from 'usgs-search-api';
+
 declare const search_api: search_api;
 
 
@@ -109,8 +111,12 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   // expermental, for autocomplete
   //filteredAdminLevelTwos: Observable<any[]>;
 
+  //////////////////////////////////////////////
   species: Species[];
-  filteredSpecies: Observable<any[]>;
+  //filteredSpecies: Observable<Species[]>[] = [];
+
+  filteredSpecies: Observable<any[]>[] = [];
+  ///////////////////////////////////////////////////////
 
   sexBiases: SexBias[];
   ageBiases: AgeBias[];
@@ -159,7 +165,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
 
     this.eventLocationArray = this.eventSubmissionForm.get('new_event_locations') as FormArray;
-
+    this.ManageSpeciesControl(0, 0);
   }
 
   constructor(
@@ -270,8 +276,34 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
   }
 
+
+  ////////////////////////////////////////////// Begin WIP
+
+  private _filter(name: string): Species[] {
+    const filterValue = name.toLowerCase();
+
+    return this.species.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+  }
+  // tslint:disable-next-line:max-line-length
+  // WIP: tying to use this example: https://stackoverflow.com/questions/51562826/how-to-use-mat-autocomplete-angular-material-autocomplete-inside-formarray-re
+  // to do dynamic filteredSpecies arrays for each loc species instance. Not working - select displays "[Object oject]" instead of name. Not sure yet if this approach is going to work
+  ManageSpeciesControl(eventLocationIndex: number, locationSpeciesIndex: number) {
+    // tslint:disable-next-line:max-line-length
+    const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species') as FormArray;
+    this.filteredSpecies[locationSpeciesIndex] = arrayControl.at(locationSpeciesIndex).get('species').valueChanges
+      .startWith(null)
+      .map(val => this.filter(val, this.species, 'name'));
+    // .pipe(
+    //   startWith<string | Species>(''),
+    //   map(value => typeof value === 'string' ? value : value.name),
+    //   map(name => name ? this._filter(name) : this.species.slice())
+    // );
+
+  }
+  ///////////////////////////////////////////////// End WIP
+
   filter(val: any, searchArray: any, searchProperty: string): string[] {
-    const realval = val && typeof val === 'object' ? val.searchProperty : val;
+    const realval = val && typeof val === 'object' ? val[searchProperty] : val;
     const result = [];
     let lastOption = null;
     for (let i = 0; i < searchArray.length; i++) {
@@ -282,6 +314,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         }
       }
     }
+    // this will return all records matching the val string
     return result;
   }
 
@@ -388,9 +421,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
           });
           // TODO: lines below commented out are for species autocomplete. more complex on this component since species is part of a form array
           // line below is copied from search dialog component, but does not work here.
-          // this.filteredSpecies = this.eventSubmissionForm.get('species').valueChanges
+          //this.filteredSpecies = this.eventSubmissionForm.get('species').valueChanges
           // line below is does not work, but is the beginning of the solution.
-          // this.filteredSpecies = this.eventSubmissionForm.get('new_event_locations').get('location_species').get('species').valueChanges
+          // this.filteredSpecies = this.eventSubmissionForm.controls.new_event_locations.get('location_species').get('species').valueChanges
           //   .startWith(null)
           //   .map(val => this.filter(val, this.species, 'name'));
         },
@@ -570,10 +603,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       clinical_signs: '',
       comment: '',
       location_species: this.formBuilder.array([
-        // this.initLocationSpecies()
+        this.initLocationSpecies()
       ]),
       location_contacts: this.formBuilder.array([
-        // this.initLocationContacts()
+        this.initLocationContacts()
       ])
     });
   }
@@ -600,7 +633,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       diagnosis: null,
       diagnosis_cause: null,
       diagnosis_basis: null,
-      confirmed: false,
+      suspect: false,
       tested_count: null,
       diagnosis_count: null,
       positive_count: null,
@@ -716,8 +749,12 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   // location species
   addLocationSpecies(eventLocationIndex) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species');
-    control.push(this.initLocationSpecies());
+    const controls = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species');
+    controls.push(this.initLocationSpecies());
+
+    const locationSpeciesIndex = controls.length - 1;
+
+    this.ManageSpeciesControl(eventLocationIndex, locationSpeciesIndex);
   }
 
   removeLocationSpecies(eventLocationIndex, locationSpeciesIndex) {
@@ -729,7 +766,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     return form.controls.location_species.controls;
   }
 
-  ////// Begin WIP ///////////////////////////////////////
   // species diagnosis
   // TODO: add an additional level of index
   addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex) {
@@ -750,7 +786,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   getSpeciesDiagnoses(form) {
     return form.controls.species_diagnoses.controls;
   }
-  //////  End WIP ///////////////////////////////////////
+
 
   // location contacts
   addLocationContacts(eventLocationIndex) {
@@ -833,7 +869,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   openAddSpeciesDiagnosisDialog(eventLocationIndex, locationSpeciesIndex) {
 
-    // TODO: add an additional level of index
     const speciesDiagnosisIndex = this.addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex);
 
     // Open dialog for adding species diagnosis
@@ -856,7 +891,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
               diagnosis: speciesDiagnosisObj.formValue.diagnosis,
               diagnosis_cause: speciesDiagnosisObj.formValue.diagnosis_cause,
               diagnosis_basis: speciesDiagnosisObj.formValue.diagnosis_basis,
-              confirmed: speciesDiagnosisObj.formValue.confirmed,
+              suspect: speciesDiagnosisObj.formValue.suspect,
               tested_count: speciesDiagnosisObj.formValue.tested_count,
               diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
               positive_count: speciesDiagnosisObj.formValue.positive_count,

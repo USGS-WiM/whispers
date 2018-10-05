@@ -23,7 +23,7 @@ export class OrganizationService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.ORGANIZATIONS_URL, options)
+    return this._http.get(APP_SETTINGS.ORGANIZATIONS_URL + '?no_page', options)
       .map((response: Response) => <Organization[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

@@ -22,7 +22,7 @@ export class DiagnosisService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.DIAGNOSES_URL, options)
+    return this._http.get(APP_SETTINGS.DIAGNOSES_URL + '?no_page', options)
       .map((response: Response) => <Diagnosis[]>response.json())
       .catch(this.handleError);
   }

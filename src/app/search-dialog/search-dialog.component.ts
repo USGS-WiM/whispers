@@ -235,6 +235,7 @@ export class SearchDialogComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
+      
     // get adminLevelTwos from the adminLevelTwo service
     // TODO: remove this from ngOnInit. Not performant. Move to the updateAdminLevelTwoOptions function
     /* if (this.data.query && this.data.query['administrative_level_two'].length > 0) {
@@ -251,7 +252,8 @@ export class SearchDialogComponent implements OnInit {
             this.errorMessage = <any>error;
           }
         ); */
-    //get species from the species service
+
+    // get species from the species service
     this._speciesService.getSpecies()
       .subscribe(
         (species) => {

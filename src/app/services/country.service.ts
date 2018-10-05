@@ -22,7 +22,7 @@ export class CountryService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.COUNTRIES_URL + stateQuery, options)
+    return this._http.get(APP_SETTINGS.COUNTRIES_URL + stateQuery + '?no_page', options)
       .map((response: Response) => <Country[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
@@ -34,7 +34,7 @@ export class CountryService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.COUNTRIES_URL, options)
+    return this._http.get(APP_SETTINGS.COUNTRIES_URL + '?no_page', options)
       .map((response: Response) => <Country[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

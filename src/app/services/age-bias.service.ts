@@ -21,7 +21,7 @@ export class AgeBiasService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.AGE_BIASES_URL, options)
+    return this._http.get(APP_SETTINGS.AGE_BIASES_URL + '?no_page', options)
       .map((response: Response) => <AgeBias[]>response.json())
       .catch(this.handleError);
 

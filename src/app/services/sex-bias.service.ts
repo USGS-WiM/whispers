@@ -22,7 +22,7 @@ export class SexBiasService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.SEX_BIASES_URL, options)
+    return this._http.get(APP_SETTINGS.SEX_BIASES_URL + '?no_page', options)
       .map((response: Response) => <SexBias[]>response.json())
       .catch(this.handleError);
 

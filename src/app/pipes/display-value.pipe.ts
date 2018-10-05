@@ -19,11 +19,16 @@ export class DisplayValuePipe implements PipeTransform {
   transform(value: any, displayProperty: string, sourceArray: Array<any>): any {
 
     let displayValue;
-    for (let i = 0; i < sourceArray.length; i++) {
-      if (sourceArray[i].id === parseInt(value, 10)) {
-        displayValue = sourceArray[i][displayProperty];
+    if (value === null || sourceArray === undefined) {
+      displayValue = '';
+    } else {
+      for (let i = 0; i < sourceArray.length; i++) {
+        if (sourceArray[i].id === parseInt(value, 10)) {
+          displayValue = sourceArray[i][displayProperty];
+        }
       }
     }
+
     return displayValue;
   }
 }

@@ -22,7 +22,7 @@ export class DiagnosisBasisService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.DIAGNOSIS_BASES_URL, options)
+    return this._http.get(APP_SETTINGS.DIAGNOSIS_BASES_URL + '?no_page', options)
       .map((response: Response) => <DiagnosisBasis[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

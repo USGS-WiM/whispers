@@ -23,7 +23,7 @@ export class EventStatusService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.EVENT_STATUSES_URL, options)
+    return this._http.get(APP_SETTINGS.EVENT_STATUSES_URL + '?no_page', options)
       .map((response: Response) => <EventStatus[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

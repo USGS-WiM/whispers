@@ -22,7 +22,7 @@ export class RoleService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.ROLES_URL, options)
+    return this._http.get(APP_SETTINGS.ROLES_URL + '?no_page', options)
       .map((response: Response) => <Role[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

@@ -22,7 +22,7 @@ export class LandOwnershipService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.LAND_OWNERSHIPS_URL, options)
+    return this._http.get(APP_SETTINGS.LAND_OWNERSHIPS_URL + '?no_page', options)
       .map((response: Response) => <LandOwnership[]>response.json())
       .catch(this.handleError);
 

@@ -21,7 +21,7 @@ export class LegalStatusService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.LEGAL_STATUS_URL, options)
+    return this._http.get(APP_SETTINGS.LEGAL_STATUS_URL + '?no_page', options)
       .map((response: Response) => <LegalStatus[]>response.json())
       .catch(this.handleError);
 

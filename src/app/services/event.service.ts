@@ -88,7 +88,7 @@ export class EventService {
 
     // console.log(JSON.stringify(eventQuery));
 
-    let queryString = '?';
+    let queryString = '?no_page';
 
     if (eventQuery.affected_count !== null && eventQuery.affected_count !== '') {
       queryString = queryString + '&affected_count=' + eventQuery.affected_count.toString();
@@ -152,7 +152,7 @@ export class EventService {
 
     // console.log(JSON.stringify(eventQuery));
 
-    let queryString = '?';
+    let queryString = '?no_page';
 
     if (eventQuery.affected_count !== null && eventQuery.affected_count !== '') {
       queryString = queryString + '&affected_count=' + eventQuery.affected_count.toString();
@@ -164,7 +164,7 @@ export class EventService {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
 
-    //attempt to handle start date and end date that are referred to differently throughout the app
+    // attempt to handle start date and end date that are referred to differently throughout the app
     if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
       queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
     }
@@ -242,7 +242,7 @@ export class EventService {
       });
     }
     
-    return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL + eventID, options)
+    return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL + eventID + '?no_page', options)
       .map((response: Response) => <EventDetail>response.json())
       .catch(this.handleError);
   }
@@ -253,7 +253,7 @@ export class EventService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     })
 
-    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'user_events', options)
+    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'user_events?no_page', options)
       .map((response: Response) => <EventSummary[]>response.json())
       .catch(this.handleError);
 

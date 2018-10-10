@@ -34,12 +34,12 @@ import {
   MatSlideToggleModule,
   MatSnackBarModule,
   MatSortModule,
-  MatStepperModule,
   MatTableModule,
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  MatBottomSheetModule
+  MatBottomSheetModule,
+  MatStepperModule
 } from '@angular/material';
 
 
@@ -94,6 +94,10 @@ import { AddEventLocationComponent } from './add-event-location/add-event-locati
 import { GnisLookupComponent } from './gnis-lookup/gnis-lookup.component';
 import { EventDetailsShareComponent } from './event-details/event-details-share/event-details-share.component';
 import { UserService } from '@services/user.service';
+import { EventSubmissionSuccessComponent } from './event-submission/event-submission-success/event-submission-success.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
+
+
 
 
 @NgModule({
@@ -120,6 +124,8 @@ import { UserService } from '@services/user.service';
     AddEventLocationComponent,
     GnisLookupComponent,
     EventDetailsShareComponent,
+    EventSubmissionSuccessComponent,
+    EditUserComponent,
   ],
   imports: [
     BrowserModule,
@@ -137,7 +143,6 @@ import { UserService } from '@services/user.service';
     MatCardModule,
     MatCheckboxModule,
     MatChipsModule,
-    MatStepperModule,
     MatDatepickerModule,
     MatDialogModule,
     MatDividerModule,
@@ -163,7 +168,8 @@ import { UserService } from '@services/user.service';
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
+    MatStepperModule
   ],
   providers: [
     AuthenticationService,
@@ -194,7 +200,7 @@ import { UserService } from '@services/user.service';
     UserService,
     LocationSpeciesDiagnosisService,
     DisplayValuePipe,
-    DatePipe
+    DatePipe,
   ],
   bootstrap: [AppComponent],
   entryComponents: [
@@ -211,7 +217,8 @@ import { UserService } from '@services/user.service';
     EditEventLocationComponent,
     AddEventLocationComponent,
     GnisLookupComponent,
-    EventDetailsShareComponent
+    EventDetailsShareComponent,
+    EditUserComponent
   ]
 })
 export class AppModule { }

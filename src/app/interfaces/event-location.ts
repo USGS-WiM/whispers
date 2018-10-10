@@ -17,7 +17,7 @@ export interface EventLocation extends History {
     land_ownership: number;
     flyway: string;
     gnis_name: number;
-    location_species: LocationSpecies[];
+    locationspecies: LocationSpecies[];
     administrative_level_two_string?: string;
     administrative_level_one_string?: string;
     country_string?: string;

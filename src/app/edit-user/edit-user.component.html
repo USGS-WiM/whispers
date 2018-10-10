@@ -1,0 +1,41 @@
+<h1 mat-dialog-title>
+  <i class="material-icons">edit</i> Edit User Details</h1>
+<mat-dialog-content>
+  <form [formGroup]="editUserForm">
+
+    <div class="vertical-form-container">
+
+      <!-- First Name -->
+      <mat-form-field class="form-control">
+        <input matInput placeholder="First Name" formControlName="first_name">
+      </mat-form-field>
+
+      <!-- Last Name -->
+      <mat-form-field class="form-control">
+        <input matInput placeholder="Last Name" formControlName="last_name">
+      </mat-form-field>
+
+      <!-- Password -->
+      <mat-form-field class="form-control">
+        <input matInput type="password" placeholder="Password" formControlName="password">
+      </mat-form-field>
+
+      <!-- Confirm Password -->
+      <mat-form-field class="form-control">
+        <input matInput type="password" placeholder="Password" formControlName="confirmPassword">
+      </mat-form-field>
+
+    </div>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+
+  <button mat-button color="warn" (click)="this.editUserDialogRef.close('cancel');">
+    <mat-icon>cancel</mat-icon>&nbsp;Cancel
+  </button>
+  <button mat-button color="primary" type="submit" [disabled]="editUserForm.invalid" (click)="updateUser(editUserForm.value)">
+    <mat-icon>send</mat-icon>&nbsp;Submit
+  </button>
+  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+</mat-dialog-actions>

@@ -3,7 +3,7 @@ import { OrganizationSummary } from '@interfaces/organization-summary';
 
 export interface LocationSpeciesDiagnosis extends History {
     id: number;
-    location_species: number;
+    locationspecies: number;
     diagnosis: Diagnosis;
     suspect: boolean;
     major: boolean;

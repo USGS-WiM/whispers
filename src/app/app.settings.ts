@@ -32,7 +32,7 @@ export class APP_SETTINGS {
     public static get EVENTS_URL(): string { return this._API_ENDPOINT + 'events/'; }
     public static get EVENT_DETAILS_URL(): string { return this._API_ENDPOINT + 'eventdetails/'; }
     public static get EVENTS_SUMMARIES_URL(): string { return this._API_ENDPOINT + 'eventsummaries/'; }
-    public static get STAFF_URL(): string { return this._API_ENDPOINT + 'epistaff/'; }
+    public static get STAFF_URL(): string { return this._API_ENDPOINT + 'staff/'; }
     public static get EVENT_TYPES_URL(): string { return this._API_ENDPOINT + 'eventtypes/'; }
     public static get EVENT_STATUSES_URL(): string { return this._API_ENDPOINT + 'eventstatuses/'; }
     public static get EVENT_ABSTRACTS_URL(): string { return this._API_ENDPOINT + 'eventabstracts/'; }

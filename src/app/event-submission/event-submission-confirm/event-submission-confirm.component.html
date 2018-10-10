@@ -55,7 +55,7 @@
           <li>Clinical Signs: {{event_location.clinical_signs}}</li>
           <label>Species</label>
           <ul>
-            <li *ngFor="let location_species of event_location.location_species">{{location_species.species | displayValue:'name':data.species}}</li>
+            <li *ngFor="let locationspecies of event_location.locationspecies">{{locationspecies.species | displayValue:'name':data.species}}</li>
           </ul>
         </ul>
 

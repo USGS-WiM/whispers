@@ -22,6 +22,8 @@ import { RoleService } from '@services/role.service';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
 
+import { EditUserComponent } from '@app/edit-user/edit-user.component';
+
 @Component({
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
@@ -34,6 +36,7 @@ export class UserDashboardComponent implements OnInit {
 
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
+  editUserDialogRef: MatDialogRef<EditUserComponent>;
 
   errorMessage;
   events;
@@ -265,6 +268,25 @@ export class UserDashboardComponent implements OnInit {
     });
   }
 
+  openEditUserDialog() {
+
+    // Open dialog for adding event diagnosis
+    this.editUserDialogRef = this.dialog.open(EditUserComponent, {
+      data: {}
+    });
+
+    this.editUserDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          // do something after close
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+  }
+
   removeContact() {
 
     if (this.selection.selected.length > 1) {
@@ -312,7 +334,7 @@ export class UserDashboardComponent implements OnInit {
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.contactsDataSource.data.length;
-    return numSelected == numRows;
+    return numSelected === numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */

@@ -208,7 +208,7 @@ export class AddEventLocationComponent implements OnInit {
           // line below is copied from search dialog component, but does not work here.
           // this.filteredSpecies = this.eventSubmissionForm.get('species').valueChanges
           // line below is does not work, but is the beginning of the solution.
-          // this.filteredSpecies = this.eventSubmissionForm.get('new_event_locations').get('location_species').get('species').valueChanges
+          // this.filteredSpecies = this.eventSubmissionForm.get('new_event_locations').get('locationspecies').get('species').valueChanges
           //   .startWith(null)
           //   .map(val => this.filter(val, this.species, 'name'));
         },
@@ -298,7 +298,7 @@ export class AddEventLocationComponent implements OnInit {
 
     formValue.event = this.eventID;
 
-    // convert start_date and end_date of event_locations to 'yyyy-MM-dd' before submission
+    // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
     // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
     formValue.start_date = this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd');
     formValue.end_date = this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd');

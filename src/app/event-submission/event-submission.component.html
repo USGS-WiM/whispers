@@ -4,7 +4,10 @@
     <mat-card>
       <mat-card-title>
         <span>
-          <b>Create Event</b>
+          <mat-icon>library_add</mat-icon>
+        </span>
+        <span>
+          <b> Create Event</b>
         </span>
       </mat-card-title>
       <mat-card-subtitle>
@@ -30,36 +33,109 @@
             </mat-form-field>
 
             <mat-form-field class="form-control">
-              <input matInput placeholder="Event Name" formControlName="event_reference">
+              <input matInput placeholder="User Event Reference" formControlName="event_reference">
               <mat-hint align="start">Reference name for this event (private) </mat-hint>
             </mat-form-field>
 
+          </div>
+
+          <div class="horizontal-form-container">
             <mat-form-field class="form-control">
               <mat-select placeholder="Event Visibility" formControlName="public" required>
                 <mat-option [value]="true">Visible to Public</mat-option>
                 <mat-option [value]="false">Not Visible to Public</mat-option>
               </mat-select>
               <mat-hint align="start"></mat-hint>
-              <mat-error *ngIf="eventSubmissionForm.get('event_type').invalid">{{getErrorMessage('event_type')}}</mat-error>
+              <mat-error *ngIf="eventSubmissionForm.get('public').invalid">{{getErrorMessage('public')}}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="form-control">
+              <mat-select placeholder="WHISPers Record Status" formControlName="complete" required>
+                <mat-option [value]="true">Complete</mat-option>
+                <mat-option [value]="false">Incomplete</mat-option>
+              </mat-select>
+              <mat-hint align="start"></mat-hint>
+              <mat-hint align="end" matTooltip="Public field">
+                <mat-icon>public</mat-icon>
+              </mat-hint>
+              <mat-error *ngIf="eventSubmissionForm.get('complete').invalid">{{getErrorMessage('complete')}}</mat-error>
             </mat-form-field>
 
           </div>
 
-
           <div class="horizontal-form-container">
 
             <mat-form-field class="form-control event-org-select">
-              <mat-select placeholder="Event Organization" formControlName="new_organizations" multiple>
+              <mat-select placeholder="Contact Organization" formControlName="new_organizations" multiple>
                 <mat-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</mat-option>
               </mat-select>
               <mat-hint align="start">
-                Event organization contact for display to general public, for general inquries
+                Contact organization for display to general public, for general inquries
               </mat-hint>
               <mat-hint align="end" matTooltip="Public field">
                 <mat-icon>public</mat-icon>
               </mat-hint>
             </mat-form-field>
+
           </div>
+
+          <!-- NWHC staff only section -->
+          <mat-card *ngIf="currentUser.role === 1 || currentUser.role === 2 ">
+            <mat-card-header>
+              <mat-card-title>NWHC Staff Only</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="horizontal-form-container">
+                <form [formGroup]="eventSubmissionForm">
+
+                  <div class="vertical-form-container">
+
+                    <mat-form-field class="form-control">
+                      <mat-select placeholder="Assigned NWHC Epidemiologist" formControlName="staff">
+                        <mat-option *ngFor="let staffMember of staff" value="{{staffMember.id}}">{{staffMember.first_name}}
+                          {{staffMember.last_name}}</mat-option>
+                      </mat-select>
+                      <mat-hint align="start"></mat-hint>
+                    </mat-form-field>
+                  </div>
+                  <div class="horizonal-form-container">
+
+                    <mat-form-field class="form-control">
+                      <mat-select placeholder="Process Status" formControlName="status" required>
+                        <mat-option *ngFor="let status of eventStatuses" value="{{status.id}}">{{status.name}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-hint align="start"></mat-hint>
+                    </mat-form-field>
+
+                    <mat-form-field class="form-control">
+                      <input matInput [matDatepicker]="qualityCheck" placeholder="NWHC Quality Check" formControlName="quality_check">
+                      <mat-datepicker-toggle matSuffix [for]="qualityCheck"></mat-datepicker-toggle>
+                      <mat-datepicker #qualityCheck></mat-datepicker>
+                      <mat-hint align="start"></mat-hint>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="horizontal-form-container">
+                    <mat-form-field class="form-control">
+                      <mat-select placeholder="Legal Status" formControlName="legal_status" required>
+                        <mat-option *ngFor="let legalStatus of legalStatuses" value="{{legalStatus.id}}">{{legalStatus.name}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-hint align="start"></mat-hint>
+                    </mat-form-field>
+
+                    <mat-form-field class="form-control">
+                      <input matInput placeholder="Legal Number" formControlName="legal_number">
+                      <mat-hint align="start"> </mat-hint>
+                    </mat-form-field>
+                  </div>
+
+                </form>
+              </div>
+            </mat-card-content>
+          </mat-card>
+          <!-- End NWHC staff only section -->
 
           <!-- Begin event diagnoses section-->
           <mat-card>
@@ -69,42 +145,47 @@
 
             </mat-card-header>
             <mat-card-content>
-              <form [formGroup]="eventSubmissionForm">
+              <div class="horizontal-form-container">
+                <form [formGroup]="eventSubmissionForm">
 
-                <div formArrayName="new_event_diagnoses">
-                  <div *ngFor="let eventDiagnosis of getEventDiagnoses(eventSubmissionForm); let eventDiagnosisIndex = index">
+                  <div formArrayName="new_event_diagnoses">
+                    <div *ngFor="let eventDiagnosis of getEventDiagnoses(eventSubmissionForm); let eventDiagnosisIndex = index">
 
-                    <div [formGroupName]="eventDiagnosisIndex">
+                      <div [formGroupName]="eventDiagnosisIndex">
 
-                      <div class="horizontal-form-container">
+                        <div class="horizontal-form-container">
 
-                        <mat-form-field class="form-control event-diagnosis-select">
-                          <mat-select placeholder="Event Diagnosis" formControlName="diagnosis">
-                            <mat-option>--</mat-option>
-                            <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}</mat-option>
-                          </mat-select>
-                        </mat-form-field>
+                          <mat-form-field class="form-control event-diagnosis-select">
+                            <mat-select placeholder="Event Diagnosis" formControlName="diagnosis">
+                              <mat-option>--</mat-option>
+                              <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}</mat-option>
+                            </mat-select>
+                            <mat-hint align="end" matTooltip="Public field">
+                              <mat-icon>public</mat-icon>
+                            </mat-hint>
+                          </mat-form-field>
 
-                        <button mat-icon-button color="warn" aria-label="Remove this diagnosis" (click)="removeEventDiagnosis(eventDiagnosisIndex)"
-                          matTooltip="Remove this diagnosis">
-                          <mat-icon>remove_circle</mat-icon>
-                        </button>
+                          <button mat-icon-button color="warn" aria-label="Remove this diagnosis" (click)="removeEventDiagnosis(eventDiagnosisIndex)"
+                            matTooltip="Remove this diagnosis">
+                            <mat-icon>remove_circle</mat-icon>
+                          </button>
+                        </div>
+
                       </div>
 
+                      <mat-divider [inset]="true"></mat-divider>
+                      <br>
                     </div>
-
-                    <mat-divider [inset]="true"></mat-divider>
-                    <br>
                   </div>
-                </div>
 
-                <div class="button-row">
-                  <button mat-button color="primary" matTooltip="Add event diagnosis" (click)="addEventDiagnosis()">
-                    <mat-icon>note_add</mat-icon> Add Event Diagnosis
-                  </button>
-                </div>
+                  <div class="button-row">
+                    <button mat-button color="primary" matTooltip="Add event diagnosis" (click)="addEventDiagnosis()">
+                      <mat-icon>note_add</mat-icon> Add Event Diagnosis
+                    </button>
+                  </div>
 
-              </form>
+                </form>
+              </div>
             </mat-card-content>
           </mat-card>
           <!-- End event diagnoses section-->
@@ -357,7 +438,7 @@
                             <!-- <button mat-icon-button color="accent">
                                     <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
                                   </button> -->
-                            <div formArrayName="location_species">
+                            <div formArrayName="new_location_species">
                               <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index">
 
                                 <div [formGroupName]="locationSpeciesIndex">
@@ -415,8 +496,7 @@
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control">
-                                      <input matInput placeholder="Est. Population at Risk" type="number"
-                                        formControlName="population_count">
+                                      <input matInput placeholder="Population" type="number" formControlName="population_count">
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
@@ -441,7 +521,7 @@
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control">
-                                      <mat-select placeholder="Captivity" formControlName="captive">
+                                      <mat-select placeholder="Captive" formControlName="captive">
                                         <mat-option [value]="true">Captive > 72 hours</mat-option>
                                         <mat-option [value]="false">Wild and/or free-ranging</mat-option>
                                       </mat-select>
@@ -478,7 +558,8 @@
                                       <mat-card-content>
                                         <mat-list dense>
                                           <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
-                                            {{speciesDiagnosis.get('diagnosis').value |displayValue:'name':this.diagnoses}}
+                                            {{speciesDiagnosis.get('diagnosis').value
+                                            |displayValue:'name':this.diagnoses}}
                                             <button mat-icon-button color="warn" aria-label="Remove this diagnosis"
                                               matTooltip="Remove this diagnosis" (click)="removeSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
                                               <mat-icon>remove_circle</mat-icon>
@@ -529,15 +610,16 @@
 
                               <div class="horizontal-form-container contact-controls-container" [formGroupName]="k">
                                 <mat-form-field class="form-control contact-select">
-                                  <mat-select placeholder="Contact" formControlName="id">
+                                  <mat-select placeholder="Contact Person" formControlName="id">
                                     <mat-option *ngFor="let contact of userContacts" [value]="contact.id">{{contact.first_name}}
-                                      {{contact.last_name}} | {{contact.organization |displayValue:'name':this.organizations}}
+                                      {{contact.last_name}} | {{contact.organization
+                                      |displayValue:'name':this.organizations}}
                                     </mat-option>
                                   </mat-select>
                                 </mat-form-field>
 
                                 <mat-form-field class="form-control  contact-type-select">
-                                  <mat-select placeholder="Type" formControlName="contact_type" required>
+                                  <mat-select placeholder="Contact Type" formControlName="contact_type" required>
                                     <mat-option *ngFor="let contactType of contactTypes" [value]="contactType.id">{{contactType.name}}</mat-option>
                                   </mat-select>
                                 </mat-form-field>
@@ -770,7 +852,7 @@
                 <mat-icon>pageview</mat-icon> Review Event Submission
               </button>
               <p>
-                <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="submitEvent(eventSubmissionForm.value)">
+                <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid" (click)="submitEvent(eventSubmissionForm.value)">
                   <mat-icon>done</mat-icon> Save Event
                 </button>
 

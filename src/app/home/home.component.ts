@@ -107,7 +107,7 @@ export class HomeComponent implements OnInit {
     'administrativelevelones',
     'administrativeleveltwos',
     'species',
-    'event_diagnoses'
+    'eventdiagnoses'
   ];
 
 
@@ -465,8 +465,6 @@ export class HomeComponent implements OnInit {
             this.parsedPopularSearches.push(parsedSearch);
           }
 
-          console.log("wat");
-
         },
         error => {
           this.errorMessage = <any>error;
@@ -590,7 +588,7 @@ export class HomeComponent implements OnInit {
             currentResultsMarkers.push({
               lat: Number(currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']),
               long: Number(currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude']),
-              event_diagnoses: currentResults[event]['eventdiagnoses'],
+              eventdiagnoses: currentResults[event]['eventdiagnoses'],
               adminleveltwo: currentResults[event]['administrativeleveltwos'][adminleveltwo]['id'],
               events: [currentResults[event]],
               complete: currentResults[event]['complete']
@@ -610,9 +608,9 @@ export class HomeComponent implements OnInit {
       let shapeClass = 'wmm-circle ';
       let iconClasses = ' wmm-icon-circle wmm-icon-white ';
       let sizeClass = 'wmm-size-25';
-      if (marker['event_diagnoses'][0] !== undefined) {
+      if (marker['eventdiagnoses'][0] !== undefined) {
         // set color of marker based on diagnosis type
-        switch (marker['event_diagnoses'][0].diagnosis_type) {
+        switch (marker['eventdiagnoses'][0].diagnosis_type) {
           case 1: {
             colorClass = 'wmm-green';
             break;

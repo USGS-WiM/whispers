@@ -24,6 +24,6 @@ export interface EventDetail extends History {
     quality_check: boolean;
     public: boolean;
     superevents: SuperEvent[];
-    event_diagnoses: EventDiagnosis[];
-    event_locations: EventLocation[];
+    eventdiagnoses: EventDiagnosis[];
+    eventlocations: EventLocation[];
 }

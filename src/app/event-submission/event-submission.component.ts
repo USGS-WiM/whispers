@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import { DatePipe } from '@angular/common';
@@ -10,12 +10,16 @@ import { map } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MatBottomSheetModule, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
 
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
+
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 
 import { MatSnackBar } from '@angular/material';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
+
+import { CurrentUserService } from '@services/current-user.service';
 
 import { EventType } from '@interfaces/event-type';
 import { EventTypeService } from '@app/services/event-type.service';
@@ -62,7 +66,13 @@ import { CommentTypeService } from '@services/comment-type.service';
 import { Organization } from '@interfaces/organization';
 import { OrganizationService } from '@services/organization.service';
 
+import { Staff } from '@interfaces/staff';
+import { StaffService } from '@services/staff.service';
+
 import { EventService } from '@app/services/event.service';
+
+import { EventStatus } from '@interfaces/event-status';
+import { EventStatusService } from '@services/event-status.service';
 
 import { CreateContactComponent } from '@create-contact/create-contact.component';
 import { CreateContactService } from '@create-contact/create-contact.service';
@@ -72,6 +82,7 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 import { AddSpeciesDiagnosisComponent } from '@app/add-species-diagnosis/add-species-diagnosis.component';
 
 import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
+import { EventSubmissionSuccessComponent } from '@app/event-submission/event-submission-success/event-submission-success.component';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
 import * as search_api from 'usgs-search-api';
@@ -85,23 +96,29 @@ declare const search_api: search_api;
   styleUrls: ['./event-submission.component.scss']
 })
 export class EventSubmissionComponent implements OnInit, AfterViewInit {
+  @ViewChild('stepper') stepper: MatStepper;
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
+  submitSuccessDialogRef: MatDialogRef<EventSubmissionSuccessComponent>;
 
   eventSubmitConfirm: MatBottomSheetRef<EventSubmissionConfirmComponent>;
 
   private subscription: Subscription;
   createdContact;
 
+  currentUser;
+
   eventTypes: EventType[];
   legalStatuses: LegalStatus[];
+  eventStatuses: EventStatus[];
   landOwnerships: LandOwnership[];
   diagnoses: Diagnosis[];
 
   countries: Country[];
+  staff: Staff[];
 
   adminLevelOnes: AdministrativeLevelOne[];
   // expermental, for autocomplete
@@ -109,11 +126,11 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   adminLevelTwos: AdministrativeLevelTwo[];
   // expermental, for autocomplete
-  //filteredAdminLevelTwos: Observable<any[]>;
+  // filteredAdminLevelTwos: Observable<any[]>;
 
   //////////////////////////////////////////////
   species: Species[];
-  //filteredSpecies: Observable<Species[]>[] = [];
+  // filteredSpecies: Observable<Species[]>[] = [];
 
   filteredSpecies = [];
   eventLocationSpecies: Observable<any[]>[] = [];
@@ -156,6 +173,13 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       complete: false,
       event_status: 1,
       public: [true, Validators.required],
+      // NWHC only
+      staff: null,
+      status: null,
+      quality_check: null,
+      legal_status: null,
+      legal_number: '',
+      // end NWHC only
       new_organizations: null,
       new_event_diagnoses: this.formBuilder.array([]),
       new_comments: this.formBuilder.array([]),
@@ -175,6 +199,8 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private bottomSheet: MatBottomSheet,
+    private currentUserService: CurrentUserService,
+    // private matStepper: MatStepper,
     private datePipe: DatePipe,
     private eventTypeService: EventTypeService,
     private legalStatusService: LegalStatusService,
@@ -192,9 +218,15 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     private contactService: ContactService,
     private createContactSevice: CreateContactService,
     private eventService: EventService,
+    private eventStatusService: EventStatusService,
+    private staffService: StaffService,
     public snackBar: MatSnackBar
   ) {
     this.buildEventSubmissionForm();
+
+    currentUserService.currentUser.subscribe(user => {
+      this.currentUser = user;
+    });
 
     this.subscription = this.createContactSevice.getCreatedContact().subscribe(
       createdContact => {
@@ -266,8 +298,11 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       {
         data: {
           title: 'Remove Event Location',
+          titleIcon: 'remove_circle',
           message: 'Are you sure you want to remove the event location?',
-          confirmButtonText: 'Remove'
+          messageIcon: '',
+          confirmButtonText: 'Remove',
+          showCancelButton: true
         }
       }
     );
@@ -292,8 +327,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   // to do dynamic filteredSpecies arrays for each loc species instance. Not working - select displays "[Object oject]" instead of name. Not sure yet if this approach is going to work
   ManageSpeciesControl(eventLocationIndex: number, locationSpeciesIndex: number) {
     // tslint:disable-next-line:max-line-length
-    const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species') as FormArray;
+    const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species') as FormArray;
     this.filteredSpecies[eventLocationIndex][locationSpeciesIndex] = arrayControl.at(locationSpeciesIndex).get('species').valueChanges
+    this.filteredSpecies[locationSpeciesIndex] = arrayControl.at(locationSpeciesIndex).get('species').valueChanges
       .startWith(null)
       .map(val => this.filter(val, this.species, 'name'));
     // .pipe(
@@ -353,7 +389,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         }
       );
 
-    // get legal statues from the LegalStatusService
+    // get legal statuses from the LegalStatusService
     this.legalStatusService.getLegalStatuses()
       .subscribe(
         legalStatuses => {
@@ -364,11 +400,28 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         }
       );
 
+    // get event record statuses from the EventStatusService
+    this.eventStatusService.getEventStatuses()
+      .subscribe(
+        eventStatuses => {
+          this.eventStatuses = eventStatuses;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+
     // get diagnoses from the diagnoses service
     this.diagnosisService.getDiagnoses()
       .subscribe(
         (diagnoses) => {
           this.diagnoses = diagnoses;
+          this.diagnoses.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
         },
         error => {
           this.errorMessage = <any>error;
@@ -380,6 +433,11 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       .subscribe(
         landOwnerships => {
           this.landOwnerships = landOwnerships;
+          this.landOwnerships.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
         },
         error => {
           this.errorMessage = <any>error;
@@ -391,6 +449,22 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       .subscribe(
         countries => {
           this.countries = countries;
+          this.countries.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get staff members from the staffService
+    this.staffService.getStaff()
+      .subscribe(
+        staff => {
+          this.staff = staff;
         },
         error => {
           this.errorMessage = <any>error;
@@ -429,7 +503,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
           // line below is copied from search dialog component, but does not work here.
           //this.filteredSpecies = this.eventSubmissionForm.get('species').valueChanges
           // line below is does not work, but is the beginning of the solution.
-          // this.filteredSpecies = this.eventSubmissionForm.controls.new_event_locations.get('location_species').get('species').valueChanges
+          // this.filteredSpecies = this.eventSubmissionForm.controls.new_event_locations.get('new_location_species').get('species').valueChanges
           //   .startWith(null)
           //   .map(val => this.filter(val, this.species, 'name'));
         },
@@ -543,7 +617,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         break;
       case 'species':
         const speciesArray =
-          <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species');
+          <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
         const species = speciesArray.controls[objectInstanceIndex];
         this.commonEventData.species.push(this.formBuilder.group({
           species: species.value.species,
@@ -563,7 +637,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         for (let i = 0, j = eventLocations.length; i < j; i++) {
 
           if (i !== eventLocationIndex) {
-            const locationSpecies = eventLocations[i].get('location_species');
+            const locationSpecies = eventLocations[i].get('new_location_species');
 
             // push a new formGroup to the locationSpecies formArray, with the same species value but all other controls null/blank
             // note: to copy the entire formGroup value, change line below to 'locationSpecies.push(species)'
@@ -608,7 +682,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       environmental_factors: '',
       clinical_signs: '',
       comment: '',
-      location_species: this.formBuilder.array([
+      new_location_species: this.formBuilder.array([
         this.initLocationSpecies()
       ]),
       location_contacts: this.formBuilder.array([
@@ -629,14 +703,13 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       captive: false,
       age_bias: null,
       sex_bias: null,
-      species_diagnoses: this.formBuilder.array([])
+      new_species_diagnoses: this.formBuilder.array([])
     });
   }
 
   initSpeciesDiagnosis() {
     return this.formBuilder.group({
-      //diagnosis: [null, Validators.required],
-      diagnosis: null,
+      diagnosis: [null, Validators.required],
       diagnosis_cause: null,
       diagnosis_basis: null,
       suspect: false,
@@ -688,7 +761,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     if (this.commonEventData.species.length > 0) {
 
       for (const species of this.commonEventData.species) {
-        const locationSpecies = <FormArray>newEventLocation.get('location_species');
+        const locationSpecies = <FormArray>newEventLocation.get('new_location_species');
         locationSpecies.push(species);
       }
     }
@@ -759,7 +832,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   // location species
   addLocationSpecies(eventLocationIndex) {
-    const controls = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species');
+    const controls = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
     controls.push(this.initLocationSpecies());
 
     const locationSpeciesIndex = controls.length - 1;
@@ -768,33 +841,33 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   }
 
   removeLocationSpecies(eventLocationIndex, locationSpeciesIndex) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
     control.removeAt(locationSpeciesIndex);
   }
 
   getLocationSpecies(form) {
-    return form.controls.location_species.controls;
+    return form.controls.new_location_species.controls;
   }
 
   // species diagnosis
   // TODO: add an additional level of index
   addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex) {
     // tslint:disable-next-line:max-line-length
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species')['controls'][locationSpeciesIndex].get('species_diagnoses');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
     control.push(this.initSpeciesDiagnosis());
     // tslint:disable-next-line:max-line-length
-    const speciesDiagnosisIndex = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species')['controls'][locationSpeciesIndex].get('species_diagnoses').length - 1;
+    const speciesDiagnosisIndex = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses').length - 1;
     return speciesDiagnosisIndex;
   }
 
   removeSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex) {
     // tslint:disable-next-line:max-line-length
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species')['controls'][locationSpeciesIndex].get('species_diagnoses');
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
     control.removeAt(speciesDiagnosisIndex);
   }
 
   getSpeciesDiagnoses(form) {
-    return form.controls.species_diagnoses.controls;
+    return form.controls.new_species_diagnoses.controls;
   }
 
 
@@ -896,8 +969,8 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
           // tslint:disable-next-line:max-line-length
           this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventLocationIndex]
-            .get('location_species')['controls'][speciesDiagnosisObj.locationSpeciesIndex]
-            .get('species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
+            .get('new_location_species')['controls'][speciesDiagnosisObj.locationSpeciesIndex]
+            .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
               diagnosis: speciesDiagnosisObj.formValue.diagnosis,
               diagnosis_cause: speciesDiagnosisObj.formValue.diagnosis_cause,
               diagnosis_basis: speciesDiagnosisObj.formValue.diagnosis_basis,
@@ -918,6 +991,15 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   }
 
+  resetStepper() {
+    this.eventSubmissionForm.reset();
+    this.eventSubmissionForm.get('new_event_locations')['controls'][0].get('country').setValue(APP_UTILITIES.DEFAULT_COUNTRY_ID);
+    this.eventSubmissionForm.markAsUntouched();
+    this.eventSubmissionForm.markAsPristine();
+    this.stepper.selectedIndex = 0;
+    window.scrollTo(0, 0);
+  }
+
 
   submitEvent(formValue) {
 
@@ -931,7 +1013,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     //   }
     // }
 
-    // convert start_date and end_date of event_locations to 'yyyy-MM-dd' before submission
+    // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
     // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
     for (const event_location of formValue.new_event_locations) {
       event_location.start_date = this.datePipe.transform(event_location.start_date, 'yyyy-MM-dd');
@@ -942,8 +1024,51 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       .subscribe(
         (event) => {
           this.submitLoading = false;
-          this.openSnackBar('Event successfully created', 'OK', 8000);
-          this.eventSubmissionForm.reset();
+
+
+
+          this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+            {
+              data: {
+                title: 'Event Saved',
+                titleIcon: 'check',
+                message: 'Your event was successfully saved. The Event ID is ' + event.id,
+                messageIcon: 'check',
+                confirmButtonText: 'OK',
+                showCancelButton : true
+              }
+            }
+          );
+
+          // when user clicks OK, reset the form and stepper using resetStepper()
+          this.confirmDialogRef.afterClosed().subscribe(result => {
+            if (result === true) {
+              alert('event saved OKed');
+              this.resetStepper();
+            }
+          });
+
+          // open event save success dialog
+          // this.submitSuccessDialogRef = this.dialog.open(EventSubmissionSuccessComponent,
+          //   {
+          //     data: {
+          //       title: 'Event Saved',
+          //       message: 'Your event was successfully saved. The Event ID is ' + event.id,
+          //       confirmButtonText: 'OK'
+          //     }
+          //   }
+          // );
+
+          // // when user clicks OK, reset the form and stepper using resetStepper()
+          // this.submitSuccessDialogRef.afterClosed().subscribe(result => {
+          //   if (result === true) {
+          //     alert('event saved OKed');
+          //     this.resetStepper();
+          //   }
+          // });
+          // use these below if using the success dialog above does not work or is unused.
+          //this.openSnackBar('Event successfully created', 'OK', 8000);
+          //this.resetStepper();
         },
         error => {
           this.submitLoading = false;

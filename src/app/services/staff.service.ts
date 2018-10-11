@@ -7,24 +7,25 @@ import 'rxjs/add/operator/catch';
 import { Subject } from 'rxjs/Subject';
 
 import { APP_SETTINGS } from '@app/app.settings';
+import { APP_UTILITIES } from '@app/app.utilities';
 
-import { EventStatus } from '@interfaces/event-status';
+import { Staff } from '@interfaces/staff';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EventStatusService {
+export class StaffService {
 
-  constructor(private _http: Http) { }
+  constructor(private http: Http) { }
 
-  public getEventStatuses(): Observable<EventStatus[]> {
+  public getStaff(): Observable<Staff[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.JSON_HEADERS
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.EVENT_STATUSES_URL + '?no_page', options)
-      .map((response: Response) => <EventStatus[]>response.json())
+    return this.http.get(APP_SETTINGS.STAFF_URL +  '?no_page', options)
+      .map((response: Response) => <Staff[]>response.json())
       .catch(this.handleError);
   }
 
@@ -32,5 +33,4 @@ export class EventStatusService {
     console.error(error);
     return Observable.throw(error.json().error || 'Server error');
   }
-
 }

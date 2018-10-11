@@ -33,16 +33,15 @@
                   <td>{{eventData.affected_count}}</td>
                 </tr>
                 <tr>
-                  <th [attr.rowspan]="eventData.event_diagnoses.length + 1 ">Diagnosis</th>
-                  <!-- <td *ngFor="let diagnosis of eventData.event_diagnosis">{{diagnosis.diagnosis_string}}</td> -->
+                  <th [attr.rowspan]="eventData.eventdiagnoses.length + 1 ">Diagnosis</th>
                 </tr>
-                <tr *ngFor="let diagnosis of eventData.event_diagnoses" class="noBorder">
+                <tr *ngFor="let diagnosis of eventData.eventdiagnoses" class="noBorder">
                   <td>{{diagnosis.diagnosis_string}}</td>
                 </tr>
                 <tr>
-                  <th [attr.rowspan]="eventData.event_locations.length + 1 ">Locations</th>
+                  <th [attr.rowspan]="eventData.eventlocations.length + 1 ">Locations</th>
                 </tr>
-                <tr *ngFor="let eventLocation of eventData.event_locations">
+                <tr *ngFor="let eventLocation of eventData.eventlocations">
                   <td>{{eventLocation.administrative_level_two_string}},
                     {{eventLocation.administrative_level_one_string}}
                     <br>{{eventLocation.country_string}} <br><span class="text-italic"><span>{{eventLocation.start_date
@@ -63,7 +62,7 @@
                     <th>Phone</th>
                   </tr>
 
-                  <tr *ngFor="let eventOrganization of eventData.event_organizations">
+                  <tr *ngFor="let eventOrganization of eventData.eventorganizations">
                     <td>{{eventOrganization.name}}</td>
                     <td>{{eventOrganization.address_one}} {{eventOrganization.address_two}} ,
                       {{eventOrganization.city}} {{eventOrganization.administrative_level_one |
@@ -108,20 +107,20 @@
                       <td>{{loc_species.age_bias | displayValue:'name':this.ageBiases}}</td>
                       <td>{{loc_species.sex_bias | displayValue:'name':this.sexBiases}}</td>
                       <td>
-                        <span *ngIf="loc_species.species_diagnosis.length > 0">
-                          <span *ngFor="let species_diagnosis of loc_species.species_diagnosis">
-                            <span class="text-bold" *ngIf="species_diagnosis">{{species_diagnosis.diagnosis_string}}</span>
+                        <span *ngIf="loc_species.speciesdiagnoses.length > 0">
+                          <span *ngFor="let speciesdiagnosis of loc_species.speciesdiagnoses">
+                            <span class="text-bold" *ngIf="speciesdiagnosis">{{speciesdiagnosis.diagnosis_string}}</span>
                             <br>
-                            <span *ngIf="species_diagnosis.causal">(Causal)</span>
+                            <span *ngIf="speciesdiagnosis.causal">(Causal)</span>
                             <br>
-                            <span>{{species_diagnosis.tested_count}} specimens tested |</span>
-                            <span>{{species_diagnosis.positive_count}} positive</span>
+                            <span>{{speciesdiagnosis.tested_count}} specimens tested |</span>
+                            <span>{{speciesdiagnosis.positive_count}} positive</span>
                             <br>
-                            <span *ngIf="species_diagnosis.organizations_string"> by
-                              {{species_diagnosis.organizations_string[0]}}</span>
+                            <span *ngIf="speciesdiagnosis.organizations_string"> by
+                              {{speciesdiagnosis.organizations_string[0]}}</span>
                           </span>
                         </span>
-                        <span *ngIf="loc_species.species_diagnosis.length === 0">Not assessed</span>
+                        <span *ngIf="loc_species.speciesdiagnoses.length === 0">Not assessed</span>
                       </td>
                     </tr>
                   </table>
@@ -223,7 +222,7 @@
                 <p>
                   <mat-card-subtitle>Event Location Details</mat-card-subtitle>
 
-                  <mat-expansion-panel *ngFor="let eventLocation of eventData.event_locations; let i = index"
+                  <mat-expansion-panel *ngFor="let eventLocation of eventData.eventlocations; let i = index"
                     [attr.data-index]="i" (change)="panelDataChange()">
                     <mat-expansion-panel-header>
                       <mat-panel-title>
@@ -249,17 +248,17 @@
                       </div>
 
                       <div class="event-detail-action-bar-left">
-                        <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEventLocation(eventData.event_locations[i])"
+                        <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEventLocation(eventData.eventlocations[i])"
                           [disabled]="!eventData.permissions.update">
                           <i class="material-icons">edit</i> Edit Event Location Details</button>
-                        <button mat-raised-button color="warn" class="event-detail-action-button" (click)="openEventLocationDeleteConfirm(eventData.event_locations[i].id)"
+                        <button mat-raised-button color="warn" class="event-detail-action-button" (click)="openEventLocationDeleteConfirm(eventData.eventlocations[i].id)"
                           [disabled]="!eventData.permissions.destroy">
                           <i class="material-icons">delete</i> Delete Event Location</button>
                       </div>
                       <p>
-                        <div *ngIf="eventLocation.location_species.length > 0">
+                        <div *ngIf="eventLocation.locationspecies.length > 0">
 
-                          <label *ngIf="eventLocation.location_species" class="event-detail-label">Species</label>
+                          <label *ngIf="eventLocation.locationspecies" class="event-detail-label">Species</label>
                           <br />
 
                           <div class="event-detail-action-bar-left">
@@ -276,7 +275,7 @@
 
                           <div class="results-table-div">
 
-                            <mat-table [dataSource]="eventLocation.location_species" matSort matSortActive="species"
+                            <mat-table [dataSource]="eventLocation.locationspecies" matSort matSortActive="species"
                               matSortDirection="asc">
 
                               <div>
@@ -370,9 +369,9 @@
                                 <ng-container matColumnDef="diagnosis">
                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Diagnosis </mat-header-cell>
                                   <mat-cell *matCellDef="let loc_species">
-                                    <span *ngIf="loc_species.species_diagnosis">
+                                    <span *ngIf="loc_species.speciesdiagnoses">
                                       <ul class="table-cell-list">
-                                        <li *ngFor="let speciesDiagnosis of loc_species.species_diagnosis">{{speciesDiagnosis.diagnosis_string}}</li>
+                                        <li *ngFor="let speciesDiagnosis of loc_species.speciesdiagnoses">{{speciesDiagnosis.diagnosis_string}}</li>
                                       </ul>
                                       <!-- <span *ngFor="let speciesDiagnosis of loc_species.species_diagnosis">{{speciesDiagnosis.diagnosis_string}}<br></span> -->
                                     </span>

@@ -9,7 +9,9 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 })
 export class AboutComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public aboutDialogRef: MatDialogRef<AboutComponent>,
+  ) { }
 
   ngOnInit() {
   }

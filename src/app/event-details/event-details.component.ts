@@ -47,7 +47,7 @@ import { AgeBias } from '@interfaces/age-bias';
 })
 export class EventDetailsComponent implements OnInit {
 
-  //@ViewChild('speciesTable') table: any;
+  // @ViewChild('speciesTable') table: any;
   eventID: string;
   map;
   icon;
@@ -163,22 +163,22 @@ export class EventDetailsComponent implements OnInit {
           (eventdetails) => {
             this.eventData = eventdetails;
 
-            for (const event_location of this.eventData.event_locations) {
-              for (const location_species of event_location.location_species) {
-                location_species.administrative_level_two_string = event_location.administrative_level_two_string;
-                location_species.administrative_level_one_string = event_location.administrative_level_one_string;
-                location_species.country_string = event_location.country_string;
-                this.eventLocationSpecies.push(location_species);
+            for (const event_location of this.eventData.eventlocations) {
+              for (const locationspecies of event_location.locationspecies) {
+                locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
+                locationspecies.administrative_level_one_string = event_location.administrative_level_one_string;
+                locationspecies.country_string = event_location.country_string;
+                this.eventLocationSpecies.push(locationspecies);
 
-                for (const species_diagnosis of location_species.species_diagnosis) {
-                  if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', species_diagnosis.diagnosis)) {
-                    this.possibleEventDiagnoses.push(species_diagnosis);
+                for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                  if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
+                    this.possibleEventDiagnoses.push(speciesdiagnosis);
                   }
                 }
               }
             }
 
-            for (let i = 0; i < this.eventData.event_locations.length; i++) {
+            for (let i = 0; i < this.eventData.eventlocations.length; i++) {
               this.selection[i] = new SelectionModel<LocationSpecies>(allowMultiSelect, initialSelection);
             }
 
@@ -340,9 +340,9 @@ export class EventDetailsComponent implements OnInit {
 
       this.map.on('overlayremove', (e) => {
         console.log('overlayremove');
-        if (e.name == 'Flyways') {
+        if (e.name === 'Flyways') {
           this.flywaysVisible = false;
-        } else if (e.name == 'Watersheds (HUC 2)') {
+        } else if (e.name === 'Watersheds (HUC 2)') {
           this.watershedsVisible = false;
         }
       });
@@ -369,7 +369,7 @@ export class EventDetailsComponent implements OnInit {
 
     const markers = [];
     this.unMappables = [];
-    for (const eventlocation of eventData.event_locations) {
+    for (const eventlocation of eventData.eventlocations) {
       markers.push(eventlocation);
     }
 
@@ -421,12 +421,12 @@ export class EventDetailsComponent implements OnInit {
                 this.eventData = eventdetails;
 
                 this.eventLocationSpecies = [];
-                for (const event_location of this.eventData.event_locations) {
-                  for (const location_species of event_location.location_species) {
-                    location_species.administrative_level_two_string = event_location.administrative_level_two_string;
-                    location_species.administrative_level_one_string = event_location.administrative_level_one_string;
-                    location_species.country_string = event_location.country_string;
-                    this.eventLocationSpecies.push(location_species);
+                for (const event_location of this.eventData.eventlocations) {
+                  for (const locationspecies of event_location.locationspecies) {
+                    locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
+                    locationspecies.administrative_level_one_string = event_location.administrative_level_one_string;
+                    locationspecies.country_string = event_location.country_string;
+                    this.eventLocationSpecies.push(locationspecies);
                   }
                 }
 
@@ -567,12 +567,12 @@ export class EventDetailsComponent implements OnInit {
           this.eventData = eventdetails;
 
           this.eventLocationSpecies = [];
-          for (const event_location of this.eventData.event_locations) {
-            for (const location_species of event_location.location_species) {
-              location_species.administrative_level_two_string = event_location.administrative_level_two_string;
-              location_species.administrative_level_one_string = event_location.administrative_level_one_string;
-              location_species.country_string = event_location.country_string;
-              this.eventLocationSpecies.push(location_species);
+          for (const event_location of this.eventData.eventlocations) {
+            for (const locationspecies of event_location.locationspecies) {
+              locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
+              locationspecies.administrative_level_one_string = event_location.administrative_level_one_string;
+              locationspecies.country_string = event_location.country_string;
+              this.eventLocationSpecies.push(locationspecies);
             }
 
           }
@@ -638,7 +638,7 @@ export class EventDetailsComponent implements OnInit {
       this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
     } else if (this.selection[index].selected.length === 1) {
       // Open dialog for adding event diagnosis
-      if (this.selection[index].selected[0].species_diagnosis[0] !== undefined) {
+      if (this.selection[index].selected[0].speciesdiagnoses[0] !== undefined) {
         this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
           data: {
             species: this.selection[index].selected[0],

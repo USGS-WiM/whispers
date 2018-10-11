@@ -329,7 +329,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     // tslint:disable-next-line:max-line-length
     const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species') as FormArray;
     this.filteredSpecies[eventLocationIndex][locationSpeciesIndex] = arrayControl.at(locationSpeciesIndex).get('species').valueChanges
-    this.filteredSpecies[locationSpeciesIndex] = arrayControl.at(locationSpeciesIndex).get('species').valueChanges
       .startWith(null)
       .map(val => this.filter(val, this.species, 'name'));
     // .pipe(

@@ -115,7 +115,8 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   species: Species[];
   //filteredSpecies: Observable<Species[]>[] = [];
 
-  filteredSpecies: Observable<any[]>[] = [];
+  filteredSpecies = [];
+  eventLocationSpecies: Observable<any[]>[] = [];
   ///////////////////////////////////////////////////////
 
   sexBiases: SexBias[];
@@ -165,6 +166,8 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
 
     this.eventLocationArray = this.eventSubmissionForm.get('new_event_locations') as FormArray;
+    let eventLocationSpecies = new Array<Observable<any>>();
+    this.filteredSpecies.push(eventLocationSpecies);
     this.ManageSpeciesControl(0, 0);
   }
 
@@ -290,7 +293,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   ManageSpeciesControl(eventLocationIndex: number, locationSpeciesIndex: number) {
     // tslint:disable-next-line:max-line-length
     const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_species') as FormArray;
-    this.filteredSpecies[locationSpeciesIndex] = arrayControl.at(locationSpeciesIndex).get('species').valueChanges
+    this.filteredSpecies[eventLocationIndex][locationSpeciesIndex] = arrayControl.at(locationSpeciesIndex).get('species').valueChanges
       .startWith(null)
       .map(val => this.filter(val, this.species, 'name'));
     // .pipe(
@@ -306,14 +309,17 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     const realval = val && typeof val === 'object' ? val[searchProperty] : val;
     const result = [];
     let lastOption = null;
-    for (let i = 0; i < searchArray.length; i++) {
-      if (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase())) {
-        if (searchArray[i][searchProperty] !== lastOption) {
-          lastOption = searchArray[i][searchProperty];
-          result.push(searchArray[i]);
+    if (searchArray !== undefined) {
+      for (let i = 0; i < searchArray.length; i++) {
+        if (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase())) {
+          if (searchArray[i][searchProperty] !== lastOption) {
+            lastOption = searchArray[i][searchProperty];
+            result.push(searchArray[i]);
+          }
         }
       }
     }
+    
     // this will return all records matching the val string
     return result;
   }
@@ -686,6 +692,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         locationSpecies.push(species);
       }
     }
+
+    let eventLocationSpecies = new Array<Observable<any>>();
+    this.filteredSpecies.push(eventLocationSpecies);
+    this.ManageSpeciesControl(newEventLocationIndex, 0);
 
     if (this.commonEventData.contacts.length > 0) {
 

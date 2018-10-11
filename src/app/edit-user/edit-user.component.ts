@@ -67,9 +67,38 @@ export class EditUserComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit(formValue) {
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
 
-    this.userService
+  updateUser(formValue) {
+
+    const userUpdates = {
+      id: formValue.id,
+      first_name: formValue.first_name,
+      last_name: formValue.last_name,
+      password: formValue.password
+    };
+
+    // if no value present in password, delete that from the object for patching
+    if (formValue.password === '') {
+      delete userUpdates.password;
+    }
+
+    this.userService.updateUser(userUpdates)
+      .subscribe(
+        (event) => {
+          this.submitLoading = false;
+          this.openSnackBar('Your user details were updated', 'OK', 5000);
+          this.editUserDialogRef.close();
+        },
+        error => {
+          this.submitLoading = false;
+          this.openSnackBar('Error. Update not completed. Error message: ' + error, 'OK', 8000);
+        }
+      );
 
   }
 

@@ -314,6 +314,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
   }
 
+  displayFn(species?: Species): string | undefined {
+    return species ? species.name : undefined;
+  }
+
 
   ////////////////////////////////////////////// Begin WIP
 

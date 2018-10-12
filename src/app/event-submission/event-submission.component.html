@@ -461,7 +461,7 @@
                                     <mat-form-field>
                                       <input type="text" matInput placeholder="Species" aria-label="Species" [matAutocomplete]="speciesAutoComplete" formControlName="species">
                                       <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn">
-                                        <mat-option *ngFor="let species of filteredSpecies[eventLocationIndex][locationSpeciesIndex] | async" [value]="species">
+                                        <mat-option *ngFor="let species of filteredSpecies[eventLocationIndex][locationSpeciesIndex] | async" [value]="species.id">
                                           <span>{{species.name}}</span>
                                         </mat-option>
                                       </mat-autocomplete>

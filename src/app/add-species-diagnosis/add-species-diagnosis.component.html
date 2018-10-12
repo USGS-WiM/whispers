@@ -3,17 +3,19 @@
 <mat-dialog-content>
   <form [formGroup]="addSpeciesDiagnosisForm">
 
-    <div *ngIf="species"><h3><b>{{species}} at {{administrative_level_two}}, {{administrative_level_one}}</b></h3></div>
+    <div *ngIf="species">
+      <h3><b>{{species}} at {{administrative_level_two}}, {{administrative_level_one}}</b></h3>
+    </div>
 
     <p>
 
       <div class="vertical-form-container">
 
-
         <mat-form-field class="form-control">
           <mat-select placeholder="Species Diagnosis" formControlName="diagnosis">
             <mat-option>--</mat-option>
-            <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}} ({{diagnosis.diagnosis_type_string}})</mat-option>
+            <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}
+              ({{diagnosis.diagnosis_type_string}})</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -47,7 +49,7 @@
           </mat-form-field>
         </div>
 
-        <div class="horizontal-form-container" class="species-controls-container">
+        <!-- <div class="horizontal-form-container" class="species-controls-container">
           <mat-form-field class="species-number-control">
             <input matInput placeholder="Number Confirmed" type="number" formControlName="positive_count">
             <mat-hint align="end" matTooltip="Public field">
@@ -61,7 +63,7 @@
               <mat-icon>public</mat-icon>
             </mat-hint>
           </mat-form-field>
-        </div>
+        </div> -->
 
         <mat-form-field class="form-control">
           <mat-select placeholder="Diagnosing Lab" formControlName="organizations">
@@ -71,7 +73,7 @@
         </mat-form-field>
 
         <mat-checkbox formControlName="suspect">Species Diagnosis Suspect</mat-checkbox>
-        <mat-checkbox formControlName="pooled">Pooled Test</mat-checkbox>
+        <!-- <mat-checkbox formControlName="pooled">Pooled Test</mat-checkbox> -->
 
       </div>
 
@@ -79,7 +81,11 @@
 </mat-dialog-content>
 <mat-dialog-actions>
 
-  <button mat-button color="warn" (click)="this.addSpeciesDiagnosisDialogRef.close('cancel');"><mat-icon>cancel</mat-icon>&nbsp;Cancel</button>
-  <button mat-button color="primary" type="submit" [disabled]="addSpeciesDiagnosisForm.invalid" (click)="onSubmit(addSpeciesDiagnosisForm.value)"><mat-icon>send</mat-icon>{{action_button_text}}</button>
+  <button mat-button color="warn" (click)="this.addSpeciesDiagnosisDialogRef.close('cancel');">
+    <mat-icon>cancel</mat-icon>&nbsp;Cancel
+  </button>
+  <button mat-button color="primary" type="submit" [disabled]="addSpeciesDiagnosisForm.invalid" (click)="onSubmit(addSpeciesDiagnosisForm.value)">
+    <mat-icon>send</mat-icon>{{action_button_text}}
+  </button>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

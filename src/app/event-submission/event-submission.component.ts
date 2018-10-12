@@ -86,6 +86,7 @@ import { EventSubmissionSuccessComponent } from '@app/event-submission/event-sub
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
 import * as search_api from 'usgs-search-api';
+import { ServiceRequestService } from '@app/services/service-request.service';
 
 declare const search_api: search_api;
 
@@ -149,6 +150,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   errorMessage;
 
   eventSubmissionForm: FormGroup;
+  serviceRequestForm: FormGroup;
 
   eventLocationArray: FormArray;
   locationContactsArray: FormArray;
@@ -190,17 +192,23 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
 
     this.eventLocationArray = this.eventSubmissionForm.get('new_event_locations') as FormArray;
-    let eventLocationSpecies = new Array<Observable<any>>();
+    const eventLocationSpecies = new Array<Observable<any>>();
     this.filteredSpecies.push(eventLocationSpecies);
     this.ManageSpeciesControl(0, 0);
   }
+
+  // buildServiceRequestForm() {
+  //   this.serviceRequestForm = this.formBuilder.group({
+  //     request_type: 0,
+  //     request_comments: this.formBuilder.array([]),
+  //   });
+  // }
 
   constructor(
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private bottomSheet: MatBottomSheet,
     private currentUserService: CurrentUserService,
-    // private matStepper: MatStepper,
     private datePipe: DatePipe,
     private eventTypeService: EventTypeService,
     private legalStatusService: LegalStatusService,
@@ -220,9 +228,11 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     private eventService: EventService,
     private eventStatusService: EventStatusService,
     private staffService: StaffService,
+    private serviceRequestService: ServiceRequestService,
     public snackBar: MatSnackBar
   ) {
     this.buildEventSubmissionForm();
+    //this.buildServiceRequestForm();
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
@@ -316,9 +326,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFn(speciesId?: Species): string | undefined {
     let species_id_match;
-    for (let i = 0; i < this["options"]._results.length-1; i++) {
-      if (this["options"]._results[i].value == speciesId) {
-        species_id_match = this["options"]._results[i].viewValue;
+    for (let i = 0; i < this['options']._results.length - 1; i++) {
+      if (this['options']._results[i].value === speciesId) {
+        species_id_match = this['options']._results[i].viewValue;
       }
     }
     return species_id_match;
@@ -364,7 +374,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         }
       }
     }
-    
+
     // this will return all records matching the val string
     return result;
   }
@@ -610,7 +620,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     switch (objectType) {
       case 'contact':
         const contactsArray =
-          <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_contacts');
+          <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
         const contact = contactsArray.controls[objectInstanceIndex];
         this.commonEventData.contacts.push(contact);
 
@@ -618,7 +628,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         for (let i = 0, j = eventLocations.length; i < j; i++) {
 
           if (i !== eventLocationIndex) {
-            const locationContacts = eventLocations[i].get('location_contacts');
+            const locationContacts = eventLocations[i].get('new_location_contacts');
             locationContacts.push(contact);
           }
         }
@@ -694,9 +704,15 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       new_location_species: this.formBuilder.array([
         this.initLocationSpecies()
       ]),
-      location_contacts: this.formBuilder.array([
+      new_location_contacts: this.formBuilder.array([
         this.initLocationContacts()
-      ])
+      ]),
+      new_service_request: this.formBuilder.group({
+        request_type: null,
+        service_request_comments: this.formBuilder.array([
+          this.initLocationComments()
+        ]),
+      })
     });
   }
 
@@ -758,6 +774,13 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
   }
 
+  initServiceRequests() {
+    return this.formBuilder.group({
+      request_type: 0,
+      request_comments: this.formBuilder.array([])
+    });
+  }
+
   // event locations
   addEventLocation() {
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations');
@@ -782,7 +805,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     if (this.commonEventData.contacts.length > 0) {
 
       for (const contact of this.commonEventData.contacts) {
-        const locationContacts = <FormArray>newEventLocation.get('location_contacts');
+        const locationContacts = <FormArray>newEventLocation.get('new_location_contacts');
         locationContacts.push(contact);
       }
     }
@@ -882,17 +905,19 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   // location contacts
   addLocationContacts(eventLocationIndex) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_contacts');
+    // tslint:disable-next-line:max-line-length
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
     control.push(this.initLocationContacts());
   }
 
   removeLocationContacts(eventLocationIndex, k) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('location_contacts');
+    // tslint:disable-next-line:max-line-length
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
     control.removeAt(k);
   }
 
   getLocationContacts(form) {
-    return form.controls.location_contacts.controls;
+    return form.controls.new_location_contacts.controls;
   }
 
   // location comments
@@ -1021,7 +1046,8 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     //     delete event_location.comment;
     //   }
     // }
-
+    // convert quality_check (date) to 'yyyy-MM-dd' before submission
+    formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');
     // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
     // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
     for (const event_location of formValue.new_event_locations) {
@@ -1034,8 +1060,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         (event) => {
           this.submitLoading = false;
 
-
-
           this.confirmDialogRef = this.dialog.open(ConfirmComponent,
             {
               data: {
@@ -1044,7 +1068,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
                 message: 'Your event was successfully saved. The Event ID is ' + event.id,
                 messageIcon: 'check',
                 confirmButtonText: 'OK',
-                showCancelButton : true
+                showCancelButton: true
               }
             }
           );

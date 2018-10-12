@@ -250,16 +250,7 @@ export class EventDetailsComponent implements OnInit {
       );
 
     setTimeout(() => {
-      // this.map = new L.Map('map', {
-      //   center: new L.LatLng(39.8283, -98.5795),
-      //   zoom: 4,
-      // });
-
-      // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      //   attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      // }).addTo(this.map);
-
-
+   
       const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
         '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
         'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',

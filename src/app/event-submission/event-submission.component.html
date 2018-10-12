@@ -204,12 +204,11 @@
 
                   <div *ngFor="let eventLocation of getEventLocations(eventSubmissionForm); let eventLocationIndex = index">
                     <!-- Begin repeating Event location markup-->
-
                     <mat-card class="event-location-card" [formGroupName]="eventLocationIndex">
                       <h3>Location {{eventLocationIndex+1}}</h3>
                       <mat-horizontal-stepper [linear]="false" #stepper linear>
 
-                        <!-- <mat-step [stepControl]="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('country').valid"> -->
+                        <!-- Event location details step -->
                         <mat-step [stepControl]="eventSubmissionForm">
 
                           <ng-template matStepLabel>Location Details</ng-template>
@@ -342,7 +341,9 @@
                           </div>
 
                         </mat-step>
+                        <!-- end Event location details step -->
 
+                        <!-- event location comments step -->
                         <mat-step [stepControl]="eventSubmissionForm">
                           <ng-template matStepLabel>Comments</ng-template>
 
@@ -428,22 +429,18 @@
                                       </button>
                                     </div>
                         </mat-step>
+                        <!--end event location comments step -->
 
+                        <!-- event location species step -->
                         <mat-step [stepControl]="eventSubmissionForm">
 
                           <ng-template matStepLabel>Species</ng-template>
                           <div>
 
-                            <!-- <h4>Species Affected</h4> -->
-                            <!-- <button mat-icon-button color="accent">
-                                    <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
-                                  </button> -->
                             <div formArrayName="new_location_species">
                               <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index">
 
                                 <div [formGroupName]="locationSpeciesIndex">
-
-                                  <!-- <div class="horizontal-form-container"></div> -->
 
                                   <div class="horizontal-form-container" class="species-controls-container">
 
@@ -456,12 +453,13 @@
                                       </mat-hint>
                                     </mat-form-field>-->
 
-
-                                    <!-- TODO: implement autocomplete for species later -->
-                                    <mat-form-field>
-                                      <input type="text" matInput placeholder="Species" aria-label="Species" [matAutocomplete]="speciesAutoComplete" formControlName="species">
+                                    <!-- Species autocomplete control -->
+                                    <mat-form-field class="form-control">
+                                      <input type="text" matInput placeholder="Species" aria-label="Species"
+                                        [matAutocomplete]="speciesAutoComplete" formControlName="species">
                                       <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn">
-                                        <mat-option *ngFor="let species of filteredSpecies[eventLocationIndex][locationSpeciesIndex] | async" [value]="species.id">
+                                        <mat-option *ngFor="let species of filteredSpecies[eventLocationIndex][locationSpeciesIndex] | async"
+                                          [value]="species.id">
                                           <span>{{species.name}}</span>
                                         </mat-option>
                                       </mat-autocomplete>
@@ -590,7 +588,9 @@
                             </div>
 
                         </mat-step>
+                        <!-- end event location species step -->
 
+                        <!-- event location contacts step -->
                         <mat-step [stepControl]="eventSubmissionForm">
 
                           <ng-template matStepLabel>Contacts</ng-template>
@@ -605,7 +605,7 @@
                             </div>
                           </div>
 
-                          <div formArrayName="location_contacts">
+                          <div formArrayName="new_location_contacts">
                             <div class="contacts-container" *ngFor="let locationContacts of getLocationContacts(eventLocation); let k = index">
 
                               <div class="horizontal-form-container contact-controls-container" [formGroupName]="k">
@@ -660,11 +660,13 @@
                           </div>
 
                         </mat-step>
+                        <!-- end event location contacts step -->
 
+                        <!-- Services Request step -->
                         <mat-step [stepControl]="eventSubmissionForm">
                           <ng-template matStepLabel>Service Request</ng-template>
 
-                          <div>
+                          <div formGroupName="new_service_request">
                             <h3>
                               Specimen Consultation and Diagnostic Services Request &nbsp;&nbsp;&nbsp;&nbsp;
                               <strong>
@@ -676,14 +678,17 @@
                               location.
                             </h4>
 
-                            <mat-radio-group>
+                            <!-- <form> -->
+                            <mat-radio-group formControlName="request_type">
                               <mat-radio-button value="1">Request diagnostic and consultative services
                               </mat-radio-button>
                               <p>
                                 <mat-radio-button value="2">Request consultative services ONLY </mat-radio-button>
                                 <p>
-                                  <mat-radio-button value="3">Request no services </mat-radio-button>
+                                  <mat-radio-button value="0">Request no services </mat-radio-button>
                             </mat-radio-group>
+                            <!-- </form> -->
+
                           </div>
 
                           <div>
@@ -695,7 +700,9 @@
                             </button>
                           </div>
                         </mat-step>
+                        <!-- End Services Request step -->
 
+                        <!-- Review step -->
                         <mat-step>
                           <ng-template matStepLabel>Review</ng-template>
 
@@ -727,7 +734,7 @@
                                   <span class="alert-text">Missing land ownership selection.</span>
                                 </mat-error>
                                 <p>
-                                  <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('location_contacts').invalid">
+                                  <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_contacts').invalid">
                                     <mat-icon class="icon">error</mat-icon>
                                     <span class="alert-text">Missing contact type selection.</span>
                                   </mat-error>
@@ -743,9 +750,9 @@
                                     </button>
                                   </div>
                         </mat-step>
+                        <!-- end Review step -->
 
                       </mat-horizontal-stepper>
-
 
                       <p>
                         <mat-divider [inset]="true"></mat-divider>
@@ -755,8 +762,6 @@
                           </button>
 
                     </mat-card>
-
-
                     <!-- End repeating Event location markup-->
                   </div>
 
@@ -824,25 +829,6 @@
               </mat-expansion-panel>
             </form>
             <!-- End event comments section-->
-
-            <mat-divider [inset]="true"></mat-divider>
-
-            <!-- Begin Specimen Submission Request section-->
-            <!-- <div>
-              <h4>
-                <mat-icon>assistant</mat-icon> Specimen Consultation and Diagnostic Services Request &nbsp;&nbsp;&nbsp;&nbsp;
-                <strong>
-                  <mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT</strong>
-              </h4>
-
-              <mat-radio-group>
-                <mat-radio-button value="1">Request diagnostic and consultative services </mat-radio-button>
-                <mat-radio-button value="2">Request consultative services ONLY </mat-radio-button>
-                <mat-radio-button value="3">Request no services </mat-radio-button>
-              </mat-radio-group>
-            </div>
-            <p> -->
-            <!-- End Specimen Submission Request section-->
 
             <mat-divider [inset]="true"></mat-divider>
 

@@ -297,80 +297,6 @@ export class HomeComponent implements OnInit {
             L.control.layers(baseMaps, overlays, { position: 'topleft' }).addTo(this.map);
             L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
-            // const legend = L.control({ position: 'bottomright' });
-
-            // legend.onAdd = function (map) {
-            //   const div = L.DomUtil.create('div', 'legend');
-            //   div.innerHTML = "<h3>Explanation</h3>" +
-            //     "<span><div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-green wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Bacteria</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-blue wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Fungus</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-red wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Nut/Met/Dev</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-orange wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Other</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-yellow wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Parasite</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-purple wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Toxin</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-sky wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Virus</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-mutedpink wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Trauma</label>" +
-            //     "</span>";
-
-            //     return div;
-            // };
-
-            // legend.addTo(this.map);
-
-
-            /*this.icon = L.icon({
-              iconUrl: '../../assets/icons/marker-icon.png',
-              shadowUrl: '../../assets/icons/marker-shadow.png',
-              iconSize: [25, 41],
-              iconAnchor: [13, 40],
-              popupAnchor: [0, -40]
-            });*/
-
             this.mapResults(this.currentResults);
 
             // begin latLngScale utility logic/////////////////////////////////////////////////////////////////////////////////////////
@@ -415,18 +341,18 @@ export class HomeComponent implements OnInit {
 
             this.map.on('overlayadd', (e) => {
               console.log('overlayadd');
-              if (e.name == "Flyways") {
+              if (e.name === 'Flyways') {
                 this.flywaysVisible = true;
-              } else if (e.name == "Watersheds (HUC 2)") {
+              } else if (e.name === 'Watersheds (HUC 2)') {
                 this.watershedsVisible = true;
               }
             });
 
             this.map.on('overlayremove', (e) => {
               console.log('overlayremove');
-              if (e.name == "Flyways") {
+              if (e.name === 'Flyways') {
                 this.flywaysVisible = false;
-              } else if (e.name == "Watersheds (HUC 2)") {
+              } else if (e.name === 'Watersheds (HUC 2)') {
                 this.watershedsVisible = false;
               }
             });

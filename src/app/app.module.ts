@@ -96,6 +96,7 @@ import { EventDetailsShareComponent } from './event-details/event-details-share/
 import { UserService } from '@services/user.service';
 import { EventSubmissionSuccessComponent } from './event-submission/event-submission-success/event-submission-success.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
+import { ServiceRequestService } from '@app/services/service-request.service';
 
 
 
@@ -199,6 +200,7 @@ import { EditUserComponent } from './edit-user/edit-user.component';
     SearchDialogService,
     UserService,
     LocationSpeciesDiagnosisService,
+    ServiceRequestService,
     DisplayValuePipe,
     DatePipe,
   ],

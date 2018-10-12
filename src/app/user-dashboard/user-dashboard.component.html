@@ -227,13 +227,9 @@
             <ng-container matColumnDef="eventdiagnoses">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Event Diagnosis </mat-header-cell>
               <mat-cell *matCellDef="let event">
-                <!--<span *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}
-                  <span *ngIf="(event.eventdiagnoses.indexOf(diagnosis)) < (event.eventdiagnoses.length - 1)">, </span>
-                </span>-->
-                <ul>
+                <ul *ngIf="event.eventdiagnoses !== null">
                   <li *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}</li>
                 </ul>
-                <span *ngIf="event.eventdiagnoses.length == 0">TBD</span>
               </mat-cell>
             </ng-container>
 

@@ -5,6 +5,7 @@
 
     <div class="vertical-form-container">
 
+      <h4>Update name</h4>
       <!-- First Name -->
       <mat-form-field class="form-control">
         <input matInput placeholder="First Name" formControlName="first_name">
@@ -15,6 +16,11 @@
         <input matInput placeholder="Last Name" formControlName="last_name">
       </mat-form-field>
 
+      <span class="text-smaller text-italic note">Note: Role, Organization and Email are not editable. Please contact
+        WHISPers administration for assistance with changes to these details.</span>
+
+      <h4>Change password</h4>
+
       <!-- Password -->
       <mat-form-field class="form-control">
         <input matInput type="password" placeholder="Password" formControlName="password">
@@ -22,7 +28,8 @@
 
       <!-- Confirm Password -->
       <mat-form-field class="form-control">
-        <input matInput type="password" placeholder="Password" formControlName="confirmPassword">
+        <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword">
+        <mat-error *ngIf="editUserForm.controls.confirmPassword.errors?.matchPassword">Passwords do not match</mat-error>
       </mat-form-field>
 
     </div>

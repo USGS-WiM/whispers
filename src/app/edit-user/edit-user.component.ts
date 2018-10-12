@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
@@ -25,13 +25,27 @@ export class EditUserComponent implements OnInit {
 
   editUserForm: FormGroup;
 
+  matchPassword(AC: AbstractControl) {
+    const password = AC.get('password').value; // to get value in input tag
+    const confirmPassword = AC.get('confirmPassword').value; // to get value in input tag
+    if (password !== confirmPassword) {
+      AC.get('confirmPassword').setErrors({ matchPassword: true });
+    } else {
+      return null;
+    }
+  }
+
   buildEditUserForm() {
     this.editUserForm = this.formBuilder.group({
+      id: this.currentUser.id,
       first_name: this.currentUser.first_name,
       last_name: this.currentUser.last_name,
       password: '',
-      confirmPassword: ''
-    });
+      confirmPassword: '',
+    }, {
+        validator: this.matchPassword
+      });
+
   }
 
   constructor(
@@ -43,14 +57,49 @@ export class EditUserComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
 
-    this.buildEditUserForm();
-
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
     });
+
+    this.buildEditUserForm();
   }
 
   ngOnInit() {
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+  updateUser(formValue) {
+
+    const userUpdates = {
+      id: formValue.id,
+      first_name: formValue.first_name,
+      last_name: formValue.last_name,
+      password: formValue.password
+    };
+
+    // if no value present in password, delete that from the object for patching
+    if (formValue.password === '') {
+      delete userUpdates.password;
+    }
+
+    this.userService.updateUser(userUpdates)
+      .subscribe(
+        (event) => {
+          this.submitLoading = false;
+          this.openSnackBar('Your user details were updated', 'OK', 5000);
+          this.editUserDialogRef.close();
+        },
+        error => {
+          this.submitLoading = false;
+          this.openSnackBar('Error. Update not completed. Error message: ' + error, 'OK', 8000);
+        }
+      );
+
   }
 
 

@@ -29,6 +29,18 @@ export class UserService {
       .catch(this.handleError);
   }
 
+  public updateUser(formValue): Observable<User> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.patch(APP_SETTINGS.USERS_URL + formValue.id + '/', formValue, options)
+      .map((response: Response) => <User>response.json())
+      .catch(this.handleError);
+
+  }
+
   private handleError(error: Response) {
     console.error(error);
     return Observable.throw(error.json().error || 'Server error');

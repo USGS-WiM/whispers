@@ -314,8 +314,14 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
   }
 
-  displayFn(species?: Species): string | undefined {
-    return species ? species.name : undefined;
+  displayFn(speciesId?: Species): string | undefined {
+    let species_id_match;
+    for (let i = 0; i < this["options"]._results.length-1; i++) {
+      if (this["options"]._results[i].value == speciesId) {
+        species_id_match = this["options"]._results[i].viewValue;
+      }
+    }
+    return species_id_match;
   }
 
 

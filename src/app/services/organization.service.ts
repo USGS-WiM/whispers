@@ -29,6 +29,18 @@ export class OrganizationService {
       .catch(this.handleError);
   }
 
+  public getLaboratories(): Observable<Organization[]> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.get(APP_SETTINGS.ORGANIZATIONS_URL + '?no_page&laboratory=true', options)
+      .map((response: Response) => <Organization[]>response.json())
+      // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
   private handleError(error: Response) {
     console.error(error);
     return Observable.throw(error.json().error || 'Server error');

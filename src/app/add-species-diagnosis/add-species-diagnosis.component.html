@@ -20,14 +20,14 @@
         </mat-form-field>
 
         <mat-form-field class="form-control">
-          <mat-select placeholder="Basis of Diagnosis" formControlName="diagnosis_basis">
+          <mat-select placeholder="Basis of Diagnosis" formControlName="basis">
             <mat-option>--</mat-option>
             <mat-option *ngFor="let diagnosisBasis of diagnosisBases" value="{{diagnosisBasis.id}}">{{diagnosisBasis.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field class="form-control">
-          <mat-select placeholder="Significance of Diagnosis for Species" formControlName="diagnosis_cause">
+          <mat-select placeholder="Significance of Diagnosis for Species" formControlName="cause">
             <mat-option>--</mat-option>
             <mat-option *ngFor="let diagnosisCause of diagnosisCauses" value="{{diagnosisCause.id}}">{{diagnosisCause.name}}</mat-option>
           </mat-select>
@@ -66,9 +66,9 @@
         </div> -->
 
         <mat-form-field class="form-control">
-          <mat-select placeholder="Diagnosing Lab" formControlName="organizations">
+          <mat-select placeholder="Diagnosing Lab" formControlName="new_species_diagnosis_organizations">
             <mat-option>--</mat-option>
-            <!-- <mat-option *ngFor="let diagnosisCause of diagnosisCauses" value="{{diagnosisCause.id}}">{{diagnosisCause.name}}</mat-option> -->
+            <mat-option *ngFor="let laboratory of laboratories" value="{{laboratory.id}}">{{laboratory.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 

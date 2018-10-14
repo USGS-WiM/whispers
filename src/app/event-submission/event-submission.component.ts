@@ -709,8 +709,8 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       ]),
       new_service_request: this.formBuilder.group({
         request_type: null,
-        service_request_comments: this.formBuilder.array([
-          this.initLocationComments()
+        new_service_request_comments: this.formBuilder.array([
+          // this.initLocationComments()
         ]),
       })
     });
@@ -735,15 +735,15 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   initSpeciesDiagnosis() {
     return this.formBuilder.group({
       diagnosis: [null, Validators.required],
-      diagnosis_cause: null,
-      diagnosis_basis: null,
+      cause: null,
+      basis: null,
       suspect: false,
       tested_count: null,
       diagnosis_count: null,
       positive_count: null,
       suspect_count: null,
       pooled: false,
-      organizations: null
+      new_species_diagnosis_organizations: null
     });
   }
 
@@ -1006,15 +1006,15 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
             .get('new_location_species')['controls'][speciesDiagnosisObj.locationSpeciesIndex]
             .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
               diagnosis: speciesDiagnosisObj.formValue.diagnosis,
-              diagnosis_cause: speciesDiagnosisObj.formValue.diagnosis_cause,
-              diagnosis_basis: speciesDiagnosisObj.formValue.diagnosis_basis,
+              cause: speciesDiagnosisObj.formValue.cause,
+              basis: speciesDiagnosisObj.formValue.basis,
               suspect: speciesDiagnosisObj.formValue.suspect,
               tested_count: speciesDiagnosisObj.formValue.tested_count,
               diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
               positive_count: speciesDiagnosisObj.formValue.positive_count,
               suspect_count: speciesDiagnosisObj.formValue.suspect_count,
               pooled: speciesDiagnosisObj.formValue.pooled,
-              organizations: speciesDiagnosisObj.formValue.organizations
+              new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
             });
 
         },

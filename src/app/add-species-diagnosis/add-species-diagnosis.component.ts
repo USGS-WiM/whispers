@@ -18,6 +18,8 @@ import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 import { DiagnosisBasis } from '@interfaces/diagnosis-basis';
 import { DiagnosisCause } from '@interfaces/diagnosis-cause';
 import { LocationSpeciesDiagnosisService } from '@app/services/location-species-diagnosis.service';
+import { OrganizationService } from '@app/services/organization.service';
+import { Organization } from '@interfaces/organization';
 
 @Component({
   selector: 'app-add-species-diagnosis',
@@ -32,6 +34,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
   diagnoses: Diagnosis[];
   diagnosisBases: DiagnosisBasis[];
   diagnosisCauses: DiagnosisCause[];
+  laboratories: Organization[];
 
   addSpeciesDiagnosisForm: FormGroup;
 
@@ -51,8 +54,8 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
     this.addSpeciesDiagnosisForm = this.formBuilder.group({
       new_location_species: null,
       diagnosis: [null, Validators.required],
-      diagnosis_cause: null,
-      diagnosis_basis: null,
+      cause: null,
+      basis: null,
       suspect: false,
       // priority: null,
       tested_count: null,
@@ -60,7 +63,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
       positive_count: null,
       suspect_count: null,
       pooled: false,
-      organizations: null
+      new_species_diagnosis_organizations: null
     });
   }
 
@@ -72,6 +75,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
     private diagnosisBasisService: DiagnosisBasisService,
     private diagnosisCauseService: DiagnosisCauseService,
     private locationSpeciesDiagnosisService: LocationSpeciesDiagnosisService,
+    private organizationService: OrganizationService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.buildAddSpeciesDiagnosisForm();
@@ -100,7 +104,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
       this.addSpeciesDiagnosisForm.get('diagnosis_count').setValue(this.data.species.speciesdiagnoses[0].diagnosis_count);
       this.addSpeciesDiagnosisForm.get('positive_count').setValue(this.data.species.speciesdiagnoses[0].positive_count);
       this.addSpeciesDiagnosisForm.get('suspect_count').setValue(this.data.species.speciesdiagnoses[0].suspect_count);
-      // this.addSpeciesDiagnosisForm.get('organizations').setValue(this.data.contact.affiliation);
+      // this.addSpeciesDiagnosisForm.get('new_species_diagnosis_organizations').setValue(this.data.contact.affiliation);
       this.addSpeciesDiagnosisForm.get('suspect').setValue(this.data.species.speciesdiagnoses[0].suspect);
       this.addSpeciesDiagnosisForm.get('pooled').setValue(this.data.species.speciesdiagnoses[0].pooled);
     }
@@ -127,9 +131,9 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
           this.diagnosisBases = diagnosisBases;
           // tslint:disable-next-line:max-line-length
           if (this.data.species) {
-            if (this.data.species.speciesdiagnoses[0] !== undefined && this.data.species.speciesdiagnoses[0].diagnosis_basis !== undefined) {
+            if (this.data.species.speciesdiagnoses[0] !== undefined && this.data.species.speciesdiagnoses[0].basis !== undefined) {
               // tslint:disable-next-line:max-line-length
-              this.addSpeciesDiagnosisForm.get('diagnosis_basis').setValue(this.data.species.speciesdiagnoses[0].diagnosis_basis.toString());
+              this.addSpeciesDiagnosisForm.get('basis').setValue(this.data.species.speciesdiagnoses[0].basis.toString());
             }
           }
 
@@ -145,11 +149,23 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
           this.diagnosisCauses = diagnosisCauses;
           // tslint:disable-next-line:max-line-length
           if (this.data.species) {
-            if (this.data.species.speciesdiagnoses[0] !== undefined && this.data.species.speciesdiagnoses[0].diagnosis_cause !== undefined) {
+            if (this.data.species.speciesdiagnoses[0] !== undefined && this.data.species.speciesdiagnoses[0].cause !== undefined) {
               // tslint:disable-next-line:max-line-length
-              this.addSpeciesDiagnosisForm.get('diagnosis_cause').setValue(this.data.species.speciesdiagnoses[0].diagnosis_cause.toString());
+              this.addSpeciesDiagnosisForm.get('cause').setValue(this.data.species.speciesdiagnoses[0].cause.toString());
             }
           }
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get 'laboratories' from the organizations service
+    // aliases the subset of organization records where laboratory = true to an array called 'laboratories'
+    this.organizationService.getLaboratories()
+      .subscribe(
+        (laboratories) => {
+          this.laboratories = laboratories;
         },
         error => {
           this.errorMessage = <any>error;

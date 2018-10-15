@@ -86,7 +86,6 @@ import { EventSubmissionSuccessComponent } from '@app/event-submission/event-sub
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
 import * as search_api from 'usgs-search-api';
-import { ServiceRequestService } from '@app/services/service-request.service';
 
 declare const search_api: search_api;
 
@@ -137,6 +136,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   eventLocationSpecies: Observable<any[]>[] = [];
   ///////////////////////////////////////////////////////
 
+  contacts: Contact[];
+  filteredContacts = [];
+
   sexBiases: SexBias[];
   ageBiases: AgeBias[];
 
@@ -150,7 +152,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   errorMessage;
 
   eventSubmissionForm: FormGroup;
-  serviceRequestForm: FormGroup;
 
   eventLocationArray: FormArray;
   locationContactsArray: FormArray;
@@ -192,23 +193,21 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
 
     this.eventLocationArray = this.eventSubmissionForm.get('new_event_locations') as FormArray;
-    const eventLocationSpecies = new Array<Observable<any>>();
+    let eventLocationSpecies = new Array<Observable<any>>();
     this.filteredSpecies.push(eventLocationSpecies);
     this.ManageSpeciesControl(0, 0);
-  }
 
-  // buildServiceRequestForm() {
-  //   this.serviceRequestForm = this.formBuilder.group({
-  //     request_type: 0,
-  //     request_comments: this.formBuilder.array([]),
-  //   });
-  // }
+    let eventLocationContacts = new Array<Observable<any>>();
+    this.filteredContacts.push(eventLocationContacts);
+    this.ManageContactControl(0, 0);
+  }
 
   constructor(
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private bottomSheet: MatBottomSheet,
     private currentUserService: CurrentUserService,
+    // private matStepper: MatStepper,
     private datePipe: DatePipe,
     private eventTypeService: EventTypeService,
     private legalStatusService: LegalStatusService,
@@ -228,11 +227,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     private eventService: EventService,
     private eventStatusService: EventStatusService,
     private staffService: StaffService,
-    private serviceRequestService: ServiceRequestService,
     public snackBar: MatSnackBar
   ) {
     this.buildEventSubmissionForm();
-    //this.buildServiceRequestForm();
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
@@ -326,12 +323,22 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFn(speciesId?: Species): string | undefined {
     let species_id_match;
-    for (let i = 0; i < this['options']._results.length - 1; i++) {
-      if (this['options']._results[i].value === speciesId) {
-        species_id_match = this['options']._results[i].viewValue;
+    for (let i = 0; i < this["options"]._results.length-1; i++) {
+      if (this["options"]._results[i].value == speciesId) {
+        species_id_match = this["options"]._results[i].viewValue;
       }
     }
     return species_id_match;
+  }
+
+  displayFnContact(contactId?: Contact): string | undefined {
+    let contact_id_match;
+    for (let i = 0; i < this["options"]._results.length; i++) {
+      if (this["options"]._results[i].value == contactId) {
+        contact_id_match = this["options"]._results[i].viewValue;
+      }
+    }
+    return contact_id_match;
   }
 
 
@@ -360,21 +367,30 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   }
   ///////////////////////////////////////////////// End WIP
 
+  ManageContactControl(eventLocationIndex: number, locationContactIndex: number) {
+    // tslint:disable-next-line:max-line-length
+    const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts') as FormArray;
+    this.filteredContacts[eventLocationIndex][locationContactIndex] = arrayControl.at(locationContactIndex).get('contact').valueChanges
+      .startWith(null)
+      .map(val => this.filter(val, this.userContacts, 'last_name'));
+  }
+
   filter(val: any, searchArray: any, searchProperty: string): string[] {
-    const realval = val && typeof val === 'object' ? val[searchProperty] : val;
-    const result = [];
-    let lastOption = null;
-    if (searchArray !== undefined) {
-      for (let i = 0; i < searchArray.length; i++) {
-        if (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase())) {
-          if (searchArray[i][searchProperty] !== lastOption) {
-            lastOption = searchArray[i][searchProperty];
-            result.push(searchArray[i]);
+    let result = [];
+    if (isNaN(val)){
+      const realval = val && typeof val === 'object' ? val[searchProperty] : val;
+      let lastOption = null;
+      if (searchArray !== undefined) {
+        for (let i = 0; i < searchArray.length; i++) {
+          if (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase())) {
+            if (searchArray[i][searchProperty] !== lastOption) {
+              lastOption = searchArray[i][searchProperty];
+              result.push(searchArray[i]);
+            }
           }
         }
       }
     }
-
     // this will return all records matching the val string
     return result;
   }
@@ -628,7 +644,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         for (let i = 0, j = eventLocations.length; i < j; i++) {
 
           if (i !== eventLocationIndex) {
-            const locationContacts = eventLocations[i].get('new_location_contacts');
+            const locationContacts = eventLocations[i].get('location_contacts');
             locationContacts.push(contact);
           }
         }
@@ -706,13 +722,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       ]),
       new_location_contacts: this.formBuilder.array([
         this.initLocationContacts()
-      ]),
-      new_service_request: this.formBuilder.group({
-        request_type: null,
-        new_service_request_comments: this.formBuilder.array([
-          // this.initLocationComments()
-        ]),
-      })
+      ])
     });
   }
 
@@ -735,21 +745,21 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   initSpeciesDiagnosis() {
     return this.formBuilder.group({
       diagnosis: [null, Validators.required],
-      cause: null,
-      basis: null,
+      diagnosis_cause: null,
+      diagnosis_basis: null,
       suspect: false,
       tested_count: null,
       diagnosis_count: null,
       positive_count: null,
       suspect_count: null,
       pooled: false,
-      new_species_diagnosis_organizations: null
+      organizations: null
     });
   }
 
   initLocationContacts() {
     return this.formBuilder.group({
-      id: [null, Validators.required],
+      contact: [null, Validators.required],
       contact_type: [null, Validators.required]
     });
   }
@@ -771,13 +781,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   initEventDiagnosis() {
     return this.formBuilder.group({
       diagnosis: null
-    });
-  }
-
-  initServiceRequests() {
-    return this.formBuilder.group({
-      request_type: 0,
-      request_comments: this.formBuilder.array([])
     });
   }
 
@@ -809,6 +812,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         locationContacts.push(contact);
       }
     }
+
+    let eventLocationContacts = new Array<Observable<any>>();
+    this.filteredContacts.push(eventLocationContacts);
+    this.ManageContactControl(newEventLocationIndex, 0);
 
     this.usgsSearch = search_api.create('search-api-div', {
       'verbose': true,
@@ -905,15 +912,17 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   // location contacts
   addLocationContacts(eventLocationIndex) {
-    // tslint:disable-next-line:max-line-length
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
     control.push(this.initLocationContacts());
+
+    const locationContactIndex = control.length - 1;
+
+    this.ManageContactControl(eventLocationIndex, locationContactIndex);
   }
 
-  removeLocationContacts(eventLocationIndex, k) {
-    // tslint:disable-next-line:max-line-length
+  removeLocationContacts(eventLocationIndex, locationContactIndex) {
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
-    control.removeAt(k);
+    control.removeAt(locationContactIndex);
   }
 
   getLocationContacts(form) {
@@ -1006,15 +1015,15 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
             .get('new_location_species')['controls'][speciesDiagnosisObj.locationSpeciesIndex]
             .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
               diagnosis: speciesDiagnosisObj.formValue.diagnosis,
-              cause: speciesDiagnosisObj.formValue.cause,
-              basis: speciesDiagnosisObj.formValue.basis,
+              diagnosis_cause: speciesDiagnosisObj.formValue.diagnosis_cause,
+              diagnosis_basis: speciesDiagnosisObj.formValue.diagnosis_basis,
               suspect: speciesDiagnosisObj.formValue.suspect,
               tested_count: speciesDiagnosisObj.formValue.tested_count,
               diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
               positive_count: speciesDiagnosisObj.formValue.positive_count,
               suspect_count: speciesDiagnosisObj.formValue.suspect_count,
               pooled: speciesDiagnosisObj.formValue.pooled,
-              new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
+              organizations: speciesDiagnosisObj.formValue.organizations
             });
 
         },
@@ -1046,8 +1055,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     //     delete event_location.comment;
     //   }
     // }
-    // convert quality_check (date) to 'yyyy-MM-dd' before submission
-    formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');
+
     // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
     // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
     for (const event_location of formValue.new_event_locations) {
@@ -1060,6 +1068,8 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         (event) => {
           this.submitLoading = false;
 
+
+
           this.confirmDialogRef = this.dialog.open(ConfirmComponent,
             {
               data: {
@@ -1068,7 +1078,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
                 message: 'Your event was successfully saved. The Event ID is ' + event.id,
                 messageIcon: 'check',
                 confirmButtonText: 'OK',
-                showCancelButton: true
+                showCancelButton : true
               }
             }
           );

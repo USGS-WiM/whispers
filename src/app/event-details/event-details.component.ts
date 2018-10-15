@@ -40,6 +40,8 @@ import { SexBias } from '@interfaces/sex-bias';
 import { AgeBiasService } from '@app/services/age-bias.service';
 import { AgeBias } from '@interfaces/age-bias';
 
+import { ViewSpeciesDiagnosisComponent } from '@app/view-species-diagnosis/view-species-diagnosis.component';
+
 @Component({
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
@@ -66,6 +68,7 @@ export class EventDetailsComponent implements OnInit {
   // addEventLocationDialogRef: MatDialogRef<AddEventLocationComponent>;
   editSpeciesDialogRef: MatDialogRef<EditSpeciesComponent>;
   addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>;
+  viewSpeciesDiagnosisDialogRef: MatDialogRef<ViewSpeciesDiagnosisComponent>;
 
   eventDetailsShareDialogRef: MatDialogRef<EventDetailsShareComponent>;
 
@@ -250,7 +253,7 @@ export class EventDetailsComponent implements OnInit {
       );
 
     setTimeout(() => {
-   
+
       const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
         '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
         'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -625,32 +628,54 @@ export class EventDetailsComponent implements OnInit {
   }
 
   editSpeciesDiagnosis(id: string, index: number) {
-    if (this.selection[index].selected.length > 1 || this.selection[index].selected.length == 0) {
+
+    if (this.selection[index].selected.length > 1 || this.selection[index].selected.length === 0) {
       this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
     } else if (this.selection[index].selected.length === 1) {
+
+
+
+
       // Open dialog for adding event diagnosis
-      if (this.selection[index].selected[0].speciesdiagnoses[0] !== undefined) {
-        this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
+      if (this.selection[index].selected[0].speciesdiagnoses !== undefined) {
+
+
+        // CHANGE: open dialog for viewing species diagnosis
+        //// begin  new approach
+        this.viewSpeciesDiagnosisDialogRef = this.dialog.open(ViewSpeciesDiagnosisComponent, {
           data: {
             species: this.selection[index].selected[0],
-            species_diagnosis_action: 'edit'
+            speciesdiagnoses: this.selection[index].selected[0].speciesdiagnoses
           }
-          // minWidth: 200
-          // height: '75%'
         });
 
-        this.addSpeciesDiagnosisDialogRef.afterClosed()
-          .subscribe(
-            () => {
-              this.refreshEvent();
-              for (let i = 0; i < this.selection.length; i++) {
-                this.selection[i].clear();
-              }
-            },
-            error => {
-              this.errorMessage = <any>error;
-            }
-          );
+        //// end  new approach
+
+
+        //// begin  outgoing approach
+        // this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
+        //   data: {
+        //     species: this.selection[index].selected[0],
+        //     speciesdiagnoses: this.selection[index].selected[0].speciesdiagnoses,
+        //     species_diagnosis_action: 'edit'
+        //   }
+        // });
+
+        // this.addSpeciesDiagnosisDialogRef.afterClosed()
+        //   .subscribe(
+        //     () => {
+        //       this.refreshEvent();
+        //       for (let i = 0; i < this.selection.length; i++) {
+        //         this.selection[i].clear();
+        //       }
+        //     },
+        //     error => {
+        //       this.errorMessage = <any>error;
+        //     }
+        //   );
+
+        //// end outgoing approach
+
       } else {
         this.openSnackBar('This species has no existing diagnosis', 'OK', 5000);
       }

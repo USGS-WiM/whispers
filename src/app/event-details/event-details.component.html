@@ -227,16 +227,54 @@
                     [attr.data-index]="i" (change)="panelDataChange()">
                     <mat-expansion-panel-header>
                       <mat-panel-title>
-                        {{determineLocationName(eventLocation.name,i+1)}}
+                        <mat-icon>location_on</mat-icon> {{determineLocationName(eventLocation.name,i+1)}}
                       </mat-panel-title>
                     </mat-expansion-panel-header>
-                    Location Start Date: {{eventLocation.start_date | date:'mediumDate'}}
-                    <br /> Location End Date: {{eventLocation.end_date | date:'mediumDate'}}
-                    <br /> Location: {{eventLocation.administrative_level_two_string}},
-                    {{eventLocation.administrative_level_one_string}},
-                    {{eventLocation.country_string}}
-                    <br /> Land ownership: {{eventLocation.land_ownership | displayValue:'name':this.landownerships }}
-                    <br />
+
+                    <!--Begin new event location mark up-->
+                    <div class="details-info">
+
+                      <span class="text-larger text-bold">
+                         {{eventLocation.administrative_level_two_string}},
+                        {{eventLocation.administrative_level_one_string}},
+                        {{eventLocation.country_string}}
+                      </span> <br>
+
+                      <div>
+                        <mat-icon>date_range</mat-icon>
+                        <span> {{eventLocation.start_date | date:'mediumDate'}}</span>
+                        <span> thru </span>
+                        <span>{{eventLocation.end_date | date:'mediumDate'}}</span>
+                      </div>
+
+                      <table>
+                        <tr>
+                          <th>Land ownership</th>
+                          <td>{{eventLocation.land_ownership | displayValue:'name':this.landownerships}}</td>
+                        </tr>
+                        <tr>
+                          <th>GNIS Feature Name</th>
+                          <td>{{eventLocation.gnis_name}}</td>
+                        </tr>
+                        <tr>
+                          <th>GNIS Feature ID</th>
+                          <td>{{eventLocation.gnis_id}}</td>
+                        </tr>
+                        <tr>
+                          <th>Latitude</th>
+                          <td>{{eventLocation.latitude}}</td>
+                        </tr>
+                        <tr>
+                          <th>Longitude</th>
+                          <td>{{eventLocation.longitude}}</td>
+                        </tr>
+                      </table>
+                    </div>
+
+
+                    <!--end new event location mark up-->
+
+
                     <p>
                       <div *ngIf="eventLocation.comments && eventLocation.comments.length > 0">
                         <label *ngIf="eventLocation.comments" class="event-detail-label">Comments</label>
@@ -249,30 +287,18 @@
                       </div>
 
                       <div class="event-detail-action-bar-left">
-                        <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEventLocation(eventData.eventlocations[i])"
+                        <button mat-stroked-button color="primary" class="event-detail-action-button" (click)="editEventLocation(eventData.eventlocations[i])"
                           [disabled]="!eventData.permissions.update">
                           <i class="material-icons">edit</i> Edit Event Location Details</button>
-                        <button mat-raised-button color="warn" class="event-detail-action-button" (click)="openEventLocationDeleteConfirm(eventData.eventlocations[i].id)"
+                        <button mat-stroked-button color="warn" class="event-detail-action-button" (click)="openEventLocationDeleteConfirm(eventData.eventlocations[i].id)"
                           [disabled]="!eventData.permissions.destroy">
                           <i class="material-icons">delete</i> Delete Event Location</button>
-                      </div>
+                      </div><br />
                       <p>
                         <div *ngIf="eventLocation.locationspecies.length > 0">
 
-                          <label *ngIf="eventLocation.locationspecies" class="event-detail-label">Species</label>
+                          <label *ngIf="eventLocation.locationspecies" class="event-detail-label text-larger text-bold">Species</label>
                           <br />
-
-                          <div class="event-detail-action-bar-left">
-                            <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpecies(id, i)"
-                              [disabled]="!eventData.permissions.update">
-                              <i class="material-icons">edit</i> Edit Species</button>
-                            <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addSpeciesDiagnosis(id, i)"
-                              [disabled]="!eventData.permissions.write">
-                              <i class="material-icons">add</i> Add Species Diagnosis</button>
-                            <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editSpeciesDiagnosis(id, i)"
-                              [disabled]="!eventData.permissions.update">
-                              <i class="material-icons">edit</i> Edit Species Diagnosis</button>
-                          </div>
 
                           <div class="results-table-div">
 
@@ -385,6 +411,18 @@
                             </mat-table>
 
                             <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+
+                            <div class="event-detail-action-bar-left">
+                              <button mat-stroked-button color="primary" class="event-detail-action-button" (click)="editSpecies(id, i)"
+                                [disabled]="!eventData.permissions.update">
+                                <i class="material-icons">edit</i> Edit Species</button>
+                              <button mat-stroked-button color="primary" class="event-detail-action-button" (click)="addSpeciesDiagnosis(id, i)"
+                                [disabled]="!eventData.permissions.write">
+                                <i class="material-icons">add</i> Add Species Diagnosis</button>
+                              <button mat-stroked-button color="primary" class="event-detail-action-button" (click)="editSpeciesDiagnosis(id, i)"
+                                [disabled]="!eventData.permissions.update">
+                                <i class="material-icons">edit</i> Edit Species Diagnosis</button>
+                            </div>
                           </div>
                         </div>
                   </mat-expansion-panel>

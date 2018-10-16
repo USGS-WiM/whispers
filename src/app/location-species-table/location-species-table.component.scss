@@ -1,38 +1,29 @@
-@import url("https://rawgit.com/USGS-WiM/marker-creator/master/stylesheets/css/markers.css");
-@import "../app.variables.scss";
-#eventDetailsContainer {
+.example-container {
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    flex-direction: column;
+    max-height: 500px;
+    min-width: 300px;
 }
 
-.detailsDiv {
-    flex-grow: 3;
+.mat-table {
+    overflow: auto;
+    max-height: 500px;
 }
 
-.mapDiv {
-    width: auto;
-    flex-grow: 3;
-    min-width: 400px;
+.element-row {
+    position: relative;
 }
 
-#map {
-    height: 800px;
+.element-row:not(.expanded) {
+    cursor: pointer;
 }
 
-@media screen and (max-width:875px) {
-    #eventDetailsContainer {
-        flex-wrap: wrap;
-        flex-direction: column;
-    }
-    .mapDiv,
-    .detailsDiv {
-        min-width: 100%;
-    }
+.element-row:not(.expanded):hover {
+    background: #f5f5f5;
 }
 
-mat-expansion-panel {
-    border: 1px solid rgba(210, 210, 220, 1);
+.element-row.expanded {
+    border-bottom-color: transparent;
 }
 
 table {
@@ -171,8 +162,7 @@ tr.noBorder td {
 
 .unmappable-warning {
     z-index: 1000;
-    position: absolute;
-    //height: 10px;
+    position: absolute; //height: 10px;
     //width: 200px;
     text-align: left;
     margin: auto;
@@ -182,12 +172,10 @@ tr.noBorder td {
 
 .legend {
     position: absolute;
-    padding: 4px;
-    // bottom: 60px !important;
-    top: 10px;
-    //left: 15px;
+    padding: 4px; // bottom: 60px !important;
+    top: 10px; //left: 15px;
     right: 10px;
-    width:200px;
+    width: 200px;
     /*height:320px;*/
     z-index: 1000;
     color: black;
@@ -231,17 +219,17 @@ tr.noBorder td {
 #iconHolder-inline {}
 
 .flyway-blue:after {
-    background-color: rgba(0,0,255,0.3);
+    background-color: rgba(0, 0, 255, 0.3);
     border: 3px solid blue;
 }
 
 .flyway-yellow:after {
-    background-color: rgba(255,255,0,0.3);
+    background-color: rgba(255, 255, 0, 0.3);
     border: 3px solid yellow;
 }
 
 .flyway-green:after {
-    background-color: rgba(0,255,0,0.3);
+    background-color: rgba(0, 255, 0, 0.3);
     border: 3px solid green;
 }
 
@@ -389,16 +377,53 @@ tr.noBorder td {
 
 .element-row {
     position: relative;
-  }
-  
-  .element-row:not(.expanded) {
+}
+
+.element-row:not(.expanded) {
     cursor: pointer;
-  }
-  
-  .element-row:not(.expanded):hover {
+}
+
+.element-row:not(.expanded):hover {
     background: #f5f5f5;
-  }
-  
-  .element-row.expanded {
+}
+
+.element-row.expanded {
     border-bottom-color: transparent;
-  }
+}
+
+.text-bold {
+    font-style: bold !important;
+}
+
+.text-larger {
+    font-size: larger !important;
+}
+
+.species-detail-action-bar {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0 0 25px 0;
+    button {
+        margin: 0 10px 0 0;
+    }
+}
+
+.species-detail-action-bar-left {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+}
+
+.species-detail-action-button {
+    margin: 5px;
+}

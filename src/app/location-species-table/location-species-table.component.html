@@ -1,0 +1,142 @@
+<div *ngIf="locationspecies.length > 0" class="example-container">
+  <mat-table #table [dataSource]="dataSource">
+
+    <!-- Species Column -->
+    <ng-container matColumnDef="species">
+      <mat-header-cell *matHeaderCellDef> Species </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.species_string}} </mat-cell>
+    </ng-container>
+
+    <!-- Location Column -->
+    <ng-container matColumnDef="location">
+      <mat-header-cell *matHeaderCellDef> Location </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <span>{{element.administrative_level_two_string}},
+          {{element.administrative_level_one_string}}</span>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Population Column -->
+    <ng-container matColumnDef="population">
+      <mat-header-cell *matHeaderCellDef> Population </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.population_count}} </mat-cell>
+    </ng-container>
+
+    <!-- Sick Count Column -->
+    <ng-container matColumnDef="sick">
+      <mat-header-cell *matHeaderCellDef> Sick </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.sick_count}} </mat-cell>
+    </ng-container>
+
+    <!-- Dead Count Column -->
+    <ng-container matColumnDef="dead">
+      <mat-header-cell *matHeaderCellDef> Dead </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.dead_count}} </mat-cell>
+    </ng-container>
+
+    <!-- Sick Count Estimated Column -->
+    <ng-container matColumnDef="sick_estimated">
+      <mat-header-cell *matHeaderCellDef> Sick Estimate </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.sick_count_estimated}}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Dead Count Estimated Column -->
+    <ng-container matColumnDef="dead_estimated">
+      <mat-header-cell *matHeaderCellDef> Dead Estimate </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.dead_count_estimated}}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Captive Column -->
+    <ng-container matColumnDef="captive">
+      <mat-header-cell *matHeaderCellDef> Captive </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.captive ? 'Yes': 'No'}}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Age Bias Column -->
+    <ng-container matColumnDef="age_bias">
+      <mat-header-cell *matHeaderCellDef> Age Basis </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.age_bias |
+        displayValue:'name':this.ageBiases}}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Sex Bias Column -->
+    <ng-container matColumnDef="sex_bias">
+      <mat-header-cell *matHeaderCellDef> Sex Bias </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.sex_bias |
+        displayValue:'name':this.sexBiases}}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Diagnosis Column -->
+    <ng-container matColumnDef="diagnosis">
+      <mat-header-cell *matHeaderCellDef> Diagnosis </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <span *ngIf="element.speciesdiagnoses">
+          <ul class="table-cell-list">
+            <li *ngFor="let speciesDiagnosis of element.speciesdiagnoses">{{speciesDiagnosis.diagnosis_string}}</li>
+          </ul>
+        </span>
+      </mat-cell>
+    </ng-container>
+
+
+    <!-- Expanded Content Column - The detail row is made up of this one column -->
+    <ng-container matColumnDef="expandedDetail">
+      <mat-cell *matCellDef="let detail">
+        <div class="species-detail-action-bar-left">
+          <button mat-button color="primary" class="species-detail-action-button" (click)="editSpecies(detail.element)">
+            <mat-icon>edit</mat-icon> Edit Species
+          </button>
+        </div>
+
+        <div *ngIf="detail.element.speciesdiagnoses.length === 0">No diagnosis for this species at this location</div>
+        <div *ngIf="detail.element.speciesdiagnoses.length > 0">
+          <label class="text-larger text-bold">Species Diagnoses</label>
+          <br />
+          <table>
+            <tr>
+              <th>Species Diagnosis</th>
+              <th>Significance of Diagnosis for Species</th>
+              <th>Basis of Diagnosis</th>
+              <th>Number Assessed</th>
+              <th>Number with diagnosis</th>
+              <th>Species Diagnosis Suspect </th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+
+            <tr *ngFor="let speciesdiagnosis of detail.element.speciesdiagnoses">
+              <td>{{speciesdiagnosis.diagnosis_string}}</td>
+              <td>{{speciesdiagnosis.cause_string}}</td>
+              <td>{{speciesdiagnosis.basis}}</td>
+              <td>{{speciesdiagnosis.tested_count}}</td>
+              <td>{{speciesdiagnosis.diagnosis_count}}</td>
+              <td>{{speciesdiagnosis.suspect ? 'Yes' : 'No'}}</td>
+              <td> <button mat-icon-button>
+                  <mat-icon aria-label="Edit species diagnosis" color="accent" (click)="editSpeciesDiagnosis(speciesdiagnosis, detail.element)">edit</mat-icon>
+                </button>
+              </td>
+              <td>
+                <button mat-icon-button>
+                  <mat-icon aria-label="delete species diagnosis" color="warn" (click)="deleteSpeciesDiagnosis(speciesdiagnosis)">remove_circle</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row"
+      (click)="expandedElement = row"></mat-row>
+    <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.element == expandedElement ? 'expanded' : 'collapsed'"
+      style="overflow: hidden">
+    </mat-row>
+  </mat-table>
+</div>

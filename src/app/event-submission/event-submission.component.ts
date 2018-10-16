@@ -390,7 +390,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species') as FormArray;
     this.filteredSpecies[eventLocationIndex][locationSpeciesIndex] = arrayControl.at(locationSpeciesIndex).get('species').valueChanges
       .startWith(null)
-      .map(val => this.filter(val, this.species, 'name'));
+      .map(val => this.filter(val, this.species, ['name']));
     // .pipe(
     //   startWith<string | Species>(''),
     //   map(value => typeof value === 'string' ? value : value.name),
@@ -405,7 +405,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts') as FormArray;
     this.filteredContacts[eventLocationIndex][locationContactIndex] = arrayControl.at(locationContactIndex).get('contact').valueChanges
       .startWith(null)
-      .map(val => this.filter(val, this.userContacts, 'last_name'));
+      .map(val => this.filter(val, this.userContacts, ['first_name','last_name','organization_string']));
   }
 
   ManageAdminLevelOneControl(eventLocationIndex: number) {
@@ -413,7 +413,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_one') as FormArray;
     this.filteredAdminLevelOnes[eventLocationIndex] = arrayControl.valueChanges
       .startWith(null)
-      .map(val => this.filter(val, this.adminLevelOnes, 'name'));
+      .map(val => this.filter(val, this.adminLevelOnes, ['name']));
   }
 
   ManageAdminLevelTwoControl(eventLocationIndex: number) {
@@ -421,25 +421,32 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_two') as FormArray;
     this.filteredAdminLevelTwos[eventLocationIndex] = arrayControl.valueChanges
       .startWith(null)
-      .map(val => this.filter(val, this.adminLevelTwos, 'name'));
+      .map(val => this.filter(val, this.adminLevelTwos, ['name']));
   }
 
-  filter(val: any, searchArray: any, searchProperty: string): string[] {
+  filter(val: any, searchArray: any, searchProperties: string[]): string[] {
+    //make searchProperty an array so multiple fields can be search
+    //
+    //  FIX NEEDED
+    //
     let result = [];
-    if (isNaN(val)){
-      const realval = val && typeof val === 'object' ? val[searchProperty] : val;
-      let lastOption = null;
-      if (searchArray !== undefined) {
-        for (let i = 0; i < searchArray.length; i++) {
-          if (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase())) {
-            if (searchArray[i][searchProperty] !== lastOption) {
-              lastOption = searchArray[i][searchProperty];
-              result.push(searchArray[i]);
+    for (let searchProperty of searchProperties) {
+      if (isNaN(val)){
+        const realval = val && typeof val === 'object' ? val[searchProperty] : val;
+        let lastOption = null;
+        if (searchArray !== undefined) {
+          for (let i = 0; i < searchArray.length; i++) {
+            if (searchArray[i][searchProperty] != null && (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase()))) {
+              if (searchArray[i][searchProperty] !== lastOption) {
+                lastOption = searchArray[i][searchProperty];
+                result.push(searchArray[i]);
+              }
             }
           }
         }
       }
     }
+    
     // this will return all records matching the val string
     return result;
   }

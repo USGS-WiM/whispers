@@ -202,10 +202,10 @@
               <div class="event-detail-action-bar">
                 <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEvent(id)"
                   [disabled]="!eventData.permissions.update">
-                  <i class="material-icons">edit</i> Edit Event</button>
+                  <mat-icon>edit</mat-icon> Edit Event</button>
                 <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addEventDiagnosis(id)"
                   [disabled]="!eventData.permissions.write">
-                  <i class="material-icons">add</i> Add Event Diagnosis</button>
+                  <mat-icon>add</mat-icon> Add Event Diagnosis</button>
               </div>
 
               <p>
@@ -297,16 +297,19 @@
                       <p>
                         <div *ngIf="eventLocation.locationspecies.length > 0">
 
-                          <label *ngIf="eventLocation.locationspecies" class="event-detail-label text-larger text-bold">Species</label>
+                          <label *ngIf="eventLocation.locationspecies" class="event-detail-label text-larger text-bold">Species at this location</label>
                           <br />
 
-                          <div class="results-table-div">
+                          
+                          <app-location-species-table [locationspecies]="eventLocationSpecies"></app-location-species-table>
+
+                          <!-- <div class="results-table-div">
 
                             <mat-table [dataSource]="eventLocation.locationspecies" matSort matSortActive="species"
                               matSortDirection="asc">
 
                               <div>
-                                <!-- Selection column -->
+                 
                                 <ng-container matColumnDef="select">
                                   <mat-header-cell *matHeaderCellDef>
                                     <mat-checkbox (change)="$event ? masterToggle(i) : null" [checked]="selection[i].hasValue() && isAllSelected(i)"
@@ -320,63 +323,52 @@
                                   </mat-cell>
                                 </ng-container>
 
-                                <!-- Species Column -->
                                 <ng-container matColumnDef="species">
                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Species </mat-header-cell>
                                   <mat-cell *matCellDef="let loc_species"> {{loc_species.species_string}} </mat-cell>
                                 </ng-container>
 
-                                <!-- Location Column -->
                                 <ng-container matColumnDef="location">
                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Location </mat-header-cell>
                                   <mat-cell *matCellDef="let loc_species">
                                     <span>{{loc_species.administrative_level_two_string}},
                                       {{loc_species.administrative_level_one_string}}</span>
-                                    <!-- <br> -->
-                                    <!-- <span>{{loc_species.country_string}}</span> -->
                                   </mat-cell>
                                 </ng-container>
 
-                                <!-- Population Column -->
                                 <ng-container matColumnDef="population">
                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Population </mat-header-cell>
                                   <mat-cell *matCellDef="let loc_species"> {{loc_species.population_count}} </mat-cell>
                                 </ng-container>
 
-                                <!-- Sick Count Column -->
                                 <ng-container matColumnDef="sick">
                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Sick </mat-header-cell>
                                   <mat-cell *matCellDef="let loc_species"> {{loc_species.sick_count}} </mat-cell>
                                 </ng-container>
 
-                                <!-- Dead Count Column -->
                                 <ng-container matColumnDef="dead">
                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Dead </mat-header-cell>
                                   <mat-cell *matCellDef="let loc_species"> {{loc_species.dead_count}} </mat-cell>
                                 </ng-container>
 
-                                <!-- Sick Count Estimated Column -->
                                 <ng-container matColumnDef="sick_estimated">
                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Sick Estimate </mat-header-cell>
                                   <mat-cell *matCellDef="let loc_species"> {{loc_species.sick_count_estimated}}
                                   </mat-cell>
                                 </ng-container>
 
-                                <!-- Dead Count Estimated Column -->
                                 <ng-container matColumnDef="dead_estimated">
                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Dead Estimate </mat-header-cell>
                                   <mat-cell *matCellDef="let loc_species"> {{loc_species.dead_count_estimated}}
                                   </mat-cell>
                                 </ng-container>
 
-                                <!-- Captive Column -->
                                 <ng-container matColumnDef="captive">
                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Captive </mat-header-cell>
                                   <mat-cell *matCellDef="let loc_species"> {{loc_species.captive ? 'Yes': 'No'}}
                                   </mat-cell>
                                 </ng-container>
 
-                                <!-- Age Bias Column -->
                                 <ng-container matColumnDef="age_bias">
                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Age Basis </mat-header-cell>
                                   <mat-cell *matCellDef="let loc_species"> {{loc_species.age_bias |
@@ -384,7 +376,6 @@
                                   </mat-cell>
                                 </ng-container>
 
-                                <!-- Sex Bias Column -->
                                 <ng-container matColumnDef="sex_bias">
                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Sex Bias </mat-header-cell>
                                   <mat-cell *matCellDef="let loc_species"> {{loc_species.sex_bias |
@@ -392,7 +383,6 @@
                                   </mat-cell>
                                 </ng-container>
 
-                                <!-- Diagnosis Column -->
                                 <ng-container matColumnDef="diagnosis">
                                   <mat-header-cell *matHeaderCellDef mat-sort-header> Diagnosis </mat-header-cell>
                                   <mat-cell *matCellDef="let loc_species">
@@ -400,7 +390,6 @@
                                       <ul class="table-cell-list">
                                         <li *ngFor="let speciesDiagnosis of loc_species.speciesdiagnoses">{{speciesDiagnosis.diagnosis_string}}</li>
                                       </ul>
-                                      <!-- <span *ngFor="let speciesDiagnosis of loc_species.species_diagnosis">{{speciesDiagnosis.diagnosis_string}}<br></span> -->
                                     </span>
                                   </mat-cell>
                                 </ng-container>
@@ -421,9 +410,10 @@
                                 <i class="material-icons">add</i> Add Species Diagnosis</button>
                               <button mat-stroked-button color="primary" class="event-detail-action-button" (click)="editSpeciesDiagnosis(id, i)"
                                 [disabled]="!eventData.permissions.update">
-                                <i class="material-icons">edit</i> Edit Species Diagnosis</button>
+                                <i class="material-icons">note</i> View Species Diagnosis</button>
                             </div>
-                          </div>
+                          </div> -->
+
                         </div>
                   </mat-expansion-panel>
 

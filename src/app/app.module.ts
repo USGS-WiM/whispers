@@ -97,7 +97,7 @@ import { UserService } from '@services/user.service';
 import { EventSubmissionSuccessComponent } from './event-submission/event-submission-success/event-submission-success.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { ServiceRequestService } from '@app/services/service-request.service';
-import { ViewSpeciesDiagnosisComponent } from './view-species-diagnosis/view-species-diagnosis.component';
+import { LocationSpeciesTableComponent } from './location-species-table/location-species-table.component';
 
 
 
@@ -128,7 +128,7 @@ import { ViewSpeciesDiagnosisComponent } from './view-species-diagnosis/view-spe
     EventDetailsShareComponent,
     EventSubmissionSuccessComponent,
     EditUserComponent,
-    ViewSpeciesDiagnosisComponent,
+    LocationSpeciesTableComponent,
   ],
   imports: [
     BrowserModule,
@@ -218,7 +218,6 @@ import { ViewSpeciesDiagnosisComponent } from './view-species-diagnosis/view-spe
     AddEventDiagnosisComponent,
     EditSpeciesComponent,
     AddSpeciesDiagnosisComponent,
-    ViewSpeciesDiagnosisComponent,
     EditEventLocationComponent,
     AddEventLocationComponent,
     GnisLookupComponent,

@@ -1,8 +1,10 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 //declare let L: any;
 
@@ -40,15 +42,20 @@ import { SexBias } from '@interfaces/sex-bias';
 import { AgeBiasService } from '@app/services/age-bias.service';
 import { AgeBias } from '@interfaces/age-bias';
 
-import { ViewSpeciesDiagnosisComponent } from '@app/view-species-diagnosis/view-species-diagnosis.component';
-
 @Component({
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
-  styleUrls: ['./event-details.component.scss']
+  styleUrls: ['./event-details.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('void', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
+      state('*', style({height: '*', visibility: 'visible'})),
+      transition('void <=> *', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class EventDetailsComponent implements OnInit {
-
+ 
   // @ViewChild('speciesTable') table: any;
   eventID: string;
   map;
@@ -68,7 +75,6 @@ export class EventDetailsComponent implements OnInit {
   // addEventLocationDialogRef: MatDialogRef<AddEventLocationComponent>;
   editSpeciesDialogRef: MatDialogRef<EditSpeciesComponent>;
   addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>;
-  viewSpeciesDiagnosisDialogRef: MatDialogRef<ViewSpeciesDiagnosisComponent>;
 
   eventDetailsShareDialogRef: MatDialogRef<EventDetailsShareComponent>;
 
@@ -94,25 +100,13 @@ export class EventDetailsComponent implements OnInit {
 
   unMappables = [];
 
-  // speciesTableRows = [];
-  // expanded: any = {};
-  // timeout: any;
-  // speciesTableColumns = [
-  //   { prop: 'Species' },
-  //   { name: 'Population' },
-  //   { name: 'Sick' },
-  //   { name: 'Dead' },
-  //   { name: 'Estimated Sick' },
-  //   { name: 'Estimated Dead' }
-  // ];
-
   errorMessage;
-
   flywaysVisible = false;
   watershedsVisible = false;
 
+
   locationSpeciesDisplayedColumns = [
-    'select',
+    //'select',
     'species',
     'location',
     'population',
@@ -189,15 +183,15 @@ export class EventDetailsComponent implements OnInit {
             // this.speciesTableRows = this.eventLocationSpecies;
 
             // TODO: lookup user for created_by
-            this.userService.getUserDetail(eventdetails.created_by)
-              .subscribe(
-                (userDetail) => {
-                  this.eventOwner = userDetail;
-                },
-                error => {
-                  this.errorMessage = <any>error;
-                }
-              );
+            // this.userService.getUserDetail(eventdetails.created_by)
+            //   .subscribe(
+            //     (userDetail) => {
+            //       this.eventOwner = userDetail;
+            //     },
+            //     error => {
+            //       this.errorMessage = <any>error;
+            //     }
+            //   );
 
             this.eventDataLoading = false;
           },
@@ -462,15 +456,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   addEventLocation() {
-
     this.showAddEventLocation = true;
-    // Open dialog for adding an event location
-    // this.addEventLocationDialogRef = this.dialog.open(AddEventLocationComponent, {
-    //   data: {
-    //     eventData: this.eventData
-    //   }
-    // });
-
   }
 
   openEventDetailsShare() {
@@ -511,6 +497,7 @@ export class EventDetailsComponent implements OnInit {
       {
         data: {
           title: 'Delete Event Location Confirm',
+          // tslint:disable-next-line:max-line-length
           message: 'Are you sure you want to delete this event location, and all its associated species, contacts, and comments? This action cannot be undone.',
           confirmButtonText: 'Yes, Delete location and all associated data'
         }
@@ -524,33 +511,6 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
-  editSpecies(id: string, index: number) {
-    if (this.selection[index].selected.length > 1 || this.selection[index].selected.length == 0) {
-      this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
-    } else if (this.selection[index].selected.length === 1) {
-      // Open dialog for adding event diagnosis
-      this.editSpeciesDialogRef = this.dialog.open(EditSpeciesComponent, {
-        data: {
-          species: this.selection[index].selected[0]
-        }
-        // minWidth: 200
-        // height: '75%'
-      });
-
-      this.editSpeciesDialogRef.afterClosed()
-        .subscribe(
-          () => {
-            this.refreshEvent();
-            for (let i = 0; i < this.selection.length; i++) {
-              this.selection[i].clear();
-            }
-          },
-          error => {
-            this.errorMessage = <any>error;
-          }
-        );
-    }
-  }
 
   refreshEvent() {
     this.viewPanelStates = new Object();
@@ -627,60 +587,6 @@ export class EventDetailsComponent implements OnInit {
     }
   }
 
-  editSpeciesDiagnosis(id: string, index: number) {
-
-    if (this.selection[index].selected.length > 1 || this.selection[index].selected.length === 0) {
-      this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
-    } else if (this.selection[index].selected.length === 1) {
-
-
-
-
-      // Open dialog for adding event diagnosis
-      if (this.selection[index].selected[0].speciesdiagnoses !== undefined) {
-
-
-        // CHANGE: open dialog for viewing species diagnosis
-        //// begin  new approach
-        this.viewSpeciesDiagnosisDialogRef = this.dialog.open(ViewSpeciesDiagnosisComponent, {
-          data: {
-            species: this.selection[index].selected[0],
-            speciesdiagnoses: this.selection[index].selected[0].speciesdiagnoses
-          }
-        });
-
-        //// end  new approach
-
-
-        //// begin  outgoing approach
-        // this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
-        //   data: {
-        //     species: this.selection[index].selected[0],
-        //     speciesdiagnoses: this.selection[index].selected[0].speciesdiagnoses,
-        //     species_diagnosis_action: 'edit'
-        //   }
-        // });
-
-        // this.addSpeciesDiagnosisDialogRef.afterClosed()
-        //   .subscribe(
-        //     () => {
-        //       this.refreshEvent();
-        //       for (let i = 0; i < this.selection.length; i++) {
-        //         this.selection[i].clear();
-        //       }
-        //     },
-        //     error => {
-        //       this.errorMessage = <any>error;
-        //     }
-        //   );
-
-        //// end outgoing approach
-
-      } else {
-        this.openSnackBar('This species has no existing diagnosis', 'OK', 5000);
-      }
-    }
-  }
 
   determineLocationName(name, i) {
     let locationName;
@@ -722,7 +628,7 @@ export class EventDetailsComponent implements OnInit {
   isAllSelected(i: number) {
     const numSelected = this.selection[i].selected.length;
     const numRows = this.locationSpeciesDataSource.data.length;
-    return numSelected == numRows;
+    return numSelected === numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
@@ -736,14 +642,5 @@ export class EventDetailsComponent implements OnInit {
     this._eventService.getEventDetailsCSV(this.eventID);
   }
 
-
-  // toggleExpandRow(row) {
-  //   console.log('Toggled Expand Row!', row);
-  //   this.table.rowDetail.toggleExpandRow(row);
-  // }
-
-  // onDetailToggle(event) {
-  //   console.log('Detail Toggled', event);
-  // }
 
 }

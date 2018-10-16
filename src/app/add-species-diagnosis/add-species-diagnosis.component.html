@@ -1,17 +1,16 @@
-<h1 mat-dialog-title>
-    {{action_text}} Species Diagnosis</h1>
+<h1 mat-dialog-title>{{action_text}} Species Diagnosis</h1>
 <mat-dialog-content>
 
   <div *ngIf="species">
     <h3><b>{{species}} at {{administrative_level_two}}, {{administrative_level_one}}</b></h3>
   </div>
 
-  <form [formGroup]="addSpeciesDiagnosisForm">
+  <form [formGroup]="speciesDiagnosisForm">
 
     <div class="vertical-form-container">
 
       <mat-form-field class="form-control">
-        <mat-select placeholder="Species Diagnosis" formControlName="diagnosis">
+        <mat-select placeholder="Species Diagnosis" formControlName="diagnosis" aria-readonly="true">
           <mat-option>--</mat-option>
           <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}
             ({{diagnosis.diagnosis_type_string}})</mat-option>
@@ -19,7 +18,7 @@
       </mat-form-field>
 
       <mat-form-field class="form-control">
-        <mat-select placeholder="Basis of Diagnosis" formControlName="basis">
+        <mat-select placeholder="Basis of Diagnosis" formControlName="basis" readonly>
           <mat-option>--</mat-option>
           <mat-option *ngFor="let diagnosisBasis of diagnosisBases" value="{{diagnosisBasis.id}}">{{diagnosisBasis.name}}</mat-option>
         </mat-select>
@@ -32,8 +31,7 @@
         </mat-select>
       </mat-form-field>
 
-      <div class="horizontal-form-container" class="species-controls-container">
-        <mat-form-field class="species-number-control">
+      <mat-form-field class="species-number-control">
           <input matInput placeholder="Number Assessed" type="number" formControlName="tested_count">
           <mat-hint align="end" matTooltip="Public field">
             <mat-icon>public</mat-icon>
@@ -46,7 +44,8 @@
             <mat-icon>public</mat-icon>
           </mat-hint>
         </mat-form-field>
-      </div>
+
+      
 
       <!-- <div class="horizontal-form-container" class="species-controls-container">
           <mat-form-field class="species-number-control">
@@ -85,7 +84,7 @@
   <button mat-button color="warn" (click)="this.addSpeciesDiagnosisDialogRef.close('cancel');">
     <mat-icon>cancel</mat-icon>&nbsp;Cancel
   </button>
-  <button mat-button color="primary" type="submit" [disabled]="addSpeciesDiagnosisForm.invalid" (click)="onSubmit(addSpeciesDiagnosisForm.value)">
+  <button mat-button color="primary" type="submit" [disabled]="speciesDiagnosisForm.invalid" (click)="onSubmit(speciesDiagnosisForm.value)">
     <mat-icon>send</mat-icon>{{action_button_text}}
   </button>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>

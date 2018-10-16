@@ -122,18 +122,19 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   adminLevelOnes: AdministrativeLevelOne[];
   // expermental, for autocomplete
-  filteredAdminLevelOnes: Observable<any[]>;
+  administrative_level_one: AdministrativeLevelOne[];
+  filteredAdminLevelOnes;
 
   adminLevelTwos: AdministrativeLevelTwo[];
   // expermental, for autocomplete
-  // filteredAdminLevelTwos: Observable<any[]>;
+  filteredAdminLevelTwos;
 
   //////////////////////////////////////////////
   species: Species[];
   // filteredSpecies: Observable<Species[]>[] = [];
 
   filteredSpecies = [];
-  eventLocationSpecies: Observable<any[]>[] = [];
+  //eventLocationSpecies: Observable<any[]>[] = [];
   ///////////////////////////////////////////////////////
 
   contacts: Contact[];
@@ -193,6 +194,14 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
 
     this.eventLocationArray = this.eventSubmissionForm.get('new_event_locations') as FormArray;
+
+    this.filteredAdminLevelOnes = new Array<Observable<any>>();
+    this.ManageAdminLevelOneControl(0);
+
+    this.filteredAdminLevelTwos = new Array<Observable<any>>();
+    this.ManageAdminLevelTwoControl(0);
+            
+
     let eventLocationSpecies = new Array<Observable<any>>();
     this.filteredSpecies.push(eventLocationSpecies);
     this.ManageSpeciesControl(0, 0);
@@ -341,6 +350,30 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     return contact_id_match;
   }
 
+  displayFnAdminLevelOne(adminLevelOneId?: number): string | undefined {
+    let admin_level_one;
+    if (this["options"] !== undefined) {
+      for (let i = 0; i < this["options"]._results.length; i++) {
+        if (this["options"]._results[i].value == adminLevelOneId) {
+          admin_level_one = this["options"]._results[i].viewValue;
+        }
+      }
+    }
+    return admin_level_one;
+  }
+
+  displayFnAdminLevelTwo(adminLevelTwoId?: number): string | undefined {
+    let admin_level_two;
+    if (this["options"] !== undefined) {
+      for (let i = 0; i < this["options"]._results.length; i++) {
+        if (this["options"]._results[i].value == adminLevelTwoId) {
+          admin_level_two = this["options"]._results[i].viewValue;
+        }
+      }
+    }
+    return admin_level_two;
+  }
+
 
   ////////////////////////////////////////////// Begin WIP
 
@@ -373,6 +406,22 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     this.filteredContacts[eventLocationIndex][locationContactIndex] = arrayControl.at(locationContactIndex).get('contact').valueChanges
       .startWith(null)
       .map(val => this.filter(val, this.userContacts, 'last_name'));
+  }
+
+  ManageAdminLevelOneControl(eventLocationIndex: number) {
+    // tslint:disable-next-line:max-line-length
+    const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_one') as FormArray;
+    this.filteredAdminLevelOnes[eventLocationIndex] = arrayControl.valueChanges
+      .startWith(null)
+      .map(val => this.filter(val, this.adminLevelOnes, 'name'));
+  }
+
+  ManageAdminLevelTwoControl(eventLocationIndex: number) {
+    // tslint:disable-next-line:max-line-length
+    const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_two') as FormArray;
+    this.filteredAdminLevelTwos[eventLocationIndex] = arrayControl.valueChanges
+      .startWith(null)
+      .map(val => this.filter(val, this.adminLevelTwos, 'name'));
   }
 
   filter(val: any, searchArray: any, searchProperty: string): string[] {
@@ -513,9 +562,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
           this.adminLevelOnes = adminLevelOnes;
 
           // experimental
-          // this.filteredAdminLevelOnes = this.eventSubmissionForm.get('').valueChanges
-          //   .startWith(null)
-          //   .map(val => this.filter(val, this.administrative_level_one, 'name'));
+          /*this.filteredAdminLevelOnes = this.eventSubmissionForm.get('state').valueChanges
+            .startWith(null)
+            .map(val => this.filter(val, this.administrative_level_one, 'name'));*/
 
           // end experimental
         },
@@ -801,6 +850,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       }
     }
 
+    this.ManageAdminLevelOneControl(newEventLocationIndex);
+    this.ManageAdminLevelTwoControl(newEventLocationIndex);
+
     let eventLocationSpecies = new Array<Observable<any>>();
     this.filteredSpecies.push(eventLocationSpecies);
     this.ManageSpeciesControl(newEventLocationIndex, 0);
@@ -962,25 +1014,27 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   }
 
   updateAdminLevelTwoOptions(selectedAdminLevelOneID) {
-    const id = Number(selectedAdminLevelOneID);
+    if (!isNaN(selectedAdminLevelOneID)) {
+      const id = Number(selectedAdminLevelOneID);
 
-    // query the adminleveltwos endpoint for appropriate records
-    // update the options for the adminLevelTwo select with the response
+      // query the adminleveltwos endpoint for appropriate records
+      // update the options for the adminLevelTwo select with the response
 
-    this.adminLevelTwoService.queryAdminLevelTwos(id)
-      .subscribe(
-        adminLevelTwos => {
-          this.adminLevelTwos = adminLevelTwos;
-          this.adminLevelTwos.sort(function (a, b) {
-            if (a.name < b.name) { return -1; }
-            if (a.name > b.name) { return 1; }
-            return 0;
-          });
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+      this.adminLevelTwoService.queryAdminLevelTwos(id)
+        .subscribe(
+          adminLevelTwos => {
+            this.adminLevelTwos = adminLevelTwos;
+            this.adminLevelTwos.sort(function (a, b) {
+              if (a.name < b.name) { return -1; }
+              if (a.name > b.name) { return 1; }
+              return 0;
+            });
+          },
+          error => {
+            this.errorMessage = <any>error;
+          }
+        );
+      }
   }
 
   openSnackBar(message: string, action: string, duration: number) {

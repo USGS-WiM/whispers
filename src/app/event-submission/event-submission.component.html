@@ -249,7 +249,7 @@
                                 enter a value</mat-error>
                             </mat-form-field>
 
-                            <mat-form-field class="form-control">
+                            <!--<mat-form-field class="form-control">
                               <mat-select placeholder="State" formControlName="administrative_level_one"
                                 (ngModelChange)="updateAdminLevelTwoOptions($event)" required>
                                 <mat-option *ngFor="let adminLevelOne of adminLevelOnes" value="{{adminLevelOne.id}}">{{adminLevelOne.name}}</mat-option>
@@ -260,13 +260,50 @@
                               </mat-hint>
                               <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_one').invalid">Please
                                 enter a value</mat-error>
+                            </mat-form-field>-->
+
+                            <!-- State autocomplete control -->
+                            <mat-form-field class="form-control">
+                              <input type="text" matInput placeholder="State" aria-label="State"
+                                [matAutocomplete]="stateAutoComplete" formControlName="administrative_level_one"
+                                (ngModelChange)="updateAdminLevelTwoOptions($event)" required>
+                              <mat-autocomplete #stateAutoComplete="matAutocomplete" [displayWith]="displayFnAdminLevelOne">
+                                <mat-option *ngFor="let admin_level_one of filteredAdminLevelOnes[eventLocationIndex] | async"
+                                  [value]="admin_level_one.id">
+                                  <span>{{admin_level_one.name}}</span>
+                                </mat-option>
+                              </mat-autocomplete>
+                              <mat-hint align="start">Select a country to populate/update state list </mat-hint>
+                              <mat-hint align="end" matTooltip="Public field">
+                                <mat-icon>public</mat-icon>
+                              </mat-hint>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_one').invalid">Please
+                                enter a value</mat-error>
                             </mat-form-field>
 
-                            <mat-form-field class="form-control">
+                            <!--<mat-form-field class="form-control">
                               <mat-select placeholder="County" formControlName="administrative_level_two" required>
                                 <mat-option *ngFor="let adminLevelTwo of adminLevelTwos" value="{{adminLevelTwo.id}}">{{adminLevelTwo.name}}</mat-option>
                               </mat-select>
                               <mat-hint align="start">Select a state to populate/update county list </mat-hint>
+                              <mat-hint align="end" matTooltip="Public field">
+                                <mat-icon>public</mat-icon>
+                              </mat-hint>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_two').invalid">Please
+                                enter a value</mat-error>
+                            </mat-form-field>-->
+
+                            <!-- County autocomplete control -->
+                            <mat-form-field class="form-control">
+                              <input type="text" matInput placeholder="County" aria-label="County"
+                                [matAutocomplete]="adminTwoAutoComplete" formControlName="administrative_level_two" required>
+                              <mat-autocomplete #adminTwoAutoComplete="matAutocomplete" [displayWith]="displayFnAdminLevelTwo">
+                                <mat-option *ngFor="let admin_level_two of filteredAdminLevelTwos[eventLocationIndex] | async"
+                                  [value]="admin_level_two.id">
+                                  <span>{{admin_level_two.name}}</span>
+                                </mat-option>
+                              </mat-autocomplete>
+                              <mat-hint align="start">Enter a state to populate/update county list </mat-hint>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>

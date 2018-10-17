@@ -425,10 +425,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   }
 
   filter(val: any, searchArray: any, searchProperties: string[]): string[] {
-    //make searchProperty an array so multiple fields can be search
-    //
-    //  FIX NEEDED
-    //
     let result = [];
     for (let searchProperty of searchProperties) {
       if (isNaN(val)){

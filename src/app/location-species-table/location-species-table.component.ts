@@ -27,7 +27,7 @@ export class LocationSpeciesTableComponent implements OnInit {
   @Input('locationspecies') locationspecies: LocationSpecies[];
   @Input('permissions') permissions: Object;
 
-  addSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
+  editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
   editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
 
   errorMessage = '';
@@ -105,7 +105,7 @@ export class LocationSpeciesTableComponent implements OnInit {
 
   editSpeciesDiagnosis(speciesdiagnosis, locationspecies) {
 
-    this.addSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+    this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
       data: {
         locationspecies: locationspecies,
         speciesdiagnosis: speciesdiagnosis,
@@ -115,7 +115,7 @@ export class LocationSpeciesTableComponent implements OnInit {
       }
     });
 
-    this.addSpeciesDiagnosisDialogRef.afterClosed()
+    this.editSpeciesDiagnosisDialogRef.afterClosed()
       .subscribe(
         () => {
           //this.refreshEvent();
@@ -132,7 +132,7 @@ export class LocationSpeciesTableComponent implements OnInit {
 
   addSpeciesDiagnosis(locationspecies) {
 
-    this.addSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+    this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
       data: {
         locationspecies: locationspecies,
         species_diagnosis_action: 'add',
@@ -141,7 +141,7 @@ export class LocationSpeciesTableComponent implements OnInit {
       }
     });
 
-    this.addSpeciesDiagnosisDialogRef.afterClosed()
+    this.editSpeciesDiagnosisDialogRef.afterClosed()
       .subscribe(
         () => {
           //this.refreshEvent();

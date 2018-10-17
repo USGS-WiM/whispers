@@ -100,7 +100,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
-  addSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
+  editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
   submitSuccessDialogRef: MatDialogRef<EventSubmissionSuccessComponent>;
 
@@ -1055,7 +1055,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     const speciesDiagnosisIndex = this.addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex);
 
     // Open dialog for adding species diagnosis
-    this.addSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+    this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
       data: {
         species_diagnosis_action: 'addToFormArray',
         eventLocationIndex: eventLocationIndex,
@@ -1063,7 +1063,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.addSpeciesDiagnosisDialogRef.afterClosed()
+    this.editSpeciesDiagnosisDialogRef.afterClosed()
       .subscribe(
         (speciesDiagnosisObj) => {
 

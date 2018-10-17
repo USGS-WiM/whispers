@@ -74,7 +74,7 @@ export class EventDetailsComponent implements OnInit {
   editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
   // addEventLocationDialogRef: MatDialogRef<AddEventLocationComponent>;
   editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
-  addSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
+  editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
 
   eventDetailsShareDialogRef: MatDialogRef<EventDetailsShareComponent>;
 
@@ -582,7 +582,7 @@ export class EventDetailsComponent implements OnInit {
   //     this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
   //   } else if (this.selection[index].selected.length === 1) {
   //     // Open dialog for adding species diagnosis
-  //     this.addSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+  //     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
   //       data: {
   //         species: this.selection[index].selected[0],
   //         species_diagnosis_action: 'add'
@@ -591,7 +591,7 @@ export class EventDetailsComponent implements OnInit {
   //       // height: '75%'
   //     });
 
-  //     this.addSpeciesDiagnosisDialogRef.afterClosed()
+  //     this.editSpeciesDiagnosisDialogRef.afterClosed()
   //       .subscribe(
   //         () => {
   //           this.refreshEvent();

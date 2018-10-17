@@ -86,7 +86,7 @@
 </mat-dialog-content>
 <mat-dialog-actions>
 
-  <button mat-button color="warn" (click)="this.addSpeciesDiagnosisDialogRef.close('cancel');">
+  <button mat-button color="warn" (click)="this.editSpeciesDiagnosisDialogRef.close('cancel');">
     <mat-icon>cancel</mat-icon>&nbsp;Cancel
   </button>
   <button mat-button color="primary" type="submit" [disabled]="speciesDiagnosisForm.invalid" (click)="onSubmit(speciesDiagnosisForm.value)">

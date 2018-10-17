@@ -79,7 +79,7 @@ import { CreateContactService } from '@create-contact/create-contact.service';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
 
-import { AddSpeciesDiagnosisComponent } from '@app/add-species-diagnosis/add-species-diagnosis.component';
+import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
 
 import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
 import { EventSubmissionSuccessComponent } from '@app/event-submission/event-submission-success/event-submission-success.component';
@@ -100,7 +100,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
-  addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>;
+  addSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
   submitSuccessDialogRef: MatDialogRef<EventSubmissionSuccessComponent>;
 
@@ -1052,7 +1052,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     const speciesDiagnosisIndex = this.addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex);
 
     // Open dialog for adding species diagnosis
-    this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
+    this.addSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
       data: {
         species_diagnosis_action: 'addToFormArray',
         eventLocationIndex: eventLocationIndex,

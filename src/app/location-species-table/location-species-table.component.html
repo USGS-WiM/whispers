@@ -88,7 +88,8 @@
     <ng-container matColumnDef="expandedDetail">
       <mat-cell *matCellDef="let detail">
         <div class="species-detail-action-bar-left">
-          <button mat-button color="primary" class="species-detail-action-button" (click)="editSpecies(detail.element)">
+          <button mat-button color="primary" class="species-detail-action-button" (click)="editLocationSpecies(detail.element)"
+            [disabled]="!permissions.update">
             <mat-icon>edit</mat-icon> Edit Species
           </button>
         </div>
@@ -105,6 +106,7 @@
               <th>Number Assessed</th>
               <th>Number with diagnosis</th>
               <th>Species Diagnosis Suspect </th>
+              <th>Diagnosing Lab </th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
@@ -116,17 +118,28 @@
               <td>{{speciesdiagnosis.tested_count}}</td>
               <td>{{speciesdiagnosis.diagnosis_count}}</td>
               <td>{{speciesdiagnosis.suspect ? 'Yes' : 'No'}}</td>
-              <td> <button mat-icon-button>
-                  <mat-icon aria-label="Edit species diagnosis" color="accent" (click)="editSpeciesDiagnosis(speciesdiagnosis, detail.element)">edit</mat-icon>
+              <td>{{speciesdiagnosis.organizations_string}}</td>
+              <td>
+                <button mat-icon-button aria-label="Edit species diagnosis" color="accent" [disabled]="!permissions.update"
+                  (click)="editSpeciesDiagnosis(speciesdiagnosis, detail.element)">
+                  <mat-icon>edit</mat-icon>
                 </button>
               </td>
               <td>
-                <button mat-icon-button>
-                  <mat-icon aria-label="delete species diagnosis" color="warn" (click)="deleteSpeciesDiagnosis(speciesdiagnosis)">remove_circle</mat-icon>
+                <button mat-icon-button aria-label="delete species diagnosis" color="warn" [disabled]="!permissions.destroy"
+                  (click)="deleteSpeciesDiagnosis(speciesdiagnosis)">
+                  <mat-icon>remove_circle</mat-icon>
                 </button>
               </td>
             </tr>
           </table>
+
+          <div class="species-detail-action-bar-left">
+            <button mat-button color="primary" class="species-detail-action-button" (click)="addSpeciesDiagnosis(detail.element)"
+              [disabled]="!permissions.write">
+              <mat-icon>add</mat-icon> Add Species Diagnosis
+            </button>
+          </div>
         </div>
       </mat-cell>
     </ng-container>

@@ -2,9 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
 
-import { EditSpeciesComponent } from '@app/edit-species/edit-species.component';
+import { EditLocationSpeciesComponent } from '@app/edit-location-species/edit-location-species.component';
 
-import { AddSpeciesDiagnosisComponent } from '@app/add-species-diagnosis/add-species-diagnosis.component';
+import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
 
 import { MatTableDataSource } from '@angular/material';
 
@@ -25,9 +25,10 @@ import { LocationSpecies } from '@interfaces/location-species';
 })
 export class LocationSpeciesTableComponent implements OnInit {
   @Input('locationspecies') locationspecies: LocationSpecies[];
+  @Input('permissions') permissions: Object;
 
-  addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>;
-  editSpeciesDialogRef: MatDialogRef<EditSpeciesComponent>;
+  addSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
+  editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
 
   errorMessage = '';
 
@@ -57,6 +58,11 @@ export class LocationSpeciesTableComponent implements OnInit {
 
   ngOnInit() {
 
+    if (this.permissions) {
+      console.log('Hey,table has permissions object: ' + this.permissions);
+    }
+
+
     const data = this.locationspecies;
 
     const rows = [];
@@ -67,18 +73,22 @@ export class LocationSpeciesTableComponent implements OnInit {
   }
 
 
-  editSpecies(species) {
+  editLocationSpecies(locationspecies) {
 
-    // Open dialog for adding event diagnosis
-    this.editSpeciesDialogRef = this.dialog.open(EditSpeciesComponent, {
+    // Open dialog for editing location species
+    this.editLocationSpeciesDialogRef = this.dialog.open(EditLocationSpeciesComponent, {
       data: {
-        species: species
+        locationspecies: locationspecies,
+        location_species_action: 'edit',
+        action_text: 'edit',
+        action_button_text: 'Save Changes',
+        title: 'Edit species',
+        titleIcon: 'edit'
+        // eventlocation: eventlocation
       }
-      // minWidth: 200
-      // height: '75%'
     });
 
-    this.editSpeciesDialogRef.afterClosed()
+    this.editLocationSpeciesDialogRef.afterClosed()
       .subscribe(
         () => {
           // this.refreshEvent();
@@ -93,13 +103,15 @@ export class LocationSpeciesTableComponent implements OnInit {
 
   }
 
-  editSpeciesDiagnosis(speciesdiagnosis, species) {
+  editSpeciesDiagnosis(speciesdiagnosis, locationspecies) {
 
-    this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
+    this.addSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
       data: {
-        species: species,
+        locationspecies: locationspecies,
         speciesdiagnosis: speciesdiagnosis,
-        species_diagnosis_action: 'edit'
+        species_diagnosis_action: 'edit',
+        title: 'Edit Species Diagnosis',
+        titleIcon: 'edit'
       }
     });
 
@@ -116,8 +128,31 @@ export class LocationSpeciesTableComponent implements OnInit {
         }
       );
 
+  }
 
+  addSpeciesDiagnosis(locationspecies) {
 
+    this.addSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+      data: {
+        locationspecies: locationspecies,
+        species_diagnosis_action: 'add',
+        title: 'Add diagnosis for this species',
+        titleIcon: 'add'
+      }
+    });
+
+    this.addSpeciesDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          //this.refreshEvent();
+          // for (let i = 0; i < this.selection.length; i++) {
+          //   this.selection[i].clear();
+          // }
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
   }
 

@@ -24,15 +24,17 @@ import { Organization } from '@interfaces/organization';
 import { SpeciesDiagnosis } from '@interfaces/species-diagnosis';
 
 @Component({
-  selector: 'app-add-species-diagnosis',
-  templateUrl: './add-species-diagnosis.component.html',
-  styleUrls: ['./add-species-diagnosis.component.scss']
+  selector: 'app-edit-species-diagnosis',
+  templateUrl: './edit-species-diagnosis.component.html',
+  styleUrls: ['./edit-species-diagnosis.component.scss']
 })
-export class AddSpeciesDiagnosisComponent implements OnInit {
+export class EditSpeciesDiagnosisComponent implements OnInit {
   @Input('selectedSpeciesDiagnosis') selectedSpeciesDiagnosis: SpeciesDiagnosis;
   errorMessage = '';
 
   submitLoading = false;
+
+  locationspeciesString;
 
   diagnoses: Diagnosis[];
   diagnosisBases: DiagnosisBasis[];
@@ -43,7 +45,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
   // editSpeciesDiagnosisForm: FormGroup;
 
   // these variables are for use when direct adding a species diagnosis
-  species;
+  locationspecies;
   speciesdiagnosis;
   administrative_level_one;
   administrative_level_two;
@@ -66,10 +68,10 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
       // priority: null,
       tested_count: null,
       diagnosis_count: null,
-      //positive_count: null,
-      //suspect_count: null,
-      //pooled: false,
-      species_diagnosis_organizations: null
+      positive_count: null,
+      suspect_count: null,
+      pooled: false,
+      new_species_diagnosis_organizations: []
     });
   }
 
@@ -77,7 +79,7 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
     private formBuilder: FormBuilder,
     public snackBar: MatSnackBar,
     private diagnosisService: DiagnosisService,
-    public addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>,
+    public editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>,
     private diagnosisBasisService: DiagnosisBasisService,
     private diagnosisCauseService: DiagnosisCauseService,
     private locationSpeciesDiagnosisService: LocationSpeciesDiagnosisService,
@@ -89,12 +91,14 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
 
   ngOnInit() {
 
-    this.speciesdiagnosis = this.data.speciesdiagnosis;
+    if (this.data.speciesdiagnosis) {
+      this.speciesdiagnosis = this.data.speciesdiagnosis;
+    }
 
-    if (this.data.species) {
-      this.species = this.data.species.species_string;
-      this.administrative_level_one = this.data.species.administrative_level_one_string;
-      this.administrative_level_two = this.data.species.administrative_level_two_string;
+    if (this.data.locationspecies) {
+      this.locationspeciesString = this.data.locationspecies.species_string;
+      this.administrative_level_one = this.data.locationspecies.administrative_level_one_string;
+      this.administrative_level_two = this.data.locationspecies.administrative_level_two_string;
     }
 
     if (this.data.species_diagnosis_action === 'add') {
@@ -108,17 +112,21 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
       this.action_button_text = 'Save Changes';
 
       // Access the form here and set the value to the objects property/value
-      this.speciesDiagnosisForm.get('id').setValue(this.data.speciesdiagnosis.id);
-      this.speciesDiagnosisForm.get('cause').setValue(this.data.speciesdiagnosis.cause);
-      this.speciesDiagnosisForm.get('basis').setValue(this.data.speciesdiagnosis.basis);
-      this.speciesDiagnosisForm.get('tested_count').setValue(this.data.speciesdiagnosis.tested_count);
-      this.speciesDiagnosisForm.get('diagnosis_count').setValue(this.data.speciesdiagnosis.diagnosis_count);
-      this.speciesDiagnosisForm.get('suspect').setValue(this.data.speciesdiagnosis.suspect);
-      // this.speciesDiagnosisForm.get('positive_count').setValue(this.data.speciesdiagnosis.positive_count);
-      //this.speciesDiagnosisForm.get('suspect_count').setValue(this.data.speciesdiagnosis.suspect_count);
-      // this.speciesDiagnosisForm.get('new_species_diagnosis_organizations').setValue(this.data.contact.affiliation);
-      
-      //this.speciesDiagnosisForm.get('pooled').setValue(this.data.speciesdiagnosis.pooled);
+      this.speciesDiagnosisForm.setValue({
+        id: this.data.speciesdiagnosis.id,
+        location_species: this.data.speciesdiagnosis.location_species,
+        diagnosis: [this.data.speciesdiagnosis.diagnosis, Validators.required],
+        cause: this.data.speciesdiagnosis.cause,
+        basis: this.data.speciesdiagnosis.basis,
+        suspect: this.data.speciesdiagnosis.suspect,
+        tested_count: this.data.speciesdiagnosis.tested_count,
+        diagnosis_count: this.data.speciesdiagnosis.diagnosis_count,
+        positive_count: this.data.speciesdiagnosis.positive_count,
+        suspect_count: this.data.speciesdiagnosis.suspect_count,
+        pooled: this.data.speciesdiagnosis.pooled,
+        new_species_diagnosis_organizations: this.data.speciesdiagnosis.organizations
+      });
+
     }
 
 
@@ -127,8 +135,8 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
       .subscribe(
         (diagnoses) => {
           this.diagnoses = diagnoses;
-          if (this.data.species) {
-            if (this.data.speciesdiagnosis !== undefined && this.data.speciesdiagnosis.diagnosis !== undefined) {
+          if (this.data.locationspecies) {
+            if (this.data.speciesdiagnosis !== undefined && this.data.speciesdiagnosis.diagnosis !== null) {
               this.speciesDiagnosisForm.get('diagnosis').setValue(this.data.speciesdiagnosis.diagnosis.toString());
             }
           }
@@ -143,8 +151,8 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
         (diagnosisBases) => {
           this.diagnosisBases = diagnosisBases;
           // tslint:disable-next-line:max-line-length
-          if (this.data.species) {
-            if (this.data.speciesdiagnosis !== undefined && this.data.speciesdiagnosis.basis !== undefined) {
+          if (this.data.locationspecies) {
+            if (this.data.speciesdiagnosis !== undefined && this.data.speciesdiagnosis.basis !== null) {
               // tslint:disable-next-line:max-line-length
               this.speciesDiagnosisForm.get('basis').setValue(this.data.speciesdiagnosis.basis.toString());
             }
@@ -161,8 +169,8 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
         (diagnosisCauses) => {
           this.diagnosisCauses = diagnosisCauses;
           // tslint:disable-next-line:max-line-length
-          if (this.data.species) {
-            if (this.data.speciesdiagnosis !== undefined && this.data.speciesdiagnosis.cause !== undefined) {
+          if (this.data.locationspecies) {
+            if (this.data.speciesdiagnosis !== undefined && this.data.speciesdiagnosis.cause !== null) {
               // tslint:disable-next-line:max-line-length
               this.speciesDiagnosisForm.get('cause').setValue(this.data.speciesdiagnosis.cause.toString());
             }
@@ -198,13 +206,13 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
     this.submitLoading = true;
 
     if (this.data.species_diagnosis_action === 'add') {
-      formValue.new_location_species = this.data.species.id;
+      // formValue.new_location_species = this.data.species.id;
       this.locationSpeciesDiagnosisService.create(formValue)
         .subscribe(
-          (contact) => {
+          (speciesdiagnosis) => {
             this.submitLoading = false;
             this.openSnackBar('Species Diagnosis Added', 'OK', 5000);
-            this.addSpeciesDiagnosisDialogRef.close();
+            this.editSpeciesDiagnosisDialogRef.close();
           },
           error => {
             this.submitLoading = false;
@@ -219,17 +227,17 @@ export class AddSpeciesDiagnosisComponent implements OnInit {
         formValue: formValue
       };
 
-      this.addSpeciesDiagnosisDialogRef.close(speciesDiagnosisObj);
+      this.editSpeciesDiagnosisDialogRef.close(speciesDiagnosisObj);
 
     } else if (this.data.species_diagnosis_action === 'edit') {
-      formValue.new_location_species = this.data.species.id;
+      // formValue.new_location_species = this.data.locationspecies.id;
       formValue.id = this.data.speciesdiagnosis.id;
       this.locationSpeciesDiagnosisService.update(formValue)
         .subscribe(
           (contact) => {
             this.submitLoading = false;
             this.openSnackBar('Species Diagnosis Updated', 'OK', 5000);
-            this.addSpeciesDiagnosisDialogRef.close();
+            this.editSpeciesDiagnosisDialogRef.close();
           },
           error => {
             this.submitLoading = false;

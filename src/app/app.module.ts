@@ -84,8 +84,8 @@ import { AuthenticationGuard } from '@authentication/authentication.guard';
 import { CurrentUserService } from '@app/services/current-user.service';
 import { RoleService } from '@app/services/role.service';
 import { AddEventDiagnosisComponent } from './add-event-diagnosis/add-event-diagnosis.component';
-import { EditSpeciesComponent } from './edit-species/edit-species.component';
-import { AddSpeciesDiagnosisComponent } from './add-species-diagnosis/add-species-diagnosis.component';
+import { EditLocationSpeciesComponent } from './edit-location-species/edit-location-species.component';
+import { EditSpeciesDiagnosisComponent } from './edit-species-diagnosis/edit-species-diagnosis.component';
 import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
 import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 import { LocationSpeciesDiagnosisService } from '@app/services/location-species-diagnosis.service';
@@ -120,8 +120,8 @@ import { LocationSpeciesTableComponent } from './location-species-table/location
     AuthenticationComponent,
     EditEventComponent,
     AddEventDiagnosisComponent,
-    EditSpeciesComponent,
-    AddSpeciesDiagnosisComponent,
+    EditLocationSpeciesComponent,
+    EditSpeciesDiagnosisComponent,
     EditEventLocationComponent,
     AddEventLocationComponent,
     GnisLookupComponent,
@@ -216,8 +216,8 @@ import { LocationSpeciesTableComponent } from './location-species-table/location
     AuthenticationComponent,
     EditEventComponent,
     AddEventDiagnosisComponent,
-    EditSpeciesComponent,
-    AddSpeciesDiagnosisComponent,
+    EditLocationSpeciesComponent,
+    EditSpeciesDiagnosisComponent,
     EditEventLocationComponent,
     AddEventLocationComponent,
     GnisLookupComponent,

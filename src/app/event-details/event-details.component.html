@@ -200,12 +200,14 @@
 
               <br>
               <div class="event-detail-action-bar">
-                <button mat-raised-button color="primary" class="event-detail-action-button" (click)="editEvent(id)"
+                <button mat-button color="primary" class="event-detail-action-button" (click)="editEvent(id)"
                   [disabled]="!eventData.permissions.update">
-                  <mat-icon>edit</mat-icon> Edit Event</button>
-                <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addEventDiagnosis(id)"
+                  <mat-icon>edit</mat-icon> Edit Event
+                </button>
+                <button mat-button color="primary" class="event-detail-action-button" (click)="addEventDiagnosis(id)"
                   [disabled]="!eventData.permissions.write">
-                  <mat-icon>add</mat-icon> Add Event Diagnosis</button>
+                  <mat-icon>add</mat-icon> Add Event Diagnosis
+                </button>
               </div>
 
               <p>
@@ -235,7 +237,7 @@
                     <div class="details-info">
 
                       <span class="text-larger text-bold">
-                         {{eventLocation.administrative_level_two_string}},
+                        {{eventLocation.administrative_level_two_string}},
                         {{eventLocation.administrative_level_one_string}},
                         {{eventLocation.country_string}}
                       </span> <br>
@@ -287,22 +289,29 @@
                       </div>
 
                       <div class="event-detail-action-bar-left">
-                        <button mat-stroked-button color="primary" class="event-detail-action-button" (click)="editEventLocation(eventData.eventlocations[i])"
+                        <button mat-button color="primary" class="event-detail-action-button" (click)="editEventLocation(eventData.eventlocations[i])"
                           [disabled]="!eventData.permissions.update">
                           <i class="material-icons">edit</i> Edit Event Location Details</button>
-                        <button mat-stroked-button color="warn" class="event-detail-action-button" (click)="openEventLocationDeleteConfirm(eventData.eventlocations[i].id)"
+                        <button mat-button color="warn" class="event-detail-action-button" (click)="openEventLocationDeleteConfirm(eventData.eventlocations[i].id)"
                           [disabled]="!eventData.permissions.destroy">
                           <i class="material-icons">delete</i> Delete Event Location</button>
                       </div><br />
                       <p>
                         <div *ngIf="eventLocation.locationspecies.length > 0">
 
-                          <label *ngIf="eventLocation.locationspecies" class="event-detail-label text-larger text-bold">Species at this location</label>
+                          <label *ngIf="eventLocation.locationspecies" class="event-detail-label text-larger text-bold">Species
+                            at this location</label>
                           <br />
 
-                          
-                          <app-location-species-table [locationspecies]="eventLocationSpecies"></app-location-species-table>
 
+                          <app-location-species-table [locationspecies]="eventLocationSpecies" [permissions]="eventData.permissions"></app-location-species-table>
+
+                          <div class="event-detail-action-bar-left">
+                            <button mat-button color="primary" class="event-detail-action-button" (click)="addLocationSpecies(eventLocation)"
+                              [disabled]="!eventData.permissions.write">
+                              <mat-icon>add</mat-icon> Add species to this location
+                            </button>
+                          </div>
                           <!-- <div class="results-table-div">
 
                             <mat-table [dataSource]="eventLocation.locationspecies" matSort matSortActive="species"

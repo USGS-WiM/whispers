@@ -27,8 +27,8 @@ import { LocationSpecies } from '@interfaces/location-species';
 import { EditEventComponent } from '@app/edit-event/edit-event.component';
 import { AddEventDiagnosisComponent } from '@app/add-event-diagnosis/add-event-diagnosis.component';
 import { EditEventLocationComponent } from '@app/edit-event-location/edit-event-location.component';
-import { EditSpeciesComponent } from '@app/edit-species/edit-species.component';
-import { AddSpeciesDiagnosisComponent } from '@app/add-species-diagnosis/add-species-diagnosis.component';
+import { EditLocationSpeciesComponent } from '@app/edit-location-species/edit-location-species.component';
+import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
 import { LandOwnershipService } from '@services/land-ownership.service';
 import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { marker } from 'leaflet';
@@ -48,14 +48,14 @@ import { AgeBias } from '@interfaces/age-bias';
   styleUrls: ['./event-details.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('void', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
-      state('*', style({height: '*', visibility: 'visible'})),
+      state('void', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
+      state('*', style({ height: '*', visibility: 'visible' })),
       transition('void <=> *', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
 })
 export class EventDetailsComponent implements OnInit {
- 
+
   // @ViewChild('speciesTable') table: any;
   eventID: string;
   map;
@@ -73,8 +73,8 @@ export class EventDetailsComponent implements OnInit {
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
   editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
   // addEventLocationDialogRef: MatDialogRef<AddEventLocationComponent>;
-  editSpeciesDialogRef: MatDialogRef<EditSpeciesComponent>;
-  addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>;
+  editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
+  editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
 
   eventDetailsShareDialogRef: MatDialogRef<EventDetailsShareComponent>;
 
@@ -577,33 +577,58 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
-  addSpeciesDiagnosis(id: string, index: number) {
-    if (this.selection[index].selected.length > 1 || this.selection[index].selected.length === 0) {
-      this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
-    } else if (this.selection[index].selected.length === 1) {
-      // Open dialog for adding species diagnosis
-      this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
-        data: {
-          species: this.selection[index].selected[0],
-          species_diagnosis_action: 'add'
-        }
-        // minWidth: 200
-        // height: '75%'
-      });
+  // addSpeciesDiagnosis(id: string, index: number) {
+  //   if (this.selection[index].selected.length > 1 || this.selection[index].selected.length === 0) {
+  //     this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
+  //   } else if (this.selection[index].selected.length === 1) {
+  //     // Open dialog for adding species diagnosis
+  //     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+  //       data: {
+  //         species: this.selection[index].selected[0],
+  //         species_diagnosis_action: 'add'
+  //       }
+  //       // minWidth: 200
+  //       // height: '75%'
+  //     });
 
-      this.addSpeciesDiagnosisDialogRef.afterClosed()
-        .subscribe(
-          () => {
-            this.refreshEvent();
-            for (let i = 0; i < this.selection.length; i++) {
-              this.selection[i].clear();
-            }
-          },
-          error => {
-            this.errorMessage = <any>error;
-          }
-        );
-    }
+  //     this.editSpeciesDiagnosisDialogRef.afterClosed()
+  //       .subscribe(
+  //         () => {
+  //           this.refreshEvent();
+  //           // for (let i = 0; i < this.selection.length; i++) {
+  //           //   this.selection[i].clear();
+  //           // }
+  //         },
+  //         error => {
+  //           this.errorMessage = <any>error;
+  //         }
+  //       );
+  //   }
+  // }
+
+  addLocationSpecies(eventlocation) {
+
+    // Open dialog for adding location species
+    this.editLocationSpeciesDialogRef = this.dialog.open(EditLocationSpeciesComponent, {
+      data: {
+        location_species_action: 'add',
+        action_text: 'add',
+        action_button_text: 'Submit',
+        eventlocation: eventlocation,
+        title: 'Add species to this location',
+        titleIcon: 'add'
+      }
+    });
+
+    this.editLocationSpeciesDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
 
 

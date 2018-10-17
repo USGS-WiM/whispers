@@ -29,6 +29,18 @@ export class LocationSpeciesService {
 
   }
 
+  public create(formValue): Observable<LocationSpecies> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.AUTH_JSON_HEADERS
+    });
+
+    return this._http.post(APP_SETTINGS.LOCATION_SPECIES_URL, formValue, options)
+      .map((response: Response) => <LocationSpecies>response.json())
+      .catch(this.handleError);
+
+  }
+
   public update(formValue): Observable<LocationSpecies> {
 
     const options = new RequestOptions({

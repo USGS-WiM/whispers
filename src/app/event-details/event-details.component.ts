@@ -356,16 +356,25 @@ export class EventDetailsComponent implements OnInit {
   mapEvent(eventData) {
 
     const markers = [];
+    let countyPolys = [];
     this.unMappables = [];
     for (const eventlocation of eventData.eventlocations) {
       markers.push(eventlocation);
+      if (eventlocation.administrative_level_two_points !== null) {
+        countyPolys.push(JSON.parse(eventlocation.administrative_level_two_points.replace('Y', '')));
+      }
+    }
+
+    let eventPolys;
+    if (countyPolys.length > 0) {
+      eventPolys = L.polygon(countyPolys, {color: 'blue'}).addTo(this.map);
     }
 
     for (const marker of markers) {
 
-      if (marker.latitude === null || marker.longitude === null) {
+      if (marker.latitude === null || marker.longitude === null || marker.latitude === undefined || marker.longitude === undefined) {
         this.unMappables.push(marker);
-      } else if (marker.latitude !== null || marker.longitude !== null) {
+      } else if (marker.latitude !== null || marker.longitude !== null || marker.latitude !== undefined || marker.longitude !== undefined) {
 
         this.icon = L.divIcon({
           className: 'wmm-pin wmm-white wmm-icon-circle wmm-icon-black wmm-size-25'
@@ -382,12 +391,22 @@ export class EventDetailsComponent implements OnInit {
 
     }
 
+    let bounds = L.latLngBounds([]);
+
     if (markers.length > this.unMappables.length) {
-      this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [500, 500] });
+      var markerBounds = this.locationMarkers.getBounds()
+      bounds.extend(markerBounds);
     }
 
-
-
+    if (countyPolys.length > 0) {
+      var countyBounds = eventPolys.getBounds();
+      bounds.extend(countyBounds);
+    }
+    
+    if (markers.length || countyPolys.length) {
+      this.map.fitBounds(bounds);
+    }
+    
   }
 
   editEvent(id: string) {

@@ -110,14 +110,12 @@
                         <span *ngIf="loc_species.speciesdiagnoses.length > 0">
                           <span *ngFor="let speciesdiagnosis of loc_species.speciesdiagnoses">
                             <span class="text-bold" *ngIf="speciesdiagnosis">{{speciesdiagnosis.diagnosis_string}}</span>
-                            <br>
-                            <span *ngIf="speciesdiagnosis.causal">(Causal)</span>
-                            <br>
-                            <span>{{speciesdiagnosis.tested_count}} specimens tested |</span>
-                            <span>{{speciesdiagnosis.positive_count}} positive</span>
+                            <br />
+                            <span *ngIf="speciesdiagnosis.tested_count !== null">{{speciesdiagnosis.tested_count}} specimens tested |</span>
+                            <span  *ngIf="speciesdiagnosis.positive_count !== null">{{speciesdiagnosis.positive_count}} positive</span>
                             <br>
                             <span *ngIf="speciesdiagnosis.organizations_string"> by
-                              {{speciesdiagnosis.organizations_string[0]}}</span>
+                              {{speciesdiagnosis.organizations_string[0]}}</span><br/>
                           </span>
                         </span>
                         <span *ngIf="loc_species.speciesdiagnoses.length === 0">Not assessed</span>

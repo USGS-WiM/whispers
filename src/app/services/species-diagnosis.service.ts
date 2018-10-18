@@ -8,47 +8,47 @@ import { Subject } from 'rxjs/Subject';
 
 import { APP_SETTINGS } from '@app/app.settings';
 
-import { LocationSpecies } from '@interfaces/location-species';
+import { SpeciesDiagnosis } from '@interfaces/species-diagnosis';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LocationSpeciesService {
+export class SpeciesDiagnosisService {
 
-  constructor(private _http: Http) { }
+  constructor(private http: Http) { }
 
-  public getLocationSpecies(): Observable<LocationSpecies[]> {
+  public getSpeciesDiagnosis(): Observable<SpeciesDiagnosis[]> {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.LOCATION_SPECIES_URL + '?no_page', options)
-      .map((response: Response) => <LocationSpecies[]>response.json())
+    return this.http.get(APP_SETTINGS.LOCATION_SPECIES_DIAGNOSIS_URL + '?no_page', options)
+      .map((response: Response) => <SpeciesDiagnosis[]>response.json())
       .catch(this.handleError);
 
   }
 
-  public create(formValue): Observable<LocationSpecies> {
+  public create(formValue): Observable<SpeciesDiagnosis> {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.AUTH_JSON_HEADERS
     });
 
-    return this._http.post(APP_SETTINGS.LOCATION_SPECIES_URL, formValue, options)
-      .map((response: Response) => <LocationSpecies>response.json())
+    return this.http.post(APP_SETTINGS.LOCATION_SPECIES_DIAGNOSIS_URL, formValue, options)
+      .map((response: Response) => <SpeciesDiagnosis>response.json())
       .catch(this.handleError);
 
   }
 
-  public update(formValue): Observable<LocationSpecies> {
+  public update(formValue): Observable<SpeciesDiagnosis> {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.put(APP_SETTINGS.LOCATION_SPECIES_URL + formValue.id + '/', formValue, options)
-      .map((response: Response) => <LocationSpecies>response.json())
+    return this.http.put(APP_SETTINGS.LOCATION_SPECIES_DIAGNOSIS_URL + formValue.id + '/', formValue, options)
+      .map((response: Response) => <SpeciesDiagnosis>response.json())
       .catch(this.handleError);
   }
 
@@ -58,7 +58,7 @@ export class LocationSpeciesService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.delete(APP_SETTINGS.LOCATION_SPECIES_URL + id + '/', options)
+    return this.http.delete(APP_SETTINGS.LOCATION_SPECIES_DIAGNOSIS_URL + id + '/', options)
       .map((response: Response) => <any>response.json())
       .catch(this.handleError);
   }
@@ -67,5 +67,4 @@ export class LocationSpeciesService {
     console.error(error);
     return Observable.throw(JSON.stringify(error.json()) || 'Server error');
   }
-
 }

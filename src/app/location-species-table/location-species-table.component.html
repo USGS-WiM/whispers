@@ -92,6 +92,10 @@
             [disabled]="!permissions.update">
             <mat-icon>edit</mat-icon> Edit Species
           </button>
+          <button mat-button color="warn" class="species-detail-action-button" (click)="openDeleteLocationSpeciesConfirm(detail.element)"
+            [disabled]="!permissions.destroy">
+            <mat-icon>delete_forever</mat-icon> Delete Species
+          </button>
         </div>
 
         <div *ngIf="detail.element.speciesdiagnoses.length === 0">No diagnosis for this species at this location</div>
@@ -127,7 +131,7 @@
               </td>
               <td>
                 <button mat-icon-button aria-label="delete species diagnosis" color="warn" [disabled]="!permissions.destroy"
-                  (click)="deleteSpeciesDiagnosis(speciesdiagnosis)">
+                  (click)="openDeleteSpeciesDiagnosisConfirm(speciesdiagnosis)">
                   <mat-icon>remove_circle</mat-icon>
                 </button>
               </td>

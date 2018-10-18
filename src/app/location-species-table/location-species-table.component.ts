@@ -7,8 +7,13 @@ import { EditLocationSpeciesComponent } from '@app/edit-location-species/edit-lo
 import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
 
 import { MatTableDataSource } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { LocationSpecies } from '@interfaces/location-species';
+
+import { ConfirmComponent } from '@confirm/confirm.component';
+import { LocationSpeciesService } from '@services/location-species.service';
+import { SpeciesDiagnosisService } from '@services/species-diagnosis.service';
 
 
 @Component({
@@ -29,6 +34,7 @@ export class LocationSpeciesTableComponent implements OnInit {
 
   editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
   editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
 
   errorMessage = '';
 
@@ -53,7 +59,10 @@ export class LocationSpeciesTableComponent implements OnInit {
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   constructor(
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private locationSpeciesService: LocationSpeciesService,
+    public snackBar: MatSnackBar,
+    private speciesDiagnosisService: SpeciesDiagnosisService
   ) { }
 
   ngOnInit() {
@@ -100,7 +109,44 @@ export class LocationSpeciesTableComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
+  }
 
+  openDeleteLocationSpeciesConfirm(locationspecies) {
+
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete species from this location',
+          titleIcon: 'delete_forever',
+          message: 'Are you sure you want to delete this species?',
+          messageIcon: '',
+          confirmButtonText: 'Delete',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteLocationSpecies(locationspecies);
+      }
+    });
+
+  }
+
+  deleteLocationSpecies(locationspecies) {
+
+    this.locationSpeciesService.delete(locationspecies.id)
+      .subscribe(
+        () => {
+          this.openSnackBar('Species Deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Species not deleted. Error message: ' + error, 'OK', 8000);
+
+        }
+      );
   }
 
   editSpeciesDiagnosis(speciesdiagnosis, locationspecies) {
@@ -130,6 +176,7 @@ export class LocationSpeciesTableComponent implements OnInit {
 
   }
 
+
   addSpeciesDiagnosis(locationspecies) {
 
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
@@ -144,10 +191,6 @@ export class LocationSpeciesTableComponent implements OnInit {
     this.editSpeciesDiagnosisDialogRef.afterClosed()
       .subscribe(
         () => {
-          //this.refreshEvent();
-          // for (let i = 0; i < this.selection.length; i++) {
-          //   this.selection[i].clear();
-          // }
         },
         error => {
           this.errorMessage = <any>error;
@@ -156,8 +199,48 @@ export class LocationSpeciesTableComponent implements OnInit {
 
   }
 
+  openDeleteSpeciesDiagnosisConfirm(speciesdiagnosis) {
+
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete diagnosis from this species',
+          titleIcon: 'delete_forever',
+          message: 'Are you sure you want to delete this diagnosis?',
+          messageIcon: '',
+          confirmButtonText: 'Delete',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteSpeciesDiagnosis(speciesdiagnosis);
+      }
+    });
+
+  }
+
   deleteSpeciesDiagnosis(speciesdiagnosis) {
 
+    this.speciesDiagnosisService.delete(speciesdiagnosis.id)
+      .subscribe(
+        () => {
+          this.openSnackBar('Species Deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Species not deleted. Error message: ' + error, 'OK', 8000);
+
+        }
+      );
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
   }
 
 

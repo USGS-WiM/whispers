@@ -98,6 +98,7 @@ import { EventSubmissionSuccessComponent } from './event-submission/event-submis
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { ServiceRequestService } from '@app/services/service-request.service';
 import { LocationSpeciesTableComponent } from './location-species-table/location-species-table.component';
+import { SpeciesDiagnosisService } from '@app/services/species-diagnosis.service';
 
 
 
@@ -202,6 +203,7 @@ import { LocationSpeciesTableComponent } from './location-species-table/location
     SearchDialogService,
     UserService,
     LocationSpeciesDiagnosisService,
+    SpeciesDiagnosisService,
     ServiceRequestService,
     DisplayValuePipe,
     DatePipe,

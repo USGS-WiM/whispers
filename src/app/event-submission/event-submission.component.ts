@@ -284,7 +284,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
   }
 
-
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
       data: {

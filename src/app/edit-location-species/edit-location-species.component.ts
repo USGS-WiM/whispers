@@ -121,7 +121,7 @@ export class EditLocationSpeciesComponent implements OnInit {
           });
           this.filteredSpecies = this.locationSpeciesForm.get('species').valueChanges
             .startWith(null)
-            .map(val => this.filter(val, this.species, 'name'));
+            .map(val => this.filter(val, this.species, ['name']));
 
         },
         error => {
@@ -148,6 +148,8 @@ export class EditLocationSpeciesComponent implements OnInit {
     this.submitLoading = true;
 
     if (this.data.location_species_action === 'add') {
+
+      formValue.event_location = this.data.eventlocation.id;
 
       this.locationSpeciesService.create(formValue)
         .subscribe(
@@ -185,23 +187,37 @@ export class EditLocationSpeciesComponent implements OnInit {
 
   }
 
-  filter(val: any, searchArray: any, searchProperty: string): string[] {
-    const realval = val && typeof val === 'object' ? val.searchProperty : val;
-    const result = [];
-    let lastOption = null;
-    for (let i = 0; i < searchArray.length; i++) {
-      if (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase())) {
-        if (searchArray[i][searchProperty] !== lastOption) {
-          lastOption = searchArray[i][searchProperty];
-          result.push(searchArray[i]);
+  filter(val: any, searchArray: any, searchProperties: string[]): string[] {
+    let result = [];
+    for (let searchProperty of searchProperties) {
+      if (isNaN(val)){
+        const realval = val && typeof val === 'object' ? val[searchProperty] : val;
+        let lastOption = null;
+        if (searchArray !== undefined) {
+          for (let i = 0; i < searchArray.length; i++) {
+            if (searchArray[i][searchProperty] != null && (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase()))) {
+              if (searchArray[i][searchProperty] !== lastOption) {
+                lastOption = searchArray[i][searchProperty];
+                result.push(searchArray[i]);
+              }
+            }
+          }
         }
       }
     }
+    
+    // this will return all records matching the val string
     return result;
   }
 
-  displayFn(species?: Species): string | undefined {
-    return species ? species.name : undefined;
+  displayFn(speciesId?: Species): string | undefined {
+    let species_id_match;
+    for (let i = 0; i < this["options"]._results.length-1; i++) {
+      if (this["options"]._results[i].value == speciesId) {
+        species_id_match = this["options"]._results[i].viewValue;
+      }
+    }
+    return species_id_match;
   }
 
 }

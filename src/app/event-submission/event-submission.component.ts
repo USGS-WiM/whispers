@@ -1124,8 +1124,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         (event) => {
           this.submitLoading = false;
 
-
-
           this.confirmDialogRef = this.dialog.open(ConfirmComponent,
             {
               data: {

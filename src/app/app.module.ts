@@ -99,6 +99,7 @@ import { EditUserComponent } from './edit-user/edit-user.component';
 import { ServiceRequestService } from '@app/services/service-request.service';
 import { LocationSpeciesTableComponent } from './location-species-table/location-species-table.component';
 import { SpeciesDiagnosisService } from '@app/services/species-diagnosis.service';
+import { DataUpdatedService } from '@app/services/data-updated.service';
 
 
 
@@ -179,6 +180,7 @@ import { SpeciesDiagnosisService } from '@app/services/species-diagnosis.service
     AuthenticationService,
     AuthenticationGuard,
     CurrentUserService,
+    DataUpdatedService,
     EventService,
     EventTypeService,
     LegalStatusService,

@@ -15,6 +15,7 @@ import { AdministrativeLevelOne } from '@interfaces/administrative-level-one';
 import { AdministrativeLevelOneService } from '@app/services/administrative-level-one.service';
 import { AdministrativeLevelTwo } from '@interfaces/administrative-level-two';
 import { AdministrativeLevelTwoService } from '@app/services/administrative-level-two.service';
+import { DataUpdatedService } from '@app/services/data-updated.service';
 
 
 @Component({
@@ -38,6 +39,7 @@ export class EditEventLocationComponent implements OnInit {
   buildEditEventLocationForm() {
     this.editEventLocationForm = this.formBuilder.group({
       id: null,
+      event: null,
       name: '',
       start_date: '',
       end_date: '',
@@ -61,6 +63,7 @@ export class EditEventLocationComponent implements OnInit {
     private adminLevelTwoService: AdministrativeLevelTwoService,
     public editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>,
     public snackBar: MatSnackBar,
+    private dataUpdatedService: DataUpdatedService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.buildEditEventLocationForm();
@@ -126,6 +129,7 @@ export class EditEventLocationComponent implements OnInit {
     this.editEventLocationForm.patchValue({
       id: this.data.eventLocationData.id,
       name: this.data.eventLocationData.name,
+      event: this.data.eventLocationData.event,
       start_date: this.data.eventLocationData.start_date,
       end_date: this.data.eventLocationData.end_date,
       country: this.data.eventLocationData.country.toString(),
@@ -197,6 +201,7 @@ export class EditEventLocationComponent implements OnInit {
           this.submitLoading = false;
           this.openSnackBar('Event Location Details Updated', 'OK', 5000);
           this.editEventLocationDialogRef.close();
+          this.dataUpdatedService.triggerRefresh();
         },
         error => {
           this.submitLoading = false;

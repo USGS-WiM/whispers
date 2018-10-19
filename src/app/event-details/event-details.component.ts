@@ -41,6 +41,8 @@ import { SexBiasService } from '@app/services/sex-bias.service';
 import { SexBias } from '@interfaces/sex-bias';
 import { AgeBiasService } from '@app/services/age-bias.service';
 import { AgeBias } from '@interfaces/age-bias';
+import { DataUpdatedService } from '@app/services/data-updated.service';
+import { EventDiagnosisService } from '@app/services/event-diagnosis.service';
 
 @Component({
   selector: 'app-event-details',
@@ -104,9 +106,7 @@ export class EventDetailsComponent implements OnInit {
   flywaysVisible = false;
   watershedsVisible = false;
 
-
   locationSpeciesDisplayedColumns = [
-    //'select',
     'species',
     'location',
     'population',
@@ -129,10 +129,12 @@ export class EventDetailsComponent implements OnInit {
     private _eventService: EventService,
     private userService: UserService,
     private currentUserService: CurrentUserService,
+    private dataUpdatedService: DataUpdatedService,
     private dialog: MatDialog,
     private adminLevelOneService: AdministrativeLevelOneService,
     private landownershipService: LandOwnershipService,
     private eventLocationService: EventLocationService,
+    private eventDiagnosisService: EventDiagnosisService,
     private ageBiasService: AgeBiasService,
     private sexBiasService: SexBiasService,
     public snackBar: MatSnackBar
@@ -141,6 +143,12 @@ export class EventDetailsComponent implements OnInit {
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
+    });
+
+    dataUpdatedService.trigger.subscribe((action) => {
+      if (action === 'refresh') {
+        this.refreshEvent();
+      }
     });
   }
 
@@ -367,7 +375,7 @@ export class EventDetailsComponent implements OnInit {
 
     let eventPolys;
     if (countyPolys.length > 0) {
-      eventPolys = L.polygon(countyPolys, {color: 'blue'}).addTo(this.map);
+      eventPolys = L.polygon(countyPolys, { color: 'blue' }).addTo(this.map);
     }
 
     for (const marker of markers) {
@@ -402,11 +410,11 @@ export class EventDetailsComponent implements OnInit {
       var countyBounds = eventPolys.getBounds();
       bounds.extend(countyBounds);
     }
-    
+
     if (markers.length || countyPolys.length) {
       this.map.fitBounds(bounds);
     }
-    
+
   }
 
   editEvent(id: string) {
@@ -494,8 +502,6 @@ export class EventDetailsComponent implements OnInit {
       data: {
         eventLocationData: eventLocationData
       }
-      // minWidth: 200
-      // height: '75%'
     });
   }
 
@@ -504,9 +510,11 @@ export class EventDetailsComponent implements OnInit {
       .subscribe(
         () => {
           this.refreshEvent();
+          this.openSnackBar('Event location successfully deleted', 'OK', 5000);
         },
         error => {
           this.errorMessage = <any>error;
+          this.openSnackBar('Error. Event location not deleted. Error message: ' + error, 'OK', 8000);
         }
       );
   }
@@ -516,9 +524,12 @@ export class EventDetailsComponent implements OnInit {
       {
         data: {
           title: 'Delete Event Location Confirm',
+          titleIcon: 'delete_forever',
           // tslint:disable-next-line:max-line-length
+          messageIcon: 'warning',
           message: 'Are you sure you want to delete this event location, and all its associated species, contacts, and comments? This action cannot be undone.',
-          confirmButtonText: 'Yes, Delete location and all associated data'
+          confirmButtonText: 'Yes, Delete location and all associated data',
+          showCancelButton: true
         }
       }
     );
@@ -528,6 +539,42 @@ export class EventDetailsComponent implements OnInit {
         this.deleteEventLocation(id);
       }
     });
+  }
+
+  openEventDiagnosisDeleteConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Event Diagnosis Confirm',
+          titleIcon: 'delete_forever',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to delete this event diagnosis? This action cannot be undone.',
+          confirmButtonText: 'Yes, Delete event diagnosis',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventDiagnosis(id);
+      }
+    });
+  }
+
+  deleteEventDiagnosis(id: number) {
+    this.eventDiagnosisService.delete(id)
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Event diagnosis successfully deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Event diagnosis not deleted. Error message: ' + error, 'OK', 8000);
+        }
+      );
   }
 
 

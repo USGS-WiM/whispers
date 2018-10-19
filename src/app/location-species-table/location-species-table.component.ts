@@ -15,6 +15,8 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 import { LocationSpeciesService } from '@services/location-species.service';
 import { SpeciesDiagnosisService } from '@services/species-diagnosis.service';
 
+import { DataUpdatedService } from '@app/services/data-updated.service';
+
 
 @Component({
   selector: 'app-location-species-table',
@@ -62,13 +64,14 @@ export class LocationSpeciesTableComponent implements OnInit {
     private dialog: MatDialog,
     private locationSpeciesService: LocationSpeciesService,
     public snackBar: MatSnackBar,
-    private speciesDiagnosisService: SpeciesDiagnosisService
+    private speciesDiagnosisService: SpeciesDiagnosisService,
+    private dataUpdatedService: DataUpdatedService
   ) { }
 
   ngOnInit() {
 
     if (this.permissions) {
-      console.log('Hey,table has permissions object: ' + this.permissions);
+      console.log('location-species-table.component has this permissions object: ' + this.permissions);
     }
 
 
@@ -140,6 +143,7 @@ export class LocationSpeciesTableComponent implements OnInit {
       .subscribe(
         () => {
           this.openSnackBar('Species Deleted', 'OK', 5000);
+          this.dataUpdatedService.triggerRefresh();
         },
         error => {
           this.errorMessage = <any>error;
@@ -217,6 +221,7 @@ export class LocationSpeciesTableComponent implements OnInit {
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result === true) {
         this.deleteSpeciesDiagnosis(speciesdiagnosis);
+        this.dataUpdatedService.triggerRefresh();
       }
     });
 
@@ -227,11 +232,12 @@ export class LocationSpeciesTableComponent implements OnInit {
     this.speciesDiagnosisService.delete(speciesdiagnosis.id)
       .subscribe(
         () => {
-          this.openSnackBar('Species Deleted', 'OK', 5000);
+          this.openSnackBar('Species diagnosis deleted', 'OK', 5000);
+          this.dataUpdatedService.triggerRefresh();
         },
         error => {
           this.errorMessage = <any>error;
-          this.openSnackBar('Error. Species not deleted. Error message: ' + error, 'OK', 8000);
+          this.openSnackBar('Error. Species diagnosis not deleted. Error message: ' + error, 'OK', 8000);
 
         }
       );

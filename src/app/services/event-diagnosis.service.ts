@@ -52,6 +52,17 @@ export class EventDiagnosisService {
       .catch(this.handleError);
   }
 
+  public delete(id): Observable<any> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.delete(APP_SETTINGS.EVENT_DIAGNOSES_URL + id + '/', options)
+      .map((response: Response) => <any>response.json())
+      .catch(this.handleError);
+  }
+
   private handleError(error: Response) {
     console.error(error);
     return Observable.throw(error.json().error || 'Server error');

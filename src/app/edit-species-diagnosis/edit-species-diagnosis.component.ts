@@ -23,6 +23,8 @@ import { Organization } from '@interfaces/organization';
 
 import { SpeciesDiagnosis } from '@interfaces/species-diagnosis';
 
+import { DataUpdatedService } from '@app/services/data-updated.service';
+
 @Component({
   selector: 'app-edit-species-diagnosis',
   templateUrl: './edit-species-diagnosis.component.html',
@@ -84,6 +86,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     private diagnosisCauseService: DiagnosisCauseService,
     private locationSpeciesDiagnosisService: LocationSpeciesDiagnosisService,
     private organizationService: OrganizationService,
+    private dataUpdatedService: DataUpdatedService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.buildspeciesDiagnosisForm();
@@ -104,6 +107,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     if (this.data.species_diagnosis_action === 'add') {
       this.action_text = 'Add';
       this.action_button_text = 'Submit';
+      this.speciesDiagnosisForm.get('location_species').setValue(this.data.locationspecies.id);
     } else if (this.data.species_diagnosis_action === 'addToFormArray') {
       this.action_text = 'Add';
       this.action_button_text = 'Add';
@@ -205,13 +209,17 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
     this.submitLoading = true;
 
+    // if new_species_diagnosis_organizations is null, set to empty array for submission
+    if (formValue.new_species_diagnosis_organizations === null) { formValue.new_species_diagnosis_organizations = []; }
+
     if (this.data.species_diagnosis_action === 'add') {
-      // formValue.new_location_species = this.data.species.id;
+      //formValue.location_species = this.data.locationspecies.id;
       this.locationSpeciesDiagnosisService.create(formValue)
         .subscribe(
           (speciesdiagnosis) => {
             this.submitLoading = false;
             this.openSnackBar('Species Diagnosis Added', 'OK', 5000);
+            this.dataUpdatedService.triggerRefresh();
             this.editSpeciesDiagnosisDialogRef.close();
           },
           error => {
@@ -237,6 +245,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
           (contact) => {
             this.submitLoading = false;
             this.openSnackBar('Species Diagnosis Updated', 'OK', 5000);
+            this.dataUpdatedService.triggerRefresh();
             this.editSpeciesDiagnosisDialogRef.close();
           },
           error => {

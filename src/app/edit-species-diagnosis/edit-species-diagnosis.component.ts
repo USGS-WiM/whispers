@@ -53,8 +53,8 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
   administrative_level_two;
 
   // these varaiables are for use when adding a species diagnosis to the event submit form
-  eventLocationIndex;
-  locationSpeciesIndex;
+  eventlocationIndex;
+  locationlpeciesIndex;
 
   action_text;
   action_button_text;
@@ -230,8 +230,8 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     } else if (this.data.species_diagnosis_action === 'addToFormArray') {
 
       const speciesDiagnosisObj = {
-        eventLocationIndex: this.data.eventLocationIndex,
-        locationSpeciesIndex: this.data.locationSpeciesIndex,
+        eventlocationIndex: this.data.eventlocationIndex,
+        locationspeciesIndex: this.data.locationspeciesIndex,
         formValue: formValue
       };
 

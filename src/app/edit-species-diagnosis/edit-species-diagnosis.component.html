@@ -5,7 +5,7 @@
 
   <h3>
     <b><span *ngIf="locationspeciesString">Species: {{locationspeciesString}} </span> <br />
-      <span>Location: {{administrative_level_two}}, {{administrative_level_one}}</span> <br />
+      <span *ngIf="data.locationspecies">Location: {{administrative_level_two}}, {{administrative_level_one}}</span> <br />
       <span *ngIf="data.speciesdiagnosis">Species Diagnosis: {{data.speciesdiagnosis.diagnosis_string}} </span>
     </b>
   </h3>
@@ -89,7 +89,7 @@
     <mat-icon>cancel</mat-icon>&nbsp;Cancel
   </button>
   <button mat-button color="primary" type="submit" [disabled]="speciesDiagnosisForm.invalid" (click)="onSubmit(speciesDiagnosisForm.value)">
-    <mat-icon>send</mat-icon>{{action_button_text}}
+    <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{action_button_text}}
   </button>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

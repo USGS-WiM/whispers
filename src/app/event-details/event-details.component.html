@@ -146,12 +146,12 @@
                 ({{currentUser.username}})</span><br />
 
               <span>
+                <label>You have these permissions on this event:</label>
                 <mat-chip-list [selectable]="false">
-                  <label>You have these permissions on this event:</label>
-                  <mat-chip color="accent" *ngIf="eventData.permissions.read === true">Read</mat-chip>
-                  <mat-chip color="primary" *ngIf="eventData.permissions.update === true">Update</mat-chip>
-                  <mat-chip color="primary" *ngIf="eventData.permissions.write=== true">Create</mat-chip>
-                  <mat-chip color="warn" *ngIf="eventData.permissions.destroy === true">Delete</mat-chip>
+                  <mat-chip color="accent" [selected]="true" *ngIf="eventData.permissions.read === true">Read</mat-chip>
+                  <mat-chip color="primary" [selected]="true" *ngIf="eventData.permissions.update === true">Update</mat-chip>
+                  <mat-chip color="primary" [selected]="true" *ngIf="eventData.permissions.write=== true">Create</mat-chip>
+                  <mat-chip color="warn" [selected]="true" *ngIf="eventData.permissions.destroy === true">Delete</mat-chip>
                 </mat-chip-list>
               </span>
 
@@ -328,10 +328,10 @@
                         <div class="event-detail-action-bar-left">
                           <button mat-button color="primary" class="event-detail-action-button" (click)="editEventLocation(eventData.eventlocations[i])"
                             [disabled]="!eventData.permissions.update">
-                            <i class="material-icons">edit</i> Edit Event Location Details</button>
+                            <mat-icon>edit_location</mat-icon> Edit Event Location Details</button>
                           <button mat-button color="warn" class="event-detail-action-button" (click)="openEventLocationDeleteConfirm(eventData.eventlocations[i].id)"
                             [disabled]="!eventData.permissions.destroy">
-                            <i class="material-icons">delete</i> Delete Event Location</button>
+                            <mat-icon>delete</mat-icon> Delete Event Location</button>
                         </div><br />
                         <p>
                           <div *ngIf="eventLocation.locationspecies.length > 0">

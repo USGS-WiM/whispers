@@ -106,15 +106,13 @@ export class APP_SETTINGS {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
             'Accept': 'application/json'
-        }
-        );
+        });
     }
     public static get AUTH_JSON_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
             'Accept': 'application/json', 'Content-Type': 'application/json'
-        }
-        );
+        });
     }
 
     // default search query for initial load of home page (may eventually come from some other source)

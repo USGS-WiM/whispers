@@ -25,6 +25,8 @@ export class EditUserComponent implements OnInit {
 
   editUserForm: FormGroup;
 
+  showChangePassword = false;
+
   matchPassword(AC: AbstractControl) {
     const password = AC.get('password').value; // to get value in input tag
     const confirmPassword = AC.get('confirmPassword').value; // to get value in input tag
@@ -83,8 +85,12 @@ export class EditUserComponent implements OnInit {
     };
 
     // if no value present in password, delete that from the object for patching
-    if (formValue.password === '') {
-      delete userUpdates.password;
+    if (formValue.password === '' || this.showChangePassword == false) {
+      //delete userUpdates.password;
+      userUpdates.password = sessionStorage.password;
+      sessionStorage.new_password = sessionStorage.password;
+    } else {
+      sessionStorage.new_password = formValue.password;
     }
 
     this.userService.updateUser(userUpdates)
@@ -93,6 +99,10 @@ export class EditUserComponent implements OnInit {
           this.submitLoading = false;
           this.openSnackBar('Your user details were updated', 'OK', 5000);
           this.editUserDialogRef.close();
+          this.currentUserService.updateCurrentUser(event);
+          sessionStorage.first_name = event.first_name;
+          sessionStorage.last_name = event.last_name;
+          sessionStorage.password = sessionStorage.new_password;
         },
         error => {
           this.submitLoading = false;
@@ -100,6 +110,14 @@ export class EditUserComponent implements OnInit {
         }
       );
 
+  }
+
+  checkChangePassword(event) {
+    if (event.target.checked == true) {
+      this.showChangePassword = true;
+    } else {
+      this.showChangePassword = false;
+    }
   }
 
 

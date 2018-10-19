@@ -185,6 +185,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       legal_number: '',
       // end NWHC only
       new_organizations: null,
+      new_service_request: this.formBuilder.group({
+        request_type: 0,
+        new_comments: this.formBuilder.array([])
+      }),
       new_event_diagnoses: this.formBuilder.array([]),
       new_comments: this.formBuilder.array([]),
       new_superevents: this.formBuilder.array([]),
@@ -200,7 +204,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
     this.filteredAdminLevelTwos = new Array<Observable<any>>();
     this.ManageAdminLevelTwoControl(0);
-            
+
 
     let eventLocationSpecies = new Array<Observable<any>>();
     this.filteredSpecies.push(eventLocationSpecies);
@@ -331,7 +335,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFn(speciesId?: Species): string | undefined {
     let species_id_match;
-    for (let i = 0; i < this["options"]._results.length-1; i++) {
+    for (let i = 0; i < this["options"]._results.length - 1; i++) {
       if (this["options"]._results[i].value == speciesId) {
         species_id_match = this["options"]._results[i].viewValue;
       }
@@ -404,7 +408,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts') as FormArray;
     this.filteredContacts[eventLocationIndex][locationContactIndex] = arrayControl.at(locationContactIndex).get('contact').valueChanges
       .startWith(null)
-      .map(val => this.filter(val, this.userContacts, ['first_name','last_name','organization_string']));
+      .map(val => this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
   }
 
   ManageAdminLevelOneControl(eventLocationIndex: number) {
@@ -426,7 +430,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   filter(val: any, searchArray: any, searchProperties: string[]): string[] {
     let result = [];
     for (let searchProperty of searchProperties) {
-      if (isNaN(val)){
+      if (isNaN(val)) {
         const realval = val && typeof val === 'object' ? val[searchProperty] : val;
         let lastOption = null;
         if (searchArray !== undefined) {
@@ -441,7 +445,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         }
       }
     }
-    
+
     // this will return all records matching the val string
     return result;
   }
@@ -796,15 +800,15 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   initSpeciesDiagnosis() {
     return this.formBuilder.group({
       diagnosis: [null, Validators.required],
-      diagnosis_cause: null,
-      diagnosis_basis: null,
+      cause: null,
+      basis: null,
       suspect: false,
       tested_count: null,
       diagnosis_count: null,
       positive_count: null,
       suspect_count: null,
       pooled: false,
-      organizations: null
+      new_species_diagnosis_organizations: null
     });
   }
 
@@ -1036,7 +1040,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
             this.errorMessage = <any>error;
           }
         );
-      }
+    }
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -1049,16 +1053,21 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     console.log('Selecting GNIS record for Event Location Number' + (eventLocationIndex + 1));
   }
 
-  openAddSpeciesDiagnosisDialog(eventLocationIndex, locationSpeciesIndex) {
+  openAddSpeciesDiagnosisDialog(eventlocationIndex, locationspeciesIndex) {
 
-    const speciesDiagnosisIndex = this.addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex);
+    // the addSpesiesDiagnosis function creates a speciesdiagnosis object within the array and returns its index
+    // this is needed below to add the captured data into the correct control index
+    const speciesDiagnosisIndex = this.addSpeciesDiagnosis(eventlocationIndex, locationspeciesIndex);
 
     // Open dialog for adding species diagnosis
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
       data: {
         species_diagnosis_action: 'addToFormArray',
-        eventLocationIndex: eventLocationIndex,
-        locationSpeciesIndex: locationSpeciesIndex
+        eventlocationIndex: eventlocationIndex,
+        locationspeciesIndex: locationspeciesIndex,
+        title: 'Add Species Diagnosis',
+        titleIcon: 'note_add',
+        actionButtonIcon: 'note_add'
       }
     });
 
@@ -1067,19 +1076,19 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         (speciesDiagnosisObj) => {
 
           // tslint:disable-next-line:max-line-length
-          this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventLocationIndex]
-            .get('new_location_species')['controls'][speciesDiagnosisObj.locationSpeciesIndex]
+          this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventlocationIndex]
+            .get('new_location_species')['controls'][speciesDiagnosisObj.locationspeciesIndex]
             .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
               diagnosis: speciesDiagnosisObj.formValue.diagnosis,
-              diagnosis_cause: speciesDiagnosisObj.formValue.diagnosis_cause,
-              diagnosis_basis: speciesDiagnosisObj.formValue.diagnosis_basis,
+              cause: speciesDiagnosisObj.formValue.cause,
+              basis: speciesDiagnosisObj.formValue.basis,
               suspect: speciesDiagnosisObj.formValue.suspect,
               tested_count: speciesDiagnosisObj.formValue.tested_count,
               diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
               positive_count: speciesDiagnosisObj.formValue.positive_count,
               suspect_count: speciesDiagnosisObj.formValue.suspect_count,
               pooled: speciesDiagnosisObj.formValue.pooled,
-              organizations: speciesDiagnosisObj.formValue.organizations
+              new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
             });
 
         },
@@ -1132,7 +1141,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
                 message: 'Your event was successfully saved. The Event ID is ' + event.id,
                 messageIcon: 'check',
                 confirmButtonText: 'OK',
-                showCancelButton : true
+                showCancelButton: true
               }
             }
           );

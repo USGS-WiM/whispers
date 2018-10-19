@@ -12,6 +12,8 @@ import { SpeciesService } from '@services/species.service';
 
 import { LocationSpeciesService } from '@services/location-species.service';
 
+import { DataUpdatedService } from '@app/services/data-updated.service';
+
 @Component({
   selector: 'app-edit-location-species',
   templateUrl: './edit-location-species.component.html',
@@ -57,6 +59,7 @@ export class EditLocationSpeciesComponent implements OnInit {
     private formBuilder: FormBuilder,
     public editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>,
     private locationSpeciesService: LocationSpeciesService,
+    private dataUpdatedService: DataUpdatedService,
     public snackBar: MatSnackBar,
     private speciesService: SpeciesService,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -156,6 +159,7 @@ export class EditLocationSpeciesComponent implements OnInit {
           (event) => {
             this.submitLoading = false;
             this.openSnackBar('Species successfully added to this location', 'OK', 5000);
+            this.dataUpdatedService.triggerRefresh();
             this.editLocationSpeciesDialogRef.close();
           },
           error => {
@@ -174,6 +178,7 @@ export class EditLocationSpeciesComponent implements OnInit {
           (event) => {
             this.submitLoading = false;
             this.openSnackBar('Species Updated', 'OK', 5000);
+            this.dataUpdatedService.triggerRefresh();
             this.editLocationSpeciesDialogRef.close();
           },
           error => {
@@ -188,9 +193,9 @@ export class EditLocationSpeciesComponent implements OnInit {
   }
 
   filter(val: any, searchArray: any, searchProperties: string[]): string[] {
-    let result = [];
-    for (let searchProperty of searchProperties) {
-      if (isNaN(val)){
+    const result = [];
+    for (const searchProperty of searchProperties) {
+      if (isNaN(val)) {
         const realval = val && typeof val === 'object' ? val[searchProperty] : val;
         let lastOption = null;
         if (searchArray !== undefined) {
@@ -205,16 +210,16 @@ export class EditLocationSpeciesComponent implements OnInit {
         }
       }
     }
-    
+
     // this will return all records matching the val string
     return result;
   }
 
   displayFn(speciesId?: Species): string | undefined {
     let species_id_match;
-    for (let i = 0; i < this["options"]._results.length-1; i++) {
-      if (this["options"]._results[i].value == speciesId) {
-        species_id_match = this["options"]._results[i].viewValue;
+    for (let i = 0; i < this['options']._results.length - 1; i++) {
+      if (this['options']._results[i].value === speciesId) {
+        species_id_match = this['options']._results[i].viewValue;
       }
     }
     return species_id_match;

@@ -786,7 +786,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   initLocationSpecies() {
     return this.formBuilder.group({
-      species: [2, Validators.required],
+      species: [null, Validators.required],
       population_count: null,
       sick_count: null,
       dead_count: null,

@@ -335,9 +335,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFn(speciesId?: Species): string | undefined {
     let species_id_match;
-    for (let i = 0; i < this["options"]._results.length - 1; i++) {
-      if (this["options"]._results[i].value == speciesId) {
-        species_id_match = this["options"]._results[i].viewValue;
+    for (let i = 0; i < this['options']._results.length - 1; i++) {
+      if (this['options']._results[i].value === speciesId) {
+        species_id_match = this['options']._results[i].viewValue;
       }
     }
     return species_id_match;
@@ -345,9 +345,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFnContact(contactId?: Contact): string | undefined {
     let contact_id_match;
-    for (let i = 0; i < this["options"]._results.length; i++) {
-      if (this["options"]._results[i].value == contactId) {
-        contact_id_match = this["options"]._results[i].viewValue;
+    for (let i = 0; i < this['options']._results.length; i++) {
+      if (this['options']._results[i].value === contactId) {
+        contact_id_match = this['options']._results[i].viewValue;
       }
     }
     return contact_id_match;
@@ -355,10 +355,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFnAdminLevelOne(adminLevelOneId?: number): string | undefined {
     let admin_level_one;
-    if (this["options"] !== undefined) {
-      for (let i = 0; i < this["options"]._results.length; i++) {
-        if (this["options"]._results[i].value == adminLevelOneId) {
-          admin_level_one = this["options"]._results[i].viewValue;
+    if (this['options'] !== undefined) {
+      for (let i = 0; i < this['options']._results.length; i++) {
+        if (this['options']._results[i].value === adminLevelOneId) {
+          admin_level_one = this['options']._results[i].viewValue;
         }
       }
     }
@@ -367,10 +367,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFnAdminLevelTwo(adminLevelTwoId?: number): string | undefined {
     let admin_level_two;
-    if (this["options"] !== undefined) {
-      for (let i = 0; i < this["options"]._results.length; i++) {
-        if (this["options"]._results[i].value == adminLevelTwoId) {
-          admin_level_two = this["options"]._results[i].viewValue;
+    if (this['options'] !== undefined) {
+      for (let i = 0; i < this['options']._results.length; i++) {
+        if (this['options']._results[i].value === adminLevelTwoId) {
+          admin_level_two = this['options']._results[i].viewValue;
         }
       }
     }
@@ -719,11 +719,13 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
           priority: null,
           captive: null,
           age_bias: null,
-          sex_bias: null
+          sex_bias: null,
+          new_species_diagnoses: this.formBuilder.array([])
+
         })
         );
 
-        // loop through event locations and push the new contact into each, except the one it came from (so as to avoid duplicate)
+        // loop through event locations and push the new species into each, except the one it came from (so as to avoid duplicate)
         for (let i = 0, j = eventLocations.length; i < j; i++) {
 
           if (i !== eventLocationIndex) {
@@ -741,7 +743,8 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
               priority: null,
               captive: null,
               age_bias: null,
-              sex_bias: null
+              sex_bias: null,
+              new_species_diagnoses: this.formBuilder.array([])
             })
             );
 

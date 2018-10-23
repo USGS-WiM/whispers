@@ -8,6 +8,7 @@ export interface SearchQuery {
     administrative_level_one: number[];
     administrative_level_two: number[];
     affected_count: number;
+    affected_count_operator: string;
     start_date: string;
     end_date: string;
     diagnosis_type_includes_all: boolean;

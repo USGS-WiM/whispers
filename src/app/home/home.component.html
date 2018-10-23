@@ -51,6 +51,7 @@
               <strong>Number Affected</strong>
             </h4>
             <p mat-line>
+              <span> {{ currentDisplayQuery.affected_count_operator === '__gte' ? '>=' : currentDisplayQuery.affected_count_operator === '__lte' ? '<=' : '' }}</span>
               <span>{{currentDisplayQuery.affected_count}}</span>
             </p>
           </mat-list-item>

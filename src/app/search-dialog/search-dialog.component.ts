@@ -96,6 +96,7 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_one: null,
       administrative_level_two: null,
       affected_count: null,
+      affected_count_operator: '__gte',
       start_date: null,
       end_date: null,
       diagnosis_type_includes_all: false,
@@ -285,6 +286,10 @@ export class SearchDialogComponent implements OnInit {
 
     if (query && query['affected_count']) {
       this.searchForm.controls['affected_count'].setValue(query['affected_count']);
+    }
+
+    if (query && query['affected_count_operator']) {
+      this.searchForm.controls['affected_count_operator'].setValue(query['affected_count_operator']);
     }
 
     if (query && query['start_date']) {
@@ -491,6 +496,7 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_one: [],
       administrative_level_two: [],
       affected_count: formValue.affected_count,
+      affected_count_operator: formValue.affected_count_operator,
       start_date: this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd'),
       end_date: this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd'),
       diagnosis_type_includes_all: formValue.diagnosis_type_includes_all,
@@ -510,6 +516,7 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_one: [],
       administrative_level_two: [],
       affected_count: formValue.affected_count,
+      affected_count_operator: formValue.affected_count_operator,
       start_date: formValue.start_date,
       // start_date: this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd'),
       end_date: formValue.end_date,

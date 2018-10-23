@@ -8,8 +8,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="styles.42b39e11feb4e03d8ea3.css"></head>
+<link rel="stylesheet" href="styles.e21466020291b68dbf38.css"></head>
 <body class="whispers-root mat-app-background">
-  <app-root></app-root>
-<script type="text/javascript" src="runtime.a66f828dca56eeb90e02.js"></script><script type="text/javascript" src="polyfills.02d5638db2f73a664f03.js"></script><script type="text/javascript" src="scripts.a34432a88fab3d7cd53d.js"></script><script type="text/javascript" src="main.20395d4f4dab73ea51fc.js"></script></body>
+  <app-root>
+    <div id="initialLoading">
+      <div id="liliAnimated">
+          <img src="/assets/w-logo.png"/>
+      </div>
+      <span>Loading...</span>
+    </div>
+    <style>
+        #initialLoading{
+          display: flex; 
+          flex-direction: column; 
+          justify-content: center; 
+          text-align: center; 
+          height: 100vh;
+          width: 100vw;
+          background-color: #03040C;
+          position: fixed;
+          top: 0;
+          left: 0;
+          color: white;
+          font-weight: 500;
+          font-size: 18px;
+          font-family: 'Lato', sans-serif;
+          font-weight: 700;
+          letter-spacing: 0.3px;
+        }
+        #initialLoading img{
+          display: block;
+          margin: 0 auto;
+          width: 80px;
+          height: auto;
+          margin-bottom: 8px;
+          animation: yourAnimation 1.5s infinite 0s ease-in-out;
+        }
+        #initialLoading span{
+          display: block;
+          margin-top: 12px;
+        }
+        @keyframes yourAnimation{
+            0%{transform: scale(0.8);}
+            50%{transform: scale(1.1);}
+            100%{transform: scale(0.8);}
+        }
+      </style>
+  </app-root>
+<script type="text/javascript" src="runtime.a66f828dca56eeb90e02.js"></script><script type="text/javascript" src="polyfills.02d5638db2f73a664f03.js"></script><script type="text/javascript" src="scripts.a34432a88fab3d7cd53d.js"></script><script type="text/javascript" src="main.4e4919b93bd89a67863a.js"></script></body>
 </html>

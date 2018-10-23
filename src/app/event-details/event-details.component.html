@@ -69,7 +69,7 @@
 
                 <tr *ngFor="let eventOrganization of eventData.eventorganizations">
                   <td>{{eventOrganization.name}}</td>
-                  <td>{{eventOrganization.address_one}} {{eventOrganization.address_two}} ,
+                  <td>{{eventOrganization.address_one}} {{eventOrganization.address_two}} <span *ngIf="eventOrganization.address_one !== '' ||  eventOrganization.address_two !== ''">,</span>
                     {{eventOrganization.city}} {{eventOrganization.administrative_level_one |
                     displayValue:'abbreviation':this.administrative_level_one }} {{eventOrganization.postal_code}}</td>
                   <td>{{eventOrganization.phone}}</td>

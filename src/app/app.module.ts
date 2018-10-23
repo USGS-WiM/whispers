@@ -100,6 +100,7 @@ import { ServiceRequestService } from '@app/services/service-request.service';
 import { LocationSpeciesTableComponent } from './location-species-table/location-species-table.component';
 import { SpeciesDiagnosisService } from '@app/services/species-diagnosis.service';
 import { DataUpdatedService } from '@app/services/data-updated.service';
+import { AddCommentComponent } from './add-comment/add-comment.component';
 
 
 
@@ -131,6 +132,7 @@ import { DataUpdatedService } from '@app/services/data-updated.service';
     EventSubmissionSuccessComponent,
     EditUserComponent,
     LocationSpeciesTableComponent,
+    AddCommentComponent,
   ],
   imports: [
     BrowserModule,
@@ -226,7 +228,8 @@ import { DataUpdatedService } from '@app/services/data-updated.service';
     AddEventLocationComponent,
     GnisLookupComponent,
     EventDetailsShareComponent,
-    EditUserComponent
+    EditUserComponent,
+    AddCommentComponent
   ]
 })
 export class AppModule { }

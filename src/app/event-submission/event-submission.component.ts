@@ -1124,6 +1124,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     //   }
     // }
 
+    if (formValue.quality_check !== null ) {
+      formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');
+    }
+
     // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
     // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
     for (const event_location of formValue.new_event_locations) {

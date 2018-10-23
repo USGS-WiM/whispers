@@ -43,6 +43,11 @@ import { AgeBiasService } from '@app/services/age-bias.service';
 import { AgeBias } from '@interfaces/age-bias';
 import { DataUpdatedService } from '@app/services/data-updated.service';
 import { EventDiagnosisService } from '@app/services/event-diagnosis.service';
+import { CommentTypeService } from '@services/comment-type.service';
+import { CommentService } from '@app/services/comment.service';
+import { CommentType } from '@interfaces/comment-type';
+import { AddCommentComponent } from '@app/add-comment/add-comment.component';
+
 
 @Component({
   selector: 'app-event-details',
@@ -74,9 +79,10 @@ export class EventDetailsComponent implements OnInit {
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
   editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
-  // addEventLocationDialogRef: MatDialogRef<AddEventLocationComponent>;
   editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
   editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
+
+  addCommentDialogRef: MatDialogRef<AddCommentComponent>;
 
   eventDetailsShareDialogRef: MatDialogRef<EventDetailsShareComponent>;
 
@@ -97,6 +103,8 @@ export class EventDetailsComponent implements OnInit {
 
   sexBiases: SexBias[];
   ageBiases: AgeBias[];
+
+  commentTypes: CommentType[];
 
   locationMarkers;
 
@@ -137,6 +145,8 @@ export class EventDetailsComponent implements OnInit {
     private eventDiagnosisService: EventDiagnosisService,
     private ageBiasService: AgeBiasService,
     private sexBiasService: SexBiasService,
+    private commentTypeService: CommentTypeService,
+    private commentService: CommentService,
     public snackBar: MatSnackBar
   ) {
     this.eventLocationSpecies = [];
@@ -248,6 +258,17 @@ export class EventDetailsComponent implements OnInit {
       .subscribe(
         ageBiases => {
           this.ageBiases = ageBiases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get comment types from the commentTypes service
+    this.commentTypeService.getCommentTypes()
+      .subscribe(
+        commentTypes => {
+          this.commentTypes = commentTypes;
         },
         error => {
           this.errorMessage = <any>error;
@@ -482,6 +503,135 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
+
+  addEventComment(id: string) {
+    // Open dialog for adding event diagnosis
+    this.addCommentDialogRef = this.dialog.open(AddCommentComponent, {
+      data: {
+        event_id: id,
+        title: 'Add Comment',
+        titleIcon: 'add_comment',
+        // confirmButtonText: 'Add comment',
+        showCancelButton: true,
+        action_button_text: 'Add Comment',
+        actionButtonIcon: 'add_comment',
+        comment_object: 'event'
+      }
+    });
+
+    this.addCommentDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
+
+  addEventLocationComment(id: string) {
+    // Open dialog for adding event diagnosis
+    this.addCommentDialogRef = this.dialog.open(AddCommentComponent, {
+      data: {
+        event_id: id,
+        title: 'Add Comment',
+        titleIcon: 'add_comment',
+        // confirmButtonText: 'Add comment',
+        showCancelButton: true,
+        action_button_text: 'Add Comment',
+        actionButtonIcon: 'add_comment',
+        comment_object: 'eventlocation'
+      }
+    });
+
+    this.addCommentDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
+  deleteEventComment(id: number) {
+    // this.commentService.delete(id)
+    // .subscribe(
+    //   () => {
+    //     this.refreshEvent();
+    //     this.openSnackBar('Comment successfully deleted', 'OK', 5000);
+    //   },
+    //   error => {
+    //     this.errorMessage = <any>error;
+    //     this.openSnackBar('Error. Comment not deleted. Error message: ' + error, 'OK', 8000);
+    //   }
+    // );
+
+  }
+
+  openEventCommentDeleteConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Event Comment Confirm',
+          titleIcon: 'delete_forever',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to delete this comment? This action cannot be undone.',
+          confirmButtonText: 'Yes, Delete comment',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventComment(id);
+      }
+    });
+  }
+
+  deleteEventLocationComment(id: number) {
+    // this.commentService.delete(id)
+    // .subscribe(
+    //   () => {
+    //     this.refreshEvent();
+    //     this.openSnackBar('Comment successfully deleted', 'OK', 5000);
+    //   },
+    //   error => {
+    //     this.errorMessage = <any>error;
+    //     this.openSnackBar('Error. Comment not deleted. Error message: ' + error, 'OK', 8000);
+    //   }
+    // );
+  }
+
+
+  openEventLocationCommentDeleteConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Event Location Comment Confirm',
+          titleIcon: 'delete_forever',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to delete this comment? This action cannot be undone.',
+          confirmButtonText: 'Yes, Delete comment',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventLocationComment(id);
+      }
+    });
+  }
+
+
   addEventLocation() {
     this.showAddEventLocation = true;
   }
@@ -685,7 +835,7 @@ export class EventDetailsComponent implements OnInit {
     if (name === '' || name === undefined) {
       locationName = 'Location ' + i;
     } else {
-      locationName = name;
+      locationName = 'Location ' + i + ' - ' + name;
     }
 
     return locationName;

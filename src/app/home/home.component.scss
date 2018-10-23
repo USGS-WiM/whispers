@@ -132,7 +132,15 @@ mat-table>.mat-row:hover {
 }
 
 .table-cell-list {
-    // list-style: none;
+    padding: 0;
+    list-style-type: none;
+
+    li{
+        position:relative;
+        line-height: 11px;
+        font-size: 11.5px;
+    }
+
 }
 
 .spinner-container {}
@@ -309,4 +317,38 @@ mat-table>.mat-row:hover {
 
 .text-bold {
     font-style: bold;
+}
+
+
+#sidebarSearchTab{
+
+    .mat-list .mat-subheader{
+        padding: 0 0 6px 0;
+        height: auto;
+    }
+
+    .mat-list .mat-list-item.mat-2-line{
+        height: auto;
+    }
+
+    .mat-expansion-panel-body{
+        padding-bottom: 0;
+    }
+
+    .search-button-row{
+        padding-bottom: 0;
+
+        button{
+            background-color: white;
+            margin: 0 auto 10px auto !important;
+            display: block;
+            width: 100%;
+            border: 1px solid fade-out(#D5DCEA, 0.5);
+            border-radius: 4px;
+        }
+
+    }
+    
+
+
 }

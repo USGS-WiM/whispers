@@ -71,6 +71,13 @@ body {
         .mat-expansion-panel-header-title{
             color: fade-out($black, 0.2);
             transition: $transition;
+
+            .mat-icon{
+                height: 18px;
+                width: 18px;
+                font-size: 17px;
+                text-decoration: none !important;
+            }
         }
     
         &:not([aria-disabled=true]){
@@ -195,6 +202,10 @@ body {
         &:nth-child(odd){
             background-color: rgba(247,247,255,1);
         }
+
+        &:hover{
+            cursor: pointer !important;
+        }
     }
 }
 .page-loader{
@@ -310,9 +321,21 @@ input[type=checkbox]{
 //     transition: max-height 0.2s ease-out;
 // }
 
-.legend-home {
-    max-height: 525px;
-    overflow-y: auto;
+.legend {
+    max-height: 60vh;
+    overflow-y: hidden;
+
+    &.mat-expanded{
+        overflow-y: auto;
+    }
+
+    .mat-expansion-panel-header{
+        height: auto !important;
+        box-sizing: border-box;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        border-bottom: none !important;
+    }
 }
 
 .accordion {

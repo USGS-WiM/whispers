@@ -1,0 +1,29 @@
+.form-control {
+    width: 18em;
+    margin: 10px;
+}
+
+.form-control-short {
+    width: 14em;
+    margin: 10px;
+}
+
+.comment-text-area {
+    width: 60em;
+    margin-bottom: 2em;
+}
+
+.general-comment-text-area {
+    width: 40em;
+    margin-bottom: 2em;
+}
+
+.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+}

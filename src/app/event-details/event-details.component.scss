@@ -1,35 +1,10 @@
 @import url("https://rawgit.com/USGS-WiM/marker-creator/master/stylesheets/css/markers.css");
 @import "../app.variables.scss";
-#eventDetailsContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-}
 
-.detailsDiv {
-    flex-grow: 3;
-}
 
-.mapDiv {
-    width: auto;
-    flex-grow: 3;
-    min-width: 400px;
-}
 
-#map {
-    height: 800px;
-}
 
-@media screen and (max-width:875px) {
-    #eventDetailsContainer {
-        flex-wrap: wrap;
-        flex-direction: column;
-    }
-    .mapDiv,
-    .detailsDiv {
-        min-width: 100%;
-    }
-}
+
 
 mat-expansion-panel {
     border: 1px solid rgba(210, 210, 220, 1);
@@ -78,11 +53,57 @@ th {
 }
 
 .event-detail-label {
-    font-size: large; //font-weight: bold;
-    // padding-top: 0;
-    // padding-bottom: 1em;
+    font-size: 22px;
     padding-left: 0;
     padding-right: 0;
+    margin: 20px 0 0 0;
+    color: $red;
+    font-weight: 900;
+    font-family: 'Lato', sans-serif;
+}
+.privileged-permissions{
+    display: block;
+
+    .title{
+        display: block;
+        padding: 5px 0 10px 0;
+        font-size: 14px;
+        color: $text;
+
+        b{
+            font-weight: bolder;
+        }
+    }
+    small{
+        display: block;
+        padding: 0 0 4px 0;
+        font-size: 12px;
+        font-style: italic;
+        color: $text-light;
+        font-weight: 400;
+    }
+
+    .permissions{
+        display: block;
+        padding: 0px 0 25px 0;
+
+        .permission{
+            color: $text;
+            font-style: italic;
+            box-sizing: border-box;
+            font-weight: 700;
+            font-size: 16px;
+            border-radius: 6px;
+            margin-right: 20px;
+            display: inline-block;
+            letter-spacing: -0.2px;
+
+            &.red{
+                color: $red;
+            }
+        }
+    }
+
 }
 
 .event-header td {
@@ -387,6 +408,18 @@ tr.noBorder td {
     }
 }
 
+.mat-expansion-panel .mat-expansion-panel-header{
+    border-left: 4px solid transparent;
+    transition: 0.12s;
+}
+.mat-expansion-panel .mat-expansion-panel-header:hover{
+    transition: 0.12s;
+    text-decoration: none !important;
+    border-left: 4px solid $blue;
+}
+.mat-expansion-panel .mat-expansion-panel-header:not([aria-disabled=true]){
+    border-bottom: none !important;
+}
 .element-row {
     position: relative;
   }
@@ -402,3 +435,198 @@ tr.noBorder td {
   .element-row.expanded {
     border-bottom-color: transparent;
   }
+
+//   Fix unmappable warning
+.unmappable-warning{
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.2);
+    line-height: 13px;
+    color: $text;
+    z-index: 1001;
+
+    .mat-icon{
+        position: absolute;
+        top: -8px;
+        left: -15px;
+        color: $red;
+    }
+}
+
+
+// Event details layout
+// Event details layout
+// Event details layout
+
+#eventDetailsContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-width: 100%;
+}
+
+.detailsDiv{
+    width: auto;
+    flex-grow: 3;
+    width: 70%;
+    background-color: white;
+}
+.mapDiv {
+    width: 30%;
+    height: 100vh;
+    height: calc(100% - 104px);
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    border-left: 1.5px solid fade-out($text, 0.3);
+
+}
+
+#map {
+    height: 800px;
+}
+
+.event-page-group{
+    padding: 0 0 35px 0;
+
+    &.split{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .event-page-split-half{
+        box-sizing: border-box;
+    }
+    .event-page-split-half:nth-child(1){
+        padding-right: 17px;
+    }
+    .event-page-split-half:nth-child(2){
+        padding-left: 17px;
+    }
+}
+.event-table-header{
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    color: $text;
+    padding-bottom: 6px;
+}
+
+@media screen and (max-width:875px) {
+    #eventDetailsContainer {
+        flex-wrap: wrap;
+        flex-direction: column;
+    }
+    .mapDiv,
+    .detailsDiv {
+        min-width: 100%;
+        max-width: 100%;
+        overflow: auto;
+    }
+}
+
+
+.privileged-meta{
+    display: flex;
+    flex-wrap: wrap;
+
+    .item{
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+
+        .label,
+        .value{
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding: 2px 25px 2px 0;
+        }
+        .label{
+            justify-content: center;
+            font-weight: 400;
+            color: $text-light;
+            font-size: 11px;
+            border-bottom: none;
+            text-decoration: underline;
+        }
+        .value{
+            justify-content: flex-start;
+            color: $text;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+    }
+}
+
+// Message when no data in section
+.event-group-no-data{
+    display: block;
+    box-sizing: border-box;
+    padding: 5px 0 10px 25px;
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.34);
+
+}
+
+
+// Event page location details
+#locationDetails{
+
+    .mat-expansion-panel-header{
+        border-bottom: 1px solid #D2D2DC !important;
+    }
+    .mat-expansion-panel{
+        border-radius: 4px;
+    }
+
+    .event-detail-action-bar-left{
+        margin-bottom: 15px;
+    }
+
+    .mat-table{
+
+        .mat-header-cell,
+        mat-header-cell{
+            font-size: 11px !important;
+            line-height: 11.5px !important; 
+            padding: 4px !important;
+        }
+        .mat-header-cell:first-child{
+            padding-left: 6px !important;
+        }
+
+
+        .mat-row,
+        mat-row{
+
+            .mat-cell,
+            mat-cell{
+                font-size: 11px !important;
+                line-height: 11.5px !important; 
+                padding: 4px !important;
+
+                &:first-child{
+                    padding-left: 6px !important;
+                }
+            }
+        }
+    }
+}
+
+.comment-type-title {
+font-weight: bold !important;
+font-size: large !important;
+}
+
+.comment-date {
+    color: rgba(0, 0, 0, 0.54)
+}
+
+.single-comment-div {
+    margin:2px;
+}

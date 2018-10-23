@@ -54,7 +54,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
   // these varaiables are for use when adding a species diagnosis to the event submit form
   eventlocationIndex;
-  locationlpeciesIndex;
+  locationSpeciesIndex;
 
   action_text;
   action_button_text;

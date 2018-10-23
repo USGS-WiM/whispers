@@ -354,7 +354,7 @@
                                         </mat-form-field>-->
 
                                     <!-- Species autocomplete control -->
-                                    <mat-form-field class="form-control" *ngIf="filteredSpecies[eventLocationIndex][locationSpeciesIndex].length > 0">
+                                    <mat-form-field class="form-control">
                                       <input type="text" matInput placeholder="Species" aria-label="Species"
                                         [matAutocomplete]="speciesAutoComplete" formControlName="species">
                                       <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn">
@@ -606,7 +606,7 @@
                                 </mat-form-field>-->
 
                                 <!-- Contacts autocomplete control -->
-                                <mat-form-field class="form-control">
+                                <mat-form-field class="form-control contact-select">
                                   <input type="text" matInput placeholder="Contact Person" aria-label="Contact Person"
                                     [matAutocomplete]="contactAutoComplete" formControlName="contact">
                                   <mat-autocomplete #contactAutoComplete="matAutocomplete" [displayWith]="displayFnContact">

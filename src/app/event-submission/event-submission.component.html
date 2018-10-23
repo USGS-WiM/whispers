@@ -101,7 +101,7 @@
                   <div class="horizonal-form-container">
 
                     <mat-form-field class="form-control">
-                      <mat-select placeholder="Process Status" formControlName="status" required>
+                      <mat-select placeholder="Process Status" formControlName="event_status" required>
                         <mat-option *ngFor="let status of eventStatuses" value="{{status.id}}">{{status.name}}
                         </mat-option>
                       </mat-select>

@@ -15,6 +15,7 @@ import { EventService } from '@services/event.service';
 import { OrganizationService } from '@services/organization.service';
 import { EventTypeService } from '@app/services/event-type.service';
 import { EventStatusService } from '@app/services/event-status.service';
+import { CurrentUserService } from '@app/services/current-user.service';
 
 @Component({
   selector: 'app-edit-event',
@@ -28,26 +29,36 @@ export class EditEventComponent implements OnInit {
   event_types: EventType[];
   event_statuses: EventStatus[];
 
+  currentUser;
+
   eventID;
-  
+
   editEventForm: FormGroup;
 
   submitLoading = false;
-  
+
   buildEditEventForm() {
     this.editEventForm = this.formBuilder.group({
+      id: null,
       event_reference: [''],
       event_type: null,
-      event_status: null,
+      complete: null,
       public: null,
-      complete: null
-      // event_organization: null
+      new_organizations: [],
+      // NWHC only
+      staff: null,
+      event_status: null,
+      quality_check: null,
+      legal_status: null,
+      legal_number: '',
+      // end NWHC only
     });
   }
 
   constructor(
     private formBuilder: FormBuilder,
     public editEventDialogRef: MatDialogRef<EditEventComponent>,
+    private currentUserService: CurrentUserService,
     private eventService: EventService,
     private organizationService: OrganizationService,
     private eventStatusService: EventStatusService,
@@ -56,49 +67,76 @@ export class EditEventComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.buildEditEventForm();
+
+    currentUserService.currentUser.subscribe(user => {
+      this.currentUser = user;
+    });
   }
 
   ngOnInit() {
-    console.log(this.data.eventData);
-    this.eventID = this.data.eventData.id;
-    this.editEventForm.get('event_reference').setValue(this.data.eventData.event_reference);
-    this.editEventForm.get('public').setValue(this.data.eventData.public.toString());
-    this.editEventForm.get('complete').setValue(this.data.eventData.complete.toString());
-    
-    // Enable this once there are orgs returned as part of the event details
+    // this.eventID = this.data.eventData.id;
+    // this.editEventForm.get('event_reference').setValue(this.data.eventData.event_reference);
+    // this.editEventForm.get('public').setValue(this.data.eventData.public.toString());
+    // this.editEventForm.get('complete').setValue(this.data.eventData.complete.toString());
+
+    //const eventOrganizationsArray = [];
+    // for (const eventOrganization of this.data.eventData.eventorganizations) {
+    //   eventOrganizationsArray.push(eventOrganization.id.toString());
+    // }
+
+    this.editEventForm.setValue({
+      id: this.data.eventData.id,
+      event_reference: this.data.eventData.event_reference,
+      event_type: this.data.eventData.event_type,
+      complete: this.data.eventData.complete,
+      public: this.data.eventData.public,
+      new_organizations: [],
+      // NWHC only
+      staff: this.data.eventData.staff,
+      event_status: this.data.eventData.event_status,
+      quality_check: this.data.eventData.quality_check,
+      legal_status: this.data.eventData.legal_status,
+      legal_number: this.data.eventData.legal_number
+      // end NWHC only
+    });
+
     // get organizations from the OrganizationService
-    /*this.organizationService.getOrganizations()
+    this.organizationService.getOrganizations()
       .subscribe(
         organizations => {
           this.organizations = organizations;
-          this.editEventForm.get('event_organization').setValue(this.data.eventData.event_organization.toString());
+          const eventOrganizationsArray = [];
+          for (const eventOrganization of this.data.eventData.eventorganizations) {
+            eventOrganizationsArray.push(eventOrganization.id);
+          }
+          this.editEventForm.get('new_organizations').setValue(eventOrganizationsArray);
         },
         error => {
           this.errorMessage = <any>error;
         }
-      );*/
+      );
 
-      this.eventTypeService.getEventTypes()
-        .subscribe(
-          event_types => {
-            this.event_types = event_types;
-            this.editEventForm.get('event_type').setValue(this.data.eventData.event_type.toString());
-          },
-          error => {
-            this.errorMessage = <any>error;
-          }
-        );
+    this.eventTypeService.getEventTypes()
+      .subscribe(
+        event_types => {
+          this.event_types = event_types;
+          this.editEventForm.get('event_type').setValue(this.data.eventData.event_type.toString());
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
-      this.eventStatusService.getEventStatuses()
-        .subscribe(
-          event_statuses => {
-            this.event_statuses = event_statuses;
-            this.editEventForm.get('event_status').setValue(this.data.eventData.event_status);
-          },
-          error => {
-            this.errorMessage = <any>error;
-          }
-        );
+    this.eventStatusService.getEventStatuses()
+      .subscribe(
+        event_statuses => {
+          this.event_statuses = event_statuses;
+          this.editEventForm.get('event_status').setValue(this.data.eventData.event_status);
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
 
   openSnackBar(message: string, action: string, duration: number) {

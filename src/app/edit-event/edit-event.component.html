@@ -19,41 +19,106 @@
         </mat-select>
       </mat-form-field>
 
-      <!-- Event Status -->
+      <div class="horizontal-form-container">
+        <mat-form-field class="form-control">
+          <mat-select placeholder="Event Visibility" formControlName="public" required>
+            <mat-option [value]="true">Visible to Public</mat-option>
+            <mat-option [value]="false">Not Visible to Public</mat-option>
+          </mat-select>
+          <mat-hint align="start"></mat-hint>
+          <mat-error *ngIf="editEventForm.get('public').invalid">{{getErrorMessage('public')}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="form-control">
+          <mat-select placeholder="WHISPers Record Status" formControlName="complete" required>
+            <mat-option [value]="true">Complete</mat-option>
+            <mat-option [value]="false">Incomplete</mat-option>
+          </mat-select>
+          <mat-hint align="start"></mat-hint>
+          <mat-hint align="end" matTooltip="Public field">
+            <mat-icon>public</mat-icon>
+          </mat-hint>
+          <mat-error *ngIf="editEventForm.get('complete').invalid">{{getErrorMessage('complete')}}</mat-error>
+        </mat-form-field>
+
+      </div>
+
+      <!-- Event Organizations -->
       <mat-form-field class="form-control org-select">
-        <mat-select placeholder="Event Status" formControlName="event_status">
+        <mat-select placeholder="Event Organizations" formControlName="new_organizations" multiple>
           <mat-option>--</mat-option>
-          <mat-option *ngFor="let event_status of event_statuses" value="{{event_status.id}}">{{event_status.name}}</mat-option>
+          <mat-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <!-- Public -->
-      <mat-checkbox formControlName="public">Public</mat-checkbox>
-      <!-- Complete -->
-      <mat-checkbox formControlName="complete">Complete</mat-checkbox>
-    
+      <!-- NWHC staff only section -->
+      <mat-card *ngIf="currentUser.role === 1 || currentUser.role === 2 ">
+        <mat-card-header>
+          <mat-card-title>NWHC Staff Only</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="horizontal-form-container">
+            <form [formGroup]="editEventForm">
 
-      <!-- Need to add more fields Legal status, etc -->
+              <div class="vertical-form-container">
 
-      <!---------------------------------------------
-      
-      -------------------------------------------------->
+                <mat-form-field class="form-control">
+                  <mat-select placeholder="Assigned NWHC Epidemiologist" formControlName="staff">
+                    <mat-option *ngFor="let staffMember of staff" value="{{staffMember.id}}">{{staffMember.first_name}}
+                      {{staffMember.last_name}}</mat-option>
+                  </mat-select>
+                  <mat-hint align="start"></mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="horizonal-form-container">
 
-      <!-- Event Owner -->
-      <!--<mat-form-field class="form-control org-select">
-        <mat-select placeholder="Event Owner" formControlName="event_organization">
-          <mat-option>--</mat-option>
-          <mat-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</mat-option>
-        </mat-select>
-      </mat-form-field>-->
+                <mat-form-field class="form-control">
+                  <mat-select placeholder="Process Status" formControlName="event_status" required>
+                    <mat-option *ngFor="let status of event_statuses" value="{{status.id}}">{{status.name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-hint align="start"></mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="form-control">
+                  <input matInput [matDatepicker]="qualityCheck" placeholder="NWHC Quality Check" formControlName="quality_check">
+                  <mat-datepicker-toggle matSuffix [for]="qualityCheck"></mat-datepicker-toggle>
+                  <mat-datepicker #qualityCheck></mat-datepicker>
+                  <mat-hint align="start"></mat-hint>
+                </mat-form-field>
+              </div>
+
+              <div class="horizontal-form-container">
+                <mat-form-field class="form-control">
+                  <mat-select placeholder="Legal Status" formControlName="legal_status" required>
+                    <mat-option *ngFor="let legalStatus of legalStatuses" value="{{legalStatus.id}}">{{legalStatus.name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-hint align="start"></mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="form-control">
+                  <input matInput placeholder="Legal Number" formControlName="legal_number">
+                  <mat-hint align="start"> </mat-hint>
+                </mat-form-field>
+              </div>
+
+            </form>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <!-- End NWHC staff only section -->
 
     </div>
 
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-
-  <button mat-button color="warn" (click)="this.editEventDialogRef.close('cancel');"><mat-icon>cancel</mat-icon>&nbsp;Cancel</button>
-  <button mat-button color="primary" type="submit" [disabled]="editEventForm.invalid" (click)="updateEvent(editEventForm.value)"><mat-icon>send</mat-icon>&nbsp;Submit</button>
+  <button mat-button color="warn" (click)="this.editEventDialogRef.close('cancel');">
+    <mat-icon>cancel</mat-icon>&nbsp;Cancel
+  </button>
+  <button mat-button color="primary" type="submit" (click)="updateEvent(editEventForm.value)">
+    <mat-icon>save</mat-icon>&nbsp;Save
+  </button>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

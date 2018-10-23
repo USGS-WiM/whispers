@@ -175,11 +175,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       event_reference: '',
       event_type: [null, Validators.required],
       complete: false,
-      event_status: 1,
       public: [true, Validators.required],
       // NWHC only
       staff: null,
-      status: null,
+      event_status: null,
       quality_check: null,
       legal_status: null,
       legal_number: '',

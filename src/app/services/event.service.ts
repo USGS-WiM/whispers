@@ -91,7 +91,7 @@ export class EventService {
     let queryString = '?no_page';
 
     if (eventQuery.affected_count !== null && eventQuery.affected_count !== '') {
-      queryString = queryString + '&affected_count=' + eventQuery.affected_count.toString();
+      queryString = queryString + '&affected_count' + eventQuery.affected_count_operator + '=' + eventQuery.affected_count.toString();
     }
     if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
       queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
@@ -155,7 +155,7 @@ export class EventService {
     let queryString = '?no_page';
 
     if (eventQuery.affected_count !== null && eventQuery.affected_count !== '') {
-      queryString = queryString + '&affected_count=' + eventQuery.affected_count.toString();
+      queryString = queryString + '&affected_count' + eventQuery.affected_count_operator + '=' + eventQuery.affected_count.toString();
     }
     if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
       queryString = queryString + '&start_date=' + eventQuery.start_date.toString();

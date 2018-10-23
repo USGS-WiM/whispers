@@ -26,6 +26,7 @@ export class APP_UTILITIES {
             administrative_level_one: null,
             administrative_level_two: null,
             affected_count: null,
+            affected_count_operator: '',
             start_date: '',
             end_date: '',
             diagnosis_type_includes_all: false,
@@ -50,6 +51,9 @@ export class APP_UTILITIES {
         }
         if (search.data.affected_count) {
             parsedSearch.affected_count = search.data.affected_count;
+        }
+        if (search.data.affected_count_operator) {
+            parsedSearch.affected_count_operator = search.data.affected_count_operator;
         }
         if (search.data.event_type) {
             parsedSearch.event_type = JSON.parse('[' + search.data.event_type + ']');

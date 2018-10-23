@@ -22,7 +22,8 @@
               <div class="chiplist">
                 <mat-chip-list #eventTypeChipList>
                   <span *ngFor="let eventType of selectedEventTypes">
-                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (removed)="removeChip(eventType, selectedEventTypes, 'eventType')">{{eventType.name}}
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
+                      (removed)="removeChip(eventType, selectedEventTypes, 'eventType')">{{eventType.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
                     <span *ngIf="(selectedEventTypes.indexOf(eventType)) < (selectedEventTypes.length - 1)">or&nbsp;</span>
@@ -66,10 +67,12 @@
               <div class="chiplist">
                 <mat-chip-list #diagnosisTypeChipList>
                   <span *ngFor="let diagnosisType of selectedDiagnosisTypes">
-                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (removed)="removeChip(diagnosisType, selectedDiagnosisTypes, 'diagnosisType')">{{diagnosisType.name}}
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
+                      (removed)="removeChip(diagnosisType, selectedDiagnosisTypes, 'diagnosisType')">{{diagnosisType.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedDiagnosisTypes.indexOf(diagnosisType)) < (selectedDiagnosisTypes.length - 1)">{{(searchForm.get('diagnosis_type_includes_all').value) ? "and" : "or"}}&nbsp;</span>
+                    <span *ngIf="(selectedDiagnosisTypes.indexOf(diagnosisType)) < (selectedDiagnosisTypes.length - 1)">{{(searchForm.get('diagnosis_type_includes_all').value)
+                      ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
               </div>
@@ -79,8 +82,8 @@
         <div>
           <div class="autocomplete-input">
             <mat-form-field class="full-width">
-              <input type="text" matInput placeholder="Add Diagnosis Type" aria-label="Add Diagnosis Type" [matAutocomplete]="diagnosisTypeAutoComplete"
-                [formControl]="diagnosisTypeControl">
+              <input type="text" matInput placeholder="Add Diagnosis Type" aria-label="Add Diagnosis Type"
+                [matAutocomplete]="diagnosisTypeAutoComplete" [formControl]="diagnosisTypeControl">
               <mat-autocomplete #diagnosisTypeAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedDiagnosisTypes, 'diagnosisType')">
                 <mat-option *ngFor="let diagnosisType of filteredDiagnosisTypes | async" [value]="diagnosisType">
                   <span>{{ diagnosisType.name }}</span>
@@ -110,10 +113,12 @@
               <div class="chiplist">
                 <mat-chip-list #diagnosisChipList>
                   <span *ngFor="let diagnosis of selectedDiagnoses">
-                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (removed)="removeChip(diagnosis, selectedDiagnoses, 'diagnosis')">{{diagnosis.name}}
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
+                      (removed)="removeChip(diagnosis, selectedDiagnoses, 'diagnosis')">{{diagnosis.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedDiagnoses.indexOf(diagnosis)) < (selectedDiagnoses.length - 1)">{{(searchForm.get('diagnosis_includes_all').value) ? "and" : "or"}}&nbsp;</span>
+                    <span *ngIf="(selectedDiagnoses.indexOf(diagnosis)) < (selectedDiagnoses.length - 1)">{{(searchForm.get('diagnosis_includes_all').value)
+                      ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
               </div>
@@ -154,10 +159,12 @@
               <div class="chiplist">
                 <mat-chip-list #speciesChipList>
                   <span *ngFor="let species of selectedSpecies">
-                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (removed)="removeChip(species, selectedSpecies, 'species')">{{species.name}}
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
+                      (removed)="removeChip(species, selectedSpecies, 'species')">{{species.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedSpecies.indexOf(species)) < (selectedSpecies.length - 1)">{{(searchForm.get('species_includes_all').value) ? "and" : "or"}}&nbsp;</span>
+                    <span *ngIf="(selectedSpecies.indexOf(species)) < (selectedSpecies.length - 1)">{{(searchForm.get('species_includes_all').value)
+                      ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
               </div>
@@ -167,7 +174,8 @@
         <div>
           <div class="autocomplete-input">
             <mat-form-field class="full-width">
-              <input type="text" matInput placeholder="Add Species" aria-label="Add Species" [matAutocomplete]="speciesAutoComplete" [formControl]="speciesControl">
+              <input type="text" matInput placeholder="Add Species" aria-label="Add Species" [matAutocomplete]="speciesAutoComplete"
+                [formControl]="speciesControl">
               <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedSpecies, 'species')">
                 <mat-option *ngFor="let species of filteredSpecies | async" [value]="species">
                   <span>{{ species.name }}</span>
@@ -197,10 +205,12 @@
               <div class="chiplist">
                 <mat-chip-list #adminLevelOneChipList>
                   <span *ngFor="let adminLevelOne of selectedAdminLevelOnes">
-                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (removed)="removeChip(adminLevelOne, selectedAdminLevelOnes, 'adminLevelOne')">{{adminLevelOne.name}}
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
+                      (removed)="removeChip(adminLevelOne, selectedAdminLevelOnes, 'adminLevelOne')">{{adminLevelOne.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedAdminLevelOnes.indexOf(adminLevelOne)) < (selectedAdminLevelOnes.length - 1)">{{(searchForm.get('administrative_level_one_includes_all').value) ? "and" : "or"}}&nbsp;</span>
+                    <span *ngIf="(selectedAdminLevelOnes.indexOf(adminLevelOne)) < (selectedAdminLevelOnes.length - 1)">{{(searchForm.get('administrative_level_one_includes_all').value)
+                      ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
               </div>
@@ -241,10 +251,12 @@
               <div class="chiplist">
                 <mat-chip-list #adminLevelTwoChipList>
                   <span *ngFor="let adminLevelTwo of selectedAdminLevelTwos">
-                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)" (removed)="removeChip(adminLevelTwo, selectedAdminLevelTwos, 'adminLevelTwo')">{{adminLevelTwo.name}}
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
+                      (removed)="removeChip(adminLevelTwo, selectedAdminLevelTwos, 'adminLevelTwo')">{{adminLevelTwo.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedAdminLevelTwos.indexOf(adminLevelTwo)) < (selectedAdminLevelTwos.length - 1)">{{(searchForm.get('administrative_level_two_includes_all').value) ? "and" : "or"}}&nbsp;</span>
+                    <span *ngIf="(selectedAdminLevelTwos.indexOf(adminLevelTwo)) < (selectedAdminLevelTwos.length - 1)">{{(searchForm.get('administrative_level_two_includes_all').value)
+                      ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
               </div>
@@ -283,14 +295,19 @@
             <b>Number Affected</b>
           </mat-panel-title>
           <mat-panel-description>
-            <span>{{searchForm.get('affected_count').value}}</span>
+            <span> {{ searchForm.get('affected_count_operator').value === '__gte' ? '>=' : searchForm.get('affected_count_operator').value === '__lte' ? '<=' : '' }} {{searchForm.get('affected_count').value}}</span>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div>
+          <div class="affected-count-operator-radios">
+            <mat-radio-group formControlName="affected_count_operator">
+              <mat-radio-button [value]="'__gte'" matTooltip="Greater than or equal to">Greater than or equal to ( >= )</mat-radio-button>&nbsp;&nbsp;
+              <mat-radio-button [value]="'__lte'" matTooltip="Less than or equal to">Less than or equal to ( <= )</mat-radio-button>
+            </mat-radio-group>
+          </div>
           <mat-form-field>
-            <input matInput type="number" placeholder="Number Affected" formControlName="affected_count">
+              <input matInput type="number" placeholder="Number Affected" formControlName="affected_count">
           </mat-form-field>
-
         </div>
       </mat-expansion-panel>
       <!--- end Number Affected expansion panel -->
@@ -330,9 +347,12 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="clearSelection()">
-    <mat-icon class="material-icons">clear_all</mat-icon> Clear Selection</button>
+    <mat-icon class="material-icons">clear_all</mat-icon> Clear Selection
+  </button>
   <button mat-button (click)="this.searchDialogRef.close('cancel');">
-    <mat-icon class="material-icons">cancel</mat-icon> Cancel</button>
+    <mat-icon class="material-icons">cancel</mat-icon> Cancel
+  </button>
   <button mat-raised-button color="primary" (click)="submitSearch(searchForm.value)">
-    <mat-icon class="material-icons">search</mat-icon> Search</button>
+    <mat-icon class="material-icons">search</mat-icon> Search
+  </button>
 </mat-dialog-actions>

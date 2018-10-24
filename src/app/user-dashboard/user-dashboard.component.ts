@@ -175,6 +175,7 @@ export class UserDashboardComponent implements OnInit {
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      disableClose: true,
       data: {
         contact_action: 'create'
       }

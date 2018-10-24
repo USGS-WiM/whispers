@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+import { throwError } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
 
 import { APP_SETTINGS } from '@app/app.settings';
@@ -91,6 +91,6 @@ export class SearchService {
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(JSON.stringify(error.json()) || 'Server error');
+    return throwError(JSON.stringify(error.json()) || 'Server error');
   }
 }

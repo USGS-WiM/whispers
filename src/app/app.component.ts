@@ -101,7 +101,7 @@ export class AppComponent implements OnInit {
   openAuthenticationDialog() {
     this.authenticationDialogRef = this.dialog.open(AuthenticationComponent, {
       //minWidth: '60%'
-      // data: {
+      // disableClose: true, data: {
       //   query: this.currentDisplayQuery
       // }
       // height: '75%'

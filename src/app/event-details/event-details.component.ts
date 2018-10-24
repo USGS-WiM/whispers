@@ -441,11 +441,10 @@ export class EventDetailsComponent implements OnInit {
   editEvent(id: string) {
     // Open dialog for editing event
     this.editEventDialogRef = this.dialog.open(EditEventComponent, {
-      data: {
+      disableClose: true,
+       data: {
         eventData: this.eventData
-      }
-      // minWidth: 200
-      // height: '75%'
+      },
     });
 
     this.editEventDialogRef.afterClosed()
@@ -508,7 +507,7 @@ export class EventDetailsComponent implements OnInit {
     // Open dialog for adding event diagnosis
     this.addCommentDialogRef = this.dialog.open(AddCommentComponent, {
       data: {
-        event_id: id,
+        object_id: id,
         title: 'Add Comment',
         titleIcon: 'add_comment',
         // confirmButtonText: 'Add comment',
@@ -535,7 +534,7 @@ export class EventDetailsComponent implements OnInit {
     // Open dialog for adding event diagnosis
     this.addCommentDialogRef = this.dialog.open(AddCommentComponent, {
       data: {
-        event_id: id,
+        object_id: id,
         title: 'Add Comment',
         titleIcon: 'add_comment',
         // confirmButtonText: 'Add comment',

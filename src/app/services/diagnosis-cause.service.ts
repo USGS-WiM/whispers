@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import { Subject } from 'rxjs/Subject';
+import { throwError } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -30,7 +31,7 @@ export class DiagnosisCauseService {
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(JSON.stringify(error.json()) || 'Server error');
+    return throwError(JSON.stringify(error.json()) || 'Server error');
   }
 
 }

@@ -89,6 +89,7 @@ export class LocationSpeciesTableComponent implements OnInit {
 
     // Open dialog for editing location species
     this.editLocationSpeciesDialogRef = this.dialog.open(EditLocationSpeciesComponent, {
+      disableClose: true,
       data: {
         locationspecies: locationspecies,
         location_species_action: 'edit',
@@ -118,6 +119,7 @@ export class LocationSpeciesTableComponent implements OnInit {
 
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
+        disableClose: true,
         data: {
           title: 'Delete species from this location',
           titleIcon: 'delete_forever',
@@ -156,6 +158,7 @@ export class LocationSpeciesTableComponent implements OnInit {
   editSpeciesDiagnosis(speciesdiagnosis, locationspecies) {
 
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+      disableClose: true,
       data: {
         locationspecies: locationspecies,
         speciesdiagnosis: speciesdiagnosis,
@@ -184,6 +187,7 @@ export class LocationSpeciesTableComponent implements OnInit {
   addSpeciesDiagnosis(locationspecies) {
 
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+      disableClose: true,
       data: {
         locationspecies: locationspecies,
         species_diagnosis_action: 'add',
@@ -207,6 +211,7 @@ export class LocationSpeciesTableComponent implements OnInit {
 
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
+        disableClose: true,
         data: {
           title: 'Delete diagnosis from this species',
           titleIcon: 'delete_forever',

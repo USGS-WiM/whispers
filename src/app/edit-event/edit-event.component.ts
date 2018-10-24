@@ -17,6 +17,9 @@ import { EventTypeService } from '@app/services/event-type.service';
 import { EventStatusService } from '@app/services/event-status.service';
 import { CurrentUserService } from '@app/services/current-user.service';
 
+import { LegalStatus } from '@interfaces/legal-status';
+import { LegalStatusService } from '@app/services/legal-status.service';
+
 @Component({
   selector: 'app-edit-event',
   templateUrl: './edit-event.component.html',
@@ -28,6 +31,7 @@ export class EditEventComponent implements OnInit {
   organizations: Organization[];
   event_types: EventType[];
   event_statuses: EventStatus[];
+  legalStatuses: LegalStatus[];
 
   currentUser;
 
@@ -63,6 +67,7 @@ export class EditEventComponent implements OnInit {
     private organizationService: OrganizationService,
     private eventStatusService: EventStatusService,
     private eventTypeService: EventTypeService,
+    private legalStatusService: LegalStatusService,
     public snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -120,7 +125,7 @@ export class EditEventComponent implements OnInit {
       .subscribe(
         event_types => {
           this.event_types = event_types;
-          this.editEventForm.get('event_type').setValue(this.data.eventData.event_type.toString());
+          this.editEventForm.get('event_type').setValue(this.data.eventData.event_type);
         },
         error => {
           this.errorMessage = <any>error;
@@ -132,6 +137,18 @@ export class EditEventComponent implements OnInit {
         event_statuses => {
           this.event_statuses = event_statuses;
           this.editEventForm.get('event_status').setValue(this.data.eventData.event_status);
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get legal statuses from the LegalStatusService
+    this.legalStatusService.getLegalStatuses()
+      .subscribe(
+        legalStatuses => {
+          this.legalStatuses = legalStatuses;
+          this.editEventForm.get('legal_status').setValue(this.data.eventData.legal_status);
         },
         error => {
           this.errorMessage = <any>error;

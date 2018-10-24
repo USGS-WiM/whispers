@@ -216,6 +216,7 @@ export class HomeComponent implements OnInit {
   openSearchDialog() {
     this.searchDialogRef = this.dialog.open(SearchDialogComponent, {
       minWidth: '60%',
+      disableClose: true,
       data: {
         query: this.currentDisplayQuery
       }

@@ -24,7 +24,7 @@ import { DataUpdatedService } from '@app/services/data-updated.service';
 export class AddCommentComponent implements OnInit {
   errorMessage = '';
   submitLoading = false;
-  event_id;
+  object_id;
 
   commentTypes: CommentType[];
 
@@ -36,7 +36,8 @@ export class AddCommentComponent implements OnInit {
     this.commentForm = this.formBuilder.group({
       comment: '',
       comment_type: null,
-      object_id: null
+      object_id: null,
+      new_content_type: ''
     });
   }
 
@@ -54,11 +55,26 @@ export class AddCommentComponent implements OnInit {
 
   ngOnInit() {
 
-    if (this.data.comment_object === 'event') { this.commentObjectString = 'Event'; }
+    this.commentForm.get('object_id').setValue(this.data.object_id);
 
-    if (this.data.comment_object === 'eventlocation') { this.commentObjectString = 'Event Location'; }
-
-    this.event_id = this.data.event_id;
+    switch (this.data.comment_object) {
+      case 'event':
+        this.commentObjectString = 'Event';
+        this.commentForm.get('new_content_type').setValue('event');
+        break;
+      case 'eventlocation':
+        this.commentObjectString = 'Event Location';
+        this.commentForm.get('new_content_type').setValue('eventlocation');
+        break;
+      case 'servicerequest':
+        this.commentObjectString = 'Service Request';
+        this.commentForm.get('new_content_type').setValue('servicerequest');
+        break;
+      case 'superevent':
+        this.commentObjectString = 'Super Event';
+        this.commentForm.get('new_content_type').setValue('superevent');
+        break;
+    }
 
     // get comment types from the commentTypes service
     this.commentTypeService.getCommentTypes()
@@ -82,25 +98,21 @@ export class AddCommentComponent implements OnInit {
 
     this.submitLoading = true;
 
-    //TODO: check 'comment_object' to see if event comment or event location comment being added, insert appropriate 'object_id'
-    //if (this.data.comment_object === 'event') { // set value }
-    // if (this.data.comment_object === 'eventlocation') { // set value }
+      this.commentService.create(formValue)
+        .subscribe(
+          (comment) => {
+            this.submitLoading = false;
+            this.openSnackBar('Comment Successfully Saved', 'OK', 5000);
+            this.dataUpdatedService.triggerRefresh();
+            this.addCommentDialogRef.close();
 
-    this.commentService.create(formValue)
-      .subscribe(
-        (comment) => {
-          this.submitLoading = false;
-          this.openSnackBar('Comment Successfully Saved', 'OK', 5000);
-          this.dataUpdatedService.triggerRefresh();
-          this.addCommentDialogRef.close();
+          },
+          error => {
+            this.errorMessage = <any>error;
+            this.openSnackBar('Error. Comment not saved. Error message: ' + error, 'OK', 8000);
 
-        },
-        error => {
-          this.errorMessage = <any>error;
-          this.openSnackBar('Error. Comment not saved. Error message: ' + error, 'OK', 8000);
+          }
+        );
+    }
 
-        }
-      );
   }
-
-}

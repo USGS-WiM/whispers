@@ -162,6 +162,7 @@ export class SavedSearchesComponent implements OnInit {
   openSearchDeleteConfirm() {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
+        disableClose: true,
         data: {
           title: 'Delete Search',
           message: 'Are you sure you want to delete the saved search "' + this.selection.selected[0].name + '" from your profile?',

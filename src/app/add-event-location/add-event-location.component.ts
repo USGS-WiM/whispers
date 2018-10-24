@@ -444,6 +444,7 @@ export class AddEventLocationComponent implements OnInit {
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      disableClose: true,
       data: {
         contact_action: 'create'
       }
@@ -452,6 +453,7 @@ export class AddEventLocationComponent implements OnInit {
 
   openGNISLookupDialog() {
     this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
+      disableClose: true,
       data: {}
     });
 

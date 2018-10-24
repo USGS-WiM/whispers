@@ -295,14 +295,14 @@
             <b>Number Affected</b>
           </mat-panel-title>
           <mat-panel-description>
-            <span> {{ searchForm.get('affected_count_operator').value === '__gte' ? '>=' : searchForm.get('affected_count_operator').value === '__lte' ? '<=' : '' }} {{searchForm.get('affected_count').value}}</span>
+            <span> {{ searchForm.get('affected_count_operator').value === '__gte' ? '&ge;' : searchForm.get('affected_count_operator').value === '__lte' ? '&le;' : '' }} {{searchForm.get('affected_count').value}}</span>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div>
           <div class="affected-count-operator-radios">
             <mat-radio-group formControlName="affected_count_operator">
-              <mat-radio-button [value]="'__gte'" matTooltip="Greater than or equal to">Greater than or equal to ( >= )</mat-radio-button>&nbsp;&nbsp;
-              <mat-radio-button [value]="'__lte'" matTooltip="Less than or equal to">Less than or equal to ( <= )</mat-radio-button>
+              <mat-radio-button [value]="'__gte'" matTooltip="Greater than or equal to">Greater than or equal to ( &ge; )</mat-radio-button>&nbsp;&nbsp;
+              <mat-radio-button [value]="'__lte'" matTooltip="Less than or equal to">Less than or equal to ( &le; )</mat-radio-button>
             </mat-radio-group>
           </div>
           <mat-form-field>

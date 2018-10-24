@@ -275,6 +275,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   openEventSubmitConfirm(formValue): void {
     this.bottomSheet.open(EventSubmissionConfirmComponent, {
+      disableClose: true,
       data: {
         formValue: formValue,
         eventTypes: this.eventTypes,
@@ -289,6 +290,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      disableClose: true,
       data: {
         contact_action: 'create'
       }
@@ -297,6 +299,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   openGNISLookupDialog(eventLocationIndex) {
     this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
+      disableClose: true,
       data: {
         event_location_index: eventLocationIndex
       }
@@ -314,6 +317,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   openEventLocationRemoveConfirm(eventLocationIndex) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
+        disableClose: true,
         data: {
           title: 'Remove Event Location',
           titleIcon: 'remove_circle',
@@ -1063,6 +1067,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
     // Open dialog for adding species diagnosis
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+      disableClose: true,
       data: {
         species_diagnosis_action: 'addToFormArray',
         eventlocationIndex: eventlocationIndex,
@@ -1123,7 +1128,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     //   }
     // }
 
-    if (formValue.quality_check !== null ) {
+    if (formValue.quality_check !== null) {
       formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');
     }
 
@@ -1141,6 +1146,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
           this.confirmDialogRef = this.dialog.open(ConfirmComponent,
             {
+              disableClose: true,
               data: {
                 title: 'Event Saved',
                 titleIcon: 'check',
@@ -1163,7 +1169,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
           // open event save success dialog
           // this.submitSuccessDialogRef = this.dialog.open(EventSubmissionSuccessComponent,
           //   {
-          //     data: {
+          //     disableClose: true, data: {
           //       title: 'Event Saved',
           //       message: 'Your event was successfully saved. The Event ID is ' + event.id,
           //       confirmButtonText: 'OK'

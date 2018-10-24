@@ -17,6 +17,8 @@ import { AdministrativeLevelTwo } from '@interfaces/administrative-level-two';
 import { AdministrativeLevelTwoService } from '@app/services/administrative-level-two.service';
 import { DataUpdatedService } from '@app/services/data-updated.service';
 
+import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
+
 
 @Component({
   selector: 'app-edit-event-location',
@@ -36,6 +38,11 @@ export class EditEventLocationComponent implements OnInit {
 
   submitLoading = false;
 
+  gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
+
+  latitudePattern: RegExp = (/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/);
+  longitudePattern: RegExp = (/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/);
+
   buildEditEventLocationForm() {
     this.editEventLocationForm = this.formBuilder.group({
       id: null,
@@ -43,12 +50,12 @@ export class EditEventLocationComponent implements OnInit {
       name: '',
       start_date: '',
       end_date: '',
-      country: null,
-      administrative_level_one: null,
-      administrative_level_two: null,
-      latitude: '',
-      longitude: '',
-      land_ownership: null,
+      country: [null, Validators.required],
+      administrative_level_one: [null, Validators.required],
+      administrative_level_two: [null, Validators.required],
+      latitude: [null, Validators.pattern(this.latitudePattern)],
+      longitude: [null, Validators.pattern(this.longitudePattern)],
+      land_ownership: [null, Validators.required],
       gnis_name: '',
       gnis_id: ''
     });
@@ -56,6 +63,7 @@ export class EditEventLocationComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private dialog: MatDialog,
     private eventLocationService: EventLocationService,
     private landOwnershipService: LandOwnershipService,
     private countryService: CountryService,
@@ -208,6 +216,22 @@ export class EditEventLocationComponent implements OnInit {
           this.openSnackBar('Error. Event location details not updated. Error message: ' + error, 'OK', 8000);
         }
       );
+  }
+
+  openGNISLookupDialog(eventLocationIndex) {
+    this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
+      disableClose: true,
+      data: {
+        event_location_index: eventLocationIndex
+      }
+    });
+
+    this.gnisLookupDialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      this.editEventLocationForm.get('gnis_id').setValue(result.id);
+      this.editEventLocationForm.get('gnis_name').setValue(result.name);
+
+    });
   }
 
 

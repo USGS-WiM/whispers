@@ -1151,7 +1151,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
                 title: 'Event Saved',
                 titleIcon: 'check',
                 message: 'Your event was successfully saved. The Event ID is ' + event.id,
-                messageIcon: 'check',
                 confirmButtonText: 'OK',
                 showCancelButton: true
               }
@@ -1161,7 +1160,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
           // when user clicks OK, reset the form and stepper using resetStepper()
           this.confirmDialogRef.afterClosed().subscribe(result => {
             if (result === true) {
-              alert('event saved OKed');
               this.resetStepper();
             }
           });

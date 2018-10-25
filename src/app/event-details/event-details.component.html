@@ -278,7 +278,7 @@
 
               <div class="event-group-no-data" *ngIf="eventData.comments.length === 0">No comments to show</div>
 
-              <div *ngIf="eventData.comments.length > 0">
+              <!-- <div *ngIf="eventData.comments.length > 0">
                 <div class="single-comment-div" *ngFor="let comment of eventData.comments">
                   <span class="comment-type-title">{{comment.comment_type | displayValue:'name':this.commentTypes}}</span><br />
                   <span class="comment-date">{{comment.created_date | date:'shortDate'}}</span><br />
@@ -289,8 +289,21 @@
                     </button>
                   </span>
                 </div>
+              </div> -->
 
-              </div>
+              <ul *ngIf="eventData.comments.length > 0">
+                <li *ngFor="let comment of eventData.comments">
+                  <span class="comment-type-title">{{comment.comment_type | displayValue:'name':this.commentTypes}}</span>&nbsp;|&nbsp;<span
+                    class="comment-date">{{comment.created_date | date:'shortDate' }}</span>&nbsp;|&nbsp;<span class="comment-text">{{comment.comment}}</span><span
+                    class="comment-delete"> <button mat-icon-button aria-label="delete event comment" color="warn"
+                      [disabled]="!eventData.permissions.destroy" (click)="openEventCommentDeleteConfirm(comment.id)">
+                      <mat-icon>remove_circle</mat-icon>
+                    </button>
+                  </span>
+                </li>
+              </ul>
+
+
               <div class="event-detail-action-bar">
                 <button mat-button color="primary" class="event-detail-action-button" (click)="addEventComment(eventData.id)"
                   [disabled]="!eventData.permissions.write">
@@ -324,12 +337,12 @@
 
                 <div class="single-comment-div" *ngFor="let servicerequest of eventData.servicerequests">
                   <span class="comment-type-title">{{servicerequest.request_type_string}}</span><br />
+                  <span class="comment-date">{{servicerequest.created_date | date:'mediumDate'}}</span><br />
                   <span>Response: {{servicerequest.request_response_string}}</span><br />
-                  <span class="comment-date">{{servicerequest.created_date | date:'shortDate'}}</span><br />
 
                   <ul *ngIf="servicerequest.comments.length > 0">
                     <li *ngFor="let comment of servicerequest.comments">
-                      {{comment.comment}}
+                      {{comment.created_date | date:'shortDate' }}&nbsp;|&nbsp;{{comment.comment}}
                     </li>
                   </ul>
 
@@ -419,7 +432,7 @@
 
                 <div *ngIf="eventLocation.comments && eventLocation.comments.length > 0">
 
-                  <div class="single-comment-div" *ngFor="let comment of eventLocation.comments">
+                  <!-- <div class="single-comment-div" *ngFor="let comment of eventLocation.comments">
                     <span class="comment-type-title">{{comment.comment_type | displayValue:'name':this.commentTypes}}</span><br />
                     <span class="comment-date">{{comment.created_date | date:'shortDate'}}</span><br />
                     <span class="comment-text">{{comment.comment}}</span>
@@ -428,7 +441,22 @@
                         <mat-icon>remove_circle</mat-icon>
                       </button>
                     </span>
-                  </div>
+                  </div> -->
+
+                  <ul *ngIf="eventLocation.comments.length > 0">
+                    <li *ngFor="let comment of eventLocation.comments">
+                      <span class="comment-type-title">{{comment.comment_type | displayValue:'name':this.commentTypes}}</span>&nbsp;|&nbsp;<span
+                        class="comment-date">{{comment.created_date | date:'shortDate' }}</span>&nbsp;|&nbsp;<span
+                        class="comment-text">{{comment.comment}}</span>
+                      <span class="comment-delete"> <button mat-icon-button aria-label="delete event comment" color="warn"
+                          [disabled]="!eventData.permissions.destroy" (click)="openEventLocationCommentDeleteConfirm(comment.id)">
+                          <mat-icon>remove_circle</mat-icon>
+                        </button>
+                      </span>
+                    </li>
+                  </ul>
+
+
                 </div>
 
                 <div class="event-detail-action-bar">

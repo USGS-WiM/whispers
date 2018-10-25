@@ -1,0 +1,32 @@
+.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-control {
+    width: 18em;
+    margin: 10px;
+}
+
+.org-select {
+    width: 35em;
+}
+
+.alert{ 
+    width: 100%;
+    background-color: lightcoral;
+}
+
+.general-comment-text-area {
+    width: 40em;
+    margin-bottom: 2em;
+}
+
+.text-small {
+    font-size: small;
+}

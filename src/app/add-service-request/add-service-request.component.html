@@ -1,3 +1,65 @@
-<p>
-  add-service-request works!
-</p>
+<h1 mat-dialog-title>
+  <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}}
+</h1>
+<mat-dialog-content>
+
+  <form [formGroup]="serviceRequestForm">
+    <div class="vertical-form-container">
+
+      <mat-radio-group formControlName="request_type">
+        <mat-radio-button [value]="1">Request diagnostic and consultative services
+        </mat-radio-button>
+        <p>
+          <mat-radio-button [value]="2">Request consultative services ONLY </mat-radio-button>
+      </mat-radio-group>
+
+      <div formArrayName="new_comments">
+        <div *ngFor="let comment of getComments(serviceRequestForm); let commentIndex = index">
+
+          <div [formGroupName]="commentIndex">
+
+            <div class="horizontal-form-container">
+
+              <mat-form-field class="general-comment-text-area">
+                <textarea matInput maxlength="1000" #comment placeholder="Comment" formControlName="comment"></textarea>
+                <mat-hint align="end">{{comment.value.length}} / 1000</mat-hint>
+              </mat-form-field>
+
+              <mat-form-field class="form-control">
+                <mat-select placeholder="Type" formControlName="comment_type">
+                  <mat-option *ngFor="let commentType of commentTypes" [value]="commentType.id">{{commentType.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <button mat-icon-button color="warn" aria-label="Remove this comment" (click)="removeComment(commentIndex)"
+                matTooltip="Remove this comment">
+                <mat-icon>remove_circle</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="button-row">
+        <button mat-button color="primary" matTooltip="Add comment" (click)="addComment()">
+          <mat-icon>add_comment</mat-icon> Add Comment <span class="text-small">(optional)</span>
+        </button>
+      </div>
+
+    </div>
+  </form>
+
+
+</mat-dialog-content>
+<mat-dialog-actions>
+
+  <button mat-button color="warn" (click)="this.addServiceRequestDialogRef.close('cancel');">
+    <mat-icon>cancel</mat-icon>&nbsp;Cancel
+  </button>
+  <button mat-button color="primary" type="submit" [disabled]="serviceRequestForm.invalid" (click)="onSubmit(serviceRequestForm.value)">
+    <mat-icon>{{data.actionButtonIcon}}</mat-icon> {{data.action_button_text}}
+  </button>
+  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+</mat-dialog-actions>

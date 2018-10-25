@@ -538,7 +538,7 @@ export class EventDetailsComponent implements OnInit {
 
 
   addEventLocationComment(id: string) {
-    // Open dialog for adding event diagnosis
+    // Open dialog for adding event location comment
     this.addCommentDialogRef = this.dialog.open(AddCommentComponent, {
       data: {
         object_id: id,
@@ -562,6 +562,33 @@ export class EventDetailsComponent implements OnInit {
         }
       );
   }
+
+  addServiceRequestComment(id: string) {
+    // Open dialog for adding service request comment
+    this.addCommentDialogRef = this.dialog.open(AddCommentComponent, {
+      data: {
+        object_id: id,
+        title: 'Add Comment',
+        titleIcon: 'add_comment',
+        // confirmButtonText: 'Add comment',
+        showCancelButton: true,
+        action_button_text: 'Add Comment',
+        actionButtonIcon: 'add_comment',
+        comment_object: 'servicerequest'
+      }
+    });
+
+    this.addCommentDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
 
 
   addEventLocationContact(id: string) {
@@ -590,6 +617,35 @@ export class EventDetailsComponent implements OnInit {
       );
 
   }
+
+
+  addServiceRequest(id: string) {
+    // Open dialog for adding event location contact
+    this.addServiceRequestDialogRef = this.dialog.open(AddServiceRequestComponent, {
+      disableClose: true,
+      data: {
+        event_id: id,
+        comment_types: this.commentTypes,
+        title: 'Add a service request',
+        titleIcon: 'add_circle',
+        showCancelButton: true,
+        action_button_text: 'Submit request',
+        actionButtonIcon: 'question_answer'
+      }
+    });
+
+    this.addServiceRequestDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+  }
+
 
   deleteEventComment(id: number) {
     // this.commentService.delete(id)

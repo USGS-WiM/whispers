@@ -302,6 +302,56 @@
           <!-- End Event Comments Section -->
 
 
+          <!-- Begin Service Requests Section -->
+          <div class="event-page-group">
+            <div class="event-table-header">Service Requests</div>
+
+            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{panelOpenState ? 'Hide Service Requests' : 'View Service Requests'}}
+                </mat-panel-title>
+                <!-- <mat-panel-description>
+                      Currently I am {{panelOpenState ? 'open' : 'closed'}}
+                    </mat-panel-description> -->
+              </mat-expansion-panel-header>
+
+              <div class="event-group-no-data" *ngIf="eventData.servicerequests.length === 0">No service requests to
+                show</div>
+
+              <div *ngIf="eventData.servicerequests.length > 0">
+
+
+                <div class="single-comment-div" *ngFor="let servicerequest of eventData.servicerequests">
+                  <span class="comment-type-title">{{servicerequest.request_type_string}}</span><br />
+                  <span>Response: {{servicerequest.request_response_string}}</span><br />
+                  <span class="comment-date">{{servicerequest.created_date | date:'shortDate'}}</span><br />
+
+                  <ul *ngIf="servicerequest.comments.length > 0">
+                    <li *ngFor="let comment of servicerequest.comments">
+                      {{comment.comment}}
+                    </li>
+                  </ul>
+
+                  <button mat-icon-button aria-label="add comment to service request" color="primary" [disabled]="!eventData.permissions.destroy"
+                    (click)="addServiceRequestComment(servicerequest.id)">
+                    <mat-icon>add_comment</mat-icon>
+                  </button>
+
+                </div>
+
+              </div>
+              <div class="event-detail-action-bar">
+                <button mat-button color="primary" class="event-detail-action-button" (click)="addServiceRequest(eventData.id)"
+                  [disabled]="!eventData.permissions.write">
+                  <mat-icon>question_answer</mat-icon> Add Service Request
+                </button>
+              </div>
+            </mat-expansion-panel>
+          </div>
+          <!-- End Service Requests Section -->
+
+
           <div class="event-page-group" id="locationDetails">
             <div class="event-table-header">Event Location Details</div>
 
@@ -391,8 +441,6 @@
               <!-- End Event Location Comments section -->
 
 
-
-
               <!-- Begin Event Location Contacts section -->
               <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                 <mat-expansion-panel-header>
@@ -450,8 +498,6 @@
                 </div>
               </mat-expansion-panel>
               <!-- End Event Location Contacts section -->
-
-
 
               <div class="event-detail-action-bar-left">
                 <button mat-button color="primary" class="event-detail-action-button" (click)="editEventLocation(eventData.eventlocations[i])"

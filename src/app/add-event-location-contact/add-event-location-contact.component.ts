@@ -65,6 +65,8 @@ export class AddEventLocationContactComponent implements OnInit {
 
     this.eventLocationContactForm.get('event_location').setValue(this.data.event_location_id);
 
+    this.userContacts = this.data.userContacts;
+
     // get contact types from the ContactTypeService
     this.contactTypeService.getContactTypes()
       .subscribe(
@@ -76,28 +78,35 @@ export class AddEventLocationContactComponent implements OnInit {
         }
       );
 
+    const arrayControl = this.eventLocationContactForm.get('contact') as FormControl;
+    this.filteredUserContacts = arrayControl.valueChanges
+      .startWith(null)
+      .map(val => this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
+
+
 
     // TEMPORARY- will need to use user creds to query user contact list
     // get contact types from the ContactTypeService
-    this.contactService.getContacts()
-      .subscribe(
-        contacts => {
-          this.userContacts = contacts;
-          this.userContacts.sort(function (a, b) {
-            if (a.last_name < b.last_name) { return -1; }
-            if (a.last_name > b.last_name) { return 1; }
-            return 0;
-          });
-          const arrayControl = this.eventLocationContactForm.get('contact') as FormControl;
-          this.filteredUserContacts = arrayControl.valueChanges
-            .startWith(null)
-            .map(val => this.filter(val, this.userContacts, ['first_name','last_name','organization_string']));
 
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    // this.contactService.getContacts()
+    //   .subscribe(
+    //     contacts => {
+    //       this.userContacts = contacts;
+    //       this.userContacts.sort(function (a, b) {
+    //         if (a.last_name < b.last_name) { return -1; }
+    //         if (a.last_name > b.last_name) { return 1; }
+    //         return 0;
+    //       });
+    //       const arrayControl = this.eventLocationContactForm.get('contact') as FormControl;
+    //       this.filteredUserContacts = arrayControl.valueChanges
+    //         .startWith(null)
+    //         .map(val => this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
+
+    //     },
+    //     error => {
+    //       this.errorMessage = <any>error;
+    //     }
+    //   );
 
   }
 
@@ -141,7 +150,7 @@ export class AddEventLocationContactComponent implements OnInit {
   filter(val: any, searchArray: any, searchProperties: string[]): string[] {
     let result = [];
     for (let searchProperty of searchProperties) {
-      if (isNaN(val)){
+      if (isNaN(val)) {
         const realval = val && typeof val === 'object' ? val[searchProperty] : val;
         let lastOption = null;
         if (searchArray !== undefined) {

@@ -53,6 +53,9 @@ import { AddServiceRequestComponent } from '@app/add-service-request/add-service
 import { EventLocationContactService } from '@services/event-location-contact.service';
 
 
+import { ContactService } from '@services/contact.service';
+
+
 @Component({
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
@@ -88,6 +91,7 @@ export class EventDetailsComponent implements OnInit {
   addEventLocationContactDialogRef: MatDialogRef<AddEventLocationContactComponent>;
   addServiceRequestDialogRef: MatDialogRef<AddServiceRequestComponent>;
 
+
   addCommentDialogRef: MatDialogRef<AddCommentComponent>;
 
   eventDetailsShareDialogRef: MatDialogRef<EventDetailsShareComponent>;
@@ -115,6 +119,9 @@ export class EventDetailsComponent implements OnInit {
   locationMarkers;
 
   unMappables = [];
+
+  userContacts;
+  userContactsLoading = false;
 
   errorMessage;
   flywaysVisible = false;
@@ -154,6 +161,7 @@ export class EventDetailsComponent implements OnInit {
     private sexBiasService: SexBiasService,
     private commentTypeService: CommentTypeService,
     private commentService: CommentService,
+    private contactService: ContactService,
     public snackBar: MatSnackBar
   ) {
     this.eventLocationSpecies = [];
@@ -279,6 +287,27 @@ export class EventDetailsComponent implements OnInit {
         },
         error => {
           this.errorMessage = <any>error;
+        }
+      );
+
+    // TEMPORARY- will need to use user creds to query user contact list
+    // get contact types from the ContactTypeService
+    this.userContactsLoading = true;
+    this.contactService.getContacts()
+      .subscribe(
+        contacts => {
+          this.userContacts = contacts;
+          this.userContacts.sort(function (a, b) {
+            if (a.last_name < b.last_name) { return -1; }
+            if (a.last_name > b.last_name) { return 1; }
+            return 0;
+          });
+          this.userContactsLoading = false;
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.userContactsLoading = false;
         }
       );
 
@@ -597,6 +626,7 @@ export class EventDetailsComponent implements OnInit {
       disableClose: true,
       data: {
         event_location_id: id,
+        userContacts: this.userContacts,
         title: 'Add Contact to event location',
         titleIcon: 'add_circle',
         // confirmButtonText: 'Add comment',

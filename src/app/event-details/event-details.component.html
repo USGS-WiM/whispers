@@ -509,7 +509,7 @@
                       <td>{{eventlocationcontact.phone}}</td>
                       <td>
                         <button mat-icon-button aria-label="remove contact" color="warn" [disabled]="!eventData.permissions.destroy"
-                          (click)="openLocationContactRemoveConfirm(eventlocationcontact)" matTooltip="Disassociate contact from this event location">
+                          (click)="openLocationContactRemoveConfirm(eventlocationcontact.id)" matTooltip="Disassociate contact from this event location">
                           <mat-icon>remove_circle</mat-icon>
                         </button>
                       </td>
@@ -520,9 +520,10 @@
 
                 <div class="event-detail-action-bar">
                   <button mat-button color="primary" class="event-detail-action-button" (click)="addEventLocationContact(eventLocation.id)"
-                    [disabled]="!eventData.permissions.write" matTooltip="Associate contact with this event location">
-                    <mat-icon>add_comment</mat-icon> Add Contact
+                    [disabled]="!eventData.permissions.write || userContactsLoading" matTooltip="Associate contact with this event location">
+                    <span><mat-icon>add_comment</mat-icon> Add Contact </span>
                   </button>
+                  <span *ngIf="userContactsLoading"><mat-spinner  [diameter]=20></mat-spinner><span>Loading contacts...</span></span>
                 </div>
               </mat-expansion-panel>
               <!-- End Event Location Contacts section -->

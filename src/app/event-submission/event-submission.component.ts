@@ -12,8 +12,6 @@ import { MatBottomSheetModule, MatBottomSheet, MatBottomSheetRef } from '@angula
 
 import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 
-import { MatAutocompleteSelectedEvent } from '@angular/material';
-
 import { MatSnackBar } from '@angular/material';
 
 import { APP_SETTINGS } from '@app/app.settings';
@@ -175,19 +173,16 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       event_reference: '',
       event_type: [null, Validators.required],
       complete: false,
+      event_status: 1,
       public: [true, Validators.required],
       // NWHC only
       staff: null,
-      event_status: null,
+      status: null,
       quality_check: null,
       legal_status: null,
       legal_number: '',
       // end NWHC only
       new_organizations: null,
-      new_service_request: this.formBuilder.group({
-        request_type: 0,
-        new_comments: this.formBuilder.array([])
-      }),
       new_event_diagnoses: this.formBuilder.array([]),
       new_comments: this.formBuilder.array([]),
       new_superevents: this.formBuilder.array([]),
@@ -203,7 +198,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
     this.filteredAdminLevelTwos = new Array<Observable<any>>();
     this.ManageAdminLevelTwoControl(0);
-
+            
 
     let eventLocationSpecies = new Array<Observable<any>>();
     this.filteredSpecies.push(eventLocationSpecies);
@@ -275,7 +270,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   openEventSubmitConfirm(formValue): void {
     this.bottomSheet.open(EventSubmissionConfirmComponent, {
-      disableClose: true,
       data: {
         formValue: formValue,
         eventTypes: this.eventTypes,
@@ -290,7 +284,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-      disableClose: true,
       data: {
         contact_action: 'create'
       }
@@ -299,7 +292,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   openGNISLookupDialog(eventLocationIndex) {
     this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
-      disableClose: true,
       data: {
         event_location_index: eventLocationIndex
       }
@@ -317,7 +309,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   openEventLocationRemoveConfirm(eventLocationIndex) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
-        disableClose: true,
         data: {
           title: 'Remove Event Location',
           titleIcon: 'remove_circle',
@@ -338,9 +329,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFn(speciesId?: Species): string | undefined {
     let species_id_match;
-    for (let i = 0; i < this['options']._results.length - 1; i++) {
-      if (this['options']._results[i].value === speciesId) {
-        species_id_match = this['options']._results[i].viewValue;
+    for (let i = 0; i < this["options"]._results.length-1; i++) {
+      if (this["options"]._results[i].value == speciesId) {
+        species_id_match = this["options"]._results[i].viewValue;
       }
     }
     return species_id_match;
@@ -348,9 +339,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFnContact(contactId?: Contact): string | undefined {
     let contact_id_match;
-    for (let i = 0; i < this['options']._results.length; i++) {
-      if (this['options']._results[i].value === contactId) {
-        contact_id_match = this['options']._results[i].viewValue;
+    for (let i = 0; i < this["options"]._results.length; i++) {
+      if (this["options"]._results[i].value == contactId) {
+        contact_id_match = this["options"]._results[i].viewValue;
       }
     }
     return contact_id_match;
@@ -358,10 +349,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFnAdminLevelOne(adminLevelOneId?: number): string | undefined {
     let admin_level_one;
-    if (this['options'] !== undefined) {
-      for (let i = 0; i < this['options']._results.length; i++) {
-        if (this['options']._results[i].value === adminLevelOneId) {
-          admin_level_one = this['options']._results[i].viewValue;
+    if (this["options"] !== undefined) {
+      for (let i = 0; i < this["options"]._results.length; i++) {
+        if (this["options"]._results[i].value == adminLevelOneId) {
+          admin_level_one = this["options"]._results[i].viewValue;
         }
       }
     }
@@ -370,10 +361,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFnAdminLevelTwo(adminLevelTwoId?: number): string | undefined {
     let admin_level_two;
-    if (this['options'] !== undefined) {
-      for (let i = 0; i < this['options']._results.length; i++) {
-        if (this['options']._results[i].value === adminLevelTwoId) {
-          admin_level_two = this['options']._results[i].viewValue;
+    if (this["options"] !== undefined) {
+      for (let i = 0; i < this["options"]._results.length; i++) {
+        if (this["options"]._results[i].value == adminLevelTwoId) {
+          admin_level_two = this["options"]._results[i].viewValue;
         }
       }
     }
@@ -402,7 +393,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     //   map(value => typeof value === 'string' ? value : value.name),
     //   map(name => name ? this._filter(name) : this.species.slice())
     // );
-
   }
   ///////////////////////////////////////////////// End WIP
 
@@ -411,7 +401,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts') as FormArray;
     this.filteredContacts[eventLocationIndex][locationContactIndex] = arrayControl.at(locationContactIndex).get('contact').valueChanges
       .startWith(null)
-      .map(val => this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
+      .map(val => this.filter(val, this.userContacts, ['first_name','last_name','organization_string']));
   }
 
   ManageAdminLevelOneControl(eventLocationIndex: number) {
@@ -430,25 +420,33 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       .map(val => this.filter(val, this.adminLevelTwos, ['name']));
   }
 
+  inputChangeTrigger(event) {
+    event.currentTarget.dispatchEvent(new Event('input'));
+  }
+
   filter(val: any, searchArray: any, searchProperties: string[]): string[] {
     let result = [];
-    for (let searchProperty of searchProperties) {
-      if (isNaN(val)) {
-        const realval = val && typeof val === 'object' ? val[searchProperty] : val;
-        let lastOption = null;
-        if (searchArray !== undefined) {
-          for (let i = 0; i < searchArray.length; i++) {
-            if (searchArray[i][searchProperty] != null && (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase()))) {
-              if (searchArray[i][searchProperty] !== lastOption) {
-                lastOption = searchArray[i][searchProperty];
-                result.push(searchArray[i]);
+    if (val == "") {
+      result = searchArray;
+    } else { 
+      for (let searchProperty of searchProperties) {
+        if (isNaN(val)){
+          const realval = val && typeof val === 'object' ? val[searchProperty] : val;
+          let lastOption = null;
+          if (searchArray !== undefined) {
+            for (let i = 0; i < searchArray.length; i++) {
+              if (searchArray[i][searchProperty] != null && (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase()))) {
+                if (searchArray[i][searchProperty] !== lastOption) {
+                  lastOption = searchArray[i][searchProperty];
+                  result.push(searchArray[i]);
+                }
               }
             }
           }
         }
       }
     }
-
+    
     // this will return all records matching the val string
     return result;
   }
@@ -722,13 +720,11 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
           priority: null,
           captive: null,
           age_bias: null,
-          sex_bias: null,
-          new_species_diagnoses: this.formBuilder.array([])
-
+          sex_bias: null
         })
         );
 
-        // loop through event locations and push the new species into each, except the one it came from (so as to avoid duplicate)
+        // loop through event locations and push the new contact into each, except the one it came from (so as to avoid duplicate)
         for (let i = 0, j = eventLocations.length; i < j; i++) {
 
           if (i !== eventLocationIndex) {
@@ -746,8 +742,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
               priority: null,
               captive: null,
               age_bias: null,
-              sex_bias: null,
-              new_species_diagnoses: this.formBuilder.array([])
+              sex_bias: null
             })
             );
 
@@ -806,15 +801,15 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   initSpeciesDiagnosis() {
     return this.formBuilder.group({
       diagnosis: [null, Validators.required],
-      cause: null,
-      basis: null,
+      diagnosis_cause: null,
+      diagnosis_basis: null,
       suspect: false,
       tested_count: null,
       diagnosis_count: null,
       positive_count: null,
       suspect_count: null,
       pooled: false,
-      new_species_diagnosis_organizations: null
+      organizations: null
     });
   }
 
@@ -1046,7 +1041,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
             this.errorMessage = <any>error;
           }
         );
-    }
+      }
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -1059,22 +1054,16 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     console.log('Selecting GNIS record for Event Location Number' + (eventLocationIndex + 1));
   }
 
-  openAddSpeciesDiagnosisDialog(eventlocationIndex, locationspeciesIndex) {
+  openAddSpeciesDiagnosisDialog(eventLocationIndex, locationSpeciesIndex) {
 
-    // the addSpesiesDiagnosis function creates a speciesdiagnosis object within the array and returns its index
-    // this is needed below to add the captured data into the correct control index
-    const speciesDiagnosisIndex = this.addSpeciesDiagnosis(eventlocationIndex, locationspeciesIndex);
+    const speciesDiagnosisIndex = this.addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex);
 
     // Open dialog for adding species diagnosis
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
-      disableClose: true,
       data: {
         species_diagnosis_action: 'addToFormArray',
-        eventlocationIndex: eventlocationIndex,
-        locationspeciesIndex: locationspeciesIndex,
-        title: 'Add Species Diagnosis',
-        titleIcon: 'note_add',
-        actionButtonIcon: 'note_add'
+        eventLocationIndex: eventLocationIndex,
+        locationSpeciesIndex: locationSpeciesIndex
       }
     });
 
@@ -1083,19 +1072,19 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         (speciesDiagnosisObj) => {
 
           // tslint:disable-next-line:max-line-length
-          this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventlocationIndex]
-            .get('new_location_species')['controls'][speciesDiagnosisObj.locationspeciesIndex]
+          this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventLocationIndex]
+            .get('new_location_species')['controls'][speciesDiagnosisObj.locationSpeciesIndex]
             .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
               diagnosis: speciesDiagnosisObj.formValue.diagnosis,
-              cause: speciesDiagnosisObj.formValue.cause,
-              basis: speciesDiagnosisObj.formValue.basis,
+              diagnosis_cause: speciesDiagnosisObj.formValue.diagnosis_cause,
+              diagnosis_basis: speciesDiagnosisObj.formValue.diagnosis_basis,
               suspect: speciesDiagnosisObj.formValue.suspect,
               tested_count: speciesDiagnosisObj.formValue.tested_count,
               diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
               positive_count: speciesDiagnosisObj.formValue.positive_count,
               suspect_count: speciesDiagnosisObj.formValue.suspect_count,
               pooled: speciesDiagnosisObj.formValue.pooled,
-              new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
+              organizations: speciesDiagnosisObj.formValue.organizations
             });
 
         },
@@ -1128,10 +1117,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     //   }
     // }
 
-    if (formValue.quality_check !== null) {
-      formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');
-    }
-
     // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
     // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
     for (const event_location of formValue.new_event_locations) {
@@ -1146,13 +1131,13 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
           this.confirmDialogRef = this.dialog.open(ConfirmComponent,
             {
-              disableClose: true,
               data: {
                 title: 'Event Saved',
                 titleIcon: 'check',
                 message: 'Your event was successfully saved. The Event ID is ' + event.id,
+                messageIcon: 'check',
                 confirmButtonText: 'OK',
-                showCancelButton: true
+                showCancelButton : true
               }
             }
           );
@@ -1160,6 +1145,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
           // when user clicks OK, reset the form and stepper using resetStepper()
           this.confirmDialogRef.afterClosed().subscribe(result => {
             if (result === true) {
+              alert('event saved OKed');
               this.resetStepper();
             }
           });
@@ -1167,7 +1153,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
           // open event save success dialog
           // this.submitSuccessDialogRef = this.dialog.open(EventSubmissionSuccessComponent,
           //   {
-          //     disableClose: true, data: {
+          //     data: {
           //       title: 'Event Saved',
           //       message: 'Your event was successfully saved. The Event ID is ' + event.id,
           //       confirmButtonText: 'OK'

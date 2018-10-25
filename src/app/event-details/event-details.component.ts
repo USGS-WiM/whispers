@@ -47,6 +47,10 @@ import { CommentTypeService } from '@services/comment-type.service';
 import { CommentService } from '@app/services/comment.service';
 import { CommentType } from '@interfaces/comment-type';
 import { AddCommentComponent } from '@app/add-comment/add-comment.component';
+import { AddEventLocationContactComponent } from '@app/add-event-location-contact/add-event-location-contact.component';
+import { AddServiceRequestComponent } from '@app/add-service-request/add-service-request.component';
+
+import { EventLocationContactService } from '@services/event-location-contact.service';
 
 
 @Component({
@@ -81,6 +85,8 @@ export class EventDetailsComponent implements OnInit {
   editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
   editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
   editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
+  addEventLocationContactDialogRef: MatDialogRef<AddEventLocationContactComponent>;
+  addServiceRequestDialogRef: MatDialogRef<AddServiceRequestComponent>;
 
   addCommentDialogRef: MatDialogRef<AddCommentComponent>;
 
@@ -143,6 +149,7 @@ export class EventDetailsComponent implements OnInit {
     private landownershipService: LandOwnershipService,
     private eventLocationService: EventLocationService,
     private eventDiagnosisService: EventDiagnosisService,
+    private eventLocationContactService: EventLocationContactService,
     private ageBiasService: AgeBiasService,
     private sexBiasService: SexBiasService,
     private commentTypeService: CommentTypeService,
@@ -442,7 +449,7 @@ export class EventDetailsComponent implements OnInit {
     // Open dialog for editing event
     this.editEventDialogRef = this.dialog.open(EditEventComponent, {
       disableClose: true,
-       data: {
+      data: {
         eventData: this.eventData
       },
     });
@@ -556,6 +563,34 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
+
+  addEventLocationContact(id: string) {
+    // Open dialog for adding event location contact
+    this.addEventLocationContactDialogRef = this.dialog.open(AddEventLocationContactComponent, {
+      disableClose: true,
+      data: {
+        event_location_id: id,
+        title: 'Add Contact to event location',
+        titleIcon: 'add_circle',
+        // confirmButtonText: 'Add comment',
+        showCancelButton: true,
+        action_button_text: 'Add Contact',
+        actionButtonIcon: 'add_circle'
+      }
+    });
+
+    this.addEventLocationContactDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+  }
+
   deleteEventComment(id: number) {
     // this.commentService.delete(id)
     // .subscribe(
@@ -594,17 +629,17 @@ export class EventDetailsComponent implements OnInit {
   }
 
   deleteEventLocationComment(id: number) {
-    // this.commentService.delete(id)
-    // .subscribe(
-    //   () => {
-    //     this.refreshEvent();
-    //     this.openSnackBar('Comment successfully deleted', 'OK', 5000);
-    //   },
-    //   error => {
-    //     this.errorMessage = <any>error;
-    //     this.openSnackBar('Error. Comment not deleted. Error message: ' + error, 'OK', 8000);
-    //   }
-    // );
+    this.commentService.delete(id)
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Comment successfully deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Comment not deleted. Error message: ' + error, 'OK', 8000);
+        }
+      );
   }
 
 
@@ -629,6 +664,44 @@ export class EventDetailsComponent implements OnInit {
       }
     });
   }
+
+  deleteEventLocationContact(id: number) {
+    this.eventLocationContactService.delete(id)
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Contact successfully disassociated', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Contact not disassociated. Error message: ' + error, 'OK', 8000);
+        }
+      );
+  }
+
+  openLocationContactRemoveConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Disassociate contact',
+          titleIcon: 'remove_circle',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you wish to disassociate this contact with this event location? This does not delete the contact record.',
+          confirmButtonText: 'Yes, remove this contact',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventLocationContact(id);
+      }
+    });
+  }
+
+
 
 
   addEventLocation() {
@@ -772,35 +845,6 @@ export class EventDetailsComponent implements OnInit {
       }
     });
   }
-
-  // addSpeciesDiagnosis(id: string, index: number) {
-  //   if (this.selection[index].selected.length > 1 || this.selection[index].selected.length === 0) {
-  //     this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
-  //   } else if (this.selection[index].selected.length === 1) {
-  //     // Open dialog for adding species diagnosis
-  //     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
-  //       data: {
-  //         species: this.selection[index].selected[0],
-  //         species_diagnosis_action: 'add'
-  //       }
-  //       // minWidth: 200
-  //       // height: '75%'
-  //     });
-
-  //     this.editSpeciesDiagnosisDialogRef.afterClosed()
-  //       .subscribe(
-  //         () => {
-  //           this.refreshEvent();
-  //           // for (let i = 0; i < this.selection.length; i++) {
-  //           //   this.selection[i].clear();
-  //           // }
-  //         },
-  //         error => {
-  //           this.errorMessage = <any>error;
-  //         }
-  //       );
-  //   }
-  // }
 
   addLocationSpecies(eventlocation) {
 

@@ -101,6 +101,9 @@ import { LocationSpeciesTableComponent } from './location-species-table/location
 import { SpeciesDiagnosisService } from '@app/services/species-diagnosis.service';
 import { DataUpdatedService } from '@app/services/data-updated.service';
 import { AddCommentComponent } from './add-comment/add-comment.component';
+import { EventLocationContactService } from '@app/services/event-location-contact.service';
+import { AddEventLocationContactComponent } from './add-event-location-contact/add-event-location-contact.component';
+import { AddServiceRequestComponent } from './add-service-request/add-service-request.component';
 
 
 
@@ -133,6 +136,8 @@ import { AddCommentComponent } from './add-comment/add-comment.component';
     EditUserComponent,
     LocationSpeciesTableComponent,
     AddCommentComponent,
+    AddEventLocationContactComponent,
+    AddServiceRequestComponent,
   ],
   imports: [
     BrowserModule,
@@ -208,6 +213,7 @@ import { AddCommentComponent } from './add-comment/add-comment.component';
     UserService,
     LocationSpeciesDiagnosisService,
     SpeciesDiagnosisService,
+    EventLocationContactService,
     ServiceRequestService,
     DisplayValuePipe,
     DatePipe,
@@ -229,7 +235,9 @@ import { AddCommentComponent } from './add-comment/add-comment.component';
     GnisLookupComponent,
     EventDetailsShareComponent,
     EditUserComponent,
-    AddCommentComponent
+    AddCommentComponent,
+    AddEventLocationContactComponent,
+    AddServiceRequestComponent
   ]
 })
 export class AppModule { }

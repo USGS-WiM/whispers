@@ -354,7 +354,7 @@
 
 
               <!-- Begin Event Location Comments section -->
-              <mat-expansion-panel  (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+              <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
                     {{panelOpenState ? 'Hide Location Comments' : 'View Location Comments'}}
@@ -365,7 +365,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="event-group-no-data" *ngIf="eventLocation.comments && eventLocation.comments.length === 0">No
-                    comments to show</div>
+                  comments to show</div>
 
                 <div *ngIf="eventLocation.comments && eventLocation.comments.length > 0">
 
@@ -378,7 +378,6 @@
                         <mat-icon>remove_circle</mat-icon>
                       </button>
                     </span>
-
                   </div>
                 </div>
 
@@ -390,6 +389,69 @@
                 </div>
               </mat-expansion-panel>
               <!-- End Event Location Comments section -->
+
+
+
+
+              <!-- Begin Event Location Contacts section -->
+              <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{panelOpenState ? 'Hide Location Contacts' : 'View Location Contacts'}}
+                  </mat-panel-title>
+                  <!-- <mat-panel-description>
+                    Currently I am {{panelOpenState ? 'open' : 'closed'}}
+                  </mat-panel-description> -->
+                </mat-expansion-panel-header>
+
+                <div class="event-group-no-data" *ngIf="eventLocation.eventlocationcontacts && eventLocation.eventlocationcontacts.length === 0">No
+                  contacts to show</div>
+
+                <div *ngIf="eventLocation.eventlocationcontacts && eventLocation.eventlocationcontacts.length > 0">
+
+                  <table>
+                    <tr>
+                      <th>Name</th>
+                      <th>Contact Type</th>
+                      <th>Organization</th>
+                      <th>Title</th>
+                      <th>Position</th>
+                      <th>Affiliation</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Remove</th>
+                    </tr>
+
+                    <tr *ngFor="let eventlocationcontact of eventLocation.eventlocationcontacts ">
+                      <td>{{eventlocationcontact.first_name}}&nbsp;{{eventlocationcontact.last_name}}</td>
+                      <td>{{eventlocationcontact.contact_type_string}}</td>
+                      <td>{{eventlocationcontact.organization_string}}</td>
+                      <td>{{eventlocationcontact.title}}</td>
+                      <td>{{eventlocationcontact.position}}</td>
+                      <td>{{eventlocationcontact.affiliation}}</td>
+                      <td>{{eventlocationcontact.email}}</td>
+                      <td>{{eventlocationcontact.phone}}</td>
+                      <td>
+                        <button mat-icon-button aria-label="remove contact" color="warn" [disabled]="!eventData.permissions.destroy"
+                          (click)="openLocationContactRemoveConfirm(eventlocationcontact)" matTooltip="Disassociate contact from this event location">
+                          <mat-icon>remove_circle</mat-icon>
+                        </button>
+                      </td>
+                    </tr>
+                  </table>
+
+                </div>
+
+                <div class="event-detail-action-bar">
+                  <button mat-button color="primary" class="event-detail-action-button" (click)="addEventLocationContact(eventLocation.id)"
+                    [disabled]="!eventData.permissions.write" matTooltip="Associate contact with this event location">
+                    <mat-icon>add_comment</mat-icon> Add Contact
+                  </button>
+                </div>
+              </mat-expansion-panel>
+              <!-- End Event Location Contacts section -->
+
+
 
               <div class="event-detail-action-bar-left">
                 <button mat-button color="primary" class="event-detail-action-button" (click)="editEventLocation(eventData.eventlocations[i])"

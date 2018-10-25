@@ -40,6 +40,7 @@ export class APP_SETTINGS {
     public static get EVENT_LABSITES_URL(): string { return this._API_ENDPOINT + 'eventlabsites/'; }
     public static get EVENT_ORGANIZATIONS_URL(): string { return this._API_ENDPOINT + 'eventorganizations/'; }
     public static get EVENT_CONTACTS_URL(): string { return this._API_ENDPOINT + 'eventcontacts/'; }
+    public static get EVENT_LOCATION_CONTACTS_URL(): string { return this._API_ENDPOINT + 'eventlocationcontacts/'; }
     public static get EVENT_LOCATIONS_URL(): string { return this._API_ENDPOINT + 'eventlocations/'; }
     public static get COUNTRIES_URL(): string { return this._API_ENDPOINT + 'countries/'; }
     public static get ADMINISTRATIVE_LEVEL_ONES_URL(): string { return this._API_ENDPOINT + 'administrativelevelones/'; }

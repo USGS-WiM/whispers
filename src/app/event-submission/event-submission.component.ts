@@ -178,7 +178,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       // NWHC only
       staff: null,
       status: null,
-      quality_check: null,
+      quality_check: '',
       legal_status: null,
       legal_number: '',
       // end NWHC only
@@ -759,7 +759,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     return this.formBuilder.group({
       name: '',
       start_date: '',
-      end_date: null,
+      end_date: '',
       country: [APP_UTILITIES.DEFAULT_COUNTRY_ID, Validators.required],
       administrative_level_one: [null, Validators.required],
       administrative_level_two: [null, Validators.required],
@@ -1116,6 +1116,8 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     //     delete event_location.comment;
     //   }
     // }
+
+    formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');
 
     // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
     // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)

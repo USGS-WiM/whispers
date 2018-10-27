@@ -1147,7 +1147,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
           // when user clicks OK, reset the form and stepper using resetStepper()
           this.confirmDialogRef.afterClosed().subscribe(result => {
             if (result === true) {
-              alert('event saved OKed');
               this.resetStepper();
             }
           });

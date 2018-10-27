@@ -354,11 +354,17 @@
                                         </mat-form-field>-->
 
                                     <!-- Species autocomplete control -->
+
                                     <mat-form-field class="form-control">
-                                      <input type="text" matInput placeholder="Species" aria-label="Species"
+                                      <!-- (focus) function allows normal dropdown, but breaks the form by inserting string value instead of id -->
+                                      <!-- <input type="text" matInput placeholder="Species" aria-label="Species"
                                         [matAutocomplete]="speciesAutoComplete" formControlName="species" (focus)="inputChangeTrigger($event)">
+                                      <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn"> -->
+                                      <input type="text" matInput placeholder="Species" aria-label="Species"
+                                        [matAutocomplete]="speciesAutoComplete" formControlName="species">
                                       <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn">
-                                        <mat-option *ngFor="let species of filteredSpecies[eventLocationIndex][locationSpeciesIndex] | async" [value]="species.id">
+                                        <mat-option *ngFor="let species of filteredSpecies[eventLocationIndex][locationSpeciesIndex] | async"
+                                          [value]="species.id">
                                           <span>{{species.name}}</span>
                                         </mat-option>
                                       </mat-autocomplete>
@@ -853,10 +859,11 @@
               <p>
                 <!-- Service request section -->
                 <h3>
-                  <mat-icon>question_answer</mat-icon> Service Request </h3>
-                  <span>Need help? Request diagnostic services and/or consult (e.g. management
-                      suggestions, recommended
-                      personal protective gear, etc.) from the USGS National Wildlife Health Center</span>
+                  <mat-icon>question_answer</mat-icon> Service Request
+                </h3>
+                <span>Need help? Request diagnostic services and/or consult (e.g. management
+                  suggestions, recommended
+                  personal protective gear, etc.) from the USGS National Wildlife Health Center</span>
                 <p>
                   <mat-card *ngIf="currentUser.role === 1 || currentUser.role === 2 ">
                     <!-- <mat-card-header>

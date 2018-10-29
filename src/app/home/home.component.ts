@@ -32,6 +32,8 @@ import { DiagnosisTypeService } from '@app/services/diagnosis-type.service';
 import { DiagnosisService } from '@app/services/diagnosis.service';
 import { SpeciesService } from '@app/services/species.service';
 
+import { SaveSearchComponent } from '@app/save-search/save-search.component';
+
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
 
@@ -59,6 +61,7 @@ export class HomeComponent implements OnInit {
   icon;
 
   searchDialogRef: MatDialogRef<SearchDialogComponent>;
+  saveSearchDialogRef: MatDialogRef<SaveSearchComponent>;
 
   private searchQuerySubscription: Subscription;
 
@@ -758,6 +761,33 @@ export class HomeComponent implements OnInit {
     // )
   }
 
+  saveSearch() {
+
+    this.saveSearchDialogRef = this.dialog.open(SaveSearchComponent, {
+      disableClose: true,
+      data: {
+        currentSearchQuery: this.currentSearchQuery,
+        title: 'Save Search',
+        titleIcon: 'save',
+        showCancelButton: true,
+        action_button_text: 'Save Search',
+        actionButtonIcon: 'save'
+      }
+    });
+
+    this.saveSearchDialogRef.afterClosed()
+      .subscribe(
+        () => {
+         // TODO: show snackbar confirmation
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+  }
+
+ 
   /**
    * Set the paginator and sort after the view init since this component will
    * be able to query its view for the initialized paginator and sort.

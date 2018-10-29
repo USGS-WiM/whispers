@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>
+  <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}}
+</h1>
+
+<mat-dialog-content>
+
+  <h4>Save the current search to your user profile</h4>
+
+  <form [formGroup]="saveSearchForm">
+    <div class="vertical-form-container">
+
+      <mat-form-field class="form-control">
+        <input matInput placeholder="Name" formControlName="name">
+        <mat-hint align="start">Reference name/alias for this search </mat-hint>
+      </mat-form-field>
+
+    </div>
+  </form>
+
+
+</mat-dialog-content>
+<mat-dialog-actions>
+
+  <button mat-button color="warn" (click)="this.saveSearchDialogRef.close('cancel');">
+    <mat-icon>cancel</mat-icon>&nbsp;Cancel
+  </button>
+  <button mat-button color="primary" type="submit" [disabled]="saveSearchForm.invalid" (click)="onSubmit(saveSearchForm.value)">
+    <mat-icon>{{data.actionButtonIcon}}</mat-icon> {{data.action_button_text}}
+  </button>
+  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+</mat-dialog-actions>

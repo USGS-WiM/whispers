@@ -105,7 +105,7 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_one_includes_all: false,
       administrative_level_two_includes_all: false,
       and_params: [],
-      openEventsOnly: false
+      complete: null
     });
   }
 
@@ -236,7 +236,7 @@ export class SearchDialogComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
-      
+
     // get adminLevelTwos from the adminLevelTwo service
     // TODO: remove this from ngOnInit. Not performant. Move to the updateAdminLevelTwoOptions function
     /* if (this.data.query && this.data.query['administrative_level_two'].length > 0) {
@@ -486,6 +486,11 @@ export class SearchDialogComponent implements OnInit {
 
   }
 
+  clearDates() {
+    this.searchForm.get('start_date').setValue(null);
+    this.searchForm.get('end_date').setValue(null);
+  }
+
   submitSearch(formValue) {
 
     const searchQuery: SearchQuery = {
@@ -505,7 +510,7 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_one_includes_all: formValue.administrative_level_one_includes_all,
       administrative_level_two_includes_all: formValue.administrative_level_two_includes_all,
       and_params: [],
-      openEventsOnly: formValue.openEventsOnly
+      complete: formValue.complete
     };
 
     const displayQuery: DisplayQuery = {
@@ -518,16 +523,14 @@ export class SearchDialogComponent implements OnInit {
       affected_count: formValue.affected_count,
       affected_count_operator: formValue.affected_count_operator,
       start_date: formValue.start_date,
-      // start_date: this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd'),
       end_date: formValue.end_date,
-      //end_date: this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd'),
       diagnosis_type_includes_all: formValue.diagnosis_type_includes_all,
       diagnosis_includes_all: formValue.diagnosis_includes_all,
       species_includes_all: formValue.species_includes_all,
       administrative_level_one_includes_all: formValue.administrative_level_one_includes_all,
       administrative_level_two_includes_all: formValue.administrative_level_two_includes_all,
       and_params: [],
-      openEventsOnly: formValue.openEventsOnly
+      complete: formValue.complete
     };
 
     if (searchQuery.diagnosis_type_includes_all === true) {

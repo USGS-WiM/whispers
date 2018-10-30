@@ -105,6 +105,7 @@ import { EventLocationContactService } from '@app/services/event-location-contac
 import { AddEventLocationContactComponent } from './add-event-location-contact/add-event-location-contact.component';
 import { AddServiceRequestComponent } from './add-service-request/add-service-request.component';
 import { NewLookupRequestComponent } from './new-lookup-request/new-lookup-request.component';
+import { SaveSearchComponent } from './save-search/save-search.component';
 
 
 
@@ -140,6 +141,7 @@ import { NewLookupRequestComponent } from './new-lookup-request/new-lookup-reque
     AddEventLocationContactComponent,
     AddServiceRequestComponent,
     NewLookupRequestComponent,
+    SaveSearchComponent
   ],
   imports: [
     BrowserModule,
@@ -240,7 +242,8 @@ import { NewLookupRequestComponent } from './new-lookup-request/new-lookup-reque
     AddCommentComponent,
     AddEventLocationContactComponent,
     AddServiceRequestComponent,
-    NewLookupRequestComponent
+    NewLookupRequestComponent,
+    SaveSearchComponent
   ]
 })
 export class AppModule { }

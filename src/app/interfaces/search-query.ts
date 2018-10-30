@@ -17,5 +17,5 @@ export interface SearchQuery {
     administrative_level_one_includes_all: boolean;
     administrative_level_two_includes_all: boolean;
     and_params: string[];
-    openEventsOnly: boolean;
+    complete: boolean;
 }

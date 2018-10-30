@@ -71,12 +71,17 @@ export class EventService {
     if (eventQuery.administrative_level_two && eventQuery.administrative_level_two.length > 0) {
       queryString = queryString + '&administrative_level_two=' + eventQuery.administrative_level_two;
     }
-
+    
     if (eventQuery.and_params) {
       if (eventQuery.and_params.length > 0) {
         queryString = queryString + '&and_params=' + eventQuery.and_params;
       }
-
+    }
+    if (eventQuery.complete === false) {
+      queryString = queryString + '&complete=False';
+    }
+    if (eventQuery.complete === true) {
+      queryString = queryString + '&complete=True';
     }
 
     queryString = queryString + '&format=csv';
@@ -137,9 +142,14 @@ export class EventService {
       if (eventQuery.and_params.length > 0) {
         queryString = queryString + '&and_params=' + eventQuery.and_params;
       }
-
     }
-
+    if (eventQuery.complete === false) {
+      queryString = queryString + '&complete=False';
+    }
+    if (eventQuery.complete === true) {
+      queryString = queryString + '&complete=True';
+    }
+   
     const options = new RequestOptions({
       headers: APP_SETTINGS.JSON_HEADERS
     });
@@ -201,7 +211,12 @@ export class EventService {
       if (eventQuery.and_params.length > 0) {
         queryString = queryString + '&and_params=' + eventQuery.and_params;
       }
-
+    }
+    if (eventQuery.complete === false) {
+      queryString = queryString + '&complete=False';
+    }
+    if (eventQuery.complete === true) {
+      queryString = queryString + '&complete=True';
     }
 
     const options = new RequestOptions({
@@ -231,7 +246,7 @@ export class EventService {
 
   // Function for retrieving event details given event id
   public getEventDetails(eventID): Observable<EventDetail> {
-    
+
     let options;
     if (sessionStorage.username !== undefined) {
       options = new RequestOptions({
@@ -242,7 +257,7 @@ export class EventService {
         headers: APP_SETTINGS.JSON_HEADERS
       });
     }
-    
+
     return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL + eventID + '?no_page', options)
       .map((response: Response) => <EventDetail>response.json())
       .catch(this.handleError);

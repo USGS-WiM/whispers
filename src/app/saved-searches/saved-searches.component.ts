@@ -51,6 +51,8 @@ export class SavedSearchesComponent implements OnInit {
 
   selection;
 
+  speciesLoading = false;
+
 
   searchDisplayedColumns = [
     'select',
@@ -80,6 +82,8 @@ export class SavedSearchesComponent implements OnInit {
 
   ngOnInit() {
 
+    this.speciesLoading = true;
+
     const initialSelection = [];
     const allowMultiSelect = true;
     this.selection = new SelectionModel<any>(allowMultiSelect, initialSelection);
@@ -94,7 +98,9 @@ export class SavedSearchesComponent implements OnInit {
             this.parsedSearches.push(parsedSearch);
           }
 
-          //this.savedSearchesDataSource = new MatTableDataSource(this.searches);
+          console.log(this.parsedSearches);
+
+          // this.savedSearchesDataSource = new MatTableDataSource(this.searches);
           this.savedSearchesDataSource = new MatTableDataSource(this.parsedSearches);
           this.savedSearchesDataSource.paginator = this.searchPaginator;
           this.savedSearchesDataSource.sort = this.searchSort;
@@ -152,9 +158,11 @@ export class SavedSearchesComponent implements OnInit {
       .subscribe(
         (species) => {
           this.species = species;
+          this.speciesLoading = false;
         },
         error => {
           this.errorMessage = <any>error;
+          this.speciesLoading = false;
         }
       );
 

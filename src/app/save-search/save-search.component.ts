@@ -58,36 +58,36 @@ export class SaveSearchComponent implements OnInit {
     formValue.data = this.data.currentSearchQuery;
 
     // remove all blank variables from the submission
-    if (formValue.affected_count === null || formValue.affected_count === '' || formValue.affected_count !== undefined) {
-      delete formValue.affected_count;
+    if (formValue.data.affected_count === null || formValue.data.affected_count === '' || formValue.data.affected_count !== undefined) {
+      delete formValue.data.affected_count;
     }
-    if (formValue.start_date === null || formValue.start_date === '' || formValue.start_date !== undefined) {
-      delete formValue.start_date;
+    if (formValue.data.start_date === null || formValue.data.start_date === '' || formValue.data.start_date !== undefined) {
+      delete formValue.data.start_date;
     }
-    if (formValue.end_date === null || formValue.end_date === '' || formValue.end_date === undefined) {
-      delete formValue.end_date;
+    if (formValue.data.end_date === null || formValue.data.end_date === '' || formValue.data.end_date === undefined) {
+      delete formValue.data.end_date;
     }
-    if (formValue.event_type.length === 0) {
-      delete formValue.event_type;
+    if (formValue.data.event_type.length === 0) {
+      delete formValue.data.event_type;
     }
-    if (formValue.diagnosis.length === 0) {
-      delete formValue.diagnosis;
+    if (formValue.data.diagnosis.length === 0) {
+      delete formValue.data.diagnosis;
     }
-    if (formValue.diagnosis_type.length === 0) {
-      delete formValue.diagnosis_type;
+    if (formValue.data.diagnosis_type.length === 0) {
+      delete formValue.data.diagnosis_type;
     }
-    if (formValue.species.length === 0) {
-      delete formValue.species;
+    if (formValue.data.species.length === 0) {
+      delete formValue.data.species;
     }
-    if (formValue.administrative_level_one.length === 0) {
-      delete formValue.administrative_level_one;
+    if (formValue.data.administrative_level_one.length === 0) {
+      delete formValue.data.administrative_level_one;
     }
-    if (formValue.administrative_level_two.length === 0) {
-      delete formValue.administrative_level_two;
+    if (formValue.data.administrative_level_two.length === 0) {
+      delete formValue.data.administrative_level_two;
     }
-    if (formValue.and_params) {
-      if (formValue.and_params.length === 0) {
-        delete formValue.and_params;
+    if (formValue.data.and_params) {
+      if (formValue.data.and_params.length === 0) {
+        delete formValue.data.and_params;
       }
     }
 

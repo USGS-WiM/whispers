@@ -91,6 +91,8 @@ export class HomeComponent implements OnInit {
 
   resultsLoading = false;
 
+  speciesLoading = true;
+
   locationMarkers;
 
   mapScale;
@@ -230,6 +232,8 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
 
     const defaultEventQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
+
+    this.speciesLoading = true;
 
     // two lines below for the DataSource as separate class method (possibly revisit)
     // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
@@ -395,6 +399,7 @@ export class HomeComponent implements OnInit {
             this.parsedPopularSearches.push(parsedSearch);
           }
 
+          console.log(this.parsedPopularSearches);
         },
         error => {
           this.errorMessage = <any>error;
@@ -446,9 +451,11 @@ export class HomeComponent implements OnInit {
       .subscribe(
         (species) => {
           this.species = species;
+          this.speciesLoading = false;
         },
         error => {
           this.errorMessage = <any>error;
+          this.speciesLoading = false;
         }
       );
 

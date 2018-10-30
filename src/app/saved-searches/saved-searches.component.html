@@ -1,75 +1,62 @@
 <mat-card>
   <mat-card-title>
-
-    <div class="results-card-title-row">
-      <span class="results-button-row">
-        <!-- <button mat-button color="accent">
-          <i class="material-icons">
-            edit
-          </i> Edit</button> -->
-        <button mat-button color="accent" (click)="openSearchDeleteConfirm()">
-          <i class="material-icons">
-            remove_circle
-          </i> Delete</button>
-      </span>
-
-    </div>
   </mat-card-title>
   <mat-card-content>
+    <div *ngIf="!speciesLoading">
 
-    <!-- <div class="button-row" *ngFor="let search of parsedSearches">
-      <button mat-button>
-        <span class="search-param" *ngIf="search.start_date || search.end_date"><span *ngIf="search.start_date"><span
-              class="text-bold"> START
-              DATE
-            </span> {{search.start_date | date:'mediumDate'}}
-          </span><span *ngIf="search.end_date"><span class="text-bold">
-              END DATE
-            </span> {{search.end_date|date:'mediumDate'}}</span></span>
-        <div *ngIf="search.start_date || search.end_date"><br /></div>
-        <span *ngIf="search.affected_count"> <span class="text-bold">AFFECTED COUNT &nbsp;</span>
-          {{search.affected_count}}
-        </span>
-
-        <span class="search-param" *ngIf="search.event_type"> <span class="text-bold">EVENT TYPE&nbsp;
-          </span> <span *ngFor="let eventType of search.event_type">{{eventType |
-            displayValue:'name':this.eventTypes}}
-            <span *ngIf="(search.event_type.indexOf(eventType)) < (search.event_type.length - 1)">or&nbsp;</span></span>
-        </span>
-        <br *ngIf="search.event_type" />
-
-        <span class="search-param" *ngIf="search.diagnosis_type"> <span class="text-bold">DIAGNOSIS TYPE &nbsp;</span>
-          <span *ngFor="let diagnosisType of search.diagnosis_type">{{diagnosisType|
-            displayValue:'name':this.diagnosisTypes}}
-            <span *ngIf="(search.diagnosis_type.indexOf(diagnosisType)) < (search.diagnosis_type.length - 1)">{{(search.diagnosis_type_includes_all)
-              ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.diagnosis_type" />
-
-        <span class="search-param" *ngIf="search.diagnosis"> <span class="text-bold">DIAGNOSIS&nbsp;</span> <span
-            *ngFor="let diagnosis of search.diagnosis">{{diagnosis
-            | displayValue:'name':this.diagnoses}} <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)">{{(search.diagnosis_includes_all)
-              ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.diagnosis" />
-
-        <span class="search-param" *ngIf="search.species"> <span class="text-bold">SPECIES &nbsp;</span><span *ngFor="let species of search.species">{{species
-            | displayValue:'name':this.species}} <span *ngIf="(search.species.indexOf(species)) < (search.species.length - 1)">{{(search.species_includes_all)
-              ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.species" />
-
-        <span class="search-param" *ngIf="search.administrative_level_one"> <span class="text-bold">STATE&nbsp;</span><span
-            *ngFor="let adminLevel1 of search.administrative_level_one">{{adminLevel1
-            | displayValue:'name':this.administrative_level_one}}
-            <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
-              ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.administrative_level_one" />
-
-        <span class="search-param" *ngIf="search.administrative_level_two"> <span class="text-bold">COUNTY &nbsp;
+      <div class="button-row" *ngFor="let search of parsedSearches">
+        <button mat-button>
+          <span class="search-param" *ngIf="search.start_date || search.end_date"><span *ngIf="search.start_date"><span
+                class="text-bold"> START
+                DATE
+              </span> {{search.start_date | date:'mediumDate'}}
+            </span><span *ngIf="search.end_date"><span class="text-bold">
+                END DATE
+              </span> {{search.end_date|date:'mediumDate'}}</span></span>
+          <div *ngIf="search.start_date || search.end_date"><br /></div>
+          <span *ngIf="search.affected_count"> <span class="text-bold">AFFECTED COUNT &nbsp;</span>
+            {{search.affected_count}}
           </span>
-          <span *ngFor="let adminLevel2 of search.administrative_level_two">{{adminLevel2}} <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
-              ? "and" : "or"}}&nbsp;</span></span><br /></span>
-      </button>
 
-      <mat-divider [inset]="true"></mat-divider>
-    </div> -->
+          <span class="search-param" *ngIf="search.event_type"> <span class="text-bold">EVENT TYPE&nbsp;
+            </span> <span *ngFor="let eventType of search.event_type">{{eventType |
+              displayValue:'name':this.eventTypes}}
+              <span *ngIf="(search.event_type.indexOf(eventType)) < (search.event_type.length - 1)">or&nbsp;</span></span>
+          </span>
+          <br *ngIf="search.event_type" />
+
+          <span class="search-param" *ngIf="search.diagnosis_type"> <span class="text-bold">DIAGNOSIS TYPE &nbsp;</span>
+            <span *ngFor="let diagnosisType of search.diagnosis_type">{{diagnosisType|
+              displayValue:'name':this.diagnosisTypes}}
+              <span *ngIf="(search.diagnosis_type.indexOf(diagnosisType)) < (search.diagnosis_type.length - 1)">{{(search.diagnosis_type_includes_all)
+                ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.diagnosis_type" />
+
+          <span class="search-param" *ngIf="search.diagnosis"> <span class="text-bold">DIAGNOSIS&nbsp;</span> <span
+              *ngFor="let diagnosis of search.diagnosis">{{diagnosis
+              | displayValue:'name':this.diagnoses}} <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)">{{(search.diagnosis_includes_all)
+                ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.diagnosis" />
+
+          <span class="search-param" *ngIf="search.species"> <span class="text-bold">SPECIES &nbsp;</span><span *ngFor="let species of search.species">{{species|displayValue:'name':this.species}} <span *ngIf="(search.species.indexOf(species)) < (search.species.length - 1)">{{(search.species_includes_all)
+                ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.species" />
+
+          <span class="search-param" *ngIf="search.administrative_level_one"> <span class="text-bold">STATE&nbsp;</span><span
+              *ngFor="let adminLevel1 of search.administrative_level_one">{{adminLevel1
+              | displayValue:'name':this.administrative_level_one}}
+              <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
+                ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.administrative_level_one" />
+
+          <span class="search-param" *ngIf="search.administrative_level_two"> <span class="text-bold">COUNTY &nbsp;
+            </span>
+            <span *ngFor="let adminLevel2 of search.administrative_level_two">{{adminLevel2}} <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
+                ? "and" : "or"}}&nbsp;</span></span><br /></span>
+        </button>
+
+        <mat-divider [inset]="true"></mat-divider>
+      </div>
+    </div>
 
 
-    <div *ngIf="savedSearchesDataSource" class="results-table-div">
+    <!-- <div *ngIf="savedSearchesDataSource" class="results-table-div">
 
       <mat-table [dataSource]="savedSearchesDataSource" matSort>
 
@@ -85,13 +72,13 @@
           </mat-cell>
         </ng-container>
 
-        <!-- Search Name Column -->
+ 
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="search-select"> Name </mat-header-cell>
           <mat-cell *matCellDef="let search" [ngClass]="search-select">{{search.name}}</mat-cell>
         </ng-container>
 
-        <!-- Search Data Column -->
+      
         <ng-container matColumnDef="search">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Search </mat-header-cell>
           <mat-cell *matCellDef="let search">
@@ -154,7 +141,7 @@
       </mat-table>
 
       <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
-    </div>
+    </div> -->
 
 
   </mat-card-content>

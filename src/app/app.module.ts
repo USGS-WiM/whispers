@@ -104,6 +104,7 @@ import { AddCommentComponent } from './add-comment/add-comment.component';
 import { EventLocationContactService } from '@app/services/event-location-contact.service';
 import { AddEventLocationContactComponent } from './add-event-location-contact/add-event-location-contact.component';
 import { AddServiceRequestComponent } from './add-service-request/add-service-request.component';
+import { NewLookupRequestComponent } from './new-lookup-request/new-lookup-request.component';
 
 
 
@@ -138,6 +139,7 @@ import { AddServiceRequestComponent } from './add-service-request/add-service-re
     AddCommentComponent,
     AddEventLocationContactComponent,
     AddServiceRequestComponent,
+    NewLookupRequestComponent,
   ],
   imports: [
     BrowserModule,
@@ -237,7 +239,8 @@ import { AddServiceRequestComponent } from './add-service-request/add-service-re
     EditUserComponent,
     AddCommentComponent,
     AddEventLocationContactComponent,
-    AddServiceRequestComponent
+    AddServiceRequestComponent,
+    NewLookupRequestComponent
   ]
 })
 export class AppModule { }

@@ -70,6 +70,9 @@ export class APP_UTILITIES {
         if (search.data.administrative_level_one) {
             parsedSearch.administrative_level_one = JSON.parse('[' + search.data.administrative_level_one + ']');
         }
+        if (search.data.administrative_level_two) {
+            parsedSearch.administrative_level_two = JSON.parse('[' + search.data.administrative_level_two + ']');
+        }
 
         if (search.data.and_params) {
             if (search.data.and_params.includes('diagnosis_type')) {

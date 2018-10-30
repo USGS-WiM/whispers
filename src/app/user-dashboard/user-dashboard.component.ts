@@ -23,6 +23,7 @@ import { RoleService } from '@services/role.service';
 import { ConfirmComponent } from '@confirm/confirm.component';
 
 import { EditUserComponent } from '@app/edit-user/edit-user.component';
+import { NewLookupRequestComponent } from '@app/new-lookup-request/new-lookup-request.component';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -37,6 +38,7 @@ export class UserDashboardComponent implements OnInit {
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
   editUserDialogRef: MatDialogRef<EditUserComponent>;
+  newLookupRequestDialogRef: MatDialogRef<NewLookupRequestComponent>;
 
   errorMessage;
   events;
@@ -277,6 +279,25 @@ export class UserDashboardComponent implements OnInit {
     });
 
     this.editUserDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          // do something after close
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+  }
+
+  openNewLookupRequestDialog() {
+
+    // Open dialog for adding event diagnosis
+    this.newLookupRequestDialogRef = this.dialog.open(NewLookupRequestComponent, {
+      data: {}
+    });
+
+    this.newLookupRequestDialogRef.afterClosed()
       .subscribe(
         () => {
           // do something after close

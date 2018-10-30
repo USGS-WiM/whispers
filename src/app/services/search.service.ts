@@ -49,7 +49,7 @@ export class SearchService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.SEARCH_URL + '?no_page' + 'user_searches', options)
+    return this._http.get(APP_SETTINGS.SEARCH_URL + 'user_searches' + '?no_page', options)
       .map((response: Response) => <any[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

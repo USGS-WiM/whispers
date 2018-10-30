@@ -216,7 +216,6 @@ export class HomeComponent implements OnInit {
   openSearchDialog() {
     this.searchDialogRef = this.dialog.open(SearchDialogComponent, {
       minWidth: '60%',
-      disableClose: true,
       data: {
         query: this.currentDisplayQuery
       }
@@ -228,10 +227,18 @@ export class HomeComponent implements OnInit {
 
     const defaultEventQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
 
+    let currentEventQuery;
+
+    if (sessionStorage.getItem('currentSearch')) {
+      currentEventQuery = JSON.parse(sessionStorage.getItem('currentSearch'));
+    } else {
+      currentEventQuery = defaultEventQuery;
+    }
+
     // two lines below for the DataSource as separate class method (possibly revisit)
     // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
     // this.testDataSource.loadResults(defaultEventQuery);
-    this.eventService.queryEvents(defaultEventQuery)
+    this.eventService.queryEvents(currentEventQuery)
       .subscribe(
         eventSummaries => {
           this.currentResults = eventSummaries;

@@ -47,36 +47,34 @@ export class EventService {
     if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
-
     if (eventQuery.event_type.length > 0) {
       queryString = queryString + '&event_type=' + eventQuery.event_type;
     }
-
     if (eventQuery.diagnosis.length > 0) {
       queryString = queryString + '&diagnosis=' + eventQuery.diagnosis;
     }
-
     if (eventQuery.diagnosis_type.length > 0) {
       queryString = queryString + '&diagnosis_type=' + eventQuery.diagnosis_type;
     }
-
     if (eventQuery.species.length > 0) {
       queryString = queryString + '&species=' + eventQuery.species;
     }
-
     if (eventQuery.administrative_level_one.length > 0) {
       queryString = queryString + '&administrative_level_one=' + eventQuery.administrative_level_one;
     }
-
     if (eventQuery.administrative_level_two.length > 0) {
       queryString = queryString + '&administrative_level_two=' + eventQuery.administrative_level_two;
     }
-
     if (eventQuery.and_params) {
       if (eventQuery.and_params.length > 0) {
         queryString = queryString + '&and_params=' + eventQuery.and_params;
       }
-
+    }
+    if (eventQuery.complete === false) {
+      queryString = queryString + '&complete=False';
+    }
+    if (eventQuery.complete === true) {
+      queryString = queryString + '&complete=True';
     }
 
     queryString = queryString + '&format=csv';
@@ -101,14 +99,6 @@ export class EventService {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
 
-    //attempt to handle start date and end date that are referred to differently throughout the app
-    if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
-      queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
-    }
-    if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
-      queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
-    }
-
     if (eventQuery.event_type.length > 0) {
       queryString = queryString + '&event_type=' + eventQuery.event_type;
     }
@@ -137,9 +127,14 @@ export class EventService {
       if (eventQuery.and_params.length > 0) {
         queryString = queryString + '&and_params=' + eventQuery.and_params;
       }
-
     }
-
+    if (eventQuery.complete === false) {
+      queryString = queryString + '&complete=False';
+    }
+    if (eventQuery.complete === true) {
+      queryString = queryString + '&complete=True';
+    }
+   
     const options = new RequestOptions({
       headers: APP_SETTINGS.JSON_HEADERS
     });
@@ -165,14 +160,6 @@ export class EventService {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
 
-    // attempt to handle start date and end date that are referred to differently throughout the app
-    if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
-      queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
-    }
-    if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
-      queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
-    }
-
     if (eventQuery.event_type.length > 0) {
       queryString = queryString + '&event_type=' + eventQuery.event_type;
     }
@@ -201,7 +188,12 @@ export class EventService {
       if (eventQuery.and_params.length > 0) {
         queryString = queryString + '&and_params=' + eventQuery.and_params;
       }
-
+    }
+    if (eventQuery.complete === false) {
+      queryString = queryString + '&complete=False';
+    }
+    if (eventQuery.complete === true) {
+      queryString = queryString + '&complete=True';
     }
 
     const options = new RequestOptions({
@@ -231,7 +223,7 @@ export class EventService {
 
   // Function for retrieving event details given event id
   public getEventDetails(eventID): Observable<EventDetail> {
-    
+
     let options;
     if (sessionStorage.username !== undefined) {
       options = new RequestOptions({
@@ -242,7 +234,7 @@ export class EventService {
         headers: APP_SETTINGS.JSON_HEADERS
       });
     }
-    
+
     return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL + eventID + '?no_page', options)
       .map((response: Response) => <EventDetail>response.json())
       .catch(this.handleError);

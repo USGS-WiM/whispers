@@ -47,24 +47,31 @@ export class EventService {
     if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
-    if (eventQuery.event_type.length > 0) {
+
+    if (eventQuery.event_type && eventQuery.event_type.length > 0) {
       queryString = queryString + '&event_type=' + eventQuery.event_type;
     }
-    if (eventQuery.diagnosis.length > 0) {
+
+    if (eventQuery.diagnosis && eventQuery.diagnosis.length > 0) {
       queryString = queryString + '&diagnosis=' + eventQuery.diagnosis;
     }
-    if (eventQuery.diagnosis_type.length > 0) {
+
+    if (eventQuery.diagnosis_type && eventQuery.diagnosis_type.length > 0) {
       queryString = queryString + '&diagnosis_type=' + eventQuery.diagnosis_type;
     }
-    if (eventQuery.species.length > 0) {
+
+    if (eventQuery.species && eventQuery.species.length > 0) {
       queryString = queryString + '&species=' + eventQuery.species;
     }
-    if (eventQuery.administrative_level_one.length > 0) {
+
+    if (eventQuery.administrative_level_one && eventQuery.administrative_level_one.length > 0) {
       queryString = queryString + '&administrative_level_one=' + eventQuery.administrative_level_one;
     }
-    if (eventQuery.administrative_level_two.length > 0) {
+
+    if (eventQuery.administrative_level_two && eventQuery.administrative_level_two.length > 0) {
       queryString = queryString + '&administrative_level_two=' + eventQuery.administrative_level_two;
     }
+    
     if (eventQuery.and_params) {
       if (eventQuery.and_params.length > 0) {
         queryString = queryString + '&and_params=' + eventQuery.and_params;
@@ -99,27 +106,35 @@ export class EventService {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
 
-    if (eventQuery.event_type.length > 0) {
+    //attempt to handle start date and end date that are referred to differently throughout the app
+    if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
+      queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
+    }
+    if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
+      queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
+    }
+
+    if (eventQuery.event_type && eventQuery.event_type.length > 0) {
       queryString = queryString + '&event_type=' + eventQuery.event_type;
     }
 
-    if (eventQuery.diagnosis.length > 0) {
+    if (eventQuery.diagnosis && eventQuery.diagnosis.length > 0) {
       queryString = queryString + '&diagnosis=' + eventQuery.diagnosis;
     }
 
-    if (eventQuery.diagnosis_type.length > 0) {
+    if (eventQuery.diagnosis_type && eventQuery.diagnosis_type.length > 0) {
       queryString = queryString + '&diagnosis_type=' + eventQuery.diagnosis_type;
     }
 
-    if (eventQuery.species.length > 0) {
+    if (eventQuery.species && eventQuery.species.length > 0) {
       queryString = queryString + '&species=' + eventQuery.species;
     }
 
-    if (eventQuery.administrative_level_one.length > 0) {
+    if (eventQuery.administrative_level_one && eventQuery.administrative_level_one.length > 0) {
       queryString = queryString + '&administrative_level_one=' + eventQuery.administrative_level_one;
     }
 
-    if (eventQuery.administrative_level_two.length > 0) {
+    if (eventQuery.administrative_level_two && eventQuery.administrative_level_two.length > 0) {
       queryString = queryString + '&administrative_level_two=' + eventQuery.administrative_level_two;
     }
 
@@ -160,27 +175,35 @@ export class EventService {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
 
-    if (eventQuery.event_type.length > 0) {
+    // attempt to handle start date and end date that are referred to differently throughout the app
+    if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
+      queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
+    }
+    if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
+      queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
+    }
+
+    if (eventQuery.event_type && eventQuery.event_type.length > 0) {
       queryString = queryString + '&event_type=' + eventQuery.event_type;
     }
 
-    if (eventQuery.diagnosis.length > 0) {
+    if (eventQuery.diagnosis && eventQuery.diagnosis.length > 0) {
       queryString = queryString + '&diagnosis=' + eventQuery.diagnosis;
     }
 
-    if (eventQuery.diagnosis_type.length > 0) {
+    if (eventQuery.diagnosis_type && eventQuery.diagnosis_type.length > 0) {
       queryString = queryString + '&diagnosis_type=' + eventQuery.diagnosis_type;
     }
 
-    if (eventQuery.species.length > 0) {
+    if (eventQuery.species && eventQuery.species.length > 0) {
       queryString = queryString + '&species=' + eventQuery.species;
     }
 
-    if (eventQuery.administrative_level_one.length > 0) {
+    if (eventQuery.administrative_level_one && eventQuery.administrative_level_one.length > 0) {
       queryString = queryString + '&administrative_level_one=' + eventQuery.administrative_level_one;
     }
 
-    if (eventQuery.administrative_level_two.length > 0) {
+    if (eventQuery.administrative_level_two && eventQuery.administrative_level_two.length > 0) {
       queryString = queryString + '&administrative_level_two=' + eventQuery.administrative_level_two;
     }
 

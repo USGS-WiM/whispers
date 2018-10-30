@@ -60,10 +60,12 @@ export class SavedSearchesComponent implements OnInit {
     'search'
   ];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) searchPaginator: MatPaginator;
+  @ViewChild(MatSort) searchSort: MatSort;
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private _searchService: SearchService,
     private dialog: MatDialog,
     private searchDialogService: SearchDialogService,
@@ -100,8 +102,8 @@ export class SavedSearchesComponent implements OnInit {
 
           // this.savedSearchesDataSource = new MatTableDataSource(this.searches);
           this.savedSearchesDataSource = new MatTableDataSource(this.parsedSearches);
-          this.savedSearchesDataSource.paginator = this.paginator;
-          this.savedSearchesDataSource.sort = this.sort;
+          this.savedSearchesDataSource.paginator = this.searchPaginator;
+          this.savedSearchesDataSource.sort = this.searchSort;
         },
         error => {
           this.errorMessage = <any>error;
@@ -209,8 +211,8 @@ export class SavedSearchesComponent implements OnInit {
                   }
 
                   this.savedSearchesDataSource = new MatTableDataSource(this.parsedSearches);
-                  this.savedSearchesDataSource.paginator = this.paginator;
-                  this.savedSearchesDataSource.sort = this.sort;
+                  this.savedSearchesDataSource.paginator = this.searchPaginator;
+                  this.savedSearchesDataSource.sort = this.searchSort;
 
                   this.openSnackBar('Contact Removed', 'OK', 5000);
                 },
@@ -224,6 +226,11 @@ export class SavedSearchesComponent implements OnInit {
           }
         );
     }
+  }
+
+  implementSearch(search) {
+    sessionStorage.setItem('currentSearch', JSON.stringify(search));
+    this.router.navigate([`../home/`], { relativeTo: this.route });
   }
 
   openSnackBar(message: string, action: string, duration: number) {

@@ -58,7 +58,7 @@
 
     <!-- <div *ngIf="savedSearchesDataSource" class="results-table-div">
 
-      <mat-table [dataSource]="savedSearchesDataSource" matSort>
+      <mat-table [dataSource]="savedSearchesDataSource" matSort matSortActive="name" matSortDirection="asc">
 
         <ng-container matColumnDef="select">
           <mat-header-cell *matHeaderCellDef>
@@ -136,13 +136,12 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="searchDisplayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let search; columns: searchDisplayedColumns;"></mat-row>
+        <mat-row *matRowDef="let search; columns: searchDisplayedColumns;" (click)="implementSearch(search)"></mat-row>
 
       </mat-table>
 
-      <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
-    </div> -->
-
+      <mat-paginator #searchPaginator='matPaginator' [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+    </div>
 
   </mat-card-content>
 </mat-card>

@@ -612,6 +612,8 @@ export class SearchDialogComponent implements OnInit {
     // use searchForm.value to build the web service query, send to searchDialogService
     this.searchDialogService.setSearchQuery(searchQuery);
 
+    sessionStorage.setItem('currentSearch', JSON.stringify(searchQuery));
+
   }
 
 }

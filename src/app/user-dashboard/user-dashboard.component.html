@@ -36,6 +36,12 @@
       <mat-icon>edit</mat-icon> Edit User Details
     </button>
   </mat-card-actions>
+
+  <mat-card-actions>
+    <button mat-button (click)="openNewLookupRequestDialog()">
+      <mat-icon>add</mat-icon> Request New Species, Organization, or Diagnosis
+    </button>
+  </mat-card-actions>
 </mat-card>
 
 <mat-tab-group (selectedIndexChange)="_setDataSource($event)">

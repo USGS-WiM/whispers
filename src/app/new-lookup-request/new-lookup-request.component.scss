@@ -1,0 +1,20 @@
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.text-smaller {
+    font-size: smaller;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+.text-bold {
+    font-style: bold;
+}
+
+.note {
+    max-width: 300px;
+}

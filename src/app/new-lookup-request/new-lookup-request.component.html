@@ -1,0 +1,36 @@
+<h1 mat-dialog-title>
+  <i class="material-icons">edit</i> Request New Item</h1>
+<mat-dialog-content>
+  <form [formGroup]="newLookupRequestForm">
+
+    <div class="vertical-form-container">
+
+      <h4>Select Item Type to Request</h4>
+      <!-- Item Type -->
+      <mat-form-field class="form-control">
+        <mat-select required formControlName="item_type">
+          <mat-option value="species">New Species</mat-option>
+          <mat-option value="organization">New Organization</mat-option>
+          <mat-option value="diagnosis">New Diagnosis</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <h4>New request details</h4>
+      <mat-form-field class="form-control">
+        <textarea matInput placeholder="500 character limit. I made that up." formControlName="request_comment"></textarea>
+      </mat-form-field>
+    
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button color="warn" (click)="this.newLookupRequestDialogRef.close('cancel');">
+    <mat-icon>cancel</mat-icon>&nbsp;Cancel
+  </button>
+  <button mat-button color="primary" type="submit" [disabled]="false" (click)="sendRequest(newLookupRequestForm.value)">
+    <mat-icon>send</mat-icon>&nbsp;Submit
+  </button>
+  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+</mat-dialog-actions>

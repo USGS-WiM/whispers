@@ -135,7 +135,7 @@ export class APP_SETTINGS {
             'administrative_level_one_includes_all': false,
             'administrative_level_two_includes_all': false,
             'and_params': [],
-            'openEventsOnly': false
+            // 'complete': false
         };
     }
 
@@ -158,7 +158,7 @@ export class APP_SETTINGS {
             'administrative_level_one_includes_all': false,
             'administrative_level_two_includes_all': false,
             'and_params': [],
-            'openEventsOnly': false
+            // 'complete': false
         };
     }
 

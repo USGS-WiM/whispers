@@ -8,9 +8,9 @@ export class APP_UTILITIES {
 
     public static get DEFAULT_COUNTRY_ID(): string {
 
-        // TODO: impove this function to actually lookup the default country id 
+        // TODO: improve this function to actually lookup the default country id 
         // using the default country abbreviation string from APP_SETTINGS.
-        // doing this quick and dirty to make quick progress now. 
+        // doing this quick and dirty to make quick progress now.
         return '30';
     }
 
@@ -35,14 +35,14 @@ export class APP_UTILITIES {
             administrative_level_one_includes_all: false,
             administrative_level_two_includes_all: false,
             and_params: [],
-            openEventsOnly: false
+            complete: false
         };
 
         parsedSearch.id = search.id;
         parsedSearch.name = search.name;
 
 
-        // TODO: may need to add logic for adding openEventsOnly to the search
+        // TODO: may need to add logic for adding complete to the search
         if (search.data.start_date) {
             parsedSearch.start_date =  search.data.start_date;
         }

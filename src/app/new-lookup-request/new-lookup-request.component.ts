@@ -44,7 +44,7 @@ export class NewLookupRequestComponent implements OnInit {
     public snackBar: MatSnackBar,
     private speciesService: SpeciesService,
     private organizationService: OrganizationService,
-    private diagnosisService: DiagnosisService
+    private diagnosisService: DiagnosisService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.buildNewLookupRequestForm();

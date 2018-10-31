@@ -183,6 +183,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       legal_number: '',
       // end NWHC only
       new_organizations: null,
+      new_service_request: this.formBuilder.group({
+        request_type: 0,
+        new_comments: this.formBuilder.array([])
+      }),
       new_event_diagnoses: this.formBuilder.array([]),
       new_comments: this.formBuilder.array([]),
       new_superevents: this.formBuilder.array([]),

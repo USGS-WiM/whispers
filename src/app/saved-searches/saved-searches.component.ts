@@ -45,7 +45,7 @@ export class SavedSearchesComponent implements OnInit {
   eventTypes = [];
   diagnosisTypes = [];
   diagnoses = [];
-  species = [];
+  allSpecies = [];
   administrative_level_one = [];
   administrative_level_two = [];
 
@@ -157,7 +157,7 @@ export class SavedSearchesComponent implements OnInit {
     this.speciesService.getSpecies()
       .subscribe(
         (species) => {
-          this.species = species;
+          this.allSpecies = species;
           this.speciesLoading = false;
         },
         error => {

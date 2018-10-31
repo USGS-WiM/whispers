@@ -216,7 +216,7 @@ export class UserDashboardComponent implements OnInit {
 
     if (this.selection.selected.length > 1) {
       alert('you have too many contacts selected for edit. select only one.');
-    } else if (this.selection.selected.length == 1) {
+    } else if (this.selection.selected.length === 1) {
       this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
         minWidth: '60%',
         data: {
@@ -294,7 +294,13 @@ export class UserDashboardComponent implements OnInit {
 
     // Open dialog for adding event diagnosis
     this.newLookupRequestDialogRef = this.dialog.open(NewLookupRequestComponent, {
-      data: {}
+      data: {
+        title: 'Request New Item',
+        titleIcon: 'add_circle',
+        showCancelButton: true,
+        action_button_text: 'Submit request',
+        actionButtonIcon: 'send'
+      }
     });
 
     this.newLookupRequestDialogRef.afterClosed()

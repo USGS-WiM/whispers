@@ -2,7 +2,7 @@
   <mat-card-title>
   </mat-card-title>
   <mat-card-content>
-    <div *ngIf="!speciesLoading">
+    <div>
 
       <div class="button-row" *ngFor="let search of parsedSearches">
         <button mat-button>
@@ -36,7 +36,8 @@
               | displayValue:'name':this.diagnoses}} <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)">{{(search.diagnosis_includes_all)
                 ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.diagnosis" />
 
-          <span class="search-param" *ngIf="search.species"> <span class="text-bold">SPECIES &nbsp;</span><span *ngFor="let species of search.species">{{species|displayValue:'name':this.species}} <span *ngIf="(search.species.indexOf(species)) < (search.species.length - 1)">{{(search.species_includes_all)
+          <span class="search-param" *ngIf="search.species"> <span class="text-bold">SPECIES &nbsp;</span><span *ngFor="let species of search.species">{{species|
+              displayValue:'name':this.allSpecies }} <span *ngIf="(search.species.indexOf(species)) < (search.species.length - 1)">{{(search.species_includes_all)
                 ? "and" : "or"}}&nbsp;</span></span></span><br *ngIf="search.species" />
 
           <span class="search-param" *ngIf="search.administrative_level_one"> <span class="text-bold">STATE&nbsp;</span><span
@@ -141,7 +142,7 @@
       </mat-table>
 
       <mat-paginator #searchPaginator='matPaginator' [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
-    </div>
+    </div> -->
 
   </mat-card-content>
 </mat-card>

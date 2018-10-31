@@ -10,7 +10,12 @@ import { MatRadioModule } from '@angular/material';
 import { User } from '@interfaces/user';
 import { UserService } from '@app/services/user.service';
 import { CurrentUserService } from '@services/current-user.service';
+import { SpeciesService } from '@services/species.service';
+import { OrganizationService } from '@services/organization.service';
+import { DiagnosisService } from '@services/diagnosis.service';
+
 import { APP_SETTINGS } from '@app/app.settings';
+
 
 @Component({
   selector: 'app-new-lookup-request',
@@ -30,16 +35,16 @@ export class NewLookupRequestComponent implements OnInit {
     this.newLookupRequestForm = this.formBuilder.group({
       item_type: null,
       request_comment: null
-    }, {
-        
-      });
-
+    });
   }
 
   constructor(
     private formBuilder: FormBuilder,
     public newLookupRequestDialogRef: MatDialogRef<NewLookupRequestComponent>,
     public snackBar: MatSnackBar,
+    private speciesService: SpeciesService,
+    private organizationService: OrganizationService,
+    private diagnosisService: DiagnosisService
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.buildNewLookupRequestForm();
@@ -55,26 +60,52 @@ export class NewLookupRequestComponent implements OnInit {
     });
   }
 
-  sendRequest(formValue) {
-    let request_url;
+  onSubmit(formValue) {
+    // let request_url;
+    switch (formValue.item_type) {
+      case 'species':
 
-    switch(formValue.item_type) {
-      case "species":
-        request_url = APP_SETTINGS.SPECIES_URL + "request_new";
+        this.speciesService.requestNew(formValue.request_comment)
+          .subscribe(
+            (response) => {
+              this.openSnackBar('Species addition request sent', 'OK', 5000);
+            },
+            error => {
+              this.openSnackBar('Error. Species addition request not sent. Error message: ' + error, 'OK', 8000);
+              this.errorMessage = <any>error;
+            }
+          );
+        // request_url = APP_SETTINGS.SPECIES_URL + 'request_new';
         break;
-      case "organization":
-        request_url = APP_SETTINGS.ORGANIZATIONS_URL + "request_new";
+      case 'organization':
+
+        this.organizationService.requestNew(formValue.request_comment)
+          .subscribe(
+            (response) => {
+              this.openSnackBar('Organization addition request sent', 'OK', 5000);
+            },
+            error => {
+              this.openSnackBar('Error. Organization addition request not sent. Error message: ' + error, 'OK', 8000);
+              this.errorMessage = <any>error;
+            }
+          );
+        // request_url = APP_SETTINGS.ORGANIZATIONS_URL + 'request_new';
         break;
-      case "diagnosis":
-        request_url = APP_SETTINGS.DIAGNOSES_URL + "request_new";
+      case 'diagnosis':
+
+        this.diagnosisService.requestNew(formValue.request_comment)
+          .subscribe(
+            (response) => {
+              this.openSnackBar('Diagnosis addition request sent', 'OK', 5000);
+            },
+            error => {
+              this.openSnackBar('Error. Diagnosis addition request not sent. Error message: ' + error, 'OK', 8000);
+              this.errorMessage = <any>error;
+            }
+          );
+        // request_url = APP_SETTINGS.DIAGNOSES_URL + 'request_new';
         break;
     }
 
-    //Build POST here using correct request_url and formValue.request_comment as the request data
-
-    console.log(formValue);
-    console.log(request_url);
-
   }
-
 }

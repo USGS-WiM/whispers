@@ -81,7 +81,7 @@ export class APP_SETTINGS {
     public static get JSON_HEADERS() { return new Headers({ 'Accept': 'application/json', 'Content-Type': 'application/json' }); }
 
     // tslint:disable-next-line:max-line-length
-    public static get GO_USA_GOV_JSON_HEADERS() { return new Headers({ }); }
+    public static get GO_USA_GOV_JSON_HEADERS() { return new Headers({}); }
 
     // line below is for headers stored in local storage. todo: revisit and implement this
     // public static get AUTH_HEADERS() { return new Headers({ 'Authorization': 'Basic ' + btoa(sessionStorage.getItem('username') + ':' + sessionStorage.getItem('password'))}) }
@@ -113,6 +113,13 @@ export class APP_SETTINGS {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
             'Accept': 'application/json', 'Content-Type': 'application/json'
+        });
+    }
+
+    public static get MIN_AUTH_TEXT_HEADERS() {
+        return new Headers({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+            'Accept': 'text/plain'
         });
     }
 

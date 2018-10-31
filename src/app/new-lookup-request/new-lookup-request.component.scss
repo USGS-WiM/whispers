@@ -1,3 +1,8 @@
+.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
 .vertical-form-container {
     display: flex;
     flex-direction: column;
@@ -17,4 +22,18 @@
 
 .note {
     max-width: 300px;
+}
+
+.form-control {
+    width: 18em;
+    margin: 10px;
+}
+
+.general-comment-text-area {
+    width: 40em;
+    margin-bottom: 2em;
+}
+
+.text-small {
+    font-size: small;
 }

@@ -401,12 +401,39 @@ export class HomeComponent implements OnInit {
         (searches) => {
           this.popularSearches = searches;
 
+          // build parsed search list
           for (const search of this.popularSearches) {
             const parsedSearch = APP_UTILITIES.parseSearch(search);
             this.parsedPopularSearches.push(parsedSearch);
           }
 
-          console.log(this.parsedPopularSearches);
+          // build a list of relevant adminL1s
+          let adminLevelOnes = [];
+          for (const parsedSearch of this.parsedPopularSearches) {
+            if (parsedSearch.administrative_level_one) {
+              for (const adminLevelOne of parsedSearch.administrative_level_one) {
+                adminLevelOnes.push(adminLevelOne);
+              }
+            }
+          }
+
+          // query adminL2s from the relevant adminL1 list
+          adminLevelOnes = adminLevelOnes.map(function (e) {
+            return JSON.stringify(e);
+          });
+          const adminLevelOneString = adminLevelOnes.join(',');
+          this.adminLevelTwoService.queryAdminLevelTwos(adminLevelOneString)
+            .subscribe(
+              (adminLevelTwos) => {
+                this.administrative_level_two = adminLevelTwos;
+
+              },
+              error => {
+                this.errorMessage = <any>error;
+              }
+            );
+          console.log('Popular searches: ' + this.parsedPopularSearches);
+
         },
         error => {
           this.errorMessage = <any>error;
@@ -665,7 +692,7 @@ export class HomeComponent implements OnInit {
         if (marker.events.length === 1) {
           // tslint:disable-next-line:max-line-length
           popupContent = popupContent + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
-            '<span class="popupLabel text-larger">' +  (this.testForUndefined(event['complete']) ? 'Complete' : 'Open') + '</span><br/>' +
+            '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Open') + '</span><br/>' +
             '<span class="popupLabel">Type:</span> ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
             '<span class="popupLabel">Dates:</span> ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
             '<span class="popupLabel">Location:</span> ' + locationContent +
@@ -677,7 +704,7 @@ export class HomeComponent implements OnInit {
           popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
             // '<h4>Event ' + this.testForUndefined(event['id']) + '</h4>' +
             '<div class="panel">' +
-            '<span class="popupLabel text-larger">' +  (this.testForUndefined(event['complete']) ? 'Complete' : 'Open') + '</span><br/>' +
+            '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Open') + '</span><br/>' +
             '<span class="popupLabel">Type:</span> ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
             '<span class="popupLabel">Dates:</span> ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
             '<span class="popupLabel">Location:</span> ' + locationContent +
@@ -792,7 +819,7 @@ export class HomeComponent implements OnInit {
     this.saveSearchDialogRef.afterClosed()
       .subscribe(
         () => {
-         // TODO: show snackbar confirmation
+          // TODO: show snackbar confirmation
         },
         error => {
           this.errorMessage = <any>error;
@@ -801,7 +828,7 @@ export class HomeComponent implements OnInit {
 
   }
 
- 
+
   /**
    * Set the paginator and sort after the view init since this component will
    * be able to query its view for the initialized paginator and sort.

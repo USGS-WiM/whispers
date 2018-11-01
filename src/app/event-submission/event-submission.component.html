@@ -370,29 +370,33 @@
                                       </mat-autocomplete>
                                     </mat-form-field>
 
-                                    <mat-form-field class="species-number-control">
+                                    <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Known Dead" type="number" formControlName="dead_count">
+                                      <mat-icon matSuffix matTooltip="Exact minimum count of the cumulative number of dead animals (not including euthanized) over the length of the event at this location. Include euthanized. If 0 observed, enter 0. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
                                     </mat-form-field>
 
-                                    <mat-form-field class="species-number-control">
+                                    <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Estimated Dead" type="number" formControlName="dead_count_estimated">
+                                      <mat-icon matSuffix matTooltip="Best guess of the maximum number of animals that died (include any known dead animals) at this location over the length of the event. Include euthanized with sick. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
                                     </mat-form-field>
 
-                                    <mat-form-field class="species-number-control">
+                                    <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Known Sick" type="number" formControlName="sick_count">
+                                      <mat-icon matSuffix matTooltip="Exact minimum count of animals exhibiting clinical signs of illness at the point in time that the observation was made at this location. If site visited repeatedly, use number remaining sick/injured plus number recovered from being sick/injured. Include euthanized. If 0 observed, enter 0. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
                                     </mat-form-field>
 
-                                    <mat-form-field class="species-number-control">
+                                    <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Estimated Sick" type="number" formControlName="sick_count_estimated">
+                                      <mat-icon matSuffix matTooltip="Best guess of the maximum number of animals that might be showing clinical signs (include any known sick animals) at the point in time that the observation was made at this location. If site visited repeatedly, use number remaining sick/injured plus number recovered from being sick/injured. Include euthanized with sick. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>

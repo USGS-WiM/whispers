@@ -98,7 +98,32 @@ export class SavedSearchesComponent implements OnInit {
             this.parsedSearches.push(parsedSearch);
           }
 
-          console.log(this.parsedSearches);
+          // build a list of relevant adminL1s
+          let adminLevelOnes = [];
+          for (const parsedSearch of this.parsedSearches) {
+            if (parsedSearch.administrative_level_one) {
+              for (const adminLevelOne of parsedSearch.administrative_level_one) {
+                adminLevelOnes.push(adminLevelOne);
+              }
+            }
+          }
+
+          // query adminL2s from the relevant adminL1 list
+          adminLevelOnes = adminLevelOnes.map(function (e) {
+            return JSON.stringify(e);
+          });
+          const adminLevelOneString = adminLevelOnes.join(',');
+          this.adminLevelTwoService.queryAdminLevelTwos(adminLevelOneString)
+            .subscribe(
+              (adminLevelTwos) => {
+                this.administrative_level_two = adminLevelTwos;
+              },
+              error => {
+                this.errorMessage = <any>error;
+              }
+            );
+
+          console.log('User saved searches: ' + this.parsedSearches);
 
           // this.savedSearchesDataSource = new MatTableDataSource(this.searches);
           this.savedSearchesDataSource = new MatTableDataSource(this.parsedSearches);

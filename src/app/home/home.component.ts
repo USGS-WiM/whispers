@@ -22,6 +22,8 @@ import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 import { DisplayQuery } from '@interfaces/display-query';
 import { APP_SETTINGS } from '@app/app.settings';
 
+import { CurrentUserService } from '@services/current-user.service';
+
 import { EventSearchResultsDataSource } from '@app/event-search-results-data-source';
 import { isNgTemplate } from '@angular/compiler';
 import { AdministrativeLevelOneService } from '@app/services/administrative-level-one.service';
@@ -36,6 +38,7 @@ import { SaveSearchComponent } from '@app/save-search/save-search.component';
 
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
+import { UserRegistrationComponent } from '@app/user-registration/user-registration.component';
 
 // export class ResultsDataSource extends MatTableDataSource<any> {
 //   constructor(private userService: EventService) {
@@ -60,8 +63,11 @@ export class HomeComponent implements OnInit {
   map;
   icon;
 
+  currentUser;
+
   searchDialogRef: MatDialogRef<SearchDialogComponent>;
   saveSearchDialogRef: MatDialogRef<SaveSearchComponent>;
+  userRegistrationDialogRef: MatDialogRef<UserRegistrationComponent>;
 
   private searchQuerySubscription: Subscription;
 
@@ -132,9 +138,14 @@ export class HomeComponent implements OnInit {
     private diagnosisTypeService: DiagnosisTypeService,
     private diagnosisService: DiagnosisService,
     private speciesService: SpeciesService,
+    private currentUserService: CurrentUserService,
     private searchService: SearchService,
     private route: ActivatedRoute
   ) {
+
+    currentUserService.currentUser.subscribe(user => {
+      this.currentUser = user;
+    });
 
     this.searchQuerySubscription = this.searchDialogService.getSearchQuery().subscribe(
       searchQuery => {
@@ -826,6 +837,31 @@ export class HomeComponent implements OnInit {
         }
       );
 
+  }
+
+
+  register(type) {
+    this.userRegistrationDialogRef = this.dialog.open(UserRegistrationComponent, {
+      disableClose: true,
+      data: {
+        title: 'WHISPers Registration',
+        titleIcon: 'person',
+        showCancelButton: true,
+        action_button_text: 'Submit',
+        actionButtonIcon: 'send',
+        registration_type: type
+      }
+    });
+
+    this.userRegistrationDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          // TODO: show snackbar confirmation
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
 
 

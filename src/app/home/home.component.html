@@ -13,6 +13,26 @@
           a
           place to explore wildlife mortality data submitted by partners across North America and verified by trained
           biologists.</p>
+
+        <p>
+
+          <span *ngIf="currentUser.role != undefined">You are logged in as <b>{{currentUser.first_name}}
+              {{currentUser.last_name}}</b>({{currentUser.username}})</span>
+
+          <p>
+            <div *ngIf="currentUser.role === undefined">
+              <h4>Looking to get started? Select the option that best describes you.</h4>
+              <div class="example-button-row">
+                <button mat-stroked-button matTooltip="Select this if you are a person interested in wildlife mortality data"
+                  (click)="register('public')">General
+                  User</button>
+                <button mat-stroked-button matTooltip="Select this if you are a current Natural Resource Management Professional"
+                  (click)="register('partner')">Natural
+                  Resource Management Professional</button>
+              </div>
+            </div>
+
+
       </mat-expansion-panel>
     </div>
 

@@ -1,0 +1,110 @@
+<h1 mat-dialog-title>
+  <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}}
+</h1>
+<mat-dialog-content>
+  <form [formGroup]="userRegistrationForm">
+
+    <div class="vertical-form-container">
+
+      <!-- Username -->
+      <mat-form-field class="form-control">
+        <input matInput placeholder="Username" formControlName="username">
+      </mat-form-field>
+
+      <div class="horizontal-form-container">
+
+        <!-- First Name -->
+        <mat-form-field class="form-control">
+          <input matInput placeholder="First Name" formControlName="first_name">
+        </mat-form-field>
+
+        <!-- Last Name -->
+        <mat-form-field class="form-control">
+          <input matInput placeholder="Last Name" formControlName="last_name">
+        </mat-form-field>
+
+      </div>
+
+      <div class="horizontal-form-container">
+
+        <!-- Email address -->
+        <mat-form-field class="form-control">
+          <input matInput placeholder="Email Address" formControlName="email" required>
+          <mat-error *ngIf="userRegistrationForm.get('email').invalid">{{getErrorMessage('email')}}</mat-error>
+        </mat-form-field>
+
+        <!-- Confirm Email address -->
+        <mat-form-field class="form-control">
+          <input matInput placeholder="Confirm Email Address" formControlName="confirmEmail" required>
+          <mat-error *ngIf="userRegistrationForm.get('confirmEmail').invalid">{{getErrorMessage('confirmEmail')}}</mat-error>
+        </mat-form-field>
+
+      </div>
+
+      <div class="horizontal-form-container">
+
+        <!-- Password -->
+        <mat-form-field class="form-control">
+          <input matInput type="password" placeholder="Password" formControlName="password">
+        </mat-form-field>
+        <br />
+        <!-- Confirm Password -->
+        <mat-form-field class="form-control">
+          <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword">
+          <mat-error *ngIf="userRegistrationForm.controls.confirmPassword.errors?.matchPassword">Passwords do not match</mat-error>
+        </mat-form-field>
+
+      </div>
+
+      <div><h3>Disclaimer Here</h3></div>
+
+    </div>
+
+    <div class="vertical-form-container" *ngIf="data.registration_type === 'partner'">
+
+      <p>
+        <span>Select the organization you would like to join</span>
+        <mat-form-field class="form-control org-select">
+          <mat-select placeholder="Organization" formControlName="organization">
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <p>
+          <span>Select the role you would like within your chosen organization</span>
+
+          <mat-form-field class="form-control org-select">
+            <mat-select placeholder="Role" formControlName="role">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let role of roles" [value]="role.id">{{role.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <p>
+            <span>(Optional) Provide any additonal comment or explanation for your request</span>
+            <mat-form-field class="general-comment-text-area">
+              <textarea matInput #requestComment maxlength="1000" minRows="3" placeholder="Comment" formControlName="request_comment"></textarea>
+              <mat-hint align="end">{{requestComment.value.length}} / 1000</mat-hint>
+            </mat-form-field>
+
+            <p>
+              <mat-checkbox formControlName="terms" appearance="outline">I agree to the terms of use</mat-checkbox>
+
+              <p>
+                <span>Thank you for your interest in becoming a WHISPers Partner user. Your request will be
+                  reviewed and you will receive an email reply as soon as possible.</span>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button color="warn" (click)="this.userRegistrationDialogRef.close('cancel');">
+    <mat-icon>cancel</mat-icon>&nbsp;Cancel
+  </button>
+  <button mat-button color="primary" type="submit" [disabled]="userRegistrationForm.invalid" (click)="onSubmit(userRegistrationForm.value)">
+    <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{data.action_button_text}}
+  </button>
+  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+</mat-dialog-actions>

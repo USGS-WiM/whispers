@@ -85,7 +85,7 @@ export class EditUserComponent implements OnInit {
     };
 
     // if no value present in password, delete that from the object for patching
-    if (formValue.password === '' || this.showChangePassword == false) {
+    if (formValue.password === '' || this.showChangePassword === false) {
       //delete userUpdates.password;
       userUpdates.password = sessionStorage.password;
       sessionStorage.new_password = sessionStorage.password;
@@ -113,7 +113,7 @@ export class EditUserComponent implements OnInit {
   }
 
   checkChangePassword(event) {
-    if (event.target.checked == true) {
+    if (event.target.checked === true) {
       this.showChangePassword = true;
     } else {
       this.showChangePassword = false;

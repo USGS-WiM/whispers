@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>
-  <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}}
+  <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}} {{data.registration_type === 'public' ? 'for General Users' : data.registration_type === 'partner' ? 'for Natural Resources Management Professionals' : ''}}
 </h1>
 <mat-dialog-content>
   <form [formGroup]="userRegistrationForm">
@@ -56,44 +56,45 @@
 
       </div>
 
-      <div><h3>Disclaimer Here</h3></div>
+      <div>
+        <h3>Disclaimer Here</h3>
+      </div>
 
     </div>
 
     <div class="vertical-form-container" *ngIf="data.registration_type === 'partner'">
 
-      <p>
-        <span>Select the organization you would like to join</span>
-        <mat-form-field class="form-control org-select">
-          <mat-select placeholder="Organization" formControlName="organization">
-            <mat-option>--</mat-option>
-            <mat-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</mat-option>
-          </mat-select>
-        </mat-form-field>
+      <span>Select the organization you would like to join</span><br />
+      <mat-form-field class="form-control org-select">
+        <mat-select placeholder="Organization" formControlName="organization">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-        <p>
-          <span>Select the role you would like within your chosen organization</span>
 
-          <mat-form-field class="form-control org-select">
-            <mat-select placeholder="Role" formControlName="role">
-              <mat-option>--</mat-option>
-              <mat-option *ngFor="let role of roles" [value]="role.id">{{role.name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+      <span>Select the role you would like within your chosen organization</span><br />
 
-          <p>
-            <span>(Optional) Provide any additonal comment or explanation for your request</span>
-            <mat-form-field class="general-comment-text-area">
-              <textarea matInput #requestComment maxlength="1000" minRows="3" placeholder="Comment" formControlName="request_comment"></textarea>
-              <mat-hint align="end">{{requestComment.value.length}} / 1000</mat-hint>
-            </mat-form-field>
+      <mat-form-field class="form-control org-select">
+        <mat-select placeholder="Role" formControlName="role">
+          <!-- <mat-option>--</mat-option> -->
+          <mat-option [value]="'partner'">User</mat-option>
+          <mat-option [value]="'partnerManager'">Manager</mat-option>
+          <mat-option [value]="'partnerAdmin'">Administrator</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-            <p>
-              <mat-checkbox formControlName="terms" appearance="outline">I agree to the terms of use</mat-checkbox>
 
-              <p>
-                <span>Thank you for your interest in becoming a WHISPers Partner user. Your request will be
-                  reviewed and you will receive an email reply as soon as possible.</span>
+      <span>(Optional) Provide any additonal comment or explanation for your request</span><br />
+      <mat-form-field class="general-comment-text-area">
+        <textarea matInput #requestComment maxlength="1000" minRows="3" placeholder="Comment" formControlName="request_comment"></textarea>
+        <mat-hint align="end">{{requestComment.value.length}} / 1000</mat-hint>
+      </mat-form-field>
+
+      <mat-checkbox formControlName="terms" appearance="outline">I agree to the terms of use</mat-checkbox><br />
+
+      <span>Thank you for your interest in becoming a WHISPers Partner user. Your request will be
+        reviewed and you will receive an email reply as soon as possible.</span>
     </div>
 
   </form>

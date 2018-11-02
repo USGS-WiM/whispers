@@ -20,7 +20,7 @@ export class RoleService {
   public getRoles(): Observable<Role[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.JSON_HEADERS
     });
 
     return this._http.get(APP_SETTINGS.ROLES_URL + '?no_page', options)

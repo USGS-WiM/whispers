@@ -21,7 +21,7 @@ export class OrganizationService {
   public getOrganizations(): Observable<Organization[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.JSON_HEADERS
     });
 
     return this._http.get(APP_SETTINGS.ORGANIZATIONS_URL + '?no_page', options)

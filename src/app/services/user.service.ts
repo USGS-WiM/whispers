@@ -42,6 +42,17 @@ export class UserService {
 
   }
 
+  public requestNew(formValue): Observable<User> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.post(APP_SETTINGS.USERS_URL + 'request_new/', formValue, options)
+      .map((response: Response) => <any>response.json())
+      .catch(this.handleError);
+  }
+
   private handleError(error: Response) {
     console.error(error);
     return throwError(JSON.stringify(error.json()) || 'Server error');

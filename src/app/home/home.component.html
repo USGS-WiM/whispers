@@ -21,7 +21,7 @@
 
           <p>
             <div *ngIf="currentUser.role === undefined">
-              <h4>Looking to get started? Select the option that best describes you.</h4>
+              <label class="text-larger text-bold">Looking to get started? Select the option that best describes you.</label>
               <div class="example-button-row">
                 <button mat-stroked-button matTooltip="Select this if you are a person interested in wildlife mortality data"
                   (click)="register('public')">General

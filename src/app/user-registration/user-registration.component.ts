@@ -13,6 +13,9 @@ import { RoleService } from '@app/services/role.service';
 import { CurrentUserService } from '@services/current-user.service';
 import { OrganizationService } from '@services/organization.service';
 
+import { Organization } from '@interfaces/organization';
+import { Role } from '@interfaces/role';
+
 
 import { APP_SETTINGS } from '@app/app.settings';
 
@@ -28,6 +31,9 @@ export class UserRegistrationComponent implements OnInit {
   submitLoading = false;
 
   currentUser;
+
+  organizations: Organization[];
+  roles: Role[];
 
   userRegistrationForm: FormGroup;
 
@@ -84,6 +90,7 @@ export class UserRegistrationComponent implements OnInit {
     private currentUserService: CurrentUserService,
     private organizationService: OrganizationService,
     private roleService: RoleService,
+    private userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
 
@@ -98,8 +105,60 @@ export class UserRegistrationComponent implements OnInit {
   ngOnInit() {
 
     console.log('Registration Type: ' + this.data.registration_type);
+
+    // get organizations from the OrganizationService
+    this.organizationService.getOrganizations()
+      .subscribe(
+        organizations => {
+          this.organizations = organizations;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+
+    // get roles from the RoleService
+    this.roleService.getRoles()
+      .subscribe(
+        roles => {
+          this.roles = roles;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
   }
 
-  onSubmit(formValue) { }
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+  onSubmit(formValue) {
+
+    // delete the confirm fields for the actual submission
+    delete formValue.confirmEmail;
+    delete formValue.confirmPassword;
+
+    this.userService.requestNew(formValue)
+      .subscribe(
+        (event) => {
+          this.submitLoading = false;
+          this.openSnackBar('User Registration Successful', 'OK', 5000);
+          this.userRegistrationDialogRef.close();
+          // this.currentUserService.updateCurrentUser(event);
+          // sessionStorage.first_name = event.first_name;
+          // sessionStorage.last_name = event.last_name;
+          // sessionStorage.password = sessionStorage.new_password;
+        },
+        error => {
+          this.submitLoading = false;
+          this.openSnackBar('Error. User registration failed. Error message: ' + error, 'OK', 8000);
+        }
+      );
+  }
 
 }

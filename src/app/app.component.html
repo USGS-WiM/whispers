@@ -41,7 +41,7 @@
         </button>
 
         <!-- Create Event -->
-        <button mat-button aria-label="Create Event" (click)="navigateToEventSubmit()">
+        <button mat-button aria-label="Create Event" *ngIf="currentUser.username != ''" (click)="navigateToEventSubmit()">
           <i class="material-icons">library_add</i>
           <span class="header-button-text">Create Event</span>
         </button>
@@ -58,7 +58,7 @@
       <div class="right">
 
         <!-- Login Status -->
-        <span *ngIf="currentUser.username == ''" class="login-status">Logged Out</span>
+        <span *ngIf="currentUser.username == ''" class="login-status signin-button" [matMenuTriggerFor]="menu">Sign In</span>
         <span *ngIf="currentUser.username !== ''" class="login-status">{{currentUser.first_name}} {{currentUser.last_name}}</span>
       
         <!-- Account Menu -->

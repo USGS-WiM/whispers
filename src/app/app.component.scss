@@ -101,8 +101,10 @@
         // App Alert
         .app-header-alert {
             color: #F24D4D;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
+            white-space: normal;
+            line-height: 11px;
 
             b{
                 font-weight: 900;
@@ -218,3 +220,6 @@
         display: none;
     }
 }
+
+
+

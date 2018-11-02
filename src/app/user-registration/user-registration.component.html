@@ -2,7 +2,7 @@
   <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}}
 </h1>
 <mat-dialog-content>
-  <form [formGroup]="userRegistrationForm">
+  <form [formGroup]="userRegistrationForm" class="registration-form">
 
     <div class="vertical-form-container">
 
@@ -47,7 +47,6 @@
         <mat-form-field class="form-control">
           <input matInput type="password" placeholder="Password" formControlName="password">
         </mat-form-field>
-        <br />
         <!-- Confirm Password -->
         <mat-form-field class="form-control">
           <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword">
@@ -56,13 +55,14 @@
 
       </div>
 
-      <div><h3>Disclaimer Here</h3></div>
+      <div><h3>Disclaimer</h3></div>
 
     </div>
 
+
+
     <div class="vertical-form-container" *ngIf="data.registration_type === 'partner'">
 
-      <p>
         <span>Select the organization you would like to join</span>
         <mat-form-field class="form-control org-select">
           <mat-select placeholder="Organization" formControlName="organization">
@@ -71,29 +71,27 @@
           </mat-select>
         </mat-form-field>
 
-        <p>
-          <span>Select the role you would like within your chosen organization</span>
+        <span>Select the role you would like within your chosen organization</span>
 
-          <mat-form-field class="form-control org-select">
-            <mat-select placeholder="Role" formControlName="role">
-              <mat-option>--</mat-option>
-              <mat-option *ngFor="let role of roles" [value]="role.id">{{role.name}}</mat-option>
-            </mat-select>
+        <mat-form-field class="form-control org-select">
+          <mat-select placeholder="Role" formControlName="role">
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let role of roles" [value]="role.id">{{role.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+          <span>(Optional) Provide any additonal comment or explanation for your request</span>
+          <mat-form-field class="general-comment-text-area">
+            <textarea matInput #requestComment maxlength="1000" minRows="3" placeholder="Comment" formControlName="request_comment"></textarea>
+            <mat-hint align="end">{{requestComment.value.length}} / 1000</mat-hint>
           </mat-form-field>
 
+          <mat-checkbox formControlName="terms" appearance="outline">I agree to the terms of use</mat-checkbox>
+
           <p>
-            <span>(Optional) Provide any additonal comment or explanation for your request</span>
-            <mat-form-field class="general-comment-text-area">
-              <textarea matInput #requestComment maxlength="1000" minRows="3" placeholder="Comment" formControlName="request_comment"></textarea>
-              <mat-hint align="end">{{requestComment.value.length}} / 1000</mat-hint>
-            </mat-form-field>
-
-            <p>
-              <mat-checkbox formControlName="terms" appearance="outline">I agree to the terms of use</mat-checkbox>
-
-              <p>
-                <span>Thank you for your interest in becoming a WHISPers Partner user. Your request will be
-                  reviewed and you will receive an email reply as soon as possible.</span>
+            Thank you for your interest in becoming a WHISPers Partner user. Your request will be
+            reviewed and you will receive an email reply as soon as possible.
+          </p>
     </div>
 
   </form>

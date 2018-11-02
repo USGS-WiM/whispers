@@ -5,3 +5,55 @@
 .text-larger {
     font-size: larger;
 }
+
+
+#aboutModal{
+
+    .mat-tab-label{
+        font-size: 12px;
+    }
+
+    h2{
+        font-size: 20px;
+        font-weight: 900;
+        margin-bottom: 20px;
+        max-width: 550px;
+        line-height: 24px;
+    }
+
+    label.about-header{
+        font-weight: 600;
+        color: #313B57;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        max-width: 550px;
+        line-height: 24px;
+        display: block;
+
+    }
+
+    p{
+        font-size: 13px;
+        line-height: 28px;
+        color: rgba(0, 0, 0, 0.54);
+        display: block;
+        max-width: 600px;
+
+        b{
+            font-weight: bolder;
+            color: #10152C;
+        }
+    }
+
+    ul{
+        max-width: 550px;
+        margin-top: 0;
+        margin-bottom: 30px;
+
+        li{
+            font-size: 13px;
+            line-height: 18px;
+            color: rgba(0, 0, 0, 0.54);
+        }
+    }
+}

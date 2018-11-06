@@ -366,9 +366,11 @@
     </mat-tab-group>
   </mat-dialog-content>
   <mat-dialog-actions>
-  
-    <button mat-button color="primary" type="submit" (click)="this.aboutDialogRef.close('cancel');">
-      <mat-icon>close</mat-icon>&nbsp;Close
-    </button>
+
+    <div class="form-buttons-flex center">
+      <button mat-button color="primary" type="submit" (click)="this.aboutDialogRef.close('cancel');">
+        <mat-icon>close</mat-icon>&nbsp;Close
+      </button>
+    </div>
   
   </mat-dialog-actions>

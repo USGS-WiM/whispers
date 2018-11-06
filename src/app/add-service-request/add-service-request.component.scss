@@ -9,8 +9,8 @@
 }
 
 .form-control {
-    width: 18em;
-    margin: 10px;
+    width: 8em;
+    margin: 5px;
 }
 
 .org-select {
@@ -22,11 +22,33 @@
     background-color: lightcoral;
 }
 
-.general-comment-text-area {
-    width: 40em;
-    margin-bottom: 2em;
-}
 
 .text-small {
     font-size: small;
+}
+
+// Prev and next buttons
+.detail-section-buttons{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    &.centered{
+        justify-content: center;
+    }
+
+    button{
+        position: relative;
+        top: -2px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+
+
+.add-service-request-form{
+
 }

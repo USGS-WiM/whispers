@@ -7,7 +7,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 *Prerequisite*: Please install Angular-CLI by following [these instructions](https://github.com/angular/angular-cli#installation).
 
 ```bash
-git clone https://github.com/USGS-WiM/lide-lims.git
+git clone https://github.com/USGS-WiM/whispers.git
 cd lide-lims
 
 # install the project's dependencies

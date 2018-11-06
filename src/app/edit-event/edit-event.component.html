@@ -52,10 +52,10 @@
       </mat-form-field>
 
       <!-- NWHC staff only section -->
-      <mat-card *ngIf="currentUser.role === 1 || currentUser.role === 2 ">
-        <mat-card-header>
-          <mat-card-title>NWHC Staff Only</mat-card-title>
-        </mat-card-header>
+      <mat-card *ngIf="currentUser.role === 1 || currentUser.role === 2 " class="nwhc-only">
+        <div class="nwhc-only-header">
+          NWHC Staff Only
+        </div>
         <mat-card-content>
           <div class="horizontal-form-container">
             <form [formGroup]="editEventForm">
@@ -114,11 +114,14 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button color="warn" (click)="this.editEventDialogRef.close('cancel');">
-    <mat-icon>cancel</mat-icon>&nbsp;Cancel
-  </button>
-  <button mat-button color="primary" type="submit" (click)="updateEvent(editEventForm.value)">
-    <mat-icon>save</mat-icon>&nbsp;Save
-  </button>
-  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+  <div class="detail-section-buttons">
+
+    <button mat-button color="warn" (click)="this.editEventDialogRef.close('cancel');">
+      <mat-icon>cancel</mat-icon>&nbsp;Cancel
+    </button>
+    <button mat-button color="primary" type="submit" (click)="updateEvent(editEventForm.value)">
+      <mat-icon>save</mat-icon>&nbsp;Save
+    </button>
+    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+  </div>
 </mat-dialog-actions>

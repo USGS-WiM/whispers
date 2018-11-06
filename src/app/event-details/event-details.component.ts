@@ -699,7 +699,7 @@ export class EventDetailsComponent implements OnInit {
           title: 'Delete Event Comment Confirm',
           titleIcon: 'delete_forever',
           // tslint:disable-next-line:max-line-length
-          message: 'Are you sure you want to delete this comment? This action cannot be undone.',
+          message: 'Are you sure you want to delete this comment?\nThis action cannot be undone.',
           confirmButtonText: 'Yes, Delete comment',
           messageIcon: '',
           showCancelButton: true
@@ -857,7 +857,7 @@ export class EventDetailsComponent implements OnInit {
           titleIcon: 'delete_forever',
           // tslint:disable-next-line:max-line-length
           message: 'Are you sure you want to delete this event diagnosis? This action cannot be undone.',
-          confirmButtonText: 'Yes, Delete event diagnosis',
+          confirmButtonText: 'Yes, Delete Event Diagnosis',
           messageIcon: '',
           showCancelButton: true
         }

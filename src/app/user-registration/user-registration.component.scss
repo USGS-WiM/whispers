@@ -26,12 +26,12 @@
 }
 
 .form-control {
-    width: 18em;
-    margin: 10px;
+    width: 16em;
+    margin: 6px;
 }
 
 .general-comment-text-area {
-    width: 40em;
+    width: 100%;
     margin-bottom: 2em;
 }
 
@@ -40,6 +40,8 @@
 }
 
 .registration-form{
+    display: block;
+    max-width: 500px;
 
     p{
         max-width: 500px !important;
@@ -58,4 +60,34 @@
         margin-top: 15px;
         margin-bottom: 8px;
     }
+}
+
+.detail-section-buttons{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    &.centered{
+        justify-content: center;
+    }
+
+    button{
+        position: relative;
+        top: -2px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+
+
+
+span.reg-hint{
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #313B57;
+    margin: 6px 0 3px 0;
 }

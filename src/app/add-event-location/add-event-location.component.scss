@@ -1,7 +1,13 @@
 .event-location-card {
     margin-top: 1em;
     margin-bottom: 1em;
-    background-color: lightgray;
+    background-color: transparent;
+    padding: 0;
+}
+.mat-stepper-horizontal{
+    background-color: #FAFCFF;
+    border: 1px solid fade-out(#A0AFCD, 0.6);
+    border-radius: 3px;
 }
 
 .horizontal-form-container {
@@ -23,16 +29,6 @@
 .form-control {
     width: 18em;
     margin: 10px;
-}
-
-.comment-text-area {
-    width: 60em;
-    margin-bottom: 2em;
-}
-
-.general-comment-text-area {
-    width: 40em;
-    margin-bottom: 2em;
 }
 
 .hint {

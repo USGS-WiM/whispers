@@ -173,16 +173,15 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       event_reference: '',
       event_type: [null, Validators.required],
       complete: false,
-      event_status: 1,
       public: [true, Validators.required],
       // NWHC only
       staff: null,
-      status: null,
-      quality_check: '',
-      legal_status: null,
+      event_status: '1',
+      quality_check: { value: '', disabled: true },
+      legal_status: '1',
       legal_number: '',
       // end NWHC only
-      new_organizations: null,
+      new_organizations: [null, Validators.required],
       new_service_request: this.formBuilder.group({
         request_type: 0,
         new_comments: this.formBuilder.array([])
@@ -202,7 +201,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
     this.filteredAdminLevelTwos = new Array<Observable<any>>();
     this.ManageAdminLevelTwoControl(0);
-            
+
 
     let eventLocationSpecies = new Array<Observable<any>>();
     this.filteredSpecies.push(eventLocationSpecies);
@@ -244,6 +243,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
+      this.eventSubmissionForm.get('new_organizations').setValue([this.currentUser.organization.toString()]);
     });
 
     this.subscription = this.createContactSevice.getCreatedContact().subscribe(
@@ -333,7 +333,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFn(speciesId?: Species): string | undefined {
     let species_id_match;
-    for (let i = 0; i < this["options"]._results.length-1; i++) {
+    for (let i = 0; i < this["options"]._results.length - 1; i++) {
       if (this["options"]._results[i].value == speciesId) {
         species_id_match = this["options"]._results[i].viewValue;
       }
@@ -405,7 +405,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts') as FormArray;
     this.filteredContacts[eventLocationIndex][locationContactIndex] = arrayControl.at(locationContactIndex).get('contact').valueChanges
       .startWith(null)
-      .map(val => this.filter(val, this.userContacts, ['first_name','last_name','organization_string']));
+      .map(val => this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
   }
 
   ManageAdminLevelOneControl(eventLocationIndex: number) {
@@ -432,9 +432,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     let result = [];
     if (val == "") {
       result = searchArray;
-    } else { 
+    } else {
       for (let searchProperty of searchProperties) {
-        if (isNaN(val)){
+        if (isNaN(val)) {
           const realval = val && typeof val === 'object' ? val[searchProperty] : val;
           let lastOption = null;
           if (searchArray !== undefined) {
@@ -450,7 +450,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         }
       }
     }
-    
+
     // this will return all records matching the val string
     return result;
   }
@@ -679,6 +679,14 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
           this.errorMessage = <any>error;
         }
       );
+
+    this.eventSubmissionForm.get('complete').valueChanges.subscribe(value => {
+      if (value === true) {
+        this.eventSubmissionForm.get('quality_check').enable();
+      } else if (value === false) {
+        this.eventSubmissionForm.get('quality_check').disable();
+      }
+    });
 
   }
 
@@ -1045,7 +1053,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
             this.errorMessage = <any>error;
           }
         );
-      }
+    }
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -1079,19 +1087,19 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         (speciesDiagnosisObj) => {
 
           this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventlocationIndex]
-          .get('new_location_species')['controls'][speciesDiagnosisObj.locationspeciesIndex]
-          .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
-            diagnosis: speciesDiagnosisObj.formValue.diagnosis,
-            cause: speciesDiagnosisObj.formValue.cause,
-            basis: speciesDiagnosisObj.formValue.basis,
-            suspect: speciesDiagnosisObj.formValue.suspect,
-            tested_count: speciesDiagnosisObj.formValue.tested_count,
-            diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
-            positive_count: speciesDiagnosisObj.formValue.positive_count,
-            suspect_count: speciesDiagnosisObj.formValue.suspect_count,
-            pooled: speciesDiagnosisObj.formValue.pooled,
-            new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
-          });
+            .get('new_location_species')['controls'][speciesDiagnosisObj.locationspeciesIndex]
+            .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
+              diagnosis: speciesDiagnosisObj.formValue.diagnosis,
+              cause: speciesDiagnosisObj.formValue.cause,
+              basis: speciesDiagnosisObj.formValue.basis,
+              suspect: speciesDiagnosisObj.formValue.suspect,
+              tested_count: speciesDiagnosisObj.formValue.tested_count,
+              diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
+              positive_count: speciesDiagnosisObj.formValue.positive_count,
+              suspect_count: speciesDiagnosisObj.formValue.suspect_count,
+              pooled: speciesDiagnosisObj.formValue.pooled,
+              new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
+            });
 
         },
         error => {
@@ -1145,7 +1153,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
                 message: 'Your event was successfully saved. The Event ID is ' + event.id,
                 messageIcon: 'check',
                 confirmButtonText: 'OK',
-                showCancelButton : true
+                showCancelButton: true
               }
             }
           );

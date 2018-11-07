@@ -1,27 +1,29 @@
 <h1 mat-dialog-title>
-  <mat-icon>share</mat-icon>Share this event
+  <mat-icon>share</mat-icon>Create Sharing Link
 </h1>
 
 <mat-dialog-content>
 
   <div class="share-link-div">
-    <h4>
-      <mat-icon>link</mat-icon> Create sharing link
-    </h4>
-    This event's details page can always be found at <code>{{appURL}}/event/{{eventID}}</code>. This URL can be shared
-    as is. <br />
 
-    To create a short, more easily shareable link that uses the <a href="https://go.usa.gov/">go.usa.gov</a> URL
-    shortening service, click below.
-    <p>
+    This event's details page can always be found at 
+    <code><a href="{{appURL}}/event/{{eventID}}" target="_blank">{{appURL}}/event/{{eventID}}</a></code>.
+    This URL can be shared as is. 
+    <small>
+        To create a short, more easily shareable link that uses the <a href="https://go.usa.gov/" target="_blank">go.usa.gov</a> URL shortening service, click below.
+    </small>
 
-      <button mat-stroked-button (click)="generateShortURL()">
-        <mat-icon>link</mat-icon> Generate shortened link
-      </button>
-      <p>
+    <button mat-stroked-button (click)="generateShortURL()">
+      <mat-icon>link</mat-icon> Generate shortened link
+    </button>
 
-        <mat-progress-bar mode="indeterminate " *ngIf="submitLoading"></mat-progress-bar>
-        <span *ngIf="shortURL !== ''">Short Shareable Link: {{shortURL}}</span>
+    <mat-progress-bar mode="indeterminate " *ngIf="submitLoading"></mat-progress-bar>
+    <!-- <span *ngIf="shortURL !== ''">Short Shareable Link: {{shortURL}}</span> -->
+
+    <div id="sharableLink" *ngIf="shortURL !== ''">
+      <label>Short sharable link:</label>
+      <code><a href="{{shortURL}}" target="_blank">{{shortURL}}</a></code>.
+    </div>
   </div>
 
 
@@ -41,8 +43,10 @@
   <!-- <button mat-button color="warn" (click)="this.gnisLookupDialogRef.close('cancel');">
     <mat-icon>cancel</mat-icon>&nbsp;Cancel
   </button> -->
-  <button mat-button color="primary" type="submit" (click)="this.eventDetailsShareDialogRef.close('cancel');">
-    <mat-icon>check</mat-icon>&nbsp;Done
-  </button>
+  <div class="form-buttons-flex center">
+    <button mat-button color="primary" type="submit" (click)="this.eventDetailsShareDialogRef.close('cancel');">
+      <mat-icon>check</mat-icon>&nbsp;Done
+    </button>
+  </div>
 
 </mat-dialog-actions>

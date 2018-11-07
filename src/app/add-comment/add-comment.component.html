@@ -7,7 +7,7 @@
     <div class="vertical-form-container">
 
       <mat-form-field class="general-comment-text-area">
-        <textarea matInput maxlength="1000" #comment placeholder="Comment" formControlName="comment"></textarea>
+        <textarea matInput maxlength="1000" #comment placeholder="Comment" formControlName="comment" rows="4"></textarea>
         <mat-hint align="end">{{comment.value.length}} / 1000</mat-hint>
       </mat-form-field>
 
@@ -24,11 +24,17 @@
 </mat-dialog-content>
 <mat-dialog-actions>
 
-  <button mat-button color="warn" (click)="this.addCommentDialogRef.close('cancel');">
-    <mat-icon>cancel</mat-icon>&nbsp;Cancel
-  </button>
-  <button mat-button color="primary" type="submit" [disabled]="commentForm.invalid" (click)="onSubmit(commentForm.value)">
-    <mat-icon>{{data.actionButtonIcon}}</mat-icon> {{data.action_button_text}}
-  </button>
+  <div class="detail-section-buttons">
+
+    <button mat-button color="warn" (click)="this.addCommentDialogRef.close('cancel');">
+      <mat-icon>cancel</mat-icon>&nbsp;Cancel
+    </button>
+    
+    <button mat-button color="primary" type="submit" [disabled]="commentForm.invalid" (click)="onSubmit(commentForm.value)">
+      <mat-icon>{{data.actionButtonIcon}}</mat-icon> {{data.action_button_text}}
+    </button>
+
+  </div>
+  
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

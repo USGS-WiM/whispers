@@ -119,7 +119,7 @@ body {
     // Panel Body
     .mat-expansion-panel-body{
         padding: 15px;
-        background-color: $bg;
+        // background-color: $bg;
         border-bottom: 1px solid $border-color;
 
         // Paragraphs
@@ -596,4 +596,102 @@ input[type=checkbox]{
             }
         }
     }
+}
+
+
+.mat-dialog-title{
+    display: flex !important;
+
+    span,i{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+.nomargin{
+    margin: 0 !important;
+}
+
+
+// Map Adjustments
+// Map Adjustments
+// Map Adjustments
+.leaflet-control-layers label{
+    text-align: left !important;
+}
+.leaflet-touch .leaflet-bar a{
+    line-height: 25px !important;
+}
+.leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar{
+    border: 1px solid fade-out(#A0AFCD, 0.6) !important;
+    background-color: white;
+    color: #10152C;
+}
+.legend{
+    background-color: white !important;
+    padding: 0;
+
+    .mat-expansion-panel-body{
+        max-height: 210px !important;
+        overflow: auto !important;
+    }
+
+    .legend-icon{
+        display: flex;
+        position: relative;
+
+        label{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 22px;
+            height: 24px;
+        }
+
+        .wmm-pin{
+            z-index: 0;
+            top: 14px;
+            left: 4px;
+            position: absolute !important;
+            transform: scale(0.65);
+        }
+        .wmm-square{
+            position: absolute !important;
+            transform: scale(0.8);
+            top: 1px;
+            left: 4px;
+        }
+    }
+}
+
+// Flyways Legend
+#watershedsLegend,
+#flywaysLegend{
+
+    .legend-label{
+        font-size: 14px;
+        font-weight: 600;
+        text-align: left;
+        display: block;
+        margin: 5px 0 1px 0;
+        padding-top: 0;
+    }
+}
+
+.transbg{
+    background-color: transparent !important;
+}
+
+.no-data{
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    padding: 25px 15px;
+    box-sizing: border-box;
+    opacity: 0.7;
+    color: fade-out(#313b57, 0.2);
 }

@@ -6,10 +6,11 @@
 .vertical-form-container {
     display: flex;
     flex-direction: column;
+    padding-bottom: 15px;
 }
 
 .form-control {
-    width: 18em; // margin: 10px;
+    width: 320px; // margin: 10px;
 }
 
 .alert {
@@ -18,7 +19,7 @@
 }
 
 .diagnosis-number-control {
-    width: 8em;
+    width: 320px;
     margin-top: 10px;
     margin-bottom: 10px;
     margin-left: 5px;
@@ -26,9 +27,30 @@
 }
 
 .species-number-control {
-    width: 12em;
+    width: 320px;
     margin-top: 10px;
     margin-bottom: 10px;
-    margin-left: 5px;
     flex-grow: 1;
 }
+
+
+.detail-section-buttons{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    &.centered{
+        justify-content: center;
+    }
+
+    button{
+        position: relative;
+        top: -2px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+

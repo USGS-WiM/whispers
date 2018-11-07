@@ -36,6 +36,8 @@ import { SpeciesService } from '@app/services/species.service';
 
 import { SaveSearchComponent } from '@app/save-search/save-search.component';
 
+import { User } from '@interfaces/user';
+
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
 import { UserRegistrationComponent } from '@app/user-registration/user-registration.component';

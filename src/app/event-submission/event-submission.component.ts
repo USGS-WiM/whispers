@@ -177,6 +177,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   filteredAdminLevelOnes = [];
   filteredAdminLevelTwos = [];
   filteredSpecies = [];
+  filteredContacts = [];
   /** Subject that emits when the component has been destroyed. */
   private _onDestroy = new Subject<void>();
 
@@ -191,12 +192,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   speciesFilterCtrl: FormControl = new FormControl();
   contactFilterCtrl: FormControl = new FormControl();
 
-  //filteredAdminLevelOnes: ReplaySubject<AdministrativeLevelOne[]> = new ReplaySubject<AdministrativeLevelOne[]>();
-  //filteredAdminLevelTwos: ReplaySubject<AdministrativeLevelTwo[]> = new ReplaySubject<AdministrativeLevelTwo[]>();
+  // filteredAdminLevelOnes: ReplaySubject<AdministrativeLevelOne[]> = new ReplaySubject<AdministrativeLevelOne[]>();
+  // filteredAdminLevelTwos: ReplaySubject<AdministrativeLevelTwo[]> = new ReplaySubject<AdministrativeLevelTwo[]>();
   // filteredSpecies: ReplaySubject<Species[]> = new ReplaySubject<Species[]>();
-  filteredContacts: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>();
-
-
+  // filteredContacts: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>();
 
   buildEventSubmissionForm() {
     this.eventSubmissionForm = this.formBuilder.group({
@@ -242,6 +241,14 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     // initiate an empty replaysubject
     this.filteredSpecies[0].push(new ReplaySubject<Species[]>());
     this.ManageSpeciesControl(0, 0);
+    // this.filteredSpecies.push(new ReplaySubject<Species[]>());
+
+
+    const eventLocationContacts = new Array<ReplaySubject<Contact[]>>();
+    this.filteredContacts.push(eventLocationContacts);
+    // initiate an empty replaysubject
+    this.filteredContacts[0].push(new ReplaySubject<Contact[]>());
+    this.ManageContactControl(0, 0);
     // this.filteredSpecies.push(new ReplaySubject<Species[]>());
 
     // this.filteredAdminLevelOnes = new Array<Observable<any>>();
@@ -450,13 +457,23 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       });
   }
 
-  // ManageContactControl(eventLocationIndex: number, locationContactIndex: number) {
-  //   // tslint:disable-next-line:max-line-length
-  //   const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts') as FormArray;
-  //   this.filteredContacts[eventLocationIndex][locationContactIndex] = arrayControl.at(locationContactIndex).get('contact').valueChanges
-  //     .startWith(null)
-  //     .map(val => this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
-  // }
+  ManageContactControl(eventLocationIndex: number, locationContactIndex: number) {
+    // tslint:disable-next-line:max-line-length
+    // const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts') as FormArray;
+    // this.filteredContacts[eventLocationIndex][locationContactIndex] = arrayControl.at(locationContactIndex).get('contact').valueChanges
+    //   .startWith(null)
+    //   .map(val => this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
+
+    // populate the species options list for the specific control
+    this.filteredContacts[eventLocationIndex][locationContactIndex].next(this.userContacts);
+
+    // listen for search field value changes
+    this.contactFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterContacts(eventLocationIndex, locationContactIndex);
+      });
+  }
 
   ManageAdminLevelOneControl(eventLocationIndex: number) {
 
@@ -660,7 +677,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
             return 0;
           });
 
-          // load the initial bank list
+          // populate the search select options for the initial control
           this.filteredSpecies[0][0].next(this.species);
 
           // listen for search field value changes
@@ -744,15 +761,15 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
             return 0;
           });
 
-          // load the initial contacts list
-          this.filteredContacts.next(this.userContacts);
+          // populate the search select options for the initial control
+          this.filteredContacts[0][0].next(this.userContacts);
 
-          // listen for search field value changes
-          this.contactFilterCtrl.valueChanges
-            .pipe(takeUntil(this._onDestroy))
-            .subscribe(() => {
-              this.filterContacts();
-            });
+          // // listen for search field value changes
+          // this.contactFilterCtrl.valueChanges
+          //   .pipe(takeUntil(this._onDestroy))
+          //   .subscribe(() => {
+          //     this.filterContacts();
+          //   });
         },
         error => {
           this.errorMessage = <any>error;
@@ -829,28 +846,24 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     );
   }
 
-  private filterContacts() {
+  private filterContacts(eventLocationIndex, locationContactIndex) {
     if (!this.userContacts) {
       return;
     }
     // get the search keyword
     let search = this.contactFilterCtrl.value;
     if (!search) {
-      this.filteredContacts.next(this.userContacts.slice());
+      this.filteredContacts[eventLocationIndex][locationContactIndex].next(this.userContacts.slice());
       return;
     } else {
       search = search.toLowerCase();
     }
     // filter the contacts
-    this.filteredContacts.next(
+    this.filteredContacts[eventLocationIndex][locationContactIndex].next(
       // tslint:disable-next-line:max-line-length
       this.userContacts.filter(contact => contact.first_name.toLowerCase().indexOf(search) > -1 || contact.last_name.toLowerCase().indexOf(search) > -1)
     );
   }
-
-
-  //this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
-
 
   createCommonEventDataObject(objectType, eventLocationIndex, objectInstanceIndex) {
 
@@ -1128,8 +1141,29 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     return form.controls.new_location_species.controls;
   }
 
-  // species diagnosis
-  // TODO: add an additional level of index
+  // location contacts
+  addLocationContact(eventLocationIndex) {
+    // tslint:disable-next-line:max-line-length
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
+    control.push(this.initLocationContacts());
+    const locationContactIndex = control.length - 1;
+
+    this.filteredContacts[eventLocationIndex].push(new ReplaySubject<Contact[]>());
+    this.ManageContactControl(eventLocationIndex, locationContactIndex);
+  }
+
+  removeLocationContact(eventLocationIndex, locationContactIndex) {
+    // tslint:disable-next-line:max-line-length
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
+    control.removeAt(locationContactIndex);
+
+    this.filteredContacts[eventLocationIndex].splice(locationContactIndex, 1);
+  }
+
+  getLocationContacts(form) {
+    return form.controls.new_location_contacts.controls;
+  }
+
   addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex) {
     // tslint:disable-next-line:max-line-length
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
@@ -1147,26 +1181,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   getSpeciesDiagnoses(form) {
     return form.controls.new_species_diagnoses.controls;
-  }
-
-
-  // location contacts
-  addLocationContacts(eventLocationIndex) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
-    control.push(this.initLocationContacts());
-
-    const locationContactIndex = control.length - 1;
-
-    //this.ManageContactControl(eventLocationIndex, locationContactIndex);
-  }
-
-  removeLocationContacts(eventLocationIndex, locationContactIndex) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
-    control.removeAt(locationContactIndex);
-  }
-
-  getLocationContacts(form) {
-    return form.controls.new_location_contacts.controls;
   }
 
   // location comments

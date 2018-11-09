@@ -678,7 +678,7 @@
                                   <mat-select formControlName="contact" placeholder="Contact Person" #contactSelect>
                                     <ngx-mat-select-search [formControl]="contactFilterCtrl" [placeholderLabel]="'Find contact...'"
                                       [noEntriesFoundLabel]="'no matching contact found'"></ngx-mat-select-search>
-                                    <mat-option *ngFor="let contact of filteredContacts | async" [value]="contact.id">
+                                    <mat-option *ngFor="let contact of filteredContacts[eventLocationIndex][locationContactIndex] | async" [value]="contact.id">
                                       <span>{{contact.first_name}}
                                         {{contact.last_name}} | {{contact.organization
                                         |displayValue:'name':this.organizations}}</span>
@@ -702,7 +702,7 @@
                                     <mat-icon>assignment_ind</mat-icon>
                                   </button>
                                   <button mat-icon-button color="warn" aria-label="Remove this contact from this location"
-                                    (click)="removeLocationContacts(eventLocationIndex, locationContactIndex)"
+                                    (click)="removeLocationContact(eventLocationIndex, locationContactIndex)"
                                     matTooltip="Remove this contact from this location">
                                     <mat-icon>remove_circle</mat-icon>
                                   </button>
@@ -715,7 +715,7 @@
                           </div>
 
                           <div class="button-row">
-                            <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContacts(eventLocationIndex)">
+                            <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContact(eventLocationIndex)">
                               <mat-icon>add_circle</mat-icon> Add Contact
                             </button>
                           </div>

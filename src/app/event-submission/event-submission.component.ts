@@ -174,6 +174,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   usgsSearch;
 
+  filteredAdminLevelOnes = [];
+  filteredAdminLevelTwos = [];
   /** Subject that emits when the component has been destroyed. */
   private _onDestroy = new Subject<void>();
 
@@ -188,10 +190,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   speciesFilterCtrl: FormControl = new FormControl();
   contactFilterCtrl: FormControl = new FormControl();
 
-  filteredAdminLevelOnes: ReplaySubject<AdministrativeLevelOne[]> = new ReplaySubject<AdministrativeLevelOne[]>();
-  filteredAdminLevelTwos: ReplaySubject<AdministrativeLevelTwo[]> = new ReplaySubject<AdministrativeLevelTwo[]>();
+  //filteredAdminLevelOnes: ReplaySubject<AdministrativeLevelOne[]> = new ReplaySubject<AdministrativeLevelOne[]>();
+  //filteredAdminLevelTwos: ReplaySubject<AdministrativeLevelTwo[]> = new ReplaySubject<AdministrativeLevelTwo[]>();
   filteredSpecies: ReplaySubject<Species[]> = new ReplaySubject<Species[]>();
   filteredContacts: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>();
+
+ 
 
   buildEventSubmissionForm() {
     this.eventSubmissionForm = this.formBuilder.group({
@@ -220,6 +224,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     this.eventLocationArray = this.eventSubmissionForm.get('new_event_locations') as FormArray;
+
+    this.filteredAdminLevelOnes = new Array<ReplaySubject<AdministrativeLevelOne[]>>();
+    this.ManageAdminLevelOneControl(0);
+  
+    this.filteredAdminLevelTwos = new Array<ReplaySubject<AdministrativeLevelTwo[]>>();
+    this.ManageAdminLevelTwoControl(0);
 
     // this.filteredAdminLevelOnes = new Array<Observable<any>>();
     //this.ManageAdminLevelOneControl(0);
@@ -453,21 +463,44 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   //     .map(val => this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
   // }
 
-  // ManageAdminLevelOneControl(eventLocationIndex: number) {
-  //   // tslint:disable-next-line:max-line-length
-  //   const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_one') as FormArray;
-  //   this.filteredAdminLevelOnes[eventLocationIndex] = arrayControl.valueChanges
-  //     .startWith(null)
-  //     .map(val => this.filter(val, this.adminLevelOnes, ['name']));
-  // }
+  ManageAdminLevelOneControl(eventLocationIndex: number) {
+    // tslint:disable-next-line:max-line-length
+    const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_one') as FormArray;
+
+
+    // load the initial adminLevelOnes list
+    this.filteredAdminLevelOnes[eventLocationIndex].next(this.adminLevelOnes);
+
+    // listen for search field value changes
+    this.adminLevelOneFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterAdminLevelOnes(eventLocationIndex);
+      });
+
+    // this part needs to change
+    // this.filteredAdminLevelOnes[eventLocationIndex] = arrayControl.valueChanges
+    //   .startWith(null)
+    //   .map(val => this.filter(val, this.adminLevelOnes, ['name']));
+  }
 
   ManageAdminLevelTwoControl(eventLocationIndex: number) {
     // tslint:disable-next-line:max-line-length
     const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_two') as FormArray;
+
+     // load the initial adminLevelOnes list
+     this.filteredAdminLevelOnes[eventLocationIndex].next(this.adminLevelOnes);
+
+     // listen for search field value changes
+     this.adminLevelOneFilterCtrl.valueChanges
+       .pipe(takeUntil(this._onDestroy))
+       .subscribe(() => {
+         this.filterAdminLevelOnes(eventLocationIndex);
+       });
     
-    this.filteredAdminLevelTwos[eventLocationIndex] = arrayControl.valueChanges
-      .startWith(null)
-      .map(val => this.filter(val, this.adminLevelTwos, ['name']));
+    // this.filteredAdminLevelTwos[eventLocationIndex] = arrayControl.valueChanges
+    //   .startWith(null)
+    //   .map(val => this.filter(val, this.adminLevelTwos, ['name']));
   }
 
   inputChangeTrigger(event) {
@@ -620,13 +653,13 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           this.adminLevelOnes = adminLevelOnes;
 
           // load the initial bank list
-          this.filteredAdminLevelOnes.next(this.adminLevelOnes);
+          this.filteredAdminLevelOnes[0].next(this.adminLevelOnes);
 
           // listen for search field value changes
           this.adminLevelOneFilterCtrl.valueChanges
             .pipe(takeUntil(this._onDestroy))
             .subscribe(() => {
-              this.filterAdminLevelOnes();
+              this.filterAdminLevelOnes(0);
             });
         },
         error => {
@@ -760,38 +793,38 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         '';
   }
 
-  private filterAdminLevelOnes() {
+  private filterAdminLevelOnes(eventLocationIndex) {
     if (!this.adminLevelOnes) {
       return;
     }
     // get the search keyword
     let search = this.adminLevelOneFilterCtrl.value;
     if (!search) {
-      this.filteredAdminLevelOnes.next(this.adminLevelOnes.slice());
+      this.filteredAdminLevelOnes[eventLocationIndex].next(this.adminLevelOnes.slice());
       return;
     } else {
       search = search.toLowerCase();
     }
     // filter the adminLevelOnes
-    this.filteredAdminLevelOnes.next(
+    this.filteredAdminLevelOnes[eventLocationIndex].next(
       this.adminLevelOnes.filter(admin_level_one => admin_level_one.name.toLowerCase().indexOf(search) > -1)
     );
   }
 
-  private filterAdminLevelTwos() {
+  private filterAdminLevelTwos(eventLocationIndex) {
     if (!this.adminLevelTwos) {
       return;
     }
     // get the search keyword
     let search = this.adminLevelTwoFilterCtrl.value;
     if (!search) {
-      this.filteredAdminLevelTwos.next(this.adminLevelTwos.slice());
+      this.filteredAdminLevelTwos[eventLocationIndex].next(this.adminLevelTwos.slice());
       return;
     } else {
       search = search.toLowerCase();
     }
     // filter the adminLevelTwos
-    this.filteredAdminLevelTwos.next(
+    this.filteredAdminLevelTwos[eventLocationIndex].next(
       this.adminLevelTwos.filter(admin_level_two => admin_level_two.name.toLowerCase().indexOf(search) > -1)
     );
   }
@@ -1199,13 +1232,13 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
             });
 
             // load the initial bank list
-            this.filteredAdminLevelTwos.next(this.adminLevelTwos);
+            this.filteredAdminLevelTwos[eventLocationIndex].next(this.adminLevelTwos);
 
             // listen for search field value changes
             this.adminLevelTwoFilterCtrl.valueChanges
               .pipe(takeUntil(this._onDestroy))
               .subscribe(() => {
-                this.filterAdminLevelTwos();
+                this.filterAdminLevelTwos(eventLocationIndex);
               });
 
             this.adminLevelTwosLoading = false;

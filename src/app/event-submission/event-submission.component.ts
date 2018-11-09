@@ -436,13 +436,13 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   // WIP: tying to use this example: https://stackoverflow.com/questions/51562826/how-to-use-mat-autocomplete-angular-material-autocomplete-inside-formarray-re
   // to do dynamic filteredSpecies arrays for each loc species instance. Not working - select displays "[Object oject]" instead of name. Not sure yet if this approach is going to work
 
-  // ManageSpeciesControl(eventLocationIndex: number, locationSpeciesIndex: number) {
-  //   // tslint:disable-next-line:max-line-length
-  //   const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species') as FormArray;
-  //   this.filteredSpecies[eventLocationIndex][locationSpeciesIndex] = arrayControl.at(locationSpeciesIndex).get('species').valueChanges
-  //     .startWith(null)
-  //     .map(val => this.filter(val, this.species, ['name']));
-  // }
+  ManageSpeciesControl(eventLocationIndex: number, locationSpeciesIndex: number) {
+    // tslint:disable-next-line:max-line-length
+    const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species') as FormArray;
+    this.filteredSpecies[eventLocationIndex][locationSpeciesIndex] = arrayControl.at(locationSpeciesIndex).get('species').valueChanges
+      .startWith(null)
+      .map(val => this.filter(val, this.species, ['name']));
+  }
   ///////////////////////////////////////////////// End WIP
 
   // ManageContactControl(eventLocationIndex: number, locationContactIndex: number) {
@@ -461,13 +461,14 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   //     .map(val => this.filter(val, this.adminLevelOnes, ['name']));
   // }
 
-  // ManageAdminLevelTwoControl(eventLocationIndex: number) {
-  //   // tslint:disable-next-line:max-line-length
-  //   const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_two') as FormArray;
-  //   this.filteredAdminLevelTwos[eventLocationIndex] = arrayControl.valueChanges
-  //     .startWith(null)
-  //     .map(val => this.filter(val, this.adminLevelTwos, ['name']));
-  // }
+  ManageAdminLevelTwoControl(eventLocationIndex: number) {
+    // tslint:disable-next-line:max-line-length
+    const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_two') as FormArray;
+    
+    this.filteredAdminLevelTwos[eventLocationIndex] = arrayControl.valueChanges
+      .startWith(null)
+      .map(val => this.filter(val, this.adminLevelTwos, ['name']));
+  }
 
   inputChangeTrigger(event) {
     event.currentTarget.dispatchEvent(new Event('input'));

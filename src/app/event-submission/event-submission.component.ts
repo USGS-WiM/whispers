@@ -230,6 +230,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this.filteredAdminLevelOnes.push(new ReplaySubject<AdministrativeLevelOne[]>());
     this.ManageAdminLevelOneControl(0);
 
+    this.filteredAdminLevelOnes.push(new ReplaySubject<AdministrativeLevelOne[]>());
+    this.ManageAdminLevelOneControl(0);
+
     this.filteredAdminLevelTwos = new Array<ReplaySubject<AdministrativeLevelTwo[]>>();
     this.filteredAdminLevelTwos.push(new ReplaySubject<AdministrativeLevelOne[]>());
     this.ManageAdminLevelTwoControl(0);

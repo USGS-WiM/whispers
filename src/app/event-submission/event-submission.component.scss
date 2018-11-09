@@ -1,7 +1,7 @@
 #eventSubmissionPage{
     display: block;
     width: 94%;
-    max-width: 900px;
+    max-width: 1000px;
     margin: 40px auto;
     border-radius: 4px;
     box-shadow: 0 1px 0 1.35px rgba(10,16,64,.08);
@@ -308,22 +308,6 @@
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .horizontal-form-container {
     display: flex;
     flex-direction: row;
@@ -361,14 +345,15 @@
 }
 
 .contact-select {
-    width: 50em;
+    width: 60em;
+    margin: 10px;
     flex-grow: 2;
 }
 
 .contact-type-select {
+    margin: 10px;
     flex-grow: 1;
 }
-
 
 
 .hint {

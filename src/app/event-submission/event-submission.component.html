@@ -105,7 +105,8 @@
                       <input matInput [matDatepicker]="qualityCheck" placeholder="NWHC Quality Check" formControlName="quality_check">
                       <mat-datepicker-toggle matSuffix [for]="qualityCheck"></mat-datepicker-toggle>
                       <mat-datepicker #qualityCheck></mat-datepicker>
-                      <mat-hint align="start" *ngIf="eventSubmissionForm.get('quality_check').disabled">Disabled if event incomplete</mat-hint>
+                      <mat-hint align="start" *ngIf="eventSubmissionForm.get('quality_check').disabled">Disabled if
+                        event incomplete</mat-hint>
                     </mat-form-field>
                   </div>
 
@@ -146,7 +147,8 @@
                 <div formArrayName="new_event_locations">
 
 
-                  <div *ngFor="let eventLocation of getEventLocations(eventSubmissionForm); let eventLocationIndex = index" class="event-location-box">
+                  <div *ngFor="let eventLocation of getEventLocations(eventSubmissionForm); let eventLocationIndex = index"
+                    class="event-location-box">
                     <!-- Begin repeating Event location markup-->
                     <mat-card class="event-location-card" [formGroupName]="eventLocationIndex">
                       <h3>Location {{eventLocationIndex+1}}</h3>
@@ -207,10 +209,11 @@
                             </mat-form-field>-->
 
                             <!-- State autocomplete control -->
-                            <mat-form-field class="form-control">
+                            <!-- <mat-form-field class="form-control">
                               <input type="text" matInput placeholder="State" aria-label="State" [matAutocomplete]="stateAutoComplete"
-                                formControlName="administrative_level_one" (ngModelChange)="updateAdminLevelTwoOptions($event)"
+                                formControlName="administrative_level_one" (ngModelChange)="updateAdminLevelTwoOptions($event, eventLocationIndex)"
                                 required>
+                              <mat-spinner *ngIf="adminLevelOnesLoading" [diameter]="20"></mat-spinner>
                               <mat-autocomplete #stateAutoComplete="matAutocomplete" [displayWith]="displayFnAdminLevelOne">
                                 <mat-option *ngFor="let admin_level_one of filteredAdminLevelOnes[eventLocationIndex] | async"
                                   [value]="admin_level_one.id">
@@ -223,7 +226,29 @@
                               </mat-hint>
                               <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_one').invalid">Please
                                 enter a value</mat-error>
+                            </mat-form-field> -->
+
+                            <!-- New experimental adminLevelOne search select  -->
+
+                            <mat-form-field class="form-control">
+                              <mat-select formControlName="administrative_level_one" placeholder="State"
+                                #adminLevelOneSelect (ngModelChange)="updateAdminLevelTwoOptions($event, eventLocationIndex)">
+                                <ngx-mat-select-search [formControl]="adminLevelOneFilterCtrl" [placeholderLabel]="'Find state...'"
+                                  [noEntriesFoundLabel]="'no matching state found'"></ngx-mat-select-search>
+                                <mat-option *ngFor="let admin_level_one of filteredAdminLevelOnes | async" [value]="admin_level_one.id">
+                                  {{admin_level_one.name}}
+                                </mat-option>
+                              </mat-select>
+                              <mat-hint align="start">Select a country to populate/update state list </mat-hint>
+                              <mat-hint align="end" matTooltip="Public field">
+                                <mat-icon>public</mat-icon>
+                              </mat-hint>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_one').invalid">Please
+                                enter a value</mat-error>
                             </mat-form-field>
+
+                            <!-- end New experimental adminLevelOne search select -->
+
 
                             <!--<mat-form-field class="form-control">
                               <mat-select placeholder="County" formControlName="administrative_level_two" required>
@@ -238,9 +263,10 @@
                             </mat-form-field>-->
 
                             <!-- County autocomplete control -->
-                            <mat-form-field class="form-control">
+                            <!-- <mat-form-field class="form-control">
                               <input type="text" matInput placeholder="County" aria-label="County" [matAutocomplete]="adminTwoAutoComplete"
                                 formControlName="administrative_level_two" required>
+                              <mat-spinner *ngIf="adminLevelTwosLoading" [diameter]="20"></mat-spinner>
                               <mat-autocomplete #adminTwoAutoComplete="matAutocomplete" [displayWith]="displayFnAdminLevelTwo">
                                 <mat-option *ngFor="let admin_level_two of filteredAdminLevelTwos[eventLocationIndex] | async"
                                   [value]="admin_level_two.id">
@@ -253,7 +279,27 @@
                               </mat-hint>
                               <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_two').invalid">Please
                                 enter a value</mat-error>
+                            </mat-form-field> -->
+                            <!-- End County autocomplete control -->
+
+                            <!-- new experimental adminLevelTwo search select -->
+                            <mat-form-field class="form-control">
+                              <mat-select formControlName="administrative_level_two" placeholder="County"
+                                #adminLevelTwoSelect>
+                                <ngx-mat-select-search [formControl]="adminLevelTwoFilterCtrl" [placeholderLabel]="'Find county...'"
+                                  [noEntriesFoundLabel]="'no matching county found'"></ngx-mat-select-search>
+                                <mat-option *ngFor="let admin_level_two of filteredAdminLevelTwos | async" [value]="admin_level_two.id">
+                                  {{admin_level_two.name}}
+                                </mat-option>
+                              </mat-select>
+                              <mat-hint align="start">Select a state to populate/update county list </mat-hint>
+                              <mat-hint align="end" matTooltip="Public field">
+                                <mat-icon>public</mat-icon>
+                              </mat-hint>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_two').invalid">Please
+                                enter a value</mat-error>
                             </mat-form-field>
+                            <!-- end new experimental adminLevelTwo search select -->
 
                           </div>
 
@@ -287,10 +333,9 @@
                           </div>
 
                           <h4>GNIS Standardized Location Name</h4>
-                           
+
                           <button mat-stroked-button color="primary" aria-label="Look up feature in Geographic Names Information System (GNIS) database"
-                            matTooltip="Look up feature in Geographic Names Information System (GNIS) database"
-                            (click)="openGNISLookupDialog(eventLocationIndex)">
+                            matTooltip="Look up feature in Geographic Names Information System (GNIS) database" (click)="openGNISLookupDialog(eventLocationIndex)">
                             <mat-icon>search</mat-icon>Look Up GNIS
                           </button>
 
@@ -338,12 +383,7 @@
                                         </mat-form-field>-->
 
                                     <!-- Species autocomplete control -->
-
-                                    <mat-form-field class="form-control">
-                                      <!-- (focus) function allows normal dropdown, but breaks the form by inserting string value instead of id -->
-                                      <!-- <input type="text" matInput placeholder="Species" aria-label="Species"
-                                        [matAutocomplete]="speciesAutoComplete" formControlName="species" (focus)="inputChangeTrigger($event)">
-                                      <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn"> -->
+                                    <!-- <mat-form-field class="form-control">
                                       <input type="text" matInput placeholder="Species" aria-label="Species"
                                         [matAutocomplete]="speciesAutoComplete" formControlName="species">
                                       <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn">
@@ -352,7 +392,21 @@
                                           <span>{{species.name}}</span>
                                         </mat-option>
                                       </mat-autocomplete>
+                                    </mat-form-field> -->
+                                    <!-- End Species autocomplete control -->
+
+
+                                    <!-- new experimental species search select -->
+                                    <mat-form-field class="form-control">
+                                      <mat-select formControlName="species" placeholder="Species" #speciesSelect>
+                                        <ngx-mat-select-search [formControl]="speciesFilterCtrl" [placeholderLabel]="'Find species...'"
+                                          [noEntriesFoundLabel]="'no matching species found'"></ngx-mat-select-search>
+                                        <mat-option *ngFor="let species of filteredSpecies | async" [value]="species.id">
+                                          {{species.name}}
+                                        </mat-option>
+                                      </mat-select>
                                     </mat-form-field>
+                                    <!-- end new experimental species search select -->
 
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Known Dead" type="number" formControlName="dead_count">
@@ -489,7 +543,9 @@
 
                           <div id="submissionCommentsForm">
                             <p>
-                              Text in at least one of the comment categories below is required. Please be as thorough as possible to aid interpretation of data and to potentially guide cause of death determination and management actions.
+                              Text in at least one of the comment categories below is required. Please be as thorough
+                              as possible to aid interpretation of data and to potentially guide cause of death
+                              determination and management actions.
                             </p>
 
                             <mat-form-field class="comment-text-area">
@@ -520,7 +576,7 @@
 
 
                             <mat-form-field class="comment-text-area">
-                              <textarea matInput #envFactors maxlength="1000"  rows="4" placeholder="Environmental Factors"
+                              <textarea matInput #envFactors maxlength="1000" rows="4" placeholder="Environmental Factors"
                                 formControlName="environmental_factors"></textarea>
                               <mat-hint align="start">
                                 <strong>storms, precipitation, temperature changes, migration, toxins, or other
@@ -553,7 +609,7 @@
                               </mat-hint>
                               <mat-hint align="end">{{generalComment.value.length}} / 1000</mat-hint>
                             </mat-form-field>
-                                    <!-- </div>
+                            <!-- </div>
                                   </div> -->
                           </div>
 
@@ -598,7 +654,7 @@
                                 </mat-form-field>-->
 
                                 <!-- Contacts autocomplete control -->
-                                <mat-form-field class="form-control contact-select">
+                                <!-- <mat-form-field class="form-control contact-select">
                                   <input type="text" matInput placeholder="Contact Person" aria-label="Contact Person"
                                     [matAutocomplete]="contactAutoComplete" formControlName="contact">
                                   <mat-autocomplete #contactAutoComplete="matAutocomplete" [displayWith]="displayFnContact">
@@ -609,10 +665,26 @@
                                         |displayValue:'name':this.organizations}}</span>
                                     </mat-option>
                                   </mat-autocomplete>
+                                </mat-form-field> -->
+                                <!-- End Contacts autocomplete control -->
+
+
+                                <!-- new experimental contact search select -->
+                                <mat-form-field class="contact-select">
+                                  <mat-select formControlName="contact" placeholder="Contact Person" #contactSelect>
+                                    <ngx-mat-select-search [formControl]="contactFilterCtrl" [placeholderLabel]="'Find contact...'"
+                                      [noEntriesFoundLabel]="'no matching contact found'"></ngx-mat-select-search>
+                                    <mat-option *ngFor="let contact of filteredContacts | async" [value]="contact.id">
+                                      <span>{{contact.first_name}}
+                                        {{contact.last_name}} | {{contact.organization
+                                        |displayValue:'name':this.organizations}}</span>
+                                    </mat-option>
+                                  </mat-select>
                                 </mat-form-field>
+                                <!-- end new experimental contact search select -->
 
                                 <mat-form-field class="form-control  contact-type-select">
-                                  <mat-select placeholder="Contact Type" formControlName="contact_type" required>
+                                  <mat-select placeholder="Contact Type" formControlName="contact_type">
                                     <mat-option *ngFor="let contactType of contactTypes" [value]="contactType.id">{{contactType.name}}</mat-option>
                                   </mat-select>
                                 </mat-form-field>
@@ -667,31 +739,31 @@
 
                           <div id="submissionReviewErrors">
                             <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('country').invalid">
-                                <mat-icon class="icon">error</mat-icon>
-                                <span class="alert-text">Missing country selection.</span>
-                              </mat-error>
-    
-                              <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_one').invalid">
-                                <mat-icon class="icon">error</mat-icon>
-                                <span class="alert-text">Missing state selection.</span>
-                              </mat-error>
-    
-                              <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_one').invalid">
-                                <mat-icon class="icon">error</mat-icon>
-                                <span class="alert-text">Missing county selection.</span>
-                              </mat-error>
-    
-                              <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('land_ownership').invalid">
-                                <mat-icon class="icon">error</mat-icon>
-                                <span class="alert-text">Missing land ownership selection.</span>
-                              </mat-error>
-    
-                              <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_contacts').invalid">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">Missing country selection.</span>
+                            </mat-error>
+
+                            <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_one').invalid">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">Missing state selection.</span>
+                            </mat-error>
+
+                            <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_one').invalid">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">Missing county selection.</span>
+                            </mat-error>
+
+                            <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('land_ownership').invalid">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">Missing land ownership selection.</span>
+                            </mat-error>
+
+                            <!-- <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_contacts').invalid">
                                 <mat-icon class="icon">error</mat-icon>
                                 <span class="alert-text">Missing contact type selection.</span>
-                              </mat-error>
+                              </mat-error> -->
                           </div>
-                          
+
 
                           <div class="form-nav-buttons">
                             <button mat-button matStepperPrevious type="button">
@@ -730,7 +802,7 @@
             </button>
           </div>
 
-          
+
 
 
           <!-- Begin event diagnoses section-->

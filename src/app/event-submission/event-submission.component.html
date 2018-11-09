@@ -184,7 +184,7 @@
                           <div class="horizontal-form-container">
 
                             <mat-form-field class="form-control">
-                              <mat-select placeholder="Country" formControlName="country" (ngModelChange)="updateAdminLevelOneOptions($event)"
+                              <mat-select placeholder="Country" formControlName="country" (ngModelChange)="updateAdminLevelOneOptions($event, eventLocationIndex)"
                                 required>
                                 <mat-option *ngFor="let country of countries" value="{{country.id}}">{{country.name}}</mat-option>
                               </mat-select>
@@ -231,11 +231,13 @@
                             <!-- New experimental adminLevelOne search select  -->
 
                             <mat-form-field class="form-control">
+                              <mat-spinner *ngIf="adminLevelOnesLoading" [diameter]="20"></mat-spinner>
                               <mat-select formControlName="administrative_level_one" placeholder="State"
                                 #adminLevelOneSelect (ngModelChange)="updateAdminLevelTwoOptions($event, eventLocationIndex)">
                                 <ngx-mat-select-search [formControl]="adminLevelOneFilterCtrl" [placeholderLabel]="'Find state...'"
                                   [noEntriesFoundLabel]="'no matching state found'"></ngx-mat-select-search>
-                                <mat-option *ngFor="let admin_level_one of filteredAdminLevelOnes | async" [value]="admin_level_one.id">
+                                <mat-option *ngFor="let admin_level_one of filteredAdminLevelOnes[eventLocationIndex] | async"
+                                  [value]="admin_level_one.id">
                                   {{admin_level_one.name}}
                                 </mat-option>
                               </mat-select>
@@ -284,11 +286,13 @@
 
                             <!-- new experimental adminLevelTwo search select -->
                             <mat-form-field class="form-control">
+                              <mat-spinner *ngIf="adminLevelTwosLoading" [diameter]="20"></mat-spinner>
                               <mat-select formControlName="administrative_level_two" placeholder="County"
                                 #adminLevelTwoSelect>
                                 <ngx-mat-select-search [formControl]="adminLevelTwoFilterCtrl" [placeholderLabel]="'Find county...'"
                                   [noEntriesFoundLabel]="'no matching county found'"></ngx-mat-select-search>
-                                <mat-option *ngFor="let admin_level_two of filteredAdminLevelTwos | async" [value]="admin_level_two.id">
+                                <mat-option *ngFor="let admin_level_two of filteredAdminLevelTwos[eventLocationIndex] | async"
+                                  [value]="admin_level_two.id">
                                   {{admin_level_two.name}}
                                 </mat-option>
                               </mat-select>
@@ -401,7 +405,7 @@
                                       <mat-select formControlName="species" placeholder="Species" #speciesSelect>
                                         <ngx-mat-select-search [formControl]="speciesFilterCtrl" [placeholderLabel]="'Find species...'"
                                           [noEntriesFoundLabel]="'no matching species found'"></ngx-mat-select-search>
-                                        <mat-option *ngFor="let species of filteredSpecies | async" [value]="species.id">
+                                        <mat-option *ngFor="let species of filteredSpecies[eventLocationIndex][locationSpeciesIndex] | async" [value]="species.id">
                                           {{species.name}}
                                         </mat-option>
                                       </mat-select>

@@ -1,6 +1,6 @@
 {
   "name": "whispers",
-  "version": "0.46.0",
+  "version": "0.47.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -34,6 +34,7 @@
     "hammerjs": "^2.0.8",
     "jquery": "^3.3.1",
     "leaflet": "^1.3.1",
+    "ngx-mat-select-search": "^1.4.2",
     "rxjs": "6.2.1",
     "rxjs-compat": "^6.2.1",
     "search_api": "https://github.com/usgs/search_api.git",

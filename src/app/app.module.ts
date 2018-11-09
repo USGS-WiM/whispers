@@ -5,6 +5,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
 
 import {
   MatAutocompleteModule,
@@ -187,7 +189,8 @@ import { UserRegistrationComponent } from './user-registration/user-registration
     MatToolbarModule,
     MatTooltipModule,
     MatBottomSheetModule,
-    MatStepperModule
+    MatStepperModule,
+    NgxMatSelectSearchModule
   ],
   providers: [
     AuthenticationService,

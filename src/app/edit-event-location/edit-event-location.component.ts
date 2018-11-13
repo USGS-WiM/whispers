@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
@@ -43,13 +43,22 @@ export class EditEventLocationComponent implements OnInit {
   latitudePattern: RegExp = (/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/);
   longitudePattern: RegExp = (/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/);
 
+  endDateBeforeStart(AC: AbstractControl) {
+    const start_date = AC.get('start_date').value;
+    const end_date = AC.get('end_date').value;
+    if ((start_date !== null && end_date !== null) && start_date > end_date) {
+      AC.get('end_date').setErrors({ endDateBeforeStart: true });
+    }
+    return null;
+  }
+
   buildEditEventLocationForm() {
     this.editEventLocationForm = this.formBuilder.group({
       id: null,
       event: null,
       name: '',
-      start_date: '',
-      end_date: '',
+      start_date: null,
+      end_date: null,
       country: [null, Validators.required],
       administrative_level_one: [null, Validators.required],
       administrative_level_two: [null, Validators.required],
@@ -58,7 +67,10 @@ export class EditEventLocationComponent implements OnInit {
       land_ownership: [null, Validators.required],
       gnis_name: '',
       gnis_id: ''
-    });
+    },
+      {
+        validator: [this.endDateBeforeStart]
+      });
   }
 
   constructor(
@@ -119,7 +131,7 @@ export class EditEventLocationComponent implements OnInit {
         }
       );
 
-      this.adminLevelTwoService.queryAdminLevelTwos(this.data.eventLocationData.administrative_level_one)
+    this.adminLevelTwoService.queryAdminLevelTwos(this.data.eventLocationData.administrative_level_one)
       .subscribe(
         adminLevelTwos => {
           this.adminLevelTwos = adminLevelTwos;

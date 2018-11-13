@@ -48,6 +48,8 @@
             <mat-hint align="end" matTooltip="Public field">
               <mat-icon>public</mat-icon>
             </mat-hint>
+            <mat-error *ngIf="addEventLocationForm.get('end_date').hasError('endDateBeforeStart')">Cannot
+              precede start date</mat-error>
           </mat-form-field>
         </div>
         <br>
@@ -66,7 +68,7 @@
               enter a value</mat-error>
           </mat-form-field>
 
-          <mat-form-field class="form-control">
+          <!-- <mat-form-field class="form-control">
             <mat-select placeholder="State" formControlName="administrative_level_one" (ngModelChange)="updateAdminLevelTwoOptions($event)"
               required>
               <mat-option *ngFor="let adminLevelOne of adminLevelOnes" value="{{adminLevelOne.id}}">{{adminLevelOne.name}}</mat-option>
@@ -77,11 +79,46 @@
             </mat-hint>
             <mat-error *ngIf="addEventLocationForm.get('administrative_level_one').invalid">Please
               enter a value</mat-error>
-          </mat-form-field>
+          </mat-form-field> -->
 
+          <!-- New experimental adminLevelOne search select  -->
           <mat-form-field class="form-control">
+            <mat-select formControlName="administrative_level_one" placeholder="State" #adminLevelOneSelect
+              (ngModelChange)="updateAdminLevelTwoOptions($event)">
+              <ngx-mat-select-search [formControl]="adminLevelOneFilterCtrl" [placeholderLabel]="'Find state...'"
+                [noEntriesFoundLabel]="'no matching state found'"></ngx-mat-select-search>
+              <mat-option *ngFor="let admin_level_one of filteredAdminLevelOnes | async" [value]="admin_level_one.id">
+                {{admin_level_one.name}}
+              </mat-option>
+            </mat-select>
+            <mat-hint align="start">Select a country to populate/update state list </mat-hint>
+            <mat-hint align="end" matTooltip="Public field">
+              <mat-icon>public</mat-icon>
+            </mat-hint>
+            <mat-error *ngIf="addEventLocationForm.get('administrative_level_one').invalid">Please
+              enter a value</mat-error>
+          </mat-form-field>
+          <!-- end New experimental adminLevelOne search select -->
+
+          <!-- <mat-form-field class="form-control">
             <mat-select placeholder="County" formControlName="administrative_level_two" required>
               <mat-option *ngFor="let adminLevelTwo of adminLevelTwos" value="{{adminLevelTwo.id}}">{{adminLevelTwo.name}}</mat-option>
+            </mat-select>
+            <mat-hint align="start">Select a state to populate/update county list </mat-hint>
+            <mat-hint align="end" matTooltip="Public field">
+              <mat-icon>public</mat-icon>
+            </mat-hint>
+           
+          </mat-form-field> -->
+
+          <!-- new experimental adminLevelTwo search select -->
+          <mat-form-field class="form-control">
+            <mat-select formControlName="administrative_level_two" placeholder="County" #adminLevelTwoSelect>
+              <ngx-mat-select-search [formControl]="adminLevelTwoFilterCtrl" [placeholderLabel]="'Find county...'"
+                [noEntriesFoundLabel]="'no matching county found'"></ngx-mat-select-search>
+              <mat-option *ngFor="let admin_level_two of filteredAdminLevelTwos | async" [value]="admin_level_two.id">
+                {{admin_level_two.name}}
+              </mat-option>
             </mat-select>
             <mat-hint align="start">Select a state to populate/update county list </mat-hint>
             <mat-hint align="end" matTooltip="Public field">
@@ -90,6 +127,8 @@
             <mat-error *ngIf="addEventLocationForm.get('administrative_level_two').invalid">Please
               enter a value</mat-error>
           </mat-form-field>
+          <!-- end new experimental adminLevelTwo search select -->
+
 
         </div>
 
@@ -244,18 +283,10 @@
         <ng-template matStepLabel>Species</ng-template>
         <div>
 
-          <!-- <h4>Species Affected</h4> -->
-          <!-- <button mat-icon-button color="accent">
-                  <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
-                </button> -->
           <div formArrayName="new_location_species">
-            <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(); let j = index">
+            <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(); let locationSpeciesIndex = index">
 
-
-
-              <div [formGroupName]="j">
-
-                <!-- <div class="horizontal-form-container"></div> -->
+              <div [formGroupName]="locationSpeciesIndex">
 
                 <div class="horizontal-form-container" class="species-controls-container">
 
@@ -268,7 +299,6 @@
                     </mat-hint>
                   </mat-form-field>
 
-
                   <!-- TODO: implement autocomplete for species later -->
                   <!-- <mat-form-field>
                     <input type="text" matInput placeholder="Species" aria-label="Species" [matAutocomplete]="speciesAutoComplete" formControlName="species">
@@ -280,38 +310,48 @@
                   </mat-form-field> -->
 
                   <mat-form-field class="species-number-control">
-                    <input matInput placeholder="Known Dead" type="number" formControlName="dead_count">
+                    <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count">
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
                     </mat-hint>
+                    <mat-error *ngIf="this.addEventLocationForm.get('new_location_species')['controls'][locationSpeciesIndex].get('dead_count').hasError('min')">Minimum
+                      value is 0</mat-error>
                   </mat-form-field>
 
                   <mat-form-field class="species-number-control">
-                    <input matInput placeholder="Estimated Dead" type="number" formControlName="dead_count_estimated">
+                    <input matInput placeholder="Estimated Dead" type="number" min="0" formControlName="dead_count_estimated">
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
                     </mat-hint>
+                    <mat-error *ngIf="this.addEventLocationForm.get('new_location_species')['controls'][locationSpeciesIndex].get('dead_count_estimated').hasError('min')">Minimum
+                      value is 0</mat-error>
                   </mat-form-field>
 
                   <mat-form-field class="species-number-control">
-                    <input matInput placeholder="Known Sick" type="number" formControlName="sick_count">
+                    <input matInput placeholder="Known Sick" type="number" min="0" formControlName="sick_count">
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
                     </mat-hint>
+                    <mat-error *ngIf="this.addEventLocationForm.get('new_location_species')['controls'][locationSpeciesIndex].get('sick_count').hasError('min')">Minimum
+                      value is 0</mat-error>
                   </mat-form-field>
 
                   <mat-form-field class="species-number-control">
-                    <input matInput placeholder="Estimated Sick" type="number" formControlName="sick_count_estimated">
+                    <input matInput placeholder="Estimated Sick" type="number" min="0" formControlName="sick_count_estimated">
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
                     </mat-hint>
+                    <mat-error *ngIf="this.addEventLocationForm.get('new_location_species')['controls'][locationSpeciesIndex].get('sick_count_estimated').hasError('min')">Minimum
+                      value is 0</mat-error>
                   </mat-form-field>
 
                   <mat-form-field class="species-number-control">
-                    <input matInput placeholder="Est. Population at Risk" type="number" formControlName="population_count">
+                    <input matInput placeholder="Population" type="number" min="0" formControlName="population_count">
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
                     </mat-hint>
+                    <mat-error *ngIf="this.addEventLocationForm.get('new_location_species')['controls'][locationSpeciesIndex].get('population_count').hasError('min')">Minimum
+                      value is 0</mat-error>
                   </mat-form-field>
 
                   <mat-form-field class="species-number-control">
@@ -333,7 +373,7 @@
                   </mat-form-field>
 
                   <mat-form-field class="species-number-control">
-                    <mat-select placeholder="Captivity" formControlName="captive">
+                    <mat-select placeholder="Captive" formControlName="captive">
                       <mat-option [value]="true">Captive > 72 hours</mat-option>
                       <mat-option [value]="false">Wild and/or free-ranging</mat-option>
                     </mat-select>
@@ -343,7 +383,7 @@
                   </mat-form-field>
 
                   <button mat-icon-button color="accent" aria-label="Apply species to all locations" matTooltip="Apply species to all locations"
-                    (click)="createCommonEventDataObject('species', i, j )">
+                    (click)="createCommonEventDataObject('species', locationSpeciesIndex )">
                     <i class="material-icons">group_work</i>
                   </button>
 
@@ -386,9 +426,9 @@
         </div>
 
         <div formArrayName="new_location_contacts">
-          <div class="contacts-container" *ngFor="let locationContacts of getLocationContacts(); let k = index">
+          <div class="contacts-container" *ngFor="let locationContacts of getLocationContacts(); let locationContactIndex = index">
 
-            <div class="horizontal-form-container contact-controls-container" [formGroupName]="k">
+            <div class="horizontal-form-container contact-controls-container" [formGroupName]="locationContactIndex">
               <mat-form-field class="form-control contact-select">
                 <mat-select placeholder="Contact" formControlName="id">
                   <mat-option *ngFor="let contact of userContacts" [value]="contact.id">{{contact.first_name}}
@@ -407,7 +447,7 @@
               <div class="contact-button-div">
 
                 <button mat-icon-button color="accent" aria-label="Apply contact to all locations" matTooltip="Apply contact to all locations"
-                  (click)="createCommonEventDataObject('contact', i, k )">
+                  (click)="createCommonEventDataObject('contact', locationContactIndex)">
                   <i class="material-icons">group_work</i>
                 </button>
 
@@ -443,40 +483,6 @@
           </button>
         </div>
 
-      </mat-step>
-
-      <mat-step [stepControl]="addEventLocationForm">
-        <ng-template matStepLabel>Service Request</ng-template>
-
-        <div>
-          <h3>
-            Specimen Consultation and Diagnostic Services Request &nbsp;&nbsp;&nbsp;&nbsp;
-            <strong>
-              <mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT
-            </strong>
-          </h3>
-
-          <h4>Request consultation and diagnostic services for specimens of affected species at this
-            location.
-          </h4>
-
-          <mat-radio-group>
-            <mat-radio-button value="1">Request diagnostic and consultative services
-            </mat-radio-button>
-            <p>
-              <mat-radio-button value="2">Request consultative services ONLY </mat-radio-button>
-              <p>
-                <mat-radio-button value="3">Request no services </mat-radio-button>
-          </mat-radio-group>
-        </div>
-
-        <div>
-          <button mat-button matStepperPrevious type="button">
-            <i class="material-icons"> arrow_back_ios </i> Back</button>
-          <button mat-button matStepperNext type="button"> Next
-            <i class="material-icons"> navigate_next </i>
-          </button>
-        </div>
       </mat-step>
 
       <mat-step>

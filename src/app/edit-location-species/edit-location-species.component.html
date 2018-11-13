@@ -22,7 +22,7 @@
       <br />
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Population" type="number" formControlName="population_count">
+        <input matInput placeholder="Population" type="number" min="0"  formControlName="population_count">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -31,7 +31,7 @@
       <br />
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Known Dead" type="number" formControlName="dead_count">
+        <input matInput placeholder="Known Dead" type="number" min="0"  formControlName="dead_count">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -40,7 +40,7 @@
       <br />
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Estimated Dead" type="number" formControlName="dead_count_estimated">
+        <input matInput placeholder="Estimated Dead" type="number" min="0"  formControlName="dead_count_estimated">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -49,7 +49,7 @@
       <br />
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Known Sick" type="number" formControlName="sick_count">
+        <input matInput placeholder="Known Sick" type="number" min="0"  min="0"  formControlName="sick_count">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -58,7 +58,7 @@
       <br />
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Estimated Sick" type="number" formControlName="sick_count_estimated">
+        <input matInput placeholder="Estimated Sick" type="number" min="0"  formControlName="sick_count_estimated">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>

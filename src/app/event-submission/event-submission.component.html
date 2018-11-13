@@ -160,6 +160,7 @@
                           <ng-template matStepLabel>Location Details</ng-template>
 
                           <div class="horizontal-form-container">
+
                             <mat-form-field class="form-control">
                               <input matInput [matDatepicker]="startDate" placeholder="Location Start Date"
                                 formControlName="start_date">
@@ -168,6 +169,8 @@
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('start_date').hasError('startDateTodayorLaterMortalityEvent')">Must
+                                be today or later for morbidity/mortality events </mat-error>
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
@@ -177,6 +180,8 @@
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
+                              <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('end_date').hasError('endDateBeforeStart')">Cannot
+                                precede start date</mat-error>
                             </mat-form-field>
                           </div>
                           <br>
@@ -367,7 +372,7 @@
                         <!-- event location species step -->
                         <mat-step [stepControl]="eventSubmissionForm">
 
-                          <ng-template matStepLabel>Species</ng-template>
+                          <ng-template matStepLabel>Species & Species Diagnosis</ng-template>
                           <div>
 
                             <div formArrayName="new_location_species">
@@ -405,7 +410,8 @@
                                       <mat-select formControlName="species" placeholder="Species" #speciesSelect>
                                         <ngx-mat-select-search [formControl]="speciesFilterCtrl" [placeholderLabel]="'Find species...'"
                                           [noEntriesFoundLabel]="'no matching species found'"></ngx-mat-select-search>
-                                        <mat-option *ngFor="let species of filteredSpecies[eventLocationIndex][locationSpeciesIndex] | async" [value]="species.id">
+                                        <mat-option *ngFor="let species of filteredSpecies[eventLocationIndex][locationSpeciesIndex] | async"
+                                          [value]="species.id">
                                           {{species.name}}
                                         </mat-option>
                                       </mat-select>
@@ -413,42 +419,54 @@
                                     <!-- end new experimental species search select -->
 
                                     <mat-form-field class="species-number-control-w-help">
-                                      <input matInput placeholder="Known Dead" type="number" formControlName="dead_count">
+                                      <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count">
                                       <mat-icon class="hint-fix" matSuffix matTooltip="Exact minimum count of the cumulative number of dead animals (not including euthanized) over the length of the event at this location. Include euthanized. If 0 observed, enter 0. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
+                                      <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('dead_count').hasError('min')">Minimum
+                                        value is 0</mat-error>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control-w-help">
-                                      <input matInput placeholder="Estimated Dead" type="number" formControlName="dead_count_estimated">
+                                      <input matInput placeholder="Estimated Dead" type="number" min="0"
+                                        formControlName="dead_count_estimated">
                                       <mat-icon class="hint-fix" matSuffix matTooltip="Best guess of the maximum number of animals that died (include any known dead animals) at this location over the length of the event. Include euthanized with sick. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
+                                      <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('dead_count_estimated').hasError('min')">Minimum
+                                        value is 0</mat-error>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control-w-help">
-                                      <input matInput placeholder="Known Sick" type="number" formControlName="sick_count">
+                                      <input matInput placeholder="Known Sick" type="number" min="0" formControlName="sick_count">
                                       <mat-icon class="hint-fix" matSuffix matTooltip="Exact minimum count of animals exhibiting clinical signs of illness at the point in time that the observation was made at this location. If site visited repeatedly, use number remaining sick/injured plus number recovered from being sick/injured. Include euthanized. If 0 observed, enter 0. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
+                                      <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('sick_count').hasError('min')">Minimum
+                                        value is 0</mat-error>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control-w-help">
-                                      <input matInput placeholder="Estimated Sick" type="number" formControlName="sick_count_estimated">
+                                      <input matInput placeholder="Estimated Sick" type="number" min="0"
+                                        formControlName="sick_count_estimated">
                                       <mat-icon class="hint-fix" matSuffix matTooltip="Best guess of the maximum number of animals that might be showing clinical signs (include any known sick animals) at the point in time that the observation was made at this location. If site visited repeatedly, use number remaining sick/injured plus number recovered from being sick/injured. Include euthanized with sick. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
+                                      <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('sick_count_estimated').hasError('min')">Minimum
+                                        value is 0</mat-error>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-bias-control">
-                                      <input matInput placeholder="Population" type="number" formControlName="population_count">
+                                      <input matInput placeholder="Population" type="number" min="0" formControlName="population_count">
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
+                                      <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('population_count').hasError('min')">Minimum
+                                        value is 0</mat-error>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-bias-control">
@@ -484,14 +502,18 @@
                                         matTooltip="Apply species to all locations" (click)="createCommonEventDataObject('species', eventLocationIndex, locationSpeciesIndex )">
                                         <mat-icon>group_work</mat-icon>
                                       </button>
-                                      <button mat-icon-button color="accent" aria-label="Add Species Diagnosis"
-                                        matTooltip="Add Species Diagnosis" (click)="openAddSpeciesDiagnosisDialog(eventLocationIndex,locationSpeciesIndex)">
-                                        <mat-icon>note_add</mat-icon>
-                                      </button>
+
                                       <button mat-icon-button color="warn" aria-label="Remove this species from this location"
                                         (click)="removeLocationSpecies(eventLocationIndex, locationSpeciesIndex)"
                                         matTooltip="Remove this species from this location">
                                         <mat-icon>remove_circle</mat-icon>
+                                      </button>
+                                    </div>
+
+                                    <div class="contact-button-div">
+                                      <button mat-button color="accent" aria-label="Add Species Diagnosis" matTooltip="Add Species Diagnosis"
+                                        (click)="openAddSpeciesDiagnosisDialog(eventLocationIndex,locationSpeciesIndex)">
+                                        <mat-icon>note_add</mat-icon> Add Species Diagnosis
                                       </button>
                                     </div>
                                   </div>
@@ -678,7 +700,8 @@
                                   <mat-select formControlName="contact" placeholder="Contact Person" #contactSelect>
                                     <ngx-mat-select-search [formControl]="contactFilterCtrl" [placeholderLabel]="'Find contact...'"
                                       [noEntriesFoundLabel]="'no matching contact found'"></ngx-mat-select-search>
-                                    <mat-option *ngFor="let contact of filteredContacts[eventLocationIndex][locationContactIndex] | async" [value]="contact.id">
+                                    <mat-option *ngFor="let contact of filteredContacts[eventLocationIndex][locationContactIndex] | async"
+                                      [value]="contact.id">
                                       <span>{{contact.first_name}}
                                         {{contact.last_name}} | {{contact.organization
                                         |displayValue:'name':this.organizations}}</span>
@@ -686,6 +709,20 @@
                                   </mat-select>
                                 </mat-form-field>
                                 <!-- end new experimental contact search select -->
+
+
+                                <!-- new experimental species search select -->
+                                <!-- <mat-form-field class="form-control">
+                                    <mat-select formControlName="species" placeholder="Species" #speciesSelect>
+                                      <ngx-mat-select-search [formControl]="speciesFilterCtrl" [placeholderLabel]="'Find species...'"
+                                        [noEntriesFoundLabel]="'no matching species found'"></ngx-mat-select-search>
+                                      <mat-option *ngFor="let species of filteredSpecies[eventLocationIndex][locationSpeciesIndex] | async"
+                                        [value]="species.id">
+                                        {{species.name}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field> -->
+                                <!-- end new experimental species search select -->
 
                                 <mat-form-field class="form-control  contact-type-select">
                                   <mat-select placeholder="Contact Type" formControlName="contact_type">
@@ -957,7 +994,7 @@
 
                   <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar "></mat-progress-bar>
                   <p>
-                    <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid " (click)="openEventSubmitConfirm(eventSubmissionForm.value)">
+                    <button mat-raised-button color="primary" (click)="openEventSubmitConfirm(eventSubmissionForm.value)">
                       <mat-icon>pageview</mat-icon> Review Event Submission
                     </button>
                     <p>

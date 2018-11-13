@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
@@ -9,6 +9,8 @@ import { take, takeUntil } from 'rxjs/operators';
 
 import { ReplaySubject, Subject } from 'rxjs';
 
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 
 import { MatDialog, MatDialogRef, MatSelect } from '@angular/material';
 import { MatBottomSheetModule, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
@@ -85,11 +87,12 @@ import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-
 import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
 import { EventSubmissionSuccessComponent } from '@app/event-submission/event-submission-success/event-submission-success.component';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
+import { DateValidators } from '@validators/date.validator';
 
 import * as search_api from 'usgs-search-api';
+import { getTreeMultipleDefaultNodeDefsError } from '@angular/cdk/tree';
 
 declare const search_api: search_api;
-
 
 @Component({
   selector: 'app-event-submission',
@@ -196,6 +199,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   // filteredAdminLevelTwos: ReplaySubject<AdministrativeLevelTwo[]> = new ReplaySubject<AdministrativeLevelTwo[]>();
   // filteredSpecies: ReplaySubject<Species[]> = new ReplaySubject<Species[]>();
   // filteredContacts: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>();
+
+
 
   buildEventSubmissionForm() {
     this.eventSubmissionForm = this.formBuilder.group({
@@ -787,9 +792,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   getErrorMessage(formControlName) {
+
     return this.eventSubmissionForm.get(formControlName).hasError('required') ? 'Please enter a value' :
-      this.eventSubmissionForm.get(formControlName).hasError('email') ? 'Not a valid email' :
-        '';
+      this.eventSubmissionForm.get(formControlName).hasError('email') ? 'Not a valid email' : '';
   }
 
   private filterAdminLevelOnes(eventLocationIndex) {
@@ -932,9 +937,29 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         break;
     }
 
-    console.log(this.commonEventData);
-
+    console.log('Common event data: ' + this.commonEventData);
   }
+
+  endDateBeforeStart(AC: AbstractControl) {
+    const start_date = AC.get('start_date').value;
+    const end_date = AC.get('end_date').value;
+    if ((start_date !== null && end_date !== null) && start_date > end_date) {
+      AC.get('end_date').setErrors({ endDateBeforeStart: true });
+    }
+    return null;
+  }
+
+  // startDateTodayorLaterMortalityEvent(AC: AbstractControl) {
+  //   const start_date = AC.get('start_date').value;
+  //   const event_type = AC.get('event_type').value;
+  //   const today = APP_UTILITIES.TODAY;
+  //   if (event_type === 1) {
+  //     if ((start_date !== null) && start_date < today) {
+  //       AC.get('start_date').setErrors({ startDateTodayorLaterMortalityEvent: true });
+  //     }
+  //   }
+  //   return null;
+  // }
 
   initEventLocation() {
     return this.formBuilder.group({
@@ -960,17 +985,21 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       new_location_contacts: this.formBuilder.array([
         this.initLocationContacts()
       ])
-    });
+    },
+      {
+        validator: [this.endDateBeforeStart]
+      }
+    );
   }
 
   initLocationSpecies() {
     return this.formBuilder.group({
       species: [null, Validators.required],
-      population_count: null,
-      sick_count: null,
-      dead_count: null,
-      sick_count_estimated: null,
-      dead_count_estimated: null,
+      population_count: [null, Validators.min(0)],
+      sick_count:  [null, Validators.min(0)],
+      dead_count:  [null, Validators.min(0)],
+      sick_count_estimated:  [null, Validators.min(0)],
+      dead_count_estimated:  [null, Validators.min(0)],
       priority: null,
       captive: false,
       age_bias: null,
@@ -1041,6 +1070,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     // initiate an empty replaysubject
     this.filteredSpecies[newEventLocationIndex].push(new ReplaySubject<Species[]>());
     this.ManageSpeciesControl(newEventLocationIndex, 0);
+
+    const eventLocationContacts = new Array<ReplaySubject<Contact[]>>();
+    this.filteredContacts.push(eventLocationContacts);
+    // initiate an empty replaysubject
+    this.filteredContacts[newEventLocationIndex].push(new ReplaySubject<Contact[]>());
+    this.ManageContactControl(newEventLocationIndex, 0);
 
     if (this.commonEventData.species.length > 0) {
 

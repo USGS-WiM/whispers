@@ -1,6 +1,6 @@
 {
   "name": "whispers",
-  "version": "0.47.0",
+  "version": "0.48.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -21,6 +21,7 @@
     "@angular/forms": "6.0.7",
     "@angular/http": "6.0.7",
     "@angular/material": "^6.4.7",
+    "@angular/material-moment-adapter": "^7.0.3",
     "@angular/platform-browser": "6.0.7",
     "@angular/platform-browser-dynamic": "6.0.7",
     "@angular/router": "6.0.7",

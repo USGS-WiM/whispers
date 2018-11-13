@@ -7,7 +7,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
-
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -225,7 +224,7 @@ import { UserRegistrationComponent } from './user-registration/user-registration
     EventLocationContactService,
     ServiceRequestService,
     DisplayValuePipe,
-    DatePipe,
+    DatePipe
   ],
   bootstrap: [AppComponent],
   entryComponents: [

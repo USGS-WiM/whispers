@@ -6,6 +6,10 @@ import { APP_SETTINGS } from '@app/app.settings';
 @Injectable()
 export class APP_UTILITIES {
 
+    public static get TODAY(): string { return new Date().toISOString().substr(0, 10); }
+
+    public static get TIME(): string { return new Date().toISOString().substr(14, 22); }
+
     public static get DEFAULT_COUNTRY_ID(): string {
 
         // TODO: improve this function to actually lookup the default country id 

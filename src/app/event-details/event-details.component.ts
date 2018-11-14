@@ -37,6 +37,8 @@ import { EventDetailsShareComponent } from '@app/event-details/event-details-sha
 import { AddEventLocationComponent } from '@app/add-event-location/add-event-location.component';
 import { UserService } from '@app/services/user.service';
 import { User } from '@interfaces/user';
+import { SpeciesService } from '@services/species.service';
+import { Species } from '@interfaces/species';
 import { SexBiasService } from '@app/services/sex-bias.service';
 import { SexBias } from '@interfaces/sex-bias';
 import { AgeBiasService } from '@app/services/age-bias.service';
@@ -76,6 +78,8 @@ export class EventDetailsComponent implements OnInit {
   icon;
   administrative_level_one = [];
   landownerships;
+  species: Species[] = [];
+  speciesLoading = false;
 
   eventOwner;
 
@@ -152,6 +156,7 @@ export class EventDetailsComponent implements OnInit {
     private currentUserService: CurrentUserService,
     private dataUpdatedService: DataUpdatedService,
     private dialog: MatDialog,
+    private speciesService: SpeciesService,
     private adminLevelOneService: AdministrativeLevelOneService,
     private landownershipService: LandOwnershipService,
     private eventLocationService: EventLocationService,
@@ -287,6 +292,26 @@ export class EventDetailsComponent implements OnInit {
         },
         error => {
           this.errorMessage = <any>error;
+        }
+      );
+
+    this.speciesLoading = true;
+    // get species from the species service
+    this.speciesService.getSpecies()
+      .subscribe(
+        (species) => {
+          this.species = species;
+          // alphabetize the species options list
+          this.species.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
+          this.speciesLoading = false;
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.speciesLoading = false;
         }
       );
 
@@ -937,6 +962,7 @@ export class EventDetailsComponent implements OnInit {
     // Open dialog for adding location species
     this.editLocationSpeciesDialogRef = this.dialog.open(EditLocationSpeciesComponent, {
       data: {
+        species: this.species,
         location_species_action: 'add',
         action_text: 'add',
         action_button_text: 'Submit',

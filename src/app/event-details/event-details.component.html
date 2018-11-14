@@ -45,9 +45,9 @@
 
             <div class="event-page-group split">
 
-            <!-- Event Details -->
-            <!-- Event Details -->
-            <!-- Event Details -->
+              <!-- Event Details -->
+              <!-- Event Details -->
+              <!-- Event Details -->
               <div class="event-page-split-half">
                 <div class="event-table-header">Event Details</div>
                 <table>
@@ -320,7 +320,7 @@
 
             <div class="event-page-group">
 
-              <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" >
+              <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
                     {{panelOpenState ? 'Hide Event Comments' : 'View Event Comments'}}
@@ -352,20 +352,20 @@
                         <b>{{comment.comment_type | displayValue:'name':this.commentTypes}}</b>
                       </span>
                       <span class="date">{{comment.created_date | date:'shortDate' }}</span>
-                      <button mat-icon-button aria-label="delete event comment" color="warn"
-                        [disabled]="!eventData.permissions.destroy" (click)="openEventCommentDeleteConfirm(comment.id)">
+                      <button mat-icon-button aria-label="delete event comment" color="warn" [disabled]="!eventData.permissions.destroy"
+                        (click)="openEventCommentDeleteConfirm(comment.id)">
                         Delete
                       </button>
                     </div>
                     <div class="comment-text">
-                        {{comment.comment}}
+                      {{comment.comment}}
                     </div>
                   </li>
                 </ul>
 
 
                 <div class="detail-section-buttons">
-                  
+
                   <button mat-button color="primary" class="event-detail-action-button" (click)="addEventComment(eventData.id)"
                     [disabled]="!eventData.permissions.write">
                     <mat-icon>add_comment</mat-icon> Add Comment
@@ -396,7 +396,8 @@
                       </mat-panel-description> -->
                 </mat-expansion-panel-header>
 
-                <div class="event-group-no-data" *ngIf="eventData.servicerequests.length === 0">No service requests to show</div>
+                <div class="event-group-no-data" *ngIf="eventData.servicerequests.length === 0">No service requests to
+                  show</div>
 
 
                 <ul *ngIf="eventData.servicerequests.length > 0" class="eventDetailCommentsList has-sub-comments">
@@ -411,7 +412,7 @@
                     <div class="comment-text">
                       {{servicerequest.request_type_string}}
 
-                      <span  *ngIf="servicerequest.comments.length > 0">
+                      <span *ngIf="servicerequest.comments.length > 0">
                         <div class="comment-response" *ngFor="let comment of servicerequest.comments">
                           <span class="date">{{comment.created_date | date:'shortDate' }}</span>
                           <span class="response-text">{{comment.comment}}</span>
@@ -531,13 +532,13 @@
                             <b>{{comment.comment_type | displayValue:'name':this.commentTypes}}</b>
                           </span>
                           <span class="date">{{comment.created_date | date:'shortDate' }}</span>
-                          <button mat-icon-button aria-label="delete event comment" color="warn"
-                            [disabled]="!eventData.permissions.destroy" (click)="openEventLocationCommentDeleteConfirm(comment.id)">
+                          <button mat-icon-button aria-label="delete event comment" color="warn" [disabled]="!eventData.permissions.destroy"
+                            (click)="openEventLocationCommentDeleteConfirm(comment.id)">
                             Delete
                           </button>
                         </div>
                         <div class="comment-text">
-                            {{comment.comment}}
+                          {{comment.comment}}
                         </div>
                       </li>
                     </ul>
@@ -603,7 +604,7 @@
 
                   </div>
 
-                  
+
                   <!--
                       Loading contacts
                       Loading contacts
@@ -611,7 +612,7 @@
                     -->
                   <div class="detail-section-buttons">
                     <span *ngIf="userContactsLoading" class="event-group-no-data">
-                      <mat-spinner  [diameter]=20 style="margin: 0 auto;"></mat-spinner>
+                      <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
                       <span>Loading contacts...</span>
                     </span>
                   </div>
@@ -623,7 +624,7 @@
                   <div class="detail-section-buttons">
                     <button mat-button color="primary" class="event-detail-action-button" (click)="addEventLocationContact(eventLocation.id)"
                       [disabled]="!eventData.permissions.write || userContactsLoading" matTooltip="Associate contact with this event location">
-                      <mat-icon>add_comment</mat-icon> 
+                      <mat-icon>add_comment</mat-icon>
                       Add Contact
                     </button>
                   </div>
@@ -649,8 +650,14 @@
                   <app-location-species-table [locationspecies]="eventLocationSpecies" [permissions]="eventData.permissions"></app-location-species-table>
 
                   <div class="detail-section-buttons">
+                    <span *ngIf="speciesLoading" class="event-group-no-data">
+                      <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
+                      <span>Loading species...</span>
+                    </span>
+                  </div>
+                  <div class="detail-section-buttons">
                     <button mat-button color="primary" class="event-detail-action-button" (click)="addLocationSpecies(eventLocation)"
-                      [disabled]="!eventData.permissions.write">
+                      [disabled]="!eventData.permissions.write || speciesLoading">
                       <mat-icon>add</mat-icon> Add species to this location
                     </button>
                   </div>
@@ -857,81 +864,81 @@
   <div class="mapDiv">
     <mat-card>
       <div id="map">
-          <mat-card class="unmappable-warning" *ngIf="unMappables.length > 0" matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
-            [matTooltipPosition]="'above'">
-            <span>
-              <mat-icon>warning</mat-icon>&nbsp;Some location data absent. The following locations are not mapped:
-              <!-- <ul>
+        <mat-card class="unmappable-warning" *ngIf="unMappables.length > 0" matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
+          [matTooltipPosition]="'above'">
+          <span>
+            <mat-icon>warning</mat-icon>&nbsp;Some location data absent. The following locations are not mapped:
+            <!-- <ul>
                 <li *ngFor="let unmappable of unMappables">{{unmappable.name}} ({{unmappable.administrative_level_two_string}},
                   {{unmappable.administrative_level_one_string}})
                 </li>
               </ul> -->
 
-              <span *ngFor="let unmappable of unMappables">{{unmappable.name}}
-                ({{unmappable.administrative_level_two_string}},
-                {{unmappable.administrative_level_one_string}})
-                <span *ngIf="(unMappables.indexOf(unmappable)) < (unMappables.length - 1)">;</span></span>
+            <span *ngFor="let unmappable of unMappables">{{unmappable.name}}
+              ({{unmappable.administrative_level_two_string}},
+              {{unmappable.administrative_level_one_string}})
+              <span *ngIf="(unMappables.indexOf(unmappable)) < (unMappables.length - 1)">;</span></span>
 
-            </span>
-          </mat-card>
+          </span>
+        </mat-card>
 
-          <mat-expansion-panel id="legend" class="legend">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Legend
-              </mat-panel-title>
-            </mat-expansion-panel-header>
+        <mat-expansion-panel id="legend" class="legend">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Legend
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-            <div class="legend-panel-content">
+          <div class="legend-panel-content">
+
+            <div class='legend-icon'>
+              <div class='wmm-pin wmm-white wmm-icon-circle wmm-icon-black wmm-size-25'></div>
+              <label>Event Location</label>
+            </div>
+
+
+            <div id="flywaysLegend">
+              <!-- <div id="flywaysLegend" *ngIf="flywaysVisible"> -->
+              <label class="legend-label">Flyways</label>
 
               <div class='legend-icon'>
-                <div class='wmm-pin wmm-white wmm-icon-circle wmm-icon-black wmm-size-25'></div>
-                <label>Event Location</label>
+                <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-blue'></div>
+                <label>Atlantic Flyways</label>
               </div>
 
-
-              <div id="flywaysLegend">
-              <!-- <div id="flywaysLegend" *ngIf="flywaysVisible"> -->
-                <label class="legend-label">Flyways</label>
-
-                <div class='legend-icon'>
-                  <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-blue'></div>
-                  <label>Atlantic Flyways</label>
-                </div>
-
-                <div class='legend-icon'>
-                  <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-yellow'></div>
-                  <label>Central Flyway</label>
-                </div>
-                <div class='legend-icon'>
-                  <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-green'></div>
-                  <label>Mississippi Flyway</label>
-                </div>
-                <div class='legend-icon'>
-                  <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-red'></div>
-                  <label>Pacific Flyway</label>
-                </div>
+              <div class='legend-icon'>
+                <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-yellow'></div>
+                <label>Central Flyway</label>
               </div>
+              <div class='legend-icon'>
+                <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-green'></div>
+                <label>Mississippi Flyway</label>
+              </div>
+              <div class='legend-icon'>
+                <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-red'></div>
+                <label>Pacific Flyway</label>
+              </div>
+            </div>
 
 
-              <!-- 
+            <!-- 
                 Watershed Legend
                 Watershed Legend
                 Watershed Legend
                -->
-              <div id="watershedsLegend">
+            <div id="watershedsLegend">
               <!-- <div id="watershedsLegend" *ngIf="watershedsVisible"> -->
-                <label class="legend-label">Watersheds</label>
+              <label class="legend-label">Watersheds</label>
 
-                <div class='legend-icon'>
-                  <div class='wmm-square wmm-white wmm-icon-circle wmm-icon-white wmm-size-20 huc-icon'></div>
-                  <label>HUC 2</label>
-                </div>
-
+              <div class='legend-icon'>
+                <div class='wmm-square wmm-white wmm-icon-circle wmm-icon-white wmm-size-20 huc-icon'></div>
+                <label>HUC 2</label>
               </div>
-            </div>
 
-          </mat-expansion-panel>
+            </div>
+          </div>
+
+        </mat-expansion-panel>
       </div>
     </mat-card>
   </div>

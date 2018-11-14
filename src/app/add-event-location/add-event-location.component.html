@@ -280,7 +280,7 @@
 
       <mat-step [stepControl]="addEventLocationForm">
 
-        <ng-template matStepLabel>Species</ng-template>
+        <ng-template matStepLabel>Species & Species Diagnosis</ng-template>
         <div>
 
           <div formArrayName="new_location_species">
@@ -290,24 +290,17 @@
 
                 <div class="horizontal-form-container" class="species-controls-container">
 
+                  <!-- new experimental species search select -->
                   <mat-form-field class="form-control">
-                    <mat-select placeholder="Species" formControlName="species">
-                      <mat-option *ngFor="let species of species" value="{{species.id}}">{{species.name}}</mat-option>
-                    </mat-select>
-                    <mat-hint align="end" matTooltip="Public field">
-                      <mat-icon>public</mat-icon>
-                    </mat-hint>
-                  </mat-form-field>
-
-                  <!-- TODO: implement autocomplete for species later -->
-                  <!-- <mat-form-field>
-                    <input type="text" matInput placeholder="Species" aria-label="Species" [matAutocomplete]="speciesAutoComplete" formControlName="species">
-                    <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn">
-                      <mat-option *ngFor="let species of filteredSpecies | async" [value]="species">
-                        <span>{{ species.name }}</span>
+                    <mat-select formControlName="species" placeholder="Species" #speciesSelect>
+                      <ngx-mat-select-search [formControl]="speciesFilterCtrl" [placeholderLabel]="'Find species...'"
+                        [noEntriesFoundLabel]="'no matching species found'"></ngx-mat-select-search>
+                      <mat-option *ngFor="let species of filteredSpecies[locationSpeciesIndex] | async" [value]="species.id">
+                        {{species.name}}
                       </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field> -->
+                    </mat-select>
+                  </mat-form-field>
+                  <!-- end new experimental species search select -->
 
                   <mat-form-field class="species-number-control">
                     <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count">
@@ -394,6 +387,7 @@
 
                 </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -426,52 +420,57 @@
         </div>
 
         <div formArrayName="new_location_contacts">
-          <div class="contacts-container" *ngFor="let locationContacts of getLocationContacts(); let locationContactIndex = index">
+          <div class="contacts-container" *ngFor="let locationContact of getLocationContacts(); let locationContactIndex = index">
 
-            <div class="horizontal-form-container contact-controls-container" [formGroupName]="locationContactIndex">
-              <mat-form-field class="form-control contact-select">
-                <mat-select placeholder="Contact" formControlName="id">
-                  <mat-option *ngFor="let contact of userContacts" [value]="contact.id">{{contact.first_name}}
-                    {{contact.last_name}} | {{contact.organization |
-                    displayValue:'name':this.organizations}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+            <div [formGroupName]="locationContactIndex">
 
-              <mat-form-field class="form-control  contact-type-select">
-                <mat-select placeholder="Type" formControlName="contact_type" required>
-                  <mat-option *ngFor="let contactType of contactTypes" [value]="contactType.id">{{contactType.name}}</mat-option>
-                </mat-select>
-              </mat-form-field>
+              <div class="horizontal-form-container contact-controls-container">
 
-              <div class="contact-button-div">
+                <mat-form-field class="form-control contact-select">
+                  <mat-select formControlName="contact" placeholder="Contact Person" #contactSelect>
+                    <ngx-mat-select-search [formControl]="contactFilterCtrl" [placeholderLabel]="'Find contact...'"
+                      [noEntriesFoundLabel]="'no matching contact found'"></ngx-mat-select-search>
+                    <mat-option *ngFor="let contact of filteredContacts[locationContactIndex] | async" [value]="contact.id">
+                      <span>{{contact.first_name}}
+                        {{contact.last_name}} | {{contact.organization_string}}</span>
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
 
-                <button mat-icon-button color="accent" aria-label="Apply contact to all locations" matTooltip="Apply contact to all locations"
-                  (click)="createCommonEventDataObject('contact', locationContactIndex)">
-                  <i class="material-icons">group_work</i>
-                </button>
+                <mat-form-field class="form-control  contact-type-select">
+                  <mat-select placeholder="Type" formControlName="contact_type">
+                    <mat-option *ngFor="let contactType of contactTypes" [value]="contactType.id">{{contactType.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
 
-                <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details">
-                  <i class="material-icons">assignment_ind</i>
-                </button>
+                <div class="contact-button-div">
 
-                <button mat-icon-button color="warn" aria-label="Remove this contact from this location" (click)="removeLocationContacts(i, k)"
-                  matTooltip="Remove this contact from this location">
-                  <i class="material-icons">remove_circle</i>
-                </button>
+                  <button mat-icon-button color="accent" aria-label="Apply contact to all locations" matTooltip="Apply contact to all locations"
+                    (click)="createCommonEventDataObject('contact', locationContactIndex)">
+                    <i class="material-icons">group_work</i>
+                  </button>
+
+                  <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details">
+                    <i class="material-icons">assignment_ind</i>
+                  </button>
+
+                  <button mat-icon-button color="warn" aria-label="Remove this contact from this location" (click)="removeLocationContacts(locationContactIndex)"
+                    matTooltip="Remove this contact from this location">
+                    <i class="material-icons">remove_circle</i>
+                  </button>
+
+                </div>
 
               </div>
-
-
-
             </div>
+
             <mat-divider [inset]="true"></mat-divider>
             <br>
           </div>
         </div>
 
         <div class="button-row">
-          <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContacts()">
+          <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContact()">
             <i class="material-icons">add_circle</i> Add Contact</button>
         </div>
 
@@ -516,10 +515,6 @@
                 <span class="alert-text">Missing land ownership selection.</span>
               </mat-error>
               <p>
-                <mat-error color="warn" *ngIf="addEventLocationForm.get('new_location_contacts').invalid">
-                  <mat-icon class="icon">error</mat-icon>
-                  <span class="alert-text">Missing contact type selection.</span>
-                </mat-error>
 
                 <div>
                   <button mat-button type="submit" color="primary" [disabled]="addEventLocationForm.invalid" (click)="onSubmit(addEventLocationForm.value)">

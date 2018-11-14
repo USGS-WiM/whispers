@@ -6,26 +6,18 @@
   <form [formGroup]="eventLocationContactForm">
     <div class="vertical-form-container">
 
-
-      <!--<mat-form-field class="form-control  contact-type-select">
-        <mat-select placeholder="Contact Person" formControlName="contact" required>
-          <mat-option *ngFor="let contact of userContacts" [value]="contact.id"> <span>{{contact.first_name}}
-              {{contact.last_name}} | {{contact.organization_string}}</span></mat-option>
-        </mat-select>
-      </mat-form-field>-->
-
-      <!-- Contacts autocomplete control -->
-      <mat-form-field class="form-control contact-select">
-        <input type="text" matInput placeholder="Contact Person" aria-label="Contact Person"
-          [matAutocomplete]="contactAutoComplete" formControlName="contact">
-        <mat-autocomplete #contactAutoComplete="matAutocomplete" [displayWith]="displayFnContact">
-          <mat-option *ngFor="let contact of filteredUserContacts | async"
-            [value]="contact.id">
+      <!-- new experimental contact search select -->
+      <mat-form-field class="contact-select">
+        <mat-select formControlName="contact" placeholder="Contact Person" #contactSelect>
+          <ngx-mat-select-search [formControl]="contactFilterCtrl" [placeholderLabel]="'Find contact...'"
+            [noEntriesFoundLabel]="'no matching contact found'"></ngx-mat-select-search>
+          <mat-option *ngFor="let contact of filteredContacts | async" [value]="contact.id">
             <span>{{contact.first_name}}
               {{contact.last_name}} | {{contact.organization_string}}</span>
           </mat-option>
-        </mat-autocomplete>
+        </mat-select>
       </mat-form-field>
+      <!-- end new experimental contact search select -->
 
       <mat-form-field class="form-control  contact-type-select">
         <mat-select placeholder="Contact Type" formControlName="contact_type" required>

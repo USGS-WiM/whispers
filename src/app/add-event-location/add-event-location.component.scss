@@ -4,7 +4,8 @@
     background-color: transparent;
     padding: 0;
 }
-.mat-stepper-horizontal{
+
+.mat-stepper-horizontal {
     background-color: #FAFCFF;
     border: 1px solid fade-out(#A0AFCD, 0.6);
     border-radius: 3px;
@@ -84,4 +85,14 @@
 
 .alert-text {
     vertical-align: middle;
+}
+
+.comment-text-area {
+    width: 100%;
+    margin: 20px auto;
+    textarea {
+        background-color: #FAFCFF;
+        box-sizing: border-box;
+        padding: 8px;
+    }
 }

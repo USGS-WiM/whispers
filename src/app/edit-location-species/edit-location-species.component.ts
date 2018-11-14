@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
+import { Subject, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSelect } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 
@@ -20,11 +22,11 @@ import { DataUpdatedService } from '@app/services/data-updated.service';
   styleUrls: ['./edit-location-species.component.scss']
 })
 export class EditLocationSpeciesComponent implements OnInit {
-
+  @ViewChild('speciesSelect') speciesSelect: MatSelect;
   locationSpeciesForm: FormGroup;
 
   species: Species[];
-  filteredSpecies: Observable<any[]>;
+  // filteredSpecies: Observable<any[]>;
 
   eventID;
   eventlocation;
@@ -38,6 +40,14 @@ export class EditLocationSpeciesComponent implements OnInit {
   action_button_text;
 
   errorMessage;
+
+  public filteredSpecies: ReplaySubject<Species[]> = new ReplaySubject<Species[]>(1);
+
+  speciesFilterCtrl: FormControl = new FormControl();
+
+  /** Subject that emits when the component has been destroyed. */
+  private _onDestroy = new Subject<void>();
+
 
   buildLocationSpeciesForm() {
     this.locationSpeciesForm = this.formBuilder.group({
@@ -69,6 +79,15 @@ export class EditLocationSpeciesComponent implements OnInit {
 
   ngOnInit() {
 
+    // populate the search select options for the species control
+    this.filteredSpecies.next(this.data.species);
+
+    // listen for search field value changes
+    this.speciesFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterSpecies();
+      });
 
     if (this.data.eventlocation) {
       this.eventlocation = this.data.eventlocation;
@@ -111,28 +130,47 @@ export class EditLocationSpeciesComponent implements OnInit {
     }
 
 
+
     // get species from the species service
-    this.speciesService.getSpecies()
-      .subscribe(
-        (species) => {
-          this.species = species;
-          // alphabetize the species options list
-          this.species.sort(function (a, b) {
-            if (a.name < b.name) { return -1; }
-            if (a.name > b.name) { return 1; }
-            return 0;
-          });
-          this.filteredSpecies = this.locationSpeciesForm.get('species').valueChanges
-            .startWith(null)
-            .map(val => this.filter(val, this.species, ['name']));
+    // this.speciesService.getSpecies()
+    //   .subscribe(
+    //     (species) => {
+    //       this.species = species;
+    //       // alphabetize the species options list
+    //       this.species.sort(function (a, b) {
+    //         if (a.name < b.name) { return -1; }
+    //         if (a.name > b.name) { return 1; }
+    //         return 0;
+    //       });
+    //       this.filteredSpecies = this.locationSpeciesForm.get('species').valueChanges
+    //         .startWith(null)
+    //         .map(val => this.filter(val, this.species, ['name']));
 
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    //     },
+    //     error => {
+    //       this.errorMessage = <any>error;
+    //     }
+    //   );
 
 
+  }
+
+  private filterSpecies() {
+    if (!this.data.species) {
+      return;
+    }
+    // get the search keyword
+    let search = this.speciesFilterCtrl.value;
+    if (!search) {
+      this.filteredSpecies.next(this.data.species.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredSpecies.next(
+      this.data.species.filter(species => species.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   openSnackBar(message: string, action: string, duration: number) {

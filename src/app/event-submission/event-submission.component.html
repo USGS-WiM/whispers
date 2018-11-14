@@ -670,31 +670,6 @@
                             <div class="contacts-container" *ngFor="let locationContacts of getLocationContacts(eventLocation); let locationContactIndex = index">
                               <div class="horizontal-form-container contact-controls-container" [formGroupName]="locationContactIndex">
 
-                                <!--<mat-form-field class="form-control contact-select">
-                                  <mat-select placeholder="Contact Person" formControlName="id">
-                                    <mat-option *ngFor="let contact of userContacts" [value]="contact.id">{{contact.first_name}}
-                                      {{contact.last_name}} | {{contact.organization
-                                      |displayValue:'name':this.organizations}}
-                                    </mat-option>
-                                  </mat-select>
-                                </mat-form-field>-->
-
-                                <!-- Contacts autocomplete control -->
-                                <!-- <mat-form-field class="form-control contact-select">
-                                  <input type="text" matInput placeholder="Contact Person" aria-label="Contact Person"
-                                    [matAutocomplete]="contactAutoComplete" formControlName="contact">
-                                  <mat-autocomplete #contactAutoComplete="matAutocomplete" [displayWith]="displayFnContact">
-                                    <mat-option *ngFor="let contact of filteredContacts[eventLocationIndex][locationContactIndex] | async"
-                                      [value]="contact.id">
-                                      <span>{{contact.first_name}}
-                                        {{contact.last_name}} | {{contact.organization
-                                        |displayValue:'name':this.organizations}}</span>
-                                    </mat-option>
-                                  </mat-autocomplete>
-                                </mat-form-field> -->
-                                <!-- End Contacts autocomplete control -->
-
-
                                 <!-- new experimental contact search select -->
                                 <mat-form-field class="contact-select">
                                   <mat-select formControlName="contact" placeholder="Contact Person" #contactSelect>
@@ -709,20 +684,6 @@
                                   </mat-select>
                                 </mat-form-field>
                                 <!-- end new experimental contact search select -->
-
-
-                                <!-- new experimental species search select -->
-                                <!-- <mat-form-field class="form-control">
-                                    <mat-select formControlName="species" placeholder="Species" #speciesSelect>
-                                      <ngx-mat-select-search [formControl]="speciesFilterCtrl" [placeholderLabel]="'Find species...'"
-                                        [noEntriesFoundLabel]="'no matching species found'"></ngx-mat-select-search>
-                                      <mat-option *ngFor="let species of filteredSpecies[eventLocationIndex][locationSpeciesIndex] | async"
-                                        [value]="species.id">
-                                        {{species.name}}
-                                      </mat-option>
-                                    </mat-select>
-                                  </mat-form-field> -->
-                                <!-- end new experimental species search select -->
 
                                 <mat-form-field class="form-control  contact-type-select">
                                   <mat-select placeholder="Contact Type" formControlName="contact_type">

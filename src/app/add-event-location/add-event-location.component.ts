@@ -68,14 +68,17 @@ declare const search_api: search_api;
   templateUrl: './add-event-location.component.html',
   styleUrls: ['./add-event-location.component.scss']
 })
-export class AddEventLocationComponent implements OnInit, OnDestroy {
+export class AddEventLocationComponent implements OnInit {
   @Input('eventID') eventID: string;
+  @ViewChild('adminLevelOneSelect') adminLevelOneSelect: MatSelect;
+  @ViewChild('adminLevelTwoSelect') adminLevelTwoSelect: MatSelect;
+  @ViewChild('speciesSelect') speciesSelect: MatSelect;
+  @ViewChild('contactSelect') contactSelect: MatSelect;
 
   errorMessage = '';
   addEventLocationForm: FormGroup;
 
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
-
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
@@ -86,36 +89,23 @@ export class AddEventLocationComponent implements OnInit, OnDestroy {
   adminLevelTwos: AdministrativeLevelTwo[];
 
   species: Species[];
-
   sexBiases: SexBias[];
   ageBiases: AgeBias[];
-
   organizations: Organization[];
-
   contactTypes: ContactType[];
   commentTypes: CommentType[];
 
   userContacts = [];
-
-  // eventID;
-
   submitLoading = false;
 
   /** Subject that emits when the component has been destroyed. */
   private _onDestroy = new Subject<void>();
 
-  // filteredAdminLevelOnes = [];
-  // filteredAdminLevelTwos = [];
   filteredSpecies = [];
   filteredContacts = [];
 
   latitudePattern: RegExp = (/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/);
   longitudePattern: RegExp = (/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/);
-
-  @ViewChild('adminLevelOneSelect') adminLevelOneSelect: MatSelect;
-  @ViewChild('adminLevelTwoSelect') adminLevelTwoSelect: MatSelect;
-  @ViewChild('speciesSelect') speciesSelect: MatSelect;
-  @ViewChild('contactSelect') contactSelect: MatSelect;
 
   /** controls for the MatSelect filter keyword */
   adminLevelOneFilterCtrl: FormControl = new FormControl();
@@ -126,445 +116,507 @@ export class AddEventLocationComponent implements OnInit, OnDestroy {
   filteredAdminLevelOnes: ReplaySubject<AdministrativeLevelOne[]> = new ReplaySubject<AdministrativeLevelOne[]>();
   filteredAdminLevelTwos: ReplaySubject<AdministrativeLevelTwo[]> = new ReplaySubject<AdministrativeLevelTwo[]>();
 
-  // TODO: set up filteredSpecies and filteredContacts
-//   this.filteredSpecies = new Array<ReplaySubject<Species[]>>();
-// this.filteredSpecies.push(new ReplaySubject<Species[]>());
-// this.ManageSpeciesControl(0);
-
-
-endDateBeforeStart(AC: AbstractControl) {
-  const start_date = AC.get('start_date').value;
-  const end_date = AC.get('end_date').value;
-  if ((start_date !== null && end_date !== null) && start_date > end_date) {
-    AC.get('end_date').setErrors({ endDateBeforeStart: true });
+  buildAddEventLocationForm() {
+    this.addEventLocationForm = this.formBuilder.group({
+      event: null,
+      name: '',
+      start_date: '',
+      end_date: null,
+      country: [APP_UTILITIES.DEFAULT_COUNTRY_ID, Validators.required],
+      administrative_level_one: [null, Validators.required],
+      administrative_level_two: [null, Validators.required],
+      latitude: [null, Validators.pattern(this.latitudePattern)],
+      longitude: [null, Validators.pattern(this.longitudePattern)],
+      land_ownership: [null, Validators.required],
+      gnis_name: '',
+      gnis_id: '',
+      site_description: '',
+      history: '',
+      environmental_factors: '',
+      clinical_signs: '',
+      comment: '',
+      new_location_species: this.formBuilder.array([
+        // this.initLocationSpecies()
+      ]),
+      new_location_contacts: this.formBuilder.array([
+        // this.initLocationContacts()
+      ])
+    },
+      {
+        validator: [this.endDateBeforeStart]
+      });
   }
-  return null;
-}
 
+  constructor(
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
+    private datePipe: DatePipe,
+    // public addEventLocationDialogRef: MatDialogRef<AddEventLocationComponent>,
+    private landOwnershipService: LandOwnershipService,
+    private countryService: CountryService,
+    private adminLevelOneService: AdministrativeLevelOneService,
+    private adminLevelTwoService: AdministrativeLevelTwoService,
+    private speciesService: SpeciesService,
+    private sexBiasService: SexBiasService,
+    private ageBiasService: AgeBiasService,
+    private contactTypeService: ContactTypeService,
+    private commentTypeService: CommentTypeService,
+    private organizationService: OrganizationService,
+    private contactService: ContactService,
+    private createContactSevice: CreateContactService,
+    private eventLocationService: EventLocationService,
+    public snackBar: MatSnackBar,
+    // @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.buildAddEventLocationForm();
+  }
 
-buildAddEventLocationForm() {
-  this.addEventLocationForm = this.formBuilder.group({
-    event: null,
-    name: '',
-    start_date: '',
-    end_date: null,
-    country: [APP_UTILITIES.DEFAULT_COUNTRY_ID, Validators.required],
-    administrative_level_one: [null, Validators.required],
-    administrative_level_two: [null, Validators.required],
-    latitude: [null, Validators.pattern(this.latitudePattern)],
-    longitude: [null, Validators.pattern(this.longitudePattern)],
-    land_ownership: [null, Validators.required],
-    gnis_name: '',
-    gnis_id: '',
-    site_description: '',
-    history: '',
-    environmental_factors: '',
-    clinical_signs: '',
-    comment: '',
-    new_location_species: this.formBuilder.array([
-      // this.initLocationSpecies()
-    ]),
-    new_location_contacts: this.formBuilder.array([
-      // this.initLocationContacts()
-    ])
-  },
-    {
-      validator: [this.endDateBeforeStart]
-    });
-}
+  // ngOnDestroy() {
+  //   this._onDestroy.next();
+  //   this._onDestroy.complete();
+  // }
 
-constructor(
-  private formBuilder: FormBuilder,
-  private dialog: MatDialog,
-  private datePipe: DatePipe,
-  // public addEventLocationDialogRef: MatDialogRef<AddEventLocationComponent>,
-  private landOwnershipService: LandOwnershipService,
-  private countryService: CountryService,
-  private adminLevelOneService: AdministrativeLevelOneService,
-  private adminLevelTwoService: AdministrativeLevelTwoService,
-  private speciesService: SpeciesService,
-  private sexBiasService: SexBiasService,
-  private ageBiasService: AgeBiasService,
-  private contactTypeService: ContactTypeService,
-  private commentTypeService: CommentTypeService,
-  private organizationService: OrganizationService,
-  private contactService: ContactService,
-  private createContactSevice: CreateContactService,
-  private eventLocationService: EventLocationService,
-  public snackBar: MatSnackBar,
-  // @Inject(MAT_DIALOG_DATA) public data: any
-) {
-  this.buildAddEventLocationForm();
-}
+  ngOnInit() {
 
-ngOnDestroy() {
-  this._onDestroy.next();
-  this._onDestroy.complete();
-}
+    this.filteredSpecies = new Array<ReplaySubject<Species[]>>();
+    this.filteredSpecies.push(new ReplaySubject<Species[]>());
+    this.ManageSpeciesControl(0);
 
-ngOnInit() {
+    this.filteredContacts = new Array<ReplaySubject<Contact[]>>();
+    this.filteredContacts.push(new ReplaySubject<Contact[]>());
+    this.ManageContactControl(0);
 
-  // get landOwnerships from the LandOwnerShipService
-  this.landOwnershipService.getLandOwnerships()
-    .subscribe(
-      landOwnerships => {
-        this.landOwnerships = landOwnerships;
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
+    // get landOwnerships from the LandOwnerShipService
+    this.landOwnershipService.getLandOwnerships()
+      .subscribe(
+        landOwnerships => {
+          this.landOwnerships = landOwnerships;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
-  // get countries from the countryService
-  this.countryService.getCountries()
-    .subscribe(
-      countries => {
-        this.countries = countries;
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
+    // get countries from the countryService
+    this.countryService.getCountries()
+      .subscribe(
+        countries => {
+          this.countries = countries;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
-  // query adminLevelOnes from the adminLevelOneService using default country
-  this.adminLevelOneService.queryAdminLevelOnes(APP_UTILITIES.DEFAULT_COUNTRY_ID)
-    .subscribe(
-      adminLevelOnes => {
-        this.adminLevelOnes = adminLevelOnes;
+    // query adminLevelOnes from the adminLevelOneService using default country
+    this.adminLevelOneService.queryAdminLevelOnes(APP_UTILITIES.DEFAULT_COUNTRY_ID)
+      .subscribe(
+        adminLevelOnes => {
+          this.adminLevelOnes = adminLevelOnes;
 
-        // load the initial bank list
-        this.filteredAdminLevelOnes.next(this.adminLevelOnes);
+          // load the initial bank list
+          this.filteredAdminLevelOnes.next(this.adminLevelOnes);
 
-        // listen for search field value changes
-        this.adminLevelOneFilterCtrl.valueChanges
-          .pipe(takeUntil(this._onDestroy))
-          .subscribe(() => {
-            this.filterAdminLevelOnes();
+          // listen for search field value changes
+          this.adminLevelOneFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+              this.filterAdminLevelOnes();
+            });
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get species from the speciesService
+    this.speciesService.getSpecies()
+      .subscribe(
+        species => {
+          this.species = species;
+          this.species.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
           });
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
 
-  // get species from the speciesService
-  this.speciesService.getSpecies()
-    .subscribe(
-      species => {
-        this.species = species;
-        this.species.sort(function (a, b) {
-          if (a.name < b.name) { return -1; }
-          if (a.name > b.name) { return 1; }
-          return 0;
-        });
-        // TODO: lines below commented out are for species autocomplete. more complex on this component since species is part of a form array
-        // line below is copied from search dialog component, but does not work here.
-        // this.filteredSpecies = this.eventSubmissionForm.get('species').valueChanges
-        // line below is does not work, but is the beginning of the solution.
-        // this.filteredSpecies = this.eventSubmissionForm.get('new_event_locations').get('locationspecies').get('species').valueChanges
-        //   .startWith(null)
-        //   .map(val => this.filter(val, this.species, 'name'));
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
+          // populate the search select options for the initial control
+          this.filteredSpecies[0].next(this.species);
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
 
-  // get sexBiases from the sexBias service
-  this.sexBiasService.getSexBiases()
-    .subscribe(
-      sexBiases => {
-        this.sexBiases = sexBiases;
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
+    // get sexBiases from the sexBias service
+    this.sexBiasService.getSexBiases()
+      .subscribe(
+        sexBiases => {
+          this.sexBiases = sexBiases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
-  // get ageBiases from the ageBias service
-  this.ageBiasService.getAgeBiases()
-    .subscribe(
-      ageBiases => {
-        this.ageBiases = ageBiases;
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
+    // get ageBiases from the ageBias service
+    this.ageBiasService.getAgeBiases()
+      .subscribe(
+        ageBiases => {
+          this.ageBiases = ageBiases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
-  // get contact types from the ContactTypeService
-  this.contactTypeService.getContactTypes()
-    .subscribe(
-      contactTypes => {
-        this.contactTypes = contactTypes;
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
+    // get contact types from the ContactTypeService
+    this.contactTypeService.getContactTypes()
+      .subscribe(
+        contactTypes => {
+          this.contactTypes = contactTypes;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
-  // get comment types from the CommentTypeService
-  this.commentTypeService.getCommentTypes()
-    .subscribe(
-      commentTypes => {
-        this.commentTypes = commentTypes;
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
+    // get comment types from the CommentTypeService
+    this.commentTypeService.getCommentTypes()
+      .subscribe(
+        commentTypes => {
+          this.commentTypes = commentTypes;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
-  // get organizations from the OrganizationService
-  this.organizationService.getOrganizations()
-    .subscribe(
-      organizations => {
-        this.organizations = organizations;
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
+    // get organizations from the OrganizationService
+    this.organizationService.getOrganizations()
+      .subscribe(
+        organizations => {
+          this.organizations = organizations;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
-  // TEMPORARY- will need to use user creds to query user contact list
-  // get contact types from the ContactTypeService
-  this.contactService.getContacts()
-    .subscribe(
-      contacts => {
-        this.userContacts = contacts;
-        this.userContacts.sort(function (a, b) {
-          if (a.last_name < b.last_name) { return -1; }
-          if (a.last_name > b.last_name) { return 1; }
-          return 0;
-        });
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
-
-}
-
-onSubmit(formValue) {
-
-  this.submitLoading = true;
-
-  formValue.event = this.eventID;
-
-  // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
-  // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
-  formValue.start_date = this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd');
-  formValue.end_date = this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd');
-
-  this.eventLocationService.create(formValue)
-    .subscribe(
-      newEventLocation => {
-        this.submitLoading = false;
-        this.openSnackBar('New event location successfully created. Page will reload.', 'OK', 5000);
-        this.addEventLocationForm.reset();
-        location.reload();
-      },
-      error => {
-        this.errorMessage = <any>error;
-        this.submitLoading = false;
-        this.openSnackBar('Error. Event location not created. Error message: ' + error, 'OK', 8000);
-      }
-    );
-
-}
-
-initLocationSpecies() {
-  return this.formBuilder.group({
-    species: [null, Validators.required],
-    population_count: [null, Validators.min(0)],
-    sick_count: [null, Validators.min(0)],
-    dead_count: [null, Validators.min(0)],
-    sick_count_estimated: [null, Validators.min(0)],
-    dead_count_estimated: [null, Validators.min(0)],
-    priority: null,
-    captive: false,
-    age_bias: null,
-    sex_bias: null
-  });
-}
-
-initLocationContacts() {
-  return this.formBuilder.group({
-    id: [null, Validators.required],
-    contact_type: [null, Validators.required]
-  });
-}
-
-initLocationComments() {
-  return this.formBuilder.group({
-    comment: '',
-    comment_type: null
-  });
-}
-
-// location species
-addLocationSpecies() {
-  const control = <FormArray>this.addEventLocationForm.get('new_location_species');
-  control.push(this.initLocationSpecies());
-}
-
-removeLocationSpecies(i, j) {
-  const control = <FormArray>this.addEventLocationForm.get('new_location_species');
-  control.removeAt(j);
-}
-getLocationSpecies() {
-  return this.addEventLocationForm.controls.new_location_species['controls'];
-}
-
-// location contacts
-addLocationContacts() {
-  const control = <FormArray>this.addEventLocationForm.get('new_location_contacts');
-  control.push(this.initLocationContacts());
-}
-
-removeLocationContacts(i, k) {
-  const control = <FormArray>this.addEventLocationForm.get('new_location_contacts');
-  control.removeAt(k);
-}
-
-getLocationContacts() {
-  return this.addEventLocationForm.controls.new_location_contacts['controls'];
-}
-
-// location comments
-addLocationComments(i) {
-  const control = <FormArray>this.addEventLocationForm.get('new_comments');
-  control.push(this.initLocationComments());
-}
-
-removeLocationComments(i, m) {
-  const control = <FormArray>this.addEventLocationForm.get('new_comments');
-  control.removeAt(m);
-}
-
-getLocationComments(form) {
-  return form.controls.comments.controls;
-}
-
-updateAdminLevelOneOptions(selectedCountryID) {
-  const id = Number(selectedCountryID);
-
-  // query the adminlevelones endpoint for appropriate records
-  // update the options for the adminLevelOne select with the response
-
-  this.adminLevelOneService.queryAdminLevelOnes(id)
-    .subscribe(
-      adminLevelOnes => {
-        this.adminLevelOnes = adminLevelOnes;
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
-}
-
-updateAdminLevelTwoOptions(selectedAdminLevelOneID) {
-  const id = Number(selectedAdminLevelOneID);
-
-  this.addEventLocationForm.get('administrative_level_two').setValue(null);
-
-  // query the adminleveltwos endpoint for appropriate records
-  // update the options for the adminLevelTwo select with the response
-
-  this.adminLevelTwoService.queryAdminLevelTwos(id)
-    .subscribe(
-      adminLevelTwos => {
-        this.adminLevelTwos = adminLevelTwos;
-        this.adminLevelTwos.sort(function (a, b) {
-          if (a.name < b.name) { return -1; }
-          if (a.name > b.name) { return 1; }
-          return 0;
-        });
-
-        // load the initial bank list
-        this.filteredAdminLevelTwos.next(this.adminLevelTwos);
-
-        // listen for search field value changes
-        this.adminLevelTwoFilterCtrl.valueChanges
-          .pipe(takeUntil(this._onDestroy))
-          .subscribe(() => {
-            this.filterAdminLevelTwos();
+    // TEMPORARY- will need to use user creds to query user contact list
+    // get contact types from the ContactTypeService
+    this.contactService.getContacts()
+      .subscribe(
+        contacts => {
+          this.userContacts = contacts;
+          this.userContacts.sort(function (a, b) {
+            if (a.last_name < b.last_name) { return -1; }
+            if (a.last_name > b.last_name) { return 1; }
+            return 0;
           });
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
-}
+          // populate the search select options for the initial control
+          this.filteredContacts[0].next(this.userContacts);
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
-openSnackBar(message: string, action: string, duration: number) {
-  this.snackBar.open(message, action, {
-    duration: duration,
-  });
-}
+  }
 
-setEventLocationForGNISSelect(i) {
-  console.log('Selecting GNIS record for Event Location Number' + (i + 1));
-}
+  onSubmit(formValue) {
 
-openCreateContactDialog() {
-  this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-    disableClose: true,
-    data: {
-      contact_action: 'create'
+    this.submitLoading = true;
+
+    formValue.event = this.eventID;
+
+    // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
+    // can be removed if configure datepicker to output this format
+    // (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
+    formValue.start_date = this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd');
+    formValue.end_date = this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd');
+
+    this.eventLocationService.create(formValue)
+      .subscribe(
+        newEventLocation => {
+          this.submitLoading = false;
+          this.openSnackBar('New event location successfully created. Page will reload.', 'OK', 5000);
+          this.addEventLocationForm.reset();
+          location.reload();
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.submitLoading = false;
+          this.openSnackBar('Error. Event location not created. Error message: ' + error, 'OK', 8000);
+        }
+      );
+
+  }
+
+  endDateBeforeStart(AC: AbstractControl) {
+    const start_date = AC.get('start_date').value;
+    const end_date = AC.get('end_date').value;
+    if ((start_date !== null && end_date !== null) && start_date > end_date) {
+      AC.get('end_date').setErrors({ endDateBeforeStart: true });
     }
-  });
-}
+    return null;
+  }
 
-openGNISLookupDialog() {
-  this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
-    disableClose: true,
-    data: {}
-  });
+  initLocationSpecies() {
+    return this.formBuilder.group({
+      species: [null, Validators.required],
+      population_count: [null, Validators.min(0)],
+      sick_count: [null, Validators.min(0)],
+      dead_count: [null, Validators.min(0)],
+      sick_count_estimated: [null, Validators.min(0)],
+      dead_count_estimated: [null, Validators.min(0)],
+      priority: null,
+      captive: false,
+      age_bias: null,
+      sex_bias: null
+    });
+  }
 
-  this.gnisLookupDialogRef.afterClosed().subscribe(result => {
-    console.log(result);
-    this.addEventLocationForm.get('gnis_id').setValue(result.id);
-    this.addEventLocationForm.get('gnis_name').setValue(result.name);
+  initLocationContacts() {
+    return this.formBuilder.group({
+      id: null,
+      contact_type: null
+    });
+  }
 
-  });
-}
+  initLocationComments() {
+    return this.formBuilder.group({
+      comment: '',
+      comment_type: null
+    });
+  }
+
+  // location species
+  addLocationSpecies() {
+    const control = <FormArray>this.addEventLocationForm.get('new_location_species');
+    control.push(this.initLocationSpecies());
+  }
+
+  removeLocationSpecies(i, j) {
+    const control = <FormArray>this.addEventLocationForm.get('new_location_species');
+    control.removeAt(j);
+  }
+  getLocationSpecies() {
+    return this.addEventLocationForm.controls.new_location_species['controls'];
+  }
+
+  // location contacts
+  addLocationContacts() {
+    const control = <FormArray>this.addEventLocationForm.get('new_location_contacts');
+    control.push(this.initLocationContacts());
+  }
+
+  removeLocationContacts(i, k) {
+    const control = <FormArray>this.addEventLocationForm.get('new_location_contacts');
+    control.removeAt(k);
+  }
+
+  getLocationContacts() {
+    return this.addEventLocationForm.controls.new_location_contacts['controls'];
+  }
+
+  // location comments
+  addLocationComments(i) {
+    const control = <FormArray>this.addEventLocationForm.get('new_comments');
+    control.push(this.initLocationComments());
+  }
+
+  removeLocationComments(i, m) {
+    const control = <FormArray>this.addEventLocationForm.get('new_comments');
+    control.removeAt(m);
+  }
+
+  getLocationComments(form) {
+    return form.controls.comments.controls;
+  }
+
+  updateAdminLevelOneOptions(selectedCountryID) {
+    const id = Number(selectedCountryID);
+
+    // query the adminlevelones endpoint for appropriate records
+    // update the options for the adminLevelOne select with the response
+
+    this.adminLevelOneService.queryAdminLevelOnes(id)
+      .subscribe(
+        adminLevelOnes => {
+          this.adminLevelOnes = adminLevelOnes;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
+  updateAdminLevelTwoOptions(selectedAdminLevelOneID) {
+    const id = Number(selectedAdminLevelOneID);
+
+    this.addEventLocationForm.get('administrative_level_two').setValue(null);
+
+    // query the adminleveltwos endpoint for appropriate records
+    // update the options for the adminLevelTwo select with the response
+
+    this.adminLevelTwoService.queryAdminLevelTwos(id)
+      .subscribe(
+        adminLevelTwos => {
+          this.adminLevelTwos = adminLevelTwos;
+          this.adminLevelTwos.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
+
+          // load the initial bank list
+          this.filteredAdminLevelTwos.next(this.adminLevelTwos);
+
+          // listen for search field value changes
+          this.adminLevelTwoFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+              this.filterAdminLevelTwos();
+            });
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+  setEventLocationForGNISSelect(i) {
+    console.log('Selecting GNIS record for Event Location Number' + (i + 1));
+  }
+
+  openCreateContactDialog() {
+    this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      disableClose: true,
+      data: {
+        contact_action: 'create'
+      }
+    });
+  }
+
+  openGNISLookupDialog() {
+    this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
+      disableClose: true,
+      data: {}
+    });
+
+    this.gnisLookupDialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      this.addEventLocationForm.get('gnis_id').setValue(result.id);
+      this.addEventLocationForm.get('gnis_name').setValue(result.name);
+
+    });
+  }
+
+  ManageSpeciesControl(locationSpeciesIndex: number) {
+    // populate the species options list for the specific control
+    this.filteredSpecies[locationSpeciesIndex].next(this.species);
+
+    // listen for search field value changes
+    this.speciesFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterSpecies(locationSpeciesIndex);
+      });
+  }
+
+  ManageContactControl(locationContactIndex: number) {
+    // populate the species options list for the specific control
+    this.filteredContacts[locationContactIndex].next(this.userContacts);
+
+    // listen for search field value changes
+    this.contactFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterContacts(locationContactIndex);
+      });
+  }
+
+
+  private filterSpecies(locationSpeciesIndex) {
+    if (!this.species) {
+      return;
+    }
+    // get the search keyword
+    let search = this.speciesFilterCtrl.value;
+    if (!search) {
+      this.filteredSpecies[locationSpeciesIndex].next(this.species.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the adminLevelTwos
+    this.filteredSpecies[locationSpeciesIndex].next(
+      this.species.filter(species => species.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  private filterContacts(locationContactIndex) {
+    if (!this.userContacts) {
+      return;
+    }
+    // get the search keyword
+    let search = this.contactFilterCtrl.value;
+    if (!search) {
+      this.filteredContacts[locationContactIndex].next(this.userContacts.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the contacts
+    this.filteredContacts[locationContactIndex].next(
+      // tslint:disable-next-line:max-line-length
+      this.userContacts.filter(contact => contact.first_name.toLowerCase().indexOf(search) > -1 || contact.last_name.toLowerCase().indexOf(search) > -1)
+    );
+  }
 
   private filterAdminLevelOnes() {
-  if (!this.adminLevelOnes) {
-    return;
+    if (!this.adminLevelOnes) {
+      return;
+    }
+    // get the search keyword
+    let search = this.adminLevelOneFilterCtrl.value;
+    if (!search) {
+      this.filteredAdminLevelOnes.next(this.adminLevelOnes.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the adminLevelOnes
+    this.filteredAdminLevelOnes.next(
+      this.adminLevelOnes.filter(admin_level_one => admin_level_one.name.toLowerCase().indexOf(search) > -1)
+    );
   }
-  // get the search keyword
-  let search = this.adminLevelOneFilterCtrl.value;
-  if (!search) {
-    this.filteredAdminLevelOnes.next(this.adminLevelOnes.slice());
-    return;
-  } else {
-    search = search.toLowerCase();
-  }
-  // filter the adminLevelOnes
-  this.filteredAdminLevelOnes.next(
-    this.adminLevelOnes.filter(admin_level_one => admin_level_one.name.toLowerCase().indexOf(search) > -1)
-  );
-}
 
   private filterAdminLevelTwos() {
-  if (!this.adminLevelTwos) {
-    return;
+    if (!this.adminLevelTwos) {
+      return;
+    }
+    // get the search keyword
+    let search = this.adminLevelTwoFilterCtrl.value;
+    if (!search) {
+      this.filteredAdminLevelTwos.next(this.adminLevelTwos.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the adminLevelTwos
+    this.filteredAdminLevelTwos.next(
+      this.adminLevelTwos.filter(admin_level_two => admin_level_two.name.toLowerCase().indexOf(search) > -1)
+    );
   }
-  // get the search keyword
-  let search = this.adminLevelTwoFilterCtrl.value;
-  if (!search) {
-    this.filteredAdminLevelTwos.next(this.adminLevelTwos.slice());
-    return;
-  } else {
-    search = search.toLowerCase();
-  }
-  // filter the adminLevelTwos
-  this.filteredAdminLevelTwos.next(
-    this.adminLevelTwos.filter(admin_level_two => admin_level_two.name.toLowerCase().indexOf(search) > -1)
-  );
-}
 
 
 

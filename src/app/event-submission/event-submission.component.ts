@@ -203,8 +203,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   // filteredSpecies: ReplaySubject<Species[]> = new ReplaySubject<Species[]>();
   // filteredContacts: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>();
 
-
-
   buildEventSubmissionForm() {
     this.eventSubmissionForm = this.formBuilder.group({
       event_reference: '',
@@ -700,7 +698,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           this.errorMessage = <any>error;
         }
       );
-
 
     // get sexBiases from the sexBias service
     this.sexBiasService.getSexBiases()

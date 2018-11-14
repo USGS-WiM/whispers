@@ -280,7 +280,7 @@
 
       <mat-step [stepControl]="addEventLocationForm">
 
-        <ng-template matStepLabel>Species</ng-template>
+        <ng-template matStepLabel>Species & Species Diagnosis</ng-template>
         <div>
 
           <div formArrayName="new_location_species">
@@ -290,24 +290,26 @@
 
                 <div class="horizontal-form-container" class="species-controls-container">
 
-                  <mat-form-field class="form-control">
+                  <!-- <mat-form-field class="form-control">
                     <mat-select placeholder="Species" formControlName="species">
                       <mat-option *ngFor="let species of species" value="{{species.id}}">{{species.name}}</mat-option>
                     </mat-select>
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
                     </mat-hint>
-                  </mat-form-field>
-
-                  <!-- TODO: implement autocomplete for species later -->
-                  <!-- <mat-form-field>
-                    <input type="text" matInput placeholder="Species" aria-label="Species" [matAutocomplete]="speciesAutoComplete" formControlName="species">
-                    <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn">
-                      <mat-option *ngFor="let species of filteredSpecies | async" [value]="species">
-                        <span>{{ species.name }}</span>
-                      </mat-option>
-                    </mat-autocomplete>
                   </mat-form-field> -->
+
+                  <!-- new experimental species search select -->
+                  <mat-form-field class="form-control">
+                    <mat-select formControlName="species" placeholder="Species" #speciesSelect>
+                      <ngx-mat-select-search [formControl]="speciesFilterCtrl" [placeholderLabel]="'Find species...'"
+                        [noEntriesFoundLabel]="'no matching species found'"></ngx-mat-select-search>
+                      <mat-option *ngFor="let species of filteredSpecies[locationSpeciesIndex] | async" [value]="species.id">
+                        {{species.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <!-- end new experimental species search select -->
 
                   <mat-form-field class="species-number-control">
                     <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count">
@@ -429,17 +431,21 @@
           <div class="contacts-container" *ngFor="let locationContacts of getLocationContacts(); let locationContactIndex = index">
 
             <div class="horizontal-form-container contact-controls-container" [formGroupName]="locationContactIndex">
-              <mat-form-field class="form-control contact-select">
-                <mat-select placeholder="Contact" formControlName="id">
-                  <mat-option *ngFor="let contact of userContacts" [value]="contact.id">{{contact.first_name}}
-                    {{contact.last_name}} | {{contact.organization |
-                    displayValue:'name':this.organizations}}
+
+              <mat-form-field class="contact-select">
+                <mat-select formControlName="contact" placeholder="Contact Person" #contactSelect>
+                  <ngx-mat-select-search [formControl]="contactFilterCtrl" [placeholderLabel]="'Find contact...'"
+                    [noEntriesFoundLabel]="'no matching contact found'"></ngx-mat-select-search>
+                  <mat-option *ngFor="let contact of filteredContacts[locationContactIndex] | async" [value]="contact.id">
+                    <span>{{contact.first_name}}
+                      {{contact.last_name}} | {{contact.organization
+                      |displayValue:'name':this.organizations}}</span>
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-
+  
               <mat-form-field class="form-control  contact-type-select">
-                <mat-select placeholder="Type" formControlName="contact_type" required>
+                <mat-select placeholder="Type" formControlName="contact_type">
                   <mat-option *ngFor="let contactType of contactTypes" [value]="contactType.id">{{contactType.name}}</mat-option>
                 </mat-select>
               </mat-form-field>

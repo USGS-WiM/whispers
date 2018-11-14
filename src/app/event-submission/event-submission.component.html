@@ -506,8 +506,7 @@
                                       <mat-card-content>
                                         <mat-list dense>
                                           <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
-                                            {{speciesDiagnosis.get('diagnosis').value
-                                            |displayValue:'name':this.diagnoses}}
+                                            {{speciesDiagnosis.get('diagnosis').value |displayValue:'name':this.diagnoses}}
                                             <button mat-icon-button color="warn" aria-label="Remove this diagnosis"
                                               matTooltip="Remove this diagnosis" (click)="removeSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
                                               <mat-icon>remove_circle</mat-icon>
@@ -645,7 +644,7 @@
 
                           <div formArrayName="new_location_contacts">
                             <div class="contacts-container" *ngFor="let locationContacts of getLocationContacts(eventLocation); let locationContactIndex = index">
-                              <div class="vertical-form-container contact-controls-container" [formGroupName]="locationContactIndex">
+                              <div class="horizontal-form-container contact-controls-container" [formGroupName]="locationContactIndex">
 
                                 <!-- new experimental contact search select -->
                                 <mat-form-field class="contact-select">
@@ -674,7 +673,7 @@
                                     <mat-icon>group_work</mat-icon>
                                   </button>
                                   <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details"
-                                  (click)="viewContactDetailsDialog(eventLocationIndex, locationContactIndex)">
+                                    (click)="viewContactDetailsDialog(eventLocationIndex, locationContactIndex)">
                                     <mat-icon>assignment_ind</mat-icon>
                                   </button>
                                   <button mat-icon-button color="warn" aria-label="Remove this contact from this location"
@@ -808,7 +807,7 @@
                             <mat-form-field class="form-control event-diagnosis-select">
                               <mat-select placeholder="Event Diagnosis" formControlName="diagnosis">
                                 <mat-option>--</mat-option>
-                                <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}</mat-option>
+                                <mat-option *ngFor="let diagnosis of availableDiagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}</mat-option>
                               </mat-select>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>

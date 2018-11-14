@@ -5,6 +5,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 
+import { Subject, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
@@ -38,6 +41,13 @@ export class AddEventLocationContactComponent implements OnInit {
 
   eventLocationContactForm: FormGroup;
 
+  public filteredContacts: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>(1);
+
+  contactFilterCtrl: FormControl = new FormControl();
+
+  /** Subject that emits when the component has been destroyed. */
+  private _onDestroy = new Subject<void>();
+
   buildEventLocationContactForm() {
     this.eventLocationContactForm = this.formBuilder.group({
       event_location: null,
@@ -67,6 +77,16 @@ export class AddEventLocationContactComponent implements OnInit {
 
     this.userContacts = this.data.userContacts;
 
+    // populate the search select options for the contact control
+    this.filteredContacts.next(this.data.userContacts);
+
+    // listen for search field value changes
+    this.contactFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterContact();
+      });
+
     // get contact types from the ContactTypeService
     this.contactTypeService.getContactTypes()
       .subscribe(
@@ -83,42 +103,37 @@ export class AddEventLocationContactComponent implements OnInit {
       .startWith(null)
       .map(val => this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
 
-
-
-    // TEMPORARY- will need to use user creds to query user contact list
-    // get contact types from the ContactTypeService
-
-    // this.contactService.getContacts()
-    //   .subscribe(
-    //     contacts => {
-    //       this.userContacts = contacts;
-    //       this.userContacts.sort(function (a, b) {
-    //         if (a.last_name < b.last_name) { return -1; }
-    //         if (a.last_name > b.last_name) { return 1; }
-    //         return 0;
-    //       });
-    //       const arrayControl = this.eventLocationContactForm.get('contact') as FormControl;
-    //       this.filteredUserContacts = arrayControl.valueChanges
-    //         .startWith(null)
-    //         .map(val => this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
-
-    //     },
-    //     error => {
-    //       this.errorMessage = <any>error;
-    //     }
-    //   );
-
   }
 
   displayFnContact(contactId?: Contact): string | undefined {
     let contact_id_match;
     for (let i = 0; i < this["options"]._results.length; i++) {
-      if (this["options"]._results[i].value == contactId) {
+      if (this["options"]._results[i].value === contactId) {
         contact_id_match = this["options"]._results[i].viewValue;
       }
     }
     return contact_id_match;
   }
+
+  private filterContact() {
+    if (!this.data.userContacts) {
+      return;
+    }
+    // get the search keyword
+    let search = this.contactFilterCtrl.value;
+    if (!search) {
+      this.filteredContacts.next(this.data.userContacts.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredContacts.next(
+      // tslint:disable-next-line:max-line-length
+      this.data.userContacts.filter(contact => contact.first_name.toLowerCase().indexOf(search) > -1 || contact.last_name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {

@@ -86,7 +86,7 @@ export class EditLocationSpeciesComponent implements OnInit {
     this.speciesFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
-        this.filterBanks();
+        this.filterSpecies();
       });
 
     if (this.data.eventlocation) {
@@ -155,7 +155,7 @@ export class EditLocationSpeciesComponent implements OnInit {
 
   }
 
-  private filterBanks() {
+  private filterSpecies() {
     if (!this.data.species) {
       return;
     }

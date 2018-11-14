@@ -380,7 +380,7 @@ export class AddEventLocationComponent implements OnInit {
 
   initLocationContacts() {
     return this.formBuilder.group({
-      id: null,
+      contact: null,
       contact_type: null
     });
   }
@@ -396,6 +396,11 @@ export class AddEventLocationComponent implements OnInit {
   addLocationSpecies() {
     const control = <FormArray>this.addEventLocationForm.get('new_location_species');
     control.push(this.initLocationSpecies());
+
+    const locationSpeciesIndex = control.length - 1;
+
+    this.filteredSpecies.push(new ReplaySubject<Species[]>());
+    this.ManageSpeciesControl(locationSpeciesIndex);
   }
 
   removeLocationSpecies(i, j) {
@@ -407,14 +412,19 @@ export class AddEventLocationComponent implements OnInit {
   }
 
   // location contacts
-  addLocationContacts() {
+  addLocationContact() {
     const control = <FormArray>this.addEventLocationForm.get('new_location_contacts');
     control.push(this.initLocationContacts());
+
+    const locationContactIndex = control.length - 1;
+
+    this.filteredContacts.push(new ReplaySubject<Contact[]>());
+    this.ManageContactControl(locationContactIndex);
   }
 
-  removeLocationContacts(i, k) {
+  removeLocationContacts(locationContactIndex) {
     const control = <FormArray>this.addEventLocationForm.get('new_location_contacts');
-    control.removeAt(k);
+    control.removeAt(locationContactIndex);
   }
 
   getLocationContacts() {

@@ -80,6 +80,8 @@ import { EventStatusService } from '@services/event-status.service';
 import { CreateContactComponent } from '@create-contact/create-contact.component';
 import { CreateContactService } from '@create-contact/create-contact.service';
 
+import { ViewContactDetailsComponent } from '@app/view-contact-details/view-contact-details.component';
+
 import { ConfirmComponent } from '@confirm/confirm.component';
 
 import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
@@ -107,6 +109,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
   submitSuccessDialogRef: MatDialogRef<EventSubmissionSuccessComponent>;
+  viewContactDetailsDialogRef: MatDialogRef<ViewContactDetailsComponent>;
 
   eventSubmitConfirm: MatBottomSheetRef<EventSubmissionConfirmComponent>;
 
@@ -1305,6 +1308,25 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           }
         );
     }
+  }
+
+  viewContactDetailsDialog() {
+
+    // Open dialog for adding event diagnosis
+    this.viewContactDetailsDialogRef = this.dialog.open(ViewContactDetailsComponent, {
+      data: {}
+    });
+
+    this.viewContactDetailsDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          // do something after close
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
   }
 
   openSnackBar(message: string, action: string, duration: number) {

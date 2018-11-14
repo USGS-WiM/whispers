@@ -119,7 +119,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   legalStatuses: LegalStatus[];
   eventStatuses: EventStatus[];
   landOwnerships: LandOwnership[];
-  diagnoses: Diagnosis[];
+  allDiagnoses: Diagnosis[];
+  availableDiagnoses: Diagnosis[] = [];
 
   countries: Country[];
   staff: Staff[];
@@ -593,12 +594,18 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this.diagnosisService.getDiagnoses()
       .subscribe(
         (diagnoses) => {
-          this.diagnoses = diagnoses;
-          this.diagnoses.sort(function (a, b) {
+          this.allDiagnoses = diagnoses;
+          this.allDiagnoses.sort(function (a, b) {
             if (a.name < b.name) { return -1; }
             if (a.name > b.name) { return 1; }
             return 0;
           });
+
+          for (const diagnosis of this.allDiagnoses) {
+            if (diagnosis.name === 'Undetermined') {
+              this.availableDiagnoses.push(diagnosis);
+            }
+          }
         },
         error => {
           this.errorMessage = <any>error;
@@ -993,10 +1000,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     return this.formBuilder.group({
       species: [null, Validators.required],
       population_count: [null, Validators.min(0)],
-      sick_count:  [null, Validators.min(0)],
-      dead_count:  [null, Validators.min(0)],
-      sick_count_estimated:  [null, Validators.min(0)],
-      dead_count_estimated:  [null, Validators.min(0)],
+      sick_count: [null, Validators.min(0)],
+      dead_count: [null, Validators.min(0)],
+      sick_count_estimated: [null, Validators.min(0)],
+      dead_count_estimated: [null, Validators.min(0)],
       priority: null,
       captive: false,
       age_bias: null,
@@ -1043,7 +1050,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   initEventDiagnosis() {
     return this.formBuilder.group({
-      diagnosis: null
+      // TODO: make this value configurbale for the "Undetermined" value
+      diagnosis: '469'
     });
   }
 
@@ -1376,6 +1384,24 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
               pooled: speciesDiagnosisObj.formValue.pooled,
               new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
             });
+
+
+          for (const diagnosis of this.allDiagnoses) {
+            if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
+
+              let found = false;
+              for (const availableDiagnosis of this.availableDiagnoses) {
+                if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
+                  found = true;
+                  break;
+                }
+              }
+              if (!found) {
+                this.availableDiagnoses.push(diagnosis);
+              }
+
+            }
+          }
 
         },
         error => {

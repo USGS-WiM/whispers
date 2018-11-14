@@ -1,22 +1,45 @@
-<span class="mat-title">Contact Details</span>
+<mat-dialog-content>
+  <span class="mat-title">Contact Details</span>
 
-<mat-card class="user-info-card">
-  <mat-card-content>
-    <span>
-      <label>First Name: {{contact.first_name}}</label>
-    </span>
-    <br />
-    <span>
-      <label>Last Name: {{contact.last_name}}</label>
-    </span>
-    <br />
-    <span>
-      <label>Organization: {{contact.organization}}</label>
-    </span>
-    <br />
-    <span>
-      <label>Email: {{contact.email}}</label>
-    </span>
-    <br />
-  </mat-card-content>
-</mat-card>
+  <mat-card class="user-info-card">
+    <mat-card-content>
+      <span>
+        <label>First Name: {{contactDetails.first_name}}</label>
+      </span>
+      <br />
+      <span>
+        <label>Last Name: {{contactDetails.last_name}}</label>
+      </span>
+      <br />
+      <span>
+        <label>Position: {{contactDetails.position}}</label>
+      </span>
+      <br />
+      <span>
+        <label>Title: {{contactDetails.title}}</label>
+      </span>
+      <br />
+      <span>
+        <label>Email: {{contactDetails.email}}</label>
+      </span>
+      <br />
+      <span>
+        <label>Phone: {{contactDetails.phone}}</label>
+      </span>
+      <br />
+      <span>
+        <label>Organization: {{contactDetails.organization_string}}</label>
+      </span>
+      <br />
+      <span>
+        <label>Owner Organization: {{contactDetails.owner_organization_string}}</label>
+      </span>
+      <br />
+    </mat-card-content>
+  </mat-card>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button color="primary" (click)="this.viewContactDetailsDialogRef.close();">
+    <mat-icon>close</mat-icon>&nbsp;Close
+  </button>
+</mat-dialog-actions>

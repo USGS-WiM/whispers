@@ -382,29 +382,6 @@
 
                                   <div class="horizontal-form-container" class="species-controls-container">
 
-                                    <!--<mat-form-field class="form-control">
-                                          <mat-select placeholder="Species" formControlName="species">
-                                            <mat-option *ngFor="let species of species" value="{{species.id}}">{{species.name}}</mat-option>
-                                          </mat-select>
-                                          <mat-hint align="end" matTooltip="Public field">
-                                            <mat-icon>public</mat-icon>
-                                          </mat-hint>
-                                        </mat-form-field>-->
-
-                                    <!-- Species autocomplete control -->
-                                    <!-- <mat-form-field class="form-control">
-                                      <input type="text" matInput placeholder="Species" aria-label="Species"
-                                        [matAutocomplete]="speciesAutoComplete" formControlName="species">
-                                      <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn">
-                                        <mat-option *ngFor="let species of filteredSpecies[eventLocationIndex][locationSpeciesIndex] | async"
-                                          [value]="species.id">
-                                          <span>{{species.name}}</span>
-                                        </mat-option>
-                                      </mat-autocomplete>
-                                    </mat-form-field> -->
-                                    <!-- End Species autocomplete control -->
-
-
                                     <!-- new experimental species search select -->
                                     <mat-form-field class="form-control">
                                       <mat-select formControlName="species" placeholder="Species" #speciesSelect>
@@ -668,7 +645,7 @@
 
                           <div formArrayName="new_location_contacts">
                             <div class="contacts-container" *ngFor="let locationContacts of getLocationContacts(eventLocation); let locationContactIndex = index">
-                              <div class="horizontal-form-container contact-controls-container" [formGroupName]="locationContactIndex">
+                              <div class="vertical-form-container contact-controls-container" [formGroupName]="locationContactIndex">
 
                                 <!-- new experimental contact search select -->
                                 <mat-form-field class="contact-select">

@@ -9,9 +9,6 @@ import { take, takeUntil } from 'rxjs/operators';
 
 import { ReplaySubject, Subject } from 'rxjs';
 
-import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-
 import { MatDialog, MatDialogRef, MatSelect } from '@angular/material';
 import { MatBottomSheetModule, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
 
@@ -1198,6 +1195,34 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this.filteredContacts[eventLocationIndex].splice(locationContactIndex, 1);
   }
 
+  viewContactDetailsDialog(eventLocationIndex, locationContactIndex) {
+
+    let contact_id = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts').value[locationContactIndex].contact;
+    let currentContact = this.userContacts.find(i => i.id === contact_id);
+
+    if (contact_id == null) {
+      this.openSnackBar('First select a contact to view that contact\'s details', 'OK', 5000);
+    } else {
+      // Open dialog for viewing contact details
+      this.viewContactDetailsDialogRef = this.dialog.open(ViewContactDetailsComponent, {
+        data: {
+          contact: currentContact
+        }
+      });
+
+      this.viewContactDetailsDialogRef.afterClosed()
+        .subscribe(
+          () => {
+            // do something after close
+          },
+          error => {
+            this.errorMessage = <any>error;
+          }
+        );
+    }
+
+  }
+
   getLocationContacts(form) {
     return form.controls.new_location_contacts.controls;
   }
@@ -1308,25 +1333,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           }
         );
     }
-  }
-
-  viewContactDetailsDialog() {
-
-    // Open dialog for adding event diagnosis
-    this.viewContactDetailsDialogRef = this.dialog.open(ViewContactDetailsComponent, {
-      data: {}
-    });
-
-    this.viewContactDetailsDialogRef.afterClosed()
-      .subscribe(
-        () => {
-          // do something after close
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-
   }
 
   openSnackBar(message: string, action: string, duration: number) {

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Inject } from '@angular/core';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material';
 
 
 @Component({
@@ -10,12 +12,19 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 })
 export class ViewContactDetailsComponent implements OnInit {
 
-  viewContactDetailsDialogRef: MatDialogRef<ViewContactDetailsComponent>;
+  contactDetails;
 
-  constructor() { }
+  constructor(
+    public viewContactDetailsDialogRef: MatDialogRef<ViewContactDetailsComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { }
 
   ngOnInit() {
-    
+
+    console.log(this.data);
+
+    this.contactDetails = this.data.contact;
+
   }
 
 }

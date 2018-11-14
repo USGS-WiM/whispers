@@ -108,6 +108,7 @@ import { AddServiceRequestComponent } from './add-service-request/add-service-re
 import { NewLookupRequestComponent } from './new-lookup-request/new-lookup-request.component';
 import { SaveSearchComponent } from './save-search/save-search.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
+import { ViewContactDetailsComponent } from './view-contact-details/view-contact-details.component';
 
 
 
@@ -144,7 +145,8 @@ import { UserRegistrationComponent } from './user-registration/user-registration
     AddServiceRequestComponent,
     NewLookupRequestComponent,
     SaveSearchComponent,
-    UserRegistrationComponent
+    UserRegistrationComponent,
+    ViewContactDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -248,7 +250,8 @@ import { UserRegistrationComponent } from './user-registration/user-registration
     AddServiceRequestComponent,
     NewLookupRequestComponent,
     SaveSearchComponent,
-    UserRegistrationComponent
+    UserRegistrationComponent,
+    ViewContactDetailsComponent
   ]
 })
 export class AppModule { }

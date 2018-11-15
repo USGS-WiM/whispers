@@ -158,6 +158,7 @@ export class LocationSpeciesTableComponent implements OnInit {
   editSpeciesDiagnosis(speciesdiagnosis, locationspecies) {
 
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+      minWidth: '40em',
       disableClose: true,
       data: {
         locationspecies: locationspecies,
@@ -187,6 +188,7 @@ export class LocationSpeciesTableComponent implements OnInit {
   addSpeciesDiagnosis(locationspecies) {
 
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+      minWidth: '40em',
       disableClose: true,
       data: {
         locationspecies: locationspecies,

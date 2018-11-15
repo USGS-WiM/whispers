@@ -807,7 +807,7 @@
                             <mat-form-field class="form-control event-diagnosis-select">
                               <mat-select placeholder="Event Diagnosis" formControlName="diagnosis">
                                 <mat-option>--</mat-option>
-                                <mat-option *ngFor="let diagnosis of availableDiagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}</mat-option>
+                                <mat-option *ngFor="let diagnosis of availableDiagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}<span *ngIf="diagnosis.suspect"> (suspect)</span></mat-option>
                               </mat-select>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>

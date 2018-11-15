@@ -878,7 +878,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
     const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'];
 
-    // check which object is being sent, parse out the specific form group instance from the form, add to the commonEventData object
+    // check which object is being sent, parse out the specific form group instance from the form, nevent to the commonEventData object
     switch (objectType) {
       case 'contact':
         const contactsArray =
@@ -987,7 +987,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         this.initLocationSpecies()
       ]),
       new_location_contacts: this.formBuilder.array([
-        this.initLocationContacts()
+        //this.initLocationContacts()
       ])
     },
       {
@@ -1029,7 +1029,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   initLocationContacts() {
     return this.formBuilder.group({
-      contact: null,
+      contact: [null, Validators.required],
       contact_type: null
     });
   }

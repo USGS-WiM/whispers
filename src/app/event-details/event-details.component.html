@@ -59,7 +59,7 @@
                     <th [attr.rowspan]="eventData.eventdiagnoses.length + 1 ">Diagnosis</th>
                   </tr>
                   <tr *ngFor="let diagnosis of eventData.eventdiagnoses" class="noBorder">
-                    <td>{{diagnosis.diagnosis_string}}</td>
+                    <td><span>{{diagnosis.diagnosis_string}}</span><span *ngIf="diagnosis.suspect">(Suspect)</span></td>
                   </tr>
                   <tr>
                     <th [attr.rowspan]="eventData.eventlocations.length + 1 ">Locations</th>

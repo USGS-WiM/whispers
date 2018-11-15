@@ -498,7 +498,7 @@
                                   <br />
                                   <!-- div for displaying species diagnoses added to the location species -->
                                   <!-- *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index" -->
-                                  <div *ngIf="locationSpecies.controls.new_species_diagnosis && getSpeciesDiagnoses(locationSpecies).length > 0">
+                                  <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
                                     <mat-card>
                                       <mat-card-header>
                                         <mat-card-title class="text-bold text-larger">Diagnoses for this Species</mat-card-title>
@@ -506,7 +506,8 @@
                                       <mat-card-content>
                                         <mat-list dense>
                                           <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
-                                            {{speciesDiagnosis.get('diagnosis').value |displayValue:'name':this.diagnoses}}
+                                            {{speciesDiagnosis.get('diagnosis').value |
+                                            displayValue:'name':this.allDiagnoses}}
                                             <button mat-icon-button color="warn" aria-label="Remove this diagnosis"
                                               matTooltip="Remove this diagnosis" (click)="removeSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
                                               <mat-icon>remove_circle</mat-icon>
@@ -807,7 +808,8 @@
                             <mat-form-field class="form-control event-diagnosis-select">
                               <mat-select placeholder="Event Diagnosis" formControlName="diagnosis">
                                 <mat-option>--</mat-option>
-                                <mat-option *ngFor="let diagnosis of availableDiagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}<span *ngIf="diagnosis.suspect"> (suspect)</span></mat-option>
+                                <mat-option *ngFor="let diagnosis of availableDiagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}<span
+                                    *ngIf="diagnosis.suspect"> (suspect)</span></mat-option>
                               </mat-select>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>

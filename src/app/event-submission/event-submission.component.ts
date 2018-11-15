@@ -315,6 +315,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           .subscribe(
             contacts => {
               this.userContacts = contacts;
+              console.log('User Contacts Loaded');
             },
             error => {
               this.errorMessage = <any>error;
@@ -512,15 +513,16 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   filter(val: any, searchArray: any, searchProperties: string[]): string[] {
     let result = [];
-    if (val == "") {
+    if (val === '') {
       result = searchArray;
     } else {
-      for (let searchProperty of searchProperties) {
+      for (const searchProperty of searchProperties) {
         if (isNaN(val)) {
           const realval = val && typeof val === 'object' ? val[searchProperty] : val;
           let lastOption = null;
           if (searchArray !== undefined) {
             for (let i = 0; i < searchArray.length; i++) {
+              // tslint:disable-next-line:max-line-length
               if (searchArray[i][searchProperty] != null && (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase()))) {
                 if (searchArray[i][searchProperty] !== lastOption) {
                   lastOption = searchArray[i][searchProperty];
@@ -550,7 +552,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       }
     });
 
-    //this.setInitialValue();
+    // this.setInitialValue();
 
   }
 
@@ -877,21 +879,34 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   createCommonEventDataObject(objectType, eventLocationIndex, objectInstanceIndex) {
 
     const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'];
-
-    // check which object is being sent, parse out the specific form group instance from the form, nevent to the commonEventData object
+    // check which object is being sent, parse out the specific form group instance from the form, add to the commonEventData object
     switch (objectType) {
       case 'contact':
         const contactsArray =
           <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
         const contact = contactsArray.controls[objectInstanceIndex];
-        this.commonEventData.contacts.push(contact);
+        this.commonEventData.contacts.push(this.formBuilder.group({
+          contact: contact.value.contact,
+          contact_type: null
+        }));
 
         // loop through event locations and push the new contact into each, except the one it came from (so as to avoid duplicate)
         for (let i = 0, j = eventLocations.length; i < j; i++) {
 
           if (i !== eventLocationIndex) {
-            const locationContacts = eventLocations[i].get('location_contacts');
-            locationContacts.push(contact);
+
+            // call addLocationContact, but also get the return value to know which contact instance to populate with the value
+            const indexObject = this.addLocationContact(i);
+
+            // tslint:disable-next-line:max-line-length
+            console.log('eventlocationindex: ' + indexObject.eventLocationIndex + ', locationspeciesindex: ' + indexObject.locationContactIndex);
+
+            // using the indexObject, push the species id value to the correct form instance
+            // tslint:disable-next-line:max-line-length
+            this.eventSubmissionForm.get('new_event_locations')['controls'][indexObject.eventLocationIndex].get('new_location_contacts')['controls'][indexObject.locationContactIndex].get('contact').setValue(contact.value.contact);
+
+            // const locationContacts = eventLocations[i].get('location_contacts');
+            // locationContacts.push(contact);
           }
         }
 
@@ -914,31 +929,20 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         })
         );
 
-        // loop through event locations and push the new contact into each, except the one it came from (so as to avoid duplicate)
+        // loop through event locations and push the new species into each, except the one it came from (so as to avoid duplicate)
         for (let i = 0, j = eventLocations.length; i < j; i++) {
 
           if (i !== eventLocationIndex) {
-            const locationSpecies = eventLocations[i].get('new_location_species');
-            
-            // push a new formGroup to the locationSpecies formArray, with the same species value but all other controls null/blank
-            // note: to copy the entire formGroup value, change line below to 'locationSpecies.push(species)'
-            locationSpecies.push(this.formBuilder.group({
-              species: species.value.species,
-              population_count: null,
-              sick_count: null,
-              dead_count: null,
-              sick_count_estimated: null,
-              dead_count_estimated: null,
-              priority: null,
-              captive: null,
-              age_bias: null,
-              sex_bias: null
-            })
-            );
 
-            this.addLocationSpecies(i);
+            // call addLocationSpecies, but also get the return value to know which species instance to populate with the value
+            const indexObject = this.addLocationSpecies(i);
 
-            //locationSpecies.controls[locationSpecies.controls.length-1].controls['species'].setValue("1544");
+            // tslint:disable-next-line:max-line-length
+            console.log('eventlocationindex: ' + indexObject.eventLocationIndex + ', locationspeciesindex: ' + indexObject.locationSpeciesIndex);
+
+            // using the indexObject, push the species id value to the correct form instance
+            // tslint:disable-next-line:max-line-length
+            this.eventSubmissionForm.get('new_event_locations')['controls'][indexObject.eventLocationIndex].get('new_location_species')['controls'][indexObject.locationSpeciesIndex].get('species').setValue(species.value.species);
 
           }
         }
@@ -1064,6 +1068,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations');
     control.push(this.initEventLocation());
 
+    const eventLocationIndex = control.length - 1;
+
     const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'];
     const newEventLocationIndex = eventLocations.length - 1;
     const newEventLocation = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][newEventLocationIndex];
@@ -1087,24 +1093,39 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this.ManageContactControl(newEventLocationIndex, 0);
 
     if (this.commonEventData.species.length > 0) {
+      // tslint:disable-next-line:max-line-length
+      this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][0].get('species').setValue(this.commonEventData.species[0].controls.species.value);
 
-      for (const species of this.commonEventData.species) {
-        const locationSpecies = <FormArray>newEventLocation.get('new_location_species');
-        locationSpecies.push(species);
+      if (this.commonEventData.species.length > 1) {
+
+        // get number of species instances needed (default first one has been set already)
+        const speciesFormArrayRemainderLength = this.commonEventData.species.length - 1;
+
+        for (let i = 0; i < speciesFormArrayRemainderLength; i++) {
+          this.addLocationSpecies(eventLocationIndex);
+        }
+
+        // start the loop at [1] (position 2) since [0] was already handled above
+        for (let i = 1; i < this.commonEventData.species.length; i++) {
+          // tslint:disable-next-line:max-line-length
+          this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][i].get('species').setValue(this.commonEventData.species[i].controls.species.value);
+        }
       }
     }
 
+    // contacts are handled differently because there is no default blank contact instance
     if (this.commonEventData.contacts.length > 0) {
 
-      for (const contact of this.commonEventData.contacts) {
-        const locationContacts = <FormArray>newEventLocation.get('new_location_contacts');
-        locationContacts.push(contact);
+      for (let i = 0; i < this.commonEventData.contacts.length; i++) {
+        // tslint:disable-next-line:max-line-length
+        this.addLocationContact(eventLocationIndex);
+      }
+
+      for (let i = 0; i < this.commonEventData.contacts.length; i++) {
+        // tslint:disable-next-line:max-line-length
+        this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts')['controls'][i].get('contact').setValue(this.commonEventData.contacts[i].controls.contact.value);
       }
     }
-
-    // let eventLocationContacts = new Array<Observable<any>>();
-    // this.filteredContacts.push(eventLocationContacts);
-    // this.ManageContactControl(newEventLocationIndex, 0);
 
     this.usgsSearch = search_api.create('search-api-div', {
       'verbose': true,
@@ -1163,13 +1184,15 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     // tslint:disable-next-line:max-line-length
     const controls = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
     controls.push(this.initLocationSpecies());
-    const locationSpeciesIndex = controls.length - 2;
+    const locationSpeciesIndex = controls.length - 1;
 
     // const eventLocationSpecies = new Array<ReplaySubject<Species[]>>();
     // this.filteredSpecies.push(eventLocationSpecies);
     // initiate an empty replaysubject
     this.filteredSpecies[eventLocationIndex].push(new ReplaySubject<Species[]>());
     this.ManageSpeciesControl(eventLocationIndex, locationSpeciesIndex);
+
+    return ({ eventLocationIndex: eventLocationIndex, locationSpeciesIndex: locationSpeciesIndex });
   }
 
   removeLocationSpecies(eventLocationIndex, locationSpeciesIndex) {
@@ -1193,6 +1216,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.filteredContacts[eventLocationIndex].push(new ReplaySubject<Contact[]>());
     this.ManageContactControl(eventLocationIndex, locationContactIndex);
+
+    return ({ eventLocationIndex: eventLocationIndex, locationContactIndex: locationContactIndex });
   }
 
   removeLocationContact(eventLocationIndex, locationContactIndex) {

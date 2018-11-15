@@ -14,7 +14,7 @@
 
     <div class="vertical-form-container">
 
-      <mat-form-field class="form-control" *ngIf="data.species_diagnosis_action !== 'edit'">
+      <mat-form-field class="form-control diagnosis-select" *ngIf="data.species_diagnosis_action !== 'edit'">
         <mat-select placeholder="Species Diagnosis" formControlName="diagnosis" aria-readonly="true">
           <mat-option>--</mat-option>
           <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}</mat-option>

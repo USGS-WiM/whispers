@@ -521,7 +521,7 @@
                                   <br />
                                   <!-- div for displaying species diagnoses added to the location species -->
                                   <!-- *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index" -->
-                                  <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
+                                  <div *ngIf="locationSpecies.controls.new_species_diagnosis && getSpeciesDiagnoses(locationSpecies).length > 0">
                                     <mat-card>
                                       <mat-card-header>
                                         <mat-card-title class="text-bold text-larger">Diagnoses for this Species</mat-card-title>

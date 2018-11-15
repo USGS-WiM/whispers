@@ -915,7 +915,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
           if (i !== eventLocationIndex) {
             const locationSpecies = eventLocations[i].get('new_location_species');
-
+            
             // push a new formGroup to the locationSpecies formArray, with the same species value but all other controls null/blank
             // note: to copy the entire formGroup value, change line below to 'locationSpecies.push(species)'
             locationSpecies.push(this.formBuilder.group({
@@ -931,6 +931,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
               sex_bias: null
             })
             );
+
+            this.addLocationSpecies(i);
+
+            //locationSpecies.controls[locationSpecies.controls.length-1].controls['species'].setValue("1544");
 
           }
         }
@@ -1154,14 +1158,13 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     // tslint:disable-next-line:max-line-length
     const controls = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
     controls.push(this.initLocationSpecies());
-    const locationSpeciesIndex = controls.length - 1;
+    const locationSpeciesIndex = controls.length - 2;
 
     // const eventLocationSpecies = new Array<ReplaySubject<Species[]>>();
     // this.filteredSpecies.push(eventLocationSpecies);
     // initiate an empty replaysubject
     this.filteredSpecies[eventLocationIndex].push(new ReplaySubject<Species[]>());
     this.ManageSpeciesControl(eventLocationIndex, locationSpeciesIndex);
-
   }
 
   removeLocationSpecies(eventLocationIndex, locationSpeciesIndex) {

@@ -15,8 +15,8 @@
           <div class="horizontal-form-container">
 
             <mat-form-field class="form-control">
-              <mat-select placeholder="Event Type" formControlName="event_type" required>
-                <mat-option *ngFor="let eventType of eventTypes" value="{{eventType.id}}">{{eventType.name}}</mat-option>
+              <mat-select placeholder="Event Type" formControlName="event_type" required (ngModelChange)="updateEventType($event)">
+                <mat-option *ngFor="let eventType of eventTypes" value="{{eventType.id}}">{{eventType.name}} </mat-option>
               </mat-select>
               <mat-hint align="end" matTooltip="Public field">
                 <mat-icon>public</mat-icon>
@@ -691,8 +691,13 @@
                           </div>
 
                           <div class="button-row">
-                            <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContact(eventLocationIndex)">
+                            <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContact(eventLocationIndex)"
+                              [disabled]="userContactsLoading">
                               <mat-icon>add_circle</mat-icon> Add Contact
+                              <span *ngIf="userContactsLoading">
+                                <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
+                                <span>Loading contacts list...</span>
+                              </span>
                             </button>
                           </div>
 

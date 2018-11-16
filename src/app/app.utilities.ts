@@ -6,7 +6,13 @@ import { APP_SETTINGS } from '@app/app.settings';
 @Injectable()
 export class APP_UTILITIES {
 
-    public static get TODAY(): string { return new Date().toISOString().substr(0, 10); }
+    public static get TODAY(): any { 
+        const now = new Date();
+        const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() ));
+        const t = new Date(new Date().toDateString());
+        return t;
+
+    }
 
     public static get TIME(): string { return new Date().toISOString().substr(14, 22); }
 

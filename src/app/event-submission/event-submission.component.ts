@@ -9,6 +9,8 @@ import { take, takeUntil } from 'rxjs/operators';
 
 import { ReplaySubject, Subject } from 'rxjs';
 
+import { DisplayValuePipe } from '../pipes/display-value.pipe';
+
 import { MatDialog, MatDialogRef, MatSelect } from '@angular/material';
 import { MatBottomSheetModule, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
 
@@ -154,6 +156,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   commentTypes: CommentType[];
 
   userContacts = [];
+  userContactsLoading = false;
 
   errorMessage;
 
@@ -278,6 +281,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     private currentUserService: CurrentUserService,
     // private matStepper: MatStepper,
     private datePipe: DatePipe,
+    private displayValuePipe: DisplayValuePipe,
     private eventTypeService: EventTypeService,
     private legalStatusService: LegalStatusService,
     private landOwnershipService: LandOwnershipService,
@@ -540,6 +544,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   ngAfterViewInit() {
+
+    const self = this;
     this.usgsSearch = search_api.create('search-api-div', {
       'verbose': true,
       'placeholder': 'Search for GNIS place name',
@@ -551,8 +557,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
       }
     });
-
-    // this.setInitialValue();
 
   }
 
@@ -762,6 +766,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
     // TEMPORARY- will need to use user creds to query user contact list
     // get contact types from the ContactTypeService
+    this.userContactsLoading = true;
     this.contactService.getContacts()
       .subscribe(
         contacts => {
@@ -774,6 +779,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
           // populate the search select options for the initial control
           this.filteredContacts[0][0].next(this.userContacts);
+          this.userContactsLoading = false;
 
           // // listen for search field value changes
           // this.contactFilterCtrl.valueChanges
@@ -905,10 +911,13 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
             // tslint:disable-next-line:max-line-length
             this.eventSubmissionForm.get('new_event_locations')['controls'][indexObject.eventLocationIndex].get('new_location_contacts')['controls'][indexObject.locationContactIndex].get('contact').setValue(contact.value.contact);
 
+
             // const locationContacts = eventLocations[i].get('location_contacts');
             // locationContacts.push(contact);
           }
         }
+        // tslint:disable-next-line:max-line-length
+        this.openSnackBar(this.displayValuePipe.transform(contact.value.contact, 'first_name', this.userContacts) + ' ' + this.displayValuePipe.transform(contact.value.contact, 'last_name', this.userContacts) + ' added to all locations.', 'OK', 5000);
 
         break;
       case 'species':
@@ -943,9 +952,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
             // using the indexObject, push the species id value to the correct form instance
             // tslint:disable-next-line:max-line-length
             this.eventSubmissionForm.get('new_event_locations')['controls'][indexObject.eventLocationIndex].get('new_location_species')['controls'][indexObject.locationSpeciesIndex].get('species').setValue(species.value.species);
-
           }
         }
+        // tslint:disable-next-line:max-line-length
+        this.openSnackBar(this.displayValuePipe.transform(species.value.species, 'name', this.species) + ' added to all locations.', 'OK', 5000);
         break;
     }
 
@@ -961,17 +971,18 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     return null;
   }
 
-  // startDateTodayorLaterMortalityEvent(AC: AbstractControl) {
-  //   const start_date = AC.get('start_date').value;
-  //   const event_type = AC.get('event_type').value;
-  //   const today = APP_UTILITIES.TODAY;
-  //   if (event_type === 1) {
-  //     if ((start_date !== null) && start_date < today) {
-  //       AC.get('start_date').setErrors({ startDateTodayorLaterMortalityEvent: true });
-  //     }
-  //   }
-  //   return null;
-  // }
+  startDateTodayorLaterMortalityEvent(AC: AbstractControl) {
+
+    const start_date = AC.get('start_date').value;
+    const event_type = AC.get('event_type').value;
+    const today = APP_UTILITIES.TODAY;
+    if (event_type === 1) {
+      if ((start_date !== null) && ((start_date.getTime()) < (today.getTime()))) {
+        AC.get('start_date').setErrors({ startDateTodayorLaterMortalityEvent: true });
+      }
+    }
+    return null;
+  }
 
   initEventLocation() {
     return this.formBuilder.group({
@@ -991,6 +1002,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       environmental_factors: '',
       clinical_signs: '',
       comment: '',
+      // used only to capture event_type from event - not part of eventlocation record
+      event_type: null,
       new_location_species: this.formBuilder.array([
         this.initLocationSpecies()
       ]),
@@ -999,7 +1012,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       ])
     },
       {
-        validator: [this.endDateBeforeStart]
+        validator: [this.endDateBeforeStart, this.startDateTodayorLaterMortalityEvent]
       }
     );
   }
@@ -1292,6 +1305,13 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   getLocationComments(form) {
     return form.controls.comments.controls;
+  }
+
+  updateEventType(eventTypeID) {
+    const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'];
+    for (let i = 0, j = eventLocations.length; i < j; i++) {
+      this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('event_type').setValue(Number(eventTypeID));
+    }
   }
 
   updateAdminLevelOneOptions(selectedCountryID, eventLocationIndex) {

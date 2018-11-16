@@ -147,7 +147,7 @@ export class SearchDialogComponent implements OnInit {
             .startWith(null)
             .map(val => this.filter(val, this.eventTypes, 'name'));
 
-          if (this.data.query && this.data.query['event_type'].length > 0) {
+          if (this.data.query && this.data.query['event_type'] && this.data.query['event_type'].length > 0) {
             for (const index in eventTypes) {
               if (this.data.query['event_type'].some(function (el) { return el === eventTypes[index].name; })) {
                 this.dropdownSetup(this.eventTypeControl, this.selectedEventTypes, eventTypes[index]);
@@ -174,7 +174,7 @@ export class SearchDialogComponent implements OnInit {
             .startWith(null)
             .map(val => this.filter(val, this.diagnosisTypes, 'name'));
 
-          if (this.data.query && this.data.query['diagnosis_type'].length > 0) {
+          if (this.data.query && this.data.query['diagnosis_type'] && this.data.query['diagnosis_type'].length > 0) {
             for (const index in diagnosisTypes) {
               if (this.data.query['diagnosis_type'].some(function (el) { return el === diagnosisTypes[index].name; })) {
                 this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, diagnosisTypes[index]);
@@ -201,7 +201,7 @@ export class SearchDialogComponent implements OnInit {
             .startWith(null)
             .map(val => this.filter(val, this.diagnoses, 'name'));
 
-          if (this.data.query && this.data.query['diagnosis'].length > 0) {
+          if (this.data.query && this.data.query['diagnosis'] && this.data.query['diagnosis'].length > 0) {
             for (const index in diagnoses) {
               if (this.data.query['diagnosis'].some(function (el) { return el === diagnoses[index].name; })) {
                 this.dropdownSetup(this.diagnosisControl, this.selectedDiagnoses, diagnoses[index]);
@@ -269,7 +269,7 @@ export class SearchDialogComponent implements OnInit {
             .startWith(null)
             .map(val => this.filter(val, this.species, 'name'));
 
-          if (this.data.query && this.data.query['species'].length > 0) {
+          if (this.data.query && this.data.query['species'] && this.data.query['species'].length > 0) {
             for (const index in species) {
               if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
                 this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);

@@ -75,8 +75,10 @@ export class HomeComponent implements OnInit {
 
   isloggedIn = APP_SETTINGS.IS_LOGGEDIN;
 
-  currentSearchQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
-  currentDisplayQuery: DisplayQuery = APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
+  currentSearchQuery = sessionStorage.getItem('currentSearch') ? JSON.parse(sessionStorage.getItem('currentSearch')) : APP_SETTINGS.DEFAULT_SEARCH_QUERY;
+  //currentSearchQuery;
+  currentDisplayQuery: DisplayQuery = sessionStorage.getItem('currentSearch') ? JSON.parse(sessionStorage.getItem('currentSearch')) : APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
+  //currentDisplayQuery;
 
   currentResults: EventSummary[];
 
@@ -167,38 +169,39 @@ export class HomeComponent implements OnInit {
                 this.resultsLoading = false;
               } else if (count.count < countLimit) {
 
-                this.eventService.queryEvents(searchQuery)
-                  .subscribe(
-                    eventSummaries => {
-                      this.currentResults = eventSummaries;
-                      this.dataSource = new MatTableDataSource(this.currentResults);
-                      this.dataSource.paginator = this.paginator;
-                      this.dataSource.sort = this.sort;
-                      this.resultsLoading = false;
+                if (searchQuery) {
+                  this.eventService.queryEvents(searchQuery)
+                    .subscribe(
+                      eventSummaries => {
+                        this.currentResults = eventSummaries;
+                        this.dataSource = new MatTableDataSource(this.currentResults);
+                        this.dataSource.paginator = this.paginator;
+                        this.dataSource.sort = this.sort;
+                        this.resultsLoading = false;
 
-                      setTimeout(() => {
-                        /*this.map = new L.Map('map', {
-                          center: new L.LatLng(39.8283, -98.5795),
-                          zoom: 4,
-                        });*/
-
-
-                        this.locationMarkers.clearLayers();
+                        setTimeout(() => {
+                          /*this.map = new L.Map('map', {
+                            center: new L.LatLng(39.8283, -98.5795),
+                            zoom: 4,
+                          });*/
 
 
-                        this.mapResults(this.currentResults);
+                          this.locationMarkers.clearLayers();
 
 
-                      }, 500);
+                          this.mapResults(this.currentResults);
 
-                    },
-                    error => {
-                      this.resultsLoading = false;
-                      this.openSnackBar('Query failed due to web service error. Please try again later.', 'OK', 8000);
-                      this.errorMessage = <any>error;
-                    }
-                  );
 
+                        }, 500);
+
+                      },
+                      error => {
+                        this.resultsLoading = false;
+                        this.openSnackBar('Query failed due to web service error. Please try again later.', 'OK', 8000);
+                        this.errorMessage = <any>error;
+                      }
+                    );
+                }
 
                 this.dataSource = new MatTableDataSource(this.currentResults);
                 this.dataSource.paginator = this.paginator;
@@ -209,8 +212,10 @@ export class HomeComponent implements OnInit {
                 // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
                 // this.testDataSource.loadResults(searchQuery);
 
-                this.searchDialogRef.close();
-
+                if (this.searchDialogRef) {
+                  this.searchDialogRef.close();
+                }
+                  
               }
 
             },
@@ -227,8 +232,12 @@ export class HomeComponent implements OnInit {
       .subscribe(
         displayQuery => {
           this.currentDisplayQuery = displayQuery;
-
         });
+
+    // use displayQuery for display of current query in markup, send to searchDialogService
+    //this.searchDialogService.setDisplayQuery(APP_SETTINGS.DEFAULT_DISPLAY_QUERY);
+    // use searchForm.value to build the web service query, send to searchDialogService
+    //this.searchDialogService.setSearchQuery(APP_SETTINGS.DEFAULT_SEARCH_QUERY);
   }
 
   openSearchDialog() {
@@ -245,20 +254,12 @@ export class HomeComponent implements OnInit {
 
     const defaultEventQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
 
-    let currentEventQuery;
-
-    if (sessionStorage.getItem('currentSearch')) {
-      currentEventQuery = JSON.parse(sessionStorage.getItem('currentSearch'));
-    } else {
-      currentEventQuery = defaultEventQuery;
-    }
-
     this.speciesLoading = true;
 
     // two lines below for the DataSource as separate class method (possibly revisit)
     // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
     // this.testDataSource.loadResults(defaultEventQuery);
-    this.eventService.queryEvents(currentEventQuery)
+    this.eventService.queryEvents(this.currentSearchQuery)
       .subscribe(
         eventSummaries => {
           this.currentResults = eventSummaries;
@@ -839,6 +840,16 @@ export class HomeComponent implements OnInit {
         }
       );
 
+  }
+
+  implementSearch(search) {
+    sessionStorage.setItem('currentSearch', JSON.stringify(search));
+    sessionStorage.setItem('currentDisplayQuery', JSON.stringify(search));
+    // use displayQuery for display of current query in markup, send to searchDialogService
+    this.searchDialogService.setDisplayQuery(search);
+    // use searchForm.value to build the web service query, send to searchDialogService
+    this.searchDialogService.setSearchQuery(search);
+    //this.router.navigate([`../home/`], { relativeTo: this.route });
   }
 
 

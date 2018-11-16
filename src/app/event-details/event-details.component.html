@@ -794,7 +794,7 @@
               <mat-icon>remove_circle</mat-icon> Cancel
             </button>
 
-            <app-add-event-location *ngIf="showAddEventLocation" [eventID]="eventID"></app-add-event-location>
+            <app-add-event-location *ngIf="showAddEventLocation" [eventID]="eventID" [eventTypeID]="eventData.event_type"></app-add-event-location>
 
           </div>
           <!-- Add new event location card -->

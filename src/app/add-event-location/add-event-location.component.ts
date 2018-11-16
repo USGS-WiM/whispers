@@ -70,6 +70,7 @@ declare const search_api: search_api;
 })
 export class AddEventLocationComponent implements OnInit {
   @Input('eventID') eventID: string;
+  @Input('eventTypeID') eventTypeID: string;
   @ViewChild('adminLevelOneSelect') adminLevelOneSelect: MatSelect;
   @ViewChild('adminLevelTwoSelect') adminLevelTwoSelect: MatSelect;
   @ViewChild('speciesSelect') speciesSelect: MatSelect;
@@ -120,7 +121,7 @@ export class AddEventLocationComponent implements OnInit {
     this.addEventLocationForm = this.formBuilder.group({
       event: null,
       name: '',
-      start_date: '',
+      start_date: null,
       end_date: null,
       country: [APP_UTILITIES.DEFAULT_COUNTRY_ID, Validators.required],
       administrative_level_one: [null, Validators.required],
@@ -135,6 +136,8 @@ export class AddEventLocationComponent implements OnInit {
       environmental_factors: '',
       clinical_signs: '',
       comment: '',
+      // used only to capture event_type from event - not part of eventlocation record
+      event_type: null,
       new_location_species: this.formBuilder.array([
         // this.initLocationSpecies()
       ]),
@@ -143,7 +146,7 @@ export class AddEventLocationComponent implements OnInit {
       ])
     },
       {
-        validator: [this.endDateBeforeStart]
+        validator: [this.endDateBeforeStart, this.startDateTodayorLaterMortalityEvent]
       });
   }
 
@@ -177,6 +180,8 @@ export class AddEventLocationComponent implements OnInit {
   // }
 
   ngOnInit() {
+
+    this.addEventLocationForm.get('event_type').setValue(this.eventTypeID);
 
     this.filteredSpecies = new Array<ReplaySubject<Species[]>>();
     this.filteredSpecies.push(new ReplaySubject<Species[]>());
@@ -352,6 +357,19 @@ export class AddEventLocationComponent implements OnInit {
         }
       );
 
+  }
+
+  startDateTodayorLaterMortalityEvent(AC: AbstractControl) {
+
+    const start_date = AC.get('start_date').value;
+    const event_type = AC.get('event_type').value;
+    const today = APP_UTILITIES.TODAY;
+    if (event_type === 1) {
+      if ((start_date !== null) && ((start_date.getTime()) < (today.getTime()))) {
+        AC.get('start_date').setErrors({ startDateTodayorLaterMortalityEvent: true });
+      }
+    }
+    return null;
   }
 
   endDateBeforeStart(AC: AbstractControl) {

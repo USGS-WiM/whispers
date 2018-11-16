@@ -19,6 +19,8 @@ import { DataUpdatedService } from '@app/services/data-updated.service';
 
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
+import { APP_UTILITIES } from '@app/app.utilities';
+
 
 @Component({
   selector: 'app-edit-event-location',
@@ -90,7 +92,6 @@ export class EditEventLocationComponent implements OnInit {
   }
 
   ngOnInit() {
-
     // get landOwnerships from the LandOwnerShipService
     this.landOwnershipService.getLandOwnerships()
       .subscribe(

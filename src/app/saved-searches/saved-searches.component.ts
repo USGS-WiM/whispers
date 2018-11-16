@@ -255,6 +255,11 @@ export class SavedSearchesComponent implements OnInit {
 
   implementSearch(search) {
     sessionStorage.setItem('currentSearch', JSON.stringify(search));
+    sessionStorage.setItem('currentDisplayQuery', JSON.stringify(search));
+    // use displayQuery for display of current query in markup, send to searchDialogService
+    this.searchDialogService.setDisplayQuery(search);
+    // use searchForm.value to build the web service query, send to searchDialogService
+    this.searchDialogService.setSearchQuery(search);
     this.router.navigate([`../home/`], { relativeTo: this.route });
   }
 

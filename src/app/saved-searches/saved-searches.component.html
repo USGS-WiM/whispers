@@ -1,5 +1,6 @@
 <div class="suggested-searches">
-  <div class="button-row" *ngFor="let search of parsedSearches">
+  <div class="button-row" *ngFor="let search of parsedSearches" (click)="implementSearch(search)">
+    
     <button mat-button>
       <!-- Start Date -->
       <span class="search-param" *ngIf="search.start_date">

@@ -2,7 +2,7 @@
   <i class="material-icons">edit_location</i> Edit Event Location Details</h1>
 <mat-dialog-content>
 
-  <form [formGroup]="editEventLocationForm">
+  <form [formGroup]="editEventLocationForm" autocomplete="off">
     <div class="horizontal-form-container">
       <mat-form-field class="form-control">
         <input matInput [matDatepicker]="startDate" placeholder="Location Start Date" formControlName="start_date">

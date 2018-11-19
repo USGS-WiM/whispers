@@ -205,6 +205,17 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     });
   }
 
+  onCancel() {
+
+    const speciesDiagnosisObj = {
+      action: 'cancel',
+      eventlocationIndex: this.data.eventlocationIndex,
+      locationspeciesIndex: this.data.locationspeciesIndex,
+    };
+    this.editSpeciesDiagnosisDialogRef.close(speciesDiagnosisObj);
+  }
+
+
   onSubmit(formValue) {
 
     this.submitLoading = true;
@@ -230,6 +241,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     } else if (this.data.species_diagnosis_action === 'addToFormArray') {
 
       const speciesDiagnosisObj = {
+        action: 'add',
         eventlocationIndex: this.data.eventlocationIndex,
         locationspeciesIndex: this.data.locationspeciesIndex,
         formValue: formValue
@@ -246,7 +258,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
             this.submitLoading = false;
             this.openSnackBar('Species Diagnosis Updated', 'OK', 5000);
             this.dataUpdatedService.triggerRefresh();
-            this.editSpeciesDiagnosisDialogRef.close();
+            this.editSpeciesDiagnosisDialogRef.close('add');
           },
           error => {
             this.submitLoading = false;

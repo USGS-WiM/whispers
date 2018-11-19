@@ -24,7 +24,7 @@
 
 <mat-card class="event-location-card">
   <h3>New Event Location (Event {{eventID}})</h3>
-  <form [formGroup]="addEventLocationForm">
+  <form [formGroup]="addEventLocationForm" autocomplete="off">
     <mat-horizontal-stepper [linear]="false" #stepper linear>
 
       <mat-step [stepControl]="addEventLocationForm">

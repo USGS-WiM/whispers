@@ -8,7 +8,7 @@
     <b><span *ngIf="locationspeciesString">{{locationspeciesString}} at</span> {{administrative_level_two}},
       {{administrative_level_one}}</b></h3>
 
-  <form [formGroup]="locationSpeciesForm">
+  <form [formGroup]="locationSpeciesForm" autocomplete="off">
     <div class="vertical-form-container">
 
       <!-- Species autocomplete control -->

@@ -4,6 +4,8 @@ import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternVali
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
+import { Subject, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 
@@ -45,6 +47,14 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
   speciesDiagnosisForm: FormGroup;
   // editSpeciesDiagnosisForm: FormGroup;
+
+  public filteredDiagnoses: ReplaySubject<Diagnosis[]> = new ReplaySubject<Diagnosis[]>(1);
+
+  diagnosisFilterCtrl: FormControl = new FormControl();
+
+  /** Subject that emits when the component has been destroyed. */
+  private _onDestroy = new Subject<void>();
+
 
   // these variables are for use when direct adding a species diagnosis
   locationspecies;
@@ -144,6 +154,16 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
               this.speciesDiagnosisForm.get('diagnosis').setValue(this.data.speciesdiagnosis.diagnosis.toString());
             }
           }
+          // populate the search select options for the species control
+          this.filteredDiagnoses.next(diagnoses);
+
+          // listen for search field value changes
+          this.diagnosisFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+              this.filterDiagnosis();
+            });
+
         },
         error => {
           this.errorMessage = <any>error;
@@ -203,6 +223,24 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     this.snackBar.open(message, action, {
       duration: duration,
     });
+  }
+
+  private filterDiagnosis() {
+    if (!this.diagnoses) {
+      return;
+    }
+    // get the search keyword
+    let search = this.diagnosisFilterCtrl.value;
+    if (!search) {
+      this.filteredDiagnoses.next(this.diagnoses.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredDiagnoses.next(
+      this.diagnoses.filter(diagnosis => diagnosis.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   onCancel() {

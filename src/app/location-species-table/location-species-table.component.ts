@@ -165,7 +165,9 @@ export class LocationSpeciesTableComponent implements OnInit {
         speciesdiagnosis: speciesdiagnosis,
         species_diagnosis_action: 'edit',
         title: 'Edit Species Diagnosis',
-        titleIcon: 'edit'
+        titleIcon: 'edit',
+        actionButtonIcon: 'save',
+        action_button_text: 'Save'
       }
     });
 
@@ -194,7 +196,9 @@ export class LocationSpeciesTableComponent implements OnInit {
         locationspecies: locationspecies,
         species_diagnosis_action: 'add',
         title: 'Add diagnosis for this species',
-        titleIcon: 'add'
+        titleIcon: 'add',
+        actionButtonIcon: 'save',
+        action_button_text: 'Save'
       }
     });
 

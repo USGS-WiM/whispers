@@ -28,7 +28,6 @@ import { EditEventComponent } from '@app/edit-event/edit-event.component';
 import { AddEventDiagnosisComponent } from '@app/add-event-diagnosis/add-event-diagnosis.component';
 import { EditEventLocationComponent } from '@app/edit-event-location/edit-event-location.component';
 import { EditLocationSpeciesComponent } from '@app/edit-location-species/edit-location-species.component';
-import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
 import { LandOwnershipService } from '@services/land-ownership.service';
 import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { marker } from 'leaflet';
@@ -91,7 +90,6 @@ export class EventDetailsComponent implements OnInit {
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
   editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
   editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
-  editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
   addEventLocationContactDialogRef: MatDialogRef<AddEventLocationContactComponent>;
   addServiceRequestDialogRef: MatDialogRef<AddServiceRequestComponent>;
 

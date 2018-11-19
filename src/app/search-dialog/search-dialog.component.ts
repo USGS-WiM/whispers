@@ -175,10 +175,29 @@ export class SearchDialogComponent implements OnInit {
             .map(val => this.filter(val, this.diagnosisTypes, 'name'));
 
           if (this.data.query && this.data.query['diagnosis_type'] && this.data.query['diagnosis_type'].length > 0) {
-            for (const index in diagnosisTypes) {
+            /*for (const index in diagnosisTypes) {
               if (this.data.query['diagnosis_type'].some(function (el) { return el === diagnosisTypes[index].name; })) {
                 this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, diagnosisTypes[index]);
               }
+            }*/
+            for (const index in diagnosisTypes) {
+              if (this.data.query['diagnosis_type'].some(
+                function (el) { 
+                  console.log(el);
+                  let match = false;
+                  if (typeof el == 'number') {
+                    if (el === diagnosisTypes[index].id) {
+                      match = true;
+                    }
+                  } else {
+                    if (el === diagnosisTypes[index].name) {
+                      match = true;
+                    }
+                  }
+                  return match; 
+                })) {
+                  this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, diagnosisTypes[index]);
+                }
             }
           }
         },
@@ -203,9 +222,23 @@ export class SearchDialogComponent implements OnInit {
 
           if (this.data.query && this.data.query['diagnosis'] && this.data.query['diagnosis'].length > 0) {
             for (const index in diagnoses) {
-              if (this.data.query['diagnosis'].some(function (el) { return el === diagnoses[index].name; })) {
-                this.dropdownSetup(this.diagnosisControl, this.selectedDiagnoses, diagnoses[index]);
-              }
+              if (this.data.query['diagnosis'].some(
+                function (el) { 
+                  console.log(el);
+                  let match = false;
+                  if (typeof el == 'number') {
+                    if (el === diagnoses[index].id) {
+                      match = true;
+                    }
+                  } else {
+                    if (el === diagnoses[index].name) {
+                      match = true;
+                    }
+                  }
+                  return match; 
+                })) {
+                  this.dropdownSetup(this.diagnosisControl, this.selectedDiagnoses, diagnoses[index]);
+                }
             }
           }
         },
@@ -289,6 +322,24 @@ export class SearchDialogComponent implements OnInit {
                 this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
               }
             }
+            for (const index in species) {
+              if (this.data.query['species'].some(
+                function (el) { 
+                  let match = false;
+                  if (typeof el == 'number') {
+                    if (el === species[index].id) {
+                      match = true;
+                    }
+                  } else {
+                    if (el === species[index].name) {
+                      match = true;
+                    }
+                  }
+                  return match; 
+                })) {
+                  this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
+                }
+            }
           }
         },
         error => {
@@ -315,7 +366,11 @@ export class SearchDialogComponent implements OnInit {
     }
 
     //always set value, even if null, because null is valid value
-    this.searchForm.controls['complete'].setValue(query['complete']);
+    if (query['complete'] == undefined) {
+      this.searchForm.controls['complete'].setValue(null);
+    } else {
+      this.searchForm.controls['complete'].setValue(query['complete']);
+    }
 
     // Handling of and_params
     if (query && query['diagnosis_type_includes_all'] === true) {

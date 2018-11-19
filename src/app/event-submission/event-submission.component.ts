@@ -1404,6 +1404,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
     // Open dialog for adding species diagnosis
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+      disableClose: true,
       data: {
         species_diagnosis_action: 'addToFormArray',
         eventlocationIndex: eventLocationIndex,
@@ -1418,36 +1419,44 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       .subscribe(
         (speciesDiagnosisObj) => {
 
-          this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventlocationIndex]
-            .get('new_location_species')['controls'][speciesDiagnosisObj.locationspeciesIndex]
-            .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
-              diagnosis: speciesDiagnosisObj.formValue.diagnosis,
-              cause: speciesDiagnosisObj.formValue.cause,
-              basis: speciesDiagnosisObj.formValue.basis,
-              suspect: speciesDiagnosisObj.formValue.suspect,
-              tested_count: speciesDiagnosisObj.formValue.tested_count,
-              diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
-              positive_count: speciesDiagnosisObj.formValue.positive_count,
-              suspect_count: speciesDiagnosisObj.formValue.suspect_count,
-              pooled: speciesDiagnosisObj.formValue.pooled,
-              new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
-            });
+          if (speciesDiagnosisObj.action === 'cancel') {
+            // remove last species diagnosis added
+            // tslint:disable-next-line:max-line-length
+            this.removeSpeciesDiagnosis(speciesDiagnosisObj.eventlocationIndex, speciesDiagnosisObj.locationspeciesIndex, speciesDiagnosisIndex);
+            return;
+          } else if (speciesDiagnosisObj.action === 'add') {
+
+            this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventlocationIndex]
+              .get('new_location_species')['controls'][speciesDiagnosisObj.locationspeciesIndex]
+              .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
+                diagnosis: speciesDiagnosisObj.formValue.diagnosis,
+                cause: speciesDiagnosisObj.formValue.cause,
+                basis: speciesDiagnosisObj.formValue.basis,
+                suspect: speciesDiagnosisObj.formValue.suspect,
+                tested_count: speciesDiagnosisObj.formValue.tested_count,
+                diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
+                positive_count: speciesDiagnosisObj.formValue.positive_count,
+                suspect_count: speciesDiagnosisObj.formValue.suspect_count,
+                pooled: speciesDiagnosisObj.formValue.pooled,
+                new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
+              });
 
 
-          for (const diagnosis of this.allDiagnoses) {
-            if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
+            for (const diagnosis of this.allDiagnoses) {
+              if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
 
-              let found = false;
-              for (const availableDiagnosis of this.availableDiagnoses) {
-                if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
-                  found = true;
-                  break;
+                let found = false;
+                for (const availableDiagnosis of this.availableDiagnoses) {
+                  if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
+                    found = true;
+                    break;
+                  }
                 }
-              }
-              if (!found) {
-                this.availableDiagnoses.push(diagnosis);
-              }
+                if (!found) {
+                  this.availableDiagnoses.push(diagnosis);
+                }
 
+              }
             }
           }
 

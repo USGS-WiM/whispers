@@ -39,8 +39,8 @@
             <mat-hint align="end" matTooltip="Public field">
               <mat-icon>public</mat-icon>
             </mat-hint>
-            <mat-error *ngIf="addEventLocationForm.get('start_date').hasError('startDateTodayorLaterMortalityEvent')">Must
-                be today or later for morbidity/mortality events </mat-error>
+            <mat-error *ngIf="addEventLocationForm.get('start_date').hasError('startDateTodayorEarlierMortalityEvent')">Must
+                be today or earlier for morbidity/mortality events </mat-error>
           </mat-form-field>
 
           <mat-form-field class="form-control">

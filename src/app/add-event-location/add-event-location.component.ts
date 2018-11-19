@@ -146,7 +146,7 @@ export class AddEventLocationComponent implements OnInit {
       ])
     },
       {
-        validator: [this.endDateBeforeStart, this.startDateTodayorLaterMortalityEvent]
+        validator: [this.endDateBeforeStart, this.startDateTodayorEarlierMortalityEvent]
       });
   }
 
@@ -359,14 +359,14 @@ export class AddEventLocationComponent implements OnInit {
 
   }
 
-  startDateTodayorLaterMortalityEvent(AC: AbstractControl) {
+  startDateTodayorEarlierMortalityEvent(AC: AbstractControl) {
 
     const start_date = AC.get('start_date').value;
     const event_type = AC.get('event_type').value;
     const today = APP_UTILITIES.TODAY;
     if (event_type === 1) {
-      if ((start_date !== null) && ((start_date.getTime()) < (today.getTime()))) {
-        AC.get('start_date').setErrors({ startDateTodayorLaterMortalityEvent: true });
+      if ((start_date !== null) && ((start_date.getTime()) > (today.getTime()))) {
+        AC.get('start_date').setErrors({ startDateTodayorEarlierMortalityEvent: true });
       }
     }
     return null;

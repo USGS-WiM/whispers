@@ -16,15 +16,27 @@
     <div class="vertical-form-container">
 
       <div class="horizontal-form-container">
-        <mat-form-field class="form-control diagnosis-select" *ngIf="data.species_diagnosis_action !== 'edit'">
+
+        <!-- <mat-form-field class="form-control diagnosis-select" *ngIf="data.species_diagnosis_action !== 'edit'">
           <mat-select placeholder="Species Diagnosis" formControlName="diagnosis" aria-readonly="true">
             <mat-option>--</mat-option>
             <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}</mat-option>
           </mat-select>
+        </mat-form-field> -->
+
+        <mat-form-field class="form-control diagnosis-select" *ngIf="data.species_diagnosis_action !== 'edit'">
+          <mat-select formControlName="diagnosis" placeholder="Species Diagnosis" #diagnosisSelect>
+            <ngx-mat-select-search [formControl]="diagnosisFilterCtrl" [placeholderLabel]="'Find diagnosis...'"
+              [noEntriesFoundLabel]="'no matching diagnosis found'"></ngx-mat-select-search>
+            <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis.id">
+              {{diagnosis.name}}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
 
-        <mat-checkbox  class="form-control suspect-checkbox" formControlName="suspect" matTooltip="Check this box if this diagnosis is based on clinical signs, previous history, or field necropsy.  Also check this box if the laboratory diagnosis was 'disease suspect', such as Avian Cholera Suspect for example.">Species Diagnosis Suspect</mat-checkbox>
-        
+        <mat-checkbox class="form-control suspect-checkbox" formControlName="suspect" matTooltip="Check this box if this diagnosis is based on clinical signs, previous history, or field necropsy.  Also check this box if the laboratory diagnosis was 'disease suspect', such as Avian Cholera Suspect for example.">Species
+          Diagnosis Suspect</mat-checkbox>
+
       </div>
 
       <mat-form-field class="form-control">
@@ -95,7 +107,7 @@
     <mat-icon>cancel</mat-icon>&nbsp;Cancel
   </button>
   <button mat-button color="primary" type="submit" [disabled]="speciesDiagnosisForm.invalid" (click)="onSubmit(speciesDiagnosisForm.value)">
-    <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{action_button_text}}
+    <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{data.action_button_text}}
   </button>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

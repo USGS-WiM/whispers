@@ -224,10 +224,24 @@ export class SearchDialogComponent implements OnInit {
 
           if (this.data.query && this.data.query['administrative_level_one'].length > 0) {
             for (const index in adminLevelOnes) {
-              if (this.data.query['administrative_level_one'].some(function (el) { return el === adminLevelOnes[index].name; })) {
-                this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, adminLevelOnes[index]);
-                this.updateAdminLevelTwoOptions(adminLevelOnes[index].id);
-              }
+              if (this.data.query['administrative_level_one'].some(
+                function (el) { 
+                  console.log(el);
+                  let match = false;
+                  if (typeof el == 'number') {
+                    if (el === adminLevelOnes[index].id) {
+                      match = true;
+                    }
+                  } else {
+                    if (el === adminLevelOnes[index].name) {
+                      match = true;
+                    }
+                  }
+                  return match; 
+                })) {
+                  this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, adminLevelOnes[index]);
+                  this.updateAdminLevelTwoOptions(adminLevelOnes[index].id);
+                }
             }
           }
 
@@ -299,6 +313,9 @@ export class SearchDialogComponent implements OnInit {
     if (query && query['end_date']) {
       this.searchForm.controls['end_date'].setValue(query['end_date']);
     }
+
+    //always set value, even if null, because null is valid value
+    this.searchForm.controls['complete'].setValue(query['complete']);
 
     // Handling of and_params
     if (query && query['diagnosis_type_includes_all'] === true) {

@@ -18,10 +18,10 @@ export interface EventDetail extends History {
     staff_string: string;
     event_status: number;
     event_status_string: string;
-    legal_status: number;
+    legal_status: string;
     legal_status_string: string;
     legal_number: string;
-    quality_check: boolean;
+    quality_check: string;
     public: boolean;
     superevents: SuperEvent[];
     eventdiagnoses: EventDiagnosis[];

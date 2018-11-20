@@ -412,13 +412,11 @@
 
         <ng-template matStepLabel>Contacts</ng-template>
 
-        <div class="contacts-section-header">
-          <div>
-            <h4>
-              <button mat-button color="primary" class="event-detail-action-button" (click)="openCreateContactDialog()">
-                <i class="material-icons">person_add</i> Create New Contact</button>
-            </h4>
-          </div>
+
+        <div class="add-content-button">
+          <button mat-button color="primary" class="event-detail-action-button" (click)="openCreateContactDialog()">
+            <i class="material-icons">person_add</i> Create New Contact
+          </button>
         </div>
 
         <div formArrayName="new_location_contacts">
@@ -447,15 +445,13 @@
 
                 <div class="contact-button-div">
 
+                  <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details">
+                    <i class="material-icons">assignment_ind</i>
+                  </button>
                   <button mat-icon-button color="accent" aria-label="Apply contact to all locations" matTooltip="Apply contact to all locations"
                     (click)="createCommonEventDataObject('contact', locationContactIndex)">
                     <i class="material-icons">group_work</i>
                   </button>
-
-                  <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details">
-                    <i class="material-icons">assignment_ind</i>
-                  </button>
-
                   <button mat-icon-button color="warn" aria-label="Remove this contact from this location" (click)="removeLocationContacts(locationContactIndex)"
                     matTooltip="Remove this contact from this location">
                     <i class="material-icons">remove_circle</i>
@@ -471,12 +467,14 @@
           </div>
         </div>
 
-        <div class="button-row">
+
+        <div class="add-content-button smaller">
           <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContact()">
-            <i class="material-icons">add_circle</i> Add Contact</button>
+            <i class="material-icons">add_circle</i> Add Contact
+          </button>
         </div>
 
-        <div>
+        <div class="form-nav-buttons">
           <button mat-button matStepperPrevious type="button">
             <i class="material-icons"> arrow_back_ios </i> Back</button>
           <button mat-button matStepperNext type="button"> Next

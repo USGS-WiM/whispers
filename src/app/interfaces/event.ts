@@ -2,7 +2,7 @@ import { History } from '@interfaces/history';
 
 export interface Event extends History {
     superevent: string;
-    legal_number: number;
+    legal_number: string;
     legal_status: string;
     event_status_string: string;
     event_status: number;

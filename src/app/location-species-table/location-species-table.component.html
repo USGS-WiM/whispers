@@ -84,25 +84,25 @@
     </ng-container>
 
 
+
     <!-- Expanded Content Column - The detail row is made up of this one column -->
     <ng-container matColumnDef="expandedDetail">
-      <mat-cell *matCellDef="let detail">
+      <mat-cell *matCellDef="let detail" class="addpadd">
         <div class="species-detail-action-bar-left">
-          <button mat-button color="primary" class="species-detail-action-button" (click)="editLocationSpecies(detail.element)"
+          <button mat-button color="primary" (click)="editLocationSpecies(detail.element)"
             [disabled]="!permissions.update">
             <mat-icon>edit</mat-icon> Edit Species
           </button>
-          <button mat-button color="warn" class="species-detail-action-button" (click)="openDeleteLocationSpeciesConfirm(detail.element)"
+          <button mat-button color="warn" (click)="openDeleteLocationSpeciesConfirm(detail.element)"
             [disabled]="!permissions.destroy">
             <mat-icon>delete_forever</mat-icon> Delete Species
           </button>
         </div>
 
-        <div *ngIf="detail.element.speciesdiagnoses.length === 0">No diagnosis for this species at this location</div>
+        <div *ngIf="detail.element.speciesdiagnoses.length === 0" class="event-group-no-data">No diagnosis for this species at this location</div>
         <div *ngIf="detail.element.speciesdiagnoses.length > 0">
           <label class="text-larger text-bold">Species Diagnoses</label>
-          <br />
-          <table>
+          <table class="species-diagnosis-table">
             <tr>
               <th>Species Diagnosis</th>
               <th>Significance of Diagnosis for Species</th>
@@ -118,7 +118,7 @@
             <tr *ngFor="let speciesdiagnosis of detail.element.speciesdiagnoses">
               <td>{{speciesdiagnosis.diagnosis_string}}</td>
               <td>{{speciesdiagnosis.cause_string}}</td>
-              <td>{{speciesdiagnosis.basis}}</td>
+              <td>{{speciesdiagnosis.basis_string}}</td>
               <td>{{speciesdiagnosis.tested_count}}</td>
               <td>{{speciesdiagnosis.diagnosis_count}}</td>
               <td>{{speciesdiagnosis.suspect ? 'Yes' : 'No'}}</td>

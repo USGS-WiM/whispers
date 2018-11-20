@@ -19,6 +19,9 @@ import { CurrentUserService } from '@app/services/current-user.service';
 
 import { LegalStatus } from '@interfaces/legal-status';
 import { LegalStatusService } from '@app/services/legal-status.service';
+import { Staff } from '@interfaces/staff';
+import { DatePipe } from '@angular/common';
+import { StaffService } from '@app/services/staff.service';
 
 @Component({
   selector: 'app-edit-event',
@@ -32,6 +35,7 @@ export class EditEventComponent implements OnInit {
   event_types: EventType[];
   event_statuses: EventStatus[];
   legalStatuses: LegalStatus[];
+  staff: Staff[];
 
   currentUser;
 
@@ -68,6 +72,8 @@ export class EditEventComponent implements OnInit {
     private eventStatusService: EventStatusService,
     private eventTypeService: EventTypeService,
     private legalStatusService: LegalStatusService,
+    private staffService: StaffService,
+    private datePipe: DatePipe,
     public snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -154,6 +160,18 @@ export class EditEventComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
+
+    // get staff members from the staffService
+    this.staffService.getStaff()
+      .subscribe(
+        staff => {
+          this.staff = staff;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -164,6 +182,7 @@ export class EditEventComponent implements OnInit {
 
   updateEvent(formValue) {
     formValue.id = this.data.eventData.id;
+    formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');
     this.eventService.update(formValue)
       .subscribe(
         (event) => {

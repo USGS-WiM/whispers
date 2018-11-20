@@ -32,6 +32,7 @@
         <ng-template matStepLabel>Location Details</ng-template>
 
         <div class="horizontal-form-container">
+          
           <mat-form-field class="form-control">
             <input matInput [matDatepicker]="startDate" placeholder="Location Start Date" formControlName="start_date">
             <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
@@ -163,35 +164,26 @@
           </mat-form-field>
         </div>
 
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>GNIS Standardized Location Name</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
+        <h4>GNIS Standardized Location Name</h4>
 
-            <div>
-              <button mat-stroked-button color="primary" aria-label="Look up feature in Geographic Names Information System (GNIS) database"
-                matTooltip="Look up feature in Geographic Names Information System (GNIS) database" (click)="openGNISLookupDialog()">
-                <mat-icon>search</mat-icon>Look Up GNIS
-              </button>
-            </div>
+        <button mat-stroked-button color="primary" aria-label="Look up feature in Geographic Names Information System (GNIS) database"
+          matTooltip="Look up feature in Geographic Names Information System (GNIS) database" (click)="openGNISLookupDialog()">
+          <mat-icon>search</mat-icon>Look Up GNIS
+        </button>
 
-            <div class="horizontal-form-container">
-              <mat-form-field class="form-control">
-                <input matInput placeholder="GNIS Feature Name" formControlName="gnis_name" readonly>
-                <mat-hint align="start">Use Look Up GNIS tool to populate </mat-hint>
+        <div class="horizontal-form-container">
+          <mat-form-field class="form-control">
+            <input matInput placeholder="GNIS Feature Name" formControlName="gnis_name" readonly>
+            <mat-hint align="start">Use Look Up GNIS tool to populate </mat-hint>
 
-              </mat-form-field>
-              <mat-form-field class="form-control">
-                <input matInput placeholder="GNIS Feature ID" formControlName="gnis_id" readonly>
-                <mat-hint align="start">Use Look Up GNIS tool to populate </mat-hint>
-              </mat-form-field>
-            </div>
+          </mat-form-field>
+          <mat-form-field class="form-control">
+            <input matInput placeholder="GNIS Feature ID" formControlName="gnis_id" readonly>
+            <mat-hint align="start">Use Look Up GNIS tool to populate </mat-hint>
+          </mat-form-field>
+        </div>
 
-          </mat-card-content>
-        </mat-card>
-
-        <div>
+        <div class="form-nav-buttons">
           <button mat-button matStepperNext type="button"> Next
             <i class="material-icons"> navigate_next </i>
           </button>
@@ -202,82 +194,76 @@
       <mat-step [stepControl]="addEventLocationForm">
         <ng-template matStepLabel>Comments</ng-template>
 
-        <span>Text in at least one of the comment categories below is required. Please be as thorough
-          as possible
-          to aid interpretation of data and to potentially guide cause of death determination and
-          management
-          actions.
-        </span>
         <p>
+          Text in at least one of the comment categories below is required. Please be as thorough as possible to aid interpretation of data and to potentially guide cause of death determination and management actions.
+        </p>
 
-          <mat-form-field class="comment-text-area">
-            <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="History" formControlName="history"></textarea>
-            <mat-hint align="start" class="hint">
-              <strong>chronological description of current observational information leading up to
-                finding sick
-                or dead wildlife, plus historical information about past events</strong>
-            </mat-hint>
-            <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
-          </mat-form-field>
-          <p>
+        <mat-form-field class="comment-text-area">
+          <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="History" formControlName="history"></textarea>
+          <mat-hint align="start" class="hint">
+            <strong>chronological description of current observational information leading up to
+              finding sick
+              or dead wildlife, plus historical information about past events</strong>
+          </mat-hint>
+          <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+        </mat-form-field>
 
-            <mat-form-field class="comment-text-area">
-              <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="Site Description"
-                formControlName="site_description"></textarea>
-              <mat-hint align="start" class="hint">
-                <strong> animal and human land use (e.g., other species present, hunting and
-                  agricultural activities),
-                  habitat types (e.g., vegetation, water features), nearby structures (e.g.,
-                  buildings,
-                  power lines, wind turbines), public health warnings, or other major characteristics
-                  of
-                  the area</strong>
-              </mat-hint>
-              <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
-            </mat-form-field>
-            <p>
+        <mat-form-field class="comment-text-area">
+          <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="Site Description"
+            formControlName="site_description"></textarea>
+          <mat-hint align="start" class="hint">
+            <strong> animal and human land use (e.g., other species present, hunting and
+              agricultural activities),
+              habitat types (e.g., vegetation, water features), nearby structures (e.g.,
+              buildings,
+              power lines, wind turbines), public health warnings, or other major characteristics
+              of
+              the area</strong>
+          </mat-hint>
+          <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+        </mat-form-field>
 
-              <mat-form-field class="comment-text-area">
-                <textarea matInput #envFactors maxlength="1000" placeholder="Environmental Factors" formControlName="environmental_factors"></textarea>
-                <mat-hint align="start">
-                  <strong>storms, precipitation, temperature changes, migration, toxins, or other
-                    factors that
-                    may contribute to stress in the animals
-                  </strong>
-                </mat-hint>
-                <mat-hint align="end">{{envFactors.value.length}} / 1000</mat-hint>
-              </mat-form-field>
-              <p>
+        <mat-form-field class="comment-text-area">
+          <textarea matInput #envFactors maxlength="1000" placeholder="Environmental Factors" formControlName="environmental_factors"></textarea>
+          <mat-hint align="start">
+            <strong>storms, precipitation, temperature changes, migration, toxins, or other
+              factors that
+              may contribute to stress in the animals
+            </strong>
+          </mat-hint>
+          <mat-hint align="end">{{envFactors.value.length}} / 1000</mat-hint>
+        </mat-form-field>
 
-                <mat-form-field class="comment-text-area">
-                  <textarea matInput #clinicalSigns maxlength="1000" placeholder="Clinical Signs" formControlName="clinical_signs"></textarea>
-                  <mat-hint align="start">
-                    <strong>any unusual behavior or physical appearance in the animals</strong>
-                  </mat-hint>
-                  <mat-hint align="end">{{clinicalSigns.value.length}} / 1000</mat-hint>
-                </mat-form-field>
-                <p>
+        <mat-form-field class="comment-text-area">
+          <textarea matInput #clinicalSigns maxlength="1000" placeholder="Clinical Signs" formControlName="clinical_signs"></textarea>
+          <mat-hint align="start">
+            <strong>any unusual behavior or physical appearance in the animals</strong>
+          </mat-hint>
+          <mat-hint align="end">{{clinicalSigns.value.length}} / 1000</mat-hint>
+        </mat-form-field>
 
-                  <!-- <div formArrayName="comments">
-                    <div *ngFor="let comments of getLocationComments(eventLocation); let c = index"> -->
+        <!-- <div formArrayName="comments">
+          <div *ngFor="let comments of getLocationComments(eventLocation); let c = index"> -->
 
-                  <mat-form-field class="comment-text-area">
-                    <textarea matInput #generalComment maxlength="1000" placeholder="Additonal Comment" formControlName="comment"></textarea>
-                    <mat-hint align="start">
-                      <strong>any additional comment not covered by the fields above</strong>
-                    </mat-hint>
-                    <mat-hint align="end">{{generalComment.value.length}} / 1000</mat-hint>
-                  </mat-form-field>
-                  <!-- </div>
-                  </div> -->
+        <mat-form-field class="comment-text-area">
+          <textarea matInput #generalComment maxlength="1000" placeholder="Additonal Comment" formControlName="comment"></textarea>
+          <mat-hint align="start">
+            <strong>any additional comment not covered by the fields above</strong>
+          </mat-hint>
+          <mat-hint align="end">{{generalComment.value.length}} / 1000</mat-hint>
+        </mat-form-field>
+        <!-- </div>
+        </div> -->
 
-                  <div>
-                    <button mat-button matStepperPrevious type="button">
-                      <i class="material-icons"> arrow_back_ios </i> Back</button>
-                    <button mat-button matStepperNext type="button"> Next
-                      <i class="material-icons"> navigate_next </i>
-                    </button>
-                  </div>
+        <div class="form-nav-buttons">
+          <button mat-button matStepperPrevious type="button">
+            <i class="material-icons"> arrow_back_ios </i> Back</button>
+          <button mat-button matStepperNext type="button"> Next
+            <i class="material-icons"> navigate_next </i>
+          </button>
+        </div>
+
+        
       </mat-step>
 
       <mat-step [stepControl]="addEventLocationForm">
@@ -393,18 +379,21 @@
             </div>
           </div>
         </div>
-        <div class="button-row">
+
+        <div class="add-content-button">
           <button mat-button color="primary" matTooltip="Add species to this location" (click)="addLocationSpecies()">
-            <i class="material-icons">add_circle</i> Add Species</button>
+              <i class="material-icons">add_circle</i> Add Species
+          </button>
         </div>
-        <p>
-          <div>
-            <button mat-button matStepperPrevious type="button">
-              <i class="material-icons"> arrow_back_ios </i> Back</button>
-            <button mat-button matStepperNext type="button"> Next
-              <i class="material-icons"> navigate_next </i>
-            </button>
-          </div>
+        
+
+        <div class="form-nav-buttons">
+          <button mat-button matStepperPrevious type="button">
+            <i class="material-icons"> arrow_back_ios </i> Back</button>
+          <button mat-button matStepperNext type="button"> Next
+            <i class="material-icons"> navigate_next </i>
+          </button>
+        </div>
 
       </mat-step>
 
@@ -468,7 +457,7 @@
         </div>
 
 
-        <div class="add-content-button smaller">
+        <div class="add-content-button">
           <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContact()">
             <i class="material-icons">add_circle</i> Add Contact
           </button>
@@ -485,49 +474,56 @@
       </mat-step>
 
       <mat-step>
+
         <ng-template matStepLabel>Review & Submit</ng-template>
 
-        <span *ngIf="addEventLocationForm.valid">
-          <h3>
-            <mat-icon>check</mat-icon>
-            <span class="alert-text">Finished with New Location </span>
-          </h3>
-        </span>
+        <div id="submissionReviewComplete" *ngIf="addEventLocationForm.valid">
+          <mat-icon>check</mat-icon>
+          <b>Finished with New Location</b>
+        </div>
 
-        <mat-error *ngIf="addEventLocationForm.get('country').invalid">
-          <mat-icon class="icon">error</mat-icon>
-          <span class="alert-text">Missing country selection.</span>
-        </mat-error>
-        <p>
+        <div id="submissionReviewErrors">
+          <mat-error *ngIf="addEventLocationForm.get('country').invalid">
+            <mat-icon class="icon">error</mat-icon>
+            <span class="alert-text">Missing country selection.</span>
+          </mat-error>
+
           <mat-error color="warn" *ngIf="addEventLocationForm.get('administrative_level_one').invalid">
             <mat-icon class="icon">error</mat-icon>
             <span class="alert-text">Missing state selection.</span>
           </mat-error>
-          <p>
-            <mat-error color="warn" *ngIf="addEventLocationForm.get('administrative_level_one').invalid">
+
+          <mat-error color="warn" *ngIf="addEventLocationForm.get('administrative_level_one').invalid">
+            <mat-icon class="icon">error</mat-icon>
+            <span class="alert-text">Missing county selection.</span>
+          </mat-error>
+
+          <mat-error color="warn" *ngIf="addEventLocationForm.get('land_ownership').invalid">
+            <mat-icon class="icon">error</mat-icon>
+            <span class="alert-text">Missing land ownership selection.</span>
+          </mat-error>
+
+          <!-- <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_contacts').invalid">
               <mat-icon class="icon">error</mat-icon>
-              <span class="alert-text">Missing county selection.</span>
-            </mat-error>
-            <p>
+              <span class="alert-text">Missing contact type selection.</span>
+            </mat-error> -->
+        </div>
 
-              <mat-error color="warn" *ngIf="addEventLocationForm.get('land_ownership').invalid">
-                <mat-icon class="icon">error</mat-icon>
-                <span class="alert-text">Missing land ownership selection.</span>
-              </mat-error>
-              <p>
 
-                <div>
-                  <button mat-button type="submit" color="primary" [disabled]="addEventLocationForm.invalid" (click)="onSubmit(addEventLocationForm.value)">
-                    <mat-icon>send</mat-icon>&nbsp;Submit
-                  </button>
-                </div>
+        <div class="form-nav-buttons">
 
-                <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+          <button mat-button matStepperPrevious type="button">
+            <i class="material-icons"> arrow_back_ios </i> Back
+          </button>
 
-                <div>
-                  <button mat-button matStepperPrevious type="button">
-                    <i class="material-icons"> arrow_back_ios </i> Back</button>
-                </div>
+          <button mat-button type="submit" color="primary" [disabled]="addEventLocationForm.invalid" (click)="onSubmit(addEventLocationForm.value)">
+            <mat-icon>send</mat-icon>&nbsp;Submit
+          </button>
+
+          <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+        </div>
+
+
       </mat-step>
 
     </mat-horizontal-stepper>

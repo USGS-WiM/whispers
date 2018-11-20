@@ -235,6 +235,24 @@ tr.noBorder td {
     opacity: 0.87;
 }
 
+.legend-label{
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+    display: block;
+    margin: 5px 0 1px 0;
+    padding-top: 0;
+}
+.legend-hint{
+    display: block;
+    font-size: 11px;
+    font-style: italic;
+    opacity: 0.5;
+    font-weight: 500;
+    margin: 1px 0 6px 0;
+    line-height: 10px;
+}
+
 .legendIcon {
     display: inline-block;
 }
@@ -734,6 +752,24 @@ tr.noBorder td {
                     padding: 2px 8px;
                     border-radius: 10px;
                 }
+            }
+
+            .identifier {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                color: rgba(0, 0, 0, 0.75);
+                margin-right: 15px;
+                font-weight: 900;
+                font-size: 12px;
+
+                b{
+                    background-color: #EEF1FB;
+                    display: inline-block;
+                    padding: 2px 8px;
+                    border-radius: 10px;
+                }
+
             }
 
             button{

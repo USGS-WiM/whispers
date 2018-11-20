@@ -701,17 +701,17 @@ export class EventDetailsComponent implements OnInit {
 
 
   deleteEventComment(id: number) {
-    // this.commentService.delete(id)
-    // .subscribe(
-    //   () => {
-    //     this.refreshEvent();
-    //     this.openSnackBar('Comment successfully deleted', 'OK', 5000);
-    //   },
-    //   error => {
-    //     this.errorMessage = <any>error;
-    //     this.openSnackBar('Error. Comment not deleted. Error message: ' + error, 'OK', 8000);
-    //   }
-    // );
+    this.commentService.delete(id)
+    .subscribe(
+      () => {
+        this.refreshEvent();
+        this.openSnackBar('Comment successfully deleted', 'OK', 5000);
+      },
+      error => {
+        this.errorMessage = <any>error;
+        this.openSnackBar('Error. Comment not deleted. Error message: ' + error, 'OK', 8000);
+      }
+    );
 
   }
 

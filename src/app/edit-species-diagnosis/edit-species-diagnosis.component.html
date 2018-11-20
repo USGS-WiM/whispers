@@ -57,6 +57,7 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
+        <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('min')">Minimum value is 0</mat-error>
       </mat-form-field>
 
       <mat-form-field class="species-number-control">
@@ -64,6 +65,7 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
+        <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('min')">Minimum value is 0</mat-error>
       </mat-form-field>
 
       <!-- <div class="horizontal-form-container" class="species-controls-container">

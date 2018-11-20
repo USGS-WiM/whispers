@@ -4,6 +4,8 @@ import { environment } from 'environments/environment';
 
 import { DisplayQuery } from '@interfaces/display-query';
 
+import { APP_UTILITIES } from '@app/app.utilities';
+
 
 @Injectable()
 export class APP_SETTINGS {
@@ -134,8 +136,8 @@ export class APP_SETTINGS {
             'administrative_level_two': [],
             'affected_count': null,
             'affected_count_operator': '',
-            'start_date': '2018-03-31',
-            'end_date': '2018-07-31',
+            'start_date': APP_UTILITIES.getDaysPreviousDate,
+            'end_date': APP_UTILITIES.getTodayDate,
             'diagnosis_type_includes_all': false,
             'diagnosis_includes_all': false,
             'species_includes_all': false,
@@ -157,8 +159,8 @@ export class APP_SETTINGS {
             'administrative_level_two': [],
             'affected_count': null,
             'affected_count_operator': '',
-            'start_date': '2018-03-31',
-            'end_date': '2018-07-31',
+            'start_date': APP_UTILITIES.getDaysPreviousDate,
+            'end_date': APP_UTILITIES.getTodayDate,
             'diagnosis_type_includes_all': false,
             'diagnosis_includes_all': false,
             'species_includes_all': false,

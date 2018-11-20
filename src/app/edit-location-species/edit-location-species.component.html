@@ -41,6 +41,7 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
+        <mat-error *ngIf="this.locationSpeciesForm.get('population_count').hasError('min')">Minimum value is 0</mat-error>
       </mat-form-field>
 
       <br />
@@ -50,6 +51,7 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
+        <mat-error *ngIf="this.locationSpeciesForm.get('dead_count').hasError('min')">Minimum value is 0</mat-error>
       </mat-form-field>
 
       <br />
@@ -59,6 +61,7 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
+        <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('min')">Minimum value is 0</mat-error>
       </mat-form-field>
 
       <br />
@@ -68,6 +71,7 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
+        <mat-error *ngIf="this.locationSpeciesForm.get('sick_count').hasError('min')">Minimum value is 0</mat-error>
       </mat-form-field>
 
       <br />
@@ -77,6 +81,7 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
+        <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('min')">Minimum value is 0</mat-error>
       </mat-form-field>
 
     </div>

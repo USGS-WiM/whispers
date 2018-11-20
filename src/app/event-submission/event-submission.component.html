@@ -667,13 +667,13 @@
                                 </mat-form-field>
 
                                 <div class="contact-button-div">
-                                  <button mat-icon-button color="accent" aria-label="Apply contact to all locations"
-                                    matTooltip="Apply contact to all locations" (click)="createCommonEventDataObject('contact', eventLocationIndex, locationContactIndex)">
-                                    <mat-icon>group_work</mat-icon>
-                                  </button>
                                   <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details"
                                     (click)="viewContactDetailsDialog(eventLocationIndex, locationContactIndex)">
                                     <mat-icon>assignment_ind</mat-icon>
+                                  </button>
+                                  <button mat-icon-button color="accent" aria-label="Apply contact to all locations"
+                                    matTooltip="Apply contact to all locations" (click)="createCommonEventDataObject('contact', eventLocationIndex, locationContactIndex)">
+                                    <mat-icon>group_work</mat-icon>
                                   </button>
                                   <button mat-icon-button color="warn" aria-label="Remove this contact from this location"
                                     (click)="removeLocationContact(eventLocationIndex, locationContactIndex)"

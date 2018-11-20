@@ -445,15 +445,13 @@
 
                 <div class="contact-button-div">
 
+                  <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details">
+                    <i class="material-icons">assignment_ind</i>
+                  </button>
                   <button mat-icon-button color="accent" aria-label="Apply contact to all locations" matTooltip="Apply contact to all locations"
                     (click)="createCommonEventDataObject('contact', locationContactIndex)">
                     <i class="material-icons">group_work</i>
                   </button>
-
-                  <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details">
-                    <i class="material-icons">assignment_ind</i>
-                  </button>
-
                   <button mat-icon-button color="warn" aria-label="Remove this contact from this location" (click)="removeLocationContacts(locationContactIndex)"
                     matTooltip="Remove this contact from this location">
                     <i class="material-icons">remove_circle</i>
@@ -483,7 +481,7 @@
             <i class="material-icons"> navigate_next </i>
           </button>
         </div>
-        
+
       </mat-step>
 
       <mat-step>

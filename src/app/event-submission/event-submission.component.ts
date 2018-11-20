@@ -1,13 +1,17 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
+import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
 import { startWith } from 'rxjs-compat/operator/startWith';
 import { map } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
+import { ReplaySubject, Subject } from 'rxjs';
 
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { DisplayValuePipe } from '../pipes/display-value.pipe';
+
+import { MatDialog, MatDialogRef, MatSelect } from '@angular/material';
 import { MatBottomSheetModule, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
 
 import { MatStepperModule, MatStepper } from '@angular/material/stepper';
@@ -75,6 +79,8 @@ import { EventStatusService } from '@services/event-status.service';
 import { CreateContactComponent } from '@create-contact/create-contact.component';
 import { CreateContactService } from '@create-contact/create-contact.service';
 
+import { ViewContactDetailsComponent } from '@app/view-contact-details/view-contact-details.component';
+
 import { ConfirmComponent } from '@confirm/confirm.component';
 
 import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
@@ -82,18 +88,19 @@ import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-
 import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
 import { EventSubmissionSuccessComponent } from '@app/event-submission/event-submission-success/event-submission-success.component';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
+import { DateValidators } from '@validators/date.validator';
 
 import * as search_api from 'usgs-search-api';
+import { getTreeMultipleDefaultNodeDefsError } from '@angular/cdk/tree';
 
 declare const search_api: search_api;
-
 
 @Component({
   selector: 'app-event-submission',
   templateUrl: './event-submission.component.html',
   styleUrls: ['./event-submission.component.scss']
 })
-export class EventSubmissionComponent implements OnInit, AfterViewInit {
+export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('stepper') stepper: MatStepper;
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
@@ -101,6 +108,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
   submitSuccessDialogRef: MatDialogRef<EventSubmissionSuccessComponent>;
+  viewContactDetailsDialogRef: MatDialogRef<ViewContactDetailsComponent>;
 
   eventSubmitConfirm: MatBottomSheetRef<EventSubmissionConfirmComponent>;
 
@@ -113,7 +121,8 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   legalStatuses: LegalStatus[];
   eventStatuses: EventStatus[];
   landOwnerships: LandOwnership[];
-  diagnoses: Diagnosis[];
+  allDiagnoses: Diagnosis[];
+  availableDiagnoses: Diagnosis[] = [];
 
   countries: Country[];
   staff: Staff[];
@@ -121,22 +130,22 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   adminLevelOnes: AdministrativeLevelOne[];
   // expermental, for autocomplete
   administrative_level_one: AdministrativeLevelOne[];
-  filteredAdminLevelOnes;
+  //filteredAdminLevelOnes;
 
   adminLevelTwos: AdministrativeLevelTwo[];
   // expermental, for autocomplete
-  filteredAdminLevelTwos;
+  // filteredAdminLevelTwos;
 
   //////////////////////////////////////////////
   species: Species[];
   // filteredSpecies: Observable<Species[]>[] = [];
 
-  filteredSpecies = [];
+  //filteredSpecies = [];
   //eventLocationSpecies: Observable<any[]>[] = [];
   ///////////////////////////////////////////////////////
 
   contacts: Contact[];
-  filteredContacts = [];
+  //filteredContacts = [];
 
   sexBiases: SexBias[];
   ageBiases: AgeBias[];
@@ -147,6 +156,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   commentTypes: CommentType[];
 
   userContacts = [];
+  userContactsLoading = false;
 
   errorMessage;
 
@@ -158,6 +168,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   submitLoading = false;
 
+  adminLevelOnesLoading = false;
+  adminLevelTwosLoading = false;
+
   latitudePattern: RegExp = (/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/);
   longitudePattern: RegExp = (/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/);
 
@@ -168,21 +181,43 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   usgsSearch;
 
+  filteredAdminLevelOnes = [];
+  filteredAdminLevelTwos = [];
+  filteredSpecies = [];
+  filteredContacts = [];
+  /** Subject that emits when the component has been destroyed. */
+  private _onDestroy = new Subject<void>();
+
+  @ViewChild('adminLevelOneSelect') adminLevelOneSelect: MatSelect;
+  @ViewChild('adminLevelTwoSelect') adminLevelTwoSelect: MatSelect;
+  @ViewChild('speciesSelect') speciesSelect: MatSelect;
+  @ViewChild('contactSelect') contactSelect: MatSelect;
+
+  /** controls for the MatSelect filter keyword */
+  adminLevelOneFilterCtrl: FormControl = new FormControl();
+  adminLevelTwoFilterCtrl: FormControl = new FormControl();
+  speciesFilterCtrl: FormControl = new FormControl();
+  contactFilterCtrl: FormControl = new FormControl();
+
+  // filteredAdminLevelOnes: ReplaySubject<AdministrativeLevelOne[]> = new ReplaySubject<AdministrativeLevelOne[]>();
+  // filteredAdminLevelTwos: ReplaySubject<AdministrativeLevelTwo[]> = new ReplaySubject<AdministrativeLevelTwo[]>();
+  // filteredSpecies: ReplaySubject<Species[]> = new ReplaySubject<Species[]>();
+  // filteredContacts: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>();
+
   buildEventSubmissionForm() {
     this.eventSubmissionForm = this.formBuilder.group({
       event_reference: '',
       event_type: [null, Validators.required],
       complete: false,
-      event_status: 1,
       public: [true, Validators.required],
       // NWHC only
       staff: null,
-      status: null,
-      quality_check: '',
-      legal_status: null,
+      event_status: '1',
+      quality_check: { value: null, disabled: true },
+      legal_status: '1',
       legal_number: '',
       // end NWHC only
-      new_organizations: null,
+      new_organizations: [[], Validators.required],
       new_service_request: this.formBuilder.group({
         request_type: 0,
         new_comments: this.formBuilder.array([])
@@ -197,20 +232,46 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
     this.eventLocationArray = this.eventSubmissionForm.get('new_event_locations') as FormArray;
 
-    this.filteredAdminLevelOnes = new Array<Observable<any>>();
+    this.filteredAdminLevelOnes = new Array<ReplaySubject<AdministrativeLevelOne[]>>();
+    this.filteredAdminLevelOnes.push(new ReplaySubject<AdministrativeLevelOne[]>());
     this.ManageAdminLevelOneControl(0);
 
-    this.filteredAdminLevelTwos = new Array<Observable<any>>();
+    this.filteredAdminLevelOnes.push(new ReplaySubject<AdministrativeLevelOne[]>());
+    this.ManageAdminLevelOneControl(0);
+
+    this.filteredAdminLevelTwos = new Array<ReplaySubject<AdministrativeLevelTwo[]>>();
+    this.filteredAdminLevelTwos.push(new ReplaySubject<AdministrativeLevelOne[]>());
     this.ManageAdminLevelTwoControl(0);
-            
 
-    let eventLocationSpecies = new Array<Observable<any>>();
+    const eventLocationSpecies = new Array<ReplaySubject<Species[]>>();
     this.filteredSpecies.push(eventLocationSpecies);
+    // initiate an empty replaysubject
+    this.filteredSpecies[0].push(new ReplaySubject<Species[]>());
     this.ManageSpeciesControl(0, 0);
+    // this.filteredSpecies.push(new ReplaySubject<Species[]>());
 
-    let eventLocationContacts = new Array<Observable<any>>();
+
+    const eventLocationContacts = new Array<ReplaySubject<Contact[]>>();
     this.filteredContacts.push(eventLocationContacts);
+    // initiate an empty replaysubject
+    this.filteredContacts[0].push(new ReplaySubject<Contact[]>());
     this.ManageContactControl(0, 0);
+    // this.filteredSpecies.push(new ReplaySubject<Species[]>());
+
+    // this.filteredAdminLevelOnes = new Array<Observable<any>>();
+    //this.ManageAdminLevelOneControl(0);
+
+    //this.filteredAdminLevelTwos = new Array<Observable<any>>();
+    //this.ManageAdminLevelTwoControl(0);
+
+
+    //const eventLocationSpecies = new Array<Observable<any>>();
+    //this.filteredSpecies.push(eventLocationSpecies);
+    //this.ManageSpeciesControl(0, 0);
+
+    // const eventLocationContacts = new Array<Observable<any>>();
+    // this.filteredContacts.push(eventLocationContacts);
+    // this.ManageContactControl(0, 0);
   }
 
   constructor(
@@ -220,6 +281,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     private currentUserService: CurrentUserService,
     // private matStepper: MatStepper,
     private datePipe: DatePipe,
+    private displayValuePipe: DisplayValuePipe,
     private eventTypeService: EventTypeService,
     private legalStatusService: LegalStatusService,
     private landOwnershipService: LandOwnershipService,
@@ -244,6 +306,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
+      this.eventSubmissionForm.get('new_organizations').setValue([this.currentUser.organization.toString()]);
     });
 
     this.subscription = this.createContactSevice.getCreatedContact().subscribe(
@@ -256,6 +319,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
           .subscribe(
             contacts => {
               this.userContacts = contacts;
+              console.log('User Contacts Loaded');
             },
             error => {
               this.errorMessage = <any>error;
@@ -264,12 +328,15 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
       });
 
-
-
     // this.eventSubmitConfirm.afterDismissed().subscribe(() => {
     //   console.log('Bottom sheet has been dismissed.');
     // });
 
+  }
+
+  ngOnDestroy() {
+    this._onDestroy.next();
+    this._onDestroy.complete();
   }
 
   openEventSubmitConfirm(formValue): void {
@@ -333,9 +400,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFn(speciesId?: Species): string | undefined {
     let species_id_match;
-    for (let i = 0; i < this["options"]._results.length-1; i++) {
-      if (this["options"]._results[i].value == speciesId) {
-        species_id_match = this["options"]._results[i].viewValue;
+    for (let i = 0; i < this['options']._results.length - 1; i++) {
+      if (this['options']._results[i].value === speciesId) {
+        species_id_match = this['options']._results[i].viewValue;
       }
     }
     return species_id_match;
@@ -343,9 +410,9 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFnContact(contactId?: Contact): string | undefined {
     let contact_id_match;
-    for (let i = 0; i < this["options"]._results.length; i++) {
-      if (this["options"]._results[i].value == contactId) {
-        contact_id_match = this["options"]._results[i].viewValue;
+    for (let i = 0; i < this['options']._results.length; i++) {
+      if (this['options']._results[i].value === contactId) {
+        contact_id_match = this['options']._results[i].viewValue;
       }
     }
     return contact_id_match;
@@ -353,10 +420,10 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFnAdminLevelOne(adminLevelOneId?: number): string | undefined {
     let admin_level_one;
-    if (this["options"] !== undefined) {
-      for (let i = 0; i < this["options"]._results.length; i++) {
-        if (this["options"]._results[i].value == adminLevelOneId) {
-          admin_level_one = this["options"]._results[i].viewValue;
+    if (this['options'] !== undefined) {
+      for (let i = 0; i < this['options']._results.length; i++) {
+        if (this['options']._results[i].value === adminLevelOneId) {
+          admin_level_one = this['options']._results[i].viewValue;
         }
       }
     }
@@ -365,63 +432,83 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   displayFnAdminLevelTwo(adminLevelTwoId?: number): string | undefined {
     let admin_level_two;
-    if (this["options"] !== undefined) {
-      for (let i = 0; i < this["options"]._results.length; i++) {
-        if (this["options"]._results[i].value == adminLevelTwoId) {
-          admin_level_two = this["options"]._results[i].viewValue;
+    if (this['options'] !== undefined) {
+      for (let i = 0; i < this['options']._results.length; i++) {
+        if (this['options']._results[i].value === adminLevelTwoId) {
+          admin_level_two = this['options']._results[i].viewValue;
         }
       }
     }
     return admin_level_two;
   }
 
-
-  ////////////////////////////////////////////// Begin WIP
-
+  // no longer in use?
   private _filter(name: string): Species[] {
     const filterValue = name.toLowerCase();
-
     return this.species.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
   }
-  // tslint:disable-next-line:max-line-length
-  // WIP: tying to use this example: https://stackoverflow.com/questions/51562826/how-to-use-mat-autocomplete-angular-material-autocomplete-inside-formarray-re
-  // to do dynamic filteredSpecies arrays for each loc species instance. Not working - select displays "[Object oject]" instead of name. Not sure yet if this approach is going to work
+
   ManageSpeciesControl(eventLocationIndex: number, locationSpeciesIndex: number) {
     // tslint:disable-next-line:max-line-length
-    const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species') as FormArray;
-    this.filteredSpecies[eventLocationIndex][locationSpeciesIndex] = arrayControl.at(locationSpeciesIndex).get('species').valueChanges
-      .startWith(null)
-      .map(val => this.filter(val, this.species, ['name']));
-    // .pipe(
-    //   startWith<string | Species>(''),
-    //   map(value => typeof value === 'string' ? value : value.name),
-    //   map(name => name ? this._filter(name) : this.species.slice())
-    // );
+    // const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species') as FormArray;
+    // this.filteredSpecies[eventLocationIndex][locationSpeciesIndex] = arrayControl.at(locationSpeciesIndex).get('species').valueChanges
+    //   .startWith(null)
+    //   .map(val => this.filter(val, this.species, ['name']));
+
+    // populate the species options list for the specific control
+    this.filteredSpecies[eventLocationIndex][locationSpeciesIndex].next(this.species);
+
+    // listen for search field value changes
+    this.speciesFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterSpecies(eventLocationIndex, locationSpeciesIndex);
+      });
   }
-  ///////////////////////////////////////////////// End WIP
 
   ManageContactControl(eventLocationIndex: number, locationContactIndex: number) {
     // tslint:disable-next-line:max-line-length
-    const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts') as FormArray;
-    this.filteredContacts[eventLocationIndex][locationContactIndex] = arrayControl.at(locationContactIndex).get('contact').valueChanges
-      .startWith(null)
-      .map(val => this.filter(val, this.userContacts, ['first_name','last_name','organization_string']));
+    // const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts') as FormArray;
+    // this.filteredContacts[eventLocationIndex][locationContactIndex] = arrayControl.at(locationContactIndex).get('contact').valueChanges
+    //   .startWith(null)
+    //   .map(val => this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
+
+    // populate the species options list for the specific control
+    this.filteredContacts[eventLocationIndex][locationContactIndex].next(this.userContacts);
+
+    // listen for search field value changes
+    this.contactFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterContacts(eventLocationIndex, locationContactIndex);
+      });
   }
 
   ManageAdminLevelOneControl(eventLocationIndex: number) {
-    // tslint:disable-next-line:max-line-length
-    const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_one') as FormArray;
-    this.filteredAdminLevelOnes[eventLocationIndex] = arrayControl.valueChanges
-      .startWith(null)
-      .map(val => this.filter(val, this.adminLevelOnes, ['name']));
+
+    // populate the adminLevelOnes options list for the specific control
+    this.filteredAdminLevelOnes[eventLocationIndex].next(this.adminLevelOnes);
+
+    // listen for search field value changes
+    this.adminLevelOneFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterAdminLevelOnes(eventLocationIndex);
+      });
   }
 
   ManageAdminLevelTwoControl(eventLocationIndex: number) {
-    // tslint:disable-next-line:max-line-length
-    const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_two') as FormArray;
-    this.filteredAdminLevelTwos[eventLocationIndex] = arrayControl.valueChanges
-      .startWith(null)
-      .map(val => this.filter(val, this.adminLevelTwos, ['name']));
+
+    // populate the adminLevelTwos options list for the specific control
+    this.filteredAdminLevelTwos[eventLocationIndex].next(this.adminLevelTwos);
+
+    // listen for search field value changes
+    this.adminLevelTwoFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterAdminLevelTwos(eventLocationIndex);
+      });
+
   }
 
   inputChangeTrigger(event) {
@@ -430,15 +517,16 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   filter(val: any, searchArray: any, searchProperties: string[]): string[] {
     let result = [];
-    if (val == "") {
+    if (val === '') {
       result = searchArray;
-    } else { 
-      for (let searchProperty of searchProperties) {
-        if (isNaN(val)){
+    } else {
+      for (const searchProperty of searchProperties) {
+        if (isNaN(val)) {
           const realval = val && typeof val === 'object' ? val[searchProperty] : val;
           let lastOption = null;
           if (searchArray !== undefined) {
             for (let i = 0; i < searchArray.length; i++) {
+              // tslint:disable-next-line:max-line-length
               if (searchArray[i][searchProperty] != null && (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase()))) {
                 if (searchArray[i][searchProperty] !== lastOption) {
                   lastOption = searchArray[i][searchProperty];
@@ -450,12 +538,14 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         }
       }
     }
-    
+
     // this will return all records matching the val string
     return result;
   }
 
   ngAfterViewInit() {
+
+    const self = this;
     this.usgsSearch = search_api.create('search-api-div', {
       'verbose': true,
       'placeholder': 'Search for GNIS place name',
@@ -469,7 +559,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     });
 
   }
-
 
   ngOnInit() {
 
@@ -511,12 +600,18 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     this.diagnosisService.getDiagnoses()
       .subscribe(
         (diagnoses) => {
-          this.diagnoses = diagnoses;
-          this.diagnoses.sort(function (a, b) {
+          this.allDiagnoses = diagnoses;
+          this.allDiagnoses.sort(function (a, b) {
             if (a.name < b.name) { return -1; }
             if (a.name > b.name) { return 1; }
             return 0;
           });
+
+          for (const diagnosis of this.allDiagnoses) {
+            if (diagnosis.name === 'Undetermined') {
+              this.availableDiagnoses.push(diagnosis);
+            }
+          }
         },
         error => {
           this.errorMessage = <any>error;
@@ -572,12 +667,15 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         adminLevelOnes => {
           this.adminLevelOnes = adminLevelOnes;
 
-          // experimental
-          /*this.filteredAdminLevelOnes = this.eventSubmissionForm.get('state').valueChanges
-            .startWith(null)
-            .map(val => this.filter(val, this.administrative_level_one, 'name'));*/
+          // load the options list for intial control
+          this.filteredAdminLevelOnes[0].next(this.adminLevelOnes);
 
-          // end experimental
+          // listen for search field value changes
+          // this.adminLevelOneFilterCtrl.valueChanges
+          //   .pipe(takeUntil(this._onDestroy))
+          //   .subscribe(() => {
+          //     this.filterAdminLevelOnes(0);
+          //   });
         },
         error => {
           this.errorMessage = <any>error;
@@ -594,19 +692,22 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
             if (a.name > b.name) { return 1; }
             return 0;
           });
-          // TODO: lines below commented out are for species autocomplete. more complex on this component since species is part of a form array
-          // line below is copied from search dialog component, but does not work here.
-          //this.filteredSpecies = this.eventSubmissionForm.get('species').valueChanges
-          // line below is does not work, but is the beginning of the solution.
-          // this.filteredSpecies = this.eventSubmissionForm.controls.new_event_locations.get('new_location_species').get('species').valueChanges
-          //   .startWith(null)
-          //   .map(val => this.filter(val, this.species, 'name'));
+
+          // populate the search select options for the initial control
+          this.filteredSpecies[0][0].next(this.species);
+
+          // listen for search field value changes
+          // this.speciesFilterCtrl.valueChanges
+          //   .pipe(takeUntil(this._onDestroy))
+          //   .subscribe(() => {
+          //     this.filterSpecies();
+          //   });
+
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
-
 
     // get sexBiases from the sexBias service
     this.sexBiasService.getSexBiases()
@@ -665,6 +766,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
     // TEMPORARY- will need to use user creds to query user contact list
     // get contact types from the ContactTypeService
+    this.userContactsLoading = true;
     this.contactService.getContacts()
       .subscribe(
         contacts => {
@@ -674,40 +776,148 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
             if (a.last_name > b.last_name) { return 1; }
             return 0;
           });
+
+          // populate the search select options for the initial control
+          this.filteredContacts[0][0].next(this.userContacts);
+          this.userContactsLoading = false;
+
+          // // listen for search field value changes
+          // this.contactFilterCtrl.valueChanges
+          //   .pipe(takeUntil(this._onDestroy))
+          //   .subscribe(() => {
+          //     this.filterContacts();
+          //   });
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
 
+    this.eventSubmissionForm.get('complete').valueChanges.subscribe(value => {
+      if (value === true) {
+        this.eventSubmissionForm.get('quality_check').enable();
+      } else if (value === false) {
+        this.eventSubmissionForm.get('quality_check').disable();
+      }
+    });
+
   }
 
   getErrorMessage(formControlName) {
+
     return this.eventSubmissionForm.get(formControlName).hasError('required') ? 'Please enter a value' :
-      this.eventSubmissionForm.get(formControlName).hasError('email') ? 'Not a valid email' :
-        '';
+      this.eventSubmissionForm.get(formControlName).hasError('email') ? 'Not a valid email' : '';
+  }
+
+  private filterAdminLevelOnes(eventLocationIndex) {
+    if (!this.adminLevelOnes) {
+      return;
+    }
+    // get the search keyword
+    let search = this.adminLevelOneFilterCtrl.value;
+    if (!search) {
+      this.filteredAdminLevelOnes[eventLocationIndex].next(this.adminLevelOnes.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the adminLevelOnes
+    this.filteredAdminLevelOnes[eventLocationIndex].next(
+      this.adminLevelOnes.filter(admin_level_one => admin_level_one.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  private filterAdminLevelTwos(eventLocationIndex) {
+    if (!this.adminLevelTwos) {
+      return;
+    }
+    // get the search keyword
+    let search = this.adminLevelTwoFilterCtrl.value;
+    if (!search) {
+      this.filteredAdminLevelTwos[eventLocationIndex].next(this.adminLevelTwos.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the adminLevelTwos
+    this.filteredAdminLevelTwos[eventLocationIndex].next(
+      this.adminLevelTwos.filter(admin_level_two => admin_level_two.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  private filterSpecies(eventLocationIndex, locationSpeciesIndex) {
+    if (!this.species) {
+      return;
+    }
+    // get the search keyword
+    let search = this.speciesFilterCtrl.value;
+    if (!search) {
+      this.filteredSpecies[eventLocationIndex][locationSpeciesIndex].next(this.species.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the adminLevelTwos
+    this.filteredSpecies[eventLocationIndex][locationSpeciesIndex].next(
+      this.species.filter(species => species.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  private filterContacts(eventLocationIndex, locationContactIndex) {
+    if (!this.userContacts) {
+      return;
+    }
+    // get the search keyword
+    let search = this.contactFilterCtrl.value;
+    if (!search) {
+      this.filteredContacts[eventLocationIndex][locationContactIndex].next(this.userContacts.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the contacts
+    this.filteredContacts[eventLocationIndex][locationContactIndex].next(
+      // tslint:disable-next-line:max-line-length
+      this.userContacts.filter(contact => contact.first_name.toLowerCase().indexOf(search) > -1 || contact.last_name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   createCommonEventDataObject(objectType, eventLocationIndex, objectInstanceIndex) {
 
     const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'];
-
     // check which object is being sent, parse out the specific form group instance from the form, add to the commonEventData object
     switch (objectType) {
       case 'contact':
         const contactsArray =
           <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
         const contact = contactsArray.controls[objectInstanceIndex];
-        this.commonEventData.contacts.push(contact);
+        this.commonEventData.contacts.push(this.formBuilder.group({
+          contact: contact.value.contact,
+          contact_type: null
+        }));
 
         // loop through event locations and push the new contact into each, except the one it came from (so as to avoid duplicate)
         for (let i = 0, j = eventLocations.length; i < j; i++) {
 
           if (i !== eventLocationIndex) {
-            const locationContacts = eventLocations[i].get('location_contacts');
-            locationContacts.push(contact);
+
+            // call addLocationContact, but also get the return value to know which contact instance to populate with the value
+            const indexObject = this.addLocationContact(i);
+
+            // tslint:disable-next-line:max-line-length
+            console.log('eventlocationindex: ' + indexObject.eventLocationIndex + ', locationspeciesindex: ' + indexObject.locationContactIndex);
+
+            // using the indexObject, push the species id value to the correct form instance
+            // tslint:disable-next-line:max-line-length
+            this.eventSubmissionForm.get('new_event_locations')['controls'][indexObject.eventLocationIndex].get('new_location_contacts')['controls'][indexObject.locationContactIndex].get('contact').setValue(contact.value.contact);
+
+
+            // const locationContacts = eventLocations[i].get('location_contacts');
+            // locationContacts.push(contact);
           }
         }
+        // tslint:disable-next-line:max-line-length
+        this.openSnackBar(this.displayValuePipe.transform(contact.value.contact, 'first_name', this.userContacts) + ' ' + this.displayValuePipe.transform(contact.value.contact, 'last_name', this.userContacts) + ' added to all locations.', 'OK', 5000);
 
         break;
       case 'species':
@@ -728,42 +938,57 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
         })
         );
 
-        // loop through event locations and push the new contact into each, except the one it came from (so as to avoid duplicate)
+        // loop through event locations and push the new species into each, except the one it came from (so as to avoid duplicate)
         for (let i = 0, j = eventLocations.length; i < j; i++) {
 
           if (i !== eventLocationIndex) {
-            const locationSpecies = eventLocations[i].get('new_location_species');
 
-            // push a new formGroup to the locationSpecies formArray, with the same species value but all other controls null/blank
-            // note: to copy the entire formGroup value, change line below to 'locationSpecies.push(species)'
-            locationSpecies.push(this.formBuilder.group({
-              species: species.value.species,
-              population_count: null,
-              sick_count: null,
-              dead_count: null,
-              sick_count_estimated: null,
-              dead_count_estimated: null,
-              priority: null,
-              captive: null,
-              age_bias: null,
-              sex_bias: null
-            })
-            );
+            // call addLocationSpecies, but also get the return value to know which species instance to populate with the value
+            const indexObject = this.addLocationSpecies(i);
 
+            // tslint:disable-next-line:max-line-length
+            console.log('eventlocationindex: ' + indexObject.eventLocationIndex + ', locationspeciesindex: ' + indexObject.locationSpeciesIndex);
+
+            // using the indexObject, push the species id value to the correct form instance
+            // tslint:disable-next-line:max-line-length
+            this.eventSubmissionForm.get('new_event_locations')['controls'][indexObject.eventLocationIndex].get('new_location_species')['controls'][indexObject.locationSpeciesIndex].get('species').setValue(species.value.species);
           }
         }
+        // tslint:disable-next-line:max-line-length
+        this.openSnackBar(this.displayValuePipe.transform(species.value.species, 'name', this.species) + ' added to all locations.', 'OK', 5000);
         break;
     }
 
-    console.log(this.commonEventData);
+    console.log('Common event data: ' + this.commonEventData);
+  }
 
+  endDateBeforeStart(AC: AbstractControl) {
+    const start_date = AC.get('start_date').value;
+    const end_date = AC.get('end_date').value;
+    if ((start_date !== null && end_date !== null) && start_date > end_date) {
+      AC.get('end_date').setErrors({ endDateBeforeStart: true });
+    }
+    return null;
+  }
+
+  startDateTodayorEarlierMortalityEvent(AC: AbstractControl) {
+
+    const start_date = AC.get('start_date').value;
+    const event_type = AC.get('event_type').value;
+    const today = APP_UTILITIES.TODAY;
+    if (event_type === 1) {
+      if ((start_date !== null) && ((start_date.getTime()) > (today.getTime()))) {
+        AC.get('start_date').setErrors({ startDateTodayorEarlierMortalityEvent: true });
+      }
+    }
+    return null;
   }
 
   initEventLocation() {
     return this.formBuilder.group({
       name: '',
-      start_date: '',
-      end_date: '',
+      start_date: null,
+      end_date: null,
       country: [APP_UTILITIES.DEFAULT_COUNTRY_ID, Validators.required],
       administrative_level_one: [null, Validators.required],
       administrative_level_two: [null, Validators.required],
@@ -777,23 +1002,29 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       environmental_factors: '',
       clinical_signs: '',
       comment: '',
+      // used only to capture event_type from event - not part of eventlocation record
+      event_type: null,
       new_location_species: this.formBuilder.array([
         this.initLocationSpecies()
       ]),
       new_location_contacts: this.formBuilder.array([
-        this.initLocationContacts()
+        //this.initLocationContacts()
       ])
-    });
+    },
+      {
+        validator: [this.endDateBeforeStart, this.startDateTodayorEarlierMortalityEvent]
+      }
+    );
   }
 
   initLocationSpecies() {
     return this.formBuilder.group({
       species: [null, Validators.required],
-      population_count: null,
-      sick_count: null,
-      dead_count: null,
-      sick_count_estimated: null,
-      dead_count_estimated: null,
+      population_count: [null, Validators.min(0)],
+      sick_count: [null, Validators.min(0)],
+      dead_count: [null, Validators.min(0)],
+      sick_count_estimated: [null, Validators.min(0)],
+      dead_count_estimated: [null, Validators.min(0)],
       priority: null,
       captive: false,
       age_bias: null,
@@ -805,22 +1036,22 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
   initSpeciesDiagnosis() {
     return this.formBuilder.group({
       diagnosis: [null, Validators.required],
-      diagnosis_cause: null,
-      diagnosis_basis: null,
+      cause: null,
+      basis: null,
       suspect: false,
       tested_count: null,
       diagnosis_count: null,
       positive_count: null,
       suspect_count: null,
       pooled: false,
-      organizations: null
+      new_species_diagnosis_organizations: null
     });
   }
 
   initLocationContacts() {
     return this.formBuilder.group({
       contact: [null, Validators.required],
-      contact_type: [null, Validators.required]
+      contact_type: null
     });
   }
 
@@ -840,7 +1071,8 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   initEventDiagnosis() {
     return this.formBuilder.group({
-      diagnosis: null
+      // TODO: make this value configurbale for the "Undetermined" value
+      diagnosis: '469'
     });
   }
 
@@ -849,36 +1081,64 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations');
     control.push(this.initEventLocation());
 
+    const eventLocationIndex = control.length - 1;
+
     const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'];
     const newEventLocationIndex = eventLocations.length - 1;
     const newEventLocation = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][newEventLocationIndex];
 
-    if (this.commonEventData.species.length > 0) {
-
-      for (const species of this.commonEventData.species) {
-        const locationSpecies = <FormArray>newEventLocation.get('new_location_species');
-        locationSpecies.push(species);
-      }
-    }
-
+    this.filteredAdminLevelOnes.push(new ReplaySubject<AdministrativeLevelOne[]>());
     this.ManageAdminLevelOneControl(newEventLocationIndex);
+
+    this.filteredAdminLevelTwos.push(new ReplaySubject<AdministrativeLevelTwo[]>());
     this.ManageAdminLevelTwoControl(newEventLocationIndex);
 
-    let eventLocationSpecies = new Array<Observable<any>>();
+    const eventLocationSpecies = new Array<ReplaySubject<Species[]>>();
     this.filteredSpecies.push(eventLocationSpecies);
+    // initiate an empty replaysubject
+    this.filteredSpecies[newEventLocationIndex].push(new ReplaySubject<Species[]>());
     this.ManageSpeciesControl(newEventLocationIndex, 0);
 
-    if (this.commonEventData.contacts.length > 0) {
+    const eventLocationContacts = new Array<ReplaySubject<Contact[]>>();
+    this.filteredContacts.push(eventLocationContacts);
+    // initiate an empty replaysubject
+    this.filteredContacts[newEventLocationIndex].push(new ReplaySubject<Contact[]>());
+    this.ManageContactControl(newEventLocationIndex, 0);
 
-      for (const contact of this.commonEventData.contacts) {
-        const locationContacts = <FormArray>newEventLocation.get('new_location_contacts');
-        locationContacts.push(contact);
+    if (this.commonEventData.species.length > 0) {
+      // tslint:disable-next-line:max-line-length
+      this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][0].get('species').setValue(this.commonEventData.species[0].controls.species.value);
+
+      if (this.commonEventData.species.length > 1) {
+
+        // get number of species instances needed (default first one has been set already)
+        const speciesFormArrayRemainderLength = this.commonEventData.species.length - 1;
+
+        for (let i = 0; i < speciesFormArrayRemainderLength; i++) {
+          this.addLocationSpecies(eventLocationIndex);
+        }
+
+        // start the loop at [1] (position 2) since [0] was already handled above
+        for (let i = 1; i < this.commonEventData.species.length; i++) {
+          // tslint:disable-next-line:max-line-length
+          this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][i].get('species').setValue(this.commonEventData.species[i].controls.species.value);
+        }
       }
     }
 
-    let eventLocationContacts = new Array<Observable<any>>();
-    this.filteredContacts.push(eventLocationContacts);
-    this.ManageContactControl(newEventLocationIndex, 0);
+    // contacts are handled differently because there is no default blank contact instance
+    if (this.commonEventData.contacts.length > 0) {
+
+      for (let i = 0; i < this.commonEventData.contacts.length; i++) {
+        // tslint:disable-next-line:max-line-length
+        this.addLocationContact(eventLocationIndex);
+      }
+
+      for (let i = 0; i < this.commonEventData.contacts.length; i++) {
+        // tslint:disable-next-line:max-line-length
+        this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts')['controls'][i].get('contact').setValue(this.commonEventData.contacts[i].controls.contact.value);
+      }
+    }
 
     this.usgsSearch = search_api.create('search-api-div', {
       'verbose': true,
@@ -934,25 +1194,85 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
   // location species
   addLocationSpecies(eventLocationIndex) {
+    // tslint:disable-next-line:max-line-length
     const controls = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
     controls.push(this.initLocationSpecies());
-
     const locationSpeciesIndex = controls.length - 1;
 
+    // const eventLocationSpecies = new Array<ReplaySubject<Species[]>>();
+    // this.filteredSpecies.push(eventLocationSpecies);
+    // initiate an empty replaysubject
+    this.filteredSpecies[eventLocationIndex].push(new ReplaySubject<Species[]>());
     this.ManageSpeciesControl(eventLocationIndex, locationSpeciesIndex);
+
+    return ({ eventLocationIndex: eventLocationIndex, locationSpeciesIndex: locationSpeciesIndex });
   }
 
   removeLocationSpecies(eventLocationIndex, locationSpeciesIndex) {
+    // tslint:disable-next-line:max-line-length
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
     control.removeAt(locationSpeciesIndex);
+
+    this.filteredSpecies[eventLocationIndex].splice(locationSpeciesIndex, 1);
   }
 
   getLocationSpecies(form) {
     return form.controls.new_location_species.controls;
   }
 
-  // species diagnosis
-  // TODO: add an additional level of index
+  // location contacts
+  addLocationContact(eventLocationIndex) {
+    // tslint:disable-next-line:max-line-length
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
+    control.push(this.initLocationContacts());
+    const locationContactIndex = control.length - 1;
+
+    this.filteredContacts[eventLocationIndex].push(new ReplaySubject<Contact[]>());
+    this.ManageContactControl(eventLocationIndex, locationContactIndex);
+
+    return ({ eventLocationIndex: eventLocationIndex, locationContactIndex: locationContactIndex });
+  }
+
+  removeLocationContact(eventLocationIndex, locationContactIndex) {
+    // tslint:disable-next-line:max-line-length
+    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
+    control.removeAt(locationContactIndex);
+
+    this.filteredContacts[eventLocationIndex].splice(locationContactIndex, 1);
+  }
+
+  viewContactDetailsDialog(eventLocationIndex, locationContactIndex) {
+
+    let contact_id = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts').value[locationContactIndex].contact;
+    let currentContact = this.userContacts.find(i => i.id === contact_id);
+
+    if (contact_id == null) {
+      this.openSnackBar('First select a contact to view that contact\'s details', 'OK', 5000);
+    } else {
+      // Open dialog for viewing contact details
+      this.viewContactDetailsDialogRef = this.dialog.open(ViewContactDetailsComponent, {
+        data: {
+          contact: currentContact
+        }
+      });
+
+      this.viewContactDetailsDialogRef.afterClosed()
+        .subscribe(
+          () => {
+            // do something after close
+          },
+          error => {
+            this.errorMessage = <any>error;
+          }
+        );
+    }
+
+  }
+
+  getLocationContacts(form) {
+    return form.controls.new_location_contacts.controls;
+  }
+
   addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex) {
     // tslint:disable-next-line:max-line-length
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
@@ -972,26 +1292,6 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     return form.controls.new_species_diagnoses.controls;
   }
 
-
-  // location contacts
-  addLocationContacts(eventLocationIndex) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
-    control.push(this.initLocationContacts());
-
-    const locationContactIndex = control.length - 1;
-
-    this.ManageContactControl(eventLocationIndex, locationContactIndex);
-  }
-
-  removeLocationContacts(eventLocationIndex, locationContactIndex) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
-    control.removeAt(locationContactIndex);
-  }
-
-  getLocationContacts(form) {
-    return form.controls.new_location_contacts.controls;
-  }
-
   // location comments
   addLocationComments(eventLocationIndex) {
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('comments');
@@ -1007,8 +1307,19 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
     return form.controls.comments.controls;
   }
 
-  updateAdminLevelOneOptions(selectedCountryID) {
+  updateEventType(eventTypeID) {
+    const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'];
+    for (let i = 0, j = eventLocations.length; i < j; i++) {
+      this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('event_type').setValue(Number(eventTypeID));
+    }
+  }
+
+  updateAdminLevelOneOptions(selectedCountryID, eventLocationIndex) {
+
+    this.adminLevelOnesLoading = true;
     const id = Number(selectedCountryID);
+
+    this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_one').setValue(null);
 
     // query the adminlevelones endpoint for appropriate records
     // update the options for the adminLevelOne select with the response
@@ -1017,16 +1328,31 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       .subscribe(
         adminLevelOnes => {
           this.adminLevelOnes = adminLevelOnes;
+          this.adminLevelOnes.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
+
+          // update the select options for the specific control
+          this.filteredAdminLevelOnes[eventLocationIndex].next(adminLevelOnes);
+
+          this.adminLevelOnesLoading = false;
         },
         error => {
           this.errorMessage = <any>error;
+          this.adminLevelOnesLoading = false;
         }
       );
   }
 
-  updateAdminLevelTwoOptions(selectedAdminLevelOneID) {
+  updateAdminLevelTwoOptions(selectedAdminLevelOneID, eventLocationIndex) {
     if (!isNaN(selectedAdminLevelOneID)) {
       const id = Number(selectedAdminLevelOneID);
+
+      this.adminLevelTwosLoading = true;
+
+      this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_two').setValue(null);
 
       // query the adminleveltwos endpoint for appropriate records
       // update the options for the adminLevelTwo select with the response
@@ -1040,12 +1366,26 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
               if (a.name > b.name) { return 1; }
               return 0;
             });
+
+            // update the select options for the specific control
+            this.filteredAdminLevelTwos[eventLocationIndex].next(adminLevelTwos);
+
+            // dont think below block should be here, but leaving it for now for debugging
+            // listen for search field value changes
+            // this.adminLevelTwoFilterCtrl.valueChanges
+            //   .pipe(takeUntil(this._onDestroy))
+            //   .subscribe(() => {
+            //     this.filterAdminLevelTwos(eventLocationIndex);
+            //   });
+
+            this.adminLevelTwosLoading = false;
           },
           error => {
             this.errorMessage = <any>error;
+            this.adminLevelTwosLoading = false;
           }
         );
-      }
+    }
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -1064,10 +1404,14 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
 
     // Open dialog for adding species diagnosis
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+      disableClose: true,
       data: {
         species_diagnosis_action: 'addToFormArray',
-        eventLocationIndex: eventLocationIndex,
-        locationSpeciesIndex: locationSpeciesIndex
+        eventlocationIndex: eventLocationIndex,
+        locationspeciesIndex: locationSpeciesIndex,
+        title: 'Add Species Diagnosis',
+        titleIcon: 'note_add',
+        actionButtonIcon: 'note_add'
       }
     });
 
@@ -1075,21 +1419,46 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
       .subscribe(
         (speciesDiagnosisObj) => {
 
-          // tslint:disable-next-line:max-line-length
-          this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventLocationIndex]
-            .get('new_location_species')['controls'][speciesDiagnosisObj.locationSpeciesIndex]
-            .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
-              diagnosis: speciesDiagnosisObj.formValue.diagnosis,
-              diagnosis_cause: speciesDiagnosisObj.formValue.diagnosis_cause,
-              diagnosis_basis: speciesDiagnosisObj.formValue.diagnosis_basis,
-              suspect: speciesDiagnosisObj.formValue.suspect,
-              tested_count: speciesDiagnosisObj.formValue.tested_count,
-              diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
-              positive_count: speciesDiagnosisObj.formValue.positive_count,
-              suspect_count: speciesDiagnosisObj.formValue.suspect_count,
-              pooled: speciesDiagnosisObj.formValue.pooled,
-              organizations: speciesDiagnosisObj.formValue.organizations
-            });
+          if (speciesDiagnosisObj.action === 'cancel') {
+            // remove last species diagnosis added
+            // tslint:disable-next-line:max-line-length
+            this.removeSpeciesDiagnosis(speciesDiagnosisObj.eventlocationIndex, speciesDiagnosisObj.locationspeciesIndex, speciesDiagnosisIndex);
+            return;
+          } else if (speciesDiagnosisObj.action === 'add') {
+
+            this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventlocationIndex]
+              .get('new_location_species')['controls'][speciesDiagnosisObj.locationspeciesIndex]
+              .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
+                diagnosis: speciesDiagnosisObj.formValue.diagnosis,
+                cause: speciesDiagnosisObj.formValue.cause,
+                basis: speciesDiagnosisObj.formValue.basis,
+                suspect: speciesDiagnosisObj.formValue.suspect,
+                tested_count: speciesDiagnosisObj.formValue.tested_count,
+                diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
+                positive_count: speciesDiagnosisObj.formValue.positive_count,
+                suspect_count: speciesDiagnosisObj.formValue.suspect_count,
+                pooled: speciesDiagnosisObj.formValue.pooled,
+                new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
+              });
+
+
+            for (const diagnosis of this.allDiagnoses) {
+              if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
+
+                let found = false;
+                for (const availableDiagnosis of this.availableDiagnoses) {
+                  if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
+                    found = true;
+                    break;
+                  }
+                }
+                if (!found) {
+                  this.availableDiagnoses.push(diagnosis);
+                }
+
+              }
+            }
+          }
 
         },
         error => {
@@ -1143,7 +1512,7 @@ export class EventSubmissionComponent implements OnInit, AfterViewInit {
                 message: 'Your event was successfully saved. The Event ID is ' + event.id,
                 messageIcon: 'check',
                 confirmButtonText: 'OK',
-                showCancelButton : true
+                showCancelButton: true
               }
             }
           );

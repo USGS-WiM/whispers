@@ -2,7 +2,7 @@
   <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}} {{data.registration_type === 'public' ? 'for General Users' : data.registration_type === 'partner' ? 'for Natural Resources Management Professionals' : ''}}
 </h1>
 <mat-dialog-content>
-  <form [formGroup]="userRegistrationForm" class="registration-form">
+  <form [formGroup]="userRegistrationForm" class="registration-form" autocomplete="off">
 
     <div class="vertical-form-container">
 

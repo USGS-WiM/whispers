@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 import {
   MatAutocompleteModule,
@@ -107,6 +108,7 @@ import { AddServiceRequestComponent } from './add-service-request/add-service-re
 import { NewLookupRequestComponent } from './new-lookup-request/new-lookup-request.component';
 import { SaveSearchComponent } from './save-search/save-search.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
+import { ViewContactDetailsComponent } from './view-contact-details/view-contact-details.component';
 
 
 
@@ -143,7 +145,8 @@ import { UserRegistrationComponent } from './user-registration/user-registration
     AddServiceRequestComponent,
     NewLookupRequestComponent,
     SaveSearchComponent,
-    UserRegistrationComponent
+    UserRegistrationComponent,
+    ViewContactDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -187,7 +190,8 @@ import { UserRegistrationComponent } from './user-registration/user-registration
     MatToolbarModule,
     MatTooltipModule,
     MatBottomSheetModule,
-    MatStepperModule
+    MatStepperModule,
+    NgxMatSelectSearchModule
   ],
   providers: [
     AuthenticationService,
@@ -222,7 +226,7 @@ import { UserRegistrationComponent } from './user-registration/user-registration
     EventLocationContactService,
     ServiceRequestService,
     DisplayValuePipe,
-    DatePipe,
+    DatePipe
   ],
   bootstrap: [AppComponent],
   entryComponents: [
@@ -246,7 +250,8 @@ import { UserRegistrationComponent } from './user-registration/user-registration
     AddServiceRequestComponent,
     NewLookupRequestComponent,
     SaveSearchComponent,
-    UserRegistrationComponent
+    UserRegistrationComponent,
+    ViewContactDetailsComponent
   ]
 })
 export class AppModule { }

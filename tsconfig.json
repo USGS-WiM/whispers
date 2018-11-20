@@ -35,6 +35,9 @@
       ],
       "@pipes/*": [
         "app/pipes/*"
+      ],
+      "@validators/*": [
+        "app/validators/*"
       ]
     },
     "target": "es5",

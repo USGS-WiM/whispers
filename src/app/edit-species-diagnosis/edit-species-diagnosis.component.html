@@ -10,16 +10,33 @@
     <span *ngIf="data.speciesdiagnosis">Species Diagnosis: {{data.speciesdiagnosis.diagnosis_string}} </span>
   </h3>
 
-  <form [formGroup]="speciesDiagnosisForm">
+  <form [formGroup]="speciesDiagnosisForm" autocomplete="off">
 
     <div class="vertical-form-container">
 
-      <mat-form-field class="form-control" *ngIf="data.species_diagnosis_action !== 'edit'">
-        <mat-select placeholder="Species Diagnosis" formControlName="diagnosis" aria-readonly="true">
-          <mat-option>--</mat-option>
-          <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="horizontal-form-container">
+
+        <!-- <mat-form-field class="form-control diagnosis-select" *ngIf="data.species_diagnosis_action !== 'edit'">
+          <mat-select placeholder="Species Diagnosis" formControlName="diagnosis" aria-readonly="true">
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.id}}">{{diagnosis.name}}</mat-option>
+          </mat-select>
+        </mat-form-field> -->
+
+        <mat-form-field class="form-control diagnosis-select" *ngIf="data.species_diagnosis_action !== 'edit'">
+          <mat-select formControlName="diagnosis" placeholder="Species Diagnosis" #diagnosisSelect>
+            <ngx-mat-select-search [formControl]="diagnosisFilterCtrl" [placeholderLabel]="'Find diagnosis...'"
+              [noEntriesFoundLabel]="'no matching diagnosis found'"></ngx-mat-select-search>
+            <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis.id">
+              {{diagnosis.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox class="form-control suspect-checkbox" formControlName="suspect" matTooltip="Check this box if this diagnosis is based on clinical signs, previous history, or field necropsy.  Also check this box if the laboratory diagnosis was 'disease suspect', such as Avian Cholera Suspect for example.">Species
+          Diagnosis Suspect</mat-checkbox>
+
+      </div>
 
       <mat-form-field class="form-control">
         <mat-select placeholder="Basis of Diagnosis" formControlName="basis" readonly>
@@ -36,14 +53,14 @@
       </mat-form-field>
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Number Assessed" type="number" formControlName="tested_count">
+        <input matInput placeholder="Number Assessed" type="number" min="0" formControlName="tested_count">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
       </mat-form-field>
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Number with this Diagnosis" type="number" formControlName="diagnosis_count">
+        <input matInput placeholder="Number with this Diagnosis" type="number" min="0" formControlName="diagnosis_count">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -51,7 +68,7 @@
 
       <!-- <div class="horizontal-form-container" class="species-controls-container">
           <mat-form-field class="species-number-control">
-            <input matInput placeholder="Number Confirmed" type="number" formControlName="positive_count">
+            <input matInput placeholder="Number Confirmed" type="number" min="0"  formControlName="positive_count">
             <mat-hint align="end" matTooltip="Public field">
               <mat-icon>public</mat-icon>
             </mat-hint>
@@ -72,9 +89,9 @@
         </mat-select>
       </mat-form-field>
 
-  
 
-      <mat-checkbox formControlName="suspect">Species Diagnosis Suspect</mat-checkbox>
+
+
       <!-- <mat-checkbox formControlName="pooled">Pooled Test</mat-checkbox> -->
 
     </div>
@@ -94,4 +111,6 @@
     </button>
     <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
   </div>
+
+
 </mat-dialog-actions>

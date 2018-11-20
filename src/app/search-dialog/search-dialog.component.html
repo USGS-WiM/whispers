@@ -8,7 +8,7 @@
 
 <mat-dialog-content>
 
-  <form [formGroup]="searchForm" class="autocomplete-form">
+  <form [formGroup]="searchForm" class="autocomplete-form" autocomplete="off">
 
     <mat-divider></mat-divider>
 
@@ -312,7 +312,7 @@
             </mat-radio-group>
           </div>
           <mat-form-field>
-            <input matInput type="number" placeholder="Number Affected" formControlName="affected_count">
+            <input matInput type="number" min="0"  placeholder="Number Affected" formControlName="affected_count">
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -357,12 +357,12 @@
             <b>Event Completion</b>
           </mat-panel-title>
           <mat-panel-description>
-              <span> {{ searchForm.get('complete').value === 'null' ? 'Open and closed events' : searchForm.get('complete').value === 'true' ? 'Complete events only' :  searchForm.get('complete').value === 'false' ? 'Open events only' : 'Open and closed events' }}</span>
+              <span> {{ searchForm.get('complete').value == null ? 'Open and closed events' : searchForm.get('complete').value == true ? 'Complete events only' :  searchForm.get('complete').value == false ? 'Open events only' : 'Open and closed events' }}</span>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div>
           <mat-radio-group formControlName="complete">
-            <mat-radio-button [value]="null" aria-selected="true" [checked]="true">Open and closed events</mat-radio-button>&nbsp;&nbsp;
+            <mat-radio-button [value]="null">Open and closed events</mat-radio-button>&nbsp;&nbsp;
             <mat-radio-button [value]="true">Complete events only</mat-radio-button>&nbsp;&nbsp;
             <mat-radio-button [value]="false">Open events only</mat-radio-button>
           </mat-radio-group>

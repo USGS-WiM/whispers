@@ -77,7 +77,7 @@
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.event_type.length > 0">
+          <mat-list-item *ngIf="currentDisplayquery && currentDisplayQuery.event_type.length > 0">
             <h4 mat-line>
               <strong>Event Type</strong>
             </h4>
@@ -88,7 +88,7 @@
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.diagnosis_type.length > 0">
+          <mat-list-item *ngIf="currentDisplayquery && currentDisplayQuery.diagnosis_type.length > 0">
             <h4 mat-line>
               <strong>Diagnosis Type</strong>
             </h4>
@@ -100,7 +100,7 @@
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.diagnosis.length > 0">
+          <mat-list-item *ngIf="currentDisplayquery && currentDisplayQuery.diagnosis.length > 0">
             <h4 mat-line>
               <strong>Diagnosis</strong>
             </h4>
@@ -112,7 +112,7 @@
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.species.length > 0">
+          <mat-list-item *ngIf="currentDisplayquery && currentDisplayQuery.species.length > 0">
             <h4 mat-line>
               <strong>Species</strong>
             </h4>
@@ -124,7 +124,7 @@
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.administrative_level_one.length > 0">
+          <mat-list-item *ngIf="currentDisplayquery && currentDisplayQuery.administrative_level_one.length > 0">
             <h4 mat-line>
               <strong>State</strong>
             </h4>
@@ -136,7 +136,7 @@
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.administrative_level_two.length > 0">
+          <mat-list-item *ngIf="currentDisplayquery && currentDisplayQuery.administrative_level_two.length > 0">
             <h4 mat-line>
               <strong>County</strong>
             </h4>
@@ -173,7 +173,7 @@
         Popular Searches
       </mat-expansion-panel-header>
       <div *ngIf="!speciesLoading" class="suggested-searches">
-        <div class="button-row" *ngFor="let search of parsedPopularSearches">
+        <div class="button-row" *ngFor="let search of parsedPopularSearches" (click)="implementSearch(search)">
           <button mat-button>
             <!-- Start Date -->
             <span class="search-param" *ngIf="search.start_date">

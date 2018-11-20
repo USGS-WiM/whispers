@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>
   <i class="material-icons">edit</i> Edit Event {{eventID}}</h1>
 <mat-dialog-content>
-  <form [formGroup]="editEventForm">
+  <form [formGroup]="editEventForm" autocomplete="off">
 
     <div class="vertical-form-container">
 
@@ -58,7 +58,7 @@
         </div>
         <mat-card-content>
           <div class="horizontal-form-container">
-            <form [formGroup]="editEventForm">
+            <form [formGroup]="editEventForm" autocomplete="off">
 
               <div class="vertical-form-container">
 

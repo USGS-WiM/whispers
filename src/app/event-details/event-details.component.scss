@@ -333,7 +333,7 @@ tr.noBorder td {
     border-style: groove;
     border-radius: 5px;
     margin-bottom: 1em;
-    width: auto;
+    width: 100%;
     display: inline-block;
 }
 
@@ -458,7 +458,8 @@ tr.noBorder td {
     flex-direction: row;
     flex-wrap: nowrap;
     width: 100%;
-    max-width: 100%;
+    max-width: 2000px;
+    margin: 0 auto;
 
     @media (max-width: 1500px) {
         flex-direction: column-reverse;
@@ -467,7 +468,7 @@ tr.noBorder td {
 
     .detailsDiv{
         width: 100%;
-        max-width: 1200px;
+        max-width: 1500px;
         background-color: white;
 
         @media (max-width: 1500px) {
@@ -483,6 +484,7 @@ tr.noBorder td {
         position: sticky;
         top: 0;
         border-left: 1.5px solid fade-out($text, 0.3);
+        max-width: 600px;
 
         #map{
             width: 100%;

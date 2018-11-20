@@ -1,10 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import { Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSelect } from '@angular/material';
+
+import { ReplaySubject, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { MatSnackBar } from '@angular/material';
 // import { MAT_DIALOG_DATA } from '@angular/material';
@@ -66,12 +70,16 @@ declare const search_api: search_api;
 })
 export class AddEventLocationComponent implements OnInit {
   @Input('eventID') eventID: string;
+  @Input('eventTypeID') eventTypeID: string;
+  @ViewChild('adminLevelOneSelect') adminLevelOneSelect: MatSelect;
+  @ViewChild('adminLevelTwoSelect') adminLevelTwoSelect: MatSelect;
+  @ViewChild('speciesSelect') speciesSelect: MatSelect;
+  @ViewChild('contactSelect') contactSelect: MatSelect;
 
   errorMessage = '';
   addEventLocationForm: FormGroup;
 
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
-
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
@@ -82,29 +90,38 @@ export class AddEventLocationComponent implements OnInit {
   adminLevelTwos: AdministrativeLevelTwo[];
 
   species: Species[];
-
   sexBiases: SexBias[];
   ageBiases: AgeBias[];
-
   organizations: Organization[];
-
   contactTypes: ContactType[];
   commentTypes: CommentType[];
 
   userContacts = [];
-
-  //eventID;
-
   submitLoading = false;
+
+  /** Subject that emits when the component has been destroyed. */
+  private _onDestroy = new Subject<void>();
+
+  filteredSpecies = [];
+  filteredContacts = [];
 
   latitudePattern: RegExp = (/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/);
   longitudePattern: RegExp = (/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/);
+
+  /** controls for the MatSelect filter keyword */
+  adminLevelOneFilterCtrl: FormControl = new FormControl();
+  adminLevelTwoFilterCtrl: FormControl = new FormControl();
+  speciesFilterCtrl: FormControl = new FormControl();
+  contactFilterCtrl: FormControl = new FormControl();
+
+  filteredAdminLevelOnes: ReplaySubject<AdministrativeLevelOne[]> = new ReplaySubject<AdministrativeLevelOne[]>();
+  filteredAdminLevelTwos: ReplaySubject<AdministrativeLevelTwo[]> = new ReplaySubject<AdministrativeLevelTwo[]>();
 
   buildAddEventLocationForm() {
     this.addEventLocationForm = this.formBuilder.group({
       event: null,
       name: '',
-      start_date: '',
+      start_date: null,
       end_date: null,
       country: [APP_UTILITIES.DEFAULT_COUNTRY_ID, Validators.required],
       administrative_level_one: [null, Validators.required],
@@ -119,13 +136,18 @@ export class AddEventLocationComponent implements OnInit {
       environmental_factors: '',
       clinical_signs: '',
       comment: '',
+      // used only to capture event_type from event - not part of eventlocation record
+      event_type: null,
       new_location_species: this.formBuilder.array([
         // this.initLocationSpecies()
       ]),
       new_location_contacts: this.formBuilder.array([
         // this.initLocationContacts()
       ])
-    });
+    },
+      {
+        validator: [this.endDateBeforeStart, this.startDateTodayorEarlierMortalityEvent]
+      });
   }
 
   constructor(
@@ -152,7 +174,22 @@ export class AddEventLocationComponent implements OnInit {
     this.buildAddEventLocationForm();
   }
 
+  // ngOnDestroy() {
+  //   this._onDestroy.next();
+  //   this._onDestroy.complete();
+  // }
+
   ngOnInit() {
+
+    this.addEventLocationForm.get('event_type').setValue(this.eventTypeID);
+
+    this.filteredSpecies = new Array<ReplaySubject<Species[]>>();
+    this.filteredSpecies.push(new ReplaySubject<Species[]>());
+    this.ManageSpeciesControl(0);
+
+    this.filteredContacts = new Array<ReplaySubject<Contact[]>>();
+    this.filteredContacts.push(new ReplaySubject<Contact[]>());
+    this.ManageContactControl(0);
 
     // get landOwnerships from the LandOwnerShipService
     this.landOwnershipService.getLandOwnerships()
@@ -182,12 +219,15 @@ export class AddEventLocationComponent implements OnInit {
         adminLevelOnes => {
           this.adminLevelOnes = adminLevelOnes;
 
-          // experimental
-          // this.filteredAdminLevelOnes = this.eventSubmissionForm.get('').valueChanges
-          //   .startWith(null)
-          //   .map(val => this.filter(val, this.administrative_level_one, 'name'));
+          // load the initial bank list
+          this.filteredAdminLevelOnes.next(this.adminLevelOnes);
 
-          // end experimental
+          // listen for search field value changes
+          this.adminLevelOneFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+              this.filterAdminLevelOnes();
+            });
         },
         error => {
           this.errorMessage = <any>error;
@@ -204,13 +244,9 @@ export class AddEventLocationComponent implements OnInit {
             if (a.name > b.name) { return 1; }
             return 0;
           });
-          // TODO: lines below commented out are for species autocomplete. more complex on this component since species is part of a form array
-          // line below is copied from search dialog component, but does not work here.
-          // this.filteredSpecies = this.eventSubmissionForm.get('species').valueChanges
-          // line below is does not work, but is the beginning of the solution.
-          // this.filteredSpecies = this.eventSubmissionForm.get('new_event_locations').get('locationspecies').get('species').valueChanges
-          //   .startWith(null)
-          //   .map(val => this.filter(val, this.species, 'name'));
+
+          // populate the search select options for the initial control
+          this.filteredSpecies[0].next(this.species);
         },
         error => {
           this.errorMessage = <any>error;
@@ -284,6 +320,8 @@ export class AddEventLocationComponent implements OnInit {
             if (a.last_name > b.last_name) { return 1; }
             return 0;
           });
+          // populate the search select options for the initial control
+          this.filteredContacts[0].next(this.userContacts);
         },
         error => {
           this.errorMessage = <any>error;
@@ -299,7 +337,8 @@ export class AddEventLocationComponent implements OnInit {
     formValue.event = this.eventID;
 
     // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
-    // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
+    // can be removed if configure datepicker to output this format
+    // (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
     formValue.start_date = this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd');
     formValue.end_date = this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd');
 
@@ -320,14 +359,36 @@ export class AddEventLocationComponent implements OnInit {
 
   }
 
+  startDateTodayorEarlierMortalityEvent(AC: AbstractControl) {
+
+    const start_date = AC.get('start_date').value;
+    const event_type = AC.get('event_type').value;
+    const today = APP_UTILITIES.TODAY;
+    if (event_type === 1) {
+      if ((start_date !== null) && ((start_date.getTime()) > (today.getTime()))) {
+        AC.get('start_date').setErrors({ startDateTodayorEarlierMortalityEvent: true });
+      }
+    }
+    return null;
+  }
+
+  endDateBeforeStart(AC: AbstractControl) {
+    const start_date = AC.get('start_date').value;
+    const end_date = AC.get('end_date').value;
+    if ((start_date !== null && end_date !== null) && start_date > end_date) {
+      AC.get('end_date').setErrors({ endDateBeforeStart: true });
+    }
+    return null;
+  }
+
   initLocationSpecies() {
     return this.formBuilder.group({
       species: [null, Validators.required],
-      population_count: null,
-      sick_count: null,
-      dead_count: null,
-      sick_count_estimated: null,
-      dead_count_estimated: null,
+      population_count: [null, Validators.min(0)],
+      sick_count: [null, Validators.min(0)],
+      dead_count: [null, Validators.min(0)],
+      sick_count_estimated: [null, Validators.min(0)],
+      dead_count_estimated: [null, Validators.min(0)],
       priority: null,
       captive: false,
       age_bias: null,
@@ -337,8 +398,8 @@ export class AddEventLocationComponent implements OnInit {
 
   initLocationContacts() {
     return this.formBuilder.group({
-      id: [null, Validators.required],
-      contact_type: [null, Validators.required]
+      contact: null,
+      contact_type: null
     });
   }
 
@@ -353,6 +414,11 @@ export class AddEventLocationComponent implements OnInit {
   addLocationSpecies() {
     const control = <FormArray>this.addEventLocationForm.get('new_location_species');
     control.push(this.initLocationSpecies());
+
+    const locationSpeciesIndex = control.length - 1;
+
+    this.filteredSpecies.push(new ReplaySubject<Species[]>());
+    this.ManageSpeciesControl(locationSpeciesIndex);
   }
 
   removeLocationSpecies(i, j) {
@@ -364,14 +430,19 @@ export class AddEventLocationComponent implements OnInit {
   }
 
   // location contacts
-  addLocationContacts() {
+  addLocationContact() {
     const control = <FormArray>this.addEventLocationForm.get('new_location_contacts');
     control.push(this.initLocationContacts());
+
+    const locationContactIndex = control.length - 1;
+
+    this.filteredContacts.push(new ReplaySubject<Contact[]>());
+    this.ManageContactControl(locationContactIndex);
   }
 
-  removeLocationContacts(i, k) {
+  removeLocationContacts(locationContactIndex) {
     const control = <FormArray>this.addEventLocationForm.get('new_location_contacts');
-    control.removeAt(k);
+    control.removeAt(locationContactIndex);
   }
 
   getLocationContacts() {
@@ -413,6 +484,8 @@ export class AddEventLocationComponent implements OnInit {
   updateAdminLevelTwoOptions(selectedAdminLevelOneID) {
     const id = Number(selectedAdminLevelOneID);
 
+    this.addEventLocationForm.get('administrative_level_two').setValue(null);
+
     // query the adminleveltwos endpoint for appropriate records
     // update the options for the adminLevelTwo select with the response
 
@@ -425,6 +498,16 @@ export class AddEventLocationComponent implements OnInit {
             if (a.name > b.name) { return 1; }
             return 0;
           });
+
+          // load the initial bank list
+          this.filteredAdminLevelTwos.next(this.adminLevelTwos);
+
+          // listen for search field value changes
+          this.adminLevelTwoFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+              this.filterAdminLevelTwos();
+            });
         },
         error => {
           this.errorMessage = <any>error;
@@ -463,6 +546,104 @@ export class AddEventLocationComponent implements OnInit {
       this.addEventLocationForm.get('gnis_name').setValue(result.name);
 
     });
+  }
+
+  ManageSpeciesControl(locationSpeciesIndex: number) {
+    // populate the species options list for the specific control
+    this.filteredSpecies[locationSpeciesIndex].next(this.species);
+
+    // listen for search field value changes
+    this.speciesFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterSpecies(locationSpeciesIndex);
+      });
+  }
+
+  ManageContactControl(locationContactIndex: number) {
+    // populate the species options list for the specific control
+    this.filteredContacts[locationContactIndex].next(this.userContacts);
+
+    // listen for search field value changes
+    this.contactFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterContacts(locationContactIndex);
+      });
+  }
+
+
+  private filterSpecies(locationSpeciesIndex) {
+    if (!this.species) {
+      return;
+    }
+    // get the search keyword
+    let search = this.speciesFilterCtrl.value;
+    if (!search) {
+      this.filteredSpecies[locationSpeciesIndex].next(this.species.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the adminLevelTwos
+    this.filteredSpecies[locationSpeciesIndex].next(
+      this.species.filter(species => species.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  private filterContacts(locationContactIndex) {
+    if (!this.userContacts) {
+      return;
+    }
+    // get the search keyword
+    let search = this.contactFilterCtrl.value;
+    if (!search) {
+      this.filteredContacts[locationContactIndex].next(this.userContacts.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the contacts
+    this.filteredContacts[locationContactIndex].next(
+      // tslint:disable-next-line:max-line-length
+      this.userContacts.filter(contact => contact.first_name.toLowerCase().indexOf(search) > -1 || contact.last_name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  private filterAdminLevelOnes() {
+    if (!this.adminLevelOnes) {
+      return;
+    }
+    // get the search keyword
+    let search = this.adminLevelOneFilterCtrl.value;
+    if (!search) {
+      this.filteredAdminLevelOnes.next(this.adminLevelOnes.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the adminLevelOnes
+    this.filteredAdminLevelOnes.next(
+      this.adminLevelOnes.filter(admin_level_one => admin_level_one.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  private filterAdminLevelTwos() {
+    if (!this.adminLevelTwos) {
+      return;
+    }
+    // get the search keyword
+    let search = this.adminLevelTwoFilterCtrl.value;
+    if (!search) {
+      this.filteredAdminLevelTwos.next(this.adminLevelTwos.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the adminLevelTwos
+    this.filteredAdminLevelTwos.next(
+      this.adminLevelTwos.filter(admin_level_two => admin_level_two.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
 

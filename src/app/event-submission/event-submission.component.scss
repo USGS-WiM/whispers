@@ -1,7 +1,7 @@
 #eventSubmissionPage{
     display: block;
     width: 94%;
-    max-width: 900px;
+    max-width: 1000px;
     margin: 40px auto;
     border-radius: 4px;
     box-shadow: 0 1px 0 1.35px rgba(10,16,64,.08);
@@ -119,6 +119,8 @@
     .form-nav-buttons{
         display: flex;
         justify-content: center;
+        box-sizing: border-box;
+        padding: 20px 0 0 0;
 
         button{
             position: relative;
@@ -166,6 +168,7 @@
         margin: 15px auto;
         box-sizing: border-box;
         padding: 15px;
+        width: 100%;
     }
     .contacts-container{
         margin: 8px auto;
@@ -308,22 +311,6 @@
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .horizontal-form-container {
     display: flex;
     flex-direction: row;
@@ -361,14 +348,14 @@
 }
 
 .contact-select {
-    width: 50em;
+    margin: 10px;
     flex-grow: 2;
 }
 
 .contact-type-select {
+    margin: 10px;
     flex-grow: 1;
 }
-
 
 
 .hint {
@@ -475,6 +462,6 @@ mat-radio-button {
 }
 
 .event-diagnosis-select {
-    width: 30em;
+    width: 60em;
 }
 

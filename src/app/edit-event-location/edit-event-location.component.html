@@ -2,7 +2,7 @@
   <i class="material-icons">edit_location</i> Edit Event Location Details</h1>
 <mat-dialog-content>
 
-  <form [formGroup]="editEventLocationForm">
+  <form [formGroup]="editEventLocationForm" autocomplete="off">
     <div class="horizontal-form-container">
       <mat-form-field class="form-control">
         <input matInput [matDatepicker]="startDate" placeholder="Location Start Date" formControlName="start_date">
@@ -20,6 +20,8 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
+        <mat-error *ngIf="editEventLocationForm.get('end_date').hasError('endDateBeforeStart')">Cannot
+          precede start date</mat-error>
       </mat-form-field>
     </div>
     <br>
@@ -102,8 +104,7 @@
 
         <div>
           <button mat-stroked-button color="primary" aria-label="Look up feature in Geographic Names Information System (GNIS) database"
-            matTooltip="Look up feature in Geographic Names Information System (GNIS) database"
-            (click)="openGNISLookupDialog(null)">
+            matTooltip="Look up feature in Geographic Names Information System (GNIS) database" (click)="openGNISLookupDialog(null)">
             <mat-icon>search</mat-icon>Look Up GNIS
           </button>
         </div>

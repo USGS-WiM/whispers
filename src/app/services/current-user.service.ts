@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+import { User } from '@interfaces/user';
 
 @Injectable()
 export class CurrentUserService {
@@ -10,7 +11,7 @@ export class CurrentUserService {
 
   constructor() { }
 
-  updateCurrentUser(user: any) {
+  updateCurrentUser(user) {
     this.userSource.next(user);
   }
 

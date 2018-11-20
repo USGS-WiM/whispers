@@ -113,58 +113,6 @@
         border: 1px solid fade-out(#A0AFCD, 0.6);
     }
 
-    // Prev and next buttons
-    // Prev and next buttons
-    // Prev and next buttons
-    .form-nav-buttons{
-        display: flex;
-        justify-content: center;
-        box-sizing: border-box;
-        padding: 20px 0 0 0;
-
-        button{
-            position: relative;
-            top: -2px;
-
-            &:hover{
-                cursor: pointer;
-            }
-        }
-    }
-
-
-    // Wrapper around add content buttons
-    // Wrapper around add content buttons
-    .add-content-button{
-        display: flex;
-        justify-content: center;
-        box-sizing: border-box;
-        margin: 0 auto;
-        width: 100%;
-        padding: 0;
-
-        button{
-            text-align: center;
-            padding: 15px 15px 10px 15px;
-            font-weight: 800;
-            font-size: 16px !important;
-
-            .mat-icon{
-                display: block;
-                margin: 0 auto;
-            }
-        }
-
-        &.smaller{
-            
-            button{
-                padding: 8px 8px 8px 8px;
-                font-weight: 600;
-                font-weight: 14px !important;
-            }
-        }
-    }
-
 
     // Species Container
     // Species Container
@@ -246,6 +194,7 @@
 
     .comment-text-area{
         width: 100%;
+        display: block;
         margin: 20px auto;
 
         textarea{
@@ -264,6 +213,64 @@
     }
 }
 
+
+
+.comment-text-area{
+    display: block !important;
+    width: 100% !important;
+    margin: 20px auto !important;
+}
+
+// Prev and next buttons
+// Prev and next buttons
+// Prev and next buttons
+.form-nav-buttons{
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 20px 0 0 0;
+
+    button{
+        position: relative;
+        top: -2px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+// Wrapper around add content buttons
+// Wrapper around add content buttons
+.add-content-button{
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+
+    button{
+        text-align: center;
+        padding: 15px 15px 10px 15px;
+        font-weight: 800;
+        font-size: 16px !important;
+
+        .mat-icon{
+            display: block;
+            margin: 0 auto;
+        }
+    }
+
+    &.smaller{
+        
+        button{
+            padding: 8px 8px 8px 8px;
+            font-weight: 600;
+            font-weight: 14px !important;
+        }
+    }
+}
 
 // Submission Review
 // Submission Review

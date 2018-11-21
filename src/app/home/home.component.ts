@@ -786,10 +786,7 @@ export class HomeComponent implements OnInit {
 
           for (i = 0; i < acc.length; i++) {
             acc[i].addEventListener('click', function () {
-              for (let j = 0; j < acc.length; j++) {
-                acc[j].classList.toggle('active');
-              }
-              this.classList.toggle('active');
+              this.classList.toggle("active");
               const panel = this.nextElementSibling;
               if (panel.style.maxHeight) {
                 panel.style.maxHeight = null;

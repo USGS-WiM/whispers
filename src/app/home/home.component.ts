@@ -744,8 +744,8 @@ export class HomeComponent implements OnInit {
         // if one event represented by marker, do a simple display. If multiple, display in collapsing panels
         if (marker.events.length === 1) {
           // tslint:disable-next-line:max-line-length
-          popupContent = popupContent  + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
-            '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Open') + '</span><br/>' +
+          popupContent = popupContent + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
+            '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Incomplete') + '</span><br/>' +
             '<span class="popupLabel">Type:</span> ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
             '<span class="popupLabel">Dates:</span> ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
             '<span class="popupLabel">Location:</span> ' + locationContent +
@@ -759,7 +759,7 @@ export class HomeComponent implements OnInit {
           popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
             // '<h4>Event ' + this.testForUndefined(event['id']) + '</h4>' +
             '<div class="panel">' +
-            '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Open') + '</span><br/>' +
+            '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Incomplete') + '</span><br/>' +
             '<span class="popupLabel">Type:</span> ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
             '<span class="popupLabel">Dates:</span> ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
             '<span class="popupLabel">Location:</span> ' + locationContent +

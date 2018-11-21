@@ -1497,6 +1497,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     for (const event_location of formValue.new_event_locations) {
       event_location.start_date = this.datePipe.transform(event_location.start_date, 'yyyy-MM-dd');
       event_location.end_date = this.datePipe.transform(event_location.end_date, 'yyyy-MM-dd');
+      //delete the event_type superficially attached to event locations
+       delete event_location.event_type;
     }
 
     this.eventService.create(formValue)

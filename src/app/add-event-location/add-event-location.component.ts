@@ -342,6 +342,9 @@ export class AddEventLocationComponent implements OnInit {
     formValue.start_date = this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd');
     formValue.end_date = this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd');
 
+    //delete the event_type superficially attached to event location for validation purposes
+    delete formValue.event_type;
+
     this.eventLocationService.create(formValue)
       .subscribe(
         newEventLocation => {

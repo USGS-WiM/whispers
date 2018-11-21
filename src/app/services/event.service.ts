@@ -106,14 +106,6 @@ export class EventService {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
 
-    //attempt to handle start date and end date that are referred to differently throughout the app
-    if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
-      queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
-    }
-    if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
-      queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
-    }
-
     if (eventQuery.event_type && eventQuery.event_type.length > 0) {
       queryString = queryString + '&event_type=' + eventQuery.event_type;
     }
@@ -168,14 +160,6 @@ export class EventService {
     if (eventQuery.affected_count !== null && eventQuery.affected_count !== '') {
       queryString = queryString + '&affected_count' + eventQuery.affected_count_operator + '=' + eventQuery.affected_count.toString();
     }
-    if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
-      queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
-    }
-    if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
-      queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
-    }
-
-    // attempt to handle start date and end date that are referred to differently throughout the app
     if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
       queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
     }

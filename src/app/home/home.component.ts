@@ -250,6 +250,9 @@ export class HomeComponent implements OnInit {
       .subscribe(
         displayQuery => {
           this.currentDisplayQuery = displayQuery;
+          console.log('New display query: ' + this.currentDisplayQuery);
+          console.log('Current Display Query adminlevelOne length: ' + this.currentDisplayQuery.administrative_level_one.length);
+          console.log(' Current Display Query Event types: ' +  this.currentDisplayQuery.event_type)
         });
 
     // use displayQuery for display of current query in markup, send to searchDialogService

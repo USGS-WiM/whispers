@@ -744,14 +744,16 @@ export class HomeComponent implements OnInit {
         // if one event represented by marker, do a simple display. If multiple, display in collapsing panels
         if (marker.events.length === 1) {
           // tslint:disable-next-line:max-line-length
-          popupContent = popupContent + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
+          popupContent = popupContent  + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
             '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Open') + '</span><br/>' +
             '<span class="popupLabel">Type:</span> ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
             '<span class="popupLabel">Dates:</span> ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
             '<span class="popupLabel">Location:</span> ' + locationContent +
             '<span class="popupLabel">Species:</span> ' + speciesContent +
             '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string');
+            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            '<a href=' + APP_SETTINGS.APP_URL + '/event/' + this.testForUndefined(event['id']) + '>View Event Details </a>';
+            
         } else if (marker.events.length > 1) {
 
           popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
@@ -763,8 +765,8 @@ export class HomeComponent implements OnInit {
             '<span class="popupLabel">Location:</span> ' + locationContent +
             '<span class="popupLabel">Species:</span> ' + speciesContent +
             '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') +
-            '<p></div>';
+            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            '<span class="popupLabel"><a href=' + APP_SETTINGS.APP_URL + '/event/' + this.testForUndefined(event['id']) + '>View Event Details </a> </span><p></div>';
         }
       }
 

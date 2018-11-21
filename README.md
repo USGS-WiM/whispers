@@ -8,7 +8,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ```bash
 git clone https://github.com/USGS-WiM/whispers.git
-cd lide-lims
+cd whispers
 
 # install the project's dependencies
 npm install

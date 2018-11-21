@@ -374,6 +374,7 @@ input[type=checkbox]{
 
 .active:after {
     content: "\2796"; /* Unicode character for "minus" sign (-) */
+    /* content: '\02795'; */
 }
 
 .popupLabel {

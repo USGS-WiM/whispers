@@ -77,72 +77,81 @@
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayquery && currentDisplayQuery.event_type.length > 0">
+          <mat-list-item>
+            <h4 mat-line>
+              <strong>Event Status</strong>
+            </h4>
+            <p mat-line>
+              <span> {{ currentDisplayQuery.complete === true ? 'Complete Events Only' :
+                currentDisplayQuery.complete === false ? 'Incomplete Events Only' : 'All Statuses' }}</span>
+            </p>
+          </mat-list-item>
+
+          <mat-list-item *ngIf="currentDisplayQuery.event_type.length > 0">
             <h4 mat-line>
               <strong>Event Type</strong>
             </h4>
             <p mat-line>
-              <span *ngFor="let item of currentDisplayQuery.event_type">{{item}}
-                <span *ngIf="(currentDisplayQuery.event_type.indexOf(item)) < (currentDisplayQuery.event_type.length - 1)">or&nbsp;</span>
+              <!-- <span>{{currentDisplayQuery.event_type}}</span> -->
+              <span *ngFor="let event_type of currentDisplayQuery.event_type">{{event_type}}
+                <span *ngIf="(currentDisplayQuery.event_type.indexOf(event_type)) < (currentDisplayQuery.event_type.length - 1)">or&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayquery && currentDisplayQuery.diagnosis_type.length > 0">
+          <mat-list-item *ngIf="currentDisplayQuery.diagnosis_type.length > 0">
             <h4 mat-line>
               <strong>Diagnosis Type</strong>
             </h4>
             <p mat-line>
-              <span *ngFor="let item of currentDisplayQuery.diagnosis_type">{{item}}
-                <span *ngIf="(currentDisplayQuery.diagnosis_type.indexOf(item)) < (currentDisplayQuery.diagnosis_type.length - 1)">{{(currentDisplayQuery.diagnosis_type_includes_all)
+              <span *ngFor="let diagnosis_type of currentDisplayQuery.diagnosis_type">{{diagnosis_type}}
+                <span *ngIf="(currentDisplayQuery.diagnosis_type.indexOf(diagnosis_type)) < (currentDisplayQuery.diagnosis_type.length - 1)">{{(currentDisplayQuery.diagnosis_type_includes_all)
                   ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayquery && currentDisplayQuery.diagnosis.length > 0">
+          <mat-list-item *ngIf="currentDisplayQuery.diagnosis.length > 0">
             <h4 mat-line>
               <strong>Diagnosis</strong>
             </h4>
             <p mat-line>
-              <span *ngFor="let item of currentDisplayQuery.diagnosis">{{item}}
-                <span *ngIf="(currentDisplayQuery.diagnosis.indexOf(item)) < (currentDisplayQuery.diagnosis.length - 1)">{{(currentDisplayQuery.diagnosis_includes_all)
-                  ? "and" : "or"}}&nbsp;</span>
+              <span *ngFor="let diagnosis of currentDisplayQuery.diagnosis">{{diagnosis}}
+                <span *ngIf="(currentDisplayQuery.diagnosis.indexOf(diagnosis)) < (currentDisplayQuery.diagnosis.length - 1)">{{(currentDisplayQuery.diagnosis_includes_all) ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayquery && currentDisplayQuery.species.length > 0">
+          <mat-list-item *ngIf="currentDisplayQuery.species.length > 0">
             <h4 mat-line>
               <strong>Species</strong>
             </h4>
             <p mat-line>
-              <span *ngFor="let item of currentDisplayQuery.species">{{item}}
-                <span *ngIf="(currentDisplayQuery.species.indexOf(item)) < (currentDisplayQuery.species.length - 1)">{{(currentDisplayQuery.species_includes_all)
-                  ? "and" : "or"}}&nbsp;</span>
+              <span *ngFor="let species of currentDisplayQuery.species">{{species}}
+                <span *ngIf="(currentDisplayQuery.species.indexOf(species)) < (currentDisplayQuery.species.length - 1)">{{(currentDisplayQuery.species_includes_all) ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayquery && currentDisplayQuery.administrative_level_one.length > 0">
+          <mat-list-item *ngIf="currentDisplayQuery.administrative_level_one.length > 0">
             <h4 mat-line>
               <strong>State</strong>
             </h4>
             <p mat-line>
-              <span *ngFor="let item of currentDisplayQuery.administrative_level_one">{{item}}
-                <span *ngIf="(currentDisplayQuery.administrative_level_one.indexOf(item)) < (currentDisplayQuery.administrative_level_one.length - 1)">{{(currentDisplayQuery.administrative_level_one_includes_all)
+              <span *ngFor="let adminLevelOne of currentDisplayQuery.administrative_level_one">{{adminLevelOne}}
+                <span *ngIf="(currentDisplayQuery.administrative_level_one.indexOf(adminLevelOne)) < (currentDisplayQuery.administrative_level_one.length - 1)">{{(currentDisplayQuery.administrative_level_one_includes_all)
                   ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayquery && currentDisplayQuery.administrative_level_two.length > 0">
+          <mat-list-item *ngIf="currentDisplayQuery.administrative_level_two.length > 0">
             <h4 mat-line>
               <strong>County</strong>
             </h4>
             <p mat-line>
-              <span *ngFor="let item of currentDisplayQuery.administrative_level_two">{{item}}
-                <span *ngIf="(currentDisplayQuery.administrative_level_two.indexOf(item)) < (currentDisplayQuery.administrative_level_two.length - 1)">{{(currentDisplayQuery.administrative_level_two_includes_all)
+              <span *ngFor="let adminLevelTwo of currentDisplayQuery.administrative_level_two">{{adminLevelTwo}}
+                <span *ngIf="(currentDisplayQuery.administrative_level_two.indexOf(adminLevelTwo)) < (currentDisplayQuery.administrative_level_two.length - 1)">{{(currentDisplayQuery.administrative_level_two_includes_all)
                   ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
@@ -316,6 +325,7 @@
 
         <mat-expansion-panel id="legend" class="legend legend-home">
           <mat-expansion-panel-header>
+              <mat-icon matTooltip="Map shows centroid of county where event occured." _ngcontent-c5="" class="material-icons mat-icon" style="color: #e8c900; font-size: 18px; width: 100%;" role="img" aria-hidden="true">warning</mat-icon>
             <mat-panel-title>
               Legend
             </mat-panel-title>

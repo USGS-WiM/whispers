@@ -250,6 +250,9 @@ export class HomeComponent implements OnInit {
       .subscribe(
         displayQuery => {
           this.currentDisplayQuery = displayQuery;
+          console.log('New display query: ' + this.currentDisplayQuery);
+          console.log('Current Display Query adminlevelOne length: ' + this.currentDisplayQuery.administrative_level_one.length);
+          console.log(' Current Display Query Event types: ' +  this.currentDisplayQuery.event_type)
         });
 
     // use displayQuery for display of current query in markup, send to searchDialogService
@@ -310,12 +313,12 @@ export class HomeComponent implements OnInit {
 
             const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
               '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-              'Imagery © <a href="https://www.mapbox.com/">Mapbox</a> | Map shows centroid of county where event occured.',
+              'Imagery © <a href="https://www.mapbox.com/">Mapbox</a> contributors.',
               // tslint:disable-next-line:max-line-length
               mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
             const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors | Map shows centroid of county where event occured.'
+              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors.'
 
             });
 
@@ -786,10 +789,7 @@ export class HomeComponent implements OnInit {
 
           for (i = 0; i < acc.length; i++) {
             acc[i].addEventListener('click', function () {
-              for (let j = 0; j < acc.length; j++) {
-                acc[j].classList.toggle('active');
-              }
-              this.classList.toggle('active');
+              this.classList.toggle("active");
               const panel = this.nextElementSibling;
               if (panel.style.maxHeight) {
                 panel.style.maxHeight = null;

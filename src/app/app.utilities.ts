@@ -14,6 +14,60 @@ export class APP_UTILITIES {
 
     }
 
+    public static get getTodayDate(): any {
+        var today_string = "";
+        var today = new Date();
+        var dd = today.getDate();
+        var dd_string = "";
+        var mm = today.getMonth()+1; //January is 0!
+        var mm_string = "";
+        var yyyy = today.getFullYear();
+
+        if(dd<10) {
+            dd_string='0'+dd;
+        } else {
+            dd_string=dd.toString();
+        }
+
+        if(mm<10) {
+            mm_string='0'+mm
+        } else { 
+            mm_string=mm.toString();
+        }
+
+        today_string = yyyy+'-'+mm_string+'-'+dd_string;
+
+        return today_string;
+    }
+
+    public static get getDaysPreviousDate(): any {
+        var daysPrevious = 28;
+        var previousDate_string = "";
+        var previousDate = new Date();
+        previousDate.setDate(previousDate.getDate() - daysPrevious);
+        var dd = previousDate.getDate();
+        var dd_string = "";
+        var mm = previousDate.getMonth()+1; //January is 0!
+        var mm_string = "";
+        var yyyy = previousDate.getFullYear();
+
+        if(dd<10) {
+            dd_string='0'+dd;
+        } else {
+            dd_string=dd.toString();
+        }
+
+        if(mm<10) {
+            mm_string='0'+mm
+        } else { 
+            mm_string=mm.toString();
+        }
+
+        previousDate_string = yyyy+'-'+mm_string+'-'+dd_string;
+
+        return previousDate_string;
+    }
+
     public static get TIME(): string { return new Date().toISOString().substr(14, 22); }
 
     public static get DEFAULT_COUNTRY_ID(): string {

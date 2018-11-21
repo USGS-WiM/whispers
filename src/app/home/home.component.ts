@@ -207,6 +207,24 @@ export class HomeComponent implements OnInit {
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
 
+                searchQuery.and_params = [];
+
+                if (searchQuery.diagnosis_type_includes_all === true) {
+                  searchQuery.and_params.push('diagnosis_type');
+                }
+                if (searchQuery.diagnosis_includes_all === true) {
+                  searchQuery.and_params.push('diagnosis_type');
+                }
+                if (searchQuery.species_includes_all === true) {
+                  searchQuery.and_params.push('species');
+                }
+                if (searchQuery.administrative_level_one_includes_all === true) {
+                  searchQuery.and_params.push('administrative_level_one');
+                }
+                if (searchQuery.administrative_level_two_includes_all === true) {
+                  searchQuery.and_params.push('administrative_level_two');
+                }
+
                 this.currentSearchQuery = searchQuery;
                 // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
                 // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
@@ -237,6 +255,9 @@ export class HomeComponent implements OnInit {
     // use displayQuery for display of current query in markup, send to searchDialogService
     //this.searchDialogService.setDisplayQuery(APP_SETTINGS.DEFAULT_DISPLAY_QUERY);
     // use searchForm.value to build the web service query, send to searchDialogService
+    //this.searchDialogService.setSearchQuery(APP_SETTINGS.DEFAULT_SEARCH_QUERY);// use displayQuery for display of current query in markup, send to searchDialogService
+    //this.searchDialogService.setDisplayQuery(APP_SETTINGS.DEFAULT_DISPLAY_QUERY);
+    // use searchForm.value to build the web service query, send to searchDialogService
     //this.searchDialogService.setSearchQuery(APP_SETTINGS.DEFAULT_SEARCH_QUERY);
   }
 
@@ -255,6 +276,24 @@ export class HomeComponent implements OnInit {
     const defaultEventQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
 
     this.speciesLoading = true;
+
+    this.currentSearchQuery.and_params = [];
+
+    if (this.currentSearchQuery.diagnosis_type_includes_all === true) {
+      this.currentSearchQuery.and_params.push('diagnosis_type');
+    }
+    if (this.currentSearchQuery.diagnosis_includes_all === true) {
+      this.currentSearchQuery.and_params.push('diagnosis_type');
+    }
+    if (this.currentSearchQuery.species_includes_all === true) {
+      this.currentSearchQuery.and_params.push('species');
+    }
+    if (this.currentSearchQuery.administrative_level_one_includes_all === true) {
+      this.currentSearchQuery.and_params.push('administrative_level_one');
+    }
+    if (this.currentSearchQuery.administrative_level_two_includes_all === true) {
+      this.currentSearchQuery.and_params.push('administrative_level_two');
+    }
 
     // two lines below for the DataSource as separate class method (possibly revisit)
     // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
@@ -780,7 +819,12 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50] });
+    if (this.locationMarkers.getBounds().isValid() == true) {
+      this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50] });
+    } else {
+      this.openSnackBar('No events match your selected criteria. Please try again.', 'OK', 8000);
+                        
+    }
   }
 
   testForUndefined(value: any, property?: any) {

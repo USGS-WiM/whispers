@@ -18,3 +18,15 @@
     font-size: text-smaller;
     color: dimgray;
 }
+
+.form-buttons-flex{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 0;
+
+    &.center{
+        justify-content: center;
+    }
+}

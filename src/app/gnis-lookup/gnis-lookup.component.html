@@ -1,19 +1,21 @@
-<h1 mat-dialog-title>GNIS Feature Lookup</h1>
-
+<h1 mat-dialog-title>
+  <mat-icon>search</mat-icon> GNIS Feature Lookup
+</h1>
+  
+  
 <mat-dialog-content>
 
-  <div id="search-api-div"></div> <br />
+  <div id="search-api-div"></div>
 
-  <label class="text-bold">Current Selection:</label><br />
-  <span *ngIf="name === '' && id === ''"><i>None</i></span> <span class="text-larger">{{name}} </span><br />
-  <span class="county-state-label">{{county}}<span *ngIf="county !== ''">, </span>{{state}}</span><br />
+  <label class="text-bold"><br/>Current Selection:<br/></label>
+  <span *ngIf="name === '' && id === ''"><i>None</i></span> <span class="text-larger">{{name}}<br/></span>
+  <span class="county-state-label">{{county}}<span *ngIf="county !== ''">, </span>{{state}}<br/></span>
   <span *ngIf="id !== ''">GNIS ID: {{id}}</span>
 <!-- </mat-dialog-content> -->
 
-<p>
 
   <div class="citation">
-    <span class="text-x-small">This lookup is powered by the <a href="https://txpub.usgs.gov/dss/search_api/2.1/doc/#overview">USGS
+    <span class="text-x-small" style="line-height: 14px !important; display: block !important; opacity: 0.8;">This lookup is powered by the <a href="https://txpub.usgs.gov/dss/search_api/2.1/doc/#overview">USGS
         Search JavaScript API</a> developed by the <a href="https://webapps.usgs.gov/">Geospatial Science + Cyber
         Innovation
         Branch</a> of the USGS Texas Water Science Center. It searches about 3.7 million location records from a
@@ -24,12 +26,14 @@
 
   </mat-dialog-content>
   <mat-dialog-actions>
+    <div class="form-buttons-flex">
 
-    <button mat-button color="warn" (click)="this.gnisLookupDialogRef.close('cancel');">
-      <mat-icon>cancel</mat-icon>&nbsp;Cancel
-    </button>
-    <button mat-button color="primary" type="submit" (click)="submitGNISSelection()">
-      <mat-icon>send</mat-icon>&nbsp;Finish
-    </button>
+      <button mat-button color="warn" (click)="this.gnisLookupDialogRef.close('cancel');">
+        <mat-icon>cancel</mat-icon>&nbsp;Cancel
+      </button>
+      <button mat-button color="primary" type="submit" (click)="submitGNISSelection()">
+        <mat-icon>send</mat-icon>&nbsp;Finish
+      </button>
+    </div>
 
   </mat-dialog-actions>

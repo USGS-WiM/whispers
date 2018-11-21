@@ -293,7 +293,7 @@ tr.noBorder td {
     border-style: groove;
     border-radius: 5px;
     margin-bottom: 1em;
-    width: auto;
+    width: 100%;
     display: inline-block;
 }
 
@@ -401,16 +401,78 @@ tr.noBorder td {
 }
 
 .species-detail-action-bar-left {
-    display: -webkit-flex;
     display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -webkit-align-items: flex-start;
-    align-items: flex-start;
-    -webkit-justify-content: flex-start;
-    justify-content: flex-start;
+    flex-direction: column;
+
+    button{
+        margin: 5px auto;
+    }
 }
 
-.species-detail-action-button {
-    margin: 5px;
+
+
+// Message when no data in section
+.event-group-no-data{
+    display: block;
+    box-sizing: border-box;
+    padding: 25px 15px 45px 15px;
+    font-size: 18px;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.34);
 }
+
+
+.species-diagnosis-table{
+    margin: 12px auto;
+    td, th{
+        font-size: 12px;
+        box-sizing: border-box;
+        padding: 3px;
+        line-height: 12px;
+    }
+}
+.addpadd{
+    box-sizing: border-box;
+    padding: 12px 18px !important;
+}
+// Table styles
+.mat-table {
+    .mat-header-row {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        .mat-header-cell {
+            box-sizing: border-box;
+            padding: 3px;
+            &:first-child {
+                padding-left: 15px;
+            }
+            &:last-child {
+                padding-right: 15px;
+            }
+        }
+    }
+    .mat-row {
+        .mat-cell {
+            font-size: 12px;
+            box-sizing: border-box;
+            padding: 3px;
+            &:first-child {
+                padding-left: 15px;
+            }
+            &:last-child {
+                padding-right: 15px;
+            }
+            ul {
+                padding-left: 15px;
+                li {
+                    line-height: 12px;
+                    padding: 3px 0;
+                    word-break: break-word;
+                }
+            }
+        }
+    }
+}
+

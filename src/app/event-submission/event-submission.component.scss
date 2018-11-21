@@ -119,6 +119,8 @@
     .form-nav-buttons{
         display: flex;
         justify-content: center;
+        box-sizing: border-box;
+        padding: 20px 0 0 0;
 
         button{
             position: relative;
@@ -166,6 +168,7 @@
         margin: 15px auto;
         box-sizing: border-box;
         padding: 15px;
+        width: 100%;
     }
     .contacts-container{
         margin: 8px auto;
@@ -345,6 +348,7 @@
 }
 
 .contact-select {
+    width: 30em;
     margin: 10px;
     flex-grow: 2;
 }

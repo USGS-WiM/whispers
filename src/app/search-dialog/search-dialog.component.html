@@ -298,8 +298,8 @@
             <b>Number Affected</b>
           </mat-panel-title>
           <mat-panel-description>
-            <span> {{ searchForm.get('affected_count_operator').value === '__gte' ? '&ge;' :
-              searchForm.get('affected_count_operator').value === '__lte' ? '&le;' : '' }}
+            <span> {{ searchForm.get('affected_count_operator').value === '__gte' && searchForm.get('affected_count').value != null ? '&ge;' :
+              searchForm.get('affected_count_operator').value === '__lte' && searchForm.get('affected_count').value != null ? '&le;' : '' }}
               {{searchForm.get('affected_count').value}}</span>
           </mat-panel-description>
         </mat-expansion-panel-header>

@@ -1,5 +1,7 @@
 <h1 mat-dialog-title>
-  <i class="material-icons">input</i> Login to WHISPers</h1>
+    <mat-icon>person</mat-icon> Login to WHISPers
+</h1>
+    
 <mat-dialog-content>
   <form [formGroup]="loginForm">
 
@@ -21,7 +23,10 @@
 </mat-dialog-content>
 <mat-dialog-actions>
 
-  <button mat-button (click)="this.authenticationDialogRef.close('cancel');">Cancel</button>
-  <button mat-button type="submit" [disabled]="loginForm.invalid" (click)="onSubmit(loginForm.value)">Login</button>
-  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+    <div class="form-buttons-flex">
+      <button mat-button (click)="this.authenticationDialogRef.close('cancel');">Cancel</button>
+      <button mat-button type="submit" [disabled]="loginForm.invalid" (click)="onSubmit(loginForm.value)">Login</button>
+    </div>
+    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+
 </mat-dialog-actions>

@@ -1,14 +1,13 @@
-<h1 mat-dialog-title>
+<h1 mat-dialog-title *ngIf="data.title">
   <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}}
 </h1>
+
 <mat-dialog-content>
 
-  <h3>
-    <b><span *ngIf="locationspeciesString">Species: {{locationspeciesString}} </span> <br />
-      <span *ngIf="data.locationspecies">Location: {{administrative_level_two}}, {{administrative_level_one}}</span>
-      <br />
-      <span *ngIf="data.speciesdiagnosis">Species Diagnosis: {{data.speciesdiagnosis.diagnosis_string}} </span>
-    </b>
+  <h3 *ngIf="locationspeciesString || data.locationspecies || data.speciesdiagnosis">
+    <span *ngIf="locationspeciesString">Species: {{locationspeciesString}} </span> <br />
+    <span *ngIf="data.locationspecies">Location: {{administrative_level_two}}, {{administrative_level_one}}</span> <br />
+    <span *ngIf="data.speciesdiagnosis">Species Diagnosis: {{data.speciesdiagnosis.diagnosis_string}} </span>
   </h3>
 
   <form [formGroup]="speciesDiagnosisForm" autocomplete="off">
@@ -58,6 +57,7 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
+        <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('min')">Minimum value is 0</mat-error>
       </mat-form-field>
 
       <mat-form-field class="species-number-control">
@@ -65,6 +65,7 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
+        <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('min')">Minimum value is 0</mat-error>
       </mat-form-field>
 
       <!-- <div class="horizontal-form-container" class="species-controls-container">
@@ -101,13 +102,17 @@
 
 
 </mat-dialog-content>
-<mat-dialog-actions>
 
-  <button mat-button color="warn" (click)="onCancel()">
-    <mat-icon>cancel</mat-icon>&nbsp;Cancel
-  </button>
-  <button mat-button color="primary" type="submit" [disabled]="speciesDiagnosisForm.invalid" (click)="onSubmit(speciesDiagnosisForm.value)">
-    <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{data.action_button_text}}
-  </button>
-  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+<mat-dialog-actions>
+  <div class="detail-section-buttons">
+    <button mat-button color="warn" (click)="this.editSpeciesDiagnosisDialogRef.close('cancel');">
+      <mat-icon>cancel</mat-icon>&nbsp;Cancel
+    </button>
+    <button mat-button color="primary" type="submit" [disabled]="speciesDiagnosisForm.invalid" (click)="onSubmit(speciesDiagnosisForm.value)">
+      <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{action_button_text}}
+    </button>
+    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+  </div>
+
+
 </mat-dialog-actions>

@@ -1,45 +1,48 @@
+<h1 mat-dialog-title>
+    <mat-icon>info</mat-icon> Contact Details
+</h1>
+  
 <mat-dialog-content>
-  <span class="mat-title">Contact Details</span>
 
-  <mat-card class="user-info-card">
-    <mat-card-content>
-      <span>
-        <label>First Name: {{contactDetails.first_name}}</label>
-      </span>
-      <br />
-      <span>
-        <label>Last Name: {{contactDetails.last_name}}</label>
-      </span>
-      <br />
-      <span>
-        <label>Position: {{contactDetails.position}}</label>
-      </span>
-      <br />
-      <span>
-        <label>Title: {{contactDetails.title}}</label>
-      </span>
-      <br />
-      <span>
-        <label>Email: {{contactDetails.email}}</label>
-      </span>
-      <br />
-      <span>
-        <label>Phone: {{contactDetails.phone}}</label>
-      </span>
-      <br />
-      <span>
-        <label>Organization: {{contactDetails.organization_string}}</label>
-      </span>
-      <br />
-      <span>
-        <label>Owner Organization: {{contactDetails.owner_organization_string}}</label>
-      </span>
-      <br />
-    </mat-card-content>
-  </mat-card>
+  <div class="user-info-card">
+    <div class="contact-detail" *ngIf="contactDetails.first_name">
+      <small>First Name</small> 
+      {{contactDetails.first_name}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.last_name">
+      <small>Last Name</small> 
+      {{contactDetails.last_name}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.position">
+      <small>Position</small> 
+      {{contactDetails.position}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.title">
+      <small>Title</small> 
+      {{contactDetails.title}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.email">
+      <small>Email</small> 
+      {{contactDetails.email}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.phone">
+      <small>Phone</small> 
+      {{contactDetails.phone}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.organization_string">
+      <small>Organization</small> 
+      {{contactDetails.organization_string}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.owner_organization_string">
+      <small>Owner Organization</small> 
+      {{contactDetails.owner_organization_string}}
+    </div>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button color="primary" (click)="this.viewContactDetailsDialogRef.close();">
-    <mat-icon>close</mat-icon>&nbsp;Close
-  </button>
+  <div class="form-buttons-flex center">
+    <button mat-button color="primary" (click)="this.viewContactDetailsDialogRef.close();">
+      <mat-icon>close</mat-icon>&nbsp;Close
+    </button>
+  </div>
 </mat-dialog-actions>

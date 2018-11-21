@@ -6,17 +6,27 @@
 .vertical-form-container {
     display: flex;
     flex-direction: column;
+    width: 280px;
 }
 
 .form-control {
-    width: 18em; // margin: 10px;
+    width: 100%; // margin: 10px;
 }
 
-.org-select {
-    width: 35em;
-}
 
 .alert{ 
     width: 100%;
     background-color: lightcoral;
+}
+
+.form-buttons-flex{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 0;
+
+    &.center{
+        justify-content: center;
+    }
 }

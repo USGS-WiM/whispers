@@ -487,12 +487,14 @@
                                       </button>
                                     </div>
 
-                                    <div class="contact-button-div">
+                                    <!-- Add species diagnosis  -->
+                                    <div class="add-content-button">
                                       <button mat-button color="accent" aria-label="Add Species Diagnosis" matTooltip="Add Species Diagnosis"
                                         (click)="openAddSpeciesDiagnosisDialog(eventLocationIndex,locationSpeciesIndex)">
                                         <mat-icon>note_add</mat-icon> Add Species Diagnosis
                                       </button>
                                     </div>
+
                                   </div>
 
                                   <br />
@@ -527,15 +529,14 @@
                               <mat-icon>add_circle</mat-icon> Add Species
                             </button>
                           </div>
-                          <p>
-                            <div class="form-nav-buttons">
-                              <button mat-button matStepperPrevious type="button">
-                                <mat-icon> navigate_before </mat-icon> Back
-                              </button>
-                              <button mat-button matStepperNext type="button"> Next
-                                <mat-icon> navigate_next </mat-icon>
-                              </button>
-                            </div>
+                          <div class="form-nav-buttons">
+                            <button mat-button matStepperPrevious type="button">
+                              <mat-icon> navigate_before </mat-icon> Back
+                            </button>
+                            <button mat-button matStepperNext type="button"> Next
+                              <mat-icon> navigate_next </mat-icon>
+                            </button>
+                          </div>
 
                         </mat-step>
                         <!-- end event location species step -->
@@ -633,14 +634,10 @@
 
                           <ng-template matStepLabel>Contacts</ng-template>
 
-                          <div class="contacts-section-header">
-                            <div>
-                              <h4>
-                                <button mat-button color="primary" class="event-detail-action-button" (click)="openCreateContactDialog()">
-                                  <mat-icon>person_add</mat-icon> Create New Contact
-                                </button>
-                              </h4>
-                            </div>
+                          <div class="add-content-button">
+                            <button mat-button color="primary" class="event-detail-action-button" (click)="openCreateContactDialog()">
+                              <mat-icon>person_add</mat-icon> Create New Contact
+                            </button>
                           </div>
 
                           <div formArrayName="new_location_contacts">
@@ -669,13 +666,13 @@
                                 </mat-form-field>
 
                                 <div class="contact-button-div">
-                                  <button mat-icon-button color="accent" aria-label="Apply contact to all locations"
-                                    matTooltip="Apply contact to all locations" (click)="createCommonEventDataObject('contact', eventLocationIndex, locationContactIndex)">
-                                    <mat-icon>group_work</mat-icon>
-                                  </button>
                                   <button mat-icon-button color="accent" aria-label="View contact details" matTooltip="View contact details"
                                     (click)="viewContactDetailsDialog(eventLocationIndex, locationContactIndex)">
                                     <mat-icon>assignment_ind</mat-icon>
+                                  </button>
+                                  <button mat-icon-button color="accent" aria-label="Apply contact to all locations"
+                                    matTooltip="Apply contact to all locations" (click)="createCommonEventDataObject('contact', eventLocationIndex, locationContactIndex)">
+                                    <mat-icon>group_work</mat-icon>
                                   </button>
                                   <button mat-icon-button color="warn" aria-label="Remove this contact from this location"
                                     (click)="removeLocationContact(eventLocationIndex, locationContactIndex)"
@@ -690,10 +687,12 @@
                             </div>
                           </div>
 
-                          <div class="button-row">
+                          <div class="add-content-button small">
                             <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContact(eventLocationIndex)"
                               [disabled]="userContactsLoading">
-                              <mat-icon>add_circle</mat-icon> Add Contact
+                              <span  *ngIf="!userContactsLoading">
+                                <mat-icon>add_circle</mat-icon> Add Contact
+                              </span>
                               <span *ngIf="userContactsLoading">
                                 <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
                                 <span>Loading contacts list...</span>

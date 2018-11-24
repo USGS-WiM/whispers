@@ -25,7 +25,6 @@ body {
     -webkit-overflow-scrolling: touch;
     text-rendering: optimizeLegibility;
 
-
     &:hover{
         outline: none;
     }
@@ -147,47 +146,6 @@ body {
     }
 }
 
-
-// .mat-button {
-//     text-transform: uppercase;
-// }
-
-
-// Sidebar 
-// .controlsDiv .mat-expansion-panel-header{
-//     background-color: rgba(247,247,255,1);
-//     border-bottom: 1px solid rgba(230,230,240,1);
-//     color: rgba(40,40,60,1) !important;
-//     font-weight: 500;
-// }
-// .controlsDiv .mat-expansion-panel-header:not([aria-disabled='true']):hover,
-// .controlsDiv .mat-expansion-panel-header:not([aria-disabled='true']):focus{
-//     background-color: rgba(237,237,245,1) !important;
-// }
-// .mat-expansion-panel:not([class*=mat-elevation-z]){
-//     box-shadow: none !important;
-// }
-// .controlsDiv .mat-expansion-indicator{
-//     position: relative;
-//     top: -2px;
-// }
-// .controlsDiv .mat-expanded .mat-expansion-indicator{
-//     top: 2px;
-// }
-
-// .controlsDiv .mat-expansion-panel-body{
-//     padding: 15px !important;
-
-//     p{
-//         font-size: 13px;
-//         line-height: 20px;
-//         font-weight: 400;
-//         color: rgba(40,40,60,0.9);
-//         margin: 0;
-//     }
-// }
-
-
 // Mat Tables
 .mat-table{
 
@@ -220,14 +178,17 @@ body {
     }
 }
 
-
-
 // Remove ugly box shadows from defaults cards
 .mat-card{
     box-shadow: none !important;
 }
 
 
+
+// =====================================================================================================================
+// =====================================================================================================================
+// Icon/Marker Tweaks
+// Allow numbers on markers
 // Float number above icon marker
 .wmm-size-25:after {
 // .wmm-circle.wmm-size-25:after {
@@ -294,34 +255,11 @@ input[type=checkbox]{
     top: 4px !important;
 }
 
-/* Style the buttons that are used to open and close the accordion panel */
-// .accordion {
-//     background-color: #eee;
-//     color: #444;
-//     cursor: pointer;
-//     padding: 18px;
-//     width: 100%;
-//     text-align: left;
-//     border: none;
-//     outline: none;
-//     transition: 0.4s;
-// }
 
-// /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-// .active, .accordion:hover {
-//     background-color: #ccc;
-// }
 
-// /* Style the accordion panel. Note: hidden by default */
-// .panel {
-//     padding: 0 18px;
-//     background-color: white;
-//     display: none;
-//     max-height: 0;
-//     overflow: hidden;
-//     transition: max-height 0.2s ease-out;
-// }
-
+// =====================================================================================================================
+// =====================================================================================================================
+// Legend Tweaks
 .legend {
     max-height: 60vh;
     overflow-y: hidden;
@@ -339,6 +277,12 @@ input[type=checkbox]{
     }
 }
 
+
+
+// =====================================================================================================================
+// =====================================================================================================================
+// Misc Tweaks
+//
 .accordion {
     background-color: #eee;
     color: #444;
@@ -382,6 +326,9 @@ input[type=checkbox]{
     font-size: larger;
 }
 
+
+// =====================================================================================================================
+// =====================================================================================================================
 // Leaflet Content Popup / map clicks
 // Leaflet Content Popup / map clicks
 // Leaflet Content Popup / map clicks
@@ -454,6 +401,8 @@ input[type=checkbox]{
 }
 
 
+// =====================================================================================================================
+// =====================================================================================================================
 // Styles for GNIS-Lookup Component
 // They don't work if they're in the gnis-lookup-component.scss
 // So they're here instead.
@@ -472,7 +421,6 @@ input[type=checkbox]{
         background-color: #182141;
     }
 }
-
 #search-api-div{
 
     .search-api-container{
@@ -500,6 +448,9 @@ input[type=checkbox]{
     }
 }
 
+
+// =====================================================================================================================
+// =====================================================================================================================
 // Modal / Dialog
 // Modal / Dialog
 // Modal / Dialog
@@ -523,7 +474,8 @@ input[type=checkbox]{
     text-decoration: underline;
 }
 
-
+// =====================================================================================================================
+// =====================================================================================================================
 // Suggested Searches
 // Suggested Searches
 // Suggested Searches
@@ -614,7 +566,39 @@ input[type=checkbox]{
     margin: 0 !important;
 }
 
+.transbg{
+    background-color: transparent !important;
+}
 
+.no-data{
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    padding: 25px 15px;
+    box-sizing: border-box;
+    opacity: 0.7;
+    color: fade-out(#313b57, 0.2);
+}
+
+.form-buttons-flex{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 0;
+
+    &.center{
+        justify-content: center;
+    }
+}
+
+
+
+// =====================================================================================================================
+// =====================================================================================================================
 // Map Adjustments
 // Map Adjustments
 // Map Adjustments
@@ -665,21 +649,10 @@ input[type=checkbox]{
         }
     }
 }
-
-
-.transbg{
-    background-color: transparent !important;
+// Remove padding around map
+#mapPanel .mat-expansion-panel-body{
+    padding: 0 !important;
 }
 
-.no-data{
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: -0.2px;
-    padding: 25px 15px;
-    box-sizing: border-box;
-    opacity: 0.7;
-    color: fade-out(#313b57, 0.2);
-}
+
+

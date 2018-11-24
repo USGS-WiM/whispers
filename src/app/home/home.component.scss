@@ -318,6 +318,27 @@ mat-table>.mat-row:hover {
     padding-top: 1em;
 }
 
+.legend-icon{
+    box-sizing: border-box;
+}
+
+.legend-panel-content{
+    box-sizing: border-box;
+    padding-left: 15px;
+    padding-top: 10px;
+
+    .wmm-circle,
+    .wmm-diamond{
+        position: relative;
+        top: 2px;
+        left: 6px;
+    }
+    .wmm-diamond{
+        top: 5px;
+    }
+
+}
+
 .search-param {
     float: left;
 }

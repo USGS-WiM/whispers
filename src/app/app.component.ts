@@ -12,6 +12,12 @@ import { CurrentUserService } from '@services/current-user.service';
 import { APP_SETTINGS } from '@app/app.settings';
 import { AuthenticationService } from '@app/services/authentication.service';
 
+
+// Needed for scroll to top
+import { isPlatformBrowser } from '@angular/common';
+
+
+
 import * as $ from 'jquery';
 import * as search_api from 'usgs-search-api';
 
@@ -115,5 +121,18 @@ export class AppComponent implements OnInit {
 
   navigateToEventSubmit() {
     this.router.navigate([`../eventsubmission/`], { relativeTo: this.route });
+  }
+
+
+  // Scroll to top on each route change
+  onActivate(event: any) {
+    let scrollToTop = window.setInterval(() => {
+      let pos = window.pageYOffset;
+      if (pos > 0) {
+        window.scrollTo(0, pos - 50); // how far to scroll on each step
+      } else {
+        window.clearInterval(scrollToTop);
+      }
+    }, 16);
   }
 }

@@ -96,7 +96,7 @@
   </mat-toolbar>
 </header>
 
-<router-outlet></router-outlet>
+<router-outlet (activate)="onActivate($event)"></router-outlet>
 
 <!-- <div class="grid">
   <aside class="sidebar">Sidebar</aside>

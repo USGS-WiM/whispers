@@ -1,69 +1,70 @@
 import { Injectable } from '@angular/core';
 import { SearchQuery } from '@app/interfaces/search-query';
+import { DisplayQuery } from '@interfaces/display-query';
 
 import { APP_SETTINGS } from '@app/app.settings';
 
 @Injectable()
 export class APP_UTILITIES {
 
-    public static get TODAY(): any { 
+    public static get TODAY(): any {
         const now = new Date();
-        const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() ));
+        const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
         const t = new Date(new Date().toDateString());
         return t;
 
     }
 
     public static get getTodayDate(): any {
-        var today_string = "";
-        var today = new Date();
-        var dd = today.getDate();
-        var dd_string = "";
-        var mm = today.getMonth()+1; //January is 0!
-        var mm_string = "";
-        var yyyy = today.getFullYear();
+        let today_string = '';
+        const today = new Date();
+        const dd = today.getDate();
+        let dd_string = '';
+        const mm = today.getMonth() + 1; //January is 0!
+        let mm_string = '';
+        const yyyy = today.getFullYear();
 
-        if(dd<10) {
-            dd_string='0'+dd;
+        if (dd < 10) {
+            dd_string = '0' + dd;
         } else {
-            dd_string=dd.toString();
+            dd_string = dd.toString();
         }
 
-        if(mm<10) {
-            mm_string='0'+mm
-        } else { 
-            mm_string=mm.toString();
+        if (mm < 10) {
+            mm_string = '0' + mm;
+        } else {
+            mm_string = mm.toString();
         }
 
-        today_string = yyyy+'-'+mm_string+'-'+dd_string;
+        today_string = yyyy + '-' + mm_string + '-' + dd_string;
 
         return today_string;
     }
 
     public static get getDaysPreviousDate(): any {
-        var daysPrevious = 28;
-        var previousDate_string = "";
-        var previousDate = new Date();
+        const daysPrevious = 28;
+        let previousDate_string = '';
+        const previousDate = new Date();
         previousDate.setDate(previousDate.getDate() - daysPrevious);
-        var dd = previousDate.getDate();
-        var dd_string = "";
-        var mm = previousDate.getMonth()+1; //January is 0!
-        var mm_string = "";
-        var yyyy = previousDate.getFullYear();
+        const dd = previousDate.getDate();
+        let dd_string = '';
+        const mm = previousDate.getMonth() + 1; //January is 0!
+        let mm_string = '';
+        const yyyy = previousDate.getFullYear();
 
-        if(dd<10) {
-            dd_string='0'+dd;
+        if (dd < 10) {
+            dd_string = '0' + dd;
         } else {
-            dd_string=dd.toString();
+            dd_string = dd.toString();
         }
 
-        if(mm<10) {
-            mm_string='0'+mm
-        } else { 
-            mm_string=mm.toString();
+        if (mm < 10) {
+            mm_string = '0' + mm;
+        } else {
+            mm_string = mm.toString();
         }
 
-        previousDate_string = yyyy+'-'+mm_string+'-'+dd_string;
+        previousDate_string = yyyy + '-' + mm_string + '-' + dd_string;
 
         return previousDate_string;
     }
@@ -77,6 +78,10 @@ export class APP_UTILITIES {
         // doing this quick and dirty to make quick progress now.
         return '30';
     }
+
+    // currently not in use because the conversion requires access to the full selected object (with name)
+    // from the search dialog form. an independent lookup of associated names may need to be developed.
+    // public static convertSearchQuerytoDisplayQuery(searchQuery): any {}
 
     public static parseSearch(search): any {
 
@@ -108,7 +113,7 @@ export class APP_UTILITIES {
 
         // TODO: may need to add logic for adding complete to the search
         if (search.data.start_date) {
-            parsedSearch.start_date =  search.data.start_date;
+            parsedSearch.start_date = search.data.start_date;
         }
         if (search.data.end_date) {
             parsedSearch.end_date = search.data.end_date;

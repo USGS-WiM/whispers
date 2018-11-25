@@ -182,7 +182,7 @@ export class SearchDialogComponent implements OnInit {
             }*/
             for (const index in diagnosisTypes) {
               if (this.data.query['diagnosis_type'].some(
-                function (el) { 
+                function (el) {
                   console.log(el);
                   let match = false;
                   if (typeof el == 'number') {
@@ -194,10 +194,10 @@ export class SearchDialogComponent implements OnInit {
                       match = true;
                     }
                   }
-                  return match; 
+                  return match;
                 })) {
-                  this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, diagnosisTypes[index]);
-                }
+                this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, diagnosisTypes[index]);
+              }
             }
           }
         },
@@ -223,7 +223,7 @@ export class SearchDialogComponent implements OnInit {
           if (this.data.query && this.data.query['diagnosis'] && this.data.query['diagnosis'].length > 0) {
             for (const index in diagnoses) {
               if (this.data.query['diagnosis'].some(
-                function (el) { 
+                function (el) {
                   console.log(el);
                   let match = false;
                   if (typeof el == 'number') {
@@ -235,10 +235,10 @@ export class SearchDialogComponent implements OnInit {
                       match = true;
                     }
                   }
-                  return match; 
+                  return match;
                 })) {
-                  this.dropdownSetup(this.diagnosisControl, this.selectedDiagnoses, diagnoses[index]);
-                }
+                this.dropdownSetup(this.diagnosisControl, this.selectedDiagnoses, diagnoses[index]);
+              }
             }
           }
         },
@@ -258,7 +258,7 @@ export class SearchDialogComponent implements OnInit {
           if (this.data.query && this.data.query['administrative_level_one'].length > 0) {
             for (const index in adminLevelOnes) {
               if (this.data.query['administrative_level_one'].some(
-                function (el) { 
+                function (el) {
                   console.log(el);
                   let match = false;
                   if (typeof el == 'number') {
@@ -270,11 +270,11 @@ export class SearchDialogComponent implements OnInit {
                       match = true;
                     }
                   }
-                  return match; 
+                  return match;
                 })) {
-                  this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, adminLevelOnes[index]);
-                  this.updateAdminLevelTwoOptions(adminLevelOnes[index].id);
-                }
+                this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, adminLevelOnes[index]);
+                this.updateAdminLevelTwoOptions(adminLevelOnes[index].id);
+              }
             }
           }
 
@@ -324,7 +324,7 @@ export class SearchDialogComponent implements OnInit {
             }
             for (const index in species) {
               if (this.data.query['species'].some(
-                function (el) { 
+                function (el) {
                   let match = false;
                   if (typeof el == 'number') {
                     if (el === species[index].id) {
@@ -335,10 +335,10 @@ export class SearchDialogComponent implements OnInit {
                       match = true;
                     }
                   }
-                  return match; 
+                  return match;
                 })) {
-                  this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
-                }
+                this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
+              }
             }
           }
         },
@@ -611,7 +611,7 @@ export class SearchDialogComponent implements OnInit {
       searchQuery.and_params.push('diagnosis_type');
     }
     if (searchQuery.diagnosis_includes_all === true) {
-      searchQuery.and_params.push('diagnosis_type');
+      searchQuery.and_params.push('diagnosis');
     }
     if (searchQuery.species_includes_all === true) {
       searchQuery.and_params.push('species');
@@ -630,6 +630,10 @@ export class SearchDialogComponent implements OnInit {
     formValue.species = this.selectedSpecies;
     formValue.administrative_level_one = this.selectedAdminLevelOnes;
     formValue.administrative_level_two = this.selectedAdminLevelTwos;
+
+    ///////
+    // insert display query convert function here (?)
+    // const displayQuery = APP_UTILITIES.convertSearchQuerytoDisplayQuery(formValue);
 
     // use formValue to populate the Current Search panel
     for (const event_type of formValue.event_type) {

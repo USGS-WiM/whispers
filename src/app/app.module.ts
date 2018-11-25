@@ -95,7 +95,6 @@ import { AddEventLocationComponent } from './add-event-location/add-event-locati
 import { GnisLookupComponent } from './gnis-lookup/gnis-lookup.component';
 import { EventDetailsShareComponent } from './event-details/event-details-share/event-details-share.component';
 import { UserService } from '@services/user.service';
-import { EventSubmissionSuccessComponent } from './event-submission/event-submission-success/event-submission-success.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { ServiceRequestService } from '@app/services/service-request.service';
 import { LocationSpeciesTableComponent } from './location-species-table/location-species-table.component';
@@ -137,7 +136,6 @@ import { ViewContactDetailsComponent } from './view-contact-details/view-contact
     AddEventLocationComponent,
     GnisLookupComponent,
     EventDetailsShareComponent,
-    EventSubmissionSuccessComponent,
     EditUserComponent,
     LocationSpeciesTableComponent,
     AddCommentComponent,

@@ -19,6 +19,7 @@ export class SearchDialogService {
 
   setDisplayQuery(query: any) {
     this.displayQuery.next(query);
+    sessionStorage.setItem('currentDisplayQuery', JSON.stringify(query));
   }
 
   getDisplayQuery(): Observable<any> {

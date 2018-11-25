@@ -1514,7 +1514,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
                 message: 'Your event was successfully saved. The Event ID is ' + event.id,
                 messageIcon: 'check',
                 confirmButtonText: 'OK',
-                showCancelButton: true
+                showCancelButton: false
               }
             }
           );

@@ -58,7 +58,7 @@
       <div class="right">
 
         <!-- Login Status -->
-        <span *ngIf="currentUser.username == ''" class="login-status signin-button" [matMenuTriggerFor]="menu">Sign In</span>
+        <span *ngIf="currentUser.username == ''" class="login-status signin-button" [matMenuTriggerFor]="menu">Log In</span>
         <span *ngIf="currentUser.username !== ''" class="login-status">{{currentUser.first_name}} {{currentUser.last_name}}</span>
       
         <!-- Account Menu -->

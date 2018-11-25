@@ -34,6 +34,8 @@ import { DiagnosisTypeService } from '@app/services/diagnosis-type.service';
 import { DiagnosisService } from '@app/services/diagnosis.service';
 import { SpeciesService } from '@app/services/species.service';
 
+import { ConfirmComponent } from '@confirm/confirm.component';
+
 import { SaveSearchComponent } from '@app/save-search/save-search.component';
 
 import { User } from '@interfaces/user';
@@ -73,11 +75,13 @@ export class HomeComponent implements OnInit {
 
   private searchQuerySubscription: Subscription;
 
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
+
   isloggedIn = APP_SETTINGS.IS_LOGGEDIN;
 
   currentSearchQuery = sessionStorage.getItem('currentSearch') ? JSON.parse(sessionStorage.getItem('currentSearch')) : APP_SETTINGS.DEFAULT_SEARCH_QUERY;
   //currentSearchQuery;
-  currentDisplayQuery: DisplayQuery = sessionStorage.getItem('currentSearch') ? JSON.parse(sessionStorage.getItem('currentSearch')) : APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
+  currentDisplayQuery: DisplayQuery = sessionStorage.getItem('currentDisplayQuery') ? JSON.parse(sessionStorage.getItem('currentDisplayQuery')) : APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
   //currentDisplayQuery;
 
   currentResults: EventSummary[];
@@ -233,7 +237,7 @@ export class HomeComponent implements OnInit {
                 if (this.searchDialogRef) {
                   this.searchDialogRef.close();
                 }
-                  
+
               }
 
             },
@@ -252,7 +256,7 @@ export class HomeComponent implements OnInit {
           this.currentDisplayQuery = displayQuery;
           console.log('New display query: ' + this.currentDisplayQuery);
           console.log('Current Display Query adminlevelOne length: ' + this.currentDisplayQuery.administrative_level_one.length);
-          console.log(' Current Display Query Event types: ' +  this.currentDisplayQuery.event_type)
+          console.log(' Current Display Query Event types: ' + this.currentDisplayQuery.event_type)
         });
 
     // use displayQuery for display of current query in markup, send to searchDialogService
@@ -281,6 +285,11 @@ export class HomeComponent implements OnInit {
     this.speciesLoading = true;
 
     this.currentSearchQuery.and_params = [];
+
+    if (sessionStorage.getItem('currentSearch')) {
+      this.openSnackBar('Current search query has been loaded from your previous visit.', 'OK', 8000);
+
+    }
 
     if (this.currentSearchQuery.diagnosis_type_includes_all === true) {
       this.currentSearchQuery.and_params.push('diagnosis_type');
@@ -756,7 +765,7 @@ export class HomeComponent implements OnInit {
             '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
             '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
             '<a href=' + APP_SETTINGS.APP_URL + '/event/' + this.testForUndefined(event['id']) + '>View Event Details </a>';
-            
+
         } else if (marker.events.length > 1) {
 
           popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
@@ -824,7 +833,7 @@ export class HomeComponent implements OnInit {
       this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50] });
     } else {
       this.openSnackBar('No events match your selected criteria. Please try again.', 'OK', 8000);
-                        
+
     }
   }
 
@@ -890,9 +899,68 @@ export class HomeComponent implements OnInit {
 
   implementSearch(search) {
     sessionStorage.setItem('currentSearch', JSON.stringify(search));
-    sessionStorage.setItem('currentDisplayQuery', JSON.stringify(search));
+
+    // TODO: currentDiplayQuery needs to be parsed from the search object
+    const displayQuery: DisplayQuery = {
+      event_type: [],
+      diagnosis: [],
+      diagnosis_type: [],
+      species: [],
+      administrative_level_one: [],
+      administrative_level_two: [],
+      affected_count: search.affected_count,
+      affected_count_operator: search.affected_count_operator,
+      start_date: search.start_date,
+      end_date: search.end_date,
+      diagnosis_type_includes_all: search.diagnosis_type_includes_all,
+      diagnosis_includes_all: search.diagnosis_includes_all,
+      species_includes_all: search.species_includes_all,
+      administrative_level_one_includes_all: search.administrative_level_one_includes_all,
+      administrative_level_two_includes_all: search.administrative_level_two_includes_all,
+      and_params: [],
+      complete: search.complete
+    };
+
+    if (search.event_type) {
+      for (const event_type of search.event_type) {
+        displayQuery.event_type.push(this.displayValuePipe.transform(event_type, 'name', this.eventTypes));
+      }
+    }
+
+    if (search.diagnosis) {
+      for (const diagnosis of search.diagnosis) {
+        displayQuery.diagnosis.push(this.displayValuePipe.transform(diagnosis, 'name', this.diagnoses));
+      }
+    }
+    if (search.diagnosis_type) {
+      for (const diagnosis_type of search.diagnosis_type) {
+        displayQuery.diagnosis_type.push(this.displayValuePipe.transform(diagnosis_type, 'name', this.diagnosisTypes));
+      }
+    }
+
+    if (search.species) {
+      for (const species of search.species) {
+        displayQuery.species.push(this.displayValuePipe.transform(species, 'name', this.allSpecies));
+      }
+    }
+
+    if (search.administrative_level_one) {
+      for (const adminLevelOne of search.administrative_level_one) {
+        displayQuery.administrative_level_one.push(this.displayValuePipe.transform(adminLevelOne, 'name', this.administrative_level_one));
+      }
+    }
+
+    if (search.administrative_level_two) {
+      for (const adminLevelTwo of search.administrative_level_two) {
+        displayQuery.administrative_level_two.push(this.displayValuePipe.transform(adminLevelTwo, 'name', this.administrative_level_two));
+      }
+    }
+
+    sessionStorage.setItem('currentDisplayQuery', JSON.stringify(displayQuery));
     // use displayQuery for display of current query in markup, send to searchDialogService
-    this.searchDialogService.setDisplayQuery(search);
+    this.searchDialogService.setDisplayQuery(displayQuery);
+
+
     // use searchForm.value to build the web service query, send to searchDialogService
     this.searchDialogService.setSearchQuery(search);
     //this.router.navigate([`../home/`], { relativeTo: this.route });

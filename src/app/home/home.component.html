@@ -55,13 +55,13 @@
 
           <h3 mat-subheader>Current Search</h3>
 
-          <mat-list-item *ngIf="currentDisplayQuery.start_date !== null &&  currentDisplayQuery.end_date !== null">
+          <mat-list-item *ngIf="currentDisplayQuery.start_date !== null &&  currentDisplayQuery.end_date !== null && currentDisplayQuery.start_date !== '' && currentDisplayQuery.end_date !== ''">
             <h4 mat-line>
               <strong>Date Range</strong>
             </h4>
             <p mat-line>
               <span>{{currentDisplayQuery.start_date | date:'mediumDate'}}</span>
-              <span *ngIf="(currentDisplayQuery.start_date !== null) || (currentDisplayQuery.end_date !== null)">&nbsp;thru&nbsp;</span>
+              <span *ngIf="(currentDisplayQuery.start_date !== null) || (currentDisplayQuery.end_date !== null) || (currentDisplayQuery.start_date !== '') || (currentDisplayQuery.end_date !== '')">&nbsp;thru&nbsp;</span>
               <span>{{currentDisplayQuery.end_date | date:'mediumDate'}}</span>
             </p>
           </mat-list-item>
@@ -83,11 +83,11 @@
             </h4>
             <p mat-line>
               <span> {{ currentDisplayQuery.complete === true ? 'Complete Events Only' :
-                currentDisplayQuery.complete === false ? 'Incomplete Events Only' : 'All Statuses' }}</span>
+                currentDisplayQuery.complete === false ? 'Incomplete Events Only' : 'Complete and incomplete events' }}</span>
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.event_type.length > 0">
+          <mat-list-item *ngIf="currentDisplayQuery.event_type && currentDisplayQuery.event_type.length > 0">
             <h4 mat-line>
               <strong>Event Type</strong>
             </h4>
@@ -99,7 +99,7 @@
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.diagnosis_type.length > 0">
+          <mat-list-item *ngIf="currentDisplayQuery.diagnosis_type && currentDisplayQuery.diagnosis_type.length > 0">
             <h4 mat-line>
               <strong>Diagnosis Type</strong>
             </h4>
@@ -111,7 +111,7 @@
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.diagnosis.length > 0">
+          <mat-list-item *ngIf="currentDisplayQuery.diagnosis && currentDisplayQuery.diagnosis.length > 0">
             <h4 mat-line>
               <strong>Diagnosis</strong>
             </h4>
@@ -122,7 +122,7 @@
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.species.length > 0">
+          <mat-list-item *ngIf=" currentDisplayQuery.species && currentDisplayQuery.species.length > 0">
             <h4 mat-line>
               <strong>Species</strong>
             </h4>
@@ -133,7 +133,7 @@
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.administrative_level_one.length > 0">
+          <mat-list-item *ngIf="currentDisplayQuery.administrative_level_one && currentDisplayQuery.administrative_level_one.length > 0">
             <h4 mat-line>
               <strong>State</strong>
             </h4>
@@ -145,7 +145,7 @@
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.administrative_level_two.length > 0">
+          <mat-list-item *ngIf="currentDisplayQuery.administrative_level_two && currentDisplayQuery.administrative_level_two.length > 0">
             <h4 mat-line>
               <strong>County</strong>
             </h4>
@@ -302,7 +302,7 @@
   </div>
 
   <div class="resultsDiv">
-    <mat-expansion-panel expanded id="mapPanel" style="padding:0px;">
+    <mat-expansion-panel expanded id="mapPanel">
       <mat-expansion-panel-header>
         <mat-panel-title id="resultsMapHeader">
           Search Results Map
@@ -310,7 +310,13 @@
       </mat-expansion-panel-header>
 
       <div class="data-loading-shade" *ngIf="resultsLoading"></div>
+      
       <div id="map">
+
+        <!-- Warning about map center -->
+        <div id="mapLocationNote"><b>Note:</b> Map shows centroid of county where event occured</div>
+
+        
         <div id="latLngScale" class="latLngScale">
           <span class="hover-content"> <b>Map scale </b></span>
           1:<span id="scale">{{mapScale}}</span> | <span class="hover-content"> <b>Zoom level </b></span> <span id="zoomLevel">
@@ -325,7 +331,7 @@
 
         <mat-expansion-panel id="legend" class="legend legend-home">
           <mat-expansion-panel-header>
-              <mat-icon matTooltip="Map shows centroid of county where event occured." _ngcontent-c5="" class="material-icons mat-icon" style="color: #e8c900; font-size: 18px; width: 100%;" role="img" aria-hidden="true">warning</mat-icon>
+              <!-- <mat-icon matTooltip="Map shows centroid of county where event occured." _ngcontent-c5="" class="material-icons mat-icon" style="color: #e8c900; font-size: 18px; width: 100%;" role="img" aria-hidden="true">warning</mat-icon> -->
             <mat-panel-title>
               Legend
             </mat-panel-title>
@@ -474,37 +480,37 @@
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-              <mat-cell *matCellDef="let event"> {{event.id}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+              <mat-cell *matCellDef="let event">{{event.id}}</mat-cell>
             </ng-container>
 
             <!-- Event Type Column -->
             <ng-container matColumnDef="event_type_string">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Type </mat-header-cell>
-              <mat-cell *matCellDef="let event"> {{event.event_type_string}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
+              <mat-cell *matCellDef="let event">{{event.event_type_string}}</mat-cell>
             </ng-container>
 
             <!-- Affected Count Column -->
             <ng-container matColumnDef="affected_count">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Affected </mat-header-cell>
-              <mat-cell *matCellDef="let event"> {{event.affected_count}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Affected</mat-header-cell>
+              <mat-cell *matCellDef="let event">{{event.affected_count}}</mat-cell>
             </ng-container>
 
             <!-- Start Date Column -->
             <ng-container matColumnDef="start_date">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </mat-header-cell>
-              <mat-cell *matCellDef="let event"> {{event.start_date | date:'shortDate'}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</mat-header-cell>
+              <mat-cell *matCellDef="let event">{{event.start_date | date:'shortDate'}}</mat-cell>
             </ng-container>
 
             <!-- End Date Column -->
             <ng-container matColumnDef="end_date">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> End Date </mat-header-cell>
-              <mat-cell *matCellDef="let event"> {{event.end_date | date:'shortDate'}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>End Date</mat-header-cell>
+              <mat-cell *matCellDef="let event">{{event.end_date | date:'shortDate'}}</mat-cell>
             </ng-container>
 
             <!-- States Column -->
             <ng-container matColumnDef="administrativelevelones">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> States </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>States</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}</li>
@@ -517,7 +523,7 @@
 
             <!-- Counties Column -->
             <ng-container matColumnDef="administrativeleveltwos">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Counties </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Counties</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let administrativeleveltwo of event.administrativeleveltwos">{{administrativeleveltwo.name}}</li>
@@ -530,7 +536,7 @@
 
             <!-- Species Column -->
             <ng-container matColumnDef="species">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Species </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Species</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let species of event.species">{{species.name}}</li>
@@ -543,7 +549,7 @@
 
             <!-- Event Diagnosis Column -->
             <ng-container matColumnDef="eventdiagnoses">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Event Diagnosis </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Event Diagnosis</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}</li>

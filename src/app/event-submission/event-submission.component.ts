@@ -86,7 +86,6 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
 
 import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
-import { EventSubmissionSuccessComponent } from '@app/event-submission/event-submission-success/event-submission-success.component';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 import { DateValidators } from '@validators/date.validator';
 
@@ -107,7 +106,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
-  submitSuccessDialogRef: MatDialogRef<EventSubmissionSuccessComponent>;
   viewContactDetailsDialogRef: MatDialogRef<ViewContactDetailsComponent>;
 
   eventSubmitConfirm: MatBottomSheetRef<EventSubmissionConfirmComponent>;
@@ -1514,7 +1512,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
                 message: 'Your event was successfully saved. The Event ID is ' + event.id,
                 messageIcon: 'check',
                 confirmButtonText: 'OK',
-                showCancelButton: true
+                showCancelButton: false
               }
             }
           );
@@ -1525,17 +1523,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
               this.resetStepper();
             }
           });
-
-          // open event save success dialog
-          // this.submitSuccessDialogRef = this.dialog.open(EventSubmissionSuccessComponent,
-          //   {
-          //     data: {
-          //       title: 'Event Saved',
-          //       message: 'Your event was successfully saved. The Event ID is ' + event.id,
-          //       confirmButtonText: 'OK'
-          //     }
-          //   }
-          // );
 
           // // when user clicks OK, reset the form and stepper using resetStepper()
           // this.submitSuccessDialogRef.afterClosed().subscribe(result => {

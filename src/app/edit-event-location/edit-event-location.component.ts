@@ -216,6 +216,14 @@ export class EditEventLocationComponent implements OnInit {
 
   updateEventLocation(formValue) {
 
+    // if lat/long fields are deleted to blank, update to null to be a valid number type on PATCH
+    if (formValue.latitude === '') {
+      formValue.latitude = null;
+    }
+    if (formValue.longitude === '') {
+      formValue.longitude = null;
+    }
+
     this.eventLocationService.update(formValue)
       .subscribe(
         (event) => {

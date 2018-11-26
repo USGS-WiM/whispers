@@ -11,12 +11,14 @@
         </mat-expansion-panel-header>
 
         <p id="welcome-text">
-          This is the Wildlife Health Information Sharing Partnership event reporting system. It is a place to explore wildlife mortality data submitted by partners across North America and verified by trained biologists.
+          This is the Wildlife Health Information Sharing Partnership event reporting system. It is a place to explore
+          wildlife mortality data submitted by partners across North America and verified by trained biologists.
         </p>
 
 
         <p *ngIf="currentUser.role != undefined">
-          <b>You are logged in as <span style="font-style: italic;">{{currentUser.first_name}} {{currentUser.last_name}}</span> ({{currentUser.username}})</b>
+          <b>You are logged in as <span style="font-style: italic;">{{currentUser.first_name}}
+              {{currentUser.last_name}}</span> ({{currentUser.username}})</b>
         </p>
 
         <!-- User Role -->
@@ -55,7 +57,7 @@
 
           <h3 mat-subheader>Current Search</h3>
 
-          <mat-list-item *ngIf="currentDisplayQuery.start_date !== null &&  currentDisplayQuery.end_date !== null && currentDisplayQuery.start_date !== '' && currentDisplayQuery.end_date !== ''">
+          <mat-list-item *ngIf="currentDisplayQuery.start_date !== null || currentDisplayQuery.start_date !== '' && currentDisplayQuery.end_date !== null || currentDisplayQuery.end_date !== ''">
             <h4 mat-line>
               <strong>Date Range</strong>
             </h4>
@@ -117,7 +119,8 @@
             </h4>
             <p mat-line>
               <span *ngFor="let diagnosis of currentDisplayQuery.diagnosis">{{diagnosis}}
-                <span *ngIf="(currentDisplayQuery.diagnosis.indexOf(diagnosis)) < (currentDisplayQuery.diagnosis.length - 1)">{{(currentDisplayQuery.diagnosis_includes_all) ? "and" : "or"}}&nbsp;</span>
+                <span *ngIf="(currentDisplayQuery.diagnosis.indexOf(diagnosis)) < (currentDisplayQuery.diagnosis.length - 1)">{{(currentDisplayQuery.diagnosis_includes_all)
+                  ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
@@ -128,7 +131,8 @@
             </h4>
             <p mat-line>
               <span *ngFor="let species of currentDisplayQuery.species">{{species}}
-                <span *ngIf="(currentDisplayQuery.species.indexOf(species)) < (currentDisplayQuery.species.length - 1)">{{(currentDisplayQuery.species_includes_all) ? "and" : "or"}}&nbsp;</span>
+                <span *ngIf="(currentDisplayQuery.species.indexOf(species)) < (currentDisplayQuery.species.length - 1)">{{(currentDisplayQuery.species_includes_all)
+                  ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
@@ -169,7 +173,7 @@
         </button>
 
         <button mat-button color="accent" (click)="openSearchDialog()">
-          <mat-icon class="material-icons">search</mat-icon> {{(currentDisplayQuery) ? "Update Search" : "Search"}}
+          <mat-icon class="material-icons">search</mat-icon> {{(currentDisplayQuery) ? "Search" : "Search"}}
         </button>
 
       </mat-action-row>
@@ -186,16 +190,16 @@
           <button mat-button>
             <!-- Start Date -->
             <span class="search-param" *ngIf="search.start_date">
-                <b>START DATE</b>
-                <span class="value">{{search.start_date | date:'mediumDate'}}</span>
+              <b>START DATE</b>
+              <span class="value">{{search.start_date | date:'mediumDate'}}</span>
             </span>
             <!-- End Date -->
             <span class="search-param" *ngIf="search.end_date">
-                <b>END DATE</b>
-                <span class="value">{{search.end_date|date:'mediumDate'}}</span>
+              <b>END DATE</b>
+              <span class="value">{{search.end_date|date:'mediumDate'}}</span>
             </span>
             <!-- Affected Count -->
-            <span *ngIf="search.affected_count" class="search-param"> 
+            <span *ngIf="search.affected_count" class="search-param">
               <b>AFFECTED COUNT</b>
               <span class="value">{{search.affected_count}}</span>
             </span>
@@ -215,11 +219,12 @@
 
             <!-- Diagnosis Type -->
             <span class="search-param" *ngIf="search.diagnosis_type">
-              <b>DIAGNOSIS TYPE</b> 
+              <b>DIAGNOSIS TYPE</b>
               <div class="value-list">
                 <span *ngFor="let diagnosisType of search.diagnosis_type" class="value">
                   {{diagnosisType| displayValue:'name':this.diagnosisTypes}}
-                  <span *ngIf="(search.diagnosis_type.indexOf(diagnosisType)) < (search.diagnosis_type.length - 1)" class="value-list-or">
+                  <span *ngIf="(search.diagnosis_type.indexOf(diagnosisType)) < (search.diagnosis_type.length - 1)"
+                    class="value-list-or">
                     {{(search.diagnosis_type_includes_all) ? "and" : "or"}}
                   </span>
                 </span>
@@ -231,7 +236,7 @@
               <b>DIAGNOSIS</b>
               <div class="value-list">
                 <span *ngFor="let diagnosis of search.diagnosis" class="value">
-                  {{diagnosis | displayValue:'name':this.diagnoses}} 
+                  {{diagnosis | displayValue:'name':this.diagnoses}}
                   <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)" class="value-list-or">
                     {{(search.diagnosis_includes_all) ? "and" : "or"}}
                   </span>
@@ -253,12 +258,13 @@
             </span>
 
             <!-- STATE -->
-            <span class="search-param" *ngIf="search.administrative_level_one"> 
+            <span class="search-param" *ngIf="search.administrative_level_one">
               <b>STATE</b>
               <div class="value-list">
                 <span *ngFor="let adminLevel1 of search.administrative_level_one" class="value">
                   {{adminLevel1 | displayValue:'name':this.administrative_level_one}}
-                  <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)" class="value-list-or">
+                  <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)"
+                    class="value-list-or">
                     {{(search.administrative_level_one_includes_all) ? "and" : "or"}}
                   </span>
                 </span>
@@ -270,8 +276,9 @@
               <b>COUNTY</b>
               <div class="value-list">
                 <span *ngFor="let adminLevel2 of search.administrative_level_two" class="value">
-                  {{adminLevel2 | displayValue:'name':this.administrative_level_two}} 
-                  <span *ngIf="(search.administrative_level_two.indexOf(adminLevel2)) < (search.administrative_level_two.length - 1)" class="value-list-or">
+                  {{adminLevel2 | displayValue:'name':this.administrative_level_two}}
+                  <span *ngIf="(search.administrative_level_two.indexOf(adminLevel2)) < (search.administrative_level_two.length - 1)"
+                    class="value-list-or">
                     {{(search.administrative_level_two_includes_all) ? "and" : "or"}}\
                   </span>
                 </span>
@@ -310,13 +317,13 @@
       </mat-expansion-panel-header>
 
       <div class="data-loading-shade" *ngIf="resultsLoading"></div>
-      
+
       <div id="map">
 
         <!-- Warning about map center -->
         <div id="mapLocationNote"><b>Note:</b> Map shows centroid of county where event occured</div>
 
-        
+
         <div id="latLngScale" class="latLngScale">
           <span class="hover-content"> <b>Map scale </b></span>
           1:<span id="scale">{{mapScale}}</span> | <span class="hover-content"> <b>Zoom level </b></span> <span id="zoomLevel">
@@ -331,18 +338,18 @@
 
         <mat-expansion-panel id="legend" class="legend legend-home">
           <mat-expansion-panel-header>
-              <!-- <mat-icon matTooltip="Map shows centroid of county where event occured." _ngcontent-c5="" class="material-icons mat-icon" style="color: #e8c900; font-size: 18px; width: 100%;" role="img" aria-hidden="true">warning</mat-icon> -->
+            <!-- <mat-icon matTooltip="Map shows centroid of county where event occured." _ngcontent-c5="" class="material-icons mat-icon" style="color: #e8c900; font-size: 18px; width: 100%;" role="img" aria-hidden="true">warning</mat-icon> -->
             <mat-panel-title>
               Legend
             </mat-panel-title>
           </mat-expansion-panel-header>
-    
+
           <div class="legend-panel-content">
 
 
             <label class="legend-label" style="margin-top: 0 !important; padding-top: 0 !important;">Event Type</label>
             <label class="legend-hint">Indicated by shape</label>
-            
+
             <div class='legend-icon'>
               <div class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
               <label>Mortality/Morbidity</label>
@@ -351,7 +358,7 @@
               <div class='wmm-diamond wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
               <label>Surveillance</label>
             </div>
-            
+
             <label class="legend-label">Diagnosis Type</label>
             <label class="legend-hint">Indicated by color</label>
 
@@ -400,10 +407,10 @@
               <label style="font-style: italic;">Multiple</label>
             </div>
 
-            
+
             <label class="legend-hint">Number indicates event count</label>
             <label class="legend-hint">White center indicates incomplete event</label>
-            
+
 
             <div id="flywaysLegend" *ngIf="flywaysVisible">
               <label class="legend-label">Flyways</label>
@@ -436,7 +443,7 @@
               </div>
 
             </div>
-            
+
           </div>
 
         </mat-expansion-panel>
@@ -454,13 +461,13 @@
 
           <span class="results-button-row">
             <button mat-button color="accent" (click)="exportEventSummaries()">
-              <i class="material-icons">
+              <mat-icon>
                 unarchive
-              </i> Export Data</button>
-            <!-- <button mat-button color="accent">
-              <i class="material-icons">
-                share
-              </i> Share</button> -->
+              </mat-icon> Export Data
+            </button>
+            <button mat-button color="accent" (click)="openMetadataLink()">
+              <mat-icon>list</mat-icon> Metadata
+            </button>
           </span>
 
         </div>
@@ -480,40 +487,48 @@
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Event ID</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.id}}</mat-cell>
             </ng-container>
 
             <!-- Event Type Column -->
             <ng-container matColumnDef="event_type_string">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Event Type</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.event_type_string}}</mat-cell>
             </ng-container>
 
             <!-- Affected Count Column -->
             <ng-container matColumnDef="affected_count">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Affected</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Number Affected</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.affected_count}}</mat-cell>
             </ng-container>
 
             <!-- Start Date Column -->
             <ng-container matColumnDef="start_date">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Event Start Date</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.start_date | date:'shortDate'}}</mat-cell>
             </ng-container>
 
             <!-- End Date Column -->
             <ng-container matColumnDef="end_date">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>End Date</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Event End Date</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.end_date | date:'shortDate'}}</mat-cell>
             </ng-container>
 
-            <!-- States Column -->
-            <ng-container matColumnDef="administrativelevelones">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>States</mat-header-cell>
+            <!-- Location Column -->
+            <ng-container matColumnDef="locations">
+              <mat-header-cell *matHeaderCellDef matTooltip="Displayed as County (or equivalent), State (or equivalent), Country - where values are available">Location</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
-                  <li *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}</li>
+                  <li *ngFor="let administrativeleveltwo of event.administrativeleveltwos">
+                    <span>{{administrativeleveltwo.name}}</span>
+                    <span *ngIf="administrativeleveltwo.administrative_level_one_string !== null && administrativeleveltwo.administrative_level_one_string !== ''">,&nbsp;</span>
+                    <span>{{administrativeleveltwo.administrative_level_one_string}}</span>
+                    <span *ngIf="administrativeleveltwo.country_string !== null && administrativeleveltwo.country_string !== ''">,&nbsp;</span>
+                    <span>{{administrativeleveltwo.country_string}}
+                    </span>
+
+                  </li>
                 </ul>
                 <!-- <span *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}
                   <span *ngIf="(event.administrativelevelones.indexOf(administrativelevelone)) < (event.administrativelevelones.length - 1)">, </span>
@@ -521,22 +536,29 @@
               </mat-cell>
             </ng-container>
 
+            <!-- States Column -->
+            <!-- <ng-container matColumnDef="administrativelevelones">
+              <mat-header-cell *matHeaderCellDef>State (or equivalent)</mat-header-cell>
+              <mat-cell *matCellDef="let event">
+                <ul class="table-cell-list">
+                  <li *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}</li>
+                </ul>
+              </mat-cell>
+            </ng-container> -->
+
             <!-- Counties Column -->
-            <ng-container matColumnDef="administrativeleveltwos">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Counties</mat-header-cell>
+            <!-- <ng-container matColumnDef="administrativeleveltwos">
+              <mat-header-cell *matHeaderCellDef>County (or equivalent)</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let administrativeleveltwo of event.administrativeleveltwos">{{administrativeleveltwo.name}}</li>
                 </ul>
-                <!-- <span *ngFor="let administrativeleveltwo of event.administrativeleveltwos">{{administrativeleveltwo.name}}
-                  <span *ngIf="(event.administrativeleveltwos.indexOf(administrativeleveltwo)) < (event.administrativeleveltwos.length - 1)">, </span>
-                </span> -->
               </mat-cell>
-            </ng-container>
+            </ng-container> -->
 
             <!-- Species Column -->
             <ng-container matColumnDef="species">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Species</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef>Species</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let species of event.species">{{species.name}}</li>
@@ -549,7 +571,7 @@
 
             <!-- Event Diagnosis Column -->
             <ng-container matColumnDef="eventdiagnoses">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Event Diagnosis</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef>Event Diagnosis</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}</li>

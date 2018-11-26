@@ -201,7 +201,7 @@
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <b>State</b>
+            <b>State (or equivalent)</b>
           </mat-panel-title>
           <mat-panel-description>
             <span>
@@ -247,7 +247,7 @@
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <b>County</b>
+            <b>County (or equivalent)</b>
           </mat-panel-title>
           <mat-panel-description>
             <span>
@@ -328,19 +328,21 @@
             <span>{{searchForm.get('start_date').value | date:'mediumDate'}}</span>
             <span *ngIf="(searchForm.get('start_date').value !== null) || (searchForm.get('end_date').value !== null)">&nbsp;thru&nbsp;</span>
             <span>{{searchForm.get('end_date').value | date:'mediumDate'}}</span>
+            <span *ngIf="searchForm.get('end_date').hasError('endDateBeforeStart')" class="date-range-warning"><mat-icon>warning</mat-icon>&nbsp;Invalid date range</span>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div>
-          <mat-form-field>
+          <mat-form-field class="form-control">
             <input matInput [matDatepicker]="startDate" placeholder="Start Date" formControlName="start_date">
             <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
             <mat-datepicker #startDate></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field>
+          <mat-form-field class="form-control">
             <input matInput [matDatepicker]="endDate" placeholder="End Date" formControlName="end_date">
             <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
             <mat-datepicker #endDate></mat-datepicker>
+            <mat-error *ngIf="searchForm.get('end_date').hasError('endDateBeforeStart')">Cannot precede start date</mat-error>
           </mat-form-field>
           <button mat-icon-button color="accent">
             <mat-icon aria-label="Clear dates" (click)="clearDates()">clear_all</mat-icon>
@@ -385,7 +387,7 @@
       </button>
     </div>
     <div>
-      <button mat-raised-button color="primary" (click)="submitSearch(searchForm.value)">
+      <button mat-raised-button color="primary" (click)="submitSearch(searchForm.value)" [disabled]="searchForm.invalid">
         <mat-icon class="material-icons">search</mat-icon> Search
       </button>
     </div>

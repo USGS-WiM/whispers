@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
@@ -85,7 +85,16 @@ export class SearchDialogComponent implements OnInit {
   selectedSpecies = []; // chips list
 
   adminLevelTwosLoading = false;
+  diagnosesLoading = false;
 
+  endDateBeforeStart(AC: AbstractControl) {
+    const start_date = AC.get('start_date').value;
+    const end_date = AC.get('end_date').value;
+    if ((start_date !== null && end_date !== null) && start_date > end_date) {
+      AC.get('end_date').setErrors({ endDateBeforeStart: true });
+    }
+    return null;
+  }
 
   buildSearchForm() {
     this.searchForm = this.formBuilder.group({
@@ -106,7 +115,10 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_two_includes_all: false,
       and_params: [],
       complete: null
-    });
+    },
+      {
+        validator: [this.endDateBeforeStart]
+      });
   }
 
   constructor(
@@ -117,7 +129,7 @@ export class SearchDialogComponent implements OnInit {
     private adminLevelTwoService: AdministrativeLevelTwoService,
     private _eventTypeService: EventTypeService,
     private _diagnosisTypeService: DiagnosisTypeService,
-    private _diagnosisService: DiagnosisService,
+    private diagnosisService: DiagnosisService,
     private _speciesService: SpeciesService,
     private eventService: EventService,
     private displayValuePipe: DisplayValuePipe,
@@ -206,7 +218,7 @@ export class SearchDialogComponent implements OnInit {
         }
       );
     // get diagnoses from the diagnoses service
-    this._diagnosisService.getDiagnoses()
+    this.diagnosisService.getDiagnoses()
       .subscribe(
         (diagnoses) => {
           this.diagnoses = diagnoses;
@@ -224,9 +236,9 @@ export class SearchDialogComponent implements OnInit {
             for (const index in diagnoses) {
               if (this.data.query['diagnosis'].some(
                 function (el) {
-                  console.log(el);
+                  // console.log(el);
                   let match = false;
-                  if (typeof el == 'number') {
+                  if (typeof el === 'number') {
                     if (el === diagnoses[index].id) {
                       match = true;
                     }
@@ -261,7 +273,7 @@ export class SearchDialogComponent implements OnInit {
                 function (el) {
                   console.log(el);
                   let match = false;
-                  if (typeof el == 'number') {
+                  if (typeof el === 'number') {
                     if (el === adminLevelOnes[index].id) {
                       match = true;
                     }
@@ -358,11 +370,13 @@ export class SearchDialogComponent implements OnInit {
     }
 
     if (query && query['start_date']) {
-      this.searchForm.controls['start_date'].setValue(query['start_date']);
+      const startDate = new Date(query['start_date']);
+      this.searchForm.controls['start_date'].setValue(startDate);
     }
 
     if (query && query['end_date']) {
-      this.searchForm.controls['end_date'].setValue(query['end_date']);
+      const endDate = new Date(query['end_date']);
+      this.searchForm.controls['end_date'].setValue(endDate);
     }
 
     //always set value, even if null, because null is valid value
@@ -466,6 +480,47 @@ export class SearchDialogComponent implements OnInit {
       this.resetFormControl(control);
     }
 
+
+    ///////////////
+
+    if (control === 'diagnosisType') {
+
+      this.diagnosesLoading = true;
+
+      const diagnosisTypeIDArray = [];
+      for (const diagnosisType of selectedValuesArray) {
+        diagnosisTypeIDArray.push(diagnosisType.id);
+      }
+      const diagnosisTypeQueryString = 'diagnosis_type=' + diagnosisTypeIDArray.toString();
+
+      this.diagnosisService.queryDiagnoses(diagnosisTypeQueryString)
+        .subscribe(
+          diagnoses => {
+
+            // needed to use the 'self' proxy for 'this' because of a not fully understood scoping issue
+            self.diagnoses = diagnoses;
+            // alphabetize the admmin level twos list
+            self.diagnoses.sort(function (a, b) {
+              if (a.name < b.name) { return -1; }
+              if (a.name > b.name) { return 1; }
+              return 0;
+            });
+
+            this.diagnosesLoading = false;
+            this.filteredDiagnoses = this.diagnosisControl.valueChanges
+              .startWith(null)
+              .map(val => this.filter(val, this.diagnoses, 'name'));
+          },
+          error => {
+            this.errorMessage = <any>error;
+            this.diagnosesLoading = false;
+          }
+        );
+
+    }
+
+    //////////////
+
     if (control === 'adminLevelOne') {
 
       this.adminLevelTwosLoading = true;
@@ -522,7 +577,7 @@ export class SearchDialogComponent implements OnInit {
     this.adminLevelTwoService.queryAdminLevelTwos(id)
       .subscribe(
         (adminLevelTwos) => {
-          //this.administrative_level_two.push(adminLevelTwos);
+          // this.administrative_level_two.push(adminLevelTwos);
           this.administrative_level_two = this.administrative_level_two.concat(adminLevelTwos);
           this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
             .startWith(null)

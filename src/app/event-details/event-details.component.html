@@ -647,7 +647,7 @@
 
                   <div *ngIf="eventLocation.locationspecies" class="event-table-header">Species at this location</div>
 
-                  <app-location-species-table [locationspecies]="eventLocationSpecies" [permissions]="eventData.permissions"></app-location-species-table>
+                  <app-location-species-table [locationspecies]="eventLocation.locationspecies" [permissions]="eventData.permissions"></app-location-species-table>
 
                   <div class="detail-section-buttons">
                     <span *ngIf="speciesLoading" class="event-group-no-data">
@@ -934,8 +934,19 @@
                 <div class='wmm-square wmm-white wmm-icon-circle wmm-icon-white wmm-size-20 huc-icon'></div>
                 <label>HUC 2</label>
               </div>
-
             </div>
+
+
+            <div id="landUseLegend">
+              <!-- <div id="landUseLegend" *ngIf="landUseVisible"> -->
+              <label class="legend-label">Land Use</label>
+
+              <div class='legend-icon'>
+                <a href="https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer/legend" target="_blank">Land Use legend (link)</a>
+                
+              </div>
+            </div>
+
           </div>
 
         </mat-expansion-panel>

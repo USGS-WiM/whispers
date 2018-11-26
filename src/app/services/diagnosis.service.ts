@@ -28,6 +28,18 @@ export class DiagnosisService {
       .catch(this.handleError);
   }
 
+  public queryDiagnoses(diagnosisQueryString): Observable<any[]> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.JSON_HEADERS
+    });
+
+    return this._http.get(APP_SETTINGS.DIAGNOSES_URL + '?no_page&' + diagnosisQueryString, options)
+      .map((response: Response) => <any[]>response.json())
+      // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
   public requestNew(formValue): Observable<any> {
 
     const options = new RequestOptions({

@@ -123,8 +123,10 @@ export class HomeComponent implements OnInit {
     'affected_count',
     'start_date',
     'end_date',
-    'administrativelevelones',
-    'administrativeleveltwos',
+    // 'country',
+    'locations',
+    // 'administrativelevelones',
+    // 'administrativeleveltwos',
     'species',
     'eventdiagnoses'
   ];
@@ -287,7 +289,7 @@ export class HomeComponent implements OnInit {
     this.currentSearchQuery.and_params = [];
 
     if (sessionStorage.getItem('currentSearch')) {
-      this.openSnackBar('Current search query has been loaded from your previous visit.', 'OK', 8000);
+      this.openSnackBar('Current Search has been loaded from your previous visit.', 'OK', 8000);
 
     }
 
@@ -830,7 +832,7 @@ export class HomeComponent implements OnInit {
     }
 
     if (this.locationMarkers.getBounds().isValid() == true) {
-      this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50] });
+      this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50], maxZoom: 10 });
     } else {
       this.openSnackBar('No events match your selected criteria. Please try again.', 'OK', 8000);
 
@@ -858,6 +860,9 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  openMetadataLink() {
+    window.open(APP_SETTINGS.WHISPERS_METADATA_URL, '_blank');
+  }
 
   exportEventSummaries() {
     this.eventService.getEventSummaryCSV(this.currentSearchQuery);

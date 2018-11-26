@@ -21,8 +21,10 @@ import { DiagnosisTypeService } from '@app/services/diagnosis-type.service';
 import { DiagnosisService } from '@app/services/diagnosis.service';
 import { SpeciesService } from '@app/services/species.service';
 import { SearchQuery } from '@app/interfaces/search-query';
+import { DisplayQuery } from '@interfaces/display-query';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
+import { DisplayValuePipe } from '../pipes/display-value.pipe';
 
 
 @Component({
@@ -68,6 +70,7 @@ export class SavedSearchesComponent implements OnInit {
     private route: ActivatedRoute,
     private _searchService: SearchService,
     private dialog: MatDialog,
+    private displayValuePipe: DisplayValuePipe,
     private searchDialogService: SearchDialogService,
     private adminLevelOneService: AdministrativeLevelOneService,
     private adminLevelTwoService: AdministrativeLevelTwoService,
@@ -254,11 +257,69 @@ export class SavedSearchesComponent implements OnInit {
   }
 
   implementSearch(search) {
-    sessionStorage.setItem('currentSearch', JSON.stringify(search));
-    sessionStorage.setItem('currentDisplayQuery', JSON.stringify(search));
+    
+
+    // TODO: currentDiplayQuery needs to be parsed from the search object
+    const displayQuery: DisplayQuery = {
+      event_type: [],
+      diagnosis: [],
+      diagnosis_type: [],
+      species: [],
+      administrative_level_one: [],
+      administrative_level_two: [],
+      affected_count: search.affected_count,
+      affected_count_operator: search.affected_count_operator,
+      start_date: search.start_date,
+      end_date: search.end_date,
+      diagnosis_type_includes_all: search.diagnosis_type_includes_all,
+      diagnosis_includes_all: search.diagnosis_includes_all,
+      species_includes_all: search.species_includes_all,
+      administrative_level_one_includes_all: search.administrative_level_one_includes_all,
+      administrative_level_two_includes_all: search.administrative_level_two_includes_all,
+      and_params: [],
+      complete: search.complete
+    };
+
+    if (search.event_type) {
+      for (const event_type of search.event_type) {
+        displayQuery.event_type.push(this.displayValuePipe.transform(event_type, 'name', this.eventTypes));
+      }
+    }
+
+    if (search.diagnosis) {
+      for (const diagnosis of search.diagnosis) {
+        displayQuery.diagnosis.push(this.displayValuePipe.transform(diagnosis, 'name', this.diagnoses));
+      }
+    }
+    if (search.diagnosis_type) {
+      for (const diagnosis_type of search.diagnosis_type) {
+        displayQuery.diagnosis_type.push(this.displayValuePipe.transform(diagnosis_type, 'name', this.diagnosisTypes));
+      }
+    }
+
+    if (search.species) {
+      for (const species of search.species) {
+        displayQuery.species.push(this.displayValuePipe.transform(species, 'name', this.allSpecies));
+      }
+    }
+
+    if (search.administrative_level_one) {
+      for (const adminLevelOne of search.administrative_level_one) {
+        displayQuery.administrative_level_one.push(this.displayValuePipe.transform(adminLevelOne, 'name', this.administrative_level_one));
+      }
+    }
+
+    if (search.administrative_level_two) {
+      for (const adminLevelTwo of search.administrative_level_two) {
+        displayQuery.administrative_level_two.push(this.displayValuePipe.transform(adminLevelTwo, 'name', this.administrative_level_two));
+      }
+    }
+
+    sessionStorage.setItem('currentDisplayQuery', JSON.stringify(displayQuery));
     // use displayQuery for display of current query in markup, send to searchDialogService
-    this.searchDialogService.setDisplayQuery(search);
-    // use searchForm.value to build the web service query, send to searchDialogService
+    this.searchDialogService.setDisplayQuery(displayQuery);
+
+    sessionStorage.setItem('currentSearch', JSON.stringify(search));
     this.searchDialogService.setSearchQuery(search);
     this.router.navigate([`../home/`], { relativeTo: this.route });
   }

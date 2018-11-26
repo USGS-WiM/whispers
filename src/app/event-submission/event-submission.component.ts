@@ -353,6 +353,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      disableClose: true,
       data: {
         contact_action: 'create'
       }
@@ -1451,6 +1452,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
                   }
                 }
                 if (!found) {
+                  if (speciesDiagnosisObj.formValue.suspect) {
+                    diagnosis.suspect = true;
+                  }
                   this.availableDiagnoses.push(diagnosis);
                 }
 

@@ -336,6 +336,13 @@ export class AddEventLocationComponent implements OnInit {
 
     formValue.event = this.eventID;
 
+    // if lat/long fields are deleted to blank, update to null to be a valid number type on PATCH
+    if (formValue.latitude === '') {
+      formValue.latitude = null;
+    }
+    if (formValue.longitude === '') {
+      formValue.longitude = null;
+    }
     // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
     // can be removed if configure datepicker to output this format
     // (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)

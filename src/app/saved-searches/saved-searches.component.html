@@ -2,6 +2,10 @@
   <div class="button-row" *ngFor="let search of parsedSearches" (click)="implementSearch(search)">
     
     <button mat-button>
+      <!-- Name -->
+      <span class="search-param search-name" *ngIf="search.name">
+          <b><i>{{search.name}}</i></b>
+      </span>
       <!-- Start Date -->
       <span class="search-param" *ngIf="search.start_date">
           <b>START DATE</b>

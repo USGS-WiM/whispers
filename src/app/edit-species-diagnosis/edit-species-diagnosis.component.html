@@ -38,7 +38,7 @@
 
       </div>
 
-      <mat-form-field class="form-control">
+      <mat-form-field class="form-control diagnosis-select">
         <mat-select placeholder="Basis of Diagnosis" formControlName="basis" readonly>
           <mat-option>--</mat-option>
           <mat-option *ngFor="let diagnosisBasis of diagnosisBases" value="{{diagnosisBasis.id}}">{{diagnosisBasis.name}}</mat-option>
@@ -52,7 +52,7 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field class="species-number-control">
+      <mat-form-field class="form control species-number-control">
         <input matInput placeholder="Number Assessed" type="number" min="0" formControlName="tested_count">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
@@ -60,7 +60,7 @@
         <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('min')">Minimum value is 0</mat-error>
       </mat-form-field>
 
-      <mat-form-field class="species-number-control">
+      <mat-form-field class="form control species-number-control">
         <input matInput placeholder="Number with this Diagnosis" type="number" min="0" formControlName="diagnosis_count">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
@@ -105,7 +105,7 @@
 
 <mat-dialog-actions>
   <div class="detail-section-buttons">
-    <button mat-button color="warn" (click)="this.editSpeciesDiagnosisDialogRef.close('cancel');">
+    <button mat-button color="warn" (click)="onCancel()">
       <mat-icon>cancel</mat-icon>&nbsp;Cancel
     </button>
     <button mat-button color="primary" type="submit" [disabled]="speciesDiagnosisForm.invalid" (click)="onSubmit(speciesDiagnosisForm.value)">

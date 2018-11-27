@@ -376,6 +376,47 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
 
+  openSpeciesDiagnosisRemoveConfirm(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Remove Species Diagnosis',
+          titleIcon: 'remove_circle',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to remove this species diagnosis? If it is the only species in the form with this diagnosis, removing it will remove it from the list of available diagnoses for event diagnosis.',
+          messageIcon: '',
+          confirmButtonText: 'Remove',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+
+        // remove the diagnosis from the available diagnoses unless another species has it
+        // tslint:disable-next-line:max-line-length
+        const diagnosisID = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].get('diagnosis').value;
+
+        // delete from availableDiagnoses unless count > 1
+        for (const availableDiagnosis of this.availableDiagnoses) {
+          if (availableDiagnosis.id === diagnosisID) {
+            if (availableDiagnosis.count > 1) {
+              // decrement the count
+              availableDiagnosis.count--;
+              break;
+            } else if (availableDiagnosis.count < 2) {
+              // remove it
+              this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== diagnosisID);
+            }
+          }
+        }
+        // remove the speciesdiagnosis form array instance
+        this.removeSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex);
+      }
+    });
+  }
+
   openEventLocationRemoveConfirm(eventLocationIndex) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
@@ -1444,17 +1485,28 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
             for (const diagnosis of this.allDiagnoses) {
               if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
 
-                let found = false;
+                let diagnosisFound = false;
+                let increment = false;
+                // check to see if the diagnosis just added already exists in the availableDiagnoses array
                 for (const availableDiagnosis of this.availableDiagnoses) {
                   if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
-                    found = true;
+                    // if found, increment the count for that diagnosis
+                    availableDiagnosis.count++;
+                    // if found, set local var found to true
+                    diagnosisFound = true;
+                    // if found, stop. do not add to availableDiagnoses array
                     break;
                   }
                 }
-                if (!found) {
-                  if (speciesDiagnosisObj.formValue.suspect) {
-                    diagnosis.suspect = true;
-                  }
+                // if diagnosis is not found to already exist in the availableDiagnoses array, add it
+                if (!diagnosisFound) {
+                  // if the species diagnosis is suspect == true, add that to the availableDiagnosis selection object (for display only)
+                  // if (speciesDiagnosisObj.formValue.suspect) {
+                  //   diagnosis.suspect = true;
+                  // }
+                  diagnosis.suspect = speciesDiagnosisObj.formValue.suspect;
+                  // set diagnosis count to 1
+                  diagnosis.count = 1;
                   this.availableDiagnoses.push(diagnosis);
                 }
 
@@ -1500,7 +1552,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       event_location.start_date = this.datePipe.transform(event_location.start_date, 'yyyy-MM-dd');
       event_location.end_date = this.datePipe.transform(event_location.end_date, 'yyyy-MM-dd');
       //delete the event_type superficially attached to event locations
-       delete event_location.event_type;
+      delete event_location.event_type;
     }
 
     this.eventService.create(formValue)
@@ -1514,7 +1566,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
                 title: 'Event Saved',
                 titleIcon: 'check',
                 message: 'Your event was successfully saved. The Event ID is ' + event.id,
-                messageIcon: 'check',
                 confirmButtonText: 'OK',
                 showCancelButton: false
               }

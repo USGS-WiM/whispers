@@ -17,6 +17,8 @@ import { SpeciesDiagnosisService } from '@services/species-diagnosis.service';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
 
+import { AgeBias } from '@interfaces/age-bias';
+import { SexBias } from '@interfaces/sex-bias';
 
 @Component({
   selector: 'app-location-species-table',
@@ -33,6 +35,8 @@ import { DataUpdatedService } from '@app/services/data-updated.service';
 export class LocationSpeciesTableComponent implements OnInit {
   @Input('locationspecies') locationspecies: LocationSpecies[];
   @Input('permissions') permissions: Object;
+  @Input('ageBiases') ageBiases: AgeBias[];
+  @Input('sexBiases') sexBiases: SexBias[];
 
   editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
   editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;

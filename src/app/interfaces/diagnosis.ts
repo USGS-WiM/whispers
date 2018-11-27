@@ -4,4 +4,5 @@ export interface Diagnosis extends History {
     name: string;
     diagnosis_type: number;
     suspect?: boolean;
+    count?: number;
 }

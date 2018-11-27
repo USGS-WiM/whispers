@@ -154,6 +154,11 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
               this.speciesDiagnosisForm.get('diagnosis').setValue(this.data.speciesdiagnosis.diagnosis.toString());
             }
           }
+          this.diagnoses.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
           // populate the search select options for the species control
           this.filteredDiagnoses.next(diagnoses);
 

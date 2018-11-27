@@ -508,10 +508,9 @@
                                       <mat-card-content>
                                         <mat-list dense>
                                           <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
-                                            {{speciesDiagnosis.get('diagnosis').value |
-                                            displayValue:'name':this.allDiagnoses}}
+                                            {{speciesDiagnosis.get('diagnosis').value | displayValue:'name':this.allDiagnoses}} {{speciesDiagnosis.get('suspect').value ? '(suspect)': '' }}
                                             <button mat-icon-button color="warn" aria-label="Remove this diagnosis"
-                                              matTooltip="Remove this diagnosis" (click)="removeSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
+                                              matTooltip="Remove this diagnosis" (click)="openSpeciesDiagnosisRemoveConfirm(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
                                               <mat-icon>remove_circle</mat-icon>
                                             </button>
                                           </mat-list-item>

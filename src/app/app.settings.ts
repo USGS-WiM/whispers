@@ -63,6 +63,7 @@ export class APP_SETTINGS {
     public static get LOCATION_SPECIES_DIAGNOSIS_URL(): string { return this._API_ENDPOINT + 'speciesdiagnoses/'; }
     public static get PERMISSIONS_URL(): string { return this._API_ENDPOINT + 'permissions/'; }
     public static get PERMISSION_TYPES_URL(): string { return this._API_ENDPOINT + 'permissionstypes'; }
+    public static get FLYWAYS_URL(): string { return this._API_ENDPOINT + 'flyways/'; }
     public static get COMMENTS_URL(): string { return this._API_ENDPOINT + 'comments/'; }
     public static get ARTIFACTS_URL(): string { return this._API_ENDPOINT + 'artifacts/'; }
     public static get USERS_URL(): string { return this._API_ENDPOINT + 'users/'; }

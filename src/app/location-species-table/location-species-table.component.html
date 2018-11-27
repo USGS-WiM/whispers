@@ -57,17 +57,15 @@
 
     <!-- Age Bias Column -->
     <ng-container matColumnDef="age_bias">
-      <mat-header-cell *matHeaderCellDef> Age Basis </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.age_bias |
-        displayValue:'name':this.ageBiases}}
+      <mat-header-cell *matHeaderCellDef> Age Bias</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.age_bias | displayValue:'name':this.ageBiases}}
       </mat-cell>
     </ng-container>
 
     <!-- Sex Bias Column -->
     <ng-container matColumnDef="sex_bias">
       <mat-header-cell *matHeaderCellDef> Sex Bias </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.sex_bias |
-        displayValue:'name':this.sexBiases}}
+      <mat-cell *matCellDef="let element"> {{element.sex_bias | displayValue:'name':this.sexBiases}}
       </mat-cell>
     </ng-container>
 

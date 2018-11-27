@@ -27,7 +27,7 @@
           <div class="subtitle">{{eventData.event_type_string}}</div>
           <div class="meta">
             <span>{{eventData.start_date | date:'mediumDate'}}</span>
-            <span> thru </span>
+            <span *ngIf="eventData.end_date !== null && eventData.end_date !== ''"> thru </span>
             <span>{{eventData.end_date | date:'mediumDate'}}</span>
           </div>
         </mat-card-title>
@@ -59,7 +59,7 @@
                     <th [attr.rowspan]="eventData.eventdiagnoses.length + 1 ">Diagnosis</th>
                   </tr>
                   <tr *ngFor="let diagnosis of eventData.eventdiagnoses" class="noBorder">
-                    <td><span>{{diagnosis.diagnosis_string}}</span><span *ngIf="diagnosis.suspect">(Suspect)</span></td>
+                    <td><span>{{diagnosis.diagnosis_string}}</span></td>
                   </tr>
                   <tr>
                     <th [attr.rowspan]="eventData.eventlocations.length + 1 ">Locations</th>
@@ -486,6 +486,10 @@
                       <div class="value">{{eventLocation.gnis_id}}</div>
                     </div>
                     <div class="item">
+                        <div class="label">Flyways</div>
+                        <div class="value"><span *ngFor="let flyway of eventLocation.flyways">{{flyway}}</span></div>
+                      </div>
+                    <div class="item">
                       <div class="label">Latitude</div>
                       <div class="value">{{eventLocation.latitude}}</div>
                     </div>
@@ -647,7 +651,7 @@
 
                   <div *ngIf="eventLocation.locationspecies" class="event-table-header">Species at this location</div>
 
-                  <app-location-species-table [locationspecies]="eventLocation.locationspecies" [permissions]="eventData.permissions"></app-location-species-table>
+                  <app-location-species-table [locationspecies]="eventLocation.locationspecies" [permissions]="eventData.permissions" [ageBiases]="ageBiases" [sexBiases]="sexBiases"></app-location-species-table>
 
                   <div class="detail-section-buttons">
                     <span *ngIf="speciesLoading" class="event-group-no-data">

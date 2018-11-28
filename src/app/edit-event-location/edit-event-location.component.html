@@ -41,7 +41,7 @@
       </mat-form-field>
 
       <mat-form-field class="form-control">
-        <mat-select placeholder="State" formControlName="administrative_level_one" (ngModelChange)="updateAdminLevelTwoOptions($event)"
+        <mat-select placeholder="State (or equivalent)" formControlName="administrative_level_one" (ngModelChange)="updateAdminLevelTwoOptions($event)"
           required>
           <mat-option *ngFor="let adminLevelOne of adminLevelOnes" value="{{adminLevelOne.id}}">{{adminLevelOne.name}}</mat-option>
         </mat-select>
@@ -54,7 +54,7 @@
       </mat-form-field>
 
       <mat-form-field class="form-control">
-        <mat-select placeholder="County" formControlName="administrative_level_two" required>
+        <mat-select placeholder="County (or equivalent)" formControlName="administrative_level_two" required>
           <mat-option *ngFor="let adminLevelTwo of adminLevelTwos" value="{{adminLevelTwo.id}}">{{adminLevelTwo.name}}</mat-option>
         </mat-select>
         <mat-hint align="start">Select a state to populate/update county list </mat-hint>

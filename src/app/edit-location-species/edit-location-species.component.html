@@ -42,6 +42,8 @@
           <mat-icon>public</mat-icon>
         </mat-hint>
         <mat-error *ngIf="this.locationSpeciesForm.get('population_count').hasError('min')">Minimum value is 0</mat-error>
+        <mat-error *ngIf="this.locationSpeciesForm.get('population_count').hasError('integer')">Must be an integer
+          (whole number)</mat-error>
       </mat-form-field>
 
       <br />
@@ -52,6 +54,8 @@
           <mat-icon>public</mat-icon>
         </mat-hint>
         <mat-error *ngIf="this.locationSpeciesForm.get('dead_count').hasError('min')">Minimum value is 0</mat-error>
+        <mat-error *ngIf="this.locationSpeciesForm.get('dead_count').hasError('integer')">Must be an integer (whole
+          number)</mat-error>
       </mat-form-field>
 
       <br />
@@ -62,6 +66,8 @@
           <mat-icon>public</mat-icon>
         </mat-hint>
         <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('min')">Minimum value is 0</mat-error>
+        <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('integer')">Must be an integer
+          (whole number)</mat-error>
       </mat-form-field>
 
       <br />
@@ -72,6 +78,8 @@
           <mat-icon>public</mat-icon>
         </mat-hint>
         <mat-error *ngIf="this.locationSpeciesForm.get('sick_count').hasError('min')">Minimum value is 0</mat-error>
+        <mat-error *ngIf="this.locationSpeciesForm.get('sick_count').hasError('integer')">Must be an integer (whole
+          number)</mat-error>
       </mat-form-field>
 
       <br />
@@ -82,6 +90,8 @@
           <mat-icon>public</mat-icon>
         </mat-hint>
         <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('min')">Minimum value is 0</mat-error>
+        <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('integer')">Must be an integer
+          (whole number)</mat-error>
       </mat-form-field>
 
     </div>

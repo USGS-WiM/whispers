@@ -16,7 +16,8 @@
 
             <mat-form-field class="form-control">
               <mat-select placeholder="Event Type" formControlName="event_type" required (ngModelChange)="updateEventType($event)">
-                <mat-option *ngFor="let eventType of eventTypes" value="{{eventType.id}}">{{eventType.name}} </mat-option>
+                <mat-option *ngFor="let eventType of eventTypes" value="{{eventType.id}}">{{eventType.name}}
+                </mat-option>
               </mat-select>
               <mat-hint align="end" matTooltip="Public field">
                 <mat-icon>public</mat-icon>
@@ -201,7 +202,7 @@
                             </mat-form-field>
 
                             <!--<mat-form-field class="form-control">
-                              <mat-select placeholder="State" formControlName="administrative_level_one"
+                              <mat-select placeholder="State (or equivalent)" formControlName="administrative_level_one"
                                 (ngModelChange)="updateAdminLevelTwoOptions($event)" required>
                                 <mat-option *ngFor="let adminLevelOne of adminLevelOnes" value="{{adminLevelOne.id}}">{{adminLevelOne.name}}</mat-option>
                               </mat-select>
@@ -215,7 +216,7 @@
 
                             <!-- State autocomplete control -->
                             <!-- <mat-form-field class="form-control">
-                              <input type="text" matInput placeholder="State" aria-label="State" [matAutocomplete]="stateAutoComplete"
+                              <input type="text" matInput placeholder="State (or equivalent)" aria-label="State" [matAutocomplete]="stateAutoComplete"
                                 formControlName="administrative_level_one" (ngModelChange)="updateAdminLevelTwoOptions($event, eventLocationIndex)"
                                 required>
                               <mat-spinner *ngIf="adminLevelOnesLoading" [diameter]="20"></mat-spinner>
@@ -237,8 +238,9 @@
 
                             <mat-form-field class="form-control">
                               <mat-spinner *ngIf="adminLevelOnesLoading" [diameter]="20"></mat-spinner>
-                              <mat-select formControlName="administrative_level_one" placeholder="State"
-                                #adminLevelOneSelect (ngModelChange)="updateAdminLevelTwoOptions($event, eventLocationIndex)">
+                              <mat-select formControlName="administrative_level_one" placeholder="State (or equivalent)"
+                                #adminLevelOneSelect (ngModelChange)="updateAdminLevelTwoOptions($event, eventLocationIndex)"
+                                required>
                                 <ngx-mat-select-search [formControl]="adminLevelOneFilterCtrl" [placeholderLabel]="'Find state...'"
                                   [noEntriesFoundLabel]="'no matching state found'"></ngx-mat-select-search>
                                 <mat-option *ngFor="let admin_level_one of filteredAdminLevelOnes[eventLocationIndex] | async"
@@ -258,7 +260,7 @@
 
 
                             <!--<mat-form-field class="form-control">
-                              <mat-select placeholder="County" formControlName="administrative_level_two" required>
+                              <mat-select placeholder="County (or equivalent)" formControlName="administrative_level_two" required>
                                 <mat-option *ngFor="let adminLevelTwo of adminLevelTwos" value="{{adminLevelTwo.id}}">{{adminLevelTwo.name}}</mat-option>
                               </mat-select>
                               <mat-hint align="start">Select a state to populate/update county list </mat-hint>
@@ -271,7 +273,7 @@
 
                             <!-- County autocomplete control -->
                             <!-- <mat-form-field class="form-control">
-                              <input type="text" matInput placeholder="County" aria-label="County" [matAutocomplete]="adminTwoAutoComplete"
+                              <input type="text" matInput placeholder="County (or equivalent)" aria-label="County" [matAutocomplete]="adminTwoAutoComplete"
                                 formControlName="administrative_level_two" required>
                               <mat-spinner *ngIf="adminLevelTwosLoading" [diameter]="20"></mat-spinner>
                               <mat-autocomplete #adminTwoAutoComplete="matAutocomplete" [displayWith]="displayFnAdminLevelTwo">
@@ -292,8 +294,8 @@
                             <!-- new experimental adminLevelTwo search select -->
                             <mat-form-field class="form-control">
                               <mat-spinner *ngIf="adminLevelTwosLoading" [diameter]="20"></mat-spinner>
-                              <mat-select formControlName="administrative_level_two" placeholder="County"
-                                #adminLevelTwoSelect>
+                              <mat-select formControlName="administrative_level_two" placeholder="County (or equivalent)"
+                                #adminLevelTwoSelect required>
                                 <ngx-mat-select-search [formControl]="adminLevelTwoFilterCtrl" [placeholderLabel]="'Find county...'"
                                   [noEntriesFoundLabel]="'no matching county found'"></ngx-mat-select-search>
                                 <mat-option *ngFor="let admin_level_two of filteredAdminLevelTwos[eventLocationIndex] | async"
@@ -384,7 +386,8 @@
 
                                     <!-- new experimental species search select -->
                                     <mat-form-field class="form-control">
-                                      <mat-select formControlName="species" placeholder="Species" #speciesSelect>
+                                      <mat-select formControlName="species" placeholder="Species" #speciesSelect
+                                        required>
                                         <ngx-mat-select-search [formControl]="speciesFilterCtrl" [placeholderLabel]="'Find species...'"
                                           [noEntriesFoundLabel]="'no matching species found'"></ngx-mat-select-search>
                                         <mat-option *ngFor="let species of filteredSpecies[eventLocationIndex][locationSpeciesIndex] | async"
@@ -392,8 +395,11 @@
                                           {{species.name}}
                                         </mat-option>
                                       </mat-select>
+                                      <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('species').hasError('required')">Species
+                                        selection is required</mat-error>
                                     </mat-form-field>
                                     <!-- end new experimental species search select -->
+
 
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count">
@@ -403,6 +409,8 @@
                                       </mat-hint>
                                       <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('dead_count').hasError('min')">Minimum
                                         value is 0</mat-error>
+                                      <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('dead_count').hasError('integer')">Must
+                                        be an integer (whole number)</mat-error>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control-w-help">
@@ -414,6 +422,8 @@
                                       </mat-hint>
                                       <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('dead_count_estimated').hasError('min')">Minimum
                                         value is 0</mat-error>
+                                      <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('dead_count_estimated').hasError('integer')">Must
+                                        be an integer (whole number)</mat-error>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control-w-help">
@@ -424,6 +434,8 @@
                                       </mat-hint>
                                       <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('sick_count').hasError('min')">Minimum
                                         value is 0</mat-error>
+                                      <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('sick_count').hasError('integer')">Must
+                                        be an integer (whole number)</mat-error>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control-w-help">
@@ -435,6 +447,8 @@
                                       </mat-hint>
                                       <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('sick_count_estimated').hasError('min')">Minimum
                                         value is 0</mat-error>
+                                      <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('sick_count_estimated').hasError('integer')">Must
+                                        be an integer (whole number)</mat-error>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-bias-control">
@@ -444,6 +458,8 @@
                                       </mat-hint>
                                       <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('population_count').hasError('min')">Minimum
                                         value is 0</mat-error>
+                                      <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('population_count').hasError('integer')">Must
+                                        be an integer (whole number)</mat-error>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-bias-control">
@@ -508,7 +524,9 @@
                                       <mat-card-content>
                                         <mat-list dense>
                                           <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
-                                            {{speciesDiagnosis.get('diagnosis').value | displayValue:'name':this.allDiagnoses}} {{speciesDiagnosis.get('suspect').value ? '(suspect)': '' }}
+                                            {{speciesDiagnosis.get('diagnosis').value |
+                                            displayValue:'name':this.allDiagnoses}}
+                                            {{speciesDiagnosis.get('suspect').value ? '(suspect)': '' }}
                                             <button mat-icon-button color="warn" aria-label="Remove this diagnosis"
                                               matTooltip="Remove this diagnosis" (click)="openSpeciesDiagnosisRemoveConfirm(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
                                               <mat-icon>remove_circle</mat-icon>
@@ -523,6 +541,14 @@
                               </div>
                             </div>
                           </div>
+
+                          <div class="submissionReviewErrors">
+                            <mat-error color="warn" *ngIf="this.eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_species').hasError('minSpecies')">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">Location must have at least one species.</span>
+                            </mat-error>
+                          </div>
+
                           <div class="button-row">
                             <button mat-button color="primary" matTooltip="Add species to this location" (click)="addLocationSpecies(eventLocationIndex)">
                               <mat-icon>add_circle</mat-icon> Add Species
@@ -560,6 +586,7 @@
                                   or dead wildlife, plus historical information about past events</strong>
                               </mat-hint>
                               <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+                              <!-- <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('history').hasError('minComment')">At least one comment field must have a value</mat-error> -->
                             </mat-form-field>
 
                             <mat-form-field class="comment-text-area">
@@ -575,6 +602,7 @@
                                   the area</strong>
                               </mat-hint>
                               <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+                              <!-- <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('site_description').hasError('minComment')">At least one comment field must have a value</mat-error> -->
                             </mat-form-field>
 
 
@@ -588,6 +616,7 @@
                                 </strong>
                               </mat-hint>
                               <mat-hint align="end">{{envFactors.value.length}} / 1000</mat-hint>
+                              <!-- <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('environmental_factors').hasError('minComment')">At least one comment field must have a value</mat-error> -->
                             </mat-form-field>
 
 
@@ -599,10 +628,8 @@
                                 <strong>any unusual behavior or physical appearance in the animals</strong>
                               </mat-hint>
                               <mat-hint align="end">{{clinicalSigns.value.length}} / 1000</mat-hint>
+                              <!-- <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('clinical_signs').hasError('minComment')">At least one comment field must have a value</mat-error> -->
                             </mat-form-field>
-
-                            <!-- <div formArrayName="comments">
-                              <div *ngFor="let comments of getLocationComments(eventLocation); let c = index"> -->
 
                             <mat-form-field class="comment-text-area">
                               <textarea matInput #generalComment maxlength="1000" rows="4" placeholder="Additonal Comment"
@@ -612,8 +639,14 @@
                               </mat-hint>
                               <mat-hint align="end">{{generalComment.value.length}} / 1000</mat-hint>
                             </mat-form-field>
-                            <!-- </div>
-                                  </div> -->
+
+                            <div class="submissionReviewErrors">
+                              <mat-error color="warn" *ngIf="checkEventLocationCommentMin(eventLocationIndex)">
+                                <mat-icon class="icon">error</mat-icon>
+                                <span class="alert-text">At least one comment field must have a value</span>
+                              </mat-error>
+                            </div>
+
                           </div>
 
                           <div class="form-nav-buttons">
@@ -689,7 +722,7 @@
                           <div class="add-content-button small">
                             <button mat-button color="primary" matTooltip="Add contact to this location" (click)="addLocationContact(eventLocationIndex)"
                               [disabled]="userContactsLoading">
-                              <span  *ngIf="!userContactsLoading">
+                              <span *ngIf="!userContactsLoading">
                                 <mat-icon>add_circle</mat-icon> Add Contact
                               </span>
                               <span *ngIf="userContactsLoading">
@@ -720,7 +753,7 @@
                             <b>Finished with Location {{eventLocationIndex+1}}</b>
                           </div>
 
-                          <div id="submissionReviewErrors">
+                          <div class="submissionReviewErrors">
                             <mat-error *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('country').invalid">
                               <mat-icon class="icon">error</mat-icon>
                               <span class="alert-text">Missing country selection.</span>
@@ -739,6 +772,21 @@
                             <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('land_ownership').invalid">
                               <mat-icon class="icon">error</mat-icon>
                               <span class="alert-text">Missing land ownership selection.</span>
+                            </mat-error>
+
+                            <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_species').hasError('minSpecies')">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">Location must have at least one species.</span>
+                            </mat-error>
+
+                            <mat-error color="warn" *ngIf="checkforMissingSpecies(eventLocationIndex)">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">Missing species selection.</span>
+                            </mat-error>
+
+                            <mat-error color="warn" *ngIf="checkEventLocationCommentMin(eventLocationIndex)">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">At least one comment field must have a value.</span>
                             </mat-error>
 
                             <!-- <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_contacts').invalid">
@@ -933,6 +981,11 @@
                   <!-- end Service request section -->
 
                   <mat-divider [inset]="true"></mat-divider>
+
+
+                  <div class="submissionReviewErrors">
+
+                  </div>
 
                   <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar "></mat-progress-bar>
                   <p>

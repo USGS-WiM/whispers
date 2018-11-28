@@ -179,6 +179,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   usgsSearch;
 
+  missingCommentFlag = false;
+
   filteredAdminLevelOnes = [];
   filteredAdminLevelTwos = [];
   filteredSpecies = [];
@@ -231,9 +233,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this.eventLocationArray = this.eventSubmissionForm.get('new_event_locations') as FormArray;
 
     this.filteredAdminLevelOnes = new Array<ReplaySubject<AdministrativeLevelOne[]>>();
-    this.filteredAdminLevelOnes.push(new ReplaySubject<AdministrativeLevelOne[]>());
-    this.ManageAdminLevelOneControl(0);
-
     this.filteredAdminLevelOnes.push(new ReplaySubject<AdministrativeLevelOne[]>());
     this.ManageAdminLevelOneControl(0);
 
@@ -1012,7 +1011,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   startDateTodayorEarlierMortalityEvent(AC: AbstractControl) {
-
     const start_date = AC.get('start_date').value;
     const event_type = AC.get('event_type').value;
     const today = APP_UTILITIES.TODAY;
@@ -1022,6 +1020,48 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       }
     }
     return null;
+  }
+
+  minSpecies(AC: AbstractControl) {
+    const locationSpeciesLength = AC.get('new_location_species')['controls'].length;
+    if (locationSpeciesLength < 1) {
+      AC.get('new_location_species').setErrors({ minSpecies: true });
+    }
+    return null;
+  }
+
+  checkforMissingSpecies(eventLocationIndex) {
+
+    // tslint:disable-next-line:max-line-length
+    const locationspecies = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
+    let speciesSelectionMissing = false;
+    for (let i = 0, j = locationspecies.length; i < j; i++) {
+      // tslint:disable-next-line:max-line-length
+      if (this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][i].get('species').value === null) {
+        speciesSelectionMissing = true;
+      }
+    }
+    if (speciesSelectionMissing) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkEventLocationCommentMin(eventLocationIndex) {
+
+    // tslint:disable-next-line:max-line-length
+    const siteDesciptionCommentLength = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('site_description').value.length;
+    const historyCommentLength = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('history').value.length;
+    // tslint:disable-next-line:max-line-length
+    const envFactorsCommentLength = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('environmental_factors').value.length;
+    const clinicalSignsCommentLength = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('clinical_signs').value.length;
+    // tslint:disable-next-line:max-line-length
+    const generalCommentLength = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('comment').value.length;
+    if ((siteDesciptionCommentLength === 0) && (historyCommentLength === 0) && (envFactorsCommentLength === 0) && (clinicalSignsCommentLength === 0) && (generalCommentLength === 0)) {
+      return true;
+    }
+    return false;
   }
 
   initEventLocation() {
@@ -1052,9 +1092,34 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       ])
     },
       {
-        validator: [this.endDateBeforeStart, this.startDateTodayorEarlierMortalityEvent]
+        validator: [this.endDateBeforeStart, this.startDateTodayorEarlierMortalityEvent, this.minSpecies]
       }
     );
+  }
+
+  integer(AC: AbstractControl) {
+
+    const population_count = AC.get('population_count').value;
+    const sick_count = AC.get('sick_count').value;
+    const dead_count = AC.get('dead_count').value;
+    const sick_count_estimated = AC.get('sick_count_estimated').value;
+    const dead_count_estimated = AC.get('dead_count_estimated').value;
+    if (!Number.isInteger(population_count) && population_count !== null) {
+      AC.get('population_count').setErrors({ integer: true });
+    }
+    if (!Number.isInteger(sick_count) && sick_count !== null) {
+      AC.get('sick_count').setErrors({ integer: true });
+    }
+    if (!Number.isInteger(dead_count) && dead_count !== null) {
+      AC.get('dead_count').setErrors({ integer: true });
+    }
+    if (!Number.isInteger(sick_count_estimated) && sick_count_estimated !== null) {
+      AC.get('sick_count_estimated').setErrors({ integer: true });
+    }
+    if (!Number.isInteger(dead_count_estimated) && dead_count_estimated !== null) {
+      AC.get('dead_count_estimated').setErrors({ integer: true });
+    }
+    return null;
   }
 
   initLocationSpecies() {
@@ -1070,7 +1135,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       age_bias: null,
       sex_bias: null,
       new_species_diagnoses: this.formBuilder.array([])
-    });
+    },
+      {
+        validator: [this.integer]
+      });
   }
 
   initSpeciesDiagnosis() {
@@ -1129,6 +1197,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.filteredAdminLevelOnes.push(new ReplaySubject<AdministrativeLevelOne[]>());
     this.ManageAdminLevelOneControl(newEventLocationIndex);
+
+    // need to update the adminLevelOne options per the default county value
+    this.updateAdminLevelOneOptions(APP_UTILITIES.DEFAULT_COUNTRY_ID, eventLocationIndex);
 
     this.filteredAdminLevelTwos.push(new ReplaySubject<AdministrativeLevelTwo[]>());
     this.ManageAdminLevelTwoControl(newEventLocationIndex);
@@ -1525,6 +1596,20 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   resetStepper() {
     this.eventSubmissionForm.reset();
     this.eventSubmissionForm.get('new_event_locations')['controls'][0].get('country').setValue(APP_UTILITIES.DEFAULT_COUNTRY_ID);
+    // need to update the adminLevelOne options per the default county value
+    this.updateAdminLevelOneOptions(APP_UTILITIES.DEFAULT_COUNTRY_ID, 0);
+    // reset default form values
+    this.eventSubmissionForm.patchValue({
+      event_reference: '',
+      complete: false,
+      public: true,
+      // NWHC only
+      staff: null,
+      event_status: '1',
+      quality_check: { value: null, disabled: true },
+      legal_status: '1',
+      legal_number: ''
+    });
     this.eventSubmissionForm.markAsUntouched();
     this.eventSubmissionForm.markAsPristine();
     this.stepper.selectedIndex = 0;

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import { Subject, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -62,7 +62,36 @@ export class EditLocationSpeciesComponent implements OnInit {
       captive: false,
       age_bias: null,
       sex_bias: null
-    });
+    },
+      {
+        validator: [this.integer]
+      }
+    );
+  }
+
+  integer(AC: AbstractControl) {
+
+    const population_count = AC.get('population_count').value;
+    const sick_count = AC.get('sick_count').value;
+    const dead_count = AC.get('dead_count').value;
+    const sick_count_estimated = AC.get('sick_count_estimated').value;
+    const dead_count_estimated = AC.get('dead_count_estimated').value;
+    if (!Number.isInteger(population_count) && population_count !== null ) {
+      AC.get('population_count').setErrors({ integer: true });
+    }
+    if (!Number.isInteger(sick_count) && sick_count !== null) {
+      AC.get('sick_count').setErrors({ integer: true });
+    }
+    if (!Number.isInteger(dead_count) && dead_count !== null) {
+      AC.get('dead_count').setErrors({ integer: true });
+    }
+    if (!Number.isInteger(sick_count_estimated) && sick_count_estimated !== null) {
+      AC.get('sick_count_estimated').setErrors({ integer: true });
+    }
+    if (!Number.isInteger(dead_count_estimated) && dead_count_estimated !== null) {
+      AC.get('dead_count_estimated').setErrors({ integer: true });
+    }
+    return null;
   }
 
   constructor(

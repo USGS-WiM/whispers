@@ -403,7 +403,36 @@ export class AddEventLocationComponent implements OnInit {
       captive: false,
       age_bias: null,
       sex_bias: null
-    });
+    },
+      {
+        validator: [this.integer]
+      }
+    );
+  }
+
+  integer(AC: AbstractControl) {
+
+    const population_count = AC.get('population_count').value;
+    const sick_count = AC.get('sick_count').value;
+    const dead_count = AC.get('dead_count').value;
+    const sick_count_estimated = AC.get('sick_count_estimated').value;
+    const dead_count_estimated = AC.get('dead_count_estimated').value;
+    if (!Number.isInteger(population_count) && population_count !== null ) {
+      AC.get('population_count').setErrors({ integer: true });
+    }
+    if (!Number.isInteger(sick_count) && sick_count !== null) {
+      AC.get('sick_count').setErrors({ integer: true });
+    }
+    if (!Number.isInteger(dead_count) && dead_count !== null) {
+      AC.get('dead_count').setErrors({ integer: true });
+    }
+    if (!Number.isInteger(sick_count_estimated) && sick_count_estimated !== null) {
+      AC.get('sick_count_estimated').setErrors({ integer: true });
+    }
+    if (!Number.isInteger(dead_count_estimated) && dead_count_estimated !== null) {
+      AC.get('dead_count_estimated').setErrors({ integer: true });
+    }
+    return null;
   }
 
   initLocationContacts() {

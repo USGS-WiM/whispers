@@ -207,7 +207,6 @@
               or dead wildlife, plus historical information about past events</strong>
           </mat-hint>
           <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
-          <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('history').hasError('minComment')">At least one comment field must have a value</mat-error>
         </mat-form-field>
 
         <mat-form-field class="comment-text-area">

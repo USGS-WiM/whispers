@@ -1064,6 +1064,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     return false;
   }
 
+  checkLocationSpeciesNumbers() {
+
+   // get length of eventlocation array
+   // loop through all event location
+  }
+
   initEventLocation() {
     return this.formBuilder.group({
       name: '',
@@ -1557,7 +1563,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
               if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
 
                 let diagnosisFound = false;
-                let increment = false;
                 // check to see if the diagnosis just added already exists in the availableDiagnoses array
                 for (const availableDiagnosis of this.availableDiagnoses) {
                   if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
@@ -1571,10 +1576,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 // if diagnosis is not found to already exist in the availableDiagnoses array, add it
                 if (!diagnosisFound) {
-                  // if the species diagnosis is suspect == true, add that to the availableDiagnosis selection object (for display only)
-                  // if (speciesDiagnosisObj.formValue.suspect) {
-                  //   diagnosis.suspect = true;
-                  // }
                   diagnosis.suspect = speciesDiagnosisObj.formValue.suspect;
                   // set diagnosis count to 1
                   diagnosis.count = 1;

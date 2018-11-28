@@ -42,11 +42,27 @@ export class UserService {
 
   }
 
+  public createNew(formValue): Observable<User> {
+
+    // add message(?)
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_JSON_HEADERS
+    });
+
+    return this._http.post(APP_SETTINGS.USERS_URL, formValue, options)
+      .map((response: Response) => <any>response.json())
+      .catch(this.handleError);
+  }
+
   public requestNew(formValue): Observable<User> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.MIN_AUTH_TEXT_HEADERS
     });
+
+    // const options = new RequestOptions({
+    //   headers: APP_SETTINGS.MIN_JSON_HEADERS
+    // });
 
     return this._http.post(APP_SETTINGS.USERS_URL + 'request_new/', formValue, options)
       .map((response: Response) => <any>response.json())

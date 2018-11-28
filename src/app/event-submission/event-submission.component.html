@@ -547,6 +547,14 @@
                               <mat-icon class="icon">error</mat-icon>
                               <span class="alert-text">Location must have at least one species.</span>
                             </mat-error>
+
+                            <mat-error color="warn" *ngIf="checkLocationSpeciesNumbers(eventLocationIndex)">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">For morbidity/mortality events, there must be at least one value
+                                between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for at least one species
+                                in the event at the time of event initiation. (sick + dead + estimated_sick +
+                                estimated_dead >= 1)</span>
+                            </mat-error>
                           </div>
 
                           <div class="button-row">

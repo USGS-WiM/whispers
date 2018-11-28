@@ -142,8 +142,16 @@ export class UserRegistrationComponent implements OnInit {
     // delete the confirm fields for the actual submission
     delete formValue.confirmEmail;
     delete formValue.confirmPassword;
+    delete formValue.terms;
 
-    this.userService.requestNew(formValue)
+    if (this.data.registration_type === 'partner') {
+      formValue.message = 'Requested role: ' + formValue.role + '. Comment: ' + formValue.request_comment;
+    }
+
+    formValue.role = 7;
+    delete formValue.request_comment;
+
+    this.userService.createNew(formValue)
       .subscribe(
         (event) => {
           this.submitLoading = false;

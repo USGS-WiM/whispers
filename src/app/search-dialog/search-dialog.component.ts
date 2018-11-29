@@ -329,11 +329,11 @@ export class SearchDialogComponent implements OnInit {
             .map(val => this.filter(val, this.species, 'name'));
 
           if (this.data.query && this.data.query['species'] && this.data.query['species'].length > 0) {
-            for (const index in species) {
+            /*for (const index in species) {
               if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
                 this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
               }
-            }
+            }*/
             for (const index in species) {
               if (this.data.query['species'].some(
                 function (el) {

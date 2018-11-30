@@ -86,6 +86,7 @@ export class SearchDialogComponent implements OnInit {
 
   adminLevelTwosLoading = false;
   diagnosesLoading = false;
+  speciesLoading = true;
 
   endDateBeforeStart(AC: AbstractControl) {
     const start_date = AC.get('start_date').value;
@@ -143,7 +144,7 @@ export class SearchDialogComponent implements OnInit {
     this.diagnosisControl = new FormControl();
     this.adminLevelOneControl = new FormControl();
     this.adminLevelTwoControl = new FormControl();
-    this.speciesControl = new FormControl();
+    this.speciesControl = new FormControl({value: null, disabled: true});
 
     this.buildSearchForm();
   }
@@ -353,6 +354,8 @@ export class SearchDialogComponent implements OnInit {
               }
             }
           }
+          this.speciesLoading = false;
+          this.speciesControl.enable();
         },
         error => {
           this.errorMessage = <any>error;

@@ -177,8 +177,9 @@
         <div>
           <div class="autocomplete-input">
             <mat-form-field class="full-width">
-              <input type="text" matInput placeholder="Add Species" aria-label="Add Species" [matAutocomplete]="speciesAutoComplete"
-                [formControl]="speciesControl">
+              <input id="speciesInput" type="text" matInput placeholder="Add Species" aria-label="Add Species" [matAutocomplete]="speciesAutoComplete"
+                [formControl]="speciesControl" disabled>
+              <mat-spinner *ngIf="speciesLoading" [diameter]="20"></mat-spinner>
               <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedSpecies, 'species')">
                 <mat-option *ngFor="let species of filteredSpecies | async" [value]="species">
                   <span>{{ species.name }}</span>

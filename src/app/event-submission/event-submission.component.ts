@@ -1648,6 +1648,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
           this.confirmDialogRef = this.dialog.open(ConfirmComponent,
             {
+              disableClose: true,
               data: {
                 title: 'Event Saved',
                 titleIcon: 'check',

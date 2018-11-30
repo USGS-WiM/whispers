@@ -19,7 +19,7 @@ export class AgeBiasService {
   public getAgeBiases(): Observable<AgeBias[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.MIN_JSON_HEADERS
     });
 
     return this._http.get(APP_SETTINGS.AGE_BIASES_URL + '?no_page', options)

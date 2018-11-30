@@ -85,15 +85,15 @@
                   <tr>
                     <th>Organization</th>
                     <th>Address</th>
-                    <th>Phone</th>
+                    <th *ngIf="currentUser.role != 7 && currentUser.role != undefined">Phone</th>
                   </tr>
 
                   <tr *ngFor="let eventOrganization of eventData.eventorganizations">
                     <td>{{eventOrganization.name}}</td>
-                    <td>{{eventOrganization.address_one}} {{eventOrganization.address_two}} <span *ngIf="eventOrganization.address_one !== '' ||  eventOrganization.address_two !== ''">,</span>
+                    <td><span *ngIf="currentUser.role != 7 && currentUser.role != undefined">{{eventOrganization.address_one}} {{eventOrganization.address_two}} <span *ngIf="eventOrganization.address_one !== '' ||  eventOrganization.address_two !== ''">,</span></span>
                       {{eventOrganization.city}} {{eventOrganization.administrative_level_one |
-                      displayValue:'abbreviation':this.administrative_level_one }} {{eventOrganization.postal_code}}</td>
-                    <td>{{eventOrganization.phone}}</td>
+                      displayValue:'abbreviation':this.administrative_level_one }}  {{eventOrganization.postal_code}}</td>
+                    <td *ngIf="currentUser.role != 7 && currentUser.role != undefined">{{(eventOrganization.phone) ? eventOrganization.phone : 'n/a'}}</td>
                   </tr>
                 </table>
               </div>
@@ -286,15 +286,15 @@
                 <table id="speciesList">
                   <tr>
                     <th>Event Diagnosis</th>
-                    <th>Diagnosis Type</th>
-                    <th>Suspect</th>
+                    <!--<th>Diagnosis Type</th>
+                    <th>Suspect</th>-->
                     <th>Delete</th>
                   </tr>
 
                   <tr *ngFor="let eventdiagnosis of eventData.eventdiagnoses">
                     <td>{{eventdiagnosis.diagnosis_string}}</td>
-                    <td>{{eventdiagnosis.diagnosis_type_string}}</td>
-                    <td>{{eventdiagnosis.suspect ? 'Yes' : 'No'}}</td>
+                    <!--<td>{{eventdiagnosis.diagnosis_type_string}}</td>
+                    <td>{{eventdiagnosis.suspect ? 'Yes' : 'No'}}</td>-->
                     <td>
                       <button mat-icon-button aria-label="delete event diagnosis" color="warn" [disabled]="!eventData.permissions.destroy"
                         (click)="openEventDiagnosisDeleteConfirm(eventdiagnosis.id)">

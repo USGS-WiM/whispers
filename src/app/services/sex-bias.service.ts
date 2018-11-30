@@ -20,7 +20,7 @@ export class SexBiasService {
   public getSexBiases(): Observable<SexBias[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.MIN_JSON_HEADERS
     });
 
     return this._http.get(APP_SETTINGS.SEX_BIASES_URL + '?no_page', options)

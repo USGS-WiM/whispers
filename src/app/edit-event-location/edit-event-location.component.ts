@@ -20,6 +20,7 @@ import { DataUpdatedService } from '@app/services/data-updated.service';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
 import { APP_UTILITIES } from '@app/app.utilities';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -78,6 +79,7 @@ export class EditEventLocationComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
+    private datePipe: DatePipe,
     private eventLocationService: EventLocationService,
     private landOwnershipService: LandOwnershipService,
     private countryService: CountryService,
@@ -223,6 +225,9 @@ export class EditEventLocationComponent implements OnInit {
     if (formValue.longitude === '') {
       formValue.longitude = null;
     }
+
+    formValue.start_date = this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd');
+    formValue.end_date = this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd');
 
     this.eventLocationService.update(formValue)
       .subscribe(

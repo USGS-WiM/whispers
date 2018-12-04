@@ -795,17 +795,28 @@ export class HomeComponent implements OnInit {
         .bindPopup(popup)
         .on('popupopen', function (popup) {
 
-          const acc = document.getElementsByClassName('accordion');
+          let acc = document.querySelectorAll('button.accordion');
           let i;
 
-          for (i = 0; i < acc.length; i++) {
-            acc[i].addEventListener('click', function () {
+          acc.forEach(function(button, i) {
+            acc[i].addEventListener('click', function (evt) {
               this.classList.toggle("active");
               const panel = this.nextElementSibling;
               if (panel.style.maxHeight) {
                 panel.style.maxHeight = null;
               } else {
                 panel.style.maxHeight = panel.scrollHeight + 'px';
+              }
+              //let acc = document.getElementsByClassName('accordion');
+              let j;
+              for (j = 0; j < acc.length; j++) {
+                if (i != j) {
+                  const panel:HTMLElement = acc[j].nextElementSibling as HTMLElement;
+                  if (panel.style.maxHeight) {
+                    acc[j].classList.toggle("active");
+                    panel.style.maxHeight = null;
+                  }
+                }
               }
             });
           }

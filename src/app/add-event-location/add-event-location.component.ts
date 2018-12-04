@@ -383,6 +383,8 @@ export class AddEventLocationComponent implements OnInit {
   }
 
   endDateBeforeStart(AC: AbstractControl) {
+    AC.get('end_date').setErrors(null);
+    AC.get('start_date').setErrors(null);
     const start_date = AC.get('start_date').value;
     const end_date = AC.get('end_date').value;
     if ((start_date !== null && end_date !== null) && start_date > end_date) {
@@ -508,6 +510,8 @@ export class AddEventLocationComponent implements OnInit {
 
     // query the adminlevelones endpoint for appropriate records
     // update the options for the adminLevelOne select with the response
+
+    this.addEventLocationForm.get('administrative_level_one').setValue(null);
 
     this.adminLevelOneService.queryAdminLevelOnes(id)
       .subscribe(

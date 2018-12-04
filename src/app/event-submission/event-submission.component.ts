@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy, OnChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import { DatePipe } from '@angular/common';
@@ -181,6 +181,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   missingCommentFlag = false;
 
+  locationSpeciesNumbersViolation = false;
+
   filteredAdminLevelOnes = [];
   filteredAdminLevelTwos = [];
   filteredSpecies = [];
@@ -335,6 +337,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this._onDestroy.next();
     this._onDestroy.complete();
   }
+
+  // ngOnChanges() {
+
+  //   this.checkLocationSpeciesNumbers();
+
+  // }
 
   openEventSubmitConfirm(formValue): void {
     this.bottomSheet.open(EventSubmissionConfirmComponent, {
@@ -601,6 +609,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   ngOnInit() {
 
+    this.onFormChanges();
+
     // get event types from the EventTypeService
     this.eventTypeService.getEventTypes()
       .subscribe(
@@ -842,6 +852,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   }
 
+  onFormChanges(): void {
+    this.eventSubmissionForm.valueChanges.subscribe(() => {
+      this.checkLocationSpeciesNumbers();
+    });
+  }
+
   getErrorMessage(formControlName) {
 
     return this.eventSubmissionForm.get(formControlName).hasError('required') ? 'Please enter a value' :
@@ -1002,6 +1018,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   endDateBeforeStart(AC: AbstractControl) {
+    AC.get('end_date').setErrors(null);
+    AC.get('start_date').setErrors(null);
     const start_date = AC.get('start_date').value;
     const end_date = AC.get('end_date').value;
     if ((start_date !== null && end_date !== null) && start_date > end_date) {
@@ -1065,9 +1083,42 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   checkLocationSpeciesNumbers() {
+    this.locationSpeciesNumbersViolation = false;
 
-   // get length of eventlocation array
-   // loop through all event location
+    // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
+    if (this.eventSubmissionForm.get('event_type').value === 1 || this.eventSubmissionForm.get('event_type').value === '1') {
+      // set var to capture of requirement is met at any of the event locations
+      let requirementMet = false;
+      const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+      // tslint:disable-next-line:max-line-length
+      for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
+        const locationspecies = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
+        // loop through each new_location_species array, set requirementMet true if any species has the number requirement.
+        // if even one meets the criteria, the event is valid for submission.
+        // tslint:disable-next-line:max-line-length
+        for (let locationspeciesindex = 0, locationspecieslength = locationspecies.length; locationspeciesindex < locationspecieslength; locationspeciesindex++) {
+          const locationspeciesform = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex];
+          if (
+            (
+              locationspeciesform.get('sick_count').value +
+              locationspeciesform.get('dead_count').value +
+              locationspeciesform.get('sick_count_estimated').value +
+              locationspeciesform.get('dead_count_estimated').value
+            ) >= 1
+          ) {
+            requirementMet = true;
+          }
+
+        }
+      }
+
+      if (requirementMet) {
+        this.locationSpeciesNumbersViolation = false;
+      } else {
+        this.locationSpeciesNumbersViolation = true;
+
+      }
+    }
   }
 
   initEventLocation() {
@@ -1429,6 +1480,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     for (let i = 0, j = eventLocations.length; i < j; i++) {
       this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('event_type').setValue(Number(eventTypeID));
     }
+
+    this.checkLocationSpeciesNumbers();
   }
 
   updateAdminLevelOneOptions(selectedCountryID, eventLocationIndex) {

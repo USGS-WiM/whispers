@@ -20,7 +20,7 @@
       <!-- end new experimental contact search select -->
 
       <mat-form-field class="form-control  contact-type-select">
-        <mat-select placeholder="Contact Type" formControlName="contact_type" required>
+        <mat-select placeholder="Contact Type" formControlName="contact_type">
           <mat-option *ngFor="let contactType of contactTypes" [value]="contactType.id">{{contactType.name}}</mat-option>
         </mat-select>
       </mat-form-field>

@@ -47,10 +47,13 @@ export class EditEventLocationComponent implements OnInit {
   longitudePattern: RegExp = (/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/);
 
   endDateBeforeStart(AC: AbstractControl) {
+    AC.get('end_date').setErrors(null);
+    AC.get('start_date').setErrors(null);
     const start_date = AC.get('start_date').value;
     const end_date = AC.get('end_date').value;
     if ((start_date !== null && end_date !== null) && start_date > end_date) {
       AC.get('end_date').setErrors({ endDateBeforeStart: true });
+      AC.get('start_date').setErrors({ endDateBeforeStart: true });
     }
     return null;
   }
@@ -153,8 +156,8 @@ export class EditEventLocationComponent implements OnInit {
       id: this.data.eventLocationData.id,
       name: this.data.eventLocationData.name,
       event: this.data.eventLocationData.event,
-      start_date: this.data.eventLocationData.start_date,
-      end_date: this.data.eventLocationData.end_date,
+      start_date: APP_UTILITIES.timeZoneAdjust(this.data.eventLocationData.start_date),
+      end_date: APP_UTILITIES.timeZoneAdjust(this.data.eventLocationData.end_date),
       country: this.data.eventLocationData.country.toString(),
       administrative_level_one: this.data.eventLocationData.administrative_level_one.toString(),
       administrative_level_two: this.data.eventLocationData.administrative_level_two.toString(),
@@ -179,6 +182,8 @@ export class EditEventLocationComponent implements OnInit {
   updateAdminLevelOneOptions(selectedCountryID) {
     const id = Number(selectedCountryID);
 
+    this.editEventLocationForm.get('administrative_level_one').setValue(null);
+
     // query the adminlevelones endpoint for appropriate records
     // update the options for the adminLevelOne select with the response
 
@@ -199,6 +204,8 @@ export class EditEventLocationComponent implements OnInit {
 
     // query the adminleveltwos endpoint for appropriate records
     // update the options for the adminLevelTwo select with the response
+
+    this.editEventLocationForm.get('administrative_level_two').setValue(null);
 
     this.adminLevelTwoService.queryAdminLevelTwos(id)
       .subscribe(

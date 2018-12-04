@@ -9,21 +9,9 @@
       {{administrative_level_one}}</b></h3>
 
   <form [formGroup]="locationSpeciesForm" autocomplete="off">
-    <div class="vertical-form-container">
+    <div class="horizontal-form-container">
 
-      <!-- Species autocomplete control -->
-      <!-- <mat-form-field class="form-control"  *ngIf="data.location_species_action !== 'edit'">
-        <input type="text" matInput placeholder="Species" aria-label="Species" [matAutocomplete]="speciesAutoComplete"
-          formControlName="species">
-        <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn">
-          <mat-option *ngFor="let species of filteredSpecies | async" [value]="species.id">
-            <span>{{ species.name }}</span>
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field> -->
-
-      <!-- new experimental species search select -->
-      <mat-form-field class="form-control">
+      <mat-form-field class="form-control" *ngIf="data.location_species_action !== 'edit'">
         <mat-select formControlName="species" placeholder="Species" #speciesSelect>
           <ngx-mat-select-search [formControl]="speciesFilterCtrl" [placeholderLabel]="'Find species...'"
             [noEntriesFoundLabel]="'no matching species found'"></ngx-mat-select-search>
@@ -32,9 +20,6 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <!-- end new experimental species search select -->
-
-      <br />
 
       <mat-form-field class="species-number-control">
         <input matInput placeholder="Population" type="number" min="0" formControlName="population_count">
@@ -46,8 +31,6 @@
           (whole number)</mat-error>
       </mat-form-field>
 
-      <br />
-
       <mat-form-field class="species-number-control">
         <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count">
         <mat-hint align="end" matTooltip="Public field">
@@ -57,8 +40,6 @@
         <mat-error *ngIf="this.locationSpeciesForm.get('dead_count').hasError('integer')">Must be an integer (whole
           number)</mat-error>
       </mat-form-field>
-
-      <br />
 
       <mat-form-field class="species-number-control">
         <input matInput placeholder="Estimated Dead" type="number" min="0" formControlName="dead_count_estimated">
@@ -70,8 +51,6 @@
           (whole number)</mat-error>
       </mat-form-field>
 
-      <br />
-
       <mat-form-field class="species-number-control">
         <input matInput placeholder="Known Sick" type="number" min="0" min="0" formControlName="sick_count">
         <mat-hint align="end" matTooltip="Public field">
@@ -82,8 +61,6 @@
           number)</mat-error>
       </mat-form-field>
 
-      <br />
-
       <mat-form-field class="species-number-control">
         <input matInput placeholder="Estimated Sick" type="number" min="0" formControlName="sick_count_estimated">
         <mat-hint align="end" matTooltip="Public field">
@@ -93,8 +70,39 @@
         <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('integer')">Must be an integer
           (whole number)</mat-error>
       </mat-form-field>
-
     </div>
+
+    <div class="horizontal-form-container">
+      <mat-form-field class="species-bias-control">
+        <mat-select placeholder="Age Bias" formControlName="age_bias">
+          <mat-option *ngFor="let ageBias of ageBiases" value="{{ageBias.id}}">{{ageBias.name}}</mat-option>
+        </mat-select>
+        <mat-hint align="end" matTooltip="Public field">
+          <mat-icon>public</mat-icon>
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field class="species-bias-control">
+        <mat-select placeholder="Sex Bias" formControlName="sex_bias">
+          <mat-option *ngFor="let sexBias of sexBiases" value="{{sexBias.id}}">{{sexBias.name}}</mat-option>
+        </mat-select>
+        <mat-hint align="end" matTooltip="Public field">
+          <mat-icon>public</mat-icon>
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field class="form-control">
+        <mat-select placeholder="Captive" formControlName="captive">
+          <mat-option [value]="true">Captive > 72 hours</mat-option>
+          <mat-option [value]="false">Wild and/or free-ranging</mat-option>
+        </mat-select>
+        <mat-hint align="end" matTooltip="Public field">
+          <mat-icon>public</mat-icon>
+        </mat-hint>
+      </mat-form-field>
+    </div>
+
+
 
   </form>
 </mat-dialog-content>
@@ -104,7 +112,7 @@
     <mat-icon>cancel</mat-icon>&nbsp;Cancel
   </button>
   <button mat-button color="primary" type="submit" [disabled]="locationSpeciesForm.invalid" (click)="onSubmit(locationSpeciesForm.value)">
-    <mat-icon>send</mat-icon>{{action_button_text}}
+    <mat-icon>send</mat-icon> {{action_button_text}}
   </button>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

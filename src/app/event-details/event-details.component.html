@@ -72,6 +72,12 @@
                         <span> thru </span>
                         <span>{{eventLocation.end_date | date:'mediumDate'}}</span></span></td>
                   </tr>
+                  <tr>
+                    <th>WHISPers Record Status</th>
+                    <td><span>{{eventData.event_status_string}}</span></td>
+                  </tr>
+                  
+
                 </table>
               </div>
 
@@ -84,16 +90,13 @@
                 <table id="speciesList">
                   <tr>
                     <th>Organization</th>
-                    <th>Address</th>
-                    <th *ngIf="currentUser.role != 7 && currentUser.role != undefined">Phone</th>
+                    <th>Location</th>
                   </tr>
 
                   <tr *ngFor="let eventOrganization of eventData.eventorganizations">
                     <td>{{eventOrganization.name}}</td>
-                    <td><span *ngIf="currentUser.role != 7 && currentUser.role != undefined">{{eventOrganization.address_one}} {{eventOrganization.address_two}} <span *ngIf="eventOrganization.address_one !== '' ||  eventOrganization.address_two !== ''">,</span></span>
-                      {{eventOrganization.city}} {{eventOrganization.administrative_level_one |
-                      displayValue:'abbreviation':this.administrative_level_one }}  {{eventOrganization.postal_code}}</td>
-                    <td *ngIf="currentUser.role != 7 && currentUser.role != undefined">{{(eventOrganization.phone) ? eventOrganization.phone : 'n/a'}}</td>
+                    <td> {{eventOrganization.city}} {{eventOrganization.administrative_level_one |
+                      displayValue:'abbreviation':this.administrative_level_one }} </td>
                   </tr>
                 </table>
               </div>
@@ -147,7 +150,7 @@
                           <span class="text-bold" *ngIf="speciesdiagnosis">{{speciesdiagnosis.diagnosis_string}}</span>
                           <br />
                           <span *ngIf="speciesdiagnosis.tested_count !== null">{{speciesdiagnosis.tested_count}}
-                            specimens tested |</span>
+                            specimens tested </span> <span *ngIf="speciesdiagnosis.tested_count !== null && speciesdiagnosis.positive_count !== null">|</span>
                           <span *ngIf="speciesdiagnosis.positive_count !== null">{{speciesdiagnosis.positive_count}}
                             positive</span>
                           <br>
@@ -199,6 +202,11 @@
                 <div class="permission red" *ngIf="eventData.permissions.destroy === true">Delete</div>
               </div>
             </div>
+
+            <div class="public">
+              <span>This event is </span><span *ngIf="eventData.public === true" class="public-status green">Public</span><span
+                *ngIf="eventData.public !== true" class="public-status red">Not Public</span>
+            </div>
           </div>
 
           <!-- Meta - event details for privileged users -->
@@ -220,7 +228,7 @@
                 <div class="value">{{eventData.event_reference || " "}}</div>
               </div>
               <div class="item">
-                <div class="label">Event Status</div>
+                <div class="label">Process Status</div>
                 <div class="value">{{eventData.event_status_string || " "}}</div>
               </div>
               <div class="item">
@@ -233,7 +241,7 @@
               </div>
               <div class="item">
                 <div class="label">Staff</div>
-                <div class="value">{{eventData.staff || " "}}</div>
+                <div class="value">{{eventData.staff_string}}</div>
               </div>
               <div class="item">
                 <div class="label">Quality Check</div>
@@ -351,7 +359,8 @@
                       <span class="type">
                         <b>{{comment.comment_type | displayValue:'name':this.commentTypes}}</b>
                       </span>
-                      <span class="date">{{comment.created_date | date:'shortDate' }}</span><span class="identifier">{{comment.created_by_first_name}} {{comment.created_by_last_name}} | {{comment.created_by_organization_string}}</span>
+                      <span class="date">{{comment.created_date | date:'shortDate' }}</span><span class="identifier">{{comment.created_by_first_name}}
+                        {{comment.created_by_last_name}} | {{comment.created_by_organization_string}}</span>
                       <button mat-icon-button aria-label="delete event comment" color="warn" [disabled]="!eventData.permissions.destroy"
                         (click)="openEventCommentDeleteConfirm(comment.id)">
                         Delete
@@ -486,9 +495,9 @@
                       <div class="value">{{eventLocation.gnis_id}}</div>
                     </div>
                     <div class="item">
-                        <div class="label">Flyways</div>
-                        <div class="value"><span *ngFor="let flyway of eventLocation.flyways">{{flyway}}</span></div>
-                      </div>
+                      <div class="label">Flyways</div>
+                      <div class="value"><span *ngFor="let flyway of eventLocation.flyways">{{flyway.name}}</span></div>
+                    </div>
                     <div class="item">
                       <div class="label">Latitude</div>
                       <div class="value">{{eventLocation.latitude}}</div>
@@ -535,7 +544,8 @@
                           <span class="type">
                             <b>{{comment.comment_type | displayValue:'name':this.commentTypes}}</b>
                           </span>
-                          <span class="date">{{comment.created_date | date:'shortDate' }}</span><span class="identifier">{{comment.created_by_first_name}} {{comment.created_by_last_name}} | {{comment.created_by_organization_string}}</span>
+                          <span class="date">{{comment.created_date | date:'shortDate' }}</span><span class="identifier">{{comment.created_by_first_name}}
+                            {{comment.created_by_last_name}} | {{comment.created_by_organization_string}}</span>
                           <button mat-icon-button aria-label="delete event comment" color="warn" [disabled]="!eventData.permissions.destroy"
                             (click)="openEventLocationCommentDeleteConfirm(comment.id)">
                             Delete
@@ -651,7 +661,8 @@
 
                   <div *ngIf="eventLocation.locationspecies" class="event-table-header">Species at this location</div>
 
-                  <app-location-species-table [locationspecies]="eventLocation.locationspecies" [permissions]="eventData.permissions" [ageBiases]="ageBiases" [sexBiases]="sexBiases"></app-location-species-table>
+                  <app-location-species-table [locationspecies]="eventLocation.locationspecies" [permissions]="eventData.permissions"
+                    [ageBiases]="ageBiases" [sexBiases]="sexBiases"></app-location-species-table>
 
                   <div class="detail-section-buttons">
                     <span *ngIf="speciesLoading" class="event-group-no-data">
@@ -946,8 +957,9 @@
               <label class="legend-label">Land Use</label>
 
               <div class='legend-icon'>
-                <a href="https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer/legend" target="_blank">Land Use legend (link)</a>
-                
+                <a href="https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer/legend"
+                  target="_blank">Land Use legend (link)</a>
+
               </div>
             </div>
 

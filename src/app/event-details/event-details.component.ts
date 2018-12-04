@@ -219,15 +219,15 @@ export class EventDetailsComponent implements OnInit {
             // this.speciesTableRows = this.eventLocationSpecies;
 
             // TODO: lookup user for created_by
-            // this.userService.getUserDetail(eventdetails.created_by)
-            //   .subscribe(
-            //     (userDetail) => {
-            //       this.eventOwner = userDetail;
-            //     },
-            //     error => {
-            //       this.errorMessage = <any>error;
-            //     }
-            //   );
+            this.userService.getUserDetail(eventdetails.created_by)
+              .subscribe(
+                (userDetail) => {
+                  this.eventOwner = userDetail;
+                },
+                error => {
+                  this.errorMessage = <any>error;
+                }
+              );
 
             this.eventDataLoading = false;
           },
@@ -961,6 +961,8 @@ export class EventDetailsComponent implements OnInit {
     this.editLocationSpeciesDialogRef = this.dialog.open(EditLocationSpeciesComponent, {
       data: {
         species: this.species,
+        ageBiases: this.ageBiases,
+        sexBiases: this.sexBiases,
         location_species_action: 'add',
         action_text: 'add',
         action_button_text: 'Submit',

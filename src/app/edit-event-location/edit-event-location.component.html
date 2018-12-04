@@ -11,6 +11,7 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
+        <mat-error *ngIf="this.editEventLocationForm.get('start_date').hasError('endDateBeforeStart')">Must precede end date</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-control">
@@ -20,7 +21,7 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
-        <mat-error *ngIf="editEventLocationForm.get('end_date').hasError('endDateBeforeStart')">Cannot
+        <mat-error *ngIf="this.editEventLocationForm.get('end_date').hasError('endDateBeforeStart')">Cannot
           precede start date</mat-error>
       </mat-form-field>
     </div>

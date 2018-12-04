@@ -12,6 +12,9 @@ import { MatSnackBar } from '@angular/material';
 import { Species } from '@interfaces/species';
 import { SpeciesService } from '@services/species.service';
 
+import { AgeBias } from '@interfaces/age-bias';
+import { SexBias } from '@interfaces/sex-bias';
+
 import { LocationSpeciesService } from '@services/location-species.service';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
@@ -40,6 +43,9 @@ export class EditLocationSpeciesComponent implements OnInit {
   action_button_text;
 
   errorMessage;
+
+  ageBiases: AgeBias[];
+  sexBiases: SexBias[];
 
   public filteredSpecies: ReplaySubject<Species[]> = new ReplaySubject<Species[]>(1);
 
@@ -110,6 +116,9 @@ export class EditLocationSpeciesComponent implements OnInit {
 
     // populate the search select options for the species control
     this.filteredSpecies.next(this.data.species);
+
+    this.ageBiases = this.data.ageBiases;
+    this.sexBiases = this.sexBiases;
 
     // listen for search field value changes
     this.speciesFilterCtrl.valueChanges

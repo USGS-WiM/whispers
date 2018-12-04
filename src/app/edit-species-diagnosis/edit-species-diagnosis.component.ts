@@ -104,6 +104,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
   ngOnInit() {
 
+
     if (this.data.speciesdiagnosis) {
       this.speciesdiagnosis = this.data.speciesdiagnosis;
     }

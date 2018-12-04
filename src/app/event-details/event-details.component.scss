@@ -886,3 +886,30 @@ font-size: large !important;
 .mat-cell *{
     line-height: 12px !important;
 }
+
+.public{
+    display: block;
+    padding: 0px 0 25px 0;
+    font-size: larger;
+    font-weight: bold;
+
+    .public-status{
+        color: $text;
+        box-sizing: border-box;
+        font-weight: 900;
+        font-size: 16px;
+        border-radius: 6px;
+        margin-right: 20px;
+        display: inline-block;
+        letter-spacing: -0.2px;
+        font-size: larger;
+
+        &.red{
+            color: $red;
+        }
+
+        &.green{
+            color:$green;
+        }
+    }
+}

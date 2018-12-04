@@ -402,7 +402,8 @@
 
 
                                     <mat-form-field class="species-number-control-w-help">
-                                      <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count">
+                                      <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count"
+                                        (change)="checkLocationSpeciesNumbers()">
                                       <mat-icon class="hint-fix" matSuffix matTooltip="Exact minimum count of the cumulative number of dead animals (not including euthanized) over the length of the event at this location. Include euthanized. If 0 observed, enter 0. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
@@ -415,7 +416,7 @@
 
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Estimated Dead" type="number" min="0"
-                                        formControlName="dead_count_estimated">
+                                        formControlName="dead_count_estimated" (change)="checkLocationSpeciesNumbers()">
                                       <mat-icon class="hint-fix" matSuffix matTooltip="Best guess of the maximum number of animals that died (include any known dead animals) at this location over the length of the event. Include euthanized with sick. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
@@ -427,7 +428,8 @@
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control-w-help">
-                                      <input matInput placeholder="Known Sick" type="number" min="0" formControlName="sick_count">
+                                      <input matInput placeholder="Known Sick" type="number" min="0" formControlName="sick_count"
+                                        (change)="checkLocationSpeciesNumbers()">
                                       <mat-icon class="hint-fix" matSuffix matTooltip="Exact minimum count of animals exhibiting clinical signs of illness at the point in time that the observation was made at this location. If site visited repeatedly, use number remaining sick/injured plus number recovered from being sick/injured. Include euthanized. If 0 observed, enter 0. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
@@ -440,7 +442,7 @@
 
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Estimated Sick" type="number" min="0"
-                                        formControlName="sick_count_estimated">
+                                        formControlName="sick_count_estimated" (change)="checkLocationSpeciesNumbers()">
                                       <mat-icon class="hint-fix" matSuffix matTooltip="Best guess of the maximum number of animals that might be showing clinical signs (include any known sick animals) at the point in time that the observation was made at this location. If site visited repeatedly, use number remaining sick/injured plus number recovered from being sick/injured. Include euthanized with sick. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
@@ -548,13 +550,6 @@
                               <span class="alert-text">Location must have at least one species.</span>
                             </mat-error>
 
-                            <mat-error color="warn" *ngIf="checkLocationSpeciesNumbers(eventLocationIndex)">
-                              <mat-icon class="icon">error</mat-icon>
-                              <span class="alert-text">For morbidity/mortality events, there must be at least one value
-                                between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for at least one species
-                                in the event at the time of event initiation. (sick + dead + estimated_sick +
-                                estimated_dead >= 1)</span>
-                            </mat-error>
                           </div>
 
                           <div class="button-row">
@@ -990,8 +985,15 @@
 
                   <mat-divider [inset]="true"></mat-divider>
 
-
                   <div class="submissionReviewErrors">
+
+                    <mat-error color="warn" *ngIf="locationSpeciesNumbersViolation">
+                      <mat-icon class="icon">error</mat-icon>
+                      <span class="alert-text">For morbidity/mortality events, there must be at least one value greater
+                        than 0
+                        between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for at least one species
+                        in the event at the time of event creation.</span>
+                    </mat-error>
 
                   </div>
 
@@ -1001,7 +1003,7 @@
                       <mat-icon>pageview</mat-icon> Review Event Submission
                     </button>
                     <p>
-                      <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid" (click)="submitEvent(eventSubmissionForm.value)">
+                      <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation" (click)="submitEvent(eventSubmissionForm.value)">
                         <mat-icon>done</mat-icon> Save Event
                       </button>
 

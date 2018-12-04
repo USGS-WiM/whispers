@@ -15,6 +15,13 @@ export class APP_UTILITIES {
 
     }
 
+    // converts date string for use in date pickers (compensates for UTC)
+    public static timeZoneAdjust(dateString): any {
+        const dateStringMidnight = dateString + 'T00:00:00';
+        const convertedDate = new Date(dateStringMidnight);
+        return convertedDate;
+    }
+
     public static get getTodayDate(): any {
         let today_string = '';
         const today = new Date();

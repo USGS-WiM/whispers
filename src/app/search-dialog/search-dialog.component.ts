@@ -89,6 +89,8 @@ export class SearchDialogComponent implements OnInit {
   speciesLoading = true;
 
   endDateBeforeStart(AC: AbstractControl) {
+    AC.get('end_date').setErrors(null);
+    AC.get('start_date').setErrors(null);
     const start_date = AC.get('start_date').value;
     const end_date = AC.get('end_date').value;
     if ((start_date !== null && end_date !== null) && start_date > end_date) {

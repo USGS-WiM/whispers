@@ -24,7 +24,7 @@ export class AdministrativeLevelTwoService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_TWOS_URL + '?no_page&administrativelevelone=' + adminLevelOneID, options)
+    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_TWOS_URL + '?no_page&slim&administrativelevelone=' + adminLevelOneID, options)
       .map((response: Response) => <AdministrativeLevelTwo[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

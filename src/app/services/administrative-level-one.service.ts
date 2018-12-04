@@ -23,7 +23,7 @@ export class AdministrativeLevelOneService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_ONES_URL + '?no_page&country=' + countryID, options)
+    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_ONES_URL + '?no_page&slim&country=' + countryID, options)
       .map((response: Response) => <AdministrativeLevelOne[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

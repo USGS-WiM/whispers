@@ -218,16 +218,16 @@ export class EventDetailsComponent implements OnInit {
             this.locationSpeciesDataSource = new MatTableDataSource(this.eventLocationSpecies);
             // this.speciesTableRows = this.eventLocationSpecies;
 
-            // TODO: lookup user for created_by
-            // this.userService.getUserDetail(eventdetails.created_by)
-            //   .subscribe(
-            //     (userDetail) => {
-            //       this.eventOwner = userDetail;
-            //     },
-            //     error => {
-            //       this.errorMessage = <any>error;
-            //     }
-            //   );
+            // lookup user for created_by
+            this.userService.getUserDetail(eventdetails.created_by)
+              .subscribe(
+                (userDetail) => {
+                  this.eventOwner = userDetail;
+                },
+                error => {
+                  this.errorMessage = <any>error;
+                }
+              );
 
             this.eventDataLoading = false;
           },

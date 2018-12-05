@@ -53,8 +53,11 @@ import { AddServiceRequestComponent } from '@app/add-service-request/add-service
 
 import { EventLocationContactService } from '@services/event-location-contact.service';
 
-
 import { ContactService } from '@services/contact.service';
+
+
+import { APP_SETTINGS } from '@app/app.settings';
+import { APP_UTILITIES } from '@app/app.utilities';
 
 
 @Component({
@@ -209,6 +212,10 @@ export class EventDetailsComponent implements OnInit {
                   }
                 }
               }
+            }
+
+            for (const diagnosis of APP_SETTINGS.UNDET_PENDING_DIAGNOSES) {
+              this.possibleEventDiagnoses.push(diagnosis);
             }
 
             for (let i = 0; i < this.eventData.eventlocations.length; i++) {
@@ -956,10 +963,10 @@ export class EventDetailsComponent implements OnInit {
   }
 
   addLocationSpecies(eventlocation) {
-
     // Open dialog for adding location species
     this.editLocationSpeciesDialogRef = this.dialog.open(EditLocationSpeciesComponent, {
       data: {
+        eventData: this.eventData,
         species: this.species,
         ageBiases: this.ageBiases,
         sexBiases: this.sexBiases,

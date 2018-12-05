@@ -182,6 +182,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   missingCommentFlag = false;
 
   locationSpeciesNumbersViolation = false;
+  locationEndDatesViolation = false;
 
   filteredAdminLevelOnes = [];
   filteredAdminLevelTwos = [];
@@ -1121,6 +1122,42 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
+  checkLocationEndDates() {
+    this.locationEndDatesViolation = false;
+    if (this.eventSubmissionForm.get('complete').value === true) {
+      let requirementMet = true;
+      const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+      // tslint:disable-next-line:max-line-length
+      // loop through event locations
+      for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
+        // if any end dates are null, requirement is not met
+        if (this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('end_date').value === null) {
+          requirementMet = false;
+        }
+      }
+      if (requirementMet) {
+        this.locationEndDatesViolation = false;
+      } else {
+        this.locationEndDatesViolation = true;
+      }
+
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Marking event as complete',
+            titleIcon: 'warning',
+            message: 'Submitting an event as complete will lock all editing on the event.',
+            messageIcon: '',
+            confirmButtonText: 'OK',
+            showCancelButton: false
+          }
+        }
+      );
+
+    }
+  }
+
   initEventLocation() {
     return this.formBuilder.group({
       name: '',
@@ -1179,6 +1216,30 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     return null;
   }
 
+  estimatedSick(AC: AbstractControl) {
+    AC.get('sick_count_estimated').setErrors(null);
+    const sick_count = AC.get('sick_count').value;
+    const sick_count_estimated = AC.get('sick_count_estimated').value;
+
+    if (sick_count !== null) {
+      if (sick_count_estimated <= sick_count) {
+        AC.get('sick_count_estimated').setErrors({ estimatedSick: true });
+      }
+    }
+  }
+
+  estimatedDead(AC: AbstractControl) {
+    AC.get('dead_count_estimated').setErrors(null);
+    const dead_count = AC.get('dead_count').value;
+    const dead_count_estimated = AC.get('dead_count_estimated').value;
+
+    if (dead_count !== null) {
+      if (dead_count_estimated <= dead_count) {
+        AC.get('dead_count_estimated').setErrors({ estimatedDead: true });
+      }
+    }
+  }
+
   initLocationSpecies() {
     return this.formBuilder.group({
       species: [null, Validators.required],
@@ -1194,7 +1255,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       new_species_diagnoses: this.formBuilder.array([])
     },
       {
-        validator: [this.integer]
+        validator: [this.integer, this.estimatedSick, this.estimatedDead]
       });
   }
 
@@ -1243,6 +1304,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   // event locations
   addEventLocation() {
+
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations');
     control.push(this.initEventLocation());
 
@@ -1318,6 +1380,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         console.warn(event.result);
       }
     });
+
+    this.checkLocationEndDates();
 
   }
 
@@ -1411,28 +1475,42 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   viewContactDetailsDialog(eventLocationIndex, locationContactIndex) {
 
-    let contact_id = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts').value[locationContactIndex].contact;
-    let currentContact = this.userContacts.find(i => i.id === contact_id);
+    // tslint:disable-next-line:max-line-length
+    const contact_id = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts').value[locationContactIndex].contact;
+    // const currentContact = this.userContacts.find(i => i.id === contact_id);
+
 
     if (contact_id == null) {
       this.openSnackBar('First select a contact to view that contact\'s details', 'OK', 5000);
     } else {
-      // Open dialog for viewing contact details
-      this.viewContactDetailsDialogRef = this.dialog.open(ViewContactDetailsComponent, {
-        data: {
-          contact: currentContact
-        }
-      });
 
-      this.viewContactDetailsDialogRef.afterClosed()
+      // look up contact
+      this.contactService.getContactDetails(contact_id)
         .subscribe(
-          () => {
-            // do something after close
+          (contactDetails) => {
+
+            // Open dialog for viewing contact details
+            this.viewContactDetailsDialogRef = this.dialog.open(ViewContactDetailsComponent, {
+              data: {
+                contact: contactDetails
+              }
+            });
+
+            this.viewContactDetailsDialogRef.afterClosed()
+              .subscribe(
+                () => {
+                  // do something after close
+                },
+                error => {
+                  this.errorMessage = <any>error;
+                }
+              );
           },
           error => {
             this.errorMessage = <any>error;
           }
         );
+
     }
 
   }
@@ -1683,8 +1761,15 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     //   }
     // }
 
+    // if lat/long fields are deleted to blank, update to null to be a valid number type on PATCH
+    if (formValue.latitude === '') {
+      formValue.latitude = null;
+    }
+    if (formValue.longitude === '') {
+      formValue.longitude = null;
+    }
+    // transform date for quality_check to the expected format
     formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');
-
     // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
     // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
     for (const event_location of formValue.new_event_locations) {

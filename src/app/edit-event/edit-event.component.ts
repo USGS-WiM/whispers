@@ -22,6 +22,7 @@ import { LegalStatusService } from '@app/services/legal-status.service';
 import { Staff } from '@interfaces/staff';
 import { DatePipe } from '@angular/common';
 import { StaffService } from '@app/services/staff.service';
+import { ConfirmComponent } from '@app/confirm/confirm.component';
 
 @Component({
   selector: 'app-edit-event',
@@ -29,6 +30,8 @@ import { StaffService } from '@app/services/staff.service';
   styleUrls: ['./edit-event.component.scss']
 })
 export class EditEventComponent implements OnInit {
+
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
 
   errorMessage = '';
   organizations: Organization[];
@@ -65,6 +68,7 @@ export class EditEventComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private dialog: MatDialog,
     public editEventDialogRef: MatDialogRef<EditEventComponent>,
     private currentUserService: CurrentUserService,
     private eventService: EventService,
@@ -178,6 +182,24 @@ export class EditEventComponent implements OnInit {
     this.snackBar.open(message, action, {
       duration: duration,
     });
+  }
+
+  openCompleteWarning() {
+    if (this.editEventForm.get('complete').value === true) {
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Marking event as complete',
+            titleIcon: 'warning',
+            message: 'Updating an event to complete will lock all editing on the event.',
+            messageIcon: '',
+            confirmButtonText: 'OK',
+            showCancelButton: false
+          }
+        }
+      );
+    }
   }
 
   updateEvent(formValue) {

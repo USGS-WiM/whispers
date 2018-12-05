@@ -32,7 +32,7 @@
       </mat-form-field>
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count">
+        <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count" (ngModelChange)="checkLocationSpeciesNumbers()">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -42,17 +42,21 @@
       </mat-form-field>
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Estimated Dead" type="number" min="0" formControlName="dead_count_estimated">
+        <input matInput placeholder="Estimated Dead" type="number" min="0" formControlName="dead_count_estimated"
+          (ngModelChange)="checkLocationSpeciesNumbers()">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
         <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('min')">Minimum value is 0</mat-error>
         <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('integer')">Must be an integer
           (whole number)</mat-error>
+        <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('estimatedDead')">Must be
+          higher than known dead</mat-error>
       </mat-form-field>
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Known Sick" type="number" min="0" min="0" formControlName="sick_count">
+        <input matInput placeholder="Known Sick" type="number" min="0" min="0" formControlName="sick_count"
+          (ngModelChange)="checkLocationSpeciesNumbers()">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -62,13 +66,16 @@
       </mat-form-field>
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Estimated Sick" type="number" min="0" formControlName="sick_count_estimated">
+        <input matInput placeholder="Estimated Sick" type="number" min="0" formControlName="sick_count_estimated"
+          (ngModelChange)="checkLocationSpeciesNumbers()">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
         <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('min')">Minimum value is 0</mat-error>
         <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('integer')">Must be an integer
           (whole number)</mat-error>
+        <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('estimatedSick')">Must be
+          higher than known sick</mat-error>
       </mat-form-field>
     </div>
 
@@ -101,10 +108,17 @@
         </mat-hint>
       </mat-form-field>
     </div>
-
-
-
+    <div class="submissionReviewErrors">
+      <mat-error color="warn" *ngIf="locationSpeciesNumbersViolation">
+        <mat-icon class="icon">error</mat-icon>
+        <span class="alert-text">For morbidity/mortality events, there must be at least one value greater
+          than 0
+          between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for at least one species
+          in the event.</span>
+      </mat-error>
+    </div>
   </form>
+
 </mat-dialog-content>
 <mat-dialog-actions>
 

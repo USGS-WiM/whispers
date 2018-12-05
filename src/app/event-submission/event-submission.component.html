@@ -43,7 +43,7 @@
             </mat-form-field>
 
             <mat-form-field class="form-control">
-              <mat-select placeholder="WHISPers Record Status" formControlName="complete" required>
+              <mat-select placeholder="WHISPers Record Status" formControlName="complete" required (ngModelChange)="checkLocationEndDates()">
                 <mat-option [value]="true">Complete</mat-option>
                 <mat-option [value]="false">Incomplete</mat-option>
               </mat-select>
@@ -175,7 +175,7 @@
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
-                              <input matInput [matDatepicker]="endDate" placeholder="Location End Date" formControlName="end_date">
+                              <input matInput [matDatepicker]="endDate" placeholder="Location End Date" formControlName="end_date" (ngModelChange)="checkLocationEndDates()">
                               <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                               <mat-datepicker #endDate></mat-datepicker>
                               <mat-hint align="end" matTooltip="Public field">
@@ -403,7 +403,7 @@
 
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count"
-                                        (change)="checkLocationSpeciesNumbers()">
+                                        (ngModelChange)="checkLocationSpeciesNumbers()">
                                       <mat-icon class="hint-fix" matSuffix matTooltip="Exact minimum count of the cumulative number of dead animals (not including euthanized) over the length of the event at this location. Include euthanized. If 0 observed, enter 0. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
@@ -416,7 +416,7 @@
 
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Estimated Dead" type="number" min="0"
-                                        formControlName="dead_count_estimated" (change)="checkLocationSpeciesNumbers()">
+                                        formControlName="dead_count_estimated" (ngModelChange)="checkLocationSpeciesNumbers()">
                                       <mat-icon class="hint-fix" matSuffix matTooltip="Best guess of the maximum number of animals that died (include any known dead animals) at this location over the length of the event. Include euthanized with sick. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
@@ -425,11 +425,13 @@
                                         value is 0</mat-error>
                                       <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('dead_count_estimated').hasError('integer')">Must
                                         be an integer (whole number)</mat-error>
+                                      <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('dead_count_estimated').hasError('estimatedDead')">Must
+                                        be higher than known dead</mat-error>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Known Sick" type="number" min="0" formControlName="sick_count"
-                                        (change)="checkLocationSpeciesNumbers()">
+                                        (ngModelChange)="checkLocationSpeciesNumbers()">
                                       <mat-icon class="hint-fix" matSuffix matTooltip="Exact minimum count of animals exhibiting clinical signs of illness at the point in time that the observation was made at this location. If site visited repeatedly, use number remaining sick/injured plus number recovered from being sick/injured. Include euthanized. If 0 observed, enter 0. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
@@ -442,7 +444,7 @@
 
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Estimated Sick" type="number" min="0"
-                                        formControlName="sick_count_estimated" (change)="checkLocationSpeciesNumbers()">
+                                        formControlName="sick_count_estimated" (ngModelChange)="checkLocationSpeciesNumbers()">
                                       <mat-icon class="hint-fix" matSuffix matTooltip="Best guess of the maximum number of animals that might be showing clinical signs (include any known sick animals) at the point in time that the observation was made at this location. If site visited repeatedly, use number remaining sick/injured plus number recovered from being sick/injured. Include euthanized with sick. Details can be provided in the Comment section.">help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
@@ -451,6 +453,8 @@
                                         value is 0</mat-error>
                                       <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('sick_count_estimated').hasError('integer')">Must
                                         be an integer (whole number)</mat-error>
+                                      <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('sick_count_estimated').hasError('estimatedSick')">Must
+                                        be higher than known sick</mat-error>
                                     </mat-form-field>
 
                                     <mat-form-field class="species-bias-control">
@@ -687,8 +691,7 @@
                                     <mat-option *ngFor="let contact of filteredContacts[eventLocationIndex][locationContactIndex] | async"
                                       [value]="contact.id">
                                       <span>{{contact.first_name}}
-                                        {{contact.last_name}} | {{contact.organization
-                                        |displayValue:'name':this.organizations}}</span>
+                                        {{contact.last_name}} | {{contact.organization_string}}</span>
                                     </mat-option>
                                   </mat-select>
                                 </mat-form-field>
@@ -995,6 +998,10 @@
                         in the event at the time of event creation.</span>
                     </mat-error>
 
+                    <mat-error color="warn" *ngIf="locationEndDatesViolation">
+                      <mat-icon class="icon">error</mat-icon>
+                      <span class="alert-text">If an event is marked as complete, it must have end date provided for each location.</span>
+                    </mat-error>
                   </div>
 
                   <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar "></mat-progress-bar>
@@ -1003,7 +1010,8 @@
                       <mat-icon>pageview</mat-icon> Review Event Submission
                     </button>
                     <p>
-                      <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation" (click)="submitEvent(eventSubmissionForm.value)">
+                      <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation || locationEndDatesViolation"
+                        (click)="submitEvent(eventSubmissionForm.value)">
                         <mat-icon>done</mat-icon> Save Event
                       </button>
 

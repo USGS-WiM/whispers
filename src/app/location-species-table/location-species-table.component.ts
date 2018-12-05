@@ -33,6 +33,7 @@ import { SexBias } from '@interfaces/sex-bias';
   ],
 })
 export class LocationSpeciesTableComponent implements OnInit {
+  @Input('eventData') eventData: Object;
   @Input('locationspecies') locationspecies: LocationSpecies[];
   @Input('permissions') permissions: Object;
   @Input('ageBiases') ageBiases: AgeBias[];
@@ -95,6 +96,7 @@ export class LocationSpeciesTableComponent implements OnInit {
     this.editLocationSpeciesDialogRef = this.dialog.open(EditLocationSpeciesComponent, {
       disableClose: true,
       data: {
+        eventData: this.eventData,
         locationspecies: locationspecies,
         location_species_action: 'edit',
         action_text: 'edit',

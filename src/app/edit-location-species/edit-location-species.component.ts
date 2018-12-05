@@ -49,11 +49,12 @@ export class EditLocationSpeciesComponent implements OnInit {
 
   public filteredSpecies: ReplaySubject<Species[]> = new ReplaySubject<Species[]>(1);
 
+  locationSpeciesNumbersViolation = false;
+
   speciesFilterCtrl: FormControl = new FormControl();
 
   /** Subject that emits when the component has been destroyed. */
   private _onDestroy = new Subject<void>();
-
 
   buildLocationSpeciesForm() {
     this.locationSpeciesForm = this.formBuilder.group({
@@ -70,7 +71,7 @@ export class EditLocationSpeciesComponent implements OnInit {
       sex_bias: null
     },
       {
-        validator: [this.integer]
+        validator: [this.integer, this.estimatedSick, this.estimatedDead]
       }
     );
   }
@@ -82,7 +83,7 @@ export class EditLocationSpeciesComponent implements OnInit {
     const dead_count = AC.get('dead_count').value;
     const sick_count_estimated = AC.get('sick_count_estimated').value;
     const dead_count_estimated = AC.get('dead_count_estimated').value;
-    if (!Number.isInteger(population_count) && population_count !== null ) {
+    if (!Number.isInteger(population_count) && population_count !== null) {
       AC.get('population_count').setErrors({ integer: true });
     }
     if (!Number.isInteger(sick_count) && sick_count !== null) {
@@ -134,8 +135,6 @@ export class EditLocationSpeciesComponent implements OnInit {
       this.administrative_level_two = this.data.eventlocation.administrative_level_two_string;
     }
 
-    // if stuff
-
     if (this.data.location_species_action === 'add') {
       this.action_text = 'Add';
       this.action_button_text = 'Submit';
@@ -163,34 +162,10 @@ export class EditLocationSpeciesComponent implements OnInit {
         sex_bias: this.data.locationspecies.sex_bias,
       });
 
-      this.locationSpeciesForm.get('species').disable();
+      //this.locationSpeciesForm.get('species').disable();
 
+      this.checkLocationSpeciesNumbers();
     }
-
-
-
-    // get species from the species service
-    // this.speciesService.getSpecies()
-    //   .subscribe(
-    //     (species) => {
-    //       this.species = species;
-    //       // alphabetize the species options list
-    //       this.species.sort(function (a, b) {
-    //         if (a.name < b.name) { return -1; }
-    //         if (a.name > b.name) { return 1; }
-    //         return 0;
-    //       });
-    //       this.filteredSpecies = this.locationSpeciesForm.get('species').valueChanges
-    //         .startWith(null)
-    //         .map(val => this.filter(val, this.species, ['name']));
-
-    //     },
-    //     error => {
-    //       this.errorMessage = <any>error;
-    //     }
-    //   );
-
-
   }
 
   private filterSpecies() {
@@ -217,9 +192,76 @@ export class EditLocationSpeciesComponent implements OnInit {
     });
   }
 
-  updateSpecies(formValue) {
+  estimatedSick(AC: AbstractControl) {
+    AC.get('sick_count_estimated').setErrors(null);
+    const sick_count = AC.get('sick_count').value;
+    const sick_count_estimated = AC.get('sick_count_estimated').value;
+
+    if (sick_count !== null) {
+      if (sick_count_estimated <= sick_count) {
+        AC.get('sick_count_estimated').setErrors({ estimatedSick: true });
+      }
+    }
+  }
+
+  estimatedDead(AC: AbstractControl) {
+    AC.get('dead_count_estimated').setErrors(null);
+    const dead_count = AC.get('dead_count').value;
+    const dead_count_estimated = AC.get('dead_count_estimated').value;
+
+    if (dead_count !== null) {
+      if (dead_count_estimated <= dead_count) {
+        AC.get('dead_count_estimated').setErrors({ estimatedDead: true });
+      }
+    }
+  }
 
 
+  checkLocationSpeciesNumbers() {
+    this.locationSpeciesNumbersViolation = false;
+
+    // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
+    if (this.data.eventData.event_type === 1 || this.data.eventData.event_type === '1') {
+      // set var to capture of requirement is met at any of the event locations
+      let requirementMet = false;
+      // add in the current form values to the if statement
+
+      for (const eventlocation of this.data.eventData.eventlocations) {
+
+        let locationspecies = [];
+        // if in edit mode, filter out locationspecies that is currently being edited.
+        // if in add mode, use the full locationspecies array.
+        if (this.data.location_species_action === 'edit') {
+          // tslint:disable-next-line:max-line-length
+          // filter out the locationspecies that is currently being edited
+          locationspecies = eventlocation.locationspecies.filter(locspecies => locspecies.id !== this.locationSpeciesForm.get('id').value);
+        } else if (this.data.location_species_action === 'add') {
+          locationspecies = eventlocation.locationspecies;
+        }
+        for (const locspecies of locationspecies) {
+          if (
+            (
+              locspecies.sick_count +
+              locspecies.dead_count +
+              locspecies.sick_count_estimated +
+              locspecies.dead_count_estimated +
+              this.locationSpeciesForm.get('sick_count').value +
+              this.locationSpeciesForm.get('dead_count').value +
+              this.locationSpeciesForm.get('sick_count_estimated').value +
+              this.locationSpeciesForm.get('dead_count_estimated').value
+            ) >= 1
+          ) {
+            requirementMet = true;
+          }
+        }
+      }
+
+      if (requirementMet) {
+        this.locationSpeciesNumbersViolation = false;
+      } else {
+        this.locationSpeciesNumbersViolation = true;
+      }
+    }
   }
 
   onSubmit(formValue) {
@@ -262,10 +304,7 @@ export class EditLocationSpeciesComponent implements OnInit {
             this.openSnackBar('Error. Species not updated. Error message: ' + error, 'OK', 8000);
           }
         );
-
-
     }
-
   }
 
   filter(val: any, searchArray: any, searchProperties: string[]): string[] {
@@ -286,7 +325,6 @@ export class EditLocationSpeciesComponent implements OnInit {
         }
       }
     }
-
     // this will return all records matching the val string
     return result;
   }
@@ -300,5 +338,4 @@ export class EditLocationSpeciesComponent implements OnInit {
     }
     return species_id_match;
   }
-
 }

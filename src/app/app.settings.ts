@@ -11,7 +11,7 @@ import { APP_UTILITIES } from '@app/app.utilities';
 export class APP_SETTINGS {
 
     private static _environment: string = 'development';
-     //private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersdev.wim.usgs.gov/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
+    //private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersdev.wim.usgs.gov/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
     // beta test services
     private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersbeta.wim.usgs.gov/test/whispersservices/' : 'https://whispersbeta.wim.usgs.gov/test/whispersservices/';
     // PAGINATION BRANCH OF WEB SERVICES
@@ -32,6 +32,19 @@ export class APP_SETTINGS {
 
     public static get VERSION() {
         return environment.version;
+    }
+
+    public static get UNDET_PENDING_DIAGNOSES() {
+        return [
+            {
+                'diagnosis': 469,
+                'diagnosis_string': 'Undetermined',
+            },
+            {
+                'diagnosis': 104,
+                'diagnosis_string': 'Pending',
+            }
+        ];
     }
 
     public static get AUTH_URL(): string { return this._API_ENDPOINT + 'auth/'; }

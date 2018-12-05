@@ -14,7 +14,7 @@
       <!-- Event Type -->
       <mat-form-field class="form-control org-select">
         <mat-select placeholder="Event Type" formControlName="event_type">
-          <mat-option>--</mat-option>
+          <mat-option value="">--</mat-option>
           <mat-option *ngFor="let event_type of event_types" [value]="event_type.id">{{event_type.name}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -30,7 +30,7 @@
         </mat-form-field>
 
         <mat-form-field class="form-control">
-          <mat-select placeholder="WHISPers Record Status" formControlName="complete" required>
+          <mat-select placeholder="WHISPers Record Status" formControlName="complete" required (ngModelChange)="openCompleteWarning()">
             <mat-option [value]="true">Complete</mat-option>
             <mat-option [value]="false">Incomplete</mat-option>
           </mat-select>
@@ -46,7 +46,7 @@
       <!-- Event Organizations -->
       <mat-form-field class="form-control org-select">
         <mat-select placeholder="Event Organizations" formControlName="new_organizations" multiple>
-          <mat-option>--</mat-option>
+          <mat-option value="">--</mat-option>
           <mat-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</mat-option>
         </mat-select>
       </mat-form-field>

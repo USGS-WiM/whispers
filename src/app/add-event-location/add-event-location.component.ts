@@ -59,6 +59,8 @@ import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
 
+import { EventDetail } from '@interfaces/event-detail';
+
 import * as search_api from 'usgs-search-api';
 declare const search_api: search_api;
 
@@ -69,7 +71,7 @@ declare const search_api: search_api;
   styleUrls: ['./add-event-location.component.scss']
 })
 export class AddEventLocationComponent implements OnInit {
-  @Input('eventID') eventID: string;
+  @Input('eventData') eventData: EventDetail;
   @Input('eventTypeID') eventTypeID: string;
   @ViewChild('adminLevelOneSelect') adminLevelOneSelect: MatSelect;
   @ViewChild('adminLevelTwoSelect') adminLevelTwoSelect: MatSelect;
@@ -105,6 +107,8 @@ export class AddEventLocationComponent implements OnInit {
   filteredSpecies = [];
   filteredContacts = [];
 
+  locationSpeciesNumbersViolation = false;
+
   latitudePattern: RegExp = (/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/);
   longitudePattern: RegExp = (/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/);
 
@@ -139,7 +143,7 @@ export class AddEventLocationComponent implements OnInit {
       // used only to capture event_type from event - not part of eventlocation record
       event_type: null,
       new_location_species: this.formBuilder.array([
-        // this.initLocationSpecies()
+        this.initLocationSpecies()
       ]),
       new_location_contacts: this.formBuilder.array([
         // this.initLocationContacts()
@@ -334,7 +338,7 @@ export class AddEventLocationComponent implements OnInit {
 
     this.submitLoading = true;
 
-    formValue.event = this.eventID;
+    formValue.event = this.eventData.id;
 
     // if lat/long fields are deleted to blank, update to null to be a valid number type on PATCH
     if (formValue.latitude === '') {
@@ -349,7 +353,7 @@ export class AddEventLocationComponent implements OnInit {
     formValue.start_date = this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd');
     formValue.end_date = this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd');
 
-    //delete the event_type superficially attached to event location for validation purposes
+    // delete the event_type field, which was superficially attached to event location for validation purposes
     delete formValue.event_type;
 
     this.eventLocationService.create(formValue)
@@ -370,7 +374,6 @@ export class AddEventLocationComponent implements OnInit {
   }
 
   startDateTodayorEarlierMortalityEvent(AC: AbstractControl) {
-
     const start_date = AC.get('start_date').value;
     const event_type = AC.get('event_type').value;
     const today = APP_UTILITIES.TODAY;
@@ -393,6 +396,48 @@ export class AddEventLocationComponent implements OnInit {
     return null;
   }
 
+  minSpecies(AC: AbstractControl) {
+    const locationSpeciesLength = AC.get('new_location_species')['controls'].length;
+    if (locationSpeciesLength < 1) {
+      AC.get('new_location_species').setErrors({ minSpecies: true });
+    }
+    return null;
+  }
+
+  checkforMissingSpecies() {
+
+    // tslint:disable-next-line:max-line-length
+    const locationspecies = <FormArray>this.addEventLocationForm.get('new_location_species');
+    let speciesSelectionMissing = false;
+    for (let i = 0, j = locationspecies.length; i < j; i++) {
+      // tslint:disable-next-line:max-line-length
+      if (this.addEventLocationForm.get('new_location_species')['controls'][i].get('species').value === null) {
+        speciesSelectionMissing = true;
+      }
+    }
+    if (speciesSelectionMissing) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkEventLocationCommentMin() {
+
+    // tslint:disable-next-line:max-line-length
+    const siteDesciptionCommentLength = this.addEventLocationForm.get('site_description').value.length;
+    const historyCommentLength = this.addEventLocationForm.get('history').value.length;
+    // tslint:disable-next-line:max-line-length
+    const envFactorsCommentLength = this.addEventLocationForm.get('environmental_factors').value.length;
+    const clinicalSignsCommentLength = this.addEventLocationForm.get('clinical_signs').value.length;
+    // tslint:disable-next-line:max-line-length
+    const generalCommentLength = this.addEventLocationForm.get('comment').value.length;
+    if ((siteDesciptionCommentLength === 0) && (historyCommentLength === 0) && (envFactorsCommentLength === 0) && (clinicalSignsCommentLength === 0) && (generalCommentLength === 0)) {
+      return true;
+    }
+    return false;
+  }
+
   initLocationSpecies() {
     return this.formBuilder.group({
       species: [null, Validators.required],
@@ -407,7 +452,7 @@ export class AddEventLocationComponent implements OnInit {
       sex_bias: null
     },
       {
-        validator: [this.integer]
+        validator: [this.integer, this.estimatedSick, this.estimatedDead]
       }
     );
   }
@@ -419,7 +464,7 @@ export class AddEventLocationComponent implements OnInit {
     const dead_count = AC.get('dead_count').value;
     const sick_count_estimated = AC.get('sick_count_estimated').value;
     const dead_count_estimated = AC.get('dead_count_estimated').value;
-    if (!Number.isInteger(population_count) && population_count !== null ) {
+    if (!Number.isInteger(population_count) && population_count !== null) {
       AC.get('population_count').setErrors({ integer: true });
     }
     if (!Number.isInteger(sick_count) && sick_count !== null) {
@@ -436,6 +481,69 @@ export class AddEventLocationComponent implements OnInit {
     }
     return null;
   }
+
+  estimatedSick(AC: AbstractControl) {
+    AC.get('sick_count_estimated').setErrors(null);
+    const sick_count = AC.get('sick_count').value;
+    const sick_count_estimated = AC.get('sick_count_estimated').value;
+
+    if (sick_count !== null) {
+      if (sick_count_estimated <= sick_count) {
+        AC.get('sick_count_estimated').setErrors({ estimatedSick: true });
+      }
+    }
+  }
+
+  estimatedDead(AC: AbstractControl) {
+    AC.get('dead_count_estimated').setErrors(null);
+    const dead_count = AC.get('dead_count').value;
+    const dead_count_estimated = AC.get('dead_count_estimated').value;
+
+    if (dead_count !== null) {
+      if (dead_count_estimated <= dead_count) {
+        AC.get('dead_count_estimated').setErrors({ estimatedDead: true });
+      }
+    }
+  }
+
+
+  // this validation check on hold. may not be needed because it is not possible for the existing locationspecies to violate
+  // the business rules, and adding one, even if all 0, can not violate the rule by itself. next check need only happen on event completion.
+  // code block below is only partially adapted for this purpose, will need to continue adaptation if this is needed.
+  // checkLocationSpeciesNumbers() {
+  //   this.locationSpeciesNumbersViolation = false;
+
+  //   // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
+  //   if (this.eventData.event_type === 1 ) {
+  //     // set var to capture of requirement is met at any of the event locations
+  //     let requirementMet = false;
+  //     // add in the current form values to the if statement
+
+  //     for (const eventlocation of this.eventData.eventlocations) {
+  //       for (const locspecies of eventlocation.locationspecies) {
+  //         if (
+  //           (
+  //             locspecies.sick_count +
+  //             locspecies.dead_count +
+  //             locspecies.sick_count_estimated +
+  //             locspecies.dead_count_estimated +
+  //             this.locationSpeciesForm.get('sick_count').value +
+  //             this.locationSpeciesForm.get('dead_count').value +
+  //             this.locationSpeciesForm.get('sick_count_estimated').value +
+  //             this.locationSpeciesForm.get('dead_count_estimated').value
+  //           ) >= 1
+  //         ) {
+  //           requirementMet = true;
+  //         }
+  //       }
+  //     }
+  //     if (requirementMet) {
+  //       this.locationSpeciesNumbersViolation = false;
+  //     } else {
+  //       this.locationSpeciesNumbersViolation = true;
+  //     }
+  //   }
+  // }
 
   initLocationContacts() {
     return this.formBuilder.group({

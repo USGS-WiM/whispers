@@ -29,6 +29,18 @@ export class ContactService {
       .catch(this.handleError);
   }
 
+  public getContactDetails(contactID): Observable<Contact> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.get(APP_SETTINGS.CONTACTS_URL + contactID + '/', options)
+      .map((response: Response) => <Contact>response.json())
+      // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
   public create(formValue): Observable<any> {
 
     const options = new RequestOptions({

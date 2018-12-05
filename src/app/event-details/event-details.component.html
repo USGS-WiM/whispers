@@ -154,8 +154,9 @@
                           <span *ngIf="speciesdiagnosis.positive_count !== null">{{speciesdiagnosis.positive_count}}
                             positive</span>
                           <br>
-                          <span *ngIf="speciesdiagnosis.organizations_string"> by
-                            {{speciesdiagnosis.organizations_string[0]}}</span><br />
+                          <span *ngIf="speciesdiagnosis.organizations_string.length > 0">Tested by
+                              <span *ngFor="let org of speciesdiagnosis.organizations_string">{{org}} </span>
+                          </span><br />
                         </span>
                       </span>
                       <span *ngIf="loc_species.speciesdiagnoses.length === 0">Not assessed</span>
@@ -661,7 +662,7 @@
 
                   <div *ngIf="eventLocation.locationspecies" class="event-table-header">Species at this location</div>
 
-                  <app-location-species-table [locationspecies]="eventLocation.locationspecies" [permissions]="eventData.permissions"
+                  <app-location-species-table [eventData]="eventData" [locationspecies]="eventLocation.locationspecies" [permissions]="eventData.permissions"
                     [ageBiases]="ageBiases" [sexBiases]="sexBiases"></app-location-species-table>
 
                   <div class="detail-section-buttons">
@@ -809,7 +810,7 @@
               <mat-icon>remove_circle</mat-icon> Cancel
             </button>
 
-            <app-add-event-location *ngIf="showAddEventLocation" [eventID]="eventID" [eventTypeID]="eventData.event_type"></app-add-event-location>
+            <app-add-event-location *ngIf="showAddEventLocation" [eventData]="eventData" [eventTypeID]="eventData.event_type"></app-add-event-location>
 
           </div>
           <!-- Add new event location card -->

@@ -21,3 +21,30 @@
     margin-left: 5px;
     flex-grow: 1;
 }
+
+.submissionReviewErrors{
+    display: block;
+    margin: 0 auto;
+    padding: 25px 0 40px 0;
+    width: 40em;
+
+    .mat-error{
+        display: flex;
+        margin: 6px 0;
+        width: 40em;
+
+        .mat-icon,
+        span{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        span{
+            font-size: 16px;
+            font-weight: 600;
+            padding-left: 4px;
+            padding-bottom: 1px;
+        }
+    }
+}

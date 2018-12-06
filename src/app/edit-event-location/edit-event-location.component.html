@@ -5,13 +5,16 @@
   <form [formGroup]="editEventLocationForm" autocomplete="off">
     <div class="horizontal-form-container">
       <mat-form-field class="form-control">
-        <input matInput [matDatepicker]="startDate" placeholder="Location Start Date" formControlName="start_date">
+        <input matInput [matDatepicker]="startDate" placeholder="Location Start Date" formControlName="start_date"
+          (ngModelChange)="preventStartDateRemoval()">
         <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
         <mat-datepicker #startDate></mat-datepicker>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
-        <mat-error *ngIf="this.editEventLocationForm.get('start_date').hasError('endDateBeforeStart')">Must precede end date</mat-error>
+        <mat-error *ngIf="this.editEventLocationForm.get('start_date').hasError('endDateBeforeStart')">Must precede end
+          date</mat-error>
+        <!-- <mat-error *ngIf="this.editEventLocationForm.get('start_date').hasError('required')">Must have a value</mat-error> -->
       </mat-form-field>
 
       <mat-form-field class="form-control">
@@ -108,6 +111,11 @@
             matTooltip="Look up feature in Geographic Names Information System (GNIS) database" (click)="openGNISLookupDialog(null)">
             <mat-icon>search</mat-icon>Look Up GNIS
           </button>
+
+          <button mat-stroked-button class="gnisid" color="primary" aria-label="Clear Geographic Names Information System (GNIS) entry"
+            matTooltip="Clear Geographic Names Information System (GNIS) entry" (click)="clearGNISEntry()">
+            <mat-icon>clear_all</mat-icon>Clear GNIS entry
+          </button>
         </div>
 
         <div class="horizontal-form-container">
@@ -125,16 +133,12 @@
       </mat-card-content>
     </mat-card>
 
-    <!-- <div class="vertical-form-container">
-      <mat-form-field class="form-control">
-        <input matInput placeholder="GNIS Standardized Location Name" formControlName="gnis_name">
-        <mat-hint align="start" matTooltip="field under development. value will not save.">
-          <strong>
-            <mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT
-          </strong>
-        </mat-hint>
-      </mat-form-field>
-    </div> -->
+    <div class="submissionReviewErrors">
+      <mat-error color="warn" *ngIf="editEventLocationForm.get('start_date').value === null">
+        <mat-icon class="icon">error</mat-icon>
+        <span class="alert-text">Start date must have a value.</span>
+      </mat-error>
+    </div>
 
   </form>
 </mat-dialog-content>
@@ -143,7 +147,7 @@
   <button mat-button color="warn" (click)="this.editEventLocationDialogRef.close('cancel');">
     <mat-icon>cancel</mat-icon>&nbsp;Cancel
   </button>
-  <button mat-button color="primary" type="submit" [disabled]="editEventLocationForm.invalid" (click)="updateEventLocation(editEventLocationForm.value)">
+  <button mat-button color="primary" type="submit" [disabled]="editEventLocationForm.invalid || startDateViolation" (click)="updateEventLocation(editEventLocationForm.value)">
     <mat-icon>send</mat-icon>&nbsp;Submit
   </button>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>

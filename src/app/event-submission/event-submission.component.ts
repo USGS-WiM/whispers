@@ -111,7 +111,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   eventSubmitConfirm: MatBottomSheetRef<EventSubmissionConfirmComponent>;
 
   private subscription: Subscription;
-  createdContact;
 
   currentUser;
 
@@ -182,6 +181,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   missingCommentFlag = false;
 
   locationSpeciesNumbersViolation = false;
+  // starts as true  because no start dates provided by default
+  locationStartDatesViolation = true;
+  // starts as false because event must be complete = true to trigger violation
   locationEndDatesViolation = false;
 
   filteredAdminLevelOnes = [];
@@ -217,7 +219,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       staff: null,
       event_status: '1',
       quality_check: { value: null, disabled: true },
-      legal_status: '1',
+      legal_status: 1,
       legal_number: '',
       // end NWHC only
       new_organizations: [[], Validators.required],
@@ -309,28 +311,15 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       this.eventSubmissionForm.get('new_organizations').setValue([this.currentUser.organization.toString()]);
     });
 
-    this.subscription = this.createContactSevice.getCreatedContact().subscribe(
+    createContactSevice.getCreatedContact().subscribe(
       createdContact => {
-        this.createdContact = createdContact;
-
-        // TEMPORARY- will need to use user creds to query user contact list
-        // get contacts from the ContactService
-        this.contactService.getContacts()
-          .subscribe(
-            contacts => {
-              this.userContacts = contacts;
-              console.log('User Contacts Loaded');
-            },
-            error => {
-              this.errorMessage = <any>error;
-            }
-          );
-
+        this.userContacts.push(createdContact);
+        this.userContacts.sort(function (a, b) {
+          if (a.last_name < b.last_name) { return -1; }
+          if (a.last_name > b.last_name) { return 1; }
+          return 0;
+        });
       });
-
-    // this.eventSubmitConfirm.afterDismissed().subscribe(() => {
-    //   console.log('Bottom sheet has been dismissed.');
-    // });
 
   }
 
@@ -338,12 +327,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this._onDestroy.next();
     this._onDestroy.complete();
   }
-
-  // ngOnChanges() {
-
-  //   this.checkLocationSpeciesNumbers();
-
-  // }
 
   openEventSubmitConfirm(formValue): void {
     this.bottomSheet.open(EventSubmissionConfirmComponent, {
@@ -381,6 +364,11 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       this.eventSubmissionForm.get('new_event_locations')['controls'][result.event_location_index].get('gnis_name').setValue(result.name);
 
     });
+  }
+
+  clearGNISEntry(eventLocationIndex) {
+    this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].controls['gnis_id'].setValue('');
+    this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].controls['gnis_name'].setValue('');
   }
 
 
@@ -840,6 +828,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         },
         error => {
           this.errorMessage = <any>error;
+          this.userContactsLoading = false;
         }
       );
 
@@ -1122,6 +1111,25 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
+  checkLocationStartDates() {
+    this.locationStartDatesViolation = false;
+    let requirementMet = false;
+      const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+      // tslint:disable-next-line:max-line-length
+      // loop through event locations
+      for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
+        // if there are any non-null start dates, requirement is met
+        if (this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('start_date').value !== null) {
+          requirementMet = true;
+        }
+      }
+      if (requirementMet) {
+        this.locationStartDatesViolation = false;
+      } else {
+        this.locationStartDatesViolation = true;
+      }
+  }
+
   checkLocationEndDates() {
     this.locationEndDatesViolation = false;
     if (this.eventSubmissionForm.get('complete').value === true) {
@@ -1147,7 +1155,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           data: {
             title: 'Marking event as complete',
             titleIcon: 'warning',
-            message: 'Submitting an event as complete will lock all editing on the event.',
+            message: 'Submitting an event as complete will lock all editing on the event after submission.',
             messageIcon: '',
             confirmButtonText: 'OK',
             showCancelButton: false
@@ -1155,6 +1163,52 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         }
       );
 
+    }
+  }
+
+  enforceLegalStatusRules(selected_legal_status) {
+    if (selected_legal_status === 2 || selected_legal_status === 4) {
+
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Legal Status Change',
+            titleIcon: 'warning',
+            message: 'This change to legal status will set the event record to private (Not Visible to Public).',
+            confirmButtonText: 'OK',
+            showCancelButton: false
+          }
+        }
+      );
+
+      this.confirmDialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.eventSubmissionForm.get('public').setValue(false);
+        }
+      });
+
+    }
+    if (selected_legal_status === 1 || selected_legal_status === 3) {
+
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Legal Status Change',
+            titleIcon: 'warning',
+            message: 'This change to legal status will set the event record to public (Visible to Public). Select "Cancel" to maintain current event visibility. Select "OK" to change to public.',
+            confirmButtonText: 'OK',
+            showCancelButton: true
+          }
+        }
+      );
+
+      this.confirmDialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.eventSubmissionForm.get('public').setValue(true);
+        }
+      });
     }
   }
 
@@ -1382,6 +1436,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     this.checkLocationEndDates();
+    this.checkLocationStartDates();
 
   }
 

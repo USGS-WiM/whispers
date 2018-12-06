@@ -372,9 +372,8 @@
 .contact-type-select {
     margin: 10px;
     flex-grow: 1;
-    max-width: 100px;
+    max-width: 100px !important;;
 }
-
 
 .hint {
     max-width: 90%;

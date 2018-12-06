@@ -181,6 +181,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   missingCommentFlag = false;
 
   locationSpeciesNumbersViolation = false;
+  // starts as true  because no start dates provided by default
+  locationStartDatesViolation = true;
+  // starts as false because event must be complete = true to trigger violation
   locationEndDatesViolation = false;
 
   filteredAdminLevelOnes = [];
@@ -364,8 +367,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   clearGNISEntry(eventLocationIndex) {
-    this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].controls['gnis_id'].setValue(null);
-    this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].controls['gnis_name'].setValue(null);
+    this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].controls['gnis_id'].setValue('');
+    this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].controls['gnis_name'].setValue('');
   }
 
 
@@ -1108,6 +1111,25 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
+  checkLocationStartDates() {
+    this.locationStartDatesViolation = false;
+    let requirementMet = false;
+      const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+      // tslint:disable-next-line:max-line-length
+      // loop through event locations
+      for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
+        // if there are any non-null start dates, requirement is met
+        if (this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('start_date').value !== null) {
+          requirementMet = true;
+        }
+      }
+      if (requirementMet) {
+        this.locationStartDatesViolation = false;
+      } else {
+        this.locationStartDatesViolation = true;
+      }
+  }
+
   checkLocationEndDates() {
     this.locationEndDatesViolation = false;
     if (this.eventSubmissionForm.get('complete').value === true) {
@@ -1133,7 +1155,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           data: {
             title: 'Marking event as complete',
             titleIcon: 'warning',
-            message: 'Submitting an event as complete will lock all editing on the event.',
+            message: 'Submitting an event as complete will lock all editing on the event after submission.',
             messageIcon: '',
             confirmButtonText: 'OK',
             showCancelButton: false
@@ -1414,6 +1436,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     this.checkLocationEndDates();
+    this.checkLocationStartDates();
 
   }
 

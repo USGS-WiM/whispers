@@ -7,13 +7,13 @@
 
       <!-- Event Reference -->
       <mat-form-field class="form-control">
-        <input matInput placeholder="Event Reference" formControlName="event_reference">
+        <input matInput placeholder="Event Reference" formControlName="event_reference" [readonly]="editEventForm.get('complete').value">
         <mat-error *ngIf="editEventForm.get('event_reference').invalid">{{getErrorMessage('event_reference')}}</mat-error>
       </mat-form-field>
 
       <!-- Event Type -->
       <mat-form-field class="form-control org-select">
-        <mat-select placeholder="Event Type" formControlName="event_type">
+        <mat-select placeholder="Event Type" formControlName="event_type" [disabled]="editEventForm.get('complete').value">
           <mat-option value="">--</mat-option>
           <mat-option *ngFor="let event_type of event_types" [value]="event_type.id">{{event_type.name}}</mat-option>
         </mat-select>
@@ -21,7 +21,7 @@
 
       <div class="horizontal-form-container">
         <mat-form-field class="form-control">
-          <mat-select placeholder="Event Visibility" formControlName="public" required>
+          <mat-select placeholder="Event Visibility" formControlName="public" required [disabled]="editEventForm.get('complete').value">
             <mat-option [value]="true">Visible to Public</mat-option>
             <mat-option [value]="false">Not Visible to Public</mat-option>
           </mat-select>
@@ -45,7 +45,7 @@
 
       <!-- Event Organizations -->
       <mat-form-field class="form-control org-select">
-        <mat-select placeholder="Event Organizations" formControlName="new_organizations" multiple>
+        <mat-select placeholder="Event Organizations" formControlName="new_organizations" multiple [disabled]="editEventForm.get('complete').value">
           <mat-option value="">--</mat-option>
           <mat-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</mat-option>
         </mat-select>
@@ -63,7 +63,7 @@
               <div class="vertical-form-container">
 
                 <mat-form-field class="form-control">
-                  <mat-select placeholder="Assigned NWHC Epidemiologist" formControlName="staff">
+                  <mat-select placeholder="Assigned NWHC Epidemiologist" formControlName="staff" [disabled]="editEventForm.get('complete').value">
                     <mat-option *ngFor="let staffMember of staff" [value]="staffMember.id">{{staffMember.first_name}}
                       {{staffMember.last_name}}</mat-option>
                   </mat-select>
@@ -73,7 +73,7 @@
               <div class="horizonal-form-container">
 
                 <mat-form-field class="form-control">
-                  <mat-select placeholder="Process Status" formControlName="event_status" required>
+                  <mat-select placeholder="Process Status" formControlName="event_status" required [disabled]="editEventForm.get('complete').value">
                     <mat-option *ngFor="let status of event_statuses" [value]="status.id">{{status.name}}
                     </mat-option>
                   </mat-select>
@@ -81,7 +81,7 @@
                 </mat-form-field>
 
                 <mat-form-field class="form-control">
-                  <input matInput [matDatepicker]="qualityCheck" placeholder="NWHC Quality Check" formControlName="quality_check">
+                  <input matInput [matDatepicker]="qualityCheck" placeholder="NWHC Quality Check" formControlName="quality_check" [readonly]="editEventForm.get('complete').value">
                   <mat-datepicker-toggle matSuffix [for]="qualityCheck"></mat-datepicker-toggle>
                   <mat-datepicker #qualityCheck></mat-datepicker>
                   <mat-hint align="start"></mat-hint>
@@ -90,7 +90,7 @@
 
               <div class="horizontal-form-container">
                 <mat-form-field class="form-control">
-                  <mat-select placeholder="Legal Status" formControlName="legal_status" required (selectionChange)="enforceLegalStatusRules($event.value)">
+                  <mat-select placeholder="Legal Status" formControlName="legal_status" required (selectionChange)="enforceLegalStatusRules($event.value)" [disabled]="editEventForm.get('complete').value">
                     <mat-option *ngFor="let legalStatus of legalStatuses" [value]="legalStatus.id">{{legalStatus.name}}
                     </mat-option>
                   </mat-select>
@@ -98,7 +98,7 @@
                 </mat-form-field>
 
                 <mat-form-field class="form-control">
-                  <input matInput placeholder="Legal Number" formControlName="legal_number">
+                  <input matInput placeholder="Legal Number" formControlName="legal_number" [readonly]="editEventForm.get('complete').value">
                   <mat-hint align="start"> </mat-hint>
                 </mat-form-field>
               </div>

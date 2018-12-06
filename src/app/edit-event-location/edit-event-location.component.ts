@@ -40,6 +40,7 @@ export class EditEventLocationComponent implements OnInit {
   editEventLocationForm: FormGroup;
 
   submitLoading = false;
+  startDateViolation = false;
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
 
@@ -171,6 +172,8 @@ export class EditEventLocationComponent implements OnInit {
       this.editEventLocationForm.get('land_ownership').setValue(this.data.eventLocationData.land_ownership.toString());
     }
 
+    this.preventStartDateRemoval();
+
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -198,6 +201,12 @@ export class EditEventLocationComponent implements OnInit {
       );
   }
 
+  preventStartDateRemoval() {
+    this.startDateViolation = false;
+    if (this.editEventLocationForm.get('start_date').value === null) {
+      this.startDateViolation = true;
+    }
+  }
 
   updateAdminLevelTwoOptions(selectedAdminLevelOneID) {
     const id = Number(selectedAdminLevelOneID);
@@ -267,9 +276,9 @@ export class EditEventLocationComponent implements OnInit {
     });
   }
 
-  clearGNISEntry(eventLocationIndex) {
-    this.editEventLocationForm.get('gnis_id').setValue(null);
-    this.editEventLocationForm.get('gnis_name').setValue(null);
+  clearGNISEntry() {
+    this.editEventLocationForm.get('gnis_id').setValue('');
+    this.editEventLocationForm.get('gnis_name').setValue('');
   }
 
 

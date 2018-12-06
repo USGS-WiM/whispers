@@ -88,11 +88,11 @@
       <mat-cell *matCellDef="let detail" class="addpadd">
         <div class="species-detail-action-bar-left">
           <button mat-button color="primary" (click)="editLocationSpecies(detail.element)"
-            [disabled]="!permissions.update">
+            [disabled]="!permissions.update || eventData.complete">
             <mat-icon>edit</mat-icon> Edit Species
           </button>
           <button mat-button color="warn" (click)="openDeleteLocationSpeciesConfirm(detail.element)"
-            [disabled]="!permissions.destroy">
+            [disabled]="!permissions.destroy || eventData.complete">
             <mat-icon>delete_forever</mat-icon> Delete Species
           </button>
         </div>
@@ -122,13 +122,13 @@
               <td>{{speciesdiagnosis.suspect ? 'Yes' : 'No'}}</td>
               <td>{{speciesdiagnosis.organizations_string}}</td>
               <td>
-                <button mat-icon-button aria-label="Edit species diagnosis" color="accent" [disabled]="!permissions.update"
+                <button mat-icon-button aria-label="Edit species diagnosis" color="accent" [disabled]="!permissions.update || eventData.complete"
                   (click)="editSpeciesDiagnosis(speciesdiagnosis, detail.element)">
                   <mat-icon>edit</mat-icon>
                 </button>
               </td>
               <td>
-                <button mat-icon-button aria-label="delete species diagnosis" color="warn" [disabled]="!permissions.destroy"
+                <button mat-icon-button aria-label="delete species diagnosis" color="warn" [disabled]="!permissions.destroy || eventData.complete"
                   (click)="openDeleteSpeciesDiagnosisConfirm(speciesdiagnosis)">
                   <mat-icon>remove_circle</mat-icon>
                 </button>
@@ -139,7 +139,7 @@
 
         <div class="species-detail-action-bar-left">
           <button mat-button color="primary" class="species-detail-action-button" (click)="addSpeciesDiagnosis(detail.element)"
-            [disabled]="!permissions.write">
+            [disabled]="!permissions.write || eventData.complete">
             <mat-icon>add</mat-icon> Add Species Diagnosis
           </button>
         </div>

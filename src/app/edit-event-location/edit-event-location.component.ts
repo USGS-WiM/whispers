@@ -267,5 +267,10 @@ export class EditEventLocationComponent implements OnInit {
     });
   }
 
+  clearGNISEntry(eventLocationIndex) {
+    this.editEventLocationForm.get('gnis_id').setValue(null);
+    this.editEventLocationForm.get('gnis_name').setValue(null);
+  }
+
 
 }

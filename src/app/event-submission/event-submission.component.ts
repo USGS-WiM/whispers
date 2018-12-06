@@ -382,6 +382,11 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     });
   }
 
+  clearGNISEntry(eventLocationIndex) {
+    this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].controls['gnis_id'].setValue(null);
+    this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].controls['gnis_name'].setValue(null);
+  }
+
 
   openSpeciesDiagnosisRemoveConfirm(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,

@@ -108,6 +108,11 @@
             matTooltip="Look up feature in Geographic Names Information System (GNIS) database" (click)="openGNISLookupDialog(null)">
             <mat-icon>search</mat-icon>Look Up GNIS
           </button>
+
+          <button mat-stroked-button class="gnisid" color="primary" aria-label="Clear Geographic Names Information System (GNIS) entry"
+            matTooltip="Clear Geographic Names Information System (GNIS) entry" (click)="clearGNISEntry(eventLocationIndex)">
+            <mat-icon>clear_all</mat-icon>Clear GNIS entry
+          </button>
         </div>
 
         <div class="horizontal-form-container">

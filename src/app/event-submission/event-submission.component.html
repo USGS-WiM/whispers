@@ -350,12 +350,18 @@
                             <mat-icon>search</mat-icon>Look Up GNIS
                           </button>
 
+                          <button mat-stroked-button class="gnisid" color="primary" aria-label="Clear Geographic Names Information System (GNIS) entry"
+                            matTooltip="Clear Geographic Names Information System (GNIS) entry" (click)="clearGNISEntry(eventLocationIndex)">
+                            <mat-icon>clear_all</mat-icon>Clear GNIS entry
+                          </button>
+
                           <div class="horizontal-form-container">
                             <mat-form-field class="form-control">
                               <input matInput placeholder="GNIS Feature Name" formControlName="gnis_name" readonly>
                               <mat-hint align="start">Use Look Up GNIS tool to populate </mat-hint>
 
                             </mat-form-field>
+
                             <mat-form-field class="form-control">
                               <input matInput placeholder="GNIS Feature ID" formControlName="gnis_id" readonly>
                               <mat-hint align="start">Use Look Up GNIS tool to populate </mat-hint>

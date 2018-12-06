@@ -58,10 +58,12 @@ import { APP_UTILITIES } from '@app/app.utilities';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
+import { ViewContactDetailsComponent } from '@app/view-contact-details/view-contact-details.component';
 
 import { EventDetail } from '@interfaces/event-detail';
 
 import * as search_api from 'usgs-search-api';
+
 declare const search_api: search_api;
 
 
@@ -85,6 +87,7 @@ export class AddEventLocationComponent implements OnInit {
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
+  viewContactDetailsDialogRef: MatDialogRef<ViewContactDetailsComponent>;
 
   landOwnerships: LandOwnership[];
   countries: Country[];
@@ -99,6 +102,7 @@ export class AddEventLocationComponent implements OnInit {
   commentTypes: CommentType[];
 
   userContacts = [];
+  userContactsLoading = false;
   submitLoading = false;
 
   /** Subject that emits when the component has been destroyed. */
@@ -176,6 +180,16 @@ export class AddEventLocationComponent implements OnInit {
     // @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.buildAddEventLocationForm();
+
+    createContactSevice.getCreatedContact().subscribe(
+      createdContact => {
+        this.userContacts.push(createdContact);
+        this.userContacts.sort(function (a, b) {
+          if (a.last_name < b.last_name) { return -1; }
+          if (a.last_name > b.last_name) { return 1; }
+          return 0;
+        });
+      });
   }
 
   // ngOnDestroy() {
@@ -315,6 +329,7 @@ export class AddEventLocationComponent implements OnInit {
 
     // TEMPORARY- will need to use user creds to query user contact list
     // get contact types from the ContactTypeService
+    this.userContactsLoading = true;
     this.contactService.getContacts()
       .subscribe(
         contacts => {
@@ -326,9 +341,11 @@ export class AddEventLocationComponent implements OnInit {
           });
           // populate the search select options for the initial control
           this.filteredContacts[0].next(this.userContacts);
+          this.userContactsLoading = false;
         },
         error => {
           this.errorMessage = <any>error;
+          this.userContactsLoading = false;
         }
       );
 
@@ -596,6 +613,43 @@ export class AddEventLocationComponent implements OnInit {
 
   getLocationContacts() {
     return this.addEventLocationForm.controls.new_location_contacts['controls'];
+  }
+
+  viewContactDetailsDialog(locationContactIndex) {
+
+    const contact_id = this.addEventLocationForm.get('new_location_contacts').value[locationContactIndex].contact;
+
+    if (contact_id == null) {
+      this.openSnackBar('First select a contact to view that contact\'s details', 'OK', 5000);
+    } else {
+
+      // look up contact
+      this.contactService.getContactDetails(contact_id)
+        .subscribe(
+          (contactDetails) => {
+
+            // Open dialog for viewing contact details
+            this.viewContactDetailsDialogRef = this.dialog.open(ViewContactDetailsComponent, {
+              data: {
+                contact: contactDetails
+              }
+            });
+
+            this.viewContactDetailsDialogRef.afterClosed()
+              .subscribe(
+                () => {
+                  // do something after close
+                },
+                error => {
+                  this.errorMessage = <any>error;
+                }
+              );
+          },
+          error => {
+            this.errorMessage = <any>error;
+          }
+        );
+    }
   }
 
   // location comments

@@ -202,6 +202,52 @@ export class EditEventComponent implements OnInit {
     }
   }
 
+  enforceLegalStatusRules(selected_legal_status) {
+    if (selected_legal_status === 2 || selected_legal_status === 4) {
+
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Legal Status Change',
+            titleIcon: 'warning',
+            message: 'This change to legal status will set the event record to private (Not Visible to Public).',
+            confirmButtonText: 'OK',
+            showCancelButton: false
+          }
+        }
+      );
+
+      this.confirmDialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.editEventForm.get('public').setValue(false);
+        }
+      });
+
+    }
+    if (selected_legal_status === 1 || selected_legal_status === 3) {
+
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Legal Status Change',
+            titleIcon: 'warning',
+            message: 'This change to legal status will set the event record to public (Visible to Public). Select "Cancel" to maintain current event visibility. Select "OK" to change to public.',
+            confirmButtonText: 'OK',
+            showCancelButton: true
+          }
+        }
+      );
+
+      this.confirmDialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.editEventForm.get('public').setValue(true);
+        }
+      });
+    }
+  }
+
   updateEvent(formValue) {
     formValue.id = this.data.eventData.id;
     formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');

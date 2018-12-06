@@ -90,7 +90,7 @@
 
               <div class="horizontal-form-container">
                 <mat-form-field class="form-control">
-                  <mat-select placeholder="Legal Status" formControlName="legal_status" required>
+                  <mat-select placeholder="Legal Status" formControlName="legal_status" required (selectionChange)="enforceLegalStatusRules($event.value)">
                     <mat-option *ngFor="let legalStatus of legalStatuses" [value]="legalStatus.id">{{legalStatus.name}}
                     </mat-option>
                   </mat-select>

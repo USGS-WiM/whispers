@@ -154,9 +154,9 @@
                           <span *ngIf="speciesdiagnosis.positive_count !== null">{{speciesdiagnosis.positive_count}}
                             positive</span>
                           <br>
-                          <span *ngIf="speciesdiagnosis.organizations_string.length > 0">Tested by
+                          <!-- <span *ngIf="speciesdiagnosis.organizations_string.length > 0">Tested by
                               <span *ngFor="let org of speciesdiagnosis.organizations_string">{{org}} </span>
-                          </span><br />
+                          </span><br /> -->
                         </span>
                       </span>
                       <span *ngIf="loc_species.speciesdiagnoses.length === 0">Not assessed</span>
@@ -205,8 +205,8 @@
             </div>
 
             <div class="public">
-              <span>This event is </span><span *ngIf="eventData.public === true" class="public-status green">Public</span><span
-                *ngIf="eventData.public !== true" class="public-status red">Not Public</span>
+              <span>This event is </span><span *ngIf="eventData.public === true" class="public-status green">Visible to Public</span><span
+                *ngIf="eventData.public !== true" class="public-status red">Not Visible to Public</span>
             </div>
           </div>
 

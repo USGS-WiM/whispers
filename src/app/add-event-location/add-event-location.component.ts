@@ -61,6 +61,7 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 
 import * as search_api from 'usgs-search-api';
 declare const search_api: search_api;
+declare let gtag: Function;
 
 
 @Component({
@@ -349,6 +350,7 @@ export class AddEventLocationComponent implements OnInit {
           this.openSnackBar('New event location successfully created. Page will reload.', 'OK', 5000);
           this.addEventLocationForm.reset();
           location.reload();
+          gtag('event', 'click', {'event_category': 'Event Details','event_label': 'New Location Added'});
         },
         error => {
           this.errorMessage = <any>error;

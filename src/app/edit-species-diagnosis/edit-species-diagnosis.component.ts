@@ -26,6 +26,7 @@ import { Organization } from '@interfaces/organization';
 import { SpeciesDiagnosis } from '@interfaces/species-diagnosis';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-edit-species-diagnosis',
@@ -270,6 +271,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
             this.openSnackBar('Species Diagnosis Added', 'OK', 5000);
             this.dataUpdatedService.triggerRefresh();
             this.editSpeciesDiagnosisDialogRef.close();
+            gtag('event', 'click', {'event_category': 'Species Diagnosis','event_label': 'Species Diagnosis Added, Diagnosis: ' + speciesdiagnosis.diagnosis});
           },
           error => {
             this.submitLoading = false;
@@ -297,6 +299,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
             this.openSnackBar('Species Diagnosis Updated', 'OK', 5000);
             this.dataUpdatedService.triggerRefresh();
             this.editSpeciesDiagnosisDialogRef.close('add');
+            gtag('event', 'click', {'event_category': 'Species Diagnosis','event_label': 'Species Diagnosis Edited, Diagnosis: ' + contact.diagnosis});
           },
           error => {
             this.submitLoading = false;

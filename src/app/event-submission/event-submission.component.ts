@@ -92,6 +92,7 @@ import { DateValidators } from '@validators/date.validator';
 
 import * as search_api from 'usgs-search-api';
 import { getTreeMultipleDefaultNodeDefsError } from '@angular/cdk/tree';
+declare let gtag: Function;
 
 declare const search_api: search_api;
 
@@ -1523,7 +1524,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
               this.resetStepper();
             }
           });
-
+          gtag('event', 'click', {'event_category': 'Event','event_label': 'New Event Created, type: ' + event.event_type});
           // open event save success dialog
           // this.submitSuccessDialogRef = this.dialog.open(EventSubmissionSuccessComponent,
           //   {

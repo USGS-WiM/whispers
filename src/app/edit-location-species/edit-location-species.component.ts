@@ -15,6 +15,7 @@ import { SpeciesService } from '@services/species.service';
 import { LocationSpeciesService } from '@services/location-species.service';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-edit-location-species',
@@ -199,6 +200,7 @@ export class EditLocationSpeciesComponent implements OnInit {
             this.openSnackBar('Species successfully added to this location', 'OK', 5000);
             this.dataUpdatedService.triggerRefresh();
             this.editLocationSpeciesDialogRef.close();
+            gtag('event', 'click', {'event_category': 'Event Location Species Details','event_label': 'Species Added to Location, location: ' + event.event_location});
           },
           error => {
             this.submitLoading = false;
@@ -218,6 +220,7 @@ export class EditLocationSpeciesComponent implements OnInit {
             this.openSnackBar('Species Updated', 'OK', 5000);
             this.dataUpdatedService.triggerRefresh();
             this.editLocationSpeciesDialogRef.close();
+            gtag('event', 'click', {'event_category': 'Event Location Species Details','event_label': 'Species Location Edited, location: ' + event.event_location});
           },
           error => {
             this.submitLoading = false;

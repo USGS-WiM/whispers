@@ -20,6 +20,7 @@ import { DataUpdatedService } from '@app/services/data-updated.service';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
 import { APP_UTILITIES } from '@app/app.utilities';
+declare let gtag: Function;
 
 
 @Component({
@@ -223,6 +224,7 @@ export class EditEventLocationComponent implements OnInit {
           this.openSnackBar('Event Location Details Updated', 'OK', 5000);
           this.editEventLocationDialogRef.close();
           this.dataUpdatedService.triggerRefresh();
+          gtag('event', 'click', {'event_category': 'Event Location Details','event_label': 'Event Location Details Edited'});
         },
         error => {
           this.submitLoading = false;

@@ -19,6 +19,7 @@ import { CurrentUserService } from '@app/services/current-user.service';
 
 import { LegalStatus } from '@interfaces/legal-status';
 import { LegalStatusService } from '@app/services/legal-status.service';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-edit-event',
@@ -170,6 +171,7 @@ export class EditEventComponent implements OnInit {
           this.submitLoading = false;
           this.openSnackBar('Event Updated', 'OK', 5000);
           this.editEventDialogRef.close();
+          gtag('event', 'click', {'event_category': 'Event Details','event_label': 'Event Edited'});
         },
         error => {
           this.submitLoading = false;

@@ -23,6 +23,7 @@ import { Staff } from '@interfaces/staff';
 import { DatePipe } from '@angular/common';
 import { StaffService } from '@app/services/staff.service';
 import { ConfirmComponent } from '@app/confirm/confirm.component';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-edit-event',
@@ -254,6 +255,7 @@ export class EditEventComponent implements OnInit {
           this.submitLoading = false;
           this.openSnackBar('Event Updated', 'OK', 5000);
           this.editEventDialogRef.close();
+          gtag('event', 'click', {'event_category': 'Event Details','event_label': 'Event Edited'});
         },
         error => {
           this.submitLoading = false;

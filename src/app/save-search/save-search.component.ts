@@ -11,6 +11,7 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
 import { SearchService } from '@app/services/search.service';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-save-search',
@@ -99,6 +100,7 @@ export class SaveSearchComponent implements OnInit {
           this.openSnackBar('Search successfully saved', 'OK', 5000);
           this.dataUpdatedService.triggerRefresh();
           this.saveSearchDialogRef.close();
+          gtag('event', 'click', {'event_category': 'Search','event_label': 'User Search Saved'});
         },
         error => {
           this.errorMessage = <any>error;

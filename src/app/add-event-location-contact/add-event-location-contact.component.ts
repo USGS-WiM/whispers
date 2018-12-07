@@ -21,6 +21,7 @@ import { ContactService } from '@services/contact.service';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
 import { EventLocationContactService } from '@app/services/event-location-contact.service';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-add-event-location-contact',
@@ -152,7 +153,7 @@ export class AddEventLocationContactComponent implements OnInit {
           this.openSnackBar('Contact association successfully saved', 'OK', 5000);
           this.dataUpdatedService.triggerRefresh();
           this.addEventLocationContactDialogRef.close();
-
+          gtag('event', 'click', {'event_category': 'Event Location Details','event_label': 'Contact Association Added'});
         },
         error => {
           this.errorMessage = <any>error;

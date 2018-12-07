@@ -11,6 +11,7 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 import { Diagnosis } from '@app/interfaces/diagnosis';
 import { DiagnosisService } from '@services/diagnosis.service';
 import { EventDiagnosisService } from '@services/event-diagnosis.service';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-add-event-diagnosis',
@@ -80,6 +81,7 @@ export class AddEventDiagnosisComponent implements OnInit {
           this.submitLoading = false;
           this.openSnackBar('Event Diagnosis Added', 'OK', 5000);
           this.addEventDiagnosisDialogRef.close();
+          gtag('event', 'click', {'event_category': 'Event Diagnosis','event_label': 'Event Diagnosis Added, Diagnosis: ' + contact.diagnosis});
         },
         error => {
           this.submitLoading = false;

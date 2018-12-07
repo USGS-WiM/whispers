@@ -91,6 +91,7 @@ import { DateValidators } from '@validators/date.validator';
 
 import * as search_api from 'usgs-search-api';
 import { getTreeMultipleDefaultNodeDefsError } from '@angular/cdk/tree';
+declare let gtag: Function;
 
 declare const search_api: search_api;
 
@@ -1278,7 +1279,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     const sick_count = AC.get('sick_count').value;
     const sick_count_estimated = AC.get('sick_count_estimated').value;
 
-    if (sick_count !== null) {
+    if (sick_count !== null && sick_count_estimated !== null) {
       if (sick_count_estimated <= sick_count) {
         AC.get('sick_count_estimated').setErrors({ estimatedSick: true });
       }
@@ -1290,7 +1291,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     const dead_count = AC.get('dead_count').value;
     const dead_count_estimated = AC.get('dead_count_estimated').value;
 
-    if (dead_count !== null) {
+    if (dead_count !== null && dead_count_estimated !== null) {
       if (dead_count_estimated <= dead_count) {
         AC.get('dead_count_estimated').setErrors({ estimatedDead: true });
       }
@@ -1841,7 +1842,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     // }
     const new_orgs_array = [];
     // loop through and convert new_organizations
-    for (const org of formValue.new_organizations){
+    for (const org of formValue.new_organizations) {
       new_orgs_array.push(org.org);
     }
     formValue.new_organizations = new_orgs_array;
@@ -1888,16 +1889,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
             }
           });
 
-          // // when user clicks OK, reset the form and stepper using resetStepper()
-          // this.submitSuccessDialogRef.afterClosed().subscribe(result => {
-          //   if (result === true) {
-          //     alert('event saved OKed');
-          //     this.resetStepper();
-          //   }
-          // });
-          // use these below if using the success dialog above does not work or is unused.
-          //this.openSnackBar('Event successfully created', 'OK', 8000);
-          //this.resetStepper();
+          gtag('event', 'click', { 'event_category': 'Event', 'event_label': 'New Event Created, type: ' + event.event_type });
+
         },
         error => {
           this.submitLoading = false;

@@ -118,7 +118,6 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     if (this.data.species_diagnosis_action === 'add') {
       this.action_text = 'Add';
       this.action_button_text = 'Submit';
-      this.speciesDiagnosisForm.get('location_species').setValue(this.data.locationspecies.id);
     } else if (this.data.species_diagnosis_action === 'addToFormArray') {
       this.action_text = 'Add';
       this.action_button_text = 'Add';

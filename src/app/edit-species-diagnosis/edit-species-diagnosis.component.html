@@ -14,6 +14,14 @@
 
     <div class="vertical-form-container">
 
+        <mat-form-field id="hidethis">
+            <mat-select>
+              <ngx-mat-select-search></ngx-mat-select-search>
+              <mat-option>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
       <div class="horizontal-form-container">
 
         <mat-form-field class="form-control diagnosis-select" *ngIf="data.species_diagnosis_action !== 'edit'">

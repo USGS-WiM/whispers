@@ -81,7 +81,7 @@
             <span class="header-button-text">Logout</span>
           </button>
   
-          <button mat-menu-item aria-label="User Dashboard" (click)="openUserDashboard()">
+          <button mat-menu-item aria-label="User Dashboard" (click)="openUserDashboard()" *ngIf="currentUser.username != ''">
             <mat-icon>dashboard</mat-icon>
             <span>User Dashboard</span>
           </button>

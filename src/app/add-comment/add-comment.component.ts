@@ -14,7 +14,7 @@ import { CommentTypeService } from '@app/services/comment-type.service';
 import { CommentType } from '@interfaces/comment-type';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
-
+declare let gtag: Function;
 
 @Component({
   selector: 'app-add-comment',
@@ -105,7 +105,7 @@ export class AddCommentComponent implements OnInit {
             this.openSnackBar('Comment Successfully Saved', 'OK', 5000);
             this.dataUpdatedService.triggerRefresh();
             this.addCommentDialogRef.close();
-
+            gtag('event', 'click', {'event_category': 'Comments','event_label': 'Comment submitted, type: ' + comment.comment_type });
           },
           error => {
             this.errorMessage = <any>error;

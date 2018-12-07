@@ -17,6 +17,7 @@ import { Contact } from '@interfaces/contact';
 import { ContactService } from '@services/contact.service';
 
 import { CreateContactService } from '@create-contact/create-contact.service';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-create-contact',
@@ -122,6 +123,7 @@ export class CreateContactComponent implements OnInit {
             this.createContactService.setCreatedContact(contact);
             this.openSnackBar('Contact Created', 'OK', 5000);
             this.createContactDialogRef.close();
+            gtag('event', 'click', {'event_category': 'Contacts','event_label': 'New Contact Created'});
           },
           error => {
             this.submitLoading = false;

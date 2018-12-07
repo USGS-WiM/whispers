@@ -18,6 +18,7 @@ import { SexBias } from '@interfaces/sex-bias';
 import { LocationSpeciesService } from '@services/location-species.service';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-edit-location-species',
@@ -119,7 +120,7 @@ export class EditLocationSpeciesComponent implements OnInit {
     this.filteredSpecies.next(this.data.species);
 
     this.ageBiases = this.data.ageBiases;
-    this.sexBiases = this.sexBiases;
+    this.sexBiases = this.data.sexBiases;
 
     // listen for search field value changes
     this.speciesFilterCtrl.valueChanges
@@ -197,7 +198,7 @@ export class EditLocationSpeciesComponent implements OnInit {
     const sick_count = AC.get('sick_count').value;
     const sick_count_estimated = AC.get('sick_count_estimated').value;
 
-    if (sick_count !== null) {
+    if (sick_count !== null && sick_count_estimated !== null) {
       if (sick_count_estimated <= sick_count) {
         AC.get('sick_count_estimated').setErrors({ estimatedSick: true });
       }
@@ -209,7 +210,7 @@ export class EditLocationSpeciesComponent implements OnInit {
     const dead_count = AC.get('dead_count').value;
     const dead_count_estimated = AC.get('dead_count_estimated').value;
 
-    if (dead_count !== null) {
+    if (dead_count !== null && dead_count_estimated !== null) {
       if (dead_count_estimated <= dead_count) {
         AC.get('dead_count_estimated').setErrors({ estimatedDead: true });
       }
@@ -238,14 +239,28 @@ export class EditLocationSpeciesComponent implements OnInit {
         } else if (this.data.location_species_action === 'add') {
           locationspecies = eventlocation.locationspecies;
         }
-        for (const locspecies of locationspecies) {
+        // check if the array has anything in it before looping
+        if (locationspecies.length > 0) {
+          for (const locspecies of locationspecies) {
+            if (
+              (
+                locspecies.sick_count +
+                locspecies.dead_count +
+                locspecies.sick_count_estimated +
+                locspecies.dead_count_estimated +
+                this.locationSpeciesForm.get('sick_count').value +
+                this.locationSpeciesForm.get('dead_count').value +
+                this.locationSpeciesForm.get('sick_count_estimated').value +
+                this.locationSpeciesForm.get('dead_count_estimated').value
+              ) >= 1
+            ) {
+              requirementMet = true;
+            }
+          }
+        } else {
+          // if locationspecies array is empty, only use the form value to validate
           if (
-            (
-              locspecies.sick_count +
-              locspecies.dead_count +
-              locspecies.sick_count_estimated +
-              locspecies.dead_count_estimated +
-              this.locationSpeciesForm.get('sick_count').value +
+            (this.locationSpeciesForm.get('sick_count').value +
               this.locationSpeciesForm.get('dead_count').value +
               this.locationSpeciesForm.get('sick_count_estimated').value +
               this.locationSpeciesForm.get('dead_count_estimated').value
@@ -279,6 +294,7 @@ export class EditLocationSpeciesComponent implements OnInit {
             this.openSnackBar('Species successfully added to this location', 'OK', 5000);
             this.dataUpdatedService.triggerRefresh();
             this.editLocationSpeciesDialogRef.close();
+            gtag('event', 'click', { 'event_category': 'Event Location Species Details', 'event_label': 'Species Added to Location, location: ' + event.event_location });
           },
           error => {
             this.submitLoading = false;
@@ -298,6 +314,7 @@ export class EditLocationSpeciesComponent implements OnInit {
             this.openSnackBar('Species Updated', 'OK', 5000);
             this.dataUpdatedService.triggerRefresh();
             this.editLocationSpeciesDialogRef.close();
+            gtag('event', 'click', { 'event_category': 'Event Location Species Details', 'event_label': 'Species Location Edited, location: ' + event.event_location });
           },
           error => {
             this.submitLoading = false;

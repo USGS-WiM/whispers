@@ -98,6 +98,8 @@ export class LocationSpeciesTableComponent implements OnInit {
       data: {
         eventData: this.eventData,
         locationspecies: locationspecies,
+        ageBiases: this.ageBiases,
+        sexBiases: this.sexBiases,
         location_species_action: 'edit',
         action_text: 'edit',
         action_button_text: 'Save Changes',

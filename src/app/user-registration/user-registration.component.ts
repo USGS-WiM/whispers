@@ -18,6 +18,8 @@ import { Role } from '@interfaces/role';
 
 
 import { APP_SETTINGS } from '@app/app.settings';
+declare let gtag: Function;
+
 
 
 @Component({
@@ -161,6 +163,7 @@ export class UserRegistrationComponent implements OnInit {
           // sessionStorage.first_name = event.first_name;
           // sessionStorage.last_name = event.last_name;
           // sessionStorage.password = sessionStorage.new_password;
+          gtag('event', 'click', {'event_category': 'Users','event_label': 'New User Created'});
         },
         error => {
           this.submitLoading = false;

@@ -33,6 +33,7 @@ import { DisplayValuePipe } from '@pipes/display-value.pipe';
 import { EventService } from '@app/services/event.service';
 
 import { APP_SETTINGS } from '@app/app.settings';
+declare let gtag: Function;
 
 
 @Component({
@@ -751,6 +752,9 @@ export class SearchDialogComponent implements OnInit {
     this.searchDialogService.setSearchQuery(searchQuery);
 
     sessionStorage.setItem('currentSearch', JSON.stringify(searchQuery));
+
+    gtag('event', 'click', {'event_category': 'Search','event_label': 'Search submitted, date range: ' + searchQuery.start_date + ' - ' + searchQuery.end_date});
+
 
   }
 

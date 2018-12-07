@@ -13,6 +13,7 @@ import { CommentType } from '@interfaces/comment-type';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
 import { ServiceRequestService } from '@services/service-request.service';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-add-service-request',
@@ -95,7 +96,7 @@ export class AddServiceRequestComponent implements OnInit {
           this.openSnackBar('Service request successfully submitted', 'OK', 5000);
           this.dataUpdatedService.triggerRefresh();
           this.addServiceRequestDialogRef.close();
-
+          gtag('event', 'click', {'event_category': 'Event Details','event_label': 'Service Request Submitted'});
         },
         error => {
           this.errorMessage = <any>error;

@@ -65,6 +65,7 @@ import { EventDetail } from '@interfaces/event-detail';
 import * as search_api from 'usgs-search-api';
 
 declare const search_api: search_api;
+declare let gtag: Function;
 
 
 @Component({
@@ -380,6 +381,7 @@ export class AddEventLocationComponent implements OnInit {
           this.openSnackBar('New event location successfully created. Page will reload.', 'OK', 5000);
           this.addEventLocationForm.reset();
           location.reload();
+          gtag('event', 'click', {'event_category': 'Event Details','event_label': 'New Location Added'});
         },
         error => {
           this.errorMessage = <any>error;
@@ -504,7 +506,7 @@ export class AddEventLocationComponent implements OnInit {
     const sick_count = AC.get('sick_count').value;
     const sick_count_estimated = AC.get('sick_count_estimated').value;
 
-    if (sick_count !== null) {
+    if (sick_count !== null && sick_count_estimated !== null) {
       if (sick_count_estimated <= sick_count) {
         AC.get('sick_count_estimated').setErrors({ estimatedSick: true });
       }
@@ -516,7 +518,7 @@ export class AddEventLocationComponent implements OnInit {
     const dead_count = AC.get('dead_count').value;
     const dead_count_estimated = AC.get('dead_count_estimated').value;
 
-    if (dead_count !== null) {
+    if (dead_count !== null && dead_count_estimated !== null) {
       if (dead_count_estimated <= dead_count) {
         AC.get('dead_count_estimated').setErrors({ estimatedDead: true });
       }

@@ -538,20 +538,17 @@
             </mat-error> -->
         </div>
 
-
         <div class="form-nav-buttons">
 
           <button mat-button matStepperPrevious type="button">
             <i class="material-icons"> arrow_back_ios </i> Back
           </button>
-
           <button mat-button type="submit" color="primary" [disabled]="addEventLocationForm.invalid" (click)="onSubmit(addEventLocationForm.value)">
             <mat-icon>send</mat-icon>&nbsp;Submit
           </button>
 
           <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
         </div>
-
 
       </mat-step>
 

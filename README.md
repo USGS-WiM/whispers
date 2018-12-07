@@ -32,11 +32,14 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Production Build
 
-Run `ng build --prod --base-href [prelative path to web server root]` to build the project. The build artifacts will be stored in the `dist/` directory. This will use the production environment configuration.
+Run `ng build --prod --base-href [relative path to web server root]` to build the project. The build artifacts will be stored in the `dist/` directory. This will use the production environment configuration.
 
 ## Authors
 
 * **[Blake Draper](https://github.com/BlakeDraper)**  - *Lead Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
+Mapping](https://wim.usgs.gov/)
+
+* **[Nick Estes](https://github.com/njestes)**  - *Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
 Mapping](https://wim.usgs.gov/)
 
 See also the list of [contributors](../../graphs/contributors) who participated in this project.

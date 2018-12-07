@@ -5,5 +5,6 @@
 export const environment = {
   production: false,
   hmr: false,
-  version: require('../../package.json').version
+  version: require('../../package.json').version,
+  api_root: 'https://whispersdev.wim.usgs.gov/whispersservices/'
 };

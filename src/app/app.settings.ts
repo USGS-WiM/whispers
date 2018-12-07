@@ -10,13 +10,14 @@ import { APP_UTILITIES } from '@app/app.utilities';
 @Injectable()
 export class APP_SETTINGS {
 
-    private static _environment: string = 'development';
-    //private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersdev.wim.usgs.gov/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
-    // beta test services
-    private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersbeta.wim.usgs.gov/test/whispersservices/' : 'https://whispersbeta.wim.usgs.gov/test/whispersservices/';
-    // PAGINATION BRANCH OF WEB SERVICES
-    //private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersdevpagination.wim.usgs.gov/whispersservices/' : 'https://whispersdevpagination.wim.usgs.gov/whispersservices/';
-    // private static _API_ENDPOINT: string = APP_SETTINGS._environment === 'production' ? 'https://whisperstest.wim.usgs.gov/whispersservices/' : 'https://whisperstest.wim.usgs.gov/whispersservices/';
+    private static _environment = 'development';
+    // tslint:disable-next-line:max-line-length
+    //private static API_ROOT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersbeta.wim.usgs.gov/test/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
+
+    // default env is development
+    public static get API_ROOT() {
+        return environment.api_root;
+    }
 
     public static set environment(env: string) { this._environment = env; }
     public static get API_USERNAME(): string { return 'admin'; }
@@ -47,50 +48,50 @@ export class APP_SETTINGS {
         ];
     }
 
-    public static get AUTH_URL(): string { return this._API_ENDPOINT + 'auth/'; }
-    public static get EVENTS_URL(): string { return this._API_ENDPOINT + 'events/'; }
-    public static get EVENT_DETAILS_URL(): string { return this._API_ENDPOINT + 'eventdetails/'; }
-    public static get EVENTS_SUMMARIES_URL(): string { return this._API_ENDPOINT + 'eventsummaries/'; }
-    public static get STAFF_URL(): string { return this._API_ENDPOINT + 'staff/'; }
-    public static get EVENT_TYPES_URL(): string { return this._API_ENDPOINT + 'eventtypes/'; }
-    public static get EVENT_STATUSES_URL(): string { return this._API_ENDPOINT + 'eventstatuses/'; }
-    public static get EVENT_ABSTRACTS_URL(): string { return this._API_ENDPOINT + 'eventabstracts/'; }
-    public static get EVENT_CASES_URL(): string { return this._API_ENDPOINT + 'eventcases/'; }
-    public static get EVENT_LABSITES_URL(): string { return this._API_ENDPOINT + 'eventlabsites/'; }
-    public static get EVENT_ORGANIZATIONS_URL(): string { return this._API_ENDPOINT + 'eventorganizations/'; }
-    public static get EVENT_CONTACTS_URL(): string { return this._API_ENDPOINT + 'eventcontacts/'; }
-    public static get EVENT_LOCATION_CONTACTS_URL(): string { return this._API_ENDPOINT + 'eventlocationcontacts/'; }
-    public static get EVENT_LOCATIONS_URL(): string { return this._API_ENDPOINT + 'eventlocations/'; }
-    public static get COUNTRIES_URL(): string { return this._API_ENDPOINT + 'countries/'; }
-    public static get ADMINISTRATIVE_LEVEL_ONES_URL(): string { return this._API_ENDPOINT + 'administrativelevelones/'; }
-    public static get ADMINISTRATIVE_LEVEL_TWOS_URL(): string { return this._API_ENDPOINT + 'administrativeleveltwos/'; }
-    public static get LAND_OWNERSHIPS_URL(): string { return this._API_ENDPOINT + 'landownerships/'; }
-    public static get LEGAL_STATUS_URL(): string { return this._API_ENDPOINT + 'legalstatuses/'; }
-    public static get LOCATION_SPECIES_URL(): string { return this._API_ENDPOINT + 'locationspecies/'; }
-    public static get SPECIES_URL(): string { return this._API_ENDPOINT + 'species/'; }
-    public static get AGE_BIASES_URL(): string { return this._API_ENDPOINT + 'agebiases/'; }
-    public static get SEX_BIASES_URL(): string { return this._API_ENDPOINT + 'sexbiases/'; }
-    public static get DIAGNOSES_URL(): string { return this._API_ENDPOINT + 'diagnoses/'; }
-    public static get DIAGNOSIS_TYPES_URL(): string { return this._API_ENDPOINT + 'diagnosistypes/'; }
-    public static get DIAGNOSIS_BASES_URL(): string { return this._API_ENDPOINT + 'diagnosisbases/'; }
-    public static get DIAGNOSIS_CAUSES_URL(): string { return this._API_ENDPOINT + 'diagnosiscauses/'; }
-    public static get EVENT_DIAGNOSES_URL(): string { return this._API_ENDPOINT + 'eventdiagnoses/'; }
-    public static get LOCATION_SPECIES_DIAGNOSIS_URL(): string { return this._API_ENDPOINT + 'speciesdiagnoses/'; }
-    public static get PERMISSIONS_URL(): string { return this._API_ENDPOINT + 'permissions/'; }
-    public static get PERMISSION_TYPES_URL(): string { return this._API_ENDPOINT + 'permissionstypes'; }
-    public static get FLYWAYS_URL(): string { return this._API_ENDPOINT + 'flyways/'; }
-    public static get COMMENTS_URL(): string { return this._API_ENDPOINT + 'comments/'; }
-    public static get ARTIFACTS_URL(): string { return this._API_ENDPOINT + 'artifacts/'; }
-    public static get USERS_URL(): string { return this._API_ENDPOINT + 'users/'; }
-    public static get ROLES_URL(): string { return this._API_ENDPOINT + 'roles/'; }
-    public static get ORGANIZATIONS_URL(): string { return this._API_ENDPOINT + 'organizations/'; }
-    public static get CONTACTS_URL(): string { return this._API_ENDPOINT + 'contacts/'; }
-    public static get CONTACT_TYPES_URL(): string { return this._API_ENDPOINT + 'contacttypes/'; }
-    public static get COMMENT_TYPES_URL(): string { return this._API_ENDPOINT + 'commenttypes/'; }
-    public static get GROUPS_URL(): string { return this._API_ENDPOINT + 'groups/'; }
-    public static get SEARCH_URL(): string { return this._API_ENDPOINT + 'searches/'; }
-    public static get SERVICE_REQUEST_URL(): string { return this._API_ENDPOINT + 'servicerequests/'; }
-    public static get SERVICE_REQUEST_TYPES_URL(): string { return this._API_ENDPOINT + 'servicerequesttypes/'; }
+    public static get AUTH_URL(): string { return this.API_ROOT + 'auth/'; }
+    public static get EVENTS_URL(): string { return this.API_ROOT + 'events/'; }
+    public static get EVENT_DETAILS_URL(): string { return this.API_ROOT + 'eventdetails/'; }
+    public static get EVENTS_SUMMARIES_URL(): string { return this.API_ROOT + 'eventsummaries/'; }
+    public static get STAFF_URL(): string { return this.API_ROOT + 'staff/'; }
+    public static get EVENT_TYPES_URL(): string { return this.API_ROOT + 'eventtypes/'; }
+    public static get EVENT_STATUSES_URL(): string { return this.API_ROOT + 'eventstatuses/'; }
+    public static get EVENT_ABSTRACTS_URL(): string { return this.API_ROOT + 'eventabstracts/'; }
+    public static get EVENT_CASES_URL(): string { return this.API_ROOT + 'eventcases/'; }
+    public static get EVENT_LABSITES_URL(): string { return this.API_ROOT + 'eventlabsites/'; }
+    public static get EVENT_ORGANIZATIONS_URL(): string { return this.API_ROOT + 'eventorganizations/'; }
+    public static get EVENT_CONTACTS_URL(): string { return this.API_ROOT + 'eventcontacts/'; }
+    public static get EVENT_LOCATION_CONTACTS_URL(): string { return this.API_ROOT + 'eventlocationcontacts/'; }
+    public static get EVENT_LOCATIONS_URL(): string { return this.API_ROOT + 'eventlocations/'; }
+    public static get COUNTRIES_URL(): string { return this.API_ROOT + 'countries/'; }
+    public static get ADMINISTRATIVE_LEVEL_ONES_URL(): string { return this.API_ROOT + 'administrativelevelones/'; }
+    public static get ADMINISTRATIVE_LEVEL_TWOS_URL(): string { return this.API_ROOT + 'administrativeleveltwos/'; }
+    public static get LAND_OWNERSHIPS_URL(): string { return this.API_ROOT + 'landownerships/'; }
+    public static get LEGAL_STATUS_URL(): string { return this.API_ROOT + 'legalstatuses/'; }
+    public static get LOCATION_SPECIES_URL(): string { return this.API_ROOT + 'locationspecies/'; }
+    public static get SPECIES_URL(): string { return this.API_ROOT + 'species/'; }
+    public static get AGE_BIASES_URL(): string { return this.API_ROOT + 'agebiases/'; }
+    public static get SEX_BIASES_URL(): string { return this.API_ROOT + 'sexbiases/'; }
+    public static get DIAGNOSES_URL(): string { return this.API_ROOT + 'diagnoses/'; }
+    public static get DIAGNOSIS_TYPES_URL(): string { return this.API_ROOT + 'diagnosistypes/'; }
+    public static get DIAGNOSIS_BASES_URL(): string { return this.API_ROOT + 'diagnosisbases/'; }
+    public static get DIAGNOSIS_CAUSES_URL(): string { return this.API_ROOT + 'diagnosiscauses/'; }
+    public static get EVENT_DIAGNOSES_URL(): string { return this.API_ROOT + 'eventdiagnoses/'; }
+    public static get LOCATION_SPECIES_DIAGNOSIS_URL(): string { return this.API_ROOT + 'speciesdiagnoses/'; }
+    public static get PERMISSIONS_URL(): string { return this.API_ROOT + 'permissions/'; }
+    public static get PERMISSION_TYPES_URL(): string { return this.API_ROOT + 'permissionstypes'; }
+    public static get FLYWAYS_URL(): string { return this.API_ROOT + 'flyways/'; }
+    public static get COMMENTS_URL(): string { return this.API_ROOT + 'comments/'; }
+    public static get ARTIFACTS_URL(): string { return this.API_ROOT + 'artifacts/'; }
+    public static get USERS_URL(): string { return this.API_ROOT + 'users/'; }
+    public static get ROLES_URL(): string { return this.API_ROOT + 'roles/'; }
+    public static get ORGANIZATIONS_URL(): string { return this.API_ROOT + 'organizations/'; }
+    public static get CONTACTS_URL(): string { return this.API_ROOT + 'contacts/'; }
+    public static get CONTACT_TYPES_URL(): string { return this.API_ROOT + 'contacttypes/'; }
+    public static get COMMENT_TYPES_URL(): string { return this.API_ROOT + 'commenttypes/'; }
+    public static get GROUPS_URL(): string { return this.API_ROOT + 'groups/'; }
+    public static get SEARCH_URL(): string { return this.API_ROOT + 'searches/'; }
+    public static get SERVICE_REQUEST_URL(): string { return this.API_ROOT + 'servicerequests/'; }
+    public static get SERVICE_REQUEST_TYPES_URL(): string { return this.API_ROOT + 'servicerequesttypes/'; }
 
     public static get GO_USA_GOV_SHORTEN_URL(): string { return 'https://go.usa.gov/api/shorten.json'; }
     public static get GO_USA_GOV_USER(): string { return 'bdraper'; }

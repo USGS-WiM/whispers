@@ -222,7 +222,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       legal_status: 1,
       legal_number: '',
       // end NWHC only
-      new_organizations: [[], Validators.required],
+      new_organizations: this.formBuilder.array([
+        this.initEventOrganization()
+      ]),
+      // new_organizations: [[], Validators.required],
       new_service_request: this.formBuilder.group({
         request_type: 0,
         new_comments: this.formBuilder.array([])
@@ -308,7 +311,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
-      this.eventSubmissionForm.get('new_organizations').setValue([this.currentUser.organization.toString()]);
+      this.eventSubmissionForm.get('new_organizations')['controls'][0].get('org').setValue(this.currentUser.organization.toString());
     });
 
     createContactSevice.getCreatedContact().subscribe(
@@ -1114,20 +1117,20 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   checkLocationStartDates() {
     this.locationStartDatesViolation = false;
     let requirementMet = false;
-      const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
-      // tslint:disable-next-line:max-line-length
-      // loop through event locations
-      for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
-        // if there are any non-null start dates, requirement is met
-        if (this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('start_date').value !== null) {
-          requirementMet = true;
-        }
+    const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+    // tslint:disable-next-line:max-line-length
+    // loop through event locations
+    for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
+      // if there are any non-null start dates, requirement is met
+      if (this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('start_date').value !== null) {
+        requirementMet = true;
       }
-      if (requirementMet) {
-        this.locationStartDatesViolation = false;
-      } else {
-        this.locationStartDatesViolation = true;
-      }
+    }
+    if (requirementMet) {
+      this.locationStartDatesViolation = false;
+    } else {
+      this.locationStartDatesViolation = true;
+    }
   }
 
   checkLocationEndDates() {
@@ -1342,6 +1345,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     });
   }
 
+  initEventOrganization() {
+    return this.formBuilder.group({
+      org: null,
+    });
+  }
+
   initEventComment() {
     return this.formBuilder.group({
       comment: '',
@@ -1447,6 +1456,21 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   getEventLocations(form) {
     return form.controls.new_event_locations.controls;
+  }
+
+  // event organizations
+  addEventOrganization() {
+    const control = <FormArray>this.eventSubmissionForm.get('new_organizations');
+    control.push(this.initEventOrganization());
+  }
+
+  removeEventOrganization(eventOrgIndex) {
+    const control = <FormArray>this.eventSubmissionForm.get('new_organizations');
+    control.removeAt(eventOrgIndex);
+  }
+
+  getEventOrganizations(form) {
+    return form.controls.new_organizations.controls;
   }
 
   // event comments
@@ -1815,7 +1839,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     //     delete event_location.comment;
     //   }
     // }
-
+    const new_orgs_array = [];
+    // loop through and convert new_organizations
+    for (const org of formValue.new_organizations){
+      new_orgs_array.push(org.org);
+    }
+    formValue.new_organizations = new_orgs_array;
     // if lat/long fields are deleted to blank, update to null to be a valid number type on PATCH
     if (formValue.latitude === '') {
       formValue.latitude = null;

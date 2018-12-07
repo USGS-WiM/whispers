@@ -28,7 +28,7 @@
 }
 
 .species-number-control {
-    width: 8em;
+    width: 16em;
     margin: 10px;
     flex-grow: 1;
 }
@@ -55,6 +55,10 @@
 
 .diagnosis-select {
     width: 35em;
+}
+
+.org-select {
+    width: 40em;
 }
 
 .suspect-checkbox {

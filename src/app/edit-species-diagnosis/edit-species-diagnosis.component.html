@@ -86,22 +86,16 @@
           </mat-form-field>
         </div> -->
 
-      <mat-form-field class="form-control">
+      <mat-form-field class="form-control org-select">
         <mat-select placeholder="Diagnosing Lab" formControlName="new_species_diagnosis_organizations" multiple>
           <mat-option value="">--</mat-option>
           <mat-option *ngFor="let laboratory of laboratories" value="{{laboratory.id}}">{{laboratory.name}}</mat-option>
         </mat-select>
       </mat-form-field>
 
-
-
-
       <!-- <mat-checkbox formControlName="pooled">Pooled Test</mat-checkbox> -->
-
     </div>
-
   </form>
-
 
 </mat-dialog-content>
 
@@ -115,6 +109,4 @@
     </button>
     <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
   </div>
-
-
 </mat-dialog-actions>

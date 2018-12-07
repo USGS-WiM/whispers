@@ -89,11 +89,8 @@ export class EditEventComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.eventID = this.data.eventData.id;
-    // this.editEventForm.get('event_reference').setValue(this.data.eventData.event_reference);
-    // this.editEventForm.get('public').setValue(this.data.eventData.public.toString());
-    // this.editEventForm.get('complete').setValue(this.data.eventData.complete.toString());
-
+    this.eventID = this.data.eventData.id;
+   
     //const eventOrganizationsArray = [];
     // for (const eventOrganization of this.data.eventData.eventorganizations) {
     //   eventOrganizationsArray.push(eventOrganization.id.toString());
@@ -199,6 +196,52 @@ export class EditEventComponent implements OnInit {
           }
         }
       );
+    }
+  }
+
+  enforceLegalStatusRules(selected_legal_status) {
+    if (selected_legal_status === 2 || selected_legal_status === 4) {
+
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Legal Status Change',
+            titleIcon: 'warning',
+            message: 'This change to legal status will set the event record to private (Not Visible to Public).',
+            confirmButtonText: 'OK',
+            showCancelButton: false
+          }
+        }
+      );
+
+      this.confirmDialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.editEventForm.get('public').setValue(false);
+        }
+      });
+
+    }
+    if (selected_legal_status === 1 || selected_legal_status === 3) {
+
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Legal Status Change',
+            titleIcon: 'warning',
+            message: 'This change to legal status will set the event record to public (Visible to Public). Select "Cancel" to maintain current event visibility. Select "OK" to change to public.',
+            confirmButtonText: 'OK',
+            showCancelButton: true
+          }
+        }
+      );
+
+      this.confirmDialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.editEventForm.get('public').setValue(true);
+        }
+      });
     }
   }
 

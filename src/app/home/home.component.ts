@@ -785,7 +785,7 @@ export class HomeComponent implements OnInit {
       }
 
       // establish leaflet popup var for binding to marker (include check for mapPanel height, to set max popup height)
-      const popup = L.popup({ maxHeight: document.getElementById("mapPanel").offsetHeight - 150 })
+      const popup = L.popup({ maxHeight: document.getElementById('mapPanel').offsetHeight - 150 })
         .setContent(popupContent);
 
       // establish leaflet marker var, passing in icon var from above, including on popupopen logic for accordion style collapsing panels
@@ -795,43 +795,34 @@ export class HomeComponent implements OnInit {
         .bindPopup(popup)
         .on('popupopen', function (popup) {
 
-          const acc = document.getElementsByClassName('accordion');
-          let i;
+          const acc = Array.from(document.querySelectorAll('button.accordion'));
 
-          for (i = 0; i < acc.length; i++) {
-            acc[i].addEventListener('click', function () {
-              this.classList.toggle("active");
+          acc.forEach(function (button, i) {
+            acc[i].addEventListener('click', function (evt) {
+              this.classList.toggle('active');
               const panel = this.nextElementSibling;
               if (panel.style.maxHeight) {
                 panel.style.maxHeight = null;
               } else {
                 panel.style.maxHeight = panel.scrollHeight + 'px';
               }
+              //let acc = document.getElementsByClassName('accordion');
+              let j;
+              for (j = 0; j < acc.length; j++) {
+                if (i !== j) {
+                  const panel: HTMLElement = acc[j].nextElementSibling as HTMLElement;
+                  if (panel.style.maxHeight) {
+                    acc[j].classList.toggle('active');
+                    panel.style.maxHeight = null;
+                  }
+                }
+              }
             });
-          }
-
-          // let acc = document.getElementsByClassName("accordion");
-          // let i;
-
-          // for (i = 0; i < acc.length; i++) {
-          //     acc[i].addEventListener("click", function() {
-          //         /* Toggle between adding and removing the "active" class,
-          //         to highlight the button that controls the panel */
-          //         this.classList.toggle("active");
-
-          //         /*Toggle between hiding and showing the active panel */
-          //         var panel = this.nextElementSibling;
-          //         if (panel.style.display === "block") {
-          //             panel.style.display = "none";
-          //         } else {
-          //             panel.style.display = "block";
-          //         }
-          //     });
-          // }
+          });
         });
     }
 
-    if (this.locationMarkers.getBounds().isValid() == true) {
+    if (this.locationMarkers.getBounds().isValid() === true) {
       this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50], maxZoom: 10 });
     } else {
       this.openSnackBar('No events match your selected criteria. Please try again.', 'OK', 8000);

@@ -113,8 +113,8 @@
 
                   <div class="horizontal-form-container">
                     <mat-form-field class="form-control">
-                      <mat-select placeholder="Legal Status" formControlName="legal_status" required>
-                        <mat-option *ngFor="let legalStatus of legalStatuses" value="{{legalStatus.id}}">{{legalStatus.name}}
+                      <mat-select placeholder="Legal Status" formControlName="legal_status" required (ngModelChange)="enforceLegalStatusRules($event)">
+                        <mat-option *ngFor="let legalStatus of legalStatuses" [value]="legalStatus.id">{{legalStatus.name}}
                         </mat-option>
                       </mat-select>
                       <mat-hint align="start"></mat-hint>
@@ -164,7 +164,7 @@
 
                             <mat-form-field class="form-control">
                               <input matInput [matDatepicker]="startDate" placeholder="Location Start Date"
-                                formControlName="start_date">
+                                formControlName="start_date" (ngModelChange)="checkLocationStartDates()">
                               <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
                               <mat-datepicker #startDate></mat-datepicker>
                               <mat-hint align="end" matTooltip="Public field">
@@ -175,7 +175,8 @@
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
-                              <input matInput [matDatepicker]="endDate" placeholder="Location End Date" formControlName="end_date" (ngModelChange)="checkLocationEndDates()">
+                              <input matInput [matDatepicker]="endDate" placeholder="Location End Date" formControlName="end_date"
+                                (ngModelChange)="checkLocationEndDates()">
                               <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                               <mat-datepicker #endDate></mat-datepicker>
                               <mat-hint align="end" matTooltip="Public field">
@@ -350,12 +351,18 @@
                             <mat-icon>search</mat-icon>Look Up GNIS
                           </button>
 
+                          <button mat-stroked-button class="gnisid" color="primary" aria-label="Clear Geographic Names Information System (GNIS) entry"
+                            matTooltip="Clear Geographic Names Information System (GNIS) entry" (click)="clearGNISEntry(eventLocationIndex)">
+                            <mat-icon>clear_all</mat-icon>Clear GNIS entry
+                          </button>
+
                           <div class="horizontal-form-container">
                             <mat-form-field class="form-control">
                               <input matInput placeholder="GNIS Feature Name" formControlName="gnis_name" readonly>
                               <mat-hint align="start">Use Look Up GNIS tool to populate </mat-hint>
 
                             </mat-form-field>
+
                             <mat-form-field class="form-control">
                               <input matInput placeholder="GNIS Feature ID" formControlName="gnis_id" readonly>
                               <mat-hint align="start">Use Look Up GNIS tool to populate </mat-hint>
@@ -998,9 +1005,15 @@
                         in the event at the time of event creation.</span>
                     </mat-error>
 
+                    <mat-error color="warn" *ngIf="locationStartDatesViolation">
+                      <mat-icon class="icon">error</mat-icon>
+                      <span class="alert-text">An event must have a start date provided for at least one location.</span>
+                    </mat-error>
+
                     <mat-error color="warn" *ngIf="locationEndDatesViolation">
                       <mat-icon class="icon">error</mat-icon>
-                      <span class="alert-text">If an event is marked as complete, it must have end date provided for each location.</span>
+                      <span class="alert-text">If an event is marked as complete, it must have end date provided for
+                        each location.</span>
                     </mat-error>
                   </div>
 
@@ -1010,7 +1023,7 @@
                       <mat-icon>pageview</mat-icon> Review Event Submission
                     </button>
                     <p>
-                      <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation || locationEndDatesViolation"
+                      <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation"
                         (click)="submitEvent(eventSubmissionForm.value)">
                         <mat-icon>done</mat-icon> Save Event
                       </button>

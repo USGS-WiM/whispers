@@ -1,0 +1,95 @@
+
+.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.text-smaller {
+    font-size: smaller;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+.text-bold {
+    font-style: bold;
+}
+
+.note {
+    max-width: 300px;
+}
+
+.form-control {
+    width: 16em;
+    margin: 6px;
+}
+
+.general-comment-text-area {
+    width: 100%;
+    margin-bottom: 2em;
+}
+
+.text-small {
+    font-size: small;
+}
+
+.registration-form{
+    display: block;
+    max-width: 500px;
+
+    p{
+        max-width: 500px !important;
+        margin: 10px 0;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 18px;
+    }
+
+    .form-control{
+        margin-top: 0;
+    }
+
+    h3{
+        font-size: 16px;
+        margin-top: 15px;
+        margin-bottom: 8px;
+    }
+}
+
+.detail-section-buttons{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    &.centered{
+        justify-content: center;
+    }
+
+    button{
+        position: relative;
+        top: -2px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+
+.org-select {
+    width: 100%;
+}
+
+span.reg-hint{
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #313B57;
+    margin: 6px 0 3px 0;
+}

@@ -1,0 +1,52 @@
+<h1 mat-dialog-title>
+  <mat-icon>share</mat-icon>Create Sharing Link
+</h1>
+
+<mat-dialog-content>
+
+  <div class="share-link-div">
+
+    This event's details page can always be found at 
+    <code><a href="{{appURL}}/event/{{eventID}}" target="_blank">{{appURL}}/event/{{eventID}}</a></code>.
+    This URL can be shared as is. 
+    <small>
+        To create a short, more easily shareable link that uses the <a href="https://go.usa.gov/" target="_blank">go.usa.gov</a> URL shortening service, click below.
+    </small>
+
+    <button mat-stroked-button (click)="generateShortURL()">
+      <mat-icon>link</mat-icon> Generate shortened link
+    </button>
+
+    <mat-progress-bar mode="indeterminate " *ngIf="submitLoading"></mat-progress-bar>
+    <!-- <span *ngIf="shortURL !== ''">Short Shareable Link: {{shortURL}}</span> -->
+
+    <div id="sharableLink" *ngIf="shortURL !== ''">
+      <label>Short sharable link:</label>
+      <code><a href="{{shortURL}}" target="_blank">{{shortURL}}</a></code>.
+    </div>
+  </div>
+
+
+  <!-- <div class="citation">
+      <span class="text-x-small">This lookup is powered by the <a href="https://txpub.usgs.gov/dss/search_api/2.1/doc/#overview">USGS
+          Search JavaScript API</a> developed by the <a href="https://webapps.usgs.gov/">Geospatial Science + Cyber
+          Innovation
+          Branch</a> of the USGS Texas Water Science Center. It searches about 3.7 million location records from a
+        variety of
+        sources, including <a href="https://geonames.usgs.gov/domestic/">GNIS</a>. Source code can be on GitHub at:
+        <a href="https://github.com/usgs/search_api/">https://github.com/usgs/search_api/</a>.</span>
+    </div> -->
+
+</mat-dialog-content>
+<mat-dialog-actions>
+
+  <!-- <button mat-button color="warn" (click)="this.gnisLookupDialogRef.close('cancel');">
+    <mat-icon>cancel</mat-icon>&nbsp;Cancel
+  </button> -->
+  <div class="form-buttons-flex center">
+    <button mat-button color="primary" type="submit" (click)="this.eventDetailsShareDialogRef.close('cancel');">
+      <mat-icon>check</mat-icon>&nbsp;Done
+    </button>
+  </div>
+
+</mat-dialog-actions>

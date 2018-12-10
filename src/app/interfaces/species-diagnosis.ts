@@ -1,17 +1,20 @@
-import { Diagnosis } from '@interfaces/diagnosis';
-import { OrganizationSummary } from '@interfaces/organization-summary';
+import { History } from '@interfaces/history';
 
-export interface SpeciesDiagnosis extends History {
-    id: number;
+export interface SpeciesDiagnosis {
+    id?: number;
     location_species: number;
-    diagnosis: Diagnosis;
-    confirmed: boolean;
-    major: boolean;
-    priority: number;
-    causal: boolean;
+    diagnosis: number;
+    diagnosis_string: string;
+    cause: number;
+    cause_string: number;
+    basis: number;
+    suspect: boolean;
+    priority?: number;
     tested_count: number;
-    positive_count: number;
-    suspect_count: number;
-    pooled: boolean;
-    diagnosis_organization: OrganizationSummary[];
+    diagnosis_count: number;
+    positive_count?: number;
+    suspect_count?: number;
+    pooled?: boolean;
+    organizations: object[];
+    organizations_string: string[];
 }

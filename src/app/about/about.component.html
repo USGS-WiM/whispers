@@ -1,6 +1,376 @@
 <h1 mat-dialog-title>
-  <i class="material-icons">
-    info
-  </i> About WHISPers</h1>
-<mat-dialog-content>
-</mat-dialog-content>
+  <mat-icon>info</mat-icon> About WHISPers
+</h1>
+  
+  <mat-dialog-content id="aboutModal">
+    <mat-tab-group>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">question_answer</mat-icon>
+          FAQs
+        </ng-template>
+  
+        <h2>WHISPers 2.0 Frequently Asked Questions</h2>
+        <label class="about-header"> What is WHISPers?</label>
+        <p>
+          WHISPers stands for Wildlife Health Information Sharing Partnership - event reporting system. It is a
+          partner-driven, web-based repository for sharing basic information about historic and ongoing wildlife
+          mortality (death) and/or morbidity (illness) events. The information, such as county-level locations, onset and
+          ending dates, species affected, and diagnosis has generously been shared with the USGS National Wildlife Health
+          Center over time by hundreds of natural resource managers and stakeholders across the U.S. and beyond. The
+          primary goal of the system is to provide natural resource management partners and the public with timely,
+          accurate information on where wildlife disease events are occurring or have occurred for better preparation and
+          decision making. The information is opportunistically collected and does not reflect all the mortality events
+          that occur in North America. WHISPers is also the portal for requests for diagnostic and epidemiologic
+          assistance from the USGS National Wildlife Health Center Diagnostic Laboratory.
+        </p>
+  
+        <label class="about-header"> What does WHISPers do?</label>
+        <p>
+          WHISPers provides a place and a reporting structure for natural resource managers to enter event information
+          and for anyone, including the public, to learn about verified (laboratory diagnosed) wildlife disease events.
+          The records in WHISPers can be searched by species, disease, location (to county level), and event starting and
+          ending dates.
+        </p>
+  
+        <label class="about-header"> What’s new in WHISPers 2.0?</label>
+        <p>
+          Historically, information provided by partner agencies was summarized and managed by staff at the USGS National
+          Wildlife Health Center. In response to partner needs for more timely understanding of wildlife disease
+          occurrence, the new WHISPers will allow authenticated partners to directly enter event information for
+          real-time display. They can also share information with colleagues within and across agencies for better
+          communication and event response coordination. WHISPers 2.0 is the platform for making diagnostic and
+          epidemiologic assistance requests to the USGS National Wildlife Health Center Diagnostic Laboratory.
+        </p>
+  
+        <label class="about-header"> What is a wildlife "event"?</label>
+        <p>
+          Historically, most events recorded in WHISPers have involved five or more free-ranging wildlife in similar
+          geographic space and time but, starting in 2019, morbidity (illness) and/or mortality (death) events are
+          defined more loosely to include any noteworthy occurrence of one or more sick or dead animals clustered in
+          space and time.
+        </p>
+  
+        <p>
+          Morbidity/mortality events can include any or all of the following conditions:
+        </p>
+
+        <ul>
+          <li>trigger cause for concern and warrant reporting by natural resource managers</li>
+          <li>cross political boundaries such as municipal, county, or state lines</li>
+          <li>involve multiple species and/or multiple diagnoses</li>
+          <li>be comprised of individuals with similar clinical signs and/or diagnoses</li>
+          <li>be related to environmental conditions</li>
+          <li>be significant to population(s) of species affected</li>
+          <li>reveal new pathogens, or range or temporal expansion of existing pathogens</li>
+        </ul>
+  
+        <label class="about-header"> Who can use WHISPers information?</label>
+        <p>
+          Anyone! Basic summary information in WHISPers is provided for anyone interested in knowing more about where
+          wildlife disease has occurred. This information is of particular interest for natural resource managers who
+          need timely situational awareness of wildlife mortality and/or morbidity events. Knowledge of recent and
+          ongoing events affords these professionals the opportunity to (1) proactively monitor for disease in their
+          jurisdiction and (2) prepare for and appropriately manage these events. Authenticated agency partners can log
+          in and see more detailed information about events they create or those shared with them by colleagues.
+          Information on sick and dead wildlife is opportunistically collected and does not reflect all the mortality
+          events that occur in North America.
+        </p>
+  
+        <label class="about-header"> What does it mean to be an authenticated agency partner?</label>
+        <p>
+            Authenticated users at partner natural resource agencies have access to enhanced WHISPers features such as
+            the ability to see more detailed event information than the public can see, the ability to enter and update
+            event information for their agency, a communication interface with the USGS National Wildlife Health Center
+            and other agencies, and a robust collection of visualization and analytical tools designed for wildlife
+            disease professionals. Administrators within partner agencies and/or the USGS National Wildlife Health
+            Center can authenticate users who want access to these enhanced features.
+        </p>
+  
+  
+        <label class="about-header"> Is this a citizen science reporting mechanism?</label>
+        <p>
+          No, information in WHISPers is verified and provided by partner agencies and laboratories. If you are a
+          private individual or entity with a mortality event to report, please contact your state department of
+          natural resources or state agency of game and fish. A list of state agencies can be at the <a href="https://www.fishwildlife.org/landing/membership/member-list">Association
+          of Fish and Wildlife Agencies</a> website.
+        </p>
+  
+        <label class="about-header"> What do the colors and shapes on the map mean?</label>
+        <p>
+            The location information in WHISPers is provided at the county level. The circles represent a
+            morbidity/mortality disease event and triangles represent surveillance activity, with the circle or
+            triangle located at the center of the county. The colors represent different disease categories such as
+            bacteria or toxins. The color key is on the map. For counties with multiple events, the color of the
+            circle or triangle is gray. The number in the shape equals the number of events recorded in WHISPers
+            that have occurred in that county. Clicking on the circle or triangle shows more information on the
+            events in that county. The map on the homepage displays the 20 most recent disease and surveillance
+            events reported in WHISPers.
+        </p>
+  
+        <label class="about-header"> Why are there many events in some places and no events in others?</label>
+        <p>
+            The information in WHISPers is collected opportunistically. Sick or dead animals must be observed,
+            collected, submitted to a diagnostic laboratory, and the information shared in WHISPers in order to
+            appear on the map and in the associated database. Not every mortality event that occurs is observed,
+            diagnosed, or reported to WHISPers. Observation and reporting are more likely in very populated areas
+            and less likely in sparsely populated locations. Some diseases, such as avian botulism, can occur
+            repeatedly in a location. A blank space on the map doesn’t mean wildlife disease has not occurred in
+            that location.
+            Wildlife agencies, diagnostic laboratories, and other organizations have vast knowledge of mortality
+            events in their area but there are technological challenges to sharing the information. A long-term
+            goal for WHISPers is to grow the partnership and make it easier for data to be shared.
+        </p>
+  
+        <label class="about-header"> Why aren't all the species diagnoses listed as event diagnoses?</label>
+        <p>
+            WHISPers has diagnoses listed at the species level, documenting diagnostic findings in specimens of
+            a particular species at a particular location. Some diagnoses may be an interesting finding in the
+            specific animal tested, but not a likely cause of sickness or death.
+            WHISPers also has event level diagnoses that represent the overall main reason(s) for illness
+            and/or death across all locations and species and thus the major cause(s) of the event, or a
+            diagnosis deemed significant enough to list at the event level for situational awareness.
+            Event level diagnoses are listed on the main table view of data (e.g., on the home page or in the
+            table that results from a search), whereas species level diagnoses can be found by clicking on a
+            particular event and looking at each species listed.
+            Note: at this point, not all WHISPers events have species level diagnoses provided.
+        </p>
+  
+        <label class="about-header"> Why is the location information only specific to the county level?</label>
+        <p>
+            In discussions with partners and stakeholders, county level information was felt to be useful for
+            providing a general overview of disease occurrence while simultaneously protecting sensitive
+            wildlife population information and respecting landowner privacy. Authenticated agency partners
+            can log in and see more detailed location information about events they create or those shared
+            with them by colleagues.
+        </p>
+  
+        <label class="about-header"> Why is it important to track wildlife mortality events?</label>
+        <p>
+          Diseases affect wildlife and wildlife populations. Many diseases are quite predictable,
+          occurring in the same locations at similar times each year. By chronicling these "typical"
+          events, we can develop a better picture of disease impacts on wildlife across North America.
+          And with knowledge of "typical" events, it is easier to identify departures from the norm,
+          including new species or geographic areas affected by known diseases, or new diseases as they
+          emerge and potentially spread across the landscape. A centralized repository of this
+          information promotes better awareness of wildlife disease and augments opportunity for both
+          proactive and timely reactive response by natural resource managers.
+        </p>
+  
+        <label class="about-header"> What data are included?</label>
+        <p>
+            WHISPers is designed to store summary or aggregate data from wildlife disease events. Each
+            record includes location of the event (to county level), start (when situation is first
+            observed or estimated to have begun) and end (when the event is considered to be over) dates,
+            species involved, number of sick and dead, cause of wildlife illness or death, the laboratory
+            where cause of disease/death was confirmed, and contact information for the agency that
+            submitted carcasses/samples to the laboratory.
+        </p>
+  
+        <label class="about-header"> Where is the information in WHISPers from?</label>
+        <p>
+            This information is from a variety of sources including federal, tribal, and state agencies
+            who contacted the USGS National Wildlife Health Center for diagnostic and epidemiological
+            assistance during mortality events; diagnostic case reports from other wildlife diagnostic
+            laboratories; and published reports in journals, newspapers, or other reporting outlets
+            such as <a href="http://www.promedmail.org/">ProMEDmail.org</a>. Information from newspaper
+            and other outlets is verified to the
+            best of our ability before inclusion in the database.
+            WHISPers does not currently contain much information from designed surveillance programs;
+            however, data on select surveillance projects that the USGS National Wildlife Health Center
+            has partnered on can be found on our <a href="https://www.usgs.gov/centers/nwhc/science/disease-surveillance">wildlife
+            pathogen surveillance websites</a>. Surveillance
+            information is planned to be added in the next version of WHISPers.
+            Event information is collected and shared opportunistically and therefore may not be a
+            complete representation of what is occurring in wildlife populations in any given time or
+            place. Providing a common platform through WHISPers for partners to share wildlife event
+            information will increase our collective understanding of when and where diseases occur in
+            wildlife.
+        </p>
+  
+        <label class="about-header"> What is involved in diagnostic laboratory evaluation and testing?</label>
+        <p>
+            Typically, 3-5 freshly dead animals are collected by field biologists and sent to a
+            veterinary diagnostic laboratory where they undergo a necropsy, which is a process
+            similar to a human autopsy. The process includes a detailed external and internal
+            examination by a trained veterinary pathologist. During the necropsy, the pathologist
+            selects tissue samples for laboratory testing and to examine under the microscope. The
+            pathologist then interprets the test results, microscopic findings, and field information
+            (such as sick animal behavior, species biology, environmental factors, and disease
+            ecology) to arrive at a diagnosis for the cause of illness or death.
+        </p>
+  
+        <label class="about-header"> Are events from all types of wildlife recorded?</label>
+        <p>
+            WHISPers contains opportunistically collected general information on mortality and/or
+            morbidity events. In the future, it will also contain information on surveillance
+            activities. Historically, most events recorded in WHISPers have involved five or more
+            free-ranging wildlife in similar geographic space and time but, starting in 2019,
+            events are defined more loosely to include any noteworthy occurrence of one or more
+            sick or dead animals clustered in space and time. It is not intended to store or track
+            health data from wildlife maintained in rehabilitation facilities, zoological
+            facilities, and other captive settings. Currently, the majority of the events in
+            WHISpers involve wild birds, but it also contains events involving mammals, reptiles,
+            amphibians, and sometimes fish. It is anticipated that as the number of participating
+            WHISPers partners increases there will be a broader diversity of events.
+        </p>
+  
+        <label class="about-header"> Who enters data into WHISPers?</label>
+        <p>
+            Currently, the information is entered by staff at the USGS National Wildlife Health
+            Center. Future plans include providing authenticated agency partners with the
+            capability to enter information about mortality and/or morbidity events directly into
+            the system, and be able to edit/update those records as needed.
+            Diagnostic facilities, like the USGS National Wildlife Health Center, will also be
+            able to enter records, if authorized by a submitting agency partner.
+        </p>
+  
+        <label class="about-header">Who created WHISPers?</label>
+  
+        <p>
+          The concept for WHISPers was developed by the USGS National Wildlife Health Center,
+          in partnership with federal, state, tribal, non-governmental, and academic
+          partners. System software was initially developed by the USGS National Wildlife
+          Health Center and then refactored by <a href="https://wim.usgs.gov/">USGS Web
+          Informatics and Mapping</a>, with funding
+          from the Department of Homeland Security’s National Biosurveillance Integration
+          Center and USGS Ecosystems Mission Area.
+        </p>
+  
+        <label class="about-header"> Is this a new idea?</label>
+        <p>
+            For nearly 40 years, the USGS National Wildlife Health Center has been collecting
+            and distributing information on wildlife mortality and/or morbidity events.
+            Quarterly summaries of these data have been published in the Supplement to the
+            Journal of Wildlife Diseases since 1987. These “Quarterly Reports,” dating to
+            1981, can be viewed <a href="https://www.usgs.gov/centers/nwhc/science/quarterly-mortality-reports">here</a>.
+            WHISPers represents a significant upgrade to these
+            reports, with tools designed to query, map, sort, and download event data.
+            Additionally, with partner input, the new system will provide a more
+            comprehensive view of wildlife mortality and/or morbidity events across North
+            America. While WHISPers is designed to accommodate partners' wildlife mortality
+            and/or morbidity event data, it is not intended to replicate existing data
+            management systems.
+        </p>
+  
+        <label class="about-header"> Where can I learn more about wildlife diseases in North America?</label>
+        <p>
+            For fact sheets and other information about specific wildlife diseases, you may
+            want to visit the USGS National Wildlife Health Center <a href="https://www.usgs.gov/centers/nwhc">website</a>
+            or peruse the
+            <a href="https://www.usgs.gov/centers/nwhc/science/field-manual-wildlife-diseases?qt-science_center_objects=0#qt-science_center_objects">Field
+            Manual of Wildlife Disease</a>.
+        </p>
+  
+        <label class="about-header"> How do I cite this information?</label>
+        <p>
+            Information presented on the WHISPers website is considered public
+            information and may be distributed or copied. Use of the appropriate citation
+            is requested. To direct readers to the entire WHISPers website, it is
+            sufficient to give the address of the site in text:
+            Retrieved [month, day, year], from the Wildlife Health Information Sharing
+            Partnership event reporting system (http://www.nwhc.usgs.gov/whispers/).
+            To cite data obtained from WHISPers, the following citation format is offered
+            as a suggestion:
+            Retrieved [month, day, year], from the Wildlife Health Information Sharing
+            Partnership event reporting system on-line database,
+            http://www.nwhc.usgs.gov/whispers/.
+            Citations can be formatted to the style needed for your publication as long
+            as there is sufficient information included to return the reader to the
+            referenced information.
+        </p>
+          
+  
+        <label class="about-header"> How do I get medical help because I, a family member, or a pet may have been exposed to a disease in my county?</label>
+        <p>
+            If you have concerns or questions regarding human or domestic animal health
+            risks associated with wildlife diseases, please contact your doctor or
+            veterinarian for more information.
+        </p>
+  
+  
+        <label class="about-header"> What is a diagnostic or epidemiologic assistance request?</label>
+        <p>
+            The USGS National Wildlife Health Center (NWHC) is a full service
+            diagnostic and research laboratory. Staff work with state, federal, and
+            tribal natural resource agencies to provide diagnostic evaluation and
+            testing on migratory birds, endangered species, and animals on federal or
+            tribal lands. In addition, NWHC epidemiologists help agencies determine
+            appropriate disease control strategies for wildlife morbidity and
+            mortality events. Staff from natural resource agencies can request
+            permission to ship specimens to NWHC for cause of death determination
+            (diagnostic request), as well as seek input on responding to disease
+            events (epidemiologic assistance request).
+        </p>
+  
+        <label class="about-header">How do I submit a carcass to the USGS National Wildlife Health Center or request epidemiology assistance?</label>
+        <p>
+            Requests for permission to ship specimens to the USGS National Wildlife
+            Health Center (NWHC) can be made by authenticated natural resource
+            agency partner users from their WHISPers dashboard. For an urgent
+            wildlife disease situation, call NWHC at 608-270-2480; for NWHC Hawaii
+            call 808-792-9520. Please do not submit carcasses without contacting
+            NWHC first.
+            The general public should report sick or dead wildlife to their <a href="https://www.fishwildlife.org/landing/membership/member-list">local
+            natural resource agency</a>.
+        </p>  
+  
+        <label class="about-header"> How do I apply to be a verified or authenticated partner?</label>
+        <p>
+            Staff from state, federal and tribal natural resource agencies can
+            request to become an authenticated WHISPers user by submitting a
+            request from the WHISPers homepage.
+        </p>  
+  
+        <label class="about-header"> Do I have to create a login?</label>
+        <p>
+            WHISPers is available to anyone to view, search, and download event
+            information without creating a login. If general users would like
+            to save their search criteria, then creating a login user name and
+            password is necessary.
+            Authenticated state, federal, and tribal partner users will have to
+            create a login in order to enter and edit events, share event
+            information with colleagues, and request diagnostic and
+            epidemiological assistance from the USGS National WIldlife Health
+            Center.
+        </p>
+      </mat-tab>
+  
+      
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">contact_support</mat-icon>
+          Contact
+        </ng-template>
+        <h3>Contact the WHISPers team</h3>
+  
+        <p>Natural resource management agency personnel with an urgent wildlife disease situation requiring immediate
+          diagnostic assistance or field response consultation can contact the USGS National Wildlife Health Center
+          epidemiology team at <b>608-270-2480</b> or Hawaii field station at <b>808-792-9520</b>.
+        </p>
+        <p>
+          For non-urgent matters related to a
+          wildlife morbidity/mortality or surveillance event, please login, create an event, and put your questions in
+          the comment section and an epidemiologist will respond as soon as possible, typically within 1-2 business
+          days.
+        </p>
+        <p>
+          Members of the public with knowledge of sick, injured, or dead wildlife should report to their local natural resource agency.
+        </p>
+        <p>
+            Technical questions or comments about the WHISPers website or database can be directed to the WHISPers
+            team at <b>whispers@usgs.gov</b>.
+        </p>
+              
+      </mat-tab>
+    </mat-tab-group>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+
+    <div class="form-buttons-flex center">
+      <button mat-button color="primary" type="submit" (click)="this.aboutDialogRef.close('cancel');">
+        <mat-icon>close</mat-icon>&nbsp;Close
+      </button>
+    </div>
+  
+  </mat-dialog-actions>

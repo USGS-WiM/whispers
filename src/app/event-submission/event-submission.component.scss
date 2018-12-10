@@ -1,3 +1,316 @@
+#eventSubmissionPage{
+    display: block;
+    width: 94%;
+    max-width: 1000px;
+    margin: 40px auto;
+    border-radius: 4px;
+    box-shadow: 0 1px 0 1.35px rgba(10,16,64,.08);
+    background-color: white;
+
+    #eventSubmissionHeader{
+        display: block;
+        box-sizing: border-box;
+        margin-bottom: 15px;
+        border-bottom: 1px solid fade-out(#10152C, 0.8);
+
+        b{
+            font-size: 22px;
+            line-height: 26px;
+            font-weight: 900;
+            color: #10152C;
+            display: block;
+            margin-bottom: 0;
+        }
+
+        small{
+            font-size: 16px;
+            line-height: 24px;
+            color: #313B57;
+            display: block;
+            margin-bottom: 15px;
+        }
+    }
+
+    .mat-card{
+        background-color: transparent !important;
+    }
+
+    h3{
+        background-color: fade-out(#050921, 0.1);
+        padding: 12px 15px 13px 36px;
+        color: white;
+        font-weight: 600;
+        border-radius: 3px;
+        position: relative;
+        margin-top: 55px;
+
+        .mat-icon{
+            position: absolute;
+            top: 10px;
+            left: 6px;
+        }
+    }
+
+    .nwhc-only{
+        display: block;
+        box-sizing: border-box;
+        padding: 15px;
+        margin: 25px 10px;
+        border: 1px solid rgba(0,0,0,0.125);
+        border-left: 4px solid #182041;
+        background-color: #FAFCFF !important;
+
+        .nwhc-only-header{
+            display: block;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-weight: 900;
+            color: #313B57;
+            margin-bottom: 10px;
+        }
+    }
+
+    .event-submission-locations{
+
+        h3{
+            margin-top: 0 !important;
+            color: rgba(255,255,255,0.9);
+            padding: 10px 15px 11px 15px !important;
+            color: #313B57 !important;
+            background-color: #FAFCFF !important;
+            border-radius: 2px !important;
+            border: 1px solid fade-out(#A0AFCD, 0.6);
+            font-size: 14px !important;
+            border-top: none !important;
+            border-left: none !important;
+            border-right: none !important;
+        }
+
+        .remove-location-button{
+            display: block;
+            text-align: right;
+
+            button{
+                background-color: #EA3B47 !important;
+                color: white !important;
+                font-size: 13px;
+                font-weight: 800;
+                
+                .mat-icon{
+                    display: none;
+                }
+
+                &:hover{
+                    cursor: pointer;
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+    .event-location-card{
+        padding: 0;
+        margin-top: 20px !important;
+        border: 1px solid fade-out(#A0AFCD, 0.6);
+    }
+
+    // Prev and next buttons
+    // Prev and next buttons
+    // Prev and next buttons
+    .form-nav-buttons{
+        display: flex;
+        justify-content: center;
+        box-sizing: border-box;
+        padding: 20px 0 0 0;
+
+        button{
+            position: relative;
+            top: -2px;
+
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+
+
+    // Wrapper around add content buttons
+    // Wrapper around add content buttons
+    .add-content-button{
+        display: flex;
+        justify-content: center;
+        box-sizing: border-box;
+        margin: 0 auto;
+        width: 100%;
+        padding: 0;
+
+        button{
+            text-align: center;
+            padding: 15px 15px 10px 15px;
+            font-weight: 800;
+            font-size: 16px !important;
+
+            .mat-icon{
+                display: block;
+                margin: 0 auto;
+            }
+        }
+    }
+
+
+    // Species Container
+    // Species Container
+    // Species Container
+    .species-container,
+    .contacts-container{
+        background-color:  #FAFCFF;
+        border: 1px solid fade-out(#A0AFCD, 0.6);
+        border-radius: 3px;
+        margin: 15px auto;
+        box-sizing: border-box;
+        padding: 15px;
+        width: 100%;
+    }
+    .contacts-container{
+        margin: 8px auto;
+        padding-bottom: 0;
+
+        .contact-button-div {
+            flex-grow: 0 !important;
+            min-width: 145px;
+            max-width: 145px;
+            width: 145px;
+            display: flex;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding-left: 15px;
+            
+            button{
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                justify-content: center;
+            }
+        }
+    }   
+    .species-container{
+        // Question mark hints
+        .hint-fix{
+            position: relative;
+            top: 6px;
+            transform: scale(0.8);
+            transition: 0.125s;
+            opacity: 0.3;
+
+            &:hover{
+                cursor: default;
+                opacity: 0.9;
+                transition: 0.125s;
+            }
+        }
+        .mat-form-field-suffix{
+            white-space: nowrap;
+            opacity: 0.35 !important;
+            flex: none;
+            transform: scale(0.8) !important;
+            transition: 0.2s;
+            position: relative !important;
+            top: 6px !important;
+
+            &:hover{
+                cursor: default;
+                opacity: 0.8;
+                transition: 0.2s;
+            }
+        }
+    }
+}
+
+
+// Submission Comments
+// Submission Comments
+// Submission Comments
+#submissionCommentsForm{
+    display: block;
+    margin: 0 auto;
+    width: 94%;
+    max-width: 700px;
+
+    .comment-text-area{
+        width: 100%;
+        margin: 20px auto;
+
+        textarea{
+            background-color: #FAFCFF;
+            box-sizing: border-box;
+            padding: 8px;
+        }
+    }
+
+    p{
+        font-size: 13px;
+        line-height: 16px;
+        letter-spacing: 0.2px;
+        margin: 5px auto;
+        color: #313B57;
+    }
+}
+
+
+// Submission Review
+// Submission Review
+// Submission Review
+.submissionReviewErrors{
+    display: block;
+    margin: 0 auto;
+    padding: 25px 0 40px 0;
+    width: fit-content;
+
+    .mat-error{
+        display: flex;
+        margin: 6px 0;
+        width: fit-content;
+
+        .mat-icon,
+        span{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        span{
+            font-size: 16px;
+            font-weight: 600;
+            padding-left: 4px;
+            padding-bottom: 1px;
+        }
+    }
+}
+
+#submissionReviewComplete{
+    display: block;
+    text-align: center;
+    color: #3DC9D4;
+    width: 100%;
+
+    .mat-icon{
+        margin: 0 auto;
+        color: #3DC9D4;
+        font-size: 100px;
+        height: 100px;
+        width: 100px;
+    }
+
+    b{
+        display: block;
+        text-align: center;
+        max-width: 400px;
+        margin: 0 auto;
+        width: 95%;
+        font-weight: 800;
+        font-size: 24px;
+    }
+}
+
 .horizontal-form-container {
     display: flex;
     flex-direction: row;
@@ -19,10 +332,11 @@
     margin: 10px;
 }
 
-.comment-text-area {
-    width: 60em;
-    margin-bottom: 2em;
+.form-control-short {
+    width: 14em;
+    margin: 10px;
 }
+
 
 .general-comment-text-area {
     width: 40em;
@@ -34,17 +348,17 @@
 }
 
 .contact-select {
-    width: 40em;
+    width: 30em;
+    margin: 10px;
     flex-grow: 2;
 }
 
 .contact-type-select {
+    margin: 10px;
     flex-grow: 1;
+    max-width: 100px !important;
 }
 
-.contact-button-div {
-    flex-grow: 1;
-}
 
 .hint {
     max-width: 90%;
@@ -65,6 +379,23 @@
 
 .species-number-control {
     width: 8em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    flex-grow: 1;
+}
+
+.species-number-control-w-help {
+    width: 10em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    flex-grow: 1;
+}
+
+
+.species-bias-control {
+    width: 10em;
     margin-top: 10px;
     margin-bottom: 10px;
     margin-left: 5px;
@@ -127,3 +458,16 @@
 .alert-text {
     vertical-align: middle;
 }
+
+mat-radio-button {
+    padding-right: 16px;
+}
+
+.event-diagnosis-select {
+    width: 60em;
+}
+
+.gnisid {
+    margin-left: 15px;
+}
+

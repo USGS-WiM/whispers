@@ -4,5 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 export const environment = {
   production: false,
-  version: require('../../package.json').version
+  hmr: false,
+  version: require('../../package.json').version,
+  api_root: 'https://whispersdev.wim.usgs.gov/whispersservices/'
 };

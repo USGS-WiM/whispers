@@ -22,6 +22,8 @@ import { RoleService } from '@services/role.service';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
 
+import { EditUserComponent } from '@app/edit-user/edit-user.component';
+import { NewLookupRequestComponent } from '@app/new-lookup-request/new-lookup-request.component';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -35,15 +37,16 @@ export class UserDashboardComponent implements OnInit {
 
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
+  editUserDialogRef: MatDialogRef<EditUserComponent>;
+  newLookupRequestDialogRef: MatDialogRef<NewLookupRequestComponent>;
 
   errorMessage;
   events;
   contacts;
-  organizations;
-  roles;
+  organizations = [];
+  roles = [];
 
   selection;
-
   currentUser;
 
   username = APP_SETTINGS.API_USERNAME;
@@ -174,7 +177,7 @@ export class UserDashboardComponent implements OnInit {
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-      minWidth: '60%',
+      disableClose: true,
       data: {
         contact_action: 'create'
       }
@@ -213,7 +216,7 @@ export class UserDashboardComponent implements OnInit {
 
     if (this.selection.selected.length > 1) {
       alert('you have too many contacts selected for edit. select only one.');
-    } else if (this.selection.selected.length == 1) {
+    } else if (this.selection.selected.length === 1) {
       this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
         minWidth: '60%',
         data: {
@@ -268,10 +271,54 @@ export class UserDashboardComponent implements OnInit {
     });
   }
 
+  openEditUserDialog() {
+
+    // Open dialog for adding event diagnosis
+    this.editUserDialogRef = this.dialog.open(EditUserComponent, {
+      data: {}
+    });
+
+    this.editUserDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          // do something after close
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+  }
+
+  openNewLookupRequestDialog() {
+
+    // Open dialog for adding event diagnosis
+    this.newLookupRequestDialogRef = this.dialog.open(NewLookupRequestComponent, {
+      data: {
+        title: 'Request New Item',
+        titleIcon: 'add_circle',
+        showCancelButton: true,
+        action_button_text: 'Submit request',
+        actionButtonIcon: 'send'
+      }
+    });
+
+    this.newLookupRequestDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          // do something after close
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+  }
+
   removeContact() {
 
     if (this.selection.selected.length > 1) {
-      alert('you have too many contacts selected for edit. select only one.');
+      alert('you have too many contacts selected for removal. select only one.');
     } else if (this.selection.selected.length === 1) {
       this._contactService.remove(this.selection.selected[0])
         .subscribe(
@@ -296,7 +343,7 @@ export class UserDashboardComponent implements OnInit {
           error => {
             this.errorMessage = <any>error;
           }
-        )
+        );
     }
   }
 
@@ -315,7 +362,7 @@ export class UserDashboardComponent implements OnInit {
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.contactsDataSource.data.length;
-    return numSelected == numRows;
+    return numSelected === numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
@@ -328,7 +375,7 @@ export class UserDashboardComponent implements OnInit {
   formatPhone(phone) {
     let formatted_phone = '';
 
-    if (phone.length == 10) {
+    if (phone != null && phone.length == 10) {
       let temp_phone = phone.split('');
       formatted_phone = '(' + temp_phone.slice(0, 3).join('') + ') ' + temp_phone.slice(3, 6).join('') + '-' + temp_phone.slice(6, 10).join('');
     } else {

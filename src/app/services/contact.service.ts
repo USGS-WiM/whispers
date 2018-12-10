@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+import { throwError } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
 
 import { APP_SETTINGS } from '@app/app.settings';
@@ -23,8 +23,20 @@ export class ContactService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.CONTACTS_URL + 'user_contacts', options)
+    return this._http.get(APP_SETTINGS.CONTACTS_URL + 'user_contacts/?no_page&slim', options)
       .map((response: Response) => <any[]>response.json())
+      // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  public getContactDetails(contactID): Observable<Contact> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.get(APP_SETTINGS.CONTACTS_URL + contactID + '/', options)
+      .map((response: Response) => <Contact>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
   }
@@ -65,7 +77,7 @@ export class ContactService {
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(JSON.stringify(error.json()) || 'Server error');
+    return throwError(JSON.stringify(error.json()) || 'Server error');
   }
 
 }

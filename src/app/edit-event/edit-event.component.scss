@@ -9,7 +9,8 @@
 }
 
 .form-control {
-    width: 18em; // margin: 10px;
+    width: 18em;
+    margin: 10px;
 }
 
 .org-select {
@@ -19,4 +20,38 @@
 .alert{ 
     width: 100%;
     background-color: lightcoral;
+}
+
+.nwhc-only{
+    display: block;
+    box-sizing: border-box;
+    padding: 15px;
+    margin: 25px 10px;
+    border: 1px solid rgba(0,0,0,0.125);
+    border-left: 4px solid #182041;
+    background-color: #FAFCFF !important;
+
+    .nwhc-only-header{
+        display: block;
+        box-sizing: border-box;
+        font-size: 16px;
+        font-weight: 900;
+        color: #313B57;
+        margin-bottom: 10px;
+    }
+}
+// Prev and next buttons
+.detail-section-buttons{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    button{
+        position: relative;
+        top: -2px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
 }

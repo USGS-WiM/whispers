@@ -1,7 +1,10 @@
 <h1 mat-dialog-title>
-  <i class="material-icons">person_add</i> {{dialogTitle}} Contact</h1>
+  <mat-icon>person_add</mat-icon> {{dialogTitle}} Contact
+</h1>
+
 <mat-dialog-content>
-  <form [formGroup]="createContactForm">
+  
+  <form [formGroup]="createContactForm" autocomplete="off">
 
     <div class="vertical-form-container">
 
@@ -34,7 +37,7 @@
 
       <mat-form-field class="form-control org-select">
         <mat-select placeholder="Organization" formControlName="organization">
-          <mat-option>--</mat-option>
+          <mat-option value="">--</mat-option>
           <mat-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -50,7 +53,11 @@
 </mat-dialog-content>
 <mat-dialog-actions>
 
-  <button mat-button (click)="this.createContactDialogRef.close('cancel');">Cancel</button>
-  <button mat-button type="submit" [disabled]="createContactForm.invalid" (click)="onSubmit(createContactForm.value)">{{action_button_text}}</button>
-  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+    <div class="form-buttons-flex">
+        <button mat-button (click)="this.createContactDialogRef.close('cancel');">Cancel</button>
+        <button mat-button type="submit" [disabled]="createContactForm.invalid" (click)="onSubmit(createContactForm.value)">{{action_button_text}}</button>
+        <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+    </div>
+
+  
 </mat-dialog-actions>

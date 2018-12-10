@@ -1,0 +1,48 @@
+<h1 mat-dialog-title>
+    <mat-icon>info</mat-icon> Contact Details
+</h1>
+  
+<mat-dialog-content>
+
+  <div class="user-info-card">
+    <div class="contact-detail" *ngIf="contactDetails.first_name">
+      <small>First Name</small> 
+      {{contactDetails.first_name}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.last_name">
+      <small>Last Name</small> 
+      {{contactDetails.last_name}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.position">
+      <small>Position</small> 
+      {{contactDetails.position}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.title">
+      <small>Title</small> 
+      {{contactDetails.title}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.email">
+      <small>Email</small> 
+      {{contactDetails.email}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.phone">
+      <small>Phone</small> 
+      {{contactDetails.phone}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.organization_string">
+      <small>Organization</small> 
+      {{contactDetails.organization_string}}
+    </div>
+    <div class="contact-detail" *ngIf="contactDetails.owner_organization_string">
+      <small>Owner Organization</small> 
+      {{contactDetails.owner_organization_string}}
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="form-buttons-flex center">
+    <button mat-button color="primary" (click)="this.viewContactDetailsDialogRef.close();">
+      <mat-icon>close</mat-icon>&nbsp;Close
+    </button>
+  </div>
+</mat-dialog-actions>

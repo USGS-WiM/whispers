@@ -1,0 +1,44 @@
+.form-control {
+    width: 18em !important;
+    margin: 10px;
+}
+
+.form-control-short {
+    width: 18em !important;
+    margin: 10px;
+}
+
+.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-section-buttons{
+    display: flex !important;
+    width: 100% !important;
+    justify-content: center;
+
+    button{
+        position: relative;
+        top: -2px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+.mat-dialog-title{
+    color: #313B57;
+    font-weight: 500;
+    margin: 0 0 6px 0;
+
+    .mat-icon{
+        position: relative;
+        top: 4px;
+    }
+}

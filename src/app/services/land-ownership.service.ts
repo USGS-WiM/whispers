@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import { Subject } from 'rxjs/Subject';
+import { throwError } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 
@@ -19,10 +20,10 @@ export class LandOwnershipService {
   public getLandOwnerships(): Observable<LandOwnership[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.LAND_OWNERSHIPS_URL, options)
+    return this._http.get(APP_SETTINGS.LAND_OWNERSHIPS_URL + '?no_page', options)
       .map((response: Response) => <LandOwnership[]>response.json())
       .catch(this.handleError);
 
@@ -30,7 +31,7 @@ export class LandOwnershipService {
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+    return throwError(JSON.stringify(error.json()) || 'Server error');
   }
 
 }

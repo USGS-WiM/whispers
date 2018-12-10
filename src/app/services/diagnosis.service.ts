@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import { Subject } from 'rxjs/Subject';
+import { throwError } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -19,17 +20,40 @@ export class DiagnosisService {
   public getDiagnoses(): Observable<Diagnosis[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.DIAGNOSES_URL, options)
+    return this._http.get(APP_SETTINGS.DIAGNOSES_URL + '?no_page', options)
       .map((response: Response) => <Diagnosis[]>response.json())
+      .catch(this.handleError);
+  }
+
+  public queryDiagnoses(diagnosisQueryString): Observable<any[]> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.JSON_HEADERS
+    });
+
+    return this._http.get(APP_SETTINGS.DIAGNOSES_URL + '?no_page&' + diagnosisQueryString, options)
+      .map((response: Response) => <any[]>response.json())
+      // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  public requestNew(formValue): Observable<any> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_TEXT_HEADERS
+    });
+
+    return this._http.post(APP_SETTINGS.DIAGNOSES_URL + 'request_new/', formValue, options)
+      .map((response: Response) => <any>response.json())
       .catch(this.handleError);
   }
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+    return throwError(JSON.stringify(error.json()) || 'Server error');
   }
 
 }

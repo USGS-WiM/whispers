@@ -12,27 +12,35 @@
     <span>
       <label>First Name: {{currentUser.first_name}}</label>
     </span>
-    <br/>
+    <br />
     <span>
       <label>Last Name: {{currentUser.last_name}}</label>
     </span>
-    <br/>
+    <br />
     <span>
-      <label>Role: {{currentUser.role | displayValue:'name':roles}}</label>
+      <label>Role: {{currentUser.role | displayValue:'name':this.roles}}</label>
     </span>
-    <br/>
+    <br />
     <span>
-      <label>Organization: {{currentUser.organization | displayValue:'name':organizations}}</label>
+      <label>Organization: {{currentUser.organization | displayValue:'name':this.organizations}}</label>
     </span>
-    <br/>
+    <br />
     <span>
       <label>Email: {{currentUser.email}}</label>
     </span>
-    <br/>
+    <br />
 
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button>Update user information</button>
+    <button mat-button (click)="openEditUserDialog()">
+      <mat-icon>edit</mat-icon> Edit User Details
+    </button>
+  </mat-card-actions>
+
+  <mat-card-actions>
+    <button mat-button (click)="openNewLookupRequestDialog()">
+      <mat-icon>add</mat-icon> Request New Species, Organization, or Diagnosis
+    </button>
   </mat-card-actions>
 </mat-card>
 
@@ -73,11 +81,13 @@
             <!-- Selection column -->
             <ng-container matColumnDef="select">
               <mat-header-cell *matHeaderCellDef>
-                <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()">
                 </mat-checkbox>
               </mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                  [checked]="selection.isSelected(row)">
                 </mat-checkbox>
               </mat-cell>
             </ng-container>
@@ -109,7 +119,7 @@
             <!-- Organization Column -->
             <ng-container matColumnDef="organization">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Organization </mat-header-cell>
-              <mat-cell *matCellDef="let contact"> {{contact.organization}} </mat-cell>
+              <mat-cell *matCellDef="let contact"> {{contact.organization_string}} </mat-cell>
             </ng-container>
 
             <!-- Permission Source Column -->
@@ -189,7 +199,8 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header> States </mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <span *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}
-                  <span *ngIf="(event.administrativelevelones.indexOf(administrativelevelone)) < (event.administrativelevelones.length - 1)">, </span>
+                  <span *ngIf="(event.administrativelevelones.indexOf(administrativelevelone)) < (event.administrativelevelones.length - 1)">,
+                  </span>
                 </span>
               </mat-cell>
             </ng-container>
@@ -199,7 +210,8 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header> Counties </mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <span *ngFor="let administrativeleveltwo of event.administrativeleveltwos">{{administrativeleveltwo.name}}
-                  <span *ngIf="(event.administrativeleveltwos.indexOf(administrativeleveltwo)) < (event.administrativeleveltwos.length - 1)">, </span>
+                  <span *ngIf="(event.administrativeleveltwos.indexOf(administrativeleveltwo)) < (event.administrativeleveltwos.length - 1)">,
+                  </span>
                 </span>
               </mat-cell>
             </ng-container>
@@ -208,9 +220,12 @@
             <ng-container matColumnDef="species">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Species </mat-header-cell>
               <mat-cell *matCellDef="let event">
-                <span *ngFor="let species of event.species">{{species.name}}
-                  <span *ngIf="(event.species.indexOf(species)) < (event.species.length - 1)">, </span>
-                </span>
+                <!--<span *ngFor="let species of event.species">{{species.name}}
+                  <span *ngIf="(event.species.indexOf(species)) < (event.species.length - 1)"> </span>
+                </span>-->
+                <ul>
+                  <li *ngFor="let species of event.species">{{species.name}}</li>
+                </ul>
               </mat-cell>
             </ng-container>
 
@@ -218,10 +233,9 @@
             <ng-container matColumnDef="eventdiagnoses">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Event Diagnosis </mat-header-cell>
               <mat-cell *matCellDef="let event">
-                <span *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}
-                  <span *ngIf="(event.eventdiagnoses.indexOf(diagnosis)) < (event.eventdiagnoses.length - 1)">, </span>
-                </span>
-                <span *ngIf="event.eventdiagnoses.length == 0">TBD</span>
+                <ul *ngIf="event.eventdiagnoses !== null">
+                  <li *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}</li>
+                </ul>
               </mat-cell>
             </ng-container>
 

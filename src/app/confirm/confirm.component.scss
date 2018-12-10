@@ -1,0 +1,33 @@
+h2,
+.mat-dialog-content,
+.mat-dialog-actions{
+    max-width: 320px;
+}
+.mat-dialog-content{
+    line-height: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #313B57;
+    margin-bottom: 20px;
+}
+// Prev and next buttons
+.detail-section-buttons{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    &.centered{
+        justify-content: center;
+    }
+
+    button{
+        position: relative;
+        top: -2px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+

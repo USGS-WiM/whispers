@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>
+    <i class="material-icons">add</i> Add Event Diagnosis for Event {{eventID}}</h1>
+  <mat-dialog-content>
+    <form [formGroup]="addEventDiagnosisForm" autocomplete="off">
+  
+      <div class="vertical-form-container">
+  
+        <mat-form-field class="form-control event-diagnosis-select">
+          <mat-select placeholder="Diagnosis" formControlName="diagnosis">
+            <mat-option value="">--</mat-option>
+            <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.diagnosis}}">{{diagnosis.diagnosis_string}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+      </div>
+  
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+  
+    <button mat-button color="warn" (click)="this.addEventDiagnosisDialogRef.close('cancel');"><mat-icon>cancel</mat-icon>&nbsp;Cancel</button>
+    <button mat-button type="submit" color="primary" [disabled]="addEventDiagnosisForm.invalid" (click)="onSubmit(addEventDiagnosisForm.value)"><mat-icon>send</mat-icon>&nbsp;Submit</button>
+    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+  </mat-dialog-actions>

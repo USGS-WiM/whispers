@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>
+  <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}} to {{commentObjectString}}
+</h1>
+<mat-dialog-content>
+
+  <form [formGroup]="commentForm" autocomplete="off">
+    <div class="vertical-form-container">
+
+      <mat-form-field class="general-comment-text-area">
+        <textarea matInput maxlength="1000" #comment placeholder="Comment" formControlName="comment" rows="4"></textarea>
+        <mat-hint align="end">{{comment.value.length}} / 1000</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field class="form-control">
+        <mat-select placeholder="Type" formControlName="comment_type">
+          <mat-option *ngFor="let commentType of commentTypes" [value]="commentType.id">{{commentType.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+  </form>
+
+
+</mat-dialog-content>
+<mat-dialog-actions>
+
+  <div class="detail-section-buttons">
+
+    <button mat-button color="warn" (click)="this.addCommentDialogRef.close('cancel');">
+      <mat-icon>cancel</mat-icon>&nbsp;Cancel
+    </button>
+    
+    <button mat-button color="primary" type="submit" [disabled]="commentForm.invalid" (click)="onSubmit(commentForm.value)">
+      <mat-icon>{{data.actionButtonIcon}}</mat-icon> {{data.action_button_text}}
+    </button>
+
+  </div>
+  
+  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+</mat-dialog-actions>

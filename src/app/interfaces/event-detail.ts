@@ -1,5 +1,6 @@
 
 import { Event } from '@interfaces/event';
+import { History } from '@interfaces/history';
 import { EventLocation } from '@interfaces/event-location';
 import { EventDiagnosis } from '@app/interfaces/event-diagnosis';
 import { SuperEvent } from '@app/interfaces/super-event';
@@ -17,12 +18,12 @@ export interface EventDetail extends History {
     staff_string: string;
     event_status: number;
     event_status_string: string;
-    legal_status: number;
+    legal_status: string;
     legal_status_string: string;
     legal_number: string;
-    quality_check: boolean;
+    quality_check: string;
     public: boolean;
     superevents: SuperEvent[];
-    event_diagnoses: EventDiagnosis[];
-    event_locations: EventLocation[];
+    eventdiagnoses: EventDiagnosis[];
+    eventlocations: EventLocation[];
 }

@@ -1,0 +1,112 @@
+<h1 mat-dialog-title *ngIf="data.title">
+  <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}}
+</h1>
+
+<mat-dialog-content>
+
+  <h3 *ngIf="locationspeciesString || data.locationspecies || data.speciesdiagnosis">
+    <span *ngIf="locationspeciesString">Species: {{locationspeciesString}} </span> <br />
+    <span *ngIf="data.locationspecies">Location: {{administrative_level_two}}, {{administrative_level_one}}</span> <br />
+    <span *ngIf="data.speciesdiagnosis">Species Diagnosis: {{data.speciesdiagnosis.diagnosis_string}} </span>
+  </h3>
+
+  <form [formGroup]="speciesDiagnosisForm" autocomplete="off">
+
+    <div class="vertical-form-container">
+
+      <!-- dummy field to absorb angular auto highlighting first field in form -->
+      <mat-form-field id="hidethis">
+        <mat-select>
+          <ngx-mat-select-search></ngx-mat-select-search>
+          <mat-option>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="horizontal-form-container">
+
+        <mat-form-field class="form-control diagnosis-select" *ngIf="data.species_diagnosis_action !== 'edit'">
+          <mat-select formControlName="diagnosis" placeholder="Species Diagnosis" #diagnosisSelect>
+            <ngx-mat-select-search [formControl]="diagnosisFilterCtrl" [placeholderLabel]="'Find diagnosis...'"
+              [noEntriesFoundLabel]="'no matching diagnosis found'"></ngx-mat-select-search>
+            <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis.id">
+              {{diagnosis.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox class="form-control suspect-checkbox" formControlName="suspect" matTooltip="Check this box if this diagnosis is based on clinical signs, previous history, or field necropsy.  Also check this box if the laboratory diagnosis was 'disease suspect', such as Avian Cholera Suspect for example.">Species
+          Diagnosis Suspect</mat-checkbox>
+
+      </div>
+
+      <mat-form-field class="form-control diagnosis-select">
+        <mat-select placeholder="Basis of Diagnosis" formControlName="basis" readonly>
+          <mat-option value="">--</mat-option>
+          <mat-option *ngFor="let diagnosisBasis of diagnosisBases" value="{{diagnosisBasis.id}}">{{diagnosisBasis.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="form-control">
+        <mat-select placeholder="Significance of Diagnosis for Species" formControlName="cause">
+          <mat-option  value="">--</mat-option>
+          <mat-option *ngFor="let diagnosisCause of diagnosisCauses" value="{{diagnosisCause.id}}">{{diagnosisCause.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="form control species-number-control">
+        <input matInput placeholder="Number Assessed" type="number" min="0" formControlName="tested_count">
+        <mat-hint align="end" matTooltip="Public field">
+          <mat-icon>public</mat-icon>
+        </mat-hint>
+        <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('min')">Minimum value is 0</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form control species-number-control">
+        <input matInput placeholder="Number with this Diagnosis" type="number" min="0" formControlName="diagnosis_count">
+        <mat-hint align="end" matTooltip="Public field">
+          <mat-icon>public</mat-icon>
+        </mat-hint>
+        <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('min')">Minimum value is 0</mat-error>
+      </mat-form-field>
+
+      <!-- <div class="horizontal-form-container" class="species-controls-container">
+          <mat-form-field class="species-number-control">
+            <input matInput placeholder="Number Confirmed" type="number" min="0"  formControlName="positive_count">
+            <mat-hint align="end" matTooltip="Public field">
+              <mat-icon>public</mat-icon>
+            </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field class="species-number-control">
+            <input matInput placeholder="Number Suspect" type="number" formControlName="suspect_count">
+            <mat-hint align="end" matTooltip="Public field">
+              <mat-icon>public</mat-icon>
+            </mat-hint>
+          </mat-form-field>
+        </div> -->
+
+      <mat-form-field class="form-control org-select">
+        <mat-select placeholder="Diagnosing Lab" formControlName="new_species_diagnosis_organizations" multiple>
+          <mat-option value="">--</mat-option>
+          <mat-option *ngFor="let laboratory of laboratories" value="{{laboratory.id}}">{{laboratory.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- <mat-checkbox formControlName="pooled">Pooled Test</mat-checkbox> -->
+    </div>
+  </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="detail-section-buttons">
+    <button mat-button color="warn" (click)="onCancel()">
+      <mat-icon>cancel</mat-icon>&nbsp;Cancel
+    </button>
+    <button mat-button color="primary" type="submit" [disabled]="speciesDiagnosisForm.invalid" (click)="onSubmit(speciesDiagnosisForm.value)">
+      <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{action_button_text}}
+    </button>
+    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+  </div>
+</mat-dialog-actions>

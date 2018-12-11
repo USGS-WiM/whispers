@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
@@ -24,6 +24,7 @@ import { OrganizationService } from '@app/services/organization.service';
 import { Organization } from '@interfaces/organization';
 
 import { SpeciesDiagnosis } from '@interfaces/species-diagnosis';
+import { ConfirmComponent } from '@confirm/confirm.component';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
 declare let gtag: Function;
@@ -41,13 +42,19 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
   locationspeciesString;
 
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
+
+  labSuspectViolation = false;
+  labViolation = false;
+
   diagnoses: Diagnosis[];
   diagnosisBases: DiagnosisBasis[];
   diagnosisCauses: DiagnosisCause[];
   laboratories: Organization[];
 
   speciesDiagnosisForm: FormGroup;
-  // editSpeciesDiagnosisForm: FormGroup;
+
+  filteredLaboratories = [];
 
   public filteredDiagnoses: ReplaySubject<Diagnosis[]> = new ReplaySubject<Diagnosis[]>(1);
 
@@ -77,20 +84,26 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       diagnosis: [null, Validators.required],
       cause: null,
       basis: null,
-      suspect: false,
+      suspect: true,
       // priority: null,
       tested_count: [null, Validators.min(0)],
       diagnosis_count: [null, Validators.min(0)],
-      positive_count: null,
-      suspect_count: null,
-      pooled: false,
-      new_species_diagnosis_organizations: []
-    });
+      // positive_count: null,
+      // suspect_count: null,
+      // pooled: false,
+      new_species_diagnosis_organizations: this.formBuilder.array([
+        this.initDiagnosisOrganization()
+      ])
+    },
+      {
+        validator: [this.integer, this.diagnosisCount, this.integerDiagnosisCount]
+      });
   }
 
   constructor(
     private formBuilder: FormBuilder,
     public snackBar: MatSnackBar,
+    private dialog: MatDialog,
     private diagnosisService: DiagnosisService,
     public editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>,
     private diagnosisBasisService: DiagnosisBasisService,
@@ -105,7 +118,6 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
   ngOnInit() {
 
-
     if (this.data.speciesdiagnosis) {
       this.speciesdiagnosis = this.data.speciesdiagnosis;
     }
@@ -116,19 +128,22 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       this.administrative_level_two = this.data.locationspecies.administrative_level_two_string;
     }
 
+    // add mode
     if (this.data.species_diagnosis_action === 'add') {
       this.action_text = 'Add';
       this.action_button_text = 'Submit';
       this.speciesDiagnosisForm.get('location_species').setValue(this.data.locationspecies.id);
+      // add to event submission formArray mode
     } else if (this.data.species_diagnosis_action === 'addToFormArray') {
       this.action_text = 'Add';
       this.action_button_text = 'Add';
+      // edit mode
     } else if (this.data.species_diagnosis_action === 'edit') {
       this.action_text = 'Edit';
       this.action_button_text = 'Save Changes';
 
       // Access the form here and set the value to the objects property/value
-      this.speciesDiagnosisForm.setValue({
+      this.speciesDiagnosisForm.patchValue({
         id: this.data.speciesdiagnosis.id,
         location_species: this.data.speciesdiagnosis.location_species,
         diagnosis: [this.data.speciesdiagnosis.diagnosis, Validators.required],
@@ -138,10 +153,22 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
         tested_count: this.data.speciesdiagnosis.tested_count,
         diagnosis_count: this.data.speciesdiagnosis.diagnosis_count,
         positive_count: this.data.speciesdiagnosis.positive_count,
-        suspect_count: this.data.speciesdiagnosis.suspect_count,
-        pooled: this.data.speciesdiagnosis.pooled,
-        new_species_diagnosis_organizations: this.data.speciesdiagnosis.organizations
+        // suspect_count: this.data.speciesdiagnosis.suspect_count,
+        // pooled: this.data.speciesdiagnosis.pooled,
+        // new_species_diagnosis_organizations: this.data.speciesdiagnosis.organizations
       });
+
+      if (this.data.speciesdiagnosis.organizations.length > 0) {
+        this.removeDiagnosisOrganization(0);
+
+        for (let i = 0, j = this.data.speciesdiagnosis.organizations.length; i < j; i++) {
+          this.addDiagnosisOrganization();
+          // tslint:disable-next-line:max-line-length
+          this.speciesDiagnosisForm.get('new_species_diagnosis_organizations')['controls'][i].get('org').setValue(this.data.speciesdiagnosis.organizations[i]);
+        }
+
+      }
+
 
     }
 
@@ -224,7 +251,74 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
         }
       );
 
+    this.checkLabSuspectCompliance();
+    this.checkLabCompliance();
   }
+
+  diagnosisCount(AC: AbstractControl) {
+    AC.get('diagnosis_count').setErrors(null);
+    const tested_count = AC.get('tested_count').value;
+    const diagnosis_count = AC.get('diagnosis_count').value
+    if (diagnosis_count !== null && tested_count !== null) {
+      if (diagnosis_count > tested_count) {
+        AC.get('diagnosis_count').setErrors({ diagnosisCount: true });
+      }
+    }
+  }
+
+  integer(AC: AbstractControl) {
+    const tested_count = AC.get('tested_count').value;
+    const diagnosis_count = AC.get('diagnosis_count').value;
+    if (!Number.isInteger(diagnosis_count) && diagnosis_count !== null) {
+      AC.get('diagnosis_count').setErrors({ integer: true });
+    }
+    if (!Number.isInteger(tested_count) && tested_count !== null) {
+      AC.get('tested_count').setErrors({ integer: true });
+    }
+    return null;
+  }
+
+  integerDTestedCount(AC: AbstractControl) {
+    AC.get('tested_count').setErrors(null);
+    const tested_count = AC.get('tested_count').value;
+    if (!Number.isInteger(tested_count) && tested_count !== null) {
+      AC.get('tested_count').setErrors({ integerTestedCount: true });
+    }
+  }
+
+  integerDiagnosisCount(AC: AbstractControl) {
+    AC.get('diagnosis_count').setErrors(null);
+    const diagnosis_count = AC.get('diagnosis_count').value;
+    if (!Number.isInteger(diagnosis_count) && diagnosis_count !== null) {
+      AC.get('diagnosis_count').setErrors({ integerDiagnosisCount: true });
+    }
+  }
+
+  // begin diagnosis organizations array functions
+  initDiagnosisOrganization() {
+    return this.formBuilder.group({
+      org: [null, Validators.required],
+    });
+  }
+
+  addDiagnosisOrganization() {
+    const control = <FormArray>this.speciesDiagnosisForm.get('new_species_diagnosis_organizations');
+    control.push(this.initDiagnosisOrganization());
+    this.checkLabSuspectCompliance();
+    this.checkLabCompliance();
+  }
+
+  removeDiagnosisOrganization(diagnosisOrgIndex) {
+    const control = <FormArray>this.speciesDiagnosisForm.get('new_species_diagnosis_organizations');
+    control.removeAt(diagnosisOrgIndex);
+    this.checkLabSuspectCompliance();
+    this.checkLabCompliance();
+  }
+
+  getDiagnosisOrganizations(form) {
+    return form.controls.new_species_diagnosis_organizations.controls;
+  }
+  // end diagnosis organizations array functions
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {
@@ -251,7 +345,6 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
   }
 
   onCancel() {
-
     const speciesDiagnosisObj = {
       action: 'cancel',
       eventlocationIndex: this.data.eventlocationIndex,
@@ -260,10 +353,34 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     this.editSpeciesDiagnosisDialogRef.close(speciesDiagnosisObj);
   }
 
+  checkLabSuspectCompliance() {
+    this.labSuspectViolation = false;
+    // tslint:disable-next-line:max-line-length
+    if (this.speciesDiagnosisForm['controls'].new_species_diagnosis_organizations['controls'].length === 0 && !this.speciesDiagnosisForm.get('suspect').value) {
+      this.labSuspectViolation = true;
+    }
+  }
+
+  checkLabCompliance() {
+    this.labViolation = false;
+    // tslint:disable-next-line:max-line-length
+    if (this.speciesDiagnosisForm['controls'].new_species_diagnosis_organizations['controls'].length === 0 && this.speciesDiagnosisForm.get('basis').value === 3) {
+      this.labViolation = true;
+    }
+  }
 
   onSubmit(formValue) {
 
     this.submitLoading = true;
+
+    const new_species_diagnosis_orgs_array = [];
+    // loop through and convert new_organizations
+    for (const org of formValue.new_species_diagnosis_organizations) {
+      if (org !== null) {
+        new_species_diagnosis_orgs_array.push(org.org);
+      }
+    }
+    formValue.new_species_diagnosis_organizations = new_species_diagnosis_orgs_array;
 
     // if new_species_diagnosis_organizations is null, set to empty array for submission
     if (formValue.new_species_diagnosis_organizations === null) { formValue.new_species_diagnosis_organizations = []; }
@@ -277,7 +394,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
             this.openSnackBar('Species Diagnosis Added', 'OK', 5000);
             this.dataUpdatedService.triggerRefresh();
             this.editSpeciesDiagnosisDialogRef.close();
-            gtag('event', 'click', {'event_category': 'Species Diagnosis','event_label': 'Species Diagnosis Added, Diagnosis: ' + speciesdiagnosis.diagnosis});
+            gtag('event', 'click', { 'event_category': 'Species Diagnosis', 'event_label': 'Species Diagnosis Added, Diagnosis: ' + speciesdiagnosis.diagnosis });
           },
           error => {
             this.submitLoading = false;
@@ -305,7 +422,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
             this.openSnackBar('Species Diagnosis Updated', 'OK', 5000);
             this.dataUpdatedService.triggerRefresh();
             this.editSpeciesDiagnosisDialogRef.close('add');
-            gtag('event', 'click', {'event_category': 'Species Diagnosis','event_label': 'Species Diagnosis Edited, Diagnosis: ' + contact.diagnosis});
+            gtag('event', 'click', { 'event_category': 'Species Diagnosis', 'event_label': 'Species Diagnosis Edited, Diagnosis: ' + contact.diagnosis });
           },
           error => {
             this.submitLoading = false;

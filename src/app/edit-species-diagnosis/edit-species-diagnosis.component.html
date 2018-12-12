@@ -41,7 +41,8 @@
 
         <mat-checkbox class="form-control suspect-checkbox" formControlName="suspect" (change)="checkLabSuspectCompliance()"
           matTooltip="Check this box if this diagnosis is based on clinical signs, previous history, or field necropsy.  Also check this box if the laboratory diagnosis was 'disease suspect', such as Avian Cholera Suspect for example. Public field.">Species
-          Diagnosis Suspect <mat-icon class="public-icon">public</mat-icon> </mat-checkbox> 
+          Diagnosis Suspect <mat-icon class="public-icon">public</mat-icon>
+        </mat-checkbox>
       </div>
 
       <mat-form-field class="form-control diagnosis-select">
@@ -64,7 +65,7 @@
           <mat-icon>public</mat-icon>
         </mat-hint>
         <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('min')">Minimum value is 0</mat-error>
-        <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('integer')">Must be an integer
+        <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('integerTestedCount')">Must be an integer
           (whole number)</mat-error>
       </mat-form-field>
 
@@ -74,11 +75,11 @@
           <mat-icon>public</mat-icon>
         </mat-hint>
         <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('min')">Minimum value is 0</mat-error>
+        <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('diagnosisCount')">Cannot be higher
+            than Number Assessed</mat-error>
         <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('integerDiagnosisCount')">Must be
           an integer
           (whole number)</mat-error>
-        <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('diagnosisCount')">Cannot be higher
-          than Number Assessed</mat-error>
       </mat-form-field>
 
       <!-- <div class="horizontal-form-container" class="species-controls-container">
@@ -111,14 +112,31 @@
 
             <div class="horizontal-form-container">
 
-              <mat-form-field class="form-control event-org-select">
+              <!-- <mat-form-field class="form-control event-org-select">
                 <mat-select placeholder="Lab" formControlName="org" required>
                   <mat-option *ngFor="let laboratory of laboratories" [value]="laboratory.id">{{laboratory.name}}</mat-option>
                 </mat-select>
                 <mat-hint align="end" matTooltip="Public field">
                   <mat-icon>public</mat-icon>
                 </mat-hint>
+              </mat-form-field> -->
+
+              <!------------------------------------------>
+              <mat-form-field class="form-control event-org-select">
+                <mat-select formControlName="org" placeholder="Lab" #labSelect required>
+                  <ngx-mat-select-search [formControl]="laboratoryFilterCtrl" [placeholderLabel]="'Find lab...'"
+                    [noEntriesFoundLabel]="'no matching lab found'"></ngx-mat-select-search>
+                  <mat-option *ngFor="let laboratory of filteredLaboratories[diagnosisOrgIndex] | async" [value]="laboratory.id">
+                    {{laboratory.name}}
+                  </mat-option>
+                </mat-select>
+                <mat-hint align="end" matTooltip="Public field">
+                  <mat-icon>public</mat-icon>
+                </mat-hint>
+                <mat-error *ngIf="speciesDiagnosisForm.get('new_species_diagnosis_organizations').controls[diagnosisOrgIndex].get('org').invalid">Please
+                  enter a value</mat-error>
               </mat-form-field>
+              <!------------------------------------------>
 
               <button mat-icon-button color="warn" aria-label="Remove this lab" (click)="removeDiagnosisOrganization(diagnosisOrgIndex)"
                 matTooltip="Remove this lab">

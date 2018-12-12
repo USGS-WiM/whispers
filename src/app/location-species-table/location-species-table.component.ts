@@ -19,6 +19,7 @@ import { DataUpdatedService } from '@app/services/data-updated.service';
 
 import { AgeBias } from '@interfaces/age-bias';
 import { SexBias } from '@interfaces/sex-bias';
+import { Organization } from '@interfaces/organization';
 
 @Component({
   selector: 'app-location-species-table',
@@ -38,6 +39,7 @@ export class LocationSpeciesTableComponent implements OnInit {
   @Input('permissions') permissions: Object;
   @Input('ageBiases') ageBiases: AgeBias[];
   @Input('sexBiases') sexBiases: SexBias[];
+  @Input('laboratories') laboratories: Organization[];
 
   editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
   editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
@@ -58,7 +60,7 @@ export class LocationSpeciesTableComponent implements OnInit {
     'sex_bias',
     'diagnosis'
   ];
-  //dataSource = new ExampleDataSource();
+  // dataSource = new ExampleDataSource();
   expandedElement: any;
 
   dataSource;
@@ -75,10 +77,9 @@ export class LocationSpeciesTableComponent implements OnInit {
 
   ngOnInit() {
 
-    if (this.permissions) {
-      console.log('location-species-table.component has this permissions object: ' + this.permissions);
-    }
-
+    // if (this.permissions) {
+    //   console.log('location-species-table.component has this permissions object: ' + this.permissions);
+    // }
 
     const data = this.locationspecies;
 
@@ -171,6 +172,7 @@ export class LocationSpeciesTableComponent implements OnInit {
       data: {
         locationspecies: locationspecies,
         speciesdiagnosis: speciesdiagnosis,
+        laboratories: this.laboratories,
         species_diagnosis_action: 'edit',
         title: 'Edit Species Diagnosis',
         titleIcon: 'edit',
@@ -202,6 +204,7 @@ export class LocationSpeciesTableComponent implements OnInit {
       disableClose: true,
       data: {
         locationspecies: locationspecies,
+        laboratories: this.laboratories,
         species_diagnosis_action: 'add',
         title: 'Add diagnosis for this species',
         titleIcon: 'add',

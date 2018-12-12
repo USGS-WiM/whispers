@@ -125,6 +125,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   countries: Country[];
   staff: Staff[];
 
+  laboratories: Organization[] = [];
+
   adminLevelOnes: AdministrativeLevelOne[];
   // expermental, for autocomplete
   administrative_level_one: AdministrativeLevelOne[];
@@ -697,6 +699,18 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       .subscribe(
         staff => {
           this.staff = staff;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get 'laboratories' from the organizations service
+    // aliases the subset of organization records where laboratory = true to an array called 'laboratories'
+    this.organizationService.getLaboratories()
+      .subscribe(
+        (laboratories) => {
+          this.laboratories = laboratories;
         },
         error => {
           this.errorMessage = <any>error;
@@ -1735,6 +1749,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       disableClose: true,
       data: {
         species_diagnosis_action: 'addToFormArray',
+        laboratories: this.laboratories,
         eventlocationIndex: eventLocationIndex,
         locationspeciesIndex: locationSpeciesIndex,
         title: 'Add Species Diagnosis',

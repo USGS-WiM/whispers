@@ -622,7 +622,7 @@
 
                   <div *ngIf="eventLocation.locationspecies" class="event-table-header">Species at this location</div>
 
-                  <app-location-species-table [eventData]="eventData" [locationspecies]="eventLocation.locationspecies"
+                  <app-location-species-table [eventData]="eventData" [laboratories]="laboratories" [locationspecies]="eventLocation.locationspecies"
                     [permissions]="eventData.permissions" [ageBiases]="ageBiases" [sexBiases]="sexBiases"></app-location-species-table>
 
                   <div class="detail-section-buttons">

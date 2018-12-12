@@ -58,6 +58,8 @@ import { ContactService } from '@services/contact.service';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
+import { OrganizationService } from '@app/services/organization.service';
+import { Organization } from '@interfaces/organization';
 
 
 @Component({
@@ -109,6 +111,8 @@ export class EventDetailsComponent implements OnInit {
   selection = [];
 
   possibleEventDiagnoses = [];
+
+  laboratories: Organization[] = [];
 
   eventDataLoading = true;
 
@@ -166,6 +170,7 @@ export class EventDetailsComponent implements OnInit {
     private ageBiasService: AgeBiasService,
     private sexBiasService: SexBiasService,
     private commentTypeService: CommentTypeService,
+    private organizationService: OrganizationService,
     private commentService: CommentService,
     private contactService: ContactService,
     public snackBar: MatSnackBar
@@ -288,6 +293,19 @@ export class EventDetailsComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
+
+    // get 'laboratories' from the organizations service
+    // aliases the subset of organization records where laboratory = true to an array called 'laboratories'
+    this.organizationService.getLaboratories()
+      .subscribe(
+        (laboratories) => {
+          this.laboratories = laboratories;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
 
     // get comment types from the commentTypes service
     this.commentTypeService.getCommentTypes()
@@ -709,16 +727,16 @@ export class EventDetailsComponent implements OnInit {
 
   deleteEventComment(id: number) {
     this.commentService.delete(id)
-    .subscribe(
-      () => {
-        this.refreshEvent();
-        this.openSnackBar('Comment successfully deleted', 'OK', 5000);
-      },
-      error => {
-        this.errorMessage = <any>error;
-        this.openSnackBar('Error. Comment not deleted. Error message: ' + error, 'OK', 8000);
-      }
-    );
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Comment successfully deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Comment not deleted. Error message: ' + error, 'OK', 8000);
+        }
+      );
 
   }
 

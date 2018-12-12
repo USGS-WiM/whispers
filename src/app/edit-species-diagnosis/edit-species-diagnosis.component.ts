@@ -50,19 +50,18 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
   diagnoses: Diagnosis[];
   diagnosisBases: DiagnosisBasis[];
   diagnosisCauses: DiagnosisCause[];
-  laboratories: Organization[];
+  laboratories: Organization[] = [];
 
   speciesDiagnosisForm: FormGroup;
 
   filteredLaboratories = [];
+  laboratoryFilterCtrl: FormControl = new FormControl();
 
   public filteredDiagnoses: ReplaySubject<Diagnosis[]> = new ReplaySubject<Diagnosis[]>(1);
-
   diagnosisFilterCtrl: FormControl = new FormControl();
 
   /** Subject that emits when the component has been destroyed. */
   private _onDestroy = new Subject<void>();
-
 
   // these variables are for use when direct adding a species diagnosis
   locationspecies;
@@ -88,16 +87,21 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       // priority: null,
       tested_count: [null, Validators.min(0)],
       diagnosis_count: [null, Validators.min(0)],
-      // positive_count: null,
-      // suspect_count: null,
-      // pooled: false,
+      //diagnosis_count: null,
+      positive_count: null,
+      suspect_count: null,
+      pooled: false,
       new_species_diagnosis_organizations: this.formBuilder.array([
         this.initDiagnosisOrganization()
       ])
     },
       {
-        validator: [this.integer, this.diagnosisCount, this.integerDiagnosisCount]
+        validator: [this.integerTestedCount, this.integerDiagnosisCount, this.diagnosisCount]
       });
+
+    this.filteredLaboratories = new Array<ReplaySubject<Organization[]>>();
+    this.filteredLaboratories.push(new ReplaySubject<Organization[]>());
+    this.ManageLaboratoryControl(0);
   }
 
   constructor(
@@ -114,9 +118,16 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.buildspeciesDiagnosisForm();
+
   }
 
   ngOnInit() {
+
+    if (this.data.laboratories) {
+      this.laboratories = this.data.laboratories;
+
+      this.filteredLaboratories[0].next(this.laboratories);
+    }
 
     if (this.data.speciesdiagnosis) {
       this.speciesdiagnosis = this.data.speciesdiagnosis;
@@ -160,15 +171,19 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
       if (this.data.speciesdiagnosis.organizations.length > 0) {
         this.removeDiagnosisOrganization(0);
+        // remove filteredLaboratories array for first index
+        this.filteredLaboratories.pop();
+
+        // for (const org of this.data.speciesdiagnosis.organizations) {
+        //   this.addDiagnosisOrganization();
+        // }
 
         for (let i = 0, j = this.data.speciesdiagnosis.organizations.length; i < j; i++) {
           this.addDiagnosisOrganization();
           // tslint:disable-next-line:max-line-length
           this.speciesDiagnosisForm.get('new_species_diagnosis_organizations')['controls'][i].get('org').setValue(this.data.speciesdiagnosis.organizations[i]);
         }
-
       }
-
 
     }
 
@@ -241,24 +256,26 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
     // get 'laboratories' from the organizations service
     // aliases the subset of organization records where laboratory = true to an array called 'laboratories'
-    this.organizationService.getLaboratories()
-      .subscribe(
-        (laboratories) => {
-          this.laboratories = laboratories;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    // this.organizationService.getLaboratories()
+    //   .subscribe(
+    //     (laboratories) => {
+    //       this.laboratories = laboratories;
+
+    //       this.filteredLaboratories[0].next(laboratories);
+    //     },
+    //     error => {
+    //       this.errorMessage = <any>error;
+    //     }
+    //   );
 
     this.checkLabSuspectCompliance();
     this.checkLabCompliance();
   }
 
   diagnosisCount(AC: AbstractControl) {
-    AC.get('diagnosis_count').setErrors(null);
+    //AC.get('diagnosis_count').setErrors(null);
     const tested_count = AC.get('tested_count').value;
-    const diagnosis_count = AC.get('diagnosis_count').value
+    const diagnosis_count = AC.get('diagnosis_count').value;
     if (diagnosis_count !== null && tested_count !== null) {
       if (diagnosis_count > tested_count) {
         AC.get('diagnosis_count').setErrors({ diagnosisCount: true });
@@ -278,7 +295,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     return null;
   }
 
-  integerDTestedCount(AC: AbstractControl) {
+  integerTestedCount(AC: AbstractControl) {
     AC.get('tested_count').setErrors(null);
     const tested_count = AC.get('tested_count').value;
     if (!Number.isInteger(tested_count) && tested_count !== null) {
@@ -304,6 +321,11 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
   addDiagnosisOrganization() {
     const control = <FormArray>this.speciesDiagnosisForm.get('new_species_diagnosis_organizations');
     control.push(this.initDiagnosisOrganization());
+    const laboratoryIndex = control.length - 1;
+
+    this.filteredLaboratories.push(new ReplaySubject<Organization[]>());
+    this.ManageLaboratoryControl(laboratoryIndex);
+
     this.checkLabSuspectCompliance();
     this.checkLabCompliance();
   }
@@ -319,6 +341,37 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     return form.controls.new_species_diagnosis_organizations.controls;
   }
   // end diagnosis organizations array functions
+
+  ManageLaboratoryControl(laboratoryIndex: number) {
+
+    // populate the laboratories options list for the specific control
+    this.filteredLaboratories[laboratoryIndex].next(this.laboratories);
+
+    // listen for search field value changes
+    this.laboratoryFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterLaboratories(laboratoryIndex);
+      });
+  }
+
+  private filterLaboratories(laboratoryIndex) {
+    if (!this.laboratories) {
+      return;
+    }
+    // get the search keyword
+    let search = this.laboratoryFilterCtrl.value;
+    if (!search) {
+      this.filteredLaboratories[laboratoryIndex].next(this.laboratories.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the laboratories
+    this.filteredLaboratories[laboratoryIndex].next(
+      this.laboratories.filter(laboratory => laboratory.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {

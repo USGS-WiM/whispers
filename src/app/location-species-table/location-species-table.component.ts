@@ -184,10 +184,7 @@ export class LocationSpeciesTableComponent implements OnInit {
     this.editSpeciesDiagnosisDialogRef.afterClosed()
       .subscribe(
         () => {
-          //this.refreshEvent();
-          // for (let i = 0; i < this.selection.length; i++) {
-          //   this.selection[i].clear();
-          // }
+          this.dataUpdatedService.triggerRefresh();
         },
         error => {
           this.errorMessage = <any>error;
@@ -216,6 +213,7 @@ export class LocationSpeciesTableComponent implements OnInit {
     this.editSpeciesDiagnosisDialogRef.afterClosed()
       .subscribe(
         () => {
+          this.dataUpdatedService.triggerRefresh();
         },
         error => {
           this.errorMessage = <any>error;

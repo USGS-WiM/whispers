@@ -57,8 +57,9 @@ export class UserDashboardComponent implements OnInit {
     'affected_count',
     'start_date',
     'end_date',
-    'administrativelevelones',
-    'administrativeleveltwos',
+    // 'administrativelevelones',
+    // 'administrativeleveltwos',
+    'locations',
     'species',
     'eventdiagnoses',
     'permission_source'

@@ -326,7 +326,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           return 0;
         });
       });
-
   }
 
   ngOnDestroy() {
@@ -350,6 +349,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      minWidth: '50em',
       disableClose: true,
       data: {
         contact_action: 'create'

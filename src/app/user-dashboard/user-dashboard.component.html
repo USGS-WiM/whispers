@@ -194,8 +194,29 @@
               <mat-cell *matCellDef="let event"> {{event.end_date | date:'shortDate'}} </mat-cell>
             </ng-container>
 
+             <!-- Location Column -->
+             <ng-container matColumnDef="locations">
+                <mat-header-cell *matHeaderCellDef matTooltip="Displayed as County (or equivalent), State (or equivalent), Country - where values are available">Location</mat-header-cell>
+                <mat-cell *matCellDef="let event">
+                  <ul class="table-cell-list">
+                    <li *ngFor="let administrativeleveltwo of event.administrativeleveltwos">
+                      <span>{{administrativeleveltwo.name}}</span>
+                      <span *ngIf="administrativeleveltwo.administrative_level_one_string !== null && administrativeleveltwo.administrative_level_one_string !== ''">,&nbsp;</span>
+                      <span>{{administrativeleveltwo.administrative_level_one_string}}</span>
+                      <span *ngIf="administrativeleveltwo.country_string !== null && administrativeleveltwo.country_string !== ''">,&nbsp;</span>
+                      <span>{{administrativeleveltwo.country_string}}
+                      </span>
+  
+                    </li>
+                  </ul>
+                  <!-- <span *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}
+                    <span *ngIf="(event.administrativelevelones.indexOf(administrativelevelone)) < (event.administrativelevelones.length - 1)">, </span>
+                  </span> -->
+                </mat-cell>
+              </ng-container>
+
             <!-- States Column -->
-            <ng-container matColumnDef="administrativelevelones">
+            <!-- <ng-container matColumnDef="administrativelevelones">
               <mat-header-cell *matHeaderCellDef mat-sort-header> States </mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <span *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}
@@ -203,10 +224,10 @@
                   </span>
                 </span>
               </mat-cell>
-            </ng-container>
+            </ng-container> -->
 
             <!-- Counties Column -->
-            <ng-container matColumnDef="administrativeleveltwos">
+            <!-- <ng-container matColumnDef="administrativeleveltwos">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Counties </mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <span *ngFor="let administrativeleveltwo of event.administrativeleveltwos">{{administrativeleveltwo.name}}
@@ -214,7 +235,7 @@
                   </span>
                 </span>
               </mat-cell>
-            </ng-container>
+            </ng-container> -->
 
             <!-- Species Column -->
             <ng-container matColumnDef="species">

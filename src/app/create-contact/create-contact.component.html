@@ -41,18 +41,13 @@
 
     <div class="vertical-form-container">
 
-      <mat-form-field class="form-control">
-        <input matInput placeholder="Title" formControlName="title">
-      </mat-form-field>
-
-      <mat-form-field class="form-control">
-        <input matInput placeholder="Position" formControlName="position">
-      </mat-form-field>
-
       <mat-form-field class="form-control org-select">
-        <mat-select placeholder="Organization" formControlName="organization">
-          <mat-option value="">--</mat-option>
-          <mat-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</mat-option>
+        <mat-select formControlName="organization" placeholder="Organization" #organizationSelect>
+          <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="'Find organization...'"
+            [noEntriesFoundLabel]="'no matching organization found'"></ngx-mat-select-search>
+          <mat-option *ngFor="let organization of filteredOrganizations | async" [value]="organization.id">
+            {{organization.name}}
+          </mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -69,8 +64,10 @@
 <mat-dialog-actions>
 
   <div class="form-buttons-flex">
-    <button mat-button (click)="this.createContactDialogRef.close('cancel');">Cancel</button>
-    <button mat-button type="submit" [disabled]="createContactForm.invalid" (click)="onSubmit(createContactForm.value)">{{action_button_text}}</button>
+    <button mat-button color="warn" (click)="this.createContactDialogRef.close('cancel');"><mat-icon>cancel</mat-icon>Cancel</button>
+    <button mat-button color="primary" type="submit" [disabled]="createContactForm.invalid" (click)="onSubmit(createContactForm.value)">
+        <mat-icon>save</mat-icon>Save
+    </button>
     <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
   </div>
 

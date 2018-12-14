@@ -94,10 +94,7 @@ export class AppComponent implements OnInit {
   }
 
   openAboutDialog() {
-    this.aboutDialogRef = this.dialog.open(AboutComponent, {
-      // minWidth: '60%',
-      // height: '75%'
-    });
+    this.aboutDialogRef = this.dialog.open(AboutComponent, {});
   }
 
   logout() {

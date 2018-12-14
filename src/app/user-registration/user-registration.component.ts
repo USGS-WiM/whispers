@@ -6,6 +6,8 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MatRadioModule } from '@angular/material';
+import { Subject, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { User } from '@interfaces/user';
 import { UserService } from '@app/services/user.service';
@@ -19,8 +21,6 @@ import { Role } from '@interfaces/role';
 
 import { APP_SETTINGS } from '@app/app.settings';
 declare let gtag: Function;
-
-
 
 @Component({
   selector: 'app-user-registration',
@@ -38,6 +38,12 @@ export class UserRegistrationComponent implements OnInit {
   roles: Role[];
 
   userRegistrationForm: FormGroup;
+
+  public filteredOrganizations: ReplaySubject<Organization[]> = new ReplaySubject<Organization[]>(1);
+  organizationFilterCtrl: FormControl = new FormControl();
+
+  /** Subject that emits when the component has been destroyed. */
+  private _onDestroy = new Subject<void>();
 
   matchEmail(AC: AbstractControl) {
     const email = AC.get('email').value; // to get value in input tag
@@ -113,6 +119,21 @@ export class UserRegistrationComponent implements OnInit {
       .subscribe(
         organizations => {
           this.organizations = organizations;
+          this.organizations.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
+
+          // populate the search select options for the species control
+          this.filteredOrganizations.next(organizations);
+
+          // listen for search field value changes
+          this.organizationFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+              this.filterOrganization();
+            });
         },
         error => {
           this.errorMessage = <any>error;
@@ -133,6 +154,24 @@ export class UserRegistrationComponent implements OnInit {
 
   }
 
+  private filterOrganization() {
+    if (!this.organizations) {
+      return;
+    }
+    // get the search keyword
+    let search = this.organizationFilterCtrl.value;
+    if (!search) {
+      this.filteredOrganizations.next(this.organizations.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredOrganizations.next(
+      this.organizations.filter(organization => organization.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {
       duration: duration,
@@ -147,7 +186,7 @@ export class UserRegistrationComponent implements OnInit {
     delete formValue.terms;
 
     if (this.data.registration_type === 'partner') {
-      formValue.message = 'Requested role: ' + formValue.role + '. Comment: ' + formValue.request_comment;
+      formValue.message = 'Requested role: ' + formValue.role + '. Requested Organization: ' + formValue.organization + '. Comment: ' + formValue.request_comment;
     }
 
     formValue.role = 7;
@@ -163,7 +202,7 @@ export class UserRegistrationComponent implements OnInit {
           // sessionStorage.first_name = event.first_name;
           // sessionStorage.last_name = event.last_name;
           // sessionStorage.password = sessionStorage.new_password;
-          gtag('event', 'click', {'event_category': 'Users','event_label': 'New User Created'});
+          gtag('event', 'click', { 'event_category': 'Users', 'event_label': 'New User Created' });
         },
         error => {
           this.submitLoading = false;

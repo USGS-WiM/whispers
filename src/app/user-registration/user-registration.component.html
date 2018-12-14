@@ -71,17 +71,27 @@
 
       <span class="reg-hint">Select the organization you would like to join</span>
 
-      <mat-form-field class="form-control org-select">
+      <!-- <mat-form-field class="form-control org-select">
         <mat-select placeholder="Organization" formControlName="organization">
           <mat-option value="">--</mat-option>
           <mat-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> -->
+
+      <mat-form-field class="form-control org-select">
+          <mat-select formControlName="organization" placeholder="Organization" #organizationSelect>
+            <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="'Find organization...'"
+              [noEntriesFoundLabel]="'no matching organization found'"></ngx-mat-select-search>
+            <mat-option *ngFor="let organization of filteredOrganizations | async" [value]="organization.name">
+              {{organization.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
 
       <span class="reg-hint">Select the role you would like within your chosen organization</span>
 
-      <mat-form-field class="form-control org-select">
+      <mat-form-field class="form-control">
         <mat-select placeholder="Role" formControlName="role">
           <mat-option [value]="'Partner'">User</mat-option>
           <mat-option [value]="'Partner Manager'">Manager</mat-option>

@@ -144,9 +144,11 @@
                         <span *ngFor="let speciesdiagnosis of loc_species.speciesdiagnoses">
                           <span class="text-bold" *ngIf="speciesdiagnosis">{{speciesdiagnosis.diagnosis_string}}</span>
                           <br />
-                          <span *ngIf="speciesdiagnosis.tested_count !== null">Number Assessed: {{speciesdiagnosis.tested_count}}</span> <br>
+                          <span *ngIf="speciesdiagnosis.tested_count !== null">Number Assessed:
+                            {{speciesdiagnosis.tested_count}}</span> <br>
                           <!-- <span *ngIf="speciesdiagnosis.tested_count !== null && speciesdiagnosis.positive_count !== null"></span> -->
-                          <span *ngIf="speciesdiagnosis.diagnosis_count !== null">Number with this diagnosis: {{speciesdiagnosis.diagnosis_count}}</span>
+                          <span *ngIf="speciesdiagnosis.diagnosis_count !== null">Number with this diagnosis:
+                            {{speciesdiagnosis.diagnosis_count}}</span>
                           <br>
                           <!-- <span *ngIf="speciesdiagnosis.organizations_string.length > 0">Tested by
                               <span *ngFor="let org of speciesdiagnosis.organizations_string">{{org}} </span>
@@ -195,7 +197,8 @@
                 <div class="permission red" *ngIf="eventData.permissions.destroy === true">Delete</div>
               </div>
               <span class="title" *ngIf="eventData.complete && (eventData.permissions.update === true || eventData.permissions.write === true || eventData.permissions.destroy === true)">Editing
-                is locked because event is marked Complete. Change WHISPers Record Status (Edit Event) to Incomplete to unlock editing.
+                is locked because event is marked Complete. Change WHISPers Record Status (Edit Event) to Incomplete to
+                unlock editing.
               </span>
             </div>
 
@@ -214,8 +217,8 @@
               <div class="item">
                 <div class="label">Event Owner</div>
                 <div class="value">
-                  <span *ngIf="eventOwner">{{eventOwner.first_name}} {{eventOwner.last_name}}
-                    ({{eventOwner.organization_string}})</span>
+                  <span>{{eventData.created_by_first_name}} {{eventData.created_by_last_name}}
+                    ({{eventData.created_by_organization_string}})</span>
                   <span *ngIf="!eventOwner">&nbsp;</span>
                 </div>
               </div>
@@ -241,7 +244,7 @@
               </div>
               <div class="item">
                 <div class="label">Quality Check</div>
-                <div class="value">{{eventData.quality_check ? 'Yes' : 'No'}}</div>
+                <div class="value">{{eventData.quality_check === null ? 'Not Done' : eventData.quality_check !== null ? (eventData.quality_check | date:'shortDate') : 'Not Done' }}</div>
               </div>
               <div class="item">
                 <div class="label">WHISPers Record Status</div>

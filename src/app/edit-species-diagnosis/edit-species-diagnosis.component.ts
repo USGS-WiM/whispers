@@ -92,7 +92,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       suspect_count: null,
       pooled: false,
       new_species_diagnosis_organizations: this.formBuilder.array([
-        this.initDiagnosisOrganization()
+       // this.initDiagnosisOrganization()
       ])
     },
       {

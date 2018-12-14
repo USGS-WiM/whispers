@@ -23,7 +23,7 @@ export class ContactService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.CONTACTS_URL + 'user_contacts/?no_page&slim', options)
+    return this._http.get(APP_SETTINGS.CONTACTS_URL + 'user_contacts/?no_page', options)
       .map((response: Response) => <any[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);

@@ -48,6 +48,20 @@ export class APP_SETTINGS {
         ];
     }
 
+    public static get EVENT_COMPLETE_DIAGNOSIS_UNKNOWN() {
+        return {
+            'diagnosis': 469,
+            'diagnosis_string': 'Undetermined',
+        }
+    }
+
+    public static get EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN() {
+        return {
+            'diagnosis': 104,
+            'diagnosis_string': 'Pending',
+        }
+    }
+
     public static get AUTH_URL(): string { return this.API_ROOT + 'auth/'; }
     public static get EVENTS_URL(): string { return this.API_ROOT + 'events/'; }
     public static get EVENT_DETAILS_URL(): string { return this.API_ROOT + 'eventdetails/'; }

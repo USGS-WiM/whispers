@@ -89,7 +89,7 @@ export class EventDetailsComponent implements OnInit {
 
   showAddEventLocation = false;
 
-  locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
+  //locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
 
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
@@ -219,27 +219,11 @@ export class EventDetailsComponent implements OnInit {
               }
             }
 
-            for (const diagnosis of APP_SETTINGS.UNDET_PENDING_DIAGNOSES) {
-              this.possibleEventDiagnoses.push(diagnosis);
+            if (eventdetails.complete === true) {
+              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+            } else if (eventdetails.complete === false) {
+              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
             }
-
-            for (let i = 0; i < this.eventData.eventlocations.length; i++) {
-              this.selection[i] = new SelectionModel<LocationSpecies>(allowMultiSelect, initialSelection);
-            }
-
-            this.locationSpeciesDataSource = new MatTableDataSource(this.eventLocationSpecies);
-            // this.speciesTableRows = this.eventLocationSpecies;
-
-            // TODO: lookup user for created_by
-            // this.userService.getUserDetail(eventdetails.created_by)
-            //   .subscribe(
-            //     (userDetail) => {
-            //       this.eventOwner = userDetail;
-            //     },
-            //     error => {
-            //       this.errorMessage = <any>error;
-            //     }
-            //   );
 
             this.eventDataLoading = false;
           },
@@ -247,7 +231,6 @@ export class EventDetailsComponent implements OnInit {
             this.errorMessage = <any>error;
           }
         );
-
     });
 
     // get administrative_level_one  from the adminLevelOne service
@@ -943,17 +926,28 @@ export class EventDetailsComponent implements OnInit {
           this.eventData = eventdetails;
 
           this.eventLocationSpecies = [];
+          this.possibleEventDiagnoses = [];
           for (const event_location of this.eventData.eventlocations) {
             for (const locationspecies of event_location.locationspecies) {
               locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
               locationspecies.administrative_level_one_string = event_location.administrative_level_one_string;
               locationspecies.country_string = event_location.country_string;
               this.eventLocationSpecies.push(locationspecies);
-            }
 
+              for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
+                  this.possibleEventDiagnoses.push(speciesdiagnosis);
+                }
+              }
+            }
           }
-          // console.log('eventLocationSpecies:', this.eventLocationSpecies);
-          // this.speciesTableRows = this.eventLocationSpecies;
+
+          if (eventdetails.complete === true) {
+            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+          } else if (eventdetails.complete === false) {
+            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+          }
+
           this.eventDataLoading = false;
 
           setTimeout(() => {
@@ -1046,18 +1040,18 @@ export class EventDetailsComponent implements OnInit {
 
   // From angular material table sample on material api reference site
   /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected(i: number) {
-    const numSelected = this.selection[i].selected.length;
-    const numRows = this.locationSpeciesDataSource.data.length;
-    return numSelected === numRows;
-  }
+  // isAllSelected(i: number) {
+  //   const numSelected = this.selection[i].selected.length;
+  //   const numRows = this.locationSpeciesDataSource.data.length;
+  //   return numSelected === numRows;
+  // }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle(i: number) {
-    this.isAllSelected(i) ?
-      this.selection[i].clear() :
-      this.locationSpeciesDataSource.data.forEach(row => this.selection[i].select(row));
-  }
+  // masterToggle(i: number) {
+  //   this.isAllSelected(i) ?
+  //     this.selection[i].clear() :
+  //     this.locationSpeciesDataSource.data.forEach(row => this.selection[i].select(row));
+  // }
 
   exportEventDetails() {
     this._eventService.getEventDetailsCSV(this.eventID);

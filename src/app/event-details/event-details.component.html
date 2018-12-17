@@ -572,7 +572,7 @@
                         <td>{{eventlocationcontact.email}}</td>
                         <td>{{eventlocationcontact.phone}}</td>
                         <td>
-                          <button mat-icon-button aria-label="remove contact" color="warn" [disabled]="!eventData.permissions.destroy"
+                          <button mat-icon-button aria-label="remove contact" color="warn" [disabled]="!eventData.permissions.destroy || eventData.complete"
                             (click)="openLocationContactRemoveConfirm(eventlocationcontact.id)" matTooltip="Disassociate contact from this event location">
                             <mat-icon>remove_circle</mat-icon>
                           </button>
@@ -601,7 +601,7 @@
                     -->
                   <div class="detail-section-buttons">
                     <button mat-button color="primary" class="event-detail-action-button" (click)="addEventLocationContact(eventLocation.id)"
-                      [disabled]="!eventData.permissions.write || userContactsLoading" matTooltip="Associate contact with this event location">
+                      [disabled]="!eventData.permissions.write || userContactsLoading || eventData.complete" matTooltip="Associate contact with this event location">
                       <mat-icon>add_comment</mat-icon>
                       Add Contact
                     </button>

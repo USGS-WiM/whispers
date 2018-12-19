@@ -56,36 +56,49 @@ export class SaveSearchComponent implements OnInit {
 
   onSubmit(formValue) {
 
-    formValue.data = this.data.currentSearchQuery;
+    // formValue.data = this.data.currentSearchQuery;
 
     // remove all blank variables from the submission
     if (formValue.data.affected_count === null || formValue.data.affected_count === '' || formValue.data.affected_count !== undefined) {
       delete formValue.data.affected_count;
     }
-    if (formValue.data.start_date === null || formValue.data.start_date === '' || formValue.data.start_date !== undefined) {
+    if (formValue.data.start_date === null || formValue.data.start_date === '' || formValue.data.start_date === undefined) {
       delete formValue.data.start_date;
     }
     if (formValue.data.end_date === null || formValue.data.end_date === '' || formValue.data.end_date === undefined) {
       delete formValue.data.end_date;
     }
-    if (formValue.data.event_type.length === 0) {
-      delete formValue.data.event_type;
+    if (formValue.data.event_type !== undefined && formValue.data.event_type !== null) {
+      if (formValue.data.event_type.length === 0) {
+        delete formValue.data.event_type;
+      }
     }
-    if (formValue.data.diagnosis.length === 0) {
-      delete formValue.data.diagnosis;
+    if (formValue.data.diagnosis !== undefined && formValue.data.diagnosis !== null) {
+      if (formValue.data.diagnosis.length === 0) {
+        delete formValue.data.diagnosis;
+      }
     }
-    if (formValue.data.diagnosis_type.length === 0) {
-      delete formValue.data.diagnosis_type;
+    if (formValue.data.diagnosis_type !== undefined && formValue.data.diagnosis_type !== null) {
+      if (formValue.data.diagnosis_type.length === 0) {
+        delete formValue.data.diagnosis_type;
+      }
     }
-    if (formValue.data.species.length === 0) {
-      delete formValue.data.species;
+    if (formValue.data.species !== undefined && formValue.data.species !== null) {
+      if (formValue.data.species.length === 0) {
+        delete formValue.data.species;
+      }
     }
-    if (formValue.data.administrative_level_one.length === 0) {
-      delete formValue.data.administrative_level_one;
+    if (formValue.data.administrative_level_one !== undefined && formValue.data.administrative_level_one !== null) {
+      if (formValue.data.administrative_level_one.length === 0) {
+        delete formValue.data.administrative_level_one;
+      }
     }
-    if (formValue.data.administrative_level_two.length === 0) {
-      delete formValue.data.administrative_level_two;
+    if (formValue.data.administrative_level_two !== undefined && formValue.data.administrative_level_two !== null) {
+      if (formValue.data.administrative_level_two.length === 0) {
+        delete formValue.data.administrative_level_two;
+      }
     }
+
     if (formValue.data.and_params) {
       if (formValue.data.and_params.length === 0) {
         delete formValue.data.and_params;
@@ -100,7 +113,7 @@ export class SaveSearchComponent implements OnInit {
           this.openSnackBar('Search successfully saved', 'OK', 5000);
           this.dataUpdatedService.triggerRefresh();
           this.saveSearchDialogRef.close();
-          gtag('event', 'click', {'event_category': 'Search','event_label': 'User Search Saved'});
+          gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'User Search Saved' });
         },
         error => {
           this.errorMessage = <any>error;

@@ -99,6 +99,7 @@ export class AppComponent implements OnInit {
 
   logout() {
     this.authenticationService.logout();
+    this.router.navigate([`../home/`], { relativeTo: this.route });
   }
 
   openAuthenticationDialog() {

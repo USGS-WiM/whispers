@@ -43,7 +43,7 @@
             </mat-form-field>
 
             <mat-form-field class="form-control">
-              <mat-select placeholder="WHISPers Record Status" formControlName="complete" required (ngModelChange)="checkLocationEndDates()">
+              <mat-select placeholder="WHISPers Record Status" formControlName="complete" required (ngModelChange)="checkEventCompleteRules()">
                 <mat-option [value]="true">Complete</mat-option>
                 <mat-option [value]="false">Incomplete</mat-option>
               </mat-select>
@@ -527,7 +527,7 @@
                                     </mat-form-field>
 
                                     <mat-form-field class="form-control-short">
-                                      <mat-select placeholder="Captive" formControlName="captive">
+                                      <mat-select placeholder="Captive" formControlName="captive" (ngModelChange)="enforceCaptiveRule($event)">
                                         <mat-option [value]="true">Captive > 72 hours</mat-option>
                                         <mat-option [value]="false">Wild and/or free-ranging</mat-option>
                                       </mat-select>
@@ -1036,6 +1036,14 @@
                       <span class="alert-text">If an event is marked as complete, it must have end date provided for
                         each location.</span>
                     </mat-error>
+
+                    <mat-error color="warn" *ngIf="speciesDiagnosisViolation">
+                      <mat-icon class="icon">error</mat-icon>
+                      <span class="alert-text">If an event is marked as complete, all species diagnoses must have a
+                        Basis of Diagnosis and Signicance of Diagnosis selected. <br>
+                        Non-compliant species diagnoses: <span *ngFor="let item of nonCompliantSpeciesDiagnoses">Location&nbsp;{{item.eventLocationNumber}},&nbsp;Species&nbsp;{{item.locationSpeciesNumber}}&nbsp;({{item.locationSpeciesName}}),&nbsp;Diagnosis&nbsp;{{item.speciesDiagnosisNumber}}&nbsp;({{item.speciesDiagnosisName}})</span>
+                      </span>
+                    </mat-error>
                   </div>
 
                   <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar "></mat-progress-bar>
@@ -1044,7 +1052,7 @@
                       <mat-icon>pageview</mat-icon> Review Event Submission
                     </button>
                     <p>
-                      <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation"
+                      <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation"
                         (click)="submitEvent(eventSubmissionForm.value)">
                         <mat-icon>done</mat-icon> Save Event
                       </button>

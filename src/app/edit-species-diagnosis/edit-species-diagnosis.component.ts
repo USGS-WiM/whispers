@@ -27,6 +27,8 @@ import { SpeciesDiagnosis } from '@interfaces/species-diagnosis';
 import { ConfirmComponent } from '@confirm/confirm.component';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
+
+import { APP_SETTINGS } from '@app/app.settings';
 declare let gtag: Function;
 
 @Component({
@@ -45,6 +47,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
 
   labSuspectViolation = false;
+  diagnosisSuspectViolation = false;
   labViolation = false;
 
   diagnoses: Diagnosis[];
@@ -87,12 +90,12 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       // priority: null,
       tested_count: [null, Validators.min(0)],
       diagnosis_count: [null, Validators.min(0)],
-      //diagnosis_count: null,
+      // diagnosis_count: null,
       positive_count: null,
       suspect_count: null,
       pooled: false,
       new_species_diagnosis_organizations: this.formBuilder.array([
-       // this.initDiagnosisOrganization()
+        // this.initDiagnosisOrganization()
       ])
     },
       {
@@ -268,7 +271,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     //     }
     //   );
 
-    this.checkLabSuspectCompliance();
+    this.checkSuspectCompliance();
     this.checkLabCompliance();
   }
 
@@ -326,14 +329,14 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     this.filteredLaboratories.push(new ReplaySubject<Organization[]>());
     this.ManageLaboratoryControl(laboratoryIndex);
 
-    this.checkLabSuspectCompliance();
+    this.checkSuspectCompliance();
     this.checkLabCompliance();
   }
 
   removeDiagnosisOrganization(diagnosisOrgIndex) {
     const control = <FormArray>this.speciesDiagnosisForm.get('new_species_diagnosis_organizations');
     control.removeAt(diagnosisOrgIndex);
-    this.checkLabSuspectCompliance();
+    this.checkSuspectCompliance();
     this.checkLabCompliance();
   }
 
@@ -406,11 +409,16 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     this.editSpeciesDiagnosisDialogRef.close(speciesDiagnosisObj);
   }
 
-  checkLabSuspectCompliance() {
+  checkSuspectCompliance() {
     this.labSuspectViolation = false;
+    this.diagnosisSuspectViolation = false;
     // tslint:disable-next-line:max-line-length
     if (this.speciesDiagnosisForm['controls'].new_species_diagnosis_organizations['controls'].length === 0 && !this.speciesDiagnosisForm.get('suspect').value) {
       this.labSuspectViolation = true;
+    }
+    // tslint:disable-next-line:max-line-length
+    if ((this.speciesDiagnosisForm.get('diagnosis').value === APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis || this.speciesDiagnosisForm.get('diagnosis').value === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) && this.speciesDiagnosisForm.get('suspect').value) {
+      this.diagnosisSuspectViolation = true;
     }
   }
 

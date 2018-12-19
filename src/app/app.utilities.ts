@@ -117,8 +117,6 @@ export class APP_UTILITIES {
         parsedSearch.id = search.id;
         parsedSearch.name = search.name;
 
-
-        // TODO: may need to add logic for adding complete to the search
         if (search.data.start_date) {
             parsedSearch.start_date = search.data.start_date;
         }
@@ -127,6 +125,9 @@ export class APP_UTILITIES {
         }
         if (search.data.affected_count) {
             parsedSearch.affected_count = search.data.affected_count;
+        }
+        if (search.data.complete) {
+            parsedSearch.complete = search.data.complete;
         }
         if (search.data.affected_count_operator) {
             parsedSearch.affected_count_operator = search.data.affected_count_operator;

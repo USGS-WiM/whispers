@@ -142,19 +142,24 @@
                     <td>
                       <span *ngIf="loc_species.speciesdiagnoses.length > 0">
                         <span *ngFor="let speciesdiagnosis of loc_species.speciesdiagnoses">
-                          <span class="text-bold" *ngIf="speciesdiagnosis">{{speciesdiagnosis.diagnosis_string}}</span>
+                          <span class="text-bold text-larger" *ngIf="speciesdiagnosis">{{speciesdiagnosis.diagnosis_string}}</span>
                           <br />
-                          <span *ngIf="speciesdiagnosis.tested_count !== null">Number Assessed:
-                            {{speciesdiagnosis.tested_count}}</span> <br>
-                          <!-- <span *ngIf="speciesdiagnosis.tested_count !== null && speciesdiagnosis.positive_count !== null"></span> -->
-                          <span *ngIf="speciesdiagnosis.diagnosis_count !== null">Number with this diagnosis:
-                            {{speciesdiagnosis.diagnosis_count}}</span>
+                          <span>Number Assessed:<span *ngIf="speciesdiagnosis.tested_count !== null" class="text-bold">
+                              {{speciesdiagnosis.tested_count}}</span><span *ngIf="speciesdiagnosis.tested_count === null">
+                              N/A</span>
+                          </span> <br>
+                          <span>Number with this diagnosis:<span *ngIf="speciesdiagnosis.diagnosis_count !== null"
+                              class="text-bold">
+                              {{speciesdiagnosis.diagnosis_count}}</span><span *ngIf="speciesdiagnosis.diagnosis_count === null">
+                              N/A</span>
+                          </span>
                           <br>
-                          <!-- <span *ngIf="speciesdiagnosis.organizations_string.length > 0">Tested by
-                              <span *ngFor="let org of speciesdiagnosis.organizations_string">{{org}} </span>
-                          </span><br /> -->
+                          <span *ngIf="speciesdiagnosis.organizations_string.length > 0">Tested by
+                            <span *ngFor="let org of speciesdiagnosis.organizations_string">{{org}} </span>
+                          </span><br />
                         </span>
                       </span>
+
                       <span *ngIf="loc_species.speciesdiagnoses.length === 0">Not assessed</span>
                     </td>
                   </tr>
@@ -244,7 +249,8 @@
               </div>
               <div class="item">
                 <div class="label">Quality Check</div>
-                <div class="value">{{eventData.quality_check === null ? 'Not Done' : eventData.quality_check !== null ? (eventData.quality_check | date:'shortDate') : 'Not Done' }}</div>
+                <div class="value">{{eventData.quality_check === null ? 'Not Done' : eventData.quality_check !== null ?
+                  (eventData.quality_check | date:'shortDate') : 'Not Done' }}</div>
               </div>
               <div class="item">
                 <div class="label">WHISPers Record Status</div>
@@ -321,7 +327,7 @@
             Comments
             Comments
            -->
-          <div class="event-detail-wrapper">
+          <div class="event-detail-wrapper" *ngIf="eventData.comments">
 
             <div class="event-page-group">
 
@@ -370,7 +376,7 @@
             Service Requests
             Service Requests
            -->
-          <div class="event-detail-wrapper">
+          <div class="event-detail-wrapper" *ngIf="eventData.cservicerequests">
 
             <div class="event-page-group">
 

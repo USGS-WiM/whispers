@@ -188,6 +188,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   locationStartDatesViolation = true;
   // starts as false because event must be complete = true to trigger violation
   locationEndDatesViolation = false;
+  speciesDiagnosisViolation = false;
+
+  nonCompliantSpeciesDiagnoses = [];
 
   filteredAdminLevelOnes = [];
   filteredAdminLevelTwos = [];
@@ -600,11 +603,14 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       }
     });
 
+    window.scrollTo(0, 0);
+
+
   }
 
   ngOnInit() {
 
-    this.onFormChanges();
+    //this.onFormChanges();
 
     // get event types from the EventTypeService
     this.eventTypeService.getEventTypes()
@@ -855,16 +861,17 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         this.eventSubmissionForm.get('quality_check').enable();
       } else if (value === false) {
         this.eventSubmissionForm.get('quality_check').disable();
+        this.eventSubmissionForm.get('quality_check').setValue(null);
       }
     });
 
   }
 
-  onFormChanges(): void {
-    this.eventSubmissionForm.valueChanges.subscribe(() => {
-      this.checkLocationSpeciesNumbers();
-    });
-  }
+  // onFormChanges(): void {
+  //   this.eventSubmissionForm.valueChanges.subscribe(() => {
+  //     this.checkLocationSpeciesNumbers();
+  //   });
+  // }
 
   getErrorMessage(formControlName) {
 
@@ -1148,6 +1155,28 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
+  checkEventCompleteRules() {
+
+    if (this.eventSubmissionForm.get('complete').value === true) {
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Marking event as complete',
+            titleIcon: 'warning',
+            message: 'Submitting an event as complete will lock all editing on the event after submission.',
+            messageIcon: '',
+            confirmButtonText: 'OK',
+            showCancelButton: false
+          }
+        }
+      );
+    }
+
+    this.checkLocationEndDates();
+    this.checkSpeciesDiagnoses();
+  }
+
   checkLocationEndDates() {
     this.locationEndDatesViolation = false;
     if (this.eventSubmissionForm.get('complete').value === true) {
@@ -1166,20 +1195,52 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       } else {
         this.locationEndDatesViolation = true;
       }
+    }
+  }
 
-      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-        {
-          disableClose: true,
-          data: {
-            title: 'Marking event as complete',
-            titleIcon: 'warning',
-            message: 'Submitting an event as complete will lock all editing on the event after submission.',
-            messageIcon: '',
-            confirmButtonText: 'OK',
-            showCancelButton: false
+  checkSpeciesDiagnoses() {
+    this.speciesDiagnosisViolation = false;
+    this.nonCompliantSpeciesDiagnoses = [];
+    if (this.eventSubmissionForm.get('complete').value === true) {
+
+      ////////////////////////////////////////////////////////////////////////
+      let requirementMet = true;
+      const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+      // tslint:disable-next-line:max-line-length
+      for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
+        const locationspecies = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
+        // loop through each new_location_species array
+        // tslint:disable-next-line:max-line-length
+        for (let locationspeciesindex = 0, locationspecieslength = locationspecies.length; locationspeciesindex < locationspecieslength; locationspeciesindex++) {
+          const locationspeciesform = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex];
+          // tslint:disable-next-line:max-line-length
+          const speciesdiagnoses = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex].get('new_species_diagnoses');
+          for (let speciesdiagnosisindex = 0, speciesdiagnoseslength = speciesdiagnoses.length; speciesdiagnosisindex < speciesdiagnoseslength; speciesdiagnosisindex++) {
+            // tslint:disable-next-line:max-line-length
+            const speciesdiagnosisform = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex].get('new_species_diagnoses')['controls'][speciesdiagnosisindex];
+            // if any of the species diagnoses are missing a cause or basis value, requirement is not met and validation check fails
+            if (speciesdiagnosisform.get('cause').value === null || speciesdiagnosisform.get('basis').value === null) {
+              requirementMet = false;
+              // add to an object storing the non-compliant species diagnoses
+              this.nonCompliantSpeciesDiagnoses.push({
+                eventLocationNumber: eventLocationIndex + 1,
+                locationSpeciesNumber: locationspeciesindex + 1,
+                locationSpeciesName: this.displayValuePipe.transform(locationspeciesform.controls.species.value, 'name', this.species),
+                speciesDiagnosisNumber: speciesdiagnosisindex + 1,
+                speciesDiagnosisName: this.displayValuePipe.transform(speciesdiagnosisform.controls.diagnosis.value, 'name', this.allDiagnoses)
+              });
+            }
           }
         }
-      );
+      }
+
+      if (requirementMet) {
+        this.speciesDiagnosisViolation = false;
+      } else {
+        this.speciesDiagnosisViolation = true;
+
+      }
+      ////////////////////////////////////////////////////////////////////
 
     }
   }
@@ -1227,6 +1288,30 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           this.eventSubmissionForm.get('public').setValue(true);
         }
       });
+    }
+  }
+
+  enforceCaptiveRule(selected_captive_value) {
+    if (selected_captive_value) {
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Location species captive',
+            titleIcon: 'warning',
+            message: 'Setting this species as captive will set the event record to private (Not Visible to Public). Select "Cancel" to maintain current event visibility. Select "OK" to change to private.',
+            confirmButtonText: 'OK',
+            showCancelButton: true
+          }
+        }
+      );
+
+      this.confirmDialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.eventSubmissionForm.get('public').setValue(false);
+        }
+      });
+
     }
   }
 
@@ -1810,6 +1895,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
               }
             }
+
+            this.checkSpeciesDiagnoses();
           }
 
         },
@@ -1900,7 +1987,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           // when user clicks OK, reset the form and stepper using resetStepper()
           this.confirmDialogRef.afterClosed().subscribe(result => {
             if (result === true) {
-              this.resetStepper();
+              // temporarily disabling the resetStepper function in favor of full page reload.
+              // tons of issues with resetting this form because of its complexity. full page reload works for now. 
+              //this.resetStepper();
+              location.reload();
             }
           });
 

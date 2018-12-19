@@ -25,7 +25,7 @@
       <div class="horizontal-form-container">
 
         <mat-form-field class="form-control diagnosis-select" *ngIf="data.species_diagnosis_action !== 'edit'">
-          <mat-select formControlName="diagnosis" placeholder="Species Diagnosis" #diagnosisSelect required>
+          <mat-select formControlName="diagnosis" placeholder="Species Diagnosis" #diagnosisSelect required (ngModelChange)="checkSuspectCompliance()">
             <ngx-mat-select-search [formControl]="diagnosisFilterCtrl" [placeholderLabel]="'Find diagnosis...'"
               [noEntriesFoundLabel]="'no matching diagnosis found'"></ngx-mat-select-search>
             <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis.id">
@@ -39,7 +39,7 @@
             enter a value</mat-error>
         </mat-form-field>
 
-        <mat-checkbox class="form-control suspect-checkbox" formControlName="suspect" (change)="checkLabSuspectCompliance()"
+        <mat-checkbox class="form-control suspect-checkbox" formControlName="suspect" (change)="checkSuspectCompliance()"
           matTooltip="Check this box if this diagnosis is based on clinical signs, previous history, or field necropsy.  Also check this box if the laboratory diagnosis was 'disease suspect', such as Avian Cholera Suspect for example. Public field.">Species
           Diagnosis Suspect <mat-icon class="public-icon">public</mat-icon>
         </mat-checkbox>
@@ -65,7 +65,8 @@
           <mat-icon>public</mat-icon>
         </mat-hint>
         <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('min')">Minimum value is 0</mat-error>
-        <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('integerTestedCount')">Must be an integer
+        <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('integerTestedCount')">Must be an
+          integer
           (whole number)</mat-error>
       </mat-form-field>
 
@@ -76,7 +77,7 @@
         </mat-hint>
         <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('min')">Minimum value is 0</mat-error>
         <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('diagnosisCount')">Cannot be higher
-            than Number Assessed</mat-error>
+          than Number Assessed</mat-error>
         <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('integerDiagnosisCount')">Must be
           an integer
           (whole number)</mat-error>
@@ -166,6 +167,11 @@
         <span class="alert-text">If Basis of Diagnosis is a lab-performed necropsy, at least one diagnosing lab must
           be selected.</span>
       </mat-error>
+
+      <mat-error color="warn" *ngIf="diagnosisSuspectViolation">
+        <mat-icon class="icon">error</mat-icon>
+        <span class="alert-text">If 'Undetermined' or 'Pending' is selected as diagnosis, diagnosis cannot be suspect.</span>
+      </mat-error>
     </div>
 
   </form>
@@ -177,7 +183,7 @@
     <button mat-button color="warn" (click)="onCancel()">
       <mat-icon>cancel</mat-icon>&nbsp;Cancel
     </button>
-    <button mat-button color="primary" type="submit" [disabled]="speciesDiagnosisForm.invalid" (click)="onSubmit(speciesDiagnosisForm.value)">
+    <button mat-button color="primary" type="submit" [disabled]="speciesDiagnosisForm.invalid || labSuspectViolation || labViolation || diagnosisSuspectViolation" (click)="onSubmit(speciesDiagnosisForm.value)">
       <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{action_button_text}}
     </button>
     <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>

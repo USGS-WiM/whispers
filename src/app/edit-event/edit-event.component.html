@@ -43,13 +43,45 @@
 
       </div>
 
-      <!-- Event Organizations -->
-      <mat-form-field class="form-control org-select">
+      <!-- Contact Organizations -->
+      <!-- <mat-form-field class="form-control org-select">
         <mat-select placeholder="Event Organizations" formControlName="new_organizations" multiple [disabled]="editEventForm.get('complete').value">
           <mat-option value="">--</mat-option>
           <mat-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> -->
+
+      <!----------------------------------------------->
+      <div formArrayName="new_organizations">
+        <div *ngFor="let organization of getEventOrganizations(editEventForm); let eventOrgIndex = index">
+
+          <div [formGroupName]="eventOrgIndex">
+
+            <div class="horizontal-form-container">
+
+              <mat-form-field class="form-control org-select">
+                <mat-select formControlName="org" placeholder="Contact Organization" #orgSelect required>
+                  <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="'Find organization...'"
+                    [noEntriesFoundLabel]="'no matching organization found'"></ngx-mat-select-search>
+                  <mat-option *ngFor="let organization of filteredOrganizations[eventOrgIndex] | async" [value]="organization.id">
+                    {{organization.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button mat-icon-button color="warn" aria-label="Remove this organization" (click)="removeEventOrganization(eventOrgIndex)"
+                matTooltip="Remove this organization" *ngIf="eventOrgIndex > 0">
+                <mat-icon>remove_circle</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="button-row">
+        <button mat-button color="primary" matTooltip="Add contact organization" (click)="addEventOrganization()">
+          <mat-icon>add_circle</mat-icon> Add Contact Organization
+        </button>
+      </div>
+      <!----------------------------------------------->
 
       <!-- NWHC staff only section -->
       <mat-card *ngIf="currentUser.role === 1 || currentUser.role === 2 " class="nwhc-only">
@@ -70,8 +102,8 @@
                   <mat-hint align="start"></mat-hint>
                 </mat-form-field>
               </div>
-              <div class="horizonal-form-container">
 
+              <div class="horizonal-form-container">
                 <mat-form-field class="form-control">
                   <mat-select placeholder="Process Status" formControlName="event_status" required [disabled]="editEventForm.get('complete').value">
                     <mat-option *ngFor="let status of event_statuses" [value]="status.id">{{status.name}}
@@ -81,16 +113,18 @@
                 </mat-form-field>
 
                 <mat-form-field class="form-control">
-                  <input matInput [matDatepicker]="qualityCheck" placeholder="NWHC Quality Check" formControlName="quality_check" [readonly]="editEventForm.get('complete').value">
+                  <input matInput [matDatepicker]="qualityCheck" placeholder="NWHC Quality Check" formControlName="quality_check">
                   <mat-datepicker-toggle matSuffix [for]="qualityCheck"></mat-datepicker-toggle>
                   <mat-datepicker #qualityCheck></mat-datepicker>
-                  <mat-hint align="start"></mat-hint>
+                  <mat-hint align="start" *ngIf="editEventForm.get('quality_check').disabled">Disabled if
+                    event incomplete</mat-hint>
                 </mat-form-field>
               </div>
 
               <div class="horizontal-form-container">
                 <mat-form-field class="form-control">
-                  <mat-select placeholder="Legal Status" formControlName="legal_status" required (selectionChange)="enforceLegalStatusRules($event.value)" [disabled]="editEventForm.get('complete').value">
+                  <mat-select placeholder="Legal Status" formControlName="legal_status" required (selectionChange)="enforceLegalStatusRules($event.value)"
+                    [disabled]="editEventForm.get('complete').value">
                     <mat-option *ngFor="let legalStatus of legalStatuses" [value]="legalStatus.id">{{legalStatus.name}}
                     </mat-option>
                   </mat-select>

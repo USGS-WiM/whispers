@@ -147,7 +147,7 @@ export class SearchDialogComponent implements OnInit {
     this.diagnosisControl = new FormControl();
     this.adminLevelOneControl = new FormControl();
     this.adminLevelTwoControl = new FormControl();
-    this.speciesControl = new FormControl({value: null, disabled: true});
+    this.speciesControl = new FormControl({ value: null, disabled: true });
 
     this.buildSearchForm();
   }
@@ -376,17 +376,17 @@ export class SearchDialogComponent implements OnInit {
     }
 
     if (query && query['start_date']) {
-      const startDate = new Date(query['start_date']);
+      const startDate = APP_UTILITIES.timeZoneAdjust(query['start_date']);
       this.searchForm.controls['start_date'].setValue(startDate);
     }
 
     if (query && query['end_date']) {
-      const endDate = new Date(query['end_date']);
+      const endDate = APP_UTILITIES.timeZoneAdjust(query['end_date']);
       this.searchForm.controls['end_date'].setValue(endDate);
     }
 
     //always set value, even if null, because null is valid value
-    if (query['complete'] == undefined) {
+    if (query['complete'] === undefined) {
       this.searchForm.controls['complete'].setValue(null);
     } else {
       this.searchForm.controls['complete'].setValue(query['complete']);
@@ -753,7 +753,7 @@ export class SearchDialogComponent implements OnInit {
 
     sessionStorage.setItem('currentSearch', JSON.stringify(searchQuery));
 
-    gtag('event', 'click', {'event_category': 'Search','event_label': 'Search submitted, date range: ' + searchQuery.start_date + ' - ' + searchQuery.end_date});
+    gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'Search submitted, date range: ' + searchQuery.start_date + ' - ' + searchQuery.end_date });
 
 
   }

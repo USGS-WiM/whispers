@@ -113,6 +113,7 @@ export class EventDetailsComponent implements OnInit {
   possibleEventDiagnoses = [];
 
   laboratories: Organization[] = [];
+  organizations: Organization[] = [];
 
   eventDataLoading = true;
 
@@ -283,6 +284,17 @@ export class EventDetailsComponent implements OnInit {
       .subscribe(
         (laboratories) => {
           this.laboratories = laboratories;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get organizations from the OrganizationService
+    this.organizationService.getOrganizations()
+      .subscribe(
+        organizations => {
+          this.organizations = organizations;
         },
         error => {
           this.errorMessage = <any>error;
@@ -510,7 +522,8 @@ export class EventDetailsComponent implements OnInit {
     this.editEventDialogRef = this.dialog.open(EditEventComponent, {
       disableClose: true,
       data: {
-        eventData: this.eventData
+        eventData: this.eventData,
+        organizations: this.organizations
       },
     });
 

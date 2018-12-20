@@ -989,11 +989,7 @@
                   suggestions, recommended
                   personal protective gear, etc.) from the USGS National Wildlife Health Center</span>
                 <p>
-                  <mat-card *ngIf="currentUser.role === 1 || currentUser.role === 2 ">
-                    <!-- <mat-card-header>
-                        <mat-card-title> Specimen Consultation and Diagnostic Services Request</mat-card-title>
-                        <mat-card-subtitle>Request consultation and diagnostic services for this event.</mat-card-subtitle>
-                      </mat-card-header> -->
+                  <mat-card>
                     <mat-card-content>
 
                       <form [formGroup]="eventSubmissionForm" autocomplete="off">

@@ -83,7 +83,7 @@ export class UserRegistrationComponent implements OnInit {
       confirmPassword: '',
       organization: null,
       role: null,
-      request_comment: '',
+      message: '',
       terms: [false, Validators.requiredTrue],
     }, {
         validator: [this.matchPassword, this.matchEmail]
@@ -185,12 +185,9 @@ export class UserRegistrationComponent implements OnInit {
     delete formValue.confirmPassword;
     delete formValue.terms;
 
-    if (this.data.registration_type === 'partner') {
-      formValue.message = 'Requested role: ' + formValue.role + '. Requested Organization: ' + formValue.organization + '. Comment: ' + formValue.request_comment;
-    }
-
-    formValue.role = 7;
-    delete formValue.request_comment;
+    // if (this.data.registration_type === 'partner') {
+    //   formValue.message = formValue.request_comment;
+    // }
 
     this.userService.createNew(formValue)
       .subscribe(

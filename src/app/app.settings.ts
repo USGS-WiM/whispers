@@ -19,6 +19,14 @@ export class APP_SETTINGS {
         return environment.api_root;
     }
 
+    public static get BANNER_WARNING() {
+        return environment.banner_content;
+    }
+
+    public static get BANNER_TEXT_COLOR(){
+        return environment.banner_text_color;
+    }
+
     public static set environment(env: string) { this._environment = env; }
     public static get API_USERNAME(): string { return 'admin'; }
     public static get API_PASSWORD(): string { return 'whispersadmin'; }

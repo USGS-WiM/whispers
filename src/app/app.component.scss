@@ -112,7 +112,8 @@
             a{
                 color: $blue-light;
                 transition: $transition;
-                color: lighten(#F24D4D, 14%);
+                //color: lighten(#F24D4D, 14%);
+                color: lighten;
                 text-decoration: underline;
 
                 &:hover{

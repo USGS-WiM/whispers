@@ -198,10 +198,10 @@
               <div class="permissions">
                 <div class="permission" *ngIf="eventData.permissions.read === true">Read</div>
                 <div class="permission" *ngIf="eventData.permissions.update === true">Update</div>
-                <div class="permission" *ngIf="eventData.permissions.write === true">Create</div>
+                <!-- <div class="permission" *ngIf="eventData.permissions.write === true">Create</div> -->
                 <div class="permission red" *ngIf="eventData.permissions.destroy === true">Delete</div>
               </div>
-              <span class="title" *ngIf="eventData.complete && (eventData.permissions.update === true || eventData.permissions.write === true || eventData.permissions.destroy === true)">Editing
+              <span class="title" *ngIf="eventData.complete && (eventData.permissions.update === true || eventData.permissions.destroy === true)">Editing
                 is locked because event is marked Complete. Change WHISPers Record Status (Edit Event) to Incomplete to
                 unlock editing.
               </span>
@@ -284,8 +284,8 @@
                 [disabled]="!eventData.permissions.update">
                 <mat-icon>edit</mat-icon> Edit Event
               </button>
-              <button mat-button color="primary" class="event-detail-action-button" [disabled]="eventData.complete"
-                (click)="addEventDiagnosis(eventData.id)" [disabled]="!eventData.permissions.write">
+              <button mat-button color="primary" class="event-detail-action-button" [disabled]="eventData.complete || !eventData.permissions.update"
+                (click)="addEventDiagnosis(eventData.id)">
                 <mat-icon>add</mat-icon> Add Event Diagnosis
               </button>
             </div>
@@ -361,7 +361,7 @@
 
                 <div class="detail-section-buttons">
                   <button mat-button color="primary" class="event-detail-action-button" (click)="addEventComment(eventData.id)"
-                    [disabled]="!eventData.permissions.write || eventData.complete">
+                    [disabled]="!eventData.permissions.update || eventData.complete">
                     <mat-icon>add_comment</mat-icon> Add Comment
                   </button>
                 </div>
@@ -424,7 +424,7 @@
 
                 <div class="detail-section-buttons">
                   <button mat-button color="primary" class="event-detail-action-button" (click)="addServiceRequest(eventData.id)"
-                    [disabled]="!eventData.permissions.write || eventData.complete">
+                    [disabled]="!eventData.permissions.update || eventData.complete">
                     <mat-icon>question_answer</mat-icon> Add Service Request
                   </button>
                 </div>
@@ -531,7 +531,7 @@
 
                   <div class="detail-section-buttons">
                     <button mat-button color="primary" class="event-detail-action-button" (click)="addEventLocationComment(eventLocation.id)"
-                      [disabled]="!eventData.permissions.write">
+                      [disabled]="!eventData.permissions.update">
                       <mat-icon>add_comment</mat-icon> Add Comment
                     </button>
                   </div>
@@ -607,7 +607,7 @@
                     -->
                   <div class="detail-section-buttons">
                     <button mat-button color="primary" class="event-detail-action-button" (click)="addEventLocationContact(eventLocation.id)"
-                      [disabled]="!eventData.permissions.write || userContactsLoading || eventData.complete" matTooltip="Associate contact with this event location">
+                      [disabled]="!eventData.permissions.update || userContactsLoading || eventData.complete" matTooltip="Associate contact with this event location">
                       <mat-icon>add_comment</mat-icon>
                       Add Contact
                     </button>
@@ -642,7 +642,7 @@
                   </div>
                   <div class="detail-section-buttons">
                     <button mat-button color="primary" class="event-detail-action-button" (click)="addLocationSpecies(eventLocation)"
-                      [disabled]="!eventData.permissions.write || speciesLoading || eventData.complete">
+                      [disabled]="!eventData.permissions.update || speciesLoading || eventData.complete">
                       <mat-icon>add</mat-icon> Add species to this location
                     </button>
                   </div>
@@ -660,7 +660,7 @@
           <div class="event-detail-wrapper">
 
             <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addEventLocation()"
-              [disabled]="!eventData.permissions.write || eventData.complete">
+              [disabled]="!eventData.permissions.update || eventData.complete">
               <mat-icon>add_location</mat-icon> Add New Event Location
             </button>
             <button mat-raised-button color="warn" *ngIf="showAddEventLocation" class="event-detail-action-button"

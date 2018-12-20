@@ -139,7 +139,7 @@
 
         <div class="species-detail-action-bar-left">
           <button mat-button color="primary" class="species-detail-action-button" (click)="addSpeciesDiagnosis(detail.element)"
-            [disabled]="!permissions.write || eventData.complete">
+            [disabled]="!permissions.update || eventData.complete">
             <mat-icon>add</mat-icon> Add Species Diagnosis
           </button>
         </div>

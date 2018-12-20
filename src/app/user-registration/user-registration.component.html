@@ -57,10 +57,36 @@
 
       </div>
 
+      <div>
+        <h3>Terms of Use</h3>
+        <p class="text-smaller">The USGS National Wildlife Health Center (NWHC) conducts wildlife disease
+          investigations in conjunction with state, federal, tribal, academic, and international partners and WHISPers
+          provides a collaborative web-based interface for data entry and communication about wildlife health events.
+          By using this site to request diagnostic assistance from NWHC, the user acknowledges that they maintain
+          appropriate federal or state authority for collection and shipment of wildlife specimens
+
+          <p class="text-smaller">By default, basic summary information such as county location, species affected, and
+            diagnosis will be made
+            publicly available. We recognize the sensitive nature of aspects of these investigations, including but not
+            limited to the precise location(s) of threatened or endangered species or sensitive habitats. Therefore,
+            registered natural resource management professionals entering data to WHISPers can choose to limit the
+            visibility of sensitive data. In order to maintain the integrity of the database and information served
+            through it, a limited number of staff at NWHC will be able to see all data entered.
+
+      </div>
+
       <mat-checkbox formControlName="terms" appearance="outline">I agree to the terms of use</mat-checkbox>
 
       <div>
         <h3>Disclaimer</h3>
+        <p class="text-smaller">The data on this website are provided for situational awareness of wildlife health
+          events. The USGS National Wildlife Health Center (NWHC) makes every effort to provide accurate and timely
+          information; however, data may not be final or fully accurate, especially if an event is ongoing or data
+          synthesis is not complete. Conclusions drawn from or actions undertaken on the basis of such data and
+          information are the sole responsibility of the user. To ensure that information is accurately interpreted and
+          appropriately credited, dissemination of information from this site (publication, press release, technical
+          report, etc.) should be done in collaboration with the specific agencies and laboratories that have generated
+          the information.
       </div>
 
     </div>
@@ -79,23 +105,23 @@
       </mat-form-field> -->
 
       <mat-form-field class="form-control org-select">
-          <mat-select formControlName="organization" placeholder="Organization" #organizationSelect>
-            <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="'Find organization...'"
-              [noEntriesFoundLabel]="'no matching organization found'"></ngx-mat-select-search>
-            <mat-option *ngFor="let organization of filteredOrganizations | async" [value]="organization.name">
-              {{organization.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <mat-select formControlName="organization" placeholder="Organization" #organizationSelect>
+          <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="'Find organization...'"
+            [noEntriesFoundLabel]="'no matching organization found'"></ngx-mat-select-search>
+          <mat-option *ngFor="let organization of filteredOrganizations | async" [value]="organization.id">
+            {{organization.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
 
       <span class="reg-hint">Select the role you would like within your chosen organization</span>
 
       <mat-form-field class="form-control">
         <mat-select placeholder="Role" formControlName="role">
-          <mat-option [value]="'Partner'">User</mat-option>
-          <mat-option [value]="'Partner Manager'">Manager</mat-option>
-          <mat-option [value]="'Partner Admin'">Administrator</mat-option>
+          <mat-option [value]="5">User</mat-option>
+          <mat-option [value]="4">Manager</mat-option>
+          <mat-option [value]="3">Administrator</mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -103,7 +129,7 @@
       <span class="reg-hint">(Optional) Provide any additonal comment or explanation for your request</span>
 
       <mat-form-field class="general-comment-text-area">
-        <textarea matInput #requestComment maxlength="1000" minRows="3" placeholder="Comment" formControlName="request_comment"></textarea>
+        <textarea matInput #requestComment maxlength="1000" minRows="3" placeholder="Comment" formControlName="message"></textarea>
         <mat-hint align="end">{{requestComment.value.length}} / 1000</mat-hint>
       </mat-form-field>
 

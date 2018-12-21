@@ -185,9 +185,10 @@ export class UserRegistrationComponent implements OnInit {
     delete formValue.confirmPassword;
     delete formValue.terms;
 
-    // if (this.data.registration_type === 'partner') {
-    //   formValue.message = formValue.request_comment;
-    // }
+    if (this.data.registration_type === 'public') {
+      formValue.role = 7;
+      formValue.organization = 1;
+    }
 
     this.userService.createNew(formValue)
       .subscribe(

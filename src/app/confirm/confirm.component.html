@@ -1,7 +1,14 @@
-<h2 mat-dialog-title>{{data.title}}</h2>
-<mat-dialog-content>{{data.message}}</mat-dialog-content>
+<h2 mat-dialog-title>
+  <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}}
+</h2>
+<mat-dialog-content>
+  <!-- <mat-icon *ngIf="data.messageIcon !== ''">{{data.messageIcon}}</mat-icon> -->
+  {{data.message}}
+</mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>Cancel</button>
-  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
-  <button mat-button [mat-dialog-close]="true">{{data.confirmButtonText}}</button>
+  <div class="detail-section-buttons centered">
+    <button mat-button mat-dialog-close *ngIf="data.showCancelButton">Cancel</button>
+    <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+    <button mat-button [mat-dialog-close]="true">{{data.confirmButtonText}}</button>
+  </div>
 </mat-dialog-actions>

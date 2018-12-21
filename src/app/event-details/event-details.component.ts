@@ -1,13 +1,16 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 //declare let L: any;
 
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
+//import * as esrilegend from 'esri-leaflet-legend';
 
 import { MatSnackBar } from '@angular/material';
 import { TooltipPosition } from '@angular/material';
@@ -23,39 +26,94 @@ import { EventLocation } from '@interfaces/event-location';
 import { LocationSpecies } from '@interfaces/location-species';
 import { EditEventComponent } from '@app/edit-event/edit-event.component';
 import { AddEventDiagnosisComponent } from '@app/add-event-diagnosis/add-event-diagnosis.component';
-import { EditSpeciesComponent } from '@app/edit-species/edit-species.component';
-import { AddSpeciesDiagnosisComponent } from '@app/add-species-diagnosis/add-species-diagnosis.component';
+import { EditEventLocationComponent } from '@app/edit-event-location/edit-event-location.component';
+import { EditLocationSpeciesComponent } from '@app/edit-location-species/edit-location-species.component';
 import { LandOwnershipService } from '@services/land-ownership.service';
+import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { marker } from 'leaflet';
+import { EventLocationService } from '@app/services/event-location.service';
+import { EventDetailsShareComponent } from '@app/event-details/event-details-share/event-details-share.component';
+import { AddEventLocationComponent } from '@app/add-event-location/add-event-location.component';
+import { UserService } from '@app/services/user.service';
+import { User } from '@interfaces/user';
+import { SpeciesService } from '@services/species.service';
+import { Species } from '@interfaces/species';
+import { SexBiasService } from '@app/services/sex-bias.service';
+import { SexBias } from '@interfaces/sex-bias';
+import { AgeBiasService } from '@app/services/age-bias.service';
+import { AgeBias } from '@interfaces/age-bias';
+import { DataUpdatedService } from '@app/services/data-updated.service';
+import { EventDiagnosisService } from '@app/services/event-diagnosis.service';
+import { CommentTypeService } from '@services/comment-type.service';
+import { CommentService } from '@app/services/comment.service';
+import { CommentType } from '@interfaces/comment-type';
+import { AddCommentComponent } from '@app/add-comment/add-comment.component';
+import { AddEventLocationContactComponent } from '@app/add-event-location-contact/add-event-location-contact.component';
+import { AddServiceRequestComponent } from '@app/add-service-request/add-service-request.component';
+
+import { EventLocationContactService } from '@services/event-location-contact.service';
+
+import { ContactService } from '@services/contact.service';
+
+
+import { APP_SETTINGS } from '@app/app.settings';
+import { APP_UTILITIES } from '@app/app.utilities';
+import { OrganizationService } from '@app/services/organization.service';
+import { Organization } from '@interfaces/organization';
 
 
 @Component({
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
-  styleUrls: ['./event-details.component.scss']
+  styleUrls: ['./event-details.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('void', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
+      state('*', style({ height: '*', visibility: 'visible' })),
+      transition('void <=> *', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class EventDetailsComponent implements OnInit {
 
-  //@ViewChild('speciesTable') table: any;
-  id: string;
+  // @ViewChild('speciesTable') table: any;
+  eventID: string;
   map;
   icon;
-  states = [];
+  administrative_level_one = [];
   landownerships;
+  species: Species[] = [];
+  speciesLoading = false;
 
-  locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
+  eventOwner;
+
+  showAddEventLocation = false;
+
+  //locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
 
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
-  editSpeciesDialogRef: MatDialogRef<EditSpeciesComponent>;
-  addSpeciesDiagnosisDialogRef: MatDialogRef<AddSpeciesDiagnosisComponent>;
+  editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
+  editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
+  addEventLocationContactDialogRef: MatDialogRef<AddEventLocationContactComponent>;
+  addServiceRequestDialogRef: MatDialogRef<AddServiceRequestComponent>;
+
+
+  addCommentDialogRef: MatDialogRef<AddCommentComponent>;
+
+  eventDetailsShareDialogRef: MatDialogRef<EventDetailsShareComponent>;
 
   eventData: EventDetail;
   eventLocationSpecies: LocationSpecies[] = [];
 
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
+
   selection = [];
 
   possibleEventDiagnoses = [];
+
+  laboratories: Organization[] = [];
+  organizations: Organization[] = [];
 
   eventDataLoading = true;
 
@@ -63,26 +121,23 @@ export class EventDetailsComponent implements OnInit {
 
   currentUser;
 
+  sexBiases: SexBias[];
+  ageBiases: AgeBias[];
+
+  commentTypes: CommentType[];
+
   locationMarkers;
 
   unMappables = [];
 
-  // speciesTableRows = [];
-  // expanded: any = {};
-  // timeout: any;
-  // speciesTableColumns = [
-  //   { prop: 'Species' },
-  //   { name: 'Population' },
-  //   { name: 'Sick' },
-  //   { name: 'Dead' },
-  //   { name: 'Estimated Sick' },
-  //   { name: 'Estimated Dead' }
-  // ];
+  userContacts;
+  userContactsLoading = false;
 
   errorMessage;
+  flywaysVisible = false;
+  watershedsVisible = false;
 
   locationSpeciesDisplayedColumns = [
-    'select',
     'species',
     'location',
     'population',
@@ -90,6 +145,9 @@ export class EventDetailsComponent implements OnInit {
     'dead',
     'sick_estimated',
     'dead_estimated',
+    'captive',
+    'age_bias',
+    'sex_bias',
     'diagnosis'
   ];
 
@@ -100,16 +158,34 @@ export class EventDetailsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private _eventService: EventService,
+    private userService: UserService,
     private currentUserService: CurrentUserService,
+    private dataUpdatedService: DataUpdatedService,
     private dialog: MatDialog,
+    private speciesService: SpeciesService,
     private adminLevelOneService: AdministrativeLevelOneService,
     private landownershipService: LandOwnershipService,
+    private eventLocationService: EventLocationService,
+    private eventDiagnosisService: EventDiagnosisService,
+    private eventLocationContactService: EventLocationContactService,
+    private ageBiasService: AgeBiasService,
+    private sexBiasService: SexBiasService,
+    private commentTypeService: CommentTypeService,
+    private organizationService: OrganizationService,
+    private commentService: CommentService,
+    private contactService: ContactService,
     public snackBar: MatSnackBar
   ) {
     this.eventLocationSpecies = [];
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
+    });
+
+    dataUpdatedService.trigger.subscribe((action) => {
+      if (action === 'refresh') {
+        this.refreshEvent();
+      }
     });
   }
 
@@ -121,49 +197,48 @@ export class EventDetailsComponent implements OnInit {
     this.eventLocationSpecies = [];
 
     this.route.paramMap.subscribe(params => {
-      this.id = params.get('id');
+      this.eventID = params.get('id');
 
       // Actual request to event details service, using id
-      this._eventService.getEventDetails(this.id)
+      this._eventService.getEventDetails(this.eventID)
         .subscribe(
           (eventdetails) => {
             this.eventData = eventdetails;
 
-            for (const event_location of this.eventData.event_locations) {
-              for (const location_species of event_location.location_species) {
-                location_species.administrative_level_two_string = event_location.administrative_level_two_string;
-                location_species.administrative_level_one_string = event_location.administrative_level_one_string;
-                location_species.country_string = event_location.country_string;
-                this.eventLocationSpecies.push(location_species);
+            for (const event_location of this.eventData.eventlocations) {
+              for (const locationspecies of event_location.locationspecies) {
+                locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
+                locationspecies.administrative_level_one_string = event_location.administrative_level_one_string;
+                locationspecies.country_string = event_location.country_string;
+                this.eventLocationSpecies.push(locationspecies);
 
-                for (const species_diagnosis of location_species.species_diagnosis) {
-                  if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', species_diagnosis.diagnosis)) {
-                    this.possibleEventDiagnoses.push(species_diagnosis);
+                for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                  if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
+                    this.possibleEventDiagnoses.push(speciesdiagnosis);
                   }
                 }
               }
             }
 
-            for (let i = 0; i < this.eventData.event_locations.length; i++) {
-              this.selection[i] = new SelectionModel<LocationSpecies>(allowMultiSelect, initialSelection);
+            if (eventdetails.complete === true) {
+              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+            } else if (eventdetails.complete === false) {
+              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
             }
 
-            this.locationSpeciesDataSource = new MatTableDataSource(this.eventLocationSpecies);
-            // this.speciesTableRows = this.eventLocationSpecies;
             this.eventDataLoading = false;
           },
           error => {
             this.errorMessage = <any>error;
           }
         );
-
     });
 
-    // get states from the state service
+    // get administrative_level_one  from the adminLevelOne service
     this.adminLevelOneService.getAdminLevelOnes()
       .subscribe(
-        (states) => {
-          this.states = states;
+        (administrative_level_one) => {
+          this.administrative_level_one = administrative_level_one;
         },
         error => {
           this.errorMessage = <any>error;
@@ -181,16 +256,105 @@ export class EventDetailsComponent implements OnInit {
         }
       );
 
+    // get sexBiases from the sexBias service
+    this.sexBiasService.getSexBiases()
+      .subscribe(
+        sexBiases => {
+          this.sexBiases = sexBiases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get ageBiases from the ageBias service
+    this.ageBiasService.getAgeBiases()
+      .subscribe(
+        ageBiases => {
+          this.ageBiases = ageBiases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get 'laboratories' from the organizations service
+    // aliases the subset of organization records where laboratory = true to an array called 'laboratories'
+    this.organizationService.getLaboratories()
+      .subscribe(
+        (laboratories) => {
+          this.laboratories = laboratories;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get organizations from the OrganizationService
+    this.organizationService.getOrganizations()
+      .subscribe(
+        organizations => {
+          this.organizations = organizations;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+
+    // get comment types from the commentTypes service
+    this.commentTypeService.getCommentTypes()
+      .subscribe(
+        commentTypes => {
+          this.commentTypes = commentTypes;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    this.speciesLoading = true;
+    // get species from the species service
+    this.speciesService.getSpecies()
+      .subscribe(
+        (species) => {
+          this.species = species;
+          // alphabetize the species options list
+          this.species.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
+          this.speciesLoading = false;
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.speciesLoading = false;
+        }
+      );
+
+    // TEMPORARY- will need to use user creds to query user contact list
+    // get contact types from the ContactTypeService
+    this.userContactsLoading = true;
+    this.contactService.getContacts()
+      .subscribe(
+        contacts => {
+          this.userContacts = contacts;
+          this.userContacts.sort(function (a, b) {
+            if (a.last_name < b.last_name) { return -1; }
+            if (a.last_name > b.last_name) { return 1; }
+            return 0;
+          });
+          this.userContactsLoading = false;
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.userContactsLoading = false;
+        }
+      );
+
     setTimeout(() => {
-      // this.map = new L.Map('map', {
-      //   center: new L.LatLng(39.8283, -98.5795),
-      //   zoom: 4,
-      // });
-
-      // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      //   attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      // }).addTo(this.map);
-
 
       const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
         '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -219,11 +383,11 @@ export class EventDetailsComponent implements OnInit {
       };
 
       // Flyways hosted by Fish and Wildlife Service
-      var flyways = esri.featureLayer({
+      const flyways = esri.featureLayer({
         url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
         style: function (feature) {
           if (feature.properties.NAME === 'Atlantic Flyway') {
-            return {color: 'blue', weight: 2 };
+            return { color: 'blue', weight: 2 };
           } else if (feature.properties.NAME === 'Pacific Flyway') {
             return { color: 'red', weight: 2 };
           } else if (feature.properties.NAME === 'Mississippi Flyway') {
@@ -233,13 +397,13 @@ export class EventDetailsComponent implements OnInit {
           }
         }
       });
-      
+
       // Watersheds hosted by The National Map (USGS)
-      var watersheds = esri.dynamicMapLayer({
+      const watersheds = esri.dynamicMapLayer({
         url: 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer',
         opacity: 0.7
       });
-      
+
       // Land use hosted by USGS
       var landUse = esri.dynamicMapLayer({
         url: 'https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer',
@@ -254,14 +418,32 @@ export class EventDetailsComponent implements OnInit {
 
       //const x = { position: 'topleft'};
 
-      L.control.layers(baseMaps, overlays, { position: 'topleft'}).addTo(this.map);
+      L.control.layers(baseMaps, overlays, { position: 'topleft' }).addTo(this.map);
       L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
       //L.control.layers(baseMaps).addTo(this.map);
 
       this.mapEvent(this.eventData);
 
-    }, 1000);
+      this.map.on('overlayadd', (e) => {
+        console.log('overlayadd');
+        if (e.name === 'Flyways') {
+          this.flywaysVisible = true;
+        } else if (e.name === 'Watersheds (HUC 2)') {
+          this.watershedsVisible = true;
+        }
+      });
+
+      this.map.on('overlayremove', (e) => {
+        console.log('overlayremove');
+        if (e.name === 'Flyways') {
+          this.flywaysVisible = false;
+        } else if (e.name === 'Watersheds (HUC 2)') {
+          this.watershedsVisible = false;
+        }
+      });
+
+    }, 2000);
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -282,16 +464,25 @@ export class EventDetailsComponent implements OnInit {
   mapEvent(eventData) {
 
     const markers = [];
+    let countyPolys = [];
     this.unMappables = [];
-    for (const eventlocation of eventData.event_locations) {
+    for (const eventlocation of eventData.eventlocations) {
       markers.push(eventlocation);
+      if (eventlocation.administrative_level_two_points !== null) {
+        countyPolys.push(JSON.parse(eventlocation.administrative_level_two_points.replace('Y', '')));
+      }
+    }
+
+    let eventPolys;
+    if (countyPolys.length > 0) {
+      eventPolys = L.polygon(countyPolys, { color: 'blue' }).addTo(this.map);
     }
 
     for (const marker of markers) {
 
-      if (marker.latitude === null || marker.longitude === null) {
+      if (marker.latitude === null || marker.longitude === null || marker.latitude === undefined || marker.longitude === undefined) {
         this.unMappables.push(marker);
-      } else if (marker.latitude !== null || marker.longitude !== null) {
+      } else if (marker.latitude !== null || marker.longitude !== null || marker.latitude !== undefined || marker.longitude !== undefined) {
 
         this.icon = L.divIcon({
           className: 'wmm-pin wmm-white wmm-icon-circle wmm-icon-black wmm-size-25'
@@ -308,44 +499,54 @@ export class EventDetailsComponent implements OnInit {
 
     }
 
+    let bounds = L.latLngBounds([]);
+
     if (markers.length > this.unMappables.length) {
-      this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [500, 500] });
+      var markerBounds = this.locationMarkers.getBounds()
+      bounds.extend(markerBounds);
     }
 
+    if (countyPolys.length > 0) {
+      var countyBounds = eventPolys.getBounds();
+      bounds.extend(countyBounds);
+    }
 
+    if (markers.length || countyPolys.length) {
+      this.map.fitBounds(bounds);
+    }
 
   }
 
   editEvent(id: string) {
     // Open dialog for editing event
     this.editEventDialogRef = this.dialog.open(EditEventComponent, {
+      disableClose: true,
       data: {
-        eventData: this.eventData
-      }
-      // minWidth: 200
-      // height: '75%'
+        eventData: this.eventData,
+        organizations: this.organizations
+      },
     });
 
     this.editEventDialogRef.afterClosed()
       .subscribe(
         () => {
-          this._eventService.getEventDetails(this.id)
+          this._eventService.getEventDetails(this.eventID)
             .subscribe(
               (eventdetails) => {
                 this.eventData = eventdetails;
 
                 this.eventLocationSpecies = [];
-                for (const event_location of this.eventData.event_locations) {
-                  for (const location_species of event_location.location_species) {
-                    location_species.administrative_level_two_string = event_location.administrative_level_two_string;
-                    location_species.administrative_level_one_string = event_location.administrative_level_one_string;
-                    location_species.country_string = event_location.country_string;
-                    this.eventLocationSpecies.push(location_species);
+                for (const event_location of this.eventData.eventlocations) {
+                  for (const locationspecies of event_location.locationspecies) {
+                    locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
+                    locationspecies.administrative_level_one_string = event_location.administrative_level_one_string;
+                    locationspecies.country_string = event_location.country_string;
+                    this.eventLocationSpecies.push(locationspecies);
                   }
                 }
 
                 console.log('eventLocationSpecies:', this.eventLocationSpecies);
-                //this.speciesTableRows = this.eventLocationSpecies;
+                //  this.speciesTableRows = this.eventLocationSpecies;
                 this.eventDataLoading = false;
               },
               error => {
@@ -381,54 +582,385 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
-  editSpecies(id: string, index: number) {
-    if (this.selection[index].selected.length > 1 || this.selection[index].selected.length == 0) {
-      this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
-    } else if (this.selection[index].selected.length === 1) {
-      // Open dialog for adding event diagnosis
-      this.editSpeciesDialogRef = this.dialog.open(EditSpeciesComponent, {
-        data: {
-          species: this.selection[index].selected[0]
-        }
-        // minWidth: 200
-        // height: '75%'
-      });
 
-      this.editSpeciesDialogRef.afterClosed()
-        .subscribe(
-          () => {
-            this.refreshEvent();
-            for (let i = 0; i < this.selection.length; i++) {
-              this.selection[i].clear();
-            }
-          },
-          error => {
-            this.errorMessage = <any>error;
-          }
-        );
-    }
+  addEventComment(id: string) {
+    // Open dialog for adding event diagnosis
+    this.addCommentDialogRef = this.dialog.open(AddCommentComponent, {
+      data: {
+        object_id: id,
+        title: 'Add Comment',
+        titleIcon: 'add_comment',
+        // confirmButtonText: 'Add comment',
+        showCancelButton: true,
+        action_button_text: 'Add Comment',
+        actionButtonIcon: 'add_comment',
+        comment_object: 'event'
+      }
+    });
+
+    this.addCommentDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
+
+
+  addEventLocationComment(id: string) {
+    // Open dialog for adding event location comment
+    this.addCommentDialogRef = this.dialog.open(AddCommentComponent, {
+      data: {
+        object_id: id,
+        title: 'Add Comment',
+        titleIcon: 'add_comment',
+        // confirmButtonText: 'Add comment',
+        showCancelButton: true,
+        action_button_text: 'Add Comment',
+        actionButtonIcon: 'add_comment',
+        comment_object: 'eventlocation'
+      }
+    });
+
+    this.addCommentDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
+  addServiceRequestComment(id: string) {
+    // Open dialog for adding service request comment
+    this.addCommentDialogRef = this.dialog.open(AddCommentComponent, {
+      data: {
+        object_id: id,
+        title: 'Add Comment',
+        titleIcon: 'add_comment',
+        // confirmButtonText: 'Add comment',
+        showCancelButton: true,
+        action_button_text: 'Add Comment',
+        actionButtonIcon: 'add_comment',
+        comment_object: 'servicerequest'
+      }
+    });
+
+    this.addCommentDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
+
+
+  addEventLocationContact(id: string) {
+    // Open dialog for adding event location contact
+    this.addEventLocationContactDialogRef = this.dialog.open(AddEventLocationContactComponent, {
+      disableClose: true,
+      data: {
+        event_location_id: id,
+        userContacts: this.userContacts,
+        title: 'Add Contact to event location',
+        titleIcon: 'add_circle',
+        // confirmButtonText: 'Add comment',
+        showCancelButton: true,
+        action_button_text: 'Add Contact',
+        actionButtonIcon: 'add_circle'
+      }
+    });
+
+    this.addEventLocationContactDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+  }
+
+
+  addServiceRequest(id: string) {
+    // Open dialog for adding event location contact
+    this.addServiceRequestDialogRef = this.dialog.open(AddServiceRequestComponent, {
+      disableClose: true,
+      data: {
+        event_id: id,
+        comment_types: this.commentTypes,
+        title: 'Add a service request',
+        titleIcon: 'add_circle',
+        showCancelButton: true,
+        action_button_text: 'Submit request',
+        actionButtonIcon: 'question_answer'
+      }
+    });
+
+    this.addServiceRequestDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+  }
+
+
+  deleteEventComment(id: number) {
+    this.commentService.delete(id)
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Comment successfully deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Comment not deleted. Error message: ' + error, 'OK', 8000);
+        }
+      );
+
+  }
+
+  openEventCommentDeleteConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Event Comment Confirm',
+          titleIcon: 'delete_forever',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to delete this comment?\nThis action cannot be undone.',
+          confirmButtonText: 'Yes, Delete comment',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventComment(id);
+      }
+    });
+  }
+
+  deleteEventLocationComment(id: number) {
+    this.commentService.delete(id)
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Comment successfully deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Comment not deleted. Error message: ' + error, 'OK', 8000);
+        }
+      );
+  }
+
+
+  openEventLocationCommentDeleteConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Event Location Comment Confirm',
+          titleIcon: 'delete_forever',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to delete this comment? This action cannot be undone.',
+          confirmButtonText: 'Yes, Delete comment',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventLocationComment(id);
+      }
+    });
+  }
+
+  deleteEventLocationContact(id: number) {
+    this.eventLocationContactService.delete(id)
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Contact successfully disassociated', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Contact not disassociated. Error message: ' + error, 'OK', 8000);
+        }
+      );
+  }
+
+  openLocationContactRemoveConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Disassociate contact',
+          titleIcon: 'remove_circle',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you wish to disassociate this contact with this event location? This does not delete the contact record.',
+          confirmButtonText: 'Yes, remove this contact',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventLocationContact(id);
+      }
+    });
+  }
+
+
+
+
+  addEventLocation() {
+    this.showAddEventLocation = true;
+  }
+
+  openEventDetailsShare() {
+
+    this.eventDetailsShareDialogRef = this.dialog.open(EventDetailsShareComponent, {
+      data: {
+        eventID: this.eventID,
+      }
+    });
+
+  }
+
+  editEventLocation(eventLocationData: Object) {
+    // Open dialog for editing event location
+    this.editEventLocationDialogRef = this.dialog.open(EditEventLocationComponent, {
+      data: {
+        eventLocationData: eventLocationData
+      }
+    });
+  }
+
+  deleteEventLocation(id: number) {
+    this.eventLocationService.delete(id)
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Event location successfully deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Event location not deleted. Error message: ' + error, 'OK', 8000);
+        }
+      );
+  }
+
+  openEventLocationDeleteConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Event Location Confirm',
+          titleIcon: 'delete_forever',
+          // tslint:disable-next-line:max-line-length
+          messageIcon: 'warning',
+          message: 'Are you sure you want to delete this event location, and all its associated species, contacts, and comments? This action cannot be undone.',
+          confirmButtonText: 'Yes, Delete location and all associated data',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventLocation(id);
+      }
+    });
+  }
+
+  openEventDiagnosisDeleteConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Event Diagnosis Confirm',
+          titleIcon: 'delete_forever',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to delete this event diagnosis? This action cannot be undone.',
+          confirmButtonText: 'Yes, Delete Event Diagnosis',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventDiagnosis(id);
+      }
+    });
+  }
+
+  deleteEventDiagnosis(id: number) {
+    this.eventDiagnosisService.delete(id)
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Event diagnosis successfully deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Event diagnosis not deleted. Error message: ' + error, 'OK', 8000);
+        }
+      );
+  }
+
 
   refreshEvent() {
     this.viewPanelStates = new Object();
     this.getViewPanelState(this.viewPanels);
-    this._eventService.getEventDetails(this.id)
+    this._eventService.getEventDetails(this.eventID)
       .subscribe(
         (eventdetails) => {
           this.eventData = eventdetails;
 
           this.eventLocationSpecies = [];
-          for (const event_location of this.eventData.event_locations) {
-            for (const location_species of event_location.location_species) {
-              location_species.administrative_level_two_string = event_location.administrative_level_two_string;
-              location_species.administrative_level_one_string = event_location.administrative_level_one_string;
-              location_species.country_string = event_location.country_string;
-              this.eventLocationSpecies.push(location_species);
-            }
+          this.possibleEventDiagnoses = [];
+          for (const event_location of this.eventData.eventlocations) {
+            for (const locationspecies of event_location.locationspecies) {
+              locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
+              locationspecies.administrative_level_one_string = event_location.administrative_level_one_string;
+              locationspecies.country_string = event_location.country_string;
+              this.eventLocationSpecies.push(locationspecies);
 
+              for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
+                  this.possibleEventDiagnoses.push(speciesdiagnosis);
+                }
+              }
+            }
           }
-          // console.log('eventLocationSpecies:', this.eventLocationSpecies);
-          // this.speciesTableRows = this.eventLocationSpecies;
+
+          if (eventdetails.complete === true) {
+            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+          } else if (eventdetails.complete === false) {
+            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+          }
+
           this.eventDataLoading = false;
 
           setTimeout(() => {
@@ -455,75 +987,42 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
-  addSpeciesDiagnosis(id: string, index: number) {
-    if (this.selection[index].selected.length > 1 || this.selection[index].selected.length == 0) {
-      this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
-    } else if (this.selection[index].selected.length === 1) {
-      // Open dialog for adding event diagnosis
-      this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
-        data: {
-          species: this.selection[index].selected[0],
-          species_diagnosis_action: 'add'
-        }
-        // minWidth: 200
-        // height: '75%'
-      });
-
-      this.addSpeciesDiagnosisDialogRef.afterClosed()
-        .subscribe(
-          () => {
-            this.refreshEvent();
-            for (let i = 0; i < this.selection.length; i++) {
-              this.selection[i].clear();
-            }
-          },
-          error => {
-            this.errorMessage = <any>error;
-          }
-        );
-    }
-  }
-
-  editSpeciesDiagnosis(id: string, index: number) {
-    if (this.selection[index].selected.length > 1 || this.selection[index].selected.length == 0) {
-      this.openSnackBar('Please select a species (only one) to edit', 'OK', 5000);
-    } else if (this.selection[index].selected.length === 1) {
-      // Open dialog for adding event diagnosis
-      if (this.selection[index].selected[0].species_diagnosis[0] !== undefined) {
-        this.addSpeciesDiagnosisDialogRef = this.dialog.open(AddSpeciesDiagnosisComponent, {
-          data: {
-            species: this.selection[index].selected[0],
-            species_diagnosis_action: 'edit'
-          }
-          // minWidth: 200
-          // height: '75%'
-        });
-
-        this.addSpeciesDiagnosisDialogRef.afterClosed()
-          .subscribe(
-            () => {
-              this.refreshEvent();
-              for (let i = 0; i < this.selection.length; i++) {
-                this.selection[i].clear();
-              }
-            },
-            error => {
-              this.errorMessage = <any>error;
-            }
-          );
-      } else {
-        this.openSnackBar('This species has no existing diagnosis', 'OK', 5000);
+  addLocationSpecies(eventlocation) {
+    // Open dialog for adding location species
+    this.editLocationSpeciesDialogRef = this.dialog.open(EditLocationSpeciesComponent, {
+      data: {
+        eventData: this.eventData,
+        species: this.species,
+        ageBiases: this.ageBiases,
+        sexBiases: this.sexBiases,
+        location_species_action: 'add',
+        action_text: 'add',
+        action_button_text: 'Submit',
+        eventlocation: eventlocation,
+        title: 'Add species to this location',
+        titleIcon: 'add'
       }
-    }
+    });
+
+    this.editLocationSpeciesDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
+
 
   determineLocationName(name, i) {
     let locationName;
 
-    if (name == "" || name == undefined) {
-      locationName = "Location " + i;
+    if (name === '' || name === undefined) {
+      locationName = 'Location ' + i;
     } else {
-      locationName = name;
+      locationName = 'Location ' + i + ' - ' + name;
     }
 
     return locationName;
@@ -534,19 +1033,19 @@ export class EventDetailsComponent implements OnInit {
     let comment_type;
     switch (comment_id) {
       case 1:
-        comment_type = "Site description";
+        comment_type = 'Site description';
         break;
       case 2:
-        comment_type = "History";
+        comment_type = 'History';
         break;
       case 3:
-        comment_type = "Environmental factors";
+        comment_type = 'Environmental factors';
         break;
       case 4:
-        comment_type = "Clinical signs";
+        comment_type = 'Clinical signs';
         break;
       case 5:
-        comment_type = "General";
+        comment_type = 'General';
         break;
     }
     return comment_type;
@@ -554,31 +1053,22 @@ export class EventDetailsComponent implements OnInit {
 
   // From angular material table sample on material api reference site
   /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected(i: number) {
-    const numSelected = this.selection[i].selected.length;
-    const numRows = this.locationSpeciesDataSource.data.length;
-    return numSelected == numRows;
-  }
+  // isAllSelected(i: number) {
+  //   const numSelected = this.selection[i].selected.length;
+  //   const numRows = this.locationSpeciesDataSource.data.length;
+  //   return numSelected === numRows;
+  // }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle(i: number) {
-    this.isAllSelected(i) ?
-      this.selection[i].clear() :
-      this.locationSpeciesDataSource.data.forEach(row => this.selection[i].select(row));
-  }
+  // masterToggle(i: number) {
+  //   this.isAllSelected(i) ?
+  //     this.selection[i].clear() :
+  //     this.locationSpeciesDataSource.data.forEach(row => this.selection[i].select(row));
+  // }
 
   exportEventDetails() {
-    this._eventService.getEventDetailsCSV(this.id);
+    this._eventService.getEventDetailsCSV(this.eventID);
   }
 
-
-  // toggleExpandRow(row) {
-  //   console.log('Toggled Expand Row!', row);
-  //   this.table.rowDetail.toggleExpandRow(row);
-  // }
-
-  // onDetailToggle(event) {
-  //   console.log('Detail Toggled', event);
-  // }
 
 }

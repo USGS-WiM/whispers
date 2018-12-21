@@ -21,8 +21,10 @@ import { DiagnosisTypeService } from '@app/services/diagnosis-type.service';
 import { DiagnosisService } from '@app/services/diagnosis.service';
 import { SpeciesService } from '@app/services/species.service';
 import { SearchQuery } from '@app/interfaces/search-query';
+import { DisplayQuery } from '@interfaces/display-query';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
+import { DisplayValuePipe } from '../pipes/display-value.pipe';
 
 
 @Component({
@@ -45,11 +47,13 @@ export class SavedSearchesComponent implements OnInit {
   eventTypes = [];
   diagnosisTypes = [];
   diagnoses = [];
-  species = [];
+  allSpecies = [];
   administrative_level_one = [];
   administrative_level_two = [];
 
   selection;
+
+  speciesLoading = false;
 
 
   searchDisplayedColumns = [
@@ -58,12 +62,15 @@ export class SavedSearchesComponent implements OnInit {
     'search'
   ];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) searchPaginator: MatPaginator;
+  @ViewChild(MatSort) searchSort: MatSort;
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private _searchService: SearchService,
     private dialog: MatDialog,
+    private displayValuePipe: DisplayValuePipe,
     private searchDialogService: SearchDialogService,
     private adminLevelOneService: AdministrativeLevelOneService,
     private adminLevelTwoService: AdministrativeLevelTwoService,
@@ -77,6 +84,8 @@ export class SavedSearchesComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.speciesLoading = true;
 
     const initialSelection = [];
     const allowMultiSelect = true;
@@ -92,10 +101,37 @@ export class SavedSearchesComponent implements OnInit {
             this.parsedSearches.push(parsedSearch);
           }
 
+          // build a list of relevant adminL1s
+          let adminLevelOnes = [];
+          for (const parsedSearch of this.parsedSearches) {
+            if (parsedSearch.administrative_level_one) {
+              for (const adminLevelOne of parsedSearch.administrative_level_one) {
+                adminLevelOnes.push(adminLevelOne);
+              }
+            }
+          }
+
+          // query adminL2s from the relevant adminL1 list
+          adminLevelOnes = adminLevelOnes.map(function (e) {
+            return JSON.stringify(e);
+          });
+          const adminLevelOneString = adminLevelOnes.join(',');
+          this.adminLevelTwoService.queryAdminLevelTwos(adminLevelOneString)
+            .subscribe(
+              (adminLevelTwos) => {
+                this.administrative_level_two = adminLevelTwos;
+              },
+              error => {
+                this.errorMessage = <any>error;
+              }
+            );
+
+          console.log('User saved searches: ' + this.parsedSearches);
+
           // this.savedSearchesDataSource = new MatTableDataSource(this.searches);
           this.savedSearchesDataSource = new MatTableDataSource(this.parsedSearches);
-          this.savedSearchesDataSource.paginator = this.paginator;
-          this.savedSearchesDataSource.sort = this.sort;
+          this.savedSearchesDataSource.paginator = this.searchPaginator;
+          this.savedSearchesDataSource.sort = this.searchSort;
         },
         error => {
           this.errorMessage = <any>error;
@@ -149,10 +185,12 @@ export class SavedSearchesComponent implements OnInit {
     this.speciesService.getSpecies()
       .subscribe(
         (species) => {
-          this.species = species;
+          this.allSpecies = species;
+          this.speciesLoading = false;
         },
         error => {
           this.errorMessage = <any>error;
+          this.speciesLoading = false;
         }
       );
 
@@ -162,6 +200,7 @@ export class SavedSearchesComponent implements OnInit {
   openSearchDeleteConfirm() {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
+        disableClose: true,
         data: {
           title: 'Delete Search',
           message: 'Are you sure you want to delete the saved search "' + this.selection.selected[0].name + '" from your profile?',
@@ -200,8 +239,8 @@ export class SavedSearchesComponent implements OnInit {
                   }
 
                   this.savedSearchesDataSource = new MatTableDataSource(this.parsedSearches);
-                  this.savedSearchesDataSource.paginator = this.paginator;
-                  this.savedSearchesDataSource.sort = this.sort;
+                  this.savedSearchesDataSource.paginator = this.searchPaginator;
+                  this.savedSearchesDataSource.sort = this.searchSort;
 
                   this.openSnackBar('Contact Removed', 'OK', 5000);
                 },
@@ -215,6 +254,74 @@ export class SavedSearchesComponent implements OnInit {
           }
         );
     }
+  }
+
+  implementSearch(search) {
+    
+
+    // TODO: currentDiplayQuery needs to be parsed from the search object
+    const displayQuery: DisplayQuery = {
+      event_type: [],
+      diagnosis: [],
+      diagnosis_type: [],
+      species: [],
+      administrative_level_one: [],
+      administrative_level_two: [],
+      affected_count: search.affected_count,
+      affected_count_operator: search.affected_count_operator,
+      start_date: search.start_date,
+      end_date: search.end_date,
+      diagnosis_type_includes_all: search.diagnosis_type_includes_all,
+      diagnosis_includes_all: search.diagnosis_includes_all,
+      species_includes_all: search.species_includes_all,
+      administrative_level_one_includes_all: search.administrative_level_one_includes_all,
+      administrative_level_two_includes_all: search.administrative_level_two_includes_all,
+      and_params: [],
+      complete: search.complete
+    };
+
+    if (search.event_type) {
+      for (const event_type of search.event_type) {
+        displayQuery.event_type.push(this.displayValuePipe.transform(event_type, 'name', this.eventTypes));
+      }
+    }
+
+    if (search.diagnosis) {
+      for (const diagnosis of search.diagnosis) {
+        displayQuery.diagnosis.push(this.displayValuePipe.transform(diagnosis, 'name', this.diagnoses));
+      }
+    }
+    if (search.diagnosis_type) {
+      for (const diagnosis_type of search.diagnosis_type) {
+        displayQuery.diagnosis_type.push(this.displayValuePipe.transform(diagnosis_type, 'name', this.diagnosisTypes));
+      }
+    }
+
+    if (search.species) {
+      for (const species of search.species) {
+        displayQuery.species.push(this.displayValuePipe.transform(species, 'name', this.allSpecies));
+      }
+    }
+
+    if (search.administrative_level_one) {
+      for (const adminLevelOne of search.administrative_level_one) {
+        displayQuery.administrative_level_one.push(this.displayValuePipe.transform(adminLevelOne, 'name', this.administrative_level_one));
+      }
+    }
+
+    if (search.administrative_level_two) {
+      for (const adminLevelTwo of search.administrative_level_two) {
+        displayQuery.administrative_level_two.push(this.displayValuePipe.transform(adminLevelTwo, 'name', this.administrative_level_two));
+      }
+    }
+
+    sessionStorage.setItem('currentDisplayQuery', JSON.stringify(displayQuery));
+    // use displayQuery for display of current query in markup, send to searchDialogService
+    this.searchDialogService.setDisplayQuery(displayQuery);
+
+    sessionStorage.setItem('currentSearch', JSON.stringify(search));
+    this.searchDialogService.setSearchQuery(search);
+    this.router.navigate([`../home/`], { relativeTo: this.route });
   }
 
   openSnackBar(message: string, action: string, duration: number) {

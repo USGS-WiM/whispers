@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import { Subject } from 'rxjs/Subject';
+import { throwError } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 
@@ -23,8 +24,20 @@ export class LocationSpeciesService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.LOCATION_SPECIES_URL, options)
+    return this._http.get(APP_SETTINGS.LOCATION_SPECIES_URL + '?no_page', options)
       .map((response: Response) => <LocationSpecies[]>response.json())
+      .catch(this.handleError);
+
+  }
+
+  public create(formValue): Observable<LocationSpecies> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.AUTH_JSON_HEADERS
+    });
+
+    return this._http.post(APP_SETTINGS.LOCATION_SPECIES_URL, formValue, options)
+      .map((response: Response) => <LocationSpecies>response.json())
       .catch(this.handleError);
 
   }
@@ -40,9 +53,20 @@ export class LocationSpeciesService {
       .catch(this.handleError);
   }
 
+  public delete(id): Observable<any> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.delete(APP_SETTINGS.LOCATION_SPECIES_URL + id + '/', options)
+      .map((response: Response) => <any>response.json())
+      .catch(this.handleError);
+  }
+
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+    return throwError(JSON.stringify(error.json()) || 'Server error');
   }
 
 }

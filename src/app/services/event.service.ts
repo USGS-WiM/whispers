@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
+import { throwError } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
 
 import { APP_SETTINGS } from '@app/app.settings';
@@ -32,50 +33,55 @@ export class EventService {
     if (eventQuery.affected_count !== null && eventQuery.affected_count !== '') {
       queryString = queryString + '&affected_count=' + eventQuery.affected_count.toString();
     }
-    if (eventQuery.startdate !== null && eventQuery.startdate !== '' && eventQuery.startdate !== undefined) {
-      queryString = queryString + '&startdate=' + eventQuery.startdate.toString();
+    if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
+      queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
     }
-    if (eventQuery.enddate !== null && eventQuery.enddate !== '' && eventQuery.enddate !== undefined) {
-      queryString = queryString + '&enddate=' + eventQuery.enddate.toString();
+    if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
+      queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
 
     //attempt to handle start date and end date that are referred to differently throughout the app
     if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
-      queryString = queryString + '&startdate=' + eventQuery.start_date.toString();
+      queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
     }
     if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
-      queryString = queryString + '&enddate=' + eventQuery.end_date.toString();
+      queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
 
-    if (eventQuery.event_type.length > 0) {
+    if (eventQuery.event_type && eventQuery.event_type.length > 0) {
       queryString = queryString + '&event_type=' + eventQuery.event_type;
     }
 
-    if (eventQuery.diagnosis.length > 0) {
+    if (eventQuery.diagnosis && eventQuery.diagnosis.length > 0) {
       queryString = queryString + '&diagnosis=' + eventQuery.diagnosis;
     }
 
-    if (eventQuery.diagnosis_type.length > 0) {
+    if (eventQuery.diagnosis_type && eventQuery.diagnosis_type.length > 0) {
       queryString = queryString + '&diagnosis_type=' + eventQuery.diagnosis_type;
     }
 
-    if (eventQuery.species.length > 0) {
+    if (eventQuery.species && eventQuery.species.length > 0) {
       queryString = queryString + '&species=' + eventQuery.species;
     }
 
-    if (eventQuery.administrative_level_one.length > 0) {
+    if (eventQuery.administrative_level_one && eventQuery.administrative_level_one.length > 0) {
       queryString = queryString + '&administrative_level_one=' + eventQuery.administrative_level_one;
     }
 
-    if (eventQuery.administrative_level_two.length > 0) {
+    if (eventQuery.administrative_level_two && eventQuery.administrative_level_two.length > 0) {
       queryString = queryString + '&administrative_level_two=' + eventQuery.administrative_level_two;
     }
-
+    
     if (eventQuery.and_params) {
       if (eventQuery.and_params.length > 0) {
         queryString = queryString + '&and_params=' + eventQuery.and_params;
       }
-
+    }
+    if (eventQuery.complete === false) {
+      queryString = queryString + '&complete=False';
+    }
+    if (eventQuery.complete === true) {
+      queryString = queryString + '&complete=True';
     }
 
     queryString = queryString + '&format=csv';
@@ -88,47 +94,39 @@ export class EventService {
 
     // console.log(JSON.stringify(eventQuery));
 
-    let queryString = '?';
+    let queryString = '?no_page';
 
     if (eventQuery.affected_count !== null && eventQuery.affected_count !== '') {
-      queryString = queryString + '&affected_count=' + eventQuery.affected_count.toString();
+      queryString = queryString + '&affected_count' + eventQuery.affected_count_operator + '=' + eventQuery.affected_count.toString();
     }
-    if (eventQuery.startdate !== null && eventQuery.startdate !== '' && eventQuery.startdate !== undefined) {
-      queryString = queryString + '&startdate=' + eventQuery.startdate.toString();
-    }
-    if (eventQuery.enddate !== null && eventQuery.enddate !== '' && eventQuery.enddate !== undefined) {
-      queryString = queryString + '&enddate=' + eventQuery.enddate.toString();
-    }
-
-    //attempt to handle start date and end date that are referred to differently throughout the app
     if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
-      queryString = queryString + '&startdate=' + eventQuery.start_date.toString();
+      queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
     }
     if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
-      queryString = queryString + '&enddate=' + eventQuery.end_date.toString();
+      queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
 
-    if (eventQuery.event_type.length > 0) {
+    if (eventQuery.event_type && eventQuery.event_type.length > 0) {
       queryString = queryString + '&event_type=' + eventQuery.event_type;
     }
 
-    if (eventQuery.diagnosis.length > 0) {
+    if (eventQuery.diagnosis && eventQuery.diagnosis.length > 0) {
       queryString = queryString + '&diagnosis=' + eventQuery.diagnosis;
     }
 
-    if (eventQuery.diagnosis_type.length > 0) {
+    if (eventQuery.diagnosis_type && eventQuery.diagnosis_type.length > 0) {
       queryString = queryString + '&diagnosis_type=' + eventQuery.diagnosis_type;
     }
 
-    if (eventQuery.species.length > 0) {
+    if (eventQuery.species && eventQuery.species.length > 0) {
       queryString = queryString + '&species=' + eventQuery.species;
     }
 
-    if (eventQuery.administrative_level_one.length > 0) {
+    if (eventQuery.administrative_level_one && eventQuery.administrative_level_one.length > 0) {
       queryString = queryString + '&administrative_level_one=' + eventQuery.administrative_level_one;
     }
 
-    if (eventQuery.administrative_level_two.length > 0) {
+    if (eventQuery.administrative_level_two && eventQuery.administrative_level_two.length > 0) {
       queryString = queryString + '&administrative_level_two=' + eventQuery.administrative_level_two;
     }
 
@@ -136,9 +134,14 @@ export class EventService {
       if (eventQuery.and_params.length > 0) {
         queryString = queryString + '&and_params=' + eventQuery.and_params;
       }
-
     }
-
+    if (eventQuery.complete === false) {
+      queryString = queryString + '&complete=False';
+    }
+    if (eventQuery.complete === true) {
+      queryString = queryString + '&complete=True';
+    }
+   
     const options = new RequestOptions({
       headers: APP_SETTINGS.JSON_HEADERS
     });
@@ -152,47 +155,39 @@ export class EventService {
 
     // console.log(JSON.stringify(eventQuery));
 
-    let queryString = '?';
+    let queryString = '?no_page';
 
     if (eventQuery.affected_count !== null && eventQuery.affected_count !== '') {
-      queryString = queryString + '&affected_count=' + eventQuery.affected_count.toString();
+      queryString = queryString + '&affected_count' + eventQuery.affected_count_operator + '=' + eventQuery.affected_count.toString();
     }
-    if (eventQuery.startdate !== null && eventQuery.startdate !== '' && eventQuery.startdate !== undefined) {
-      queryString = queryString + '&startdate=' + eventQuery.startdate.toString();
-    }
-    if (eventQuery.enddate !== null && eventQuery.enddate !== '' && eventQuery.enddate !== undefined) {
-      queryString = queryString + '&enddate=' + eventQuery.enddate.toString();
-    }
-
-    //attempt to handle start date and end date that are referred to differently throughout the app
     if (eventQuery.start_date !== null && eventQuery.start_date !== '' && eventQuery.start_date !== undefined) {
-      queryString = queryString + '&startdate=' + eventQuery.start_date.toString();
+      queryString = queryString + '&start_date=' + eventQuery.start_date.toString();
     }
     if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
-      queryString = queryString + '&enddate=' + eventQuery.end_date.toString();
+      queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
 
-    if (eventQuery.event_type.length > 0) {
+    if (eventQuery.event_type && eventQuery.event_type.length > 0) {
       queryString = queryString + '&event_type=' + eventQuery.event_type;
     }
 
-    if (eventQuery.diagnosis.length > 0) {
+    if (eventQuery.diagnosis && eventQuery.diagnosis.length > 0) {
       queryString = queryString + '&diagnosis=' + eventQuery.diagnosis;
     }
 
-    if (eventQuery.diagnosis_type.length > 0) {
+    if (eventQuery.diagnosis_type && eventQuery.diagnosis_type.length > 0) {
       queryString = queryString + '&diagnosis_type=' + eventQuery.diagnosis_type;
     }
 
-    if (eventQuery.species.length > 0) {
+    if (eventQuery.species && eventQuery.species.length > 0) {
       queryString = queryString + '&species=' + eventQuery.species;
     }
 
-    if (eventQuery.administrative_level_one.length > 0) {
+    if (eventQuery.administrative_level_one && eventQuery.administrative_level_one.length > 0) {
       queryString = queryString + '&administrative_level_one=' + eventQuery.administrative_level_one;
     }
 
-    if (eventQuery.administrative_level_two.length > 0) {
+    if (eventQuery.administrative_level_two && eventQuery.administrative_level_two.length > 0) {
       queryString = queryString + '&administrative_level_two=' + eventQuery.administrative_level_two;
     }
 
@@ -200,7 +195,12 @@ export class EventService {
       if (eventQuery.and_params.length > 0) {
         queryString = queryString + '&and_params=' + eventQuery.and_params;
       }
-
+    }
+    if (eventQuery.complete === false) {
+      queryString = queryString + '&complete=False';
+    }
+    if (eventQuery.complete === true) {
+      queryString = queryString + '&complete=True';
     }
 
     const options = new RequestOptions({
@@ -230,7 +230,7 @@ export class EventService {
 
   // Function for retrieving event details given event id
   public getEventDetails(eventID): Observable<EventDetail> {
-    
+
     let options;
     if (sessionStorage.username !== undefined) {
       options = new RequestOptions({
@@ -241,8 +241,8 @@ export class EventService {
         headers: APP_SETTINGS.JSON_HEADERS
       });
     }
-    
-    return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL + eventID, options)
+
+    return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL + eventID + '?no_page', options)
       .map((response: Response) => <EventDetail>response.json())
       .catch(this.handleError);
   }
@@ -253,7 +253,7 @@ export class EventService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     })
 
-    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'user_events', options)
+    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'user_events?no_page', options)
       .map((response: Response) => <EventSummary[]>response.json())
       .catch(this.handleError);
 
@@ -285,7 +285,7 @@ export class EventService {
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(JSON.stringify(error.json()) || 'Server error');
+    return throwError(JSON.stringify(error.json()) || 'Server error');
   }
 
 }

@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 import {
   MatAutocompleteModule,
@@ -34,12 +35,12 @@ import {
   MatSlideToggleModule,
   MatSnackBarModule,
   MatSortModule,
-  MatStepperModule,
   MatTableModule,
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  MatBottomSheetModule
+  MatBottomSheetModule,
+  MatStepperModule
 } from '@angular/material';
 
 
@@ -84,11 +85,31 @@ import { AuthenticationGuard } from '@authentication/authentication.guard';
 import { CurrentUserService } from '@app/services/current-user.service';
 import { RoleService } from '@app/services/role.service';
 import { AddEventDiagnosisComponent } from './add-event-diagnosis/add-event-diagnosis.component';
-import { EditSpeciesComponent } from './edit-species/edit-species.component';
-import { AddSpeciesDiagnosisComponent } from './add-species-diagnosis/add-species-diagnosis.component';
+import { EditLocationSpeciesComponent } from './edit-location-species/edit-location-species.component';
+import { EditSpeciesDiagnosisComponent } from './edit-species-diagnosis/edit-species-diagnosis.component';
 import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
 import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 import { LocationSpeciesDiagnosisService } from '@app/services/location-species-diagnosis.service';
+import { EditEventLocationComponent } from './edit-event-location/edit-event-location.component';
+import { AddEventLocationComponent } from './add-event-location/add-event-location.component';
+import { GnisLookupComponent } from './gnis-lookup/gnis-lookup.component';
+import { EventDetailsShareComponent } from './event-details/event-details-share/event-details-share.component';
+import { UserService } from '@services/user.service';
+import { EditUserComponent } from './edit-user/edit-user.component';
+import { ServiceRequestService } from '@app/services/service-request.service';
+import { LocationSpeciesTableComponent } from './location-species-table/location-species-table.component';
+import { SpeciesDiagnosisService } from '@app/services/species-diagnosis.service';
+import { DataUpdatedService } from '@app/services/data-updated.service';
+import { AddCommentComponent } from './add-comment/add-comment.component';
+import { EventLocationContactService } from '@app/services/event-location-contact.service';
+import { AddEventLocationContactComponent } from './add-event-location-contact/add-event-location-contact.component';
+import { AddServiceRequestComponent } from './add-service-request/add-service-request.component';
+import { NewLookupRequestComponent } from './new-lookup-request/new-lookup-request.component';
+import { SaveSearchComponent } from './save-search/save-search.component';
+import { UserRegistrationComponent } from './user-registration/user-registration.component';
+import { ViewContactDetailsComponent } from './view-contact-details/view-contact-details.component';
+
+
 
 
 @NgModule({
@@ -109,8 +130,21 @@ import { LocationSpeciesDiagnosisService } from '@app/services/location-species-
     AuthenticationComponent,
     EditEventComponent,
     AddEventDiagnosisComponent,
-    EditSpeciesComponent,
-    AddSpeciesDiagnosisComponent,
+    EditLocationSpeciesComponent,
+    EditSpeciesDiagnosisComponent,
+    EditEventLocationComponent,
+    AddEventLocationComponent,
+    GnisLookupComponent,
+    EventDetailsShareComponent,
+    EditUserComponent,
+    LocationSpeciesTableComponent,
+    AddCommentComponent,
+    AddEventLocationContactComponent,
+    AddServiceRequestComponent,
+    NewLookupRequestComponent,
+    SaveSearchComponent,
+    UserRegistrationComponent,
+    ViewContactDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -128,7 +162,6 @@ import { LocationSpeciesDiagnosisService } from '@app/services/location-species-
     MatCardModule,
     MatCheckboxModule,
     MatChipsModule,
-    MatStepperModule,
     MatDatepickerModule,
     MatDialogModule,
     MatDividerModule,
@@ -154,12 +187,15 @@ import { LocationSpeciesDiagnosisService } from '@app/services/location-species-
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
+    MatStepperModule,
+    NgxMatSelectSearchModule
   ],
   providers: [
     AuthenticationService,
     AuthenticationGuard,
     CurrentUserService,
+    DataUpdatedService,
     EventService,
     EventTypeService,
     LegalStatusService,
@@ -182,7 +218,11 @@ import { LocationSpeciesDiagnosisService } from '@app/services/location-species-
     RoleService,
     SearchService,
     SearchDialogService,
+    UserService,
     LocationSpeciesDiagnosisService,
+    SpeciesDiagnosisService,
+    EventLocationContactService,
+    ServiceRequestService,
     DisplayValuePipe,
     DatePipe
   ],
@@ -196,8 +236,20 @@ import { LocationSpeciesDiagnosisService } from '@app/services/location-species-
     AuthenticationComponent,
     EditEventComponent,
     AddEventDiagnosisComponent,
-    EditSpeciesComponent,
-    AddSpeciesDiagnosisComponent
+    EditLocationSpeciesComponent,
+    EditSpeciesDiagnosisComponent,
+    EditEventLocationComponent,
+    AddEventLocationComponent,
+    GnisLookupComponent,
+    EventDetailsShareComponent,
+    EditUserComponent,
+    AddCommentComponent,
+    AddEventLocationContactComponent,
+    AddServiceRequestComponent,
+    NewLookupRequestComponent,
+    SaveSearchComponent,
+    UserRegistrationComponent,
+    ViewContactDetailsComponent
   ]
 })
 export class AppModule { }

@@ -1,0 +1,61 @@
+<h1 mat-dialog-title>
+  <i class="material-icons">edit</i> Edit User Details</h1>
+<mat-dialog-content>
+  <form [formGroup]="editUserForm" autocomplete="off">
+
+    <div class="vertical-form-container">
+
+      <h4>Update name</h4>
+      <!-- First Name -->
+      <mat-form-field class="form-control">
+        <input matInput placeholder="First Name" formControlName="first_name">
+      </mat-form-field>
+
+      <!-- Last Name -->
+      <mat-form-field class="form-control">
+        <input matInput placeholder="Last Name" formControlName="last_name">
+      </mat-form-field>
+
+      <span class="text-smaller text-italic note">Note: Role and Organization are not editable. Please contact
+        WHISPers administration for assistance with changes to these details.</span>
+      
+      <p><span>
+        <input id="changePassword" type="checkbox" (click)="checkChangePassword($event)">
+        <label for="changePassword"> Change Password?</label>
+      </span></p>
+
+      <div *ngIf="showChangePassword">
+        <h4>Change password</h4>
+
+        <!-- Password -->
+        <mat-form-field class="form-control">
+          <input matInput type="password" placeholder="Password" formControlName="password">
+        </mat-form-field>
+        <br/>
+        <!-- Confirm Password -->
+        <mat-form-field class="form-control">
+          <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword">
+          <mat-error *ngIf="editUserForm.controls.confirmPassword.errors?.matchPassword">Passwords do not match</mat-error>
+        </mat-form-field>
+      </div>
+      
+
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<span><mat-icon>error_outline</mat-icon>UNDER DEVELOPMENT</span><br />
+
+<mat-dialog-actions>
+  <button mat-button color="warn" (click)="this.editUserDialogRef.close('cancel');">
+    <mat-icon>cancel</mat-icon>&nbsp;Cancel
+  </button>
+  <!-- <button mat-button color="primary" type="submit" [disabled]="editUserForm.invalid" (click)="updateUser(editUserForm.value)">
+    <mat-icon>send</mat-icon>&nbsp;Submit
+  </button> -->
+  <button mat-button color="primary" type="submit" [disabled]="false" (click)="updateUser(editUserForm.value)">
+    <mat-icon>send</mat-icon>&nbsp;Submit
+  </button>
+  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+</mat-dialog-actions>

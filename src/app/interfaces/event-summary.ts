@@ -12,7 +12,7 @@ export interface EventSummary extends History {
     start_date: string;
     event_type_string: string;
     event_type: number;
-    event_diagnoses: EventDiagnosis[];
+    eventdiagnoses: EventDiagnosis[];
     administrativelevelones: AdministrativeLevelOne[];
     administrativeleveltwos: AdministrativeLevelTwo[];
     species: Species[];

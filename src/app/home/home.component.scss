@@ -6,6 +6,8 @@
     flex-wrap: nowrap;
     background-color: $white;
     box-sizing: border-box; // Left sidebar
+    min-height: 100vh;
+    min-height: calc(100vh - 80px);
     .controlsDiv {
         flex-grow: 1;
         max-width: 25%;
@@ -27,6 +29,7 @@
         flex-grow: 3;
         width: auto;
         min-width: 550px;
+
         #resultsMapHeader {
             justify-content: flex-end;
         } // Table
@@ -96,11 +99,31 @@
 
 #map {
     height: 600px;
+    position: relative;
+    
+    #mapLocationNote{
+        position: absolute;
+        top: 11px;
+        left: 50px;
+        background-color: white;
+        font-size: 12px;
+        z-index: 401;
+        box-sizing: border-box;
+        padding: 5px;
+        border-radius: 3px;
+        color: #313B57;
+        width: 164px;
+        line-height: 12px;
+        border: 1px solid rgba(160, 175, 205, 0.4);
+
+        b{
+            color: #3356FA;
+            font-weight: 700;
+            text-decoration: underline;
+        }
+    }
 }
 
-#mapPanel .mat-expansion-panel-body {
-    padding: 0px;
-}
 
 mat-table>.mat-row:hover {
     background-color: #E8F5E9;
@@ -119,16 +142,29 @@ mat-table>.mat-row:hover {
     font-size: x-large;
 }
 
+.text-larger {
+    font-size: larger !important;
+}
+
+.text-large {
+    font-size: large !important;
+}
+
 .spacer {
     flex-grow: 1;
 }
 
-::ng-deep #mapPanel .mat-expansion-panel-content>.mat-expansion-panel-body {
-    padding: 0px 0px 0px 0px;
-}
 
 .table-cell-list {
-    // list-style: none;
+    padding: 0;
+    list-style-type: none;
+
+    li{
+        position:relative;
+        line-height: 11px;
+        font-size: 11.5px;
+    }
+
 }
 
 .spinner-container {}
@@ -139,7 +175,7 @@ mat-table>.mat-row:hover {
 
 #iconHolder {
     margin-left: 15px;
-    padding-top: 10px;
+    padding-top: 2px;
 }
 
 #iconHolder .wmm-circle,
@@ -163,15 +199,6 @@ mat-table>.mat-row:hover {
     position: relative;
 }
 
-#expLabel {
-    margin-left: 35px;
-    padding-top: 10px;
-}
-
-#expLabel2 {
-    margin-left: 15px;
-    padding-top: 10px;
-}
 /* Style the buttons that are used to open and close the accordion panel */
 
 .accordion {
@@ -239,6 +266,7 @@ mat-table>.mat-row:hover {
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
     border-radius: 4px;
     cursor: pointer;
+    opacity: 0.87;
 }
 
 .latLngScale:hover .hover-content {
@@ -262,10 +290,174 @@ mat-table>.mat-row:hover {
     display: inline-block;
 }
 
+.flyway-blue:after {
+    background-color: rgba(0,0,255,0.3);
+    border: 3px solid blue;
+}
+
+.flyway-yellow:after {
+    background-color: rgba(255,255,0,0.3);
+    border: 3px solid yellow;
+}
+
+.flyway-green:after {
+    background-color: rgba(0,255,0,0.3);
+    border: 3px solid green;
+}
+
+.flyway-red:after {
+    background-color: rgba(255, 238, 0, 0.3);
+    border: 3px solid red;
+}
+
+.huc-icon:after {
+    border: 3px solid #b57dcf;
+}
+
 .legend-label {
     padding-top: 1em;
+}
+
+.legend-icon{
+    box-sizing: border-box;
+}
+
+.legend-panel-content{
+    box-sizing: border-box;
+    padding-left: 15px;
+    padding-top: 10px;
+
+    .wmm-circle,
+    .wmm-diamond{
+        position: relative;
+        top: 2px;
+        left: 6px;
+    }
+    .wmm-diamond{
+        top: 5px;
+    }
+
 }
 
 .search-param {
     float: left;
 }
+
+.text-smaller {
+    font-size: smaller;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+.text-bold {
+    font-style: bold;
+}
+
+
+#sidebarSearchTab{
+
+    .mat-list .mat-subheader{
+        padding: 0 0 6px 0;
+        height: auto;
+    }
+
+    .mat-list .mat-list-item.mat-2-line{
+        height: auto;
+    }
+
+    .mat-expansion-panel-body{
+        padding-bottom: 0;
+    }
+
+    .search-button-row{
+        padding-bottom: 0;
+
+        button{
+            background-color: white;
+            margin: 0 auto 10px auto !important;
+            display: block;
+            width: 100%;
+            border: 1px solid fade-out(#D5DCEA, 0.5);
+            border-radius: 4px;
+        }
+
+    }
+    
+
+
+}
+
+
+
+// User Role Selector
+// User Role Selector
+// User Role Selector
+#userRoleSelector{
+
+    button{
+        margin-bottom: 10px;
+        width: 100%;
+        white-space: normal;
+        line-height: 15px;
+        padding: 10px;
+        font-size: 14px;
+        font-weight: 500;
+        background-color: white;
+        
+
+    }
+}
+
+
+
+
+// Home Legend
+// Home Legend
+// Home Legend
+.legend {
+    position: absolute;
+    padding: 4px;
+    // bottom: 60px !important;
+    top: 10px;
+    //left: 15px;
+    right: 10px;
+    width:200px;
+    /*height:320px;*/
+    z-index: 1000;
+    color: black;
+    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.87;
+}
+
+.legend-label{
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+    display: block;
+    margin: 5px 0 1px 0;
+    padding-top: 0;
+}
+.legend-hint{
+    display: block;
+    font-size: 11px;
+    font-style: italic;
+    opacity: 0.5;
+    font-weight: 500;
+    margin: 1px 0 6px 0;
+    line-height: 10px;
+}
+
+.legendIcon {
+    display: inline-block;
+}
+
+.legend-label {
+    padding-top: 1em;
+}
+

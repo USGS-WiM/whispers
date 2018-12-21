@@ -1,10 +1,12 @@
 <h1 mat-dialog-title>
-  <i class="material-icons">person_add</i> {{dialogTitle}} Contact</h1>
+  <mat-icon>person_add</mat-icon> {{dialogTitle}} Contact
+</h1>
+
 <mat-dialog-content>
-  <form [formGroup]="createContactForm">
 
-    <div class="vertical-form-container">
+  <form [formGroup]="createContactForm" autocomplete="off">
 
+    <div class="horizontal-form-container">
       <mat-form-field class="form-control">
         <input matInput placeholder="First Name" formControlName="first_name" required>
         <mat-error *ngIf="createContactForm.get('first_name').invalid">{{getErrorMessage('first_name')}}</mat-error>
@@ -14,7 +16,9 @@
         <input matInput placeholder="Last Name" formControlName="last_name" required>
         <mat-error *ngIf="createContactForm.get('last_name').invalid">{{getErrorMessage('last_name')}}</mat-error>
       </mat-form-field>
+    </div>
 
+    <div class="horizontal-form-container">
       <mat-form-field class="form-control">
         <input matInput placeholder="Email Address" formControlName="email" required>
         <mat-error *ngIf="createContactForm.get('email').invalid">{{getErrorMessage('email')}}</mat-error>
@@ -23,7 +27,9 @@
       <mat-form-field class="form-control">
         <input matInput placeholder="Phone Number" formControlName="phone">
       </mat-form-field>
+    </div>
 
+    <div class="horizontal-form-container">
       <mat-form-field class="form-control">
         <input matInput placeholder="Title" formControlName="title">
       </mat-form-field>
@@ -31,17 +37,24 @@
       <mat-form-field class="form-control">
         <input matInput placeholder="Position" formControlName="position">
       </mat-form-field>
+    </div>
+
+    <div class="vertical-form-container">
 
       <mat-form-field class="form-control org-select">
-        <mat-select placeholder="Organization" formControlName="organization">
-          <mat-option>--</mat-option>
-          <mat-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</mat-option>
+        <mat-select formControlName="organization" placeholder="Organization" #organizationSelect>
+          <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="'Find organization...'"
+            [noEntriesFoundLabel]="'no matching organization found'"></ngx-mat-select-search>
+          <mat-option *ngFor="let organization of filteredOrganizations | async" [value]="organization.id">
+            {{organization.name}}
+          </mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field class="form-control org-select">
         <input matInput placeholder="Company/Business/Affiliation" formControlName="affiliation">
-        <mat-hint align="start">Contact's company or other affiliation, if not part of one of the Organizations listed above </mat-hint>
+        <mat-hint align="start">Contact's company or other affiliation, if not part of one of the Organizations listed
+          above </mat-hint>
       </mat-form-field>
 
     </div>
@@ -50,7 +63,13 @@
 </mat-dialog-content>
 <mat-dialog-actions>
 
-  <button mat-button (click)="this.createContactDialogRef.close('cancel');">Cancel</button>
-  <button mat-button type="submit" [disabled]="createContactForm.invalid" (click)="onSubmit(createContactForm.value)">{{action_button_text}}</button>
-  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+  <div class="form-buttons-flex">
+    <button mat-button color="warn" (click)="this.createContactDialogRef.close('cancel');"><mat-icon>cancel</mat-icon>Cancel</button>
+    <button mat-button color="primary" type="submit" [disabled]="createContactForm.invalid" (click)="onSubmit(createContactForm.value)">
+        <mat-icon>save</mat-icon>Save
+    </button>
+    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+  </div>
+
+
 </mat-dialog-actions>

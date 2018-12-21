@@ -13,6 +13,7 @@
 
 body { 
     margin: 0px !important;
+    color: $black;
 }
 
 *{
@@ -23,7 +24,6 @@ body {
     -webkit-appearance: none;
     -webkit-overflow-scrolling: touch;
     text-rendering: optimizeLegibility;
-
 
     &:hover{
         outline: none;
@@ -71,6 +71,13 @@ body {
         .mat-expansion-panel-header-title{
             color: fade-out($black, 0.2);
             transition: $transition;
+
+            .mat-icon{
+                height: 18px;
+                width: 18px;
+                font-size: 17px;
+                text-decoration: none !important;
+            }
         }
     
         &:not([aria-disabled=true]){
@@ -111,7 +118,7 @@ body {
     // Panel Body
     .mat-expansion-panel-body{
         padding: 15px;
-        background-color: $bg;
+        // background-color: $bg;
         border-bottom: 1px solid $border-color;
 
         // Paragraphs
@@ -139,47 +146,6 @@ body {
     }
 }
 
-
-// .mat-button {
-//     text-transform: uppercase;
-// }
-
-
-// Sidebar 
-// .controlsDiv .mat-expansion-panel-header{
-//     background-color: rgba(247,247,255,1);
-//     border-bottom: 1px solid rgba(230,230,240,1);
-//     color: rgba(40,40,60,1) !important;
-//     font-weight: 500;
-// }
-// .controlsDiv .mat-expansion-panel-header:not([aria-disabled='true']):hover,
-// .controlsDiv .mat-expansion-panel-header:not([aria-disabled='true']):focus{
-//     background-color: rgba(237,237,245,1) !important;
-// }
-// .mat-expansion-panel:not([class*=mat-elevation-z]){
-//     box-shadow: none !important;
-// }
-// .controlsDiv .mat-expansion-indicator{
-//     position: relative;
-//     top: -2px;
-// }
-// .controlsDiv .mat-expanded .mat-expansion-indicator{
-//     top: 2px;
-// }
-
-// .controlsDiv .mat-expansion-panel-body{
-//     padding: 15px !important;
-
-//     p{
-//         font-size: 13px;
-//         line-height: 20px;
-//         font-weight: 400;
-//         color: rgba(40,40,60,0.9);
-//         margin: 0;
-//     }
-// }
-
-
 // Mat Tables
 .mat-table{
 
@@ -195,6 +161,10 @@ body {
         &:nth-child(odd){
             background-color: rgba(247,247,255,1);
         }
+
+        &:hover{
+            cursor: pointer !important;
+        }
     }
 }
 .page-loader{
@@ -208,14 +178,17 @@ body {
     }
 }
 
-
-
 // Remove ugly box shadows from defaults cards
 .mat-card{
     box-shadow: none !important;
 }
 
 
+
+// =====================================================================================================================
+// =====================================================================================================================
+// Icon/Marker Tweaks
+// Allow numbers on markers
 // Float number above icon marker
 .wmm-size-25:after {
 // .wmm-circle.wmm-size-25:after {
@@ -282,34 +255,34 @@ input[type=checkbox]{
     top: 4px !important;
 }
 
-/* Style the buttons that are used to open and close the accordion panel */
-// .accordion {
-//     background-color: #eee;
-//     color: #444;
-//     cursor: pointer;
-//     padding: 18px;
-//     width: 100%;
-//     text-align: left;
-//     border: none;
-//     outline: none;
-//     transition: 0.4s;
-// }
 
-// /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-// .active, .accordion:hover {
-//     background-color: #ccc;
-// }
 
-// /* Style the accordion panel. Note: hidden by default */
-// .panel {
-//     padding: 0 18px;
-//     background-color: white;
-//     display: none;
-//     max-height: 0;
-//     overflow: hidden;
-//     transition: max-height 0.2s ease-out;
-// }
+// =====================================================================================================================
+// =====================================================================================================================
+// Legend Tweaks
+.legend {
+    max-height: 60vh;
+    overflow-y: hidden;
 
+    &.mat-expanded{
+        overflow-y: auto;
+    }
+
+    .mat-expansion-panel-header{
+        height: auto !important;
+        box-sizing: border-box;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        border-bottom: none !important;
+    }
+}
+
+
+
+// =====================================================================================================================
+// =====================================================================================================================
+// Misc Tweaks
+//
 .accordion {
     background-color: #eee;
     color: #444;
@@ -345,6 +318,7 @@ input[type=checkbox]{
 
 .active:after {
     content: "\2796"; /* Unicode character for "minus" sign (-) */
+    /* content: '\02795'; */
 }
 
 .popupLabel {
@@ -352,6 +326,9 @@ input[type=checkbox]{
     font-size: larger;
 }
 
+
+// =====================================================================================================================
+// =====================================================================================================================
 // Leaflet Content Popup / map clicks
 // Leaflet Content Popup / map clicks
 // Leaflet Content Popup / map clicks
@@ -422,3 +399,260 @@ input[type=checkbox]{
 .text-larger {
     font-size: larger;
 }
+
+
+// =====================================================================================================================
+// =====================================================================================================================
+// Styles for GNIS-Lookup Component
+// They don't work if they're in the gnis-lookup-component.scss
+// So they're here instead.
+.search-api-menu.search-api-md.search-api-menu-down {
+    width: 300px !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-left:-150px;
+
+    .search-api-menu-content{
+        max-height: 40vh !important;
+    }
+
+    .search-api-menu-title{
+        background-color: #182141;
+    }
+}
+#search-api-div{
+
+    .search-api-container{
+        border:none;
+        position: relative;
+
+        .search-api-icon{
+            border: none;
+            padding-right: 2px;
+            position:absolute;
+            background-color: transparent;
+            padding-top: 2px;
+        }
+
+        input{
+            border: none;
+            border-bottom: 1px solid #949494;
+            border-radius: 0;
+            padding-left: 40px;
+
+            &:focus{
+                border-bottom: 2px solid #3456FA;
+            }
+        }
+    }
+}
+
+
+// =====================================================================================================================
+// =====================================================================================================================
+// Modal / Dialog
+// Modal / Dialog
+// Modal / Dialog
+.mat-dialog-title{
+    margin-bottom: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    color: $black;
+
+    .mat-icon {
+        float: left;
+        position: relative;
+        top: 2.5px;
+        margin-right: 4px;
+    }
+}
+
+// Log in button
+.signin-button:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+// =====================================================================================================================
+// =====================================================================================================================
+// Suggested Searches
+// Suggested Searches
+// Suggested Searches
+.suggested-searches{
+
+    .button-row{
+        // border-bottom: 1px solid fade-out($black, 0.85);
+
+        // &:first-child{
+        //     border-top: 1px solid fade-out($black, 0.85);
+        // }
+
+        .mat-button{
+            width: 92%;
+            padding: 10px 10px;
+            border-radius: 4px !important;
+            border: 1px solid rgba(213, 220, 234, 0.5) !important;
+            background-color: white;
+            margin: 0 auto 6px 4%;
+
+            .search-param{
+                width: 100%;
+                float: none;
+                text-align: left;
+                display: block;
+                font-size: 12.5px;
+                line-height: 13px;
+                height: auto;
+                display: flex;
+                justify-content: space-between;
+                box-sizing: border-box;
+                padding: 0px 0;
+                white-space: normal;
+
+                &:first-child{
+                    padding-left: 0;
+                }
+
+                b{
+                    font-weight: 800;
+                    font-size: 12px;
+                    box-sizing: border-box;
+                    padding-right: 10px;
+                }
+
+
+                .value{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    flex-grow: 3;
+                    text-align: right;
+                }
+
+                .value-list{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+
+                    .value{
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                    }
+
+                    .value-list-or{
+                        font-weight: 700;
+                        font-style: italic;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+.mat-dialog-title{
+    display: flex !important;
+
+    span,i{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+.nomargin{
+    margin: 0 !important;
+}
+
+.transbg{
+    background-color: transparent !important;
+}
+
+.no-data{
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    padding: 25px 15px;
+    box-sizing: border-box;
+    opacity: 0.7;
+    color: fade-out(#313b57, 0.2);
+}
+
+.form-buttons-flex{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 0;
+
+    &.center{
+        justify-content: center;
+    }
+}
+
+
+
+// =====================================================================================================================
+// =====================================================================================================================
+// Map Adjustments
+// Map Adjustments
+// Map Adjustments
+.leaflet-control-layers label{
+    text-align: left !important;
+}
+.leaflet-touch .leaflet-bar a{
+    line-height: 25px !important;
+}
+.leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar{
+    border: 1px solid fade-out(#A0AFCD, 0.6) !important;
+    background-color: white;
+    color: #10152C;
+}
+.legend{
+    background-color: white !important;
+    padding: 0;
+
+    .mat-expansion-panel-body{
+        max-height: 210px !important;
+        overflow: auto !important;
+    }
+
+    .legend-icon{
+        display: flex;
+        position: relative;
+
+        label{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 22px;
+            height: 24px;
+        }
+
+        .wmm-pin{
+            z-index: 0;
+            top: 14px;
+            left: 4px;
+            position: absolute !important;
+            transform: scale(0.65);
+        }
+        .wmm-square{
+            position: absolute !important;
+            transform: scale(0.8);
+            top: 1px;
+            left: 4px;
+        }
+    }
+}
+// Remove padding around map
+#mapPanel .mat-expansion-panel-body{
+    padding: 0 !important;
+}
+
+
+

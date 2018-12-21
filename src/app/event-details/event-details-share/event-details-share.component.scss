@@ -1,0 +1,42 @@
+.share-link-div {
+    max-width: 500px;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: 0.2px;
+    margin: 5px auto;
+    color: #313B57;
+
+    button{
+        margin: 0 auto;
+        display: block;
+    }
+
+    code{
+        font-family: monospace;
+        background-color: #EEF1FB;
+        color: #10152C;
+        display: block;
+        box-sizing: border-box;
+        padding: 8px 6px;
+        border-radius: 3px;
+        text-decoration: underline;
+        margin: 6px auto;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        width: 100%;
+        border: 1px solid fade-out(#A0AFCD, 0.6);
+        color: #1D5FEE;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+
+    small{
+        margin-top: 25px;
+        margin-bottom: 10px;
+        display: block;
+        margin-bottom: 10px;
+    }
+}

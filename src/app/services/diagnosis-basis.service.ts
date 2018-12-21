@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import { Subject } from 'rxjs/Subject';
+import { throwError } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -22,7 +23,7 @@ export class DiagnosisBasisService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.DIAGNOSIS_BASES_URL, options)
+    return this._http.get(APP_SETTINGS.DIAGNOSIS_BASES_URL + '?no_page', options)
       .map((response: Response) => <DiagnosisBasis[]>response.json())
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       .catch(this.handleError);
@@ -30,7 +31,7 @@ export class DiagnosisBasisService {
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+    return throwError(JSON.stringify(error.json()) || 'Server error');
   }
 
 }

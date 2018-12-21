@@ -4,22 +4,27 @@
     <mat-toolbar-row class="header-top-row">
 
       <div class="whispers-branding">
-          <a href="/" class="whispers-title">WHISPers&nbsp;&nbsp;</a>
-          <span class="whispers-subtitle">
-            <span>Wildlife Health Information Sharing Partnership</span>
-            <small>event reporting system</small>
-          </span>
+        <a href="/" class="whispers-title">
+          <div class="whispers-logo">
+            <img src="./assets/w-logo.png" />
+          </div>
+          <span>HISPers</span>
+        </a>
+        <span class="whispers-subtitle">
+          <span>Wildlife Health Information Sharing Partnership</span>
+          <small>event reporting system</small>
+        </span>
       </div>
 
       <div class="nav-buttons">
-          <span class="about-button-span">
-            <button mat-button (click)="openAboutDialog()" aria-label="About this application">
-              <mat-icon class="icon">info_outline</mat-icon>
-              <span class="header-button-text">About</span>
-            </button>
-          </span>
+        <span class="about-button-span">
+          <button mat-button (click)="openAboutDialog()" aria-label="About this application">
+            <mat-icon class="icon">info_outline</mat-icon>
+            <span class="header-button-text">About</span>
+          </button>
+        </span>
       </div>
-      
+
 
     </mat-toolbar-row>
 
@@ -36,26 +41,28 @@
         </button>
 
         <!-- Create Event -->
-        <button mat-button aria-label="Create Event" (click)="navigateToEventSubmit()">
+        <button mat-button aria-label="Create Event" *ngIf="currentUser.username != ''" (click)="navigateToEventSubmit()">
           <i class="material-icons">library_add</i>
           <span class="header-button-text">Create Event</span>
         </button>
-        
+
       </div>
 
       <!-- App alert -->
-      <span class="app-header-alert">
-          This website is under development and is used for testing. Please see
-        <a href="http://www.nwhc.usgs.gov/WHISPers">nwhc.usgs.gov/WHISPers</a> for the current production version of WHISPers
+      <span class="app-header-alert" [ngStyle]="{'color': bannerTextColor}">
+        <span>{{bannerWarning}}</span>Please see
+        <a href="http://www.nwhc.usgs.gov/WHISPers">nwhc.usgs.gov/WHISPers</a> for the current production version,
+        WHISPers 1.0.
       </span>
-      
+
       <!-- Right side of bottom toolbar -->
       <div class="right">
 
         <!-- Login Status -->
-        <span *ngIf="currentUser.username == ''" class="login-status">Logged Out</span>
-        <span *ngIf="currentUser.username !== ''" class="login-status">{{currentUser.first_name}} {{currentUser.last_name}}</span>
-      
+        <span *ngIf="currentUser.username == ''" class="login-status signin-button" [matMenuTriggerFor]="menu">Log In</span>
+        <span *ngIf="currentUser.username !== ''" class="login-status">{{currentUser.first_name}}
+          {{currentUser.last_name}}</span>
+
         <!-- Account Menu -->
         <!-- <button mat-button aria-label="Login">
           <mat-icon class="icon">account_box</mat-icon>
@@ -64,26 +71,26 @@
         <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon class="icon">account_box</mat-icon>
         </button>
-    
+
         <mat-menu #menu="matMenu">
           <button mat-menu-item aria-label="Login" (click)="openAuthenticationDialog()" *ngIf="currentUser.username == ''">
             <mat-icon>account_box</mat-icon>
             <span class="header-button-text">Login</span>
           </button>
-  
+
           <button mat-menu-item aria-label="Logout" (click)="logout()" *ngIf="currentUser.username !== ''">
             <mat-icon>account_box</mat-icon>
             <span class="header-button-text">Logout</span>
           </button>
-  
-          <button mat-menu-item aria-label="User Dashboard" (click)="openUserDashboard()">
+
+          <button mat-menu-item aria-label="User Dashboard" (click)="openUserDashboard()" *ngIf="currentUser.username != ''">
             <mat-icon>dashboard</mat-icon>
             <span>User Dashboard</span>
           </button>
         </mat-menu>
 
       </div>
-      
+
 
 
 
@@ -91,7 +98,7 @@
   </mat-toolbar>
 </header>
 
-<router-outlet></router-outlet>
+<router-outlet (activate)="onActivate($event)"></router-outlet>
 
 <!-- <div class="grid">
   <aside class="sidebar">Sidebar</aside>
@@ -108,7 +115,7 @@
       <span class="org">USGS National Wildlife Health Center</span>
 
       <span class="app-meta">
-        <span>Version {{whispersVersion}} (test)</span>
+        <span>Version {{whispersVersion}}</span>
         <span>Developed by <a href="https://wim.usgs.gov" target="_blank">USGS Web Informatics and Mapping (WIM)</a></span>
       </span>
 

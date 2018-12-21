@@ -1,0 +1,54 @@
+.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-control {
+    width: 8em;
+    margin: 5px;
+}
+
+.org-select {
+    width: 35em;
+}
+
+.alert{ 
+    width: 100%;
+    background-color: lightcoral;
+}
+
+
+.text-small {
+    font-size: small;
+}
+
+// Prev and next buttons
+.detail-section-buttons{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    &.centered{
+        justify-content: center;
+    }
+
+    button{
+        position: relative;
+        top: -2px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+
+
+.add-service-request-form{
+
+}

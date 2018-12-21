@@ -41,8 +41,25 @@
                 font-size: 34px;
                 font-weight: 700;
                 display: flex;
-                flex-direction: column;
-                justify-content: center;
+
+                .whispers-logo{
+                    display: block;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+
+                    img{
+                        display: block;
+                        height: 28px;
+                        width: auto;
+                        margin-right: 2px;
+                    }
+                }
+                span{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
             }
 
             .whispers-subtitle{
@@ -84,8 +101,10 @@
         // App Alert
         .app-header-alert {
             color: #F24D4D;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
+            white-space: normal;
+            line-height: 11px;
 
             b{
                 font-weight: 900;
@@ -93,7 +112,8 @@
             a{
                 color: $blue-light;
                 transition: $transition;
-                color: lighten(#F24D4D, 14%);
+                //color: lighten(#F24D4D, 14%);
+                color: lighten;
                 text-decoration: underline;
 
                 &:hover{
@@ -201,3 +221,10 @@
         display: none;
     }
 }
+
+
+
+
+
+
+

@@ -22,6 +22,8 @@ import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 import { DisplayQuery } from '@interfaces/display-query';
 import { APP_SETTINGS } from '@app/app.settings';
 
+import { CurrentUserService } from '@services/current-user.service';
+
 import { EventSearchResultsDataSource } from '@app/event-search-results-data-source';
 import { isNgTemplate } from '@angular/compiler';
 import { AdministrativeLevelOneService } from '@app/services/administrative-level-one.service';
@@ -32,8 +34,15 @@ import { DiagnosisTypeService } from '@app/services/diagnosis-type.service';
 import { DiagnosisService } from '@app/services/diagnosis.service';
 import { SpeciesService } from '@app/services/species.service';
 
+import { ConfirmComponent } from '@confirm/confirm.component';
+
+import { SaveSearchComponent } from '@app/save-search/save-search.component';
+
+import { User } from '@interfaces/user';
+
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
+import { UserRegistrationComponent } from '@app/user-registration/user-registration.component';
 
 // export class ResultsDataSource extends MatTableDataSource<any> {
 //   constructor(private userService: EventService) {
@@ -58,14 +67,22 @@ export class HomeComponent implements OnInit {
   map;
   icon;
 
+  currentUser;
+
   searchDialogRef: MatDialogRef<SearchDialogComponent>;
+  saveSearchDialogRef: MatDialogRef<SaveSearchComponent>;
+  userRegistrationDialogRef: MatDialogRef<UserRegistrationComponent>;
 
   private searchQuerySubscription: Subscription;
 
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
+
   isloggedIn = APP_SETTINGS.IS_LOGGEDIN;
 
-  currentSearchQuery = APP_SETTINGS.DEFAULT_EVENT_QUERY;
-  currentDisplayQuery: DisplayQuery;
+  currentSearchQuery = sessionStorage.getItem('currentSearch') ? JSON.parse(sessionStorage.getItem('currentSearch')) : APP_SETTINGS.DEFAULT_SEARCH_QUERY;
+  //currentSearchQuery;
+  currentDisplayQuery: DisplayQuery = sessionStorage.getItem('currentDisplayQuery') ? JSON.parse(sessionStorage.getItem('currentDisplayQuery')) : APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
+  //currentDisplayQuery;
 
   currentResults: EventSummary[];
 
@@ -74,7 +91,7 @@ export class HomeComponent implements OnInit {
   eventTypes = [];
   diagnosisTypes = [];
   diagnoses = [];
-  species = [];
+  allSpecies = [];
   administrative_level_one = [];
   administrative_level_two = [];
 
@@ -88,6 +105,8 @@ export class HomeComponent implements OnInit {
 
   resultsLoading = false;
 
+  speciesLoading = true;
+
   locationMarkers;
 
   mapScale;
@@ -95,16 +114,21 @@ export class HomeComponent implements OnInit {
   longitude;
   zoomLevel;
 
+  flywaysVisible = false;
+  watershedsVisible = false;
+
   displayedColumns = [
     'id',
     'event_type_string',
     'affected_count',
     'start_date',
     'end_date',
-    'administrativelevelones',
-    'administrativeleveltwos',
+    // 'country',
+    'locations',
+    // 'administrativelevelones',
+    // 'administrativeleveltwos',
     'species',
-    'event_diagnoses'
+    'eventdiagnoses'
   ];
 
 
@@ -124,9 +148,14 @@ export class HomeComponent implements OnInit {
     private diagnosisTypeService: DiagnosisTypeService,
     private diagnosisService: DiagnosisService,
     private speciesService: SpeciesService,
+    private currentUserService: CurrentUserService,
     private searchService: SearchService,
     private route: ActivatedRoute
   ) {
+
+    currentUserService.currentUser.subscribe(user => {
+      this.currentUser = user;
+    });
 
     this.searchQuerySubscription = this.searchDialogService.getSearchQuery().subscribe(
       searchQuery => {
@@ -146,49 +175,70 @@ export class HomeComponent implements OnInit {
                 this.resultsLoading = false;
               } else if (count.count < countLimit) {
 
-                this.eventService.queryEvents(searchQuery)
-                  .subscribe(
-                    eventSummaries => {
-                      this.currentResults = eventSummaries;
-                      this.dataSource = new MatTableDataSource(this.currentResults);
-                      this.dataSource.paginator = this.paginator;
-                      this.dataSource.sort = this.sort;
-                      this.resultsLoading = false;
+                if (searchQuery) {
+                  this.eventService.queryEvents(searchQuery)
+                    .subscribe(
+                      eventSummaries => {
+                        this.currentResults = eventSummaries;
+                        this.dataSource = new MatTableDataSource(this.currentResults);
+                        this.dataSource.paginator = this.paginator;
+                        this.dataSource.sort = this.sort;
+                        this.resultsLoading = false;
 
-                      setTimeout(() => {
-                        /*this.map = new L.Map('map', {
-                          center: new L.LatLng(39.8283, -98.5795),
-                          zoom: 4,
-                        });*/
-
-
-                        this.locationMarkers.clearLayers();
+                        setTimeout(() => {
+                          /*this.map = new L.Map('map', {
+                            center: new L.LatLng(39.8283, -98.5795),
+                            zoom: 4,
+                          });*/
 
 
-                        this.mapResults(this.currentResults);
+                          this.locationMarkers.clearLayers();
 
 
-                      }, 500);
+                          this.mapResults(this.currentResults);
 
-                    },
-                    error => {
-                      this.resultsLoading = false;
-                      this.openSnackBar('Query failed due to web service error. Please try again later.', 'OK', 8000);
-                      this.errorMessage = <any>error;
-                    }
-                  );
 
+                        }, 500);
+
+                      },
+                      error => {
+                        this.resultsLoading = false;
+                        this.openSnackBar('Query failed due to web service error. Please try again later.', 'OK', 8000);
+                        this.errorMessage = <any>error;
+                      }
+                    );
+                }
 
                 this.dataSource = new MatTableDataSource(this.currentResults);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
+
+                searchQuery.and_params = [];
+
+                if (searchQuery.diagnosis_type_includes_all === true) {
+                  searchQuery.and_params.push('diagnosis_type');
+                }
+                if (searchQuery.diagnosis_includes_all === true) {
+                  searchQuery.and_params.push('diagnosis_type');
+                }
+                if (searchQuery.species_includes_all === true) {
+                  searchQuery.and_params.push('species');
+                }
+                if (searchQuery.administrative_level_one_includes_all === true) {
+                  searchQuery.and_params.push('administrative_level_one');
+                }
+                if (searchQuery.administrative_level_two_includes_all === true) {
+                  searchQuery.and_params.push('administrative_level_two');
+                }
 
                 this.currentSearchQuery = searchQuery;
                 // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
                 // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
                 // this.testDataSource.loadResults(searchQuery);
 
-                this.searchDialogRef.close();
+                if (this.searchDialogRef) {
+                  this.searchDialogRef.close();
+                }
 
               }
 
@@ -202,11 +252,22 @@ export class HomeComponent implements OnInit {
 
       });
 
-    this.searchQuerySubscription = this.searchDialogService.getDisplayQuery().subscribe(
-      displayQuery => {
-        this.currentDisplayQuery = displayQuery;
+    this.searchQuerySubscription = this.searchDialogService.getDisplayQuery()
+      .subscribe(
+        displayQuery => {
+          this.currentDisplayQuery = displayQuery;
+          console.log('New display query: ' + this.currentDisplayQuery);
+          console.log('Current Display Query adminlevelOne length: ' + this.currentDisplayQuery.administrative_level_one.length);
+          console.log(' Current Display Query Event types: ' + this.currentDisplayQuery.event_type)
+        });
 
-      });
+    // use displayQuery for display of current query in markup, send to searchDialogService
+    //this.searchDialogService.setDisplayQuery(APP_SETTINGS.DEFAULT_DISPLAY_QUERY);
+    // use searchForm.value to build the web service query, send to searchDialogService
+    //this.searchDialogService.setSearchQuery(APP_SETTINGS.DEFAULT_SEARCH_QUERY);// use displayQuery for display of current query in markup, send to searchDialogService
+    //this.searchDialogService.setDisplayQuery(APP_SETTINGS.DEFAULT_DISPLAY_QUERY);
+    // use searchForm.value to build the web service query, send to searchDialogService
+    //this.searchDialogService.setSearchQuery(APP_SETTINGS.DEFAULT_SEARCH_QUERY);
   }
 
   openSearchDialog() {
@@ -221,12 +282,37 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
 
-    const defaultEventQuery = APP_SETTINGS.DEFAULT_EVENT_QUERY;
+    const defaultEventQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
+
+    this.speciesLoading = true;
+
+    this.currentSearchQuery.and_params = [];
+
+    if (sessionStorage.getItem('currentSearch')) {
+      this.openSnackBar('Current Search has been loaded from your previous visit.', 'OK', 8000);
+
+    }
+
+    if (this.currentSearchQuery.diagnosis_type_includes_all === true) {
+      this.currentSearchQuery.and_params.push('diagnosis_type');
+    }
+    if (this.currentSearchQuery.diagnosis_includes_all === true) {
+      this.currentSearchQuery.and_params.push('diagnosis_type');
+    }
+    if (this.currentSearchQuery.species_includes_all === true) {
+      this.currentSearchQuery.and_params.push('species');
+    }
+    if (this.currentSearchQuery.administrative_level_one_includes_all === true) {
+      this.currentSearchQuery.and_params.push('administrative_level_one');
+    }
+    if (this.currentSearchQuery.administrative_level_two_includes_all === true) {
+      this.currentSearchQuery.and_params.push('administrative_level_two');
+    }
 
     // two lines below for the DataSource as separate class method (possibly revisit)
     // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
     // this.testDataSource.loadResults(defaultEventQuery);
-    this.eventService.queryEvents(defaultEventQuery)
+    this.eventService.queryEvents(this.currentSearchQuery)
       .subscribe(
         eventSummaries => {
           this.currentResults = eventSummaries;
@@ -238,12 +324,12 @@ export class HomeComponent implements OnInit {
 
             const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
               '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-              'Imagery © <a href="https://www.mapbox.com/">Mapbox</a> | Map shows centroid of county where event occured.',
+              'Imagery © <a href="https://www.mapbox.com/">Mapbox</a> contributors.',
               // tslint:disable-next-line:max-line-length
               mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
             const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors | Map shows centroid of county where event occured.'
+              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors.'
 
             });
 
@@ -264,11 +350,11 @@ export class HomeComponent implements OnInit {
             };
 
             // Flyways hosted by Fish and Wildlife Service
-            var flyways = esri.featureLayer({
+            const flyways = esri.featureLayer({
               url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
               style: function (feature) {
                 if (feature.properties.NAME === 'Atlantic Flyway') {
-                  return {color: 'blue', weight: 2 };
+                  return { color: 'blue', weight: 2 };
                 } else if (feature.properties.NAME === 'Pacific Flyway') {
                   return { color: 'red', weight: 2 };
                 } else if (feature.properties.NAME === 'Mississippi Flyway') {
@@ -278,94 +364,20 @@ export class HomeComponent implements OnInit {
                 }
               }
             });
-            
+
             // Watersheds hosted by The National Map (USGS)
-            var watersheds = esri.dynamicMapLayer({
+            const watersheds = esri.dynamicMapLayer({
               url: 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer',
               opacity: 0.7
             });
-            
+
             const overlays = {
               'Flyways': flyways,
               'Watersheds (HUC 2)': watersheds
             }
 
-            L.control.layers(baseMaps, overlays, { position: 'topleft'}).addTo(this.map);
+            L.control.layers(baseMaps, overlays, { position: 'topleft' }).addTo(this.map);
             L.control.scale({ position: 'bottomright' }).addTo(this.map);
-            
-            // const legend = L.control({ position: 'bottomright' });
-
-            // legend.onAdd = function (map) {
-            //   const div = L.DomUtil.create('div', 'legend');
-            //   div.innerHTML = "<h3>Explanation</h3>" +
-            //     "<span><div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-green wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Bacteria</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-blue wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Fungus</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-red wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Nut/Met/Dev</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-orange wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Other</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-yellow wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Parasite</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-purple wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Toxin</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-sky wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Virus</label>" +
-            //     "</span>" +
-            //     "<br/>" +
-            //     "<span>" +
-            //     "<div id='iconHolder'>" +
-            //     "<div class='wmm-circle wmm-mutedpink wmm-icon-circle wmm-icon-white wmm-size-25'></div>" +
-            //     "</div>" +
-            //     "<label id='expLabel'>Trauma</label>" +
-            //     "</span>";
-
-            //     return div;
-            // };
-
-            // legend.addTo(this.map);
-
-
-            /*this.icon = L.icon({
-              iconUrl: '../../assets/icons/marker-icon.png',
-              shadowUrl: '../../assets/icons/marker-shadow.png',
-              iconSize: [25, 41],
-              iconAnchor: [13, 40],
-              popupAnchor: [0, -40]
-            });*/
 
             this.mapResults(this.currentResults);
 
@@ -409,6 +421,24 @@ export class HomeComponent implements OnInit {
             });
             // end latLngScale utility logic/////////
 
+            this.map.on('overlayadd', (e) => {
+              console.log('overlayadd');
+              if (e.name === 'Flyways') {
+                this.flywaysVisible = true;
+              } else if (e.name === 'Watersheds (HUC 2)') {
+                this.watershedsVisible = true;
+              }
+            });
+
+            this.map.on('overlayremove', (e) => {
+              console.log('overlayremove');
+              if (e.name === 'Flyways') {
+                this.flywaysVisible = false;
+              } else if (e.name === 'Watersheds (HUC 2)') {
+                this.watershedsVisible = false;
+              }
+            });
+
           }, 500);
 
         },
@@ -438,12 +468,38 @@ export class HomeComponent implements OnInit {
         (searches) => {
           this.popularSearches = searches;
 
+          // build parsed search list
           for (const search of this.popularSearches) {
             const parsedSearch = APP_UTILITIES.parseSearch(search);
             this.parsedPopularSearches.push(parsedSearch);
           }
 
-          console.log("wat");
+          // build a list of relevant adminL1s
+          let adminLevelOnes = [];
+          for (const parsedSearch of this.parsedPopularSearches) {
+            if (parsedSearch.administrative_level_one) {
+              for (const adminLevelOne of parsedSearch.administrative_level_one) {
+                adminLevelOnes.push(adminLevelOne);
+              }
+            }
+          }
+
+          // query adminL2s from the relevant adminL1 list
+          adminLevelOnes = adminLevelOnes.map(function (e) {
+            return JSON.stringify(e);
+          });
+          const adminLevelOneString = adminLevelOnes.join(',');
+          this.adminLevelTwoService.queryAdminLevelTwos(adminLevelOneString)
+            .subscribe(
+              (adminLevelTwos) => {
+                this.administrative_level_two = adminLevelTwos;
+
+              },
+              error => {
+                this.errorMessage = <any>error;
+              }
+            );
+          console.log('Popular searches: ' + this.parsedPopularSearches);
 
         },
         error => {
@@ -495,10 +551,12 @@ export class HomeComponent implements OnInit {
     this.speciesService.getSpecies()
       .subscribe(
         (species) => {
-          this.species = species;
+          this.allSpecies = species;
+          this.speciesLoading = false;
         },
         error => {
           this.errorMessage = <any>error;
+          this.speciesLoading = false;
         }
       );
 
@@ -568,7 +626,7 @@ export class HomeComponent implements OnInit {
             currentResultsMarkers.push({
               lat: Number(currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']),
               long: Number(currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude']),
-              event_diagnoses: currentResults[event]['eventdiagnoses'],
+              eventdiagnoses: currentResults[event]['eventdiagnoses'],
               adminleveltwo: currentResults[event]['administrativeleveltwos'][adminleveltwo]['id'],
               events: [currentResults[event]],
               complete: currentResults[event]['complete']
@@ -588,9 +646,9 @@ export class HomeComponent implements OnInit {
       let shapeClass = 'wmm-circle ';
       let iconClasses = ' wmm-icon-circle wmm-icon-white ';
       let sizeClass = 'wmm-size-25';
-      if (marker['event_diagnoses'][0] !== undefined) {
+      if (marker['eventdiagnoses'][0] !== undefined) {
         // set color of marker based on diagnosis type
-        switch (marker['event_diagnoses'][0].diagnosis_type) {
+        switch (marker['eventdiagnoses'][0].diagnosis_type) {
           case 1: {
             colorClass = 'wmm-green';
             break;
@@ -626,20 +684,39 @@ export class HomeComponent implements OnInit {
         }
       }
 
-      // if event is complete, remove the white center to indicate 'closed'
-      if (marker['complete'] === true) {
-        iconClasses = ' wmm-icon-noicon wmm-icon-white ';
+
+      if (marker.events.length === 1) {
+        // if event is complete, remove the white center to indicate closed/complete
+        if (marker['complete'] === true) {
+          iconClasses = ' wmm-icon-noicon wmm-icon-white ';
+        }
+
+      } else if (marker.events.length > 1) {
+        // set a variable for alllEventsComplete, default to true
+        let allEventsComplete = true;
+        // loop through the events within the marker and check their 'complete' value
+        for (const event of marker.events) {
+          // if any of the events are not complete, set allEventsComplete to false
+          if (event.complete === false) {
+            allEventsComplete = false;
+          }
+        }
+        // if all the events are complete, remove the white center to indicate closed/complete
+        if (allEventsComplete) {
+          iconClasses = ' wmm-icon-noicon wmm-icon-white ';
+        }
       }
+
 
       // eventCount var keeps track of number of events at the location. Do not show if less than 2.
       let eventCount;
       if (marker.events.length > 1) {
         // for location with multiple events, show event count on symbol, make larger and gray
         eventCount = marker.events.length;
-        iconClasses = ' wmm-icon-circle wmm-icon-white ';
+        // iconClasses = ' wmm-icon-circle wmm-icon-white ';
         colorClass = 'wmm-mutedblue';
         sizeClass = 'wmm-size-35';
-        
+
       } else {
         // eventCount set to empty string if just one event at location
         eventCount = '';
@@ -680,30 +757,35 @@ export class HomeComponent implements OnInit {
 
         // if one event represented by marker, do a simple display. If multiple, display in collapsing panels
         if (marker.events.length === 1) {
+          // tslint:disable-next-line:max-line-length
           popupContent = popupContent + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
+            '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Incomplete') + '</span><br/>' +
             '<span class="popupLabel">Type:</span> ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
             '<span class="popupLabel">Dates:</span> ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
             '<span class="popupLabel">Location:</span> ' + locationContent +
             '<span class="popupLabel">Species:</span> ' + speciesContent +
             '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string');
+            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            '<a href="./event/' + this.testForUndefined(event['id']) + '">View Event Details </a>';
+
         } else if (marker.events.length > 1) {
 
           popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
             // '<h4>Event ' + this.testForUndefined(event['id']) + '</h4>' +
             '<div class="panel">' +
+            '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Incomplete') + '</span><br/>' +
             '<span class="popupLabel">Type:</span> ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
             '<span class="popupLabel">Dates:</span> ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
             '<span class="popupLabel">Location:</span> ' + locationContent +
             '<span class="popupLabel">Species:</span> ' + speciesContent +
             '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') +
-            '<p></div>';
+            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            '<span class="popupLabel"><a href="./event/' + this.testForUndefined(event['id']) + '">View Event Details </a> </span><p></div>';
         }
       }
 
       // establish leaflet popup var for binding to marker (include check for mapPanel height, to set max popup height)
-      const popup = L.popup({ maxHeight: document.getElementById("mapPanel").offsetHeight - 150 })
+      const popup = L.popup({ maxHeight: document.getElementById('mapPanel').offsetHeight - 150 })
         .setContent(popupContent);
 
       // establish leaflet marker var, passing in icon var from above, including on popupopen logic for accordion style collapsing panels
@@ -713,14 +795,10 @@ export class HomeComponent implements OnInit {
         .bindPopup(popup)
         .on('popupopen', function (popup) {
 
-          const acc = document.getElementsByClassName('accordion');
-          let i;
+          const acc = Array.from(document.querySelectorAll('button.accordion'));
 
-          for (i = 0; i < acc.length; i++) {
-            acc[i].addEventListener('click', function () {
-              for (let j = 0; j < acc.length; j++) {
-                acc[j].classList.toggle('active');
-              }
+          acc.forEach(function (button, i) {
+            acc[i].addEventListener('click', function (evt) {
               this.classList.toggle('active');
               const panel = this.nextElementSibling;
               if (panel.style.maxHeight) {
@@ -728,31 +806,28 @@ export class HomeComponent implements OnInit {
               } else {
                 panel.style.maxHeight = panel.scrollHeight + 'px';
               }
+              //let acc = document.getElementsByClassName('accordion');
+              let j;
+              for (j = 0; j < acc.length; j++) {
+                if (i !== j) {
+                  const panel: HTMLElement = acc[j].nextElementSibling as HTMLElement;
+                  if (panel.style.maxHeight) {
+                    acc[j].classList.toggle('active');
+                    panel.style.maxHeight = null;
+                  }
+                }
+              }
             });
-          }
-
-          // let acc = document.getElementsByClassName("accordion");
-          // let i;
-
-          // for (i = 0; i < acc.length; i++) {
-          //     acc[i].addEventListener("click", function() {
-          //         /* Toggle between adding and removing the "active" class,
-          //         to highlight the button that controls the panel */
-          //         this.classList.toggle("active");
-
-          //         /*Toggle between hiding and showing the active panel */
-          //         var panel = this.nextElementSibling;
-          //         if (panel.style.display === "block") {
-          //             panel.style.display = "none";
-          //         } else {
-          //             panel.style.display = "block";
-          //         }
-          //     });
-          // }
+          });
         });
     }
 
-    this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50] });
+    if (this.locationMarkers.getBounds().isValid() === true) {
+      this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50], maxZoom: 10 });
+    } else {
+      this.openSnackBar('No events match your selected criteria. Please try again.', 'OK', 8000);
+
+    }
   }
 
   testForUndefined(value: any, property?: any) {
@@ -776,6 +851,9 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  openMetadataLink() {
+    window.open(APP_SETTINGS.WHISPERS_METADATA_URL, '_blank');
+  }
 
   exportEventSummaries() {
     this.eventService.getEventSummaryCSV(this.currentSearchQuery);
@@ -788,6 +866,128 @@ export class HomeComponent implements OnInit {
     //   }
     // )
   }
+
+  saveSearch() {
+
+    this.saveSearchDialogRef = this.dialog.open(SaveSearchComponent, {
+      disableClose: true,
+      data: {
+        currentSearchQuery: this.currentSearchQuery,
+        title: 'Save Search',
+        titleIcon: 'save',
+        showCancelButton: true,
+        action_button_text: 'Save Search',
+        actionButtonIcon: 'save'
+      }
+    });
+
+    this.saveSearchDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          // TODO: show snackbar confirmation
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+  }
+
+  implementSearch(search) {
+    sessionStorage.setItem('currentSearch', JSON.stringify(search));
+
+    // TODO: currentDiplayQuery needs to be parsed from the search object
+    const displayQuery: DisplayQuery = {
+      event_type: [],
+      diagnosis: [],
+      diagnosis_type: [],
+      species: [],
+      administrative_level_one: [],
+      administrative_level_two: [],
+      affected_count: search.affected_count,
+      affected_count_operator: search.affected_count_operator,
+      start_date: search.start_date,
+      end_date: search.end_date,
+      diagnosis_type_includes_all: search.diagnosis_type_includes_all,
+      diagnosis_includes_all: search.diagnosis_includes_all,
+      species_includes_all: search.species_includes_all,
+      administrative_level_one_includes_all: search.administrative_level_one_includes_all,
+      administrative_level_two_includes_all: search.administrative_level_two_includes_all,
+      and_params: [],
+      complete: search.complete
+    };
+
+    if (search.event_type) {
+      for (const event_type of search.event_type) {
+        displayQuery.event_type.push(this.displayValuePipe.transform(event_type, 'name', this.eventTypes));
+      }
+    }
+
+    if (search.diagnosis) {
+      for (const diagnosis of search.diagnosis) {
+        displayQuery.diagnosis.push(this.displayValuePipe.transform(diagnosis, 'name', this.diagnoses));
+      }
+    }
+    if (search.diagnosis_type) {
+      for (const diagnosis_type of search.diagnosis_type) {
+        displayQuery.diagnosis_type.push(this.displayValuePipe.transform(diagnosis_type, 'name', this.diagnosisTypes));
+      }
+    }
+
+    if (search.species) {
+      for (const species of search.species) {
+        displayQuery.species.push(this.displayValuePipe.transform(species, 'name', this.allSpecies));
+      }
+    }
+
+    if (search.administrative_level_one) {
+      for (const adminLevelOne of search.administrative_level_one) {
+        displayQuery.administrative_level_one.push(this.displayValuePipe.transform(adminLevelOne, 'name', this.administrative_level_one));
+      }
+    }
+
+    if (search.administrative_level_two) {
+      for (const adminLevelTwo of search.administrative_level_two) {
+        displayQuery.administrative_level_two.push(this.displayValuePipe.transform(adminLevelTwo, 'name', this.administrative_level_two));
+      }
+    }
+
+    sessionStorage.setItem('currentDisplayQuery', JSON.stringify(displayQuery));
+    // use displayQuery for display of current query in markup, send to searchDialogService
+    this.searchDialogService.setDisplayQuery(displayQuery);
+
+
+    // use searchForm.value to build the web service query, send to searchDialogService
+    this.searchDialogService.setSearchQuery(search);
+    //this.router.navigate([`../home/`], { relativeTo: this.route });
+  }
+
+
+  register(type) {
+    this.userRegistrationDialogRef = this.dialog.open(UserRegistrationComponent, {
+      minWidth: '50em',
+      disableClose: true,
+      data: {
+        title: 'WHISPers Registration',
+        titleIcon: 'person',
+        showCancelButton: true,
+        action_button_text: 'Submit',
+        actionButtonIcon: 'send',
+        registration_type: type
+      }
+    });
+
+    this.userRegistrationDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          // TODO: show snackbar confirmation
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
 
   /**
    * Set the paginator and sort after the view init since this component will

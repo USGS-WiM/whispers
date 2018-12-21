@@ -32,37 +32,37 @@ export class AuthenticationService {
     return this._http.post(APP_SETTINGS.AUTH_URL, null, options)
       .map((res: any) => {
         self.user = res.json();
-        if (self.user.is_staff || self.user.username == 'testuser') {
-          sessionStorage.setItem('username', username);
-          sessionStorage.setItem('password', password);
-          sessionStorage.setItem('first_name', self.user.first_name);
-          sessionStorage.setItem('last_name', self.user.last_name);
-          sessionStorage.setItem('email', self.user.email);
-          sessionStorage.setItem('is_staff', self.user.is_staff.toString());
-          sessionStorage.setItem('is_superuser', self.user.is_superuser.toString());
-          sessionStorage.setItem('is_active', self.user.is_active.toString());
-          sessionStorage.setItem('role', self.user.role.toString());
-          sessionStorage.setItem('organization', self.user.organization.toString());
-          sessionStorage.setItem('last_login', self.user.last_login);
-          sessionStorage.setItem('active_key', self.user.active_key);
-          sessionStorage.setItem('user_status', self.user.user_status);
+        // if (self.user.is_staff || self.user.username == 'testuser') {
+        sessionStorage.setItem('username', username);
+        sessionStorage.setItem('password', password);
+        sessionStorage.setItem('first_name', self.user.first_name);
+        sessionStorage.setItem('last_name', self.user.last_name);
+        sessionStorage.setItem('email', self.user.email);
+        sessionStorage.setItem('is_staff', self.user.is_staff.toString());
+        sessionStorage.setItem('is_superuser', self.user.is_superuser.toString());
+        sessionStorage.setItem('is_active', self.user.is_active.toString());
+        sessionStorage.setItem('role', self.user.role.toString());
+        sessionStorage.setItem('organization', self.user.organization.toString());
+        sessionStorage.setItem('last_login', self.user.last_login);
+        sessionStorage.setItem('active_key', self.user.active_key);
+        sessionStorage.setItem('user_status', self.user.user_status);
 
-          sessionStorage.setItem('currentUser', JSON.stringify(self.user));
+        sessionStorage.setItem('currentUser', JSON.stringify(self.user));
 
-          // self.userLoggedIn$.emit(res);
-          // this.currentUser.emit(res);
-          this.currentUserService.updateCurrentUser(self.user);
-        } else {
-          // TODO: do something more professional here
-          alert('This user is not authorized!');
-        }
+        // self.userLoggedIn$.emit(res);
+        // this.currentUser.emit(res);
+        this.currentUserService.updateCurrentUser(self.user);
+        // } else {
+
+        //   alert('This user is not authorized!');
+        // }
       });
 
   }
 
   logout() {
 
-    //this.router.navigate(['/login']);
+    // this.router.navigate(['/login']);
     // this.router.navigateByUrl('login');
     this.user = undefined;
     this.currentUserService.updateCurrentUser({ 'username': '' });

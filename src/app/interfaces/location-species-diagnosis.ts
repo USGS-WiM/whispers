@@ -3,9 +3,9 @@ import { OrganizationSummary } from '@interfaces/organization-summary';
 
 export interface LocationSpeciesDiagnosis extends History {
     id: number;
-    location_species: number;
+    locationspecies: number;
     diagnosis: Diagnosis;
-    confirmed: boolean;
+    suspect: boolean;
     major: boolean;
     priority: number;
     causal: boolean;

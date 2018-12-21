@@ -1,58 +1,151 @@
-<mat-card>
-  <mat-card-title>
+<div class="suggested-searches">
+  <div class="button-row" *ngFor="let search of parsedSearches" (click)="implementSearch(search)">
 
-    <div class="results-card-title-row">
-      <span class="results-button-row">
-        <!-- <button mat-button color="accent">
-          <i class="material-icons">
-            edit
-          </i> Edit</button> -->
-        <button mat-button color="accent" (click)="openSearchDeleteConfirm()">
-          <i class="material-icons">
-            remove_circle
-          </i> Delete</button>
+    <button mat-button>
+      <!-- Name -->
+      <span class="search-param search-name" *ngIf="search.name">
+        <b><i>{{search.name}}</i></b>
+      </span>
+      <!-- Start Date -->
+      <span class="search-param" *ngIf="search.start_date">
+        <b>START DATE</b>
+        <span class="value">{{search.start_date | date:'mediumDate'}}</span>
+      </span>
+      <!-- End Date -->
+      <span class="search-param" *ngIf="search.end_date">
+        <b>END DATE</b>
+        <span class="value">{{search.end_date|date:'mediumDate'}}</span>
+      </span>
+      <!-- Affected Count -->
+      <span *ngIf="search.affected_count" class="search-param">
+        <b>AFFECTED COUNT</b>
+        <span class="value">{{search.affected_count}}</span>
+      </span>
+      <!-- WHISPers Record Status -->
+      <span class="search-param">
+        <b>WHISPers Record Status</b>
+        <span>{{search.complete === true ? 'Complete Events Only' :
+          search.complete === false ? 'Incomplete Events Only' : 'Complete and incomplete events' }}</span>
       </span>
 
-    </div>
-  </mat-card-title>
-  <mat-card-content>
-    <div *ngIf="savedSearchesDataSource" class="results-table-div">
+      <!-- Event Type -->
+      <span class="search-param" *ngIf="search.event_type">
+        <b>EVENT TYPE</b>
+        <div class="value-list">
+          <span *ngFor="let eventType of search.event_type" class="value">
+            {{eventType | displayValue:'name':this.eventTypes}}
+            <span *ngIf="(search.event_type.indexOf(eventType)) < (search.event_type.length - 1)" class="value-list-or">
+              or
+            </span>
+          </span>
+        </div>
+      </span>
 
-      <mat-table [dataSource]="savedSearchesDataSource" matSort>
+      <!-- Diagnosis Type -->
+      <span class="search-param" *ngIf="search.diagnosis_type">
+        <b>DIAGNOSIS TYPE</b>
+        <div class="value-list">
+          <span *ngFor="let diagnosisType of search.diagnosis_type" class="value">
+            {{diagnosisType| displayValue:'name':this.diagnosisTypes}}
+            <span *ngIf="(search.diagnosis_type.indexOf(diagnosisType)) < (search.diagnosis_type.length - 1)" class="value-list-or">
+              {{(search.diagnosis_type_includes_all) ? "and" : "or"}}
+            </span>
+          </span>
+        </div>
+      </span>
 
-        <!-- Selection Column -->
-        <!-- <ng-container matColumnDef="select">
-          <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="search-select"> Select </mat-header-cell>
-          <mat-cell *matCellDef="let search" [ngClass]="search-select">
-            <mat-checkbox id='search-{{search.id}}'></mat-checkbox>
-          </mat-cell>
-        </ng-container> -->
+      <!-- DIAGNOSIS -->
+      <span class="search-param" *ngIf="search.diagnosis">
+        <b>DIAGNOSIS</b>
+        <div class="value-list">
+          <span *ngFor="let diagnosis of search.diagnosis" class="value">
+            {{diagnosis | displayValue:'name':this.diagnoses}}
+            <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)" class="value-list-or">
+              {{(search.diagnosis_includes_all) ? "and" : "or"}}
+            </span>
+          </span>
+        </div>
+      </span>
+
+      <!-- SPECIES -->
+      <span class="search-param" *ngIf="search.species">
+        <b>SPECIES</b>
+        <div class="value-list">
+          <span *ngFor="let species of search.species" class="value">
+            {{species | displayValue:'name':this.allSpecies}}
+            <span *ngIf="(search.species.indexOf(species)) < (search.species.length - 1)" class="value-list-or">
+              {{(search.species_includes_all) ? "and" : "or"}}
+            </span>
+          </span>
+        </div>
+      </span>
+
+      <!-- STATE -->
+      <span class="search-param" *ngIf="search.administrative_level_one">
+        <b>STATE</b>
+        <div class="value-list">
+          <span *ngFor="let adminLevel1 of search.administrative_level_one" class="value">
+            {{adminLevel1 | displayValue:'name':this.administrative_level_one}}
+            <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)"
+              class="value-list-or">
+              {{(search.administrative_level_one_includes_all) ? "and" : "or"}}
+            </span>
+          </span>
+        </div>
+      </span>
+
+      <!-- County -->
+      <span class="search-param" *ngIf="search.administrative_level_two">
+        <b>COUNTY</b>
+        <div class="value-list">
+          <span *ngFor="let adminLevel2 of search.administrative_level_two" class="value">
+            {{adminLevel2 | displayValue:'name':this.administrative_level_two}}
+            <span *ngIf="(search.administrative_level_two.indexOf(adminLevel2)) < (search.administrative_level_two.length - 1)"
+              class="value-list-or">
+              {{(search.administrative_level_two_includes_all) ? "and" : "or"}}\
+            </span>
+          </span>
+        </div>
+      </span>
+
+    </button><!-- END MAT BUTTON -->
+
+  </div>
+
+
+</div>
+
+<!-- <div *ngIf="savedSearchesDataSource" class="results-table-div">
+
+      <mat-table [dataSource]="savedSearchesDataSource" matSort matSortActive="name" matSortDirection="asc">
 
         <ng-container matColumnDef="select">
-            <mat-header-cell *matHeaderCellDef>
-              <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
-              </mat-checkbox>
-            </mat-header-cell>
-            <mat-cell *matCellDef="let row">
-              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
-              </mat-checkbox>
-            </mat-cell>
-          </ng-container>
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
 
-        <!-- Search Name Column -->
+ 
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="search-select"> Name </mat-header-cell>
           <mat-cell *matCellDef="let search" [ngClass]="search-select">{{search.name}}</mat-cell>
         </ng-container>
 
-        <!-- Search Data Column -->
+      
         <ng-container matColumnDef="search">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Search </mat-header-cell>
           <mat-cell *matCellDef="let search">
 
             <span *ngIf="search.start_date">
               <span class="text-bold"> START DATE</span> {{search.start_date | date:'mediumDate'}}
-            </span><span *ngIf="search.end_date"><span class="text-bold text-larger"> | </span><span class="text-bold"> END
+            </span><span *ngIf="search.end_date"><span class="text-bold text-larger"> | </span><span class="text-bold">
+                END
                 DATE
               </span> {{search.end_date|date:'mediumDate'}}</span>
             <span *ngIf="search.affected_count"><span class="text-bold text-larger"> | </span> <span class="text-bold">AFFECTED
@@ -60,30 +153,35 @@
 
             <span *ngIf="search.event_type"><span class="text-bold text-larger"> | </span> <span class="text-bold">EVENT
                 TYPE&nbsp;
-              </span> <span *ngFor="let eventType of search.event_type">{{eventType | displayValue:'name':this.eventTypes}}
+              </span> <span *ngFor="let eventType of search.event_type">{{eventType |
+                displayValue:'name':this.eventTypes}}
                 <span *ngIf="(search.event_type.indexOf(eventType)) < (search.event_type.length - 1)">or&nbsp;</span></span>
               <br>
             </span>
             <span *ngIf="search.diagnosis_type"><span class="text-bold text-larger"> | </span> <span class="text-bold">DIAGNOSIS
-                TYPE &nbsp;</span> <span *ngFor="let diagnosisType of search.diagnosis_type">{{diagnosisType| displayValue:'name':this.diagnosisTypes}}
+                TYPE &nbsp;</span> <span *ngFor="let diagnosisType of search.diagnosis_type">{{diagnosisType|
+                displayValue:'name':this.diagnosisTypes}}
                 <span *ngIf="(search.diagnosis_type.indexOf(diagnosisType)) < (search.diagnosis_type.length - 1)">{{(search.diagnosis_type_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span><br></span>
 
             <span *ngIf="search.diagnosis"><span class="text-bold text-larger"> | </span> <span class="text-bold">DIAGNOSIS
                 &nbsp;
               </span>
-              <span *ngFor="let diagnosis of search.diagnosis">{{diagnosis | displayValue:'name':this.diagnoses}} <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)">{{(search.diagnosis_includes_all)
+              <span *ngFor="let diagnosis of search.diagnosis">{{diagnosis | displayValue:'name':this.diagnoses}} <span
+                  *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)">{{(search.diagnosis_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span>
               <br>
             </span>
-            <span *ngIf="search.species"><span class="text-bold text-larger"> | </span> <span class="text-bold">SPECIES &nbsp;</span>
+            <span *ngIf="search.species"><span class="text-bold text-larger"> | </span> <span class="text-bold">SPECIES
+                &nbsp;</span>
               <span *ngFor="let species of search.species">{{species | displayValue:'name':this.species}} <span *ngIf="(search.species.indexOf(species)) < (search.species.length - 1)">{{(search.species_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span><br></span>
 
             <span *ngIf="search.administrative_level_one"><span class="text-bold text-larger"> | </span> <span class="text-bold">STATE
                 &nbsp;
               </span>
-              <span *ngFor="let adminLevel1 of search.administrative_level_one">{{adminLevel1 | displayValue:'name':this.administrative_level_one}}
+              <span *ngFor="let adminLevel1 of search.administrative_level_one">{{adminLevel1 |
+                displayValue:'name':this.administrative_level_one}}
                 <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)">{{(search.administrative_level_one_includes_all)
                   ? "and" : "or"}}&nbsp;</span></span><br></span>
 
@@ -97,11 +195,9 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="searchDisplayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let search; columns: searchDisplayedColumns;"></mat-row>
+        <mat-row *matRowDef="let search; columns: searchDisplayedColumns;" (click)="implementSearch(search)"></mat-row>
 
       </mat-table>
 
-      <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
-    </div>
-  </mat-card-content>
-</mat-card>
+      <mat-paginator #searchPaginator='matPaginator' [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+    </div> -->

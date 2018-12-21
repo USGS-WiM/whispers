@@ -1,0 +1,98 @@
+.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.form-control {
+    width: 320px;
+    margin: 10px;
+}
+
+.alert {
+    width: 100%;
+    background-color: lightcoral;
+}
+
+.diagnosis-number-control {
+    width: 320px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    flex-grow: 1;
+}
+
+.species-number-control {
+    width: 16em;
+    margin: 10px;
+    flex-grow: 1;
+}
+
+.detail-section-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    &.centered {
+        justify-content: center;
+    }
+    button {
+        position: relative;
+        top: -2px;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.diagnosis-select {
+    width: 35em;
+}
+
+.event-org-select {
+    width: 40em;
+}
+
+.suspect-checkbox {
+    // width: 5em;
+}
+
+#hidethis {
+    opacity: 0;
+    max-height: 0px;
+}
+
+.public-icon {
+    width: 1em;
+    height: 1em;
+    font-size: inherit;
+    vertical-align: baseline;
+}
+
+.submissionReviewErrors {
+    display: block;
+    margin: 0 auto;
+    padding: 25px 0 40px 0;
+    width: 40em;
+    .mat-error {
+        display: flex;
+        margin: 6px 0;
+        width: 40em;
+        .mat-icon,
+        span {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        span {
+            font-size: 16px;
+            font-weight: 600;
+            padding-left: 4px;
+            padding-bottom: 1px;
+        }
+    }
+}

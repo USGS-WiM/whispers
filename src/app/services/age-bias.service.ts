@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import { Subject } from 'rxjs/Subject';
+import { throwError } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 
@@ -18,10 +19,10 @@ export class AgeBiasService {
   public getAgeBiases(): Observable<AgeBias[]> {
 
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      headers: APP_SETTINGS.MIN_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.AGE_BIASES_URL, options)
+    return this._http.get(APP_SETTINGS.AGE_BIASES_URL + '?no_page', options)
       .map((response: Response) => <AgeBias[]>response.json())
       .catch(this.handleError);
 
@@ -29,7 +30,7 @@ export class AgeBiasService {
 
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+    return throwError(JSON.stringify(error.json()) || 'Server error');
   }
 
 }

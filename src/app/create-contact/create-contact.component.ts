@@ -4,6 +4,8 @@ import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternVali
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
+import { Subject, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 
@@ -17,6 +19,7 @@ import { Contact } from '@interfaces/contact';
 import { ContactService } from '@services/contact.service';
 
 import { CreateContactService } from '@create-contact/create-contact.service';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-create-contact',
@@ -29,11 +32,17 @@ export class CreateContactComponent implements OnInit {
   organizations: Organization[];
 
   createContactForm: FormGroup;
-  
+
   dialogTitle: string;
   action_button_text: string;
 
   submitLoading = false;
+
+  public filteredOrganizations: ReplaySubject<Organization[]> = new ReplaySubject<Organization[]>(1);
+  organizationFilterCtrl: FormControl = new FormControl();
+
+   /** Subject that emits when the component has been destroyed. */
+   private _onDestroy = new Subject<void>();
 
   buildCreateContactForm() {
     this.createContactForm = this.formBuilder.group({
@@ -87,14 +96,47 @@ export class CreateContactComponent implements OnInit {
       .subscribe(
         organizations => {
           this.organizations = organizations;
+          this.organizations.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
           if (this.data.contact_action === 'edit') {
             contactForm.get('organization').setValue(this.data.contact.organization.toString());
           }
+
+          // populate the search select options for the species control
+          this.filteredOrganizations.next(organizations);
+
+          // listen for search field value changes
+          this.organizationFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+              this.filterOrganization();
+            });
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
+  }
+
+  private filterOrganization() {
+    if (!this.organizations) {
+      return;
+    }
+    // get the search keyword
+    let search = this.organizationFilterCtrl.value;
+    if (!search) {
+      this.filteredOrganizations.next(this.organizations.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredOrganizations.next(
+      this.organizations.filter(organization => organization.name.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   getErrorMessage(formControlName) {
@@ -122,6 +164,7 @@ export class CreateContactComponent implements OnInit {
             this.createContactService.setCreatedContact(contact);
             this.openSnackBar('Contact Created', 'OK', 5000);
             this.createContactDialogRef.close();
+            gtag('event', 'click', { 'event_category': 'Contacts', 'event_label': 'New Contact Created' });
           },
           error => {
             this.submitLoading = false;
@@ -144,8 +187,6 @@ export class CreateContactComponent implements OnInit {
           }
         );
     }
-
-    
 
   }
 

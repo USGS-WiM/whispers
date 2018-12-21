@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
@@ -32,6 +32,9 @@ import { SearchQuery } from '@interfaces/search-query';
 import { DisplayValuePipe } from '@pipes/display-value.pipe';
 import { EventService } from '@app/services/event.service';
 
+import { APP_SETTINGS } from '@app/app.settings';
+declare let gtag: Function;
+
 
 @Component({
   selector: 'app-search-dialog',
@@ -45,6 +48,9 @@ export class SearchDialogComponent implements OnInit {
   selectable = true;
   removable = true;
   addOnBlur = true;
+
+  defaultSearchQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
+  defaultDisplayQuery = APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
 
   searchForm: FormGroup;
   // independent controls - values do not persist - used to select the value and add to a selection array
@@ -80,7 +86,19 @@ export class SearchDialogComponent implements OnInit {
   selectedSpecies = []; // chips list
 
   adminLevelTwosLoading = false;
+  diagnosesLoading = false;
+  speciesLoading = true;
 
+  endDateBeforeStart(AC: AbstractControl) {
+    AC.get('end_date').setErrors(null);
+    AC.get('start_date').setErrors(null);
+    const start_date = AC.get('start_date').value;
+    const end_date = AC.get('end_date').value;
+    if ((start_date !== null && end_date !== null) && start_date > end_date) {
+      AC.get('end_date').setErrors({ endDateBeforeStart: true });
+    }
+    return null;
+  }
 
   buildSearchForm() {
     this.searchForm = this.formBuilder.group({
@@ -91,6 +109,7 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_one: null,
       administrative_level_two: null,
       affected_count: null,
+      affected_count_operator: '__gte',
       start_date: null,
       end_date: null,
       diagnosis_type_includes_all: false,
@@ -99,8 +118,11 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_one_includes_all: false,
       administrative_level_two_includes_all: false,
       and_params: [],
-      openEventsOnly: false
-    });
+      complete: null
+    },
+      {
+        validator: [this.endDateBeforeStart]
+      });
   }
 
   constructor(
@@ -111,7 +133,7 @@ export class SearchDialogComponent implements OnInit {
     private adminLevelTwoService: AdministrativeLevelTwoService,
     private _eventTypeService: EventTypeService,
     private _diagnosisTypeService: DiagnosisTypeService,
-    private _diagnosisService: DiagnosisService,
+    private diagnosisService: DiagnosisService,
     private _speciesService: SpeciesService,
     private eventService: EventService,
     private displayValuePipe: DisplayValuePipe,
@@ -125,7 +147,7 @@ export class SearchDialogComponent implements OnInit {
     this.diagnosisControl = new FormControl();
     this.adminLevelOneControl = new FormControl();
     this.adminLevelTwoControl = new FormControl();
-    this.speciesControl = new FormControl();
+    this.speciesControl = new FormControl({ value: null, disabled: true });
 
     this.buildSearchForm();
   }
@@ -141,9 +163,9 @@ export class SearchDialogComponent implements OnInit {
             .startWith(null)
             .map(val => this.filter(val, this.eventTypes, 'name'));
 
-          if (this.data.query && this.data.query['event_type'].length > 0) {
+          if (this.data.query && this.data.query['event_type'] && this.data.query['event_type'].length > 0) {
             for (const index in eventTypes) {
-              if (this.data.query['event_type'].some(function (el) { return el === eventTypes[index].name })) {
+              if (this.data.query['event_type'].some(function (el) { return el === eventTypes[index].name; })) {
                 this.dropdownSetup(this.eventTypeControl, this.selectedEventTypes, eventTypes[index]);
               }
             }
@@ -158,13 +180,38 @@ export class SearchDialogComponent implements OnInit {
       .subscribe(
         (diagnosisTypes) => {
           this.diagnosisTypes = diagnosisTypes;
+          // alphabetize the diagnosis type options list
+          this.diagnosisTypes.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
           this.filteredDiagnosisTypes = this.diagnosisTypeControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.diagnosisTypes, 'name'));
 
-          if (this.data.query && this.data.query['diagnosis_type'].length > 0) {
+          if (this.data.query && this.data.query['diagnosis_type'] && this.data.query['diagnosis_type'].length > 0) {
+            /*for (const index in diagnosisTypes) {
+              if (this.data.query['diagnosis_type'].some(function (el) { return el === diagnosisTypes[index].name; })) {
+                this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, diagnosisTypes[index]);
+              }
+            }*/
             for (const index in diagnosisTypes) {
-              if (this.data.query['diagnosis_type'].some(function (el) { return el === diagnosisTypes[index].name })) {
+              if (this.data.query['diagnosis_type'].some(
+                function (el) {
+                  console.log(el);
+                  let match = false;
+                  if (typeof el == 'number') {
+                    if (el === diagnosisTypes[index].id) {
+                      match = true;
+                    }
+                  } else {
+                    if (el === diagnosisTypes[index].name) {
+                      match = true;
+                    }
+                  }
+                  return match;
+                })) {
                 this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, diagnosisTypes[index]);
               }
             }
@@ -175,17 +222,37 @@ export class SearchDialogComponent implements OnInit {
         }
       );
     // get diagnoses from the diagnoses service
-    this._diagnosisService.getDiagnoses()
+    this.diagnosisService.getDiagnoses()
       .subscribe(
         (diagnoses) => {
           this.diagnoses = diagnoses;
+          // alphabetize the diagnosis options list
+          this.diagnoses.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
           this.filteredDiagnoses = this.diagnosisControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.diagnoses, 'name'));
 
-          if (this.data.query && this.data.query['diagnosis'].length > 0) {
+          if (this.data.query && this.data.query['diagnosis'] && this.data.query['diagnosis'].length > 0) {
             for (const index in diagnoses) {
-              if (this.data.query['diagnosis'].some(function (el) { return el === diagnoses[index].name; })) {
+              if (this.data.query['diagnosis'].some(
+                function (el) {
+                  // console.log(el);
+                  let match = false;
+                  if (typeof el === 'number') {
+                    if (el === diagnoses[index].id) {
+                      match = true;
+                    }
+                  } else {
+                    if (el === diagnoses[index].name) {
+                      match = true;
+                    }
+                  }
+                  return match;
+                })) {
                 this.dropdownSetup(this.diagnosisControl, this.selectedDiagnoses, diagnoses[index]);
               }
             }
@@ -206,9 +273,23 @@ export class SearchDialogComponent implements OnInit {
 
           if (this.data.query && this.data.query['administrative_level_one'].length > 0) {
             for (const index in adminLevelOnes) {
-              if (this.data.query['administrative_level_one'].some(function (el) { return el === adminLevelOnes[index].name })) {
+              if (this.data.query['administrative_level_one'].some(
+                function (el) {
+                  console.log(el);
+                  let match = false;
+                  if (typeof el === 'number') {
+                    if (el === adminLevelOnes[index].id) {
+                      match = true;
+                    }
+                  } else {
+                    if (el === adminLevelOnes[index].name) {
+                      match = true;
+                    }
+                  }
+                  return match;
+                })) {
                 this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, adminLevelOnes[index]);
-                this.updateAdminLevelTwoOptions(adminLevelOnes[index].id)
+                this.updateAdminLevelTwoOptions(adminLevelOnes[index].id);
               }
             }
           }
@@ -218,6 +299,7 @@ export class SearchDialogComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
+
     // get adminLevelTwos from the adminLevelTwo service
     // TODO: remove this from ngOnInit. Not performant. Move to the updateAdminLevelTwoOptions function
     /* if (this.data.query && this.data.query['administrative_level_two'].length > 0) {
@@ -234,22 +316,49 @@ export class SearchDialogComponent implements OnInit {
             this.errorMessage = <any>error;
           }
         ); */
-    //get species from the species service
+
+    // get species from the species service
     this._speciesService.getSpecies()
       .subscribe(
         (species) => {
           this.species = species;
+          // alphabetize the species options list
+          this.species.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
           this.filteredSpecies = this.speciesControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.species, 'name'));
 
-          if (this.data.query && this.data.query['species'].length > 0) {
-            for (const index in species) {
+          if (this.data.query && this.data.query['species'] && this.data.query['species'].length > 0) {
+            /*for (const index in species) {
               if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
+                this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
+              }
+            }*/
+            for (const index in species) {
+              if (this.data.query['species'].some(
+                function (el) {
+                  let match = false;
+                  if (typeof el == 'number') {
+                    if (el === species[index].id) {
+                      match = true;
+                    }
+                  } else {
+                    if (el === species[index].name) {
+                      match = true;
+                    }
+                  }
+                  return match;
+                })) {
                 this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
               }
             }
           }
+          this.speciesLoading = false;
+          this.speciesControl.enable();
         },
         error => {
           this.errorMessage = <any>error;
@@ -262,28 +371,41 @@ export class SearchDialogComponent implements OnInit {
       this.searchForm.controls['affected_count'].setValue(query['affected_count']);
     }
 
+    if (query && query['affected_count_operator']) {
+      this.searchForm.controls['affected_count_operator'].setValue(query['affected_count_operator']);
+    }
+
     if (query && query['start_date']) {
-      this.searchForm.controls['start_date'].setValue(query['start_date']);
+      const startDate = APP_UTILITIES.timeZoneAdjust(query['start_date']);
+      this.searchForm.controls['start_date'].setValue(startDate);
     }
 
     if (query && query['end_date']) {
-      this.searchForm.controls['end_date'].setValue(query['end_date']);
+      const endDate = APP_UTILITIES.timeZoneAdjust(query['end_date']);
+      this.searchForm.controls['end_date'].setValue(endDate);
+    }
+
+    //always set value, even if null, because null is valid value
+    if (query['complete'] === undefined) {
+      this.searchForm.controls['complete'].setValue(null);
+    } else {
+      this.searchForm.controls['complete'].setValue(query['complete']);
     }
 
     // Handling of and_params
-    if (query && query['diagnosis_type_includes_all'] == true) {
+    if (query && query['diagnosis_type_includes_all'] === true) {
       this.searchForm.controls['diagnosis_type_includes_all'].setValue(true);
     }
-    if (query && query['diagnosis_includes_all'] == true) {
+    if (query && query['diagnosis_includes_all'] === true) {
       this.searchForm.controls['diagnosis_includes_all'].setValue(true);
     }
-    if (query && query['species_includes_all'] == true) {
+    if (query && query['species_includes_all'] === true) {
       this.searchForm.controls['species_includes_all'].setValue(true);
     }
-    if (query && query['administrative_level_one_includes_all'] == true) {
+    if (query && query['administrative_level_one_includes_all'] === true) {
       this.searchForm.controls['administrative_level_one_includes_all'].setValue(true);
     }
-    if (query && query['administrative_level_two_includes_all'] == true) {
+    if (query && query['administrative_level_two_includes_all'] === true) {
       this.searchForm.controls['administrative_level_two_includes_all'].setValue(true);
     }
 
@@ -299,7 +421,7 @@ export class SearchDialogComponent implements OnInit {
     const result = [];
     let lastOption = null;
     for (let i = 0; i < searchArray.length; i++) {
-      if (!realval || searchArray[i][searchProperty].toLowerCase().startsWith(realval.toLowerCase())) {
+      if (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase())) {
         if (searchArray[i][searchProperty] !== lastOption) {
           lastOption = searchArray[i][searchProperty];
           result.push(searchArray[i]);
@@ -364,6 +486,47 @@ export class SearchDialogComponent implements OnInit {
       this.resetFormControl(control);
     }
 
+
+    ///////////////
+
+    if (control === 'diagnosisType') {
+
+      this.diagnosesLoading = true;
+
+      const diagnosisTypeIDArray = [];
+      for (const diagnosisType of selectedValuesArray) {
+        diagnosisTypeIDArray.push(diagnosisType.id);
+      }
+      const diagnosisTypeQueryString = 'diagnosis_type=' + diagnosisTypeIDArray.toString();
+
+      this.diagnosisService.queryDiagnoses(diagnosisTypeQueryString)
+        .subscribe(
+          diagnoses => {
+
+            // needed to use the 'self' proxy for 'this' because of a not fully understood scoping issue
+            self.diagnoses = diagnoses;
+            // alphabetize the admmin level twos list
+            self.diagnoses.sort(function (a, b) {
+              if (a.name < b.name) { return -1; }
+              if (a.name > b.name) { return 1; }
+              return 0;
+            });
+
+            this.diagnosesLoading = false;
+            this.filteredDiagnoses = this.diagnosisControl.valueChanges
+              .startWith(null)
+              .map(val => this.filter(val, this.diagnoses, 'name'));
+          },
+          error => {
+            this.errorMessage = <any>error;
+            this.diagnosesLoading = false;
+          }
+        );
+
+    }
+
+    //////////////
+
     if (control === 'adminLevelOne') {
 
       this.adminLevelTwosLoading = true;
@@ -371,9 +534,14 @@ export class SearchDialogComponent implements OnInit {
       this.adminLevelTwoService.queryAdminLevelTwos(selection.id)
         .subscribe(
           adminLevelTwos => {
-            // self.administrative_level_two.push(adminLevelTwos);
+            // needed to use the 'self' proxy for 'this' because of a not fully understood scoping issue
             self.administrative_level_two = self.administrative_level_two.concat(adminLevelTwos);
-            //this.administrative_level_two = adminLevelTwos;
+            // alphabetize the admmin level twos list
+            self.administrative_level_two.sort(function (a, b) {
+              if (a.name < b.name) { return -1; }
+              if (a.name > b.name) { return 1; }
+              return 0;
+            });
             this.adminLevelTwosLoading = false;
             this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
               .startWith(null)
@@ -415,7 +583,7 @@ export class SearchDialogComponent implements OnInit {
     this.adminLevelTwoService.queryAdminLevelTwos(id)
       .subscribe(
         (adminLevelTwos) => {
-          //this.administrative_level_two.push(adminLevelTwos);
+          // this.administrative_level_two.push(adminLevelTwos);
           this.administrative_level_two = this.administrative_level_two.concat(adminLevelTwos);
           this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges
             .startWith(null)
@@ -444,6 +612,18 @@ export class SearchDialogComponent implements OnInit {
     this.selectedAdminLevelOnes = [];
     this.selectedAdminLevelTwos = [];
 
+    // use defaault displayQuery for display in markup, send to searchDialogService
+    //this.searchDialogService.setDisplayQuery(this.defaultDisplayQuery);
+    // use default search query, send to searchDialogService
+    //this.searchDialogService.setSearchQuery(this.defaultSearchQuery);
+
+    this.clearDates();
+
+  }
+
+  clearDates() {
+    this.searchForm.get('start_date').setValue(null);
+    this.searchForm.get('end_date').setValue(null);
   }
 
   submitSearch(formValue) {
@@ -456,6 +636,7 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_one: [],
       administrative_level_two: [],
       affected_count: formValue.affected_count,
+      affected_count_operator: formValue.affected_count_operator,
       start_date: this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd'),
       end_date: this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd'),
       diagnosis_type_includes_all: formValue.diagnosis_type_includes_all,
@@ -464,7 +645,7 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_one_includes_all: formValue.administrative_level_one_includes_all,
       administrative_level_two_includes_all: formValue.administrative_level_two_includes_all,
       and_params: [],
-      openEventsOnly: formValue.openEventsOnly
+      complete: formValue.complete
     };
 
     const displayQuery: DisplayQuery = {
@@ -475,24 +656,23 @@ export class SearchDialogComponent implements OnInit {
       administrative_level_one: [],
       administrative_level_two: [],
       affected_count: formValue.affected_count,
+      affected_count_operator: formValue.affected_count_operator,
       start_date: formValue.start_date,
-      // start_date: this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd'),
       end_date: formValue.end_date,
-      //end_date: this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd'),
       diagnosis_type_includes_all: formValue.diagnosis_type_includes_all,
       diagnosis_includes_all: formValue.diagnosis_includes_all,
       species_includes_all: formValue.species_includes_all,
       administrative_level_one_includes_all: formValue.administrative_level_one_includes_all,
       administrative_level_two_includes_all: formValue.administrative_level_two_includes_all,
       and_params: [],
-      openEventsOnly: formValue.openEventsOnly
+      complete: formValue.complete
     };
 
     if (searchQuery.diagnosis_type_includes_all === true) {
       searchQuery.and_params.push('diagnosis_type');
     }
     if (searchQuery.diagnosis_includes_all === true) {
-      searchQuery.and_params.push('diagnosis_type');
+      searchQuery.and_params.push('diagnosis');
     }
     if (searchQuery.species_includes_all === true) {
       searchQuery.and_params.push('species');
@@ -511,6 +691,10 @@ export class SearchDialogComponent implements OnInit {
     formValue.species = this.selectedSpecies;
     formValue.administrative_level_one = this.selectedAdminLevelOnes;
     formValue.administrative_level_two = this.selectedAdminLevelTwos;
+
+    ///////
+    // insert display query convert function here (?)
+    // const displayQuery = APP_UTILITIES.convertSearchQuerytoDisplayQuery(formValue);
 
     // use formValue to populate the Current Search panel
     for (const event_type of formValue.event_type) {
@@ -566,6 +750,11 @@ export class SearchDialogComponent implements OnInit {
     this.searchDialogService.setDisplayQuery(displayQuery);
     // use searchForm.value to build the web service query, send to searchDialogService
     this.searchDialogService.setSearchQuery(searchQuery);
+
+    sessionStorage.setItem('currentSearch', JSON.stringify(searchQuery));
+
+    gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'Search submitted, date range: ' + searchQuery.start_date + ' - ' + searchQuery.end_date });
+
 
   }
 

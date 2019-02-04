@@ -973,7 +973,7 @@ export class HomeComponent implements OnInit {
         showCancelButton: true,
         action_button_text: 'Submit',
         actionButtonIcon: 'send',
-        : type
+        registration_type: type
       }
     });
 

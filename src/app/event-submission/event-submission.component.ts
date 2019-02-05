@@ -85,6 +85,8 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 
 import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
 
+import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
+import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 import { DateValidators } from '@validators/date.validator';
@@ -182,6 +184,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   usgsSearch;
 
   missingCommentFlag = false;
+  diagnosisBases = [];
+  diagnosisCauses = [];
 
   locationSpeciesNumbersViolation = false;
   // starts as true  because no start dates provided by default
@@ -311,6 +315,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     private eventService: EventService,
     private eventStatusService: EventStatusService,
     private staffService: StaffService,
+    private diagnosisBasisService: DiagnosisBasisService,
+    private diagnosisCauseService: DiagnosisCauseService,
     public snackBar: MatSnackBar
   ) {
     this.buildEventSubmissionForm();
@@ -820,6 +826,27 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       .subscribe(
         organizations => {
           this.organizations = organizations;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get diagnosisBases from the diagnosisBasis service
+    this.diagnosisBasisService.getDiagnosisBases()
+      .subscribe(
+        (diagnosisBases) => {
+          this.diagnosisBases = diagnosisBases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get diagnosisCauses from the diagnosisCause service
+    this.diagnosisCauseService.getDiagnosisCauses()
+      .subscribe(
+        (diagnosisCauses) => {
+          this.diagnosisCauses = diagnosisCauses;
         },
         error => {
           this.errorMessage = <any>error;
@@ -1824,6 +1851,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   setEventLocationForGNISSelect(eventLocationIndex) {
     console.log('Selecting GNIS record for Event Location Number' + (eventLocationIndex + 1));
   }
+
 
   openAddSpeciesDiagnosisDialog(eventLocationIndex, locationSpeciesIndex) {
 

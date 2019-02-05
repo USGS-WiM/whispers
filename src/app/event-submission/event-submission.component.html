@@ -414,7 +414,7 @@
                         <!-- event location species step -->
                         <mat-step [stepControl]="eventSubmissionForm">
 
-                          <ng-template matStepLabel>Species & Species Diagnosis</ng-template>
+                          <ng-template matStepLabel>Species</ng-template>
                           <div>
 
                             <div formArrayName="new_location_species">
@@ -549,20 +549,20 @@
                                       </button>
                                     </div>
 
-                                    <!-- Add species diagnosis  -->
-                                    <div class="add-content-button">
+                                    <!-- Add species diagnosis button -->
+                                    <!-- <div class="add-content-button">
                                       <button mat-button color="accent" aria-label="Add Species Diagnosis" matTooltip="Add Species Diagnosis"
                                         (click)="openAddSpeciesDiagnosisDialog(eventLocationIndex,locationSpeciesIndex)">
                                         <mat-icon>note_add</mat-icon> Add Species Diagnosis
                                       </button>
-                                    </div>
+                                    </div> -->
 
                                   </div>
 
-                                  <br />
+                                  <!-- <br /> -->
                                   <!-- div for displaying species diagnoses added to the location species -->
                                   <!-- *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index" -->
-                                  <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
+                                  <!-- <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
                                     <mat-card>
                                       <mat-card-header>
                                         <mat-card-title class="text-bold text-larger">Diagnoses for this Species</mat-card-title>
@@ -581,7 +581,7 @@
                                         </mat-list>
                                       </mat-card-content>
                                     </mat-card>
-                                  </div>
+                                  </div> -->
 
                                 </div>
                               </div>
@@ -612,6 +612,130 @@
 
                         </mat-step>
                         <!-- end event location species step -->
+
+                        <!-- event location species diagnosis step -->
+                        <mat-step [stepControl]="eventSubmissionForm">
+
+                          <ng-template matStepLabel>Species Diagnosis</ng-template>
+                          <div>
+                            <span class="text-large text-bold">Species Diagnoses</span>
+
+                            <div formArrayName="new_location_species">
+                              <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index">
+
+                                <div [formGroupName]="locationSpeciesIndex">
+
+                                  <div class="horizontal-form-container" class="species-controls-container">
+
+                                    <!-- need list of all species from the previous step shown here, with ability to add diagnoses (multiple) to each-->
+                                    <!-- potentially using the add-species-diagnosis component, or maybe creating a new component for this context since it will not be in a modal-->
+                                    <!----------------------------------------------------------------------------->
+                                    <div>
+                                      <span class="text-larger text-bold">{{locationSpecies.get('species').value |
+                                        displayValue:'name':this.species}}</span>
+
+                                      <!-- div for displaying species diagnoses added to the location species -->
+                                      <!-- *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index" -->
+                                      <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
+
+
+                                        <!-- <mat-list dense>
+                                          <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
+                                            {{speciesDiagnosis.get('diagnosis').value |
+                                            displayValue:'name':this.allDiagnoses}}
+                                            {{speciesDiagnosis.get('suspect').value ? '(suspect)': '' }} Number
+                                            Assessed: {{speciesDiagnosis.get('tested_count').value}}
+                                            <button mat-icon-button color="warn" aria-label="Remove this diagnosis"
+                                              matTooltip="Remove this diagnosis" (click)="openSpeciesDiagnosisRemoveConfirm(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
+                                              <mat-icon>remove_circle</mat-icon>
+                                            </button>
+                                          </mat-list-item>
+                                        </mat-list> -->
+
+                                        <table class="species-diagnosis-table">
+                                          <tr>
+                                            <th>Species Diagnosis</th>
+                                            <th>Significance of Diagnosis for Species</th>
+                                            <th>Basis of Diagnosis</th>
+                                            <th>Number Assessed</th>
+                                            <th>Number with this diagnosis</th>
+                                            <th>Species Diagnosis Suspect </th>
+                                            <th>Diagnosing Lab </th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+                                          </tr>
+
+                                          <tr *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
+                                            <td>{{speciesDiagnosis.get('diagnosis').value | displayValue:'name':this.allDiagnoses}}</td>
+                                            <td>{{speciesDiagnosis.get('cause').value | displayValue:'name':this.diagnosisCauses}}</td>
+                                            <td>{{speciesDiagnosis.get('basis').value | displayValue:'name':this.diagnosisBases}}</td>
+                                            <td>{{speciesDiagnosis.get('tested_count').value}}</td>
+                                            <td>{{speciesDiagnosis.get('diagnosis_count').value}}</td>
+                                            <td>{{speciesDiagnosis.get('suspect').value ? 'Yes' : 'No'}}</td>
+                                            <td></td>
+                                            <td>
+                                              <button mat-icon-button aria-label="Edit species diagnosis" color="accent" (click)="editSpeciesDiagnosis(speciesdiagnosis, detail.element)">
+                                                <mat-icon>edit</mat-icon>
+                                              </button>
+                                            </td>
+                                            <td>
+                                              <button mat-icon-button aria-label="delete species diagnosis" color="warn" (click)="openDeleteSpeciesDiagnosisConfirm(speciesdiagnosis)">
+                                                <mat-icon>remove_circle</mat-icon>
+                                              </button>
+                                            </td>
+                                          </tr>
+                                        </table>
+
+
+                                        <!-- <mat-card>
+                                          <mat-card-header>
+                                            <mat-card-title class="text-bold text-larger">Diagnoses for this Species</mat-card-title>
+                                          </mat-card-header>
+                                          <mat-card-content>
+                                            
+                                          </mat-card-content>
+                                        </mat-card> -->
+                                      </div>
+
+                                    </div>
+
+                                    <!-- Add species diagnosis button -->
+                                    <div class="button-row">
+                                      <button mat-button color="primary" matTooltip="Add diagnosis to this species"
+                                        (click)="openAddSpeciesDiagnosisDialog(eventLocationIndex,locationSpeciesIndex)">
+                                        <mat-icon>add_circle</mat-icon> Add Diagnosis
+                                      </button>
+                                    </div>
+                                    <!-- End Add species diagnosis button -->
+                                    <!----------------------------------------------------------------------------->
+                                  </div>
+
+                                  <br />
+
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="submissionReviewErrors">
+                            <mat-error color="warn" *ngIf="this.eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_species').hasError('minSpecies')">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">Location must have at least one species.</span>
+                            </mat-error>
+
+                          </div>
+
+                          <div class="form-nav-buttons">
+                            <button mat-button matStepperPrevious type="button">
+                              <mat-icon> navigate_before </mat-icon> Back
+                            </button>
+                            <button mat-button matStepperNext type="button"> Next
+                              <mat-icon> navigate_next </mat-icon>
+                            </button>
+                          </div>
+
+                        </mat-step>
+                        <!-- end event location species diagnosis step -->
 
                         <!-- event location comments step -->
                         <mat-step [stepControl]="eventSubmissionForm">

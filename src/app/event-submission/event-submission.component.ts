@@ -366,6 +366,38 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     });
   }
 
+  editSpeciesDiagnosis(speciesdiagnosis, locationspecies) {
+
+    this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+      minWidth: '40em',
+      disableClose: true,
+      data: {
+        locationspecies: locationspecies.value,
+        speciesdiagnosis: speciesdiagnosis.value,
+        laboratories: this.laboratories,
+        diagnosisBases: this.diagnosisBases,
+        diagnosisCauses: this.diagnosisCauses,
+        diagnoses: this.allDiagnoses,
+        species_diagnosis_action: 'editInFormArray',
+        title: 'Edit Species Diagnosis',
+        titleIcon: 'edit',
+        actionButtonIcon: 'save',
+        action_button_text: 'Save'
+      }
+    });
+
+    this.editSpeciesDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        () => {
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+  }
+
   openGNISLookupDialog(eventLocationIndex) {
     this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
       data: {
@@ -1742,6 +1774,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   getSpeciesDiagnoses(form) {
     return form.controls.new_species_diagnoses.controls;
+  }
+
+  getDiagnosisOrganizations(form) {
+    return form.controls.new_species_diagnosis_organizations.value;
   }
 
   // location comments

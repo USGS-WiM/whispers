@@ -617,27 +617,28 @@
                         <mat-step [stepControl]="eventSubmissionForm">
 
                           <ng-template matStepLabel>Species Diagnosis</ng-template>
-                          <div>
+                          <div *ngIf="getLocationSpecies(eventLocation).length === 0 || getLocationSpecies(eventLocation)[0].get('species').value === null">
+                            <span class="text-large text-bold">Species Diagnoses: No species selected</span><br><span
+                              class="text-smaller">Return
+                              to previous step to select a species</span>
+                          </div>
+
+                          <div *ngIf="getLocationSpecies(eventLocation).length > 0 && getLocationSpecies(eventLocation)[0].get('species').value !== null">
                             <span class="text-large text-bold">Species Diagnoses</span>
 
                             <div formArrayName="new_location_species">
-                              <div class="species-container" *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index">
+                              <div *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index">
 
-                                <div [formGroupName]="locationSpeciesIndex">
+                                <div class="species-container" [formGroupName]="locationSpeciesIndex" *ngIf="locationSpecies.get('species').value !== null">
 
                                   <div class="horizontal-form-container" class="species-controls-container">
 
-                                    <!-- need list of all species from the previous step shown here, with ability to add diagnoses (multiple) to each-->
-                                    <!-- potentially using the add-species-diagnosis component, or maybe creating a new component for this context since it will not be in a modal-->
-                                    <!----------------------------------------------------------------------------->
                                     <div>
                                       <span class="text-larger text-bold">{{locationSpecies.get('species').value |
                                         displayValue:'name':this.species}}</span>
 
                                       <!-- div for displaying species diagnoses added to the location species -->
-                                      <!-- *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index" -->
                                       <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
-
 
                                         <!-- <mat-list dense>
                                           <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
@@ -666,39 +667,37 @@
                                           </tr>
 
                                           <tr *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
-                                            <td>{{speciesDiagnosis.get('diagnosis').value | displayValue:'name':this.allDiagnoses}}</td>
-                                            <td>{{speciesDiagnosis.get('cause').value | displayValue:'name':this.diagnosisCauses}}</td>
-                                            <td>{{speciesDiagnosis.get('basis').value | displayValue:'name':this.diagnosisBases}}</td>
+                                            <td>{{speciesDiagnosis.get('diagnosis').value |
+                                              displayValue:'name':this.allDiagnoses}}</td>
+                                            <td>{{speciesDiagnosis.get('cause').value |
+                                              displayValue:'name':this.diagnosisCauses}}</td>
+                                            <td>{{speciesDiagnosis.get('basis').value |
+                                              displayValue:'name':this.diagnosisBases}}</td>
                                             <td>{{speciesDiagnosis.get('tested_count').value}}</td>
                                             <td>{{speciesDiagnosis.get('diagnosis_count').value}}</td>
                                             <td>{{speciesDiagnosis.get('suspect').value ? 'Yes' : 'No'}}</td>
-                                            <td></td>
                                             <td>
-                                              <button mat-icon-button aria-label="Edit species diagnosis" color="accent" (click)="editSpeciesDiagnosis(speciesdiagnosis, detail.element)">
+                                              <ul *ngIf="getDiagnosisOrganizations(speciesDiagnosis)">
+                                                <li *ngFor="let organizationID of getDiagnosisOrganizations(speciesDiagnosis); let diagnosisOrganizationIndex = index;">{{organizationID
+                                                  | displayValue:'name':this.organizations}}</li>
+                                              </ul>
+                                            </td>
+                                            <td>
+                                              <button mat-icon-button aria-label="Edit species diagnosis" color="accent"
+                                                (click)="editSpeciesDiagnosis(speciesDiagnosis, locationSpecies)">
                                                 <mat-icon>edit</mat-icon>
                                               </button>
                                             </td>
                                             <td>
-                                              <button mat-icon-button aria-label="delete species diagnosis" color="warn" (click)="openDeleteSpeciesDiagnosisConfirm(speciesdiagnosis)">
+                                              <button mat-icon-button aria-label="delete species diagnosis" color="warn"
+                                                (click)="openSpeciesDiagnosisRemoveConfirm(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
                                                 <mat-icon>remove_circle</mat-icon>
                                               </button>
                                             </td>
                                           </tr>
                                         </table>
-
-
-                                        <!-- <mat-card>
-                                          <mat-card-header>
-                                            <mat-card-title class="text-bold text-larger">Diagnoses for this Species</mat-card-title>
-                                          </mat-card-header>
-                                          <mat-card-content>
-                                            
-                                          </mat-card-content>
-                                        </mat-card> -->
                                       </div>
-
                                     </div>
-
                                     <!-- Add species diagnosis button -->
                                     <div class="button-row">
                                       <button mat-button color="primary" matTooltip="Add diagnosis to this species"
@@ -707,11 +706,7 @@
                                       </button>
                                     </div>
                                     <!-- End Add species diagnosis button -->
-                                    <!----------------------------------------------------------------------------->
                                   </div>
-
-                                  <br />
-
                                 </div>
                               </div>
                             </div>
@@ -722,7 +717,6 @@
                               <mat-icon class="icon">error</mat-icon>
                               <span class="alert-text">Location must have at least one species.</span>
                             </mat-error>
-
                           </div>
 
                           <div class="form-nav-buttons">

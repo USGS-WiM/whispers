@@ -152,6 +152,42 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       this.action_text = 'Add';
       this.action_button_text = 'Add';
       // edit mode
+    } else if (this.data.species_diagnosis_action === 'editInFormArray') {
+      this.action_text = 'Edit';
+      this.action_button_text = 'Save Changes';
+
+      // this.diagnosisBases = this.data.diagnosisBases;
+      // this.diagnosisCauses = this.data.diagnosisCauses;
+      // this.diagnoses = this.data.diagnoses;
+
+      // Access the form here and set the value to the objects property/value
+      this.speciesDiagnosisForm.patchValue({
+        id: this.data.speciesdiagnosis.id,
+        // location_species: this.data.speciesdiagnosis.location_species,
+        diagnosis: [this.data.speciesdiagnosis.diagnosis, Validators.required],
+        cause: this.data.speciesdiagnosis.cause,
+        basis: this.data.speciesdiagnosis.basis,
+        suspect: this.data.speciesdiagnosis.suspect,
+        tested_count: this.data.speciesdiagnosis.tested_count,
+        diagnosis_count: this.data.speciesdiagnosis.diagnosis_count,
+        positive_count: this.data.speciesdiagnosis.positive_count,
+        // suspect_count: this.data.speciesdiagnosis.suspect_count,
+        // pooled: this.data.speciesdiagnosis.pooled,
+        // new_species_diagnosis_organizations: this.data.speciesdiagnosis.organizations
+      });
+
+      if (this.data.speciesdiagnosis.new_species_diagnosis_organizations.length > 0) {
+        this.removeDiagnosisOrganization(0);
+        // remove filteredLaboratories array for first index
+        this.filteredLaboratories.pop();
+
+        for (let i = 0, j = this.data.speciesdiagnosis.new_species_diagnosis_organizations.length; i < j; i++) {
+          this.addDiagnosisOrganization();
+          // tslint:disable-next-line:max-line-length
+          this.speciesDiagnosisForm.get('new_species_diagnosis_organizations')['controls'][i].get('org').setValue(this.data.speciesdiagnosis.new_species_diagnosis_organizations[i]);
+        }
+      }
+
     } else if (this.data.species_diagnosis_action === 'edit') {
       this.action_text = 'Edit';
       this.action_button_text = 'Save Changes';
@@ -177,10 +213,6 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
         // remove filteredLaboratories array for first index
         this.filteredLaboratories.pop();
 
-        // for (const org of this.data.speciesdiagnosis.organizations) {
-        //   this.addDiagnosisOrganization();
-        // }
-
         for (let i = 0, j = this.data.speciesdiagnosis.organizations.length; i < j; i++) {
           this.addDiagnosisOrganization();
           // tslint:disable-next-line:max-line-length
@@ -189,7 +221,6 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       }
 
     }
-
 
     // get diagnoses from the diagnoses service
     this.diagnosisService.getDiagnoses()
@@ -230,7 +261,9 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
           if (this.data.locationspecies) {
             if (this.data.speciesdiagnosis !== undefined && this.data.speciesdiagnosis.basis !== null) {
               // tslint:disable-next-line:max-line-length
-              this.speciesDiagnosisForm.get('basis').setValue(this.data.speciesdiagnosis.basis.toString());
+              // the 'toString()' version of the below line used in past, may need to use conditionally
+              //this.speciesDiagnosisForm.get('basis').setValue(this.data.speciesdiagnosis.basis.toString());
+              this.speciesDiagnosisForm.get('basis').setValue(this.data.speciesdiagnosis.basis);
             }
           }
 
@@ -248,7 +281,9 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
           if (this.data.locationspecies) {
             if (this.data.speciesdiagnosis !== undefined && this.data.speciesdiagnosis.cause !== null) {
               // tslint:disable-next-line:max-line-length
-              this.speciesDiagnosisForm.get('cause').setValue(this.data.speciesdiagnosis.cause.toString());
+              // the 'toString()' version of the below line used in past, may need to use conditionally
+              // this.speciesDiagnosisForm.get('cause').setValue(this.data.speciesdiagnosis.cause.toString());
+              this.speciesDiagnosisForm.get('cause').setValue(this.data.speciesdiagnosis.cause);
             }
           }
         },

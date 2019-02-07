@@ -677,9 +677,9 @@
                                             <td>{{speciesDiagnosis.get('diagnosis_count').value}}</td>
                                             <td>{{speciesDiagnosis.get('suspect').value ? 'Yes' : 'No'}}</td>
                                             <td>
-                                              <ul *ngIf="getDiagnosisOrganizations(speciesDiagnosis)">
+                                              <ul *ngIf="getDiagnosisOrganizations(speciesDiagnosis)" class="table-cell-list">
                                                 <li *ngFor="let organizationID of getDiagnosisOrganizations(speciesDiagnosis); let diagnosisOrganizationIndex = index;">{{organizationID
-                                                  | displayValue:'name':this.organizations}}</li>
+                                                  | displayValue:'name':this.organizations}}</li><br>
                                               </ul>
                                             </td>
                                             <td>

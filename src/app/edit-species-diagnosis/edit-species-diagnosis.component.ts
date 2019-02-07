@@ -229,7 +229,10 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
           this.diagnoses = diagnoses;
           if (this.data.locationspecies) {
             if (this.data.speciesdiagnosis !== undefined && this.data.speciesdiagnosis.diagnosis !== null) {
-              this.speciesDiagnosisForm.get('diagnosis').setValue(this.data.speciesdiagnosis.diagnosis.toString());
+
+              // the 'toString()' version of the below line used in past, may need to use conditionally
+              // this.speciesDiagnosisForm.get('diagnosis').setValue(this.data.speciesdiagnosis.diagnosis.toString());
+              this.speciesDiagnosisForm.get('diagnosis').setValue(this.data.speciesdiagnosis.diagnosis);
             }
           }
           this.diagnoses.sort(function (a, b) {
@@ -501,6 +504,16 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
       const speciesDiagnosisObj = {
         action: 'add',
+        eventlocationIndex: this.data.eventlocationIndex,
+        locationspeciesIndex: this.data.locationspeciesIndex,
+        formValue: formValue
+      };
+
+      this.editSpeciesDiagnosisDialogRef.close(speciesDiagnosisObj);
+    } else if (this.data.species_diagnosis_action === 'editInFormArray') {
+
+      const speciesDiagnosisObj = {
+        action: 'editInFormArray',
         eventlocationIndex: this.data.eventlocationIndex,
         locationspeciesIndex: this.data.locationspeciesIndex,
         formValue: formValue

@@ -85,6 +85,8 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 
 import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
 
+import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
+import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 import { DateValidators } from '@validators/date.validator';
@@ -182,6 +184,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   usgsSearch;
 
   missingCommentFlag = false;
+  diagnosisBases = [];
+  diagnosisCauses = [];
 
   locationSpeciesNumbersViolation = false;
   // starts as true  because no start dates provided by default
@@ -311,6 +315,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     private eventService: EventService,
     private eventStatusService: EventStatusService,
     private staffService: StaffService,
+    private diagnosisBasisService: DiagnosisBasisService,
+    private diagnosisCauseService: DiagnosisCauseService,
     public snackBar: MatSnackBar
   ) {
     this.buildEventSubmissionForm();
@@ -358,6 +364,95 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         contact_action: 'create'
       }
     });
+  }
+
+  editSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex, speciesdiagnosis, locationspecies) {
+
+    this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+      minWidth: '40em',
+      disableClose: true,
+      data: {
+        locationspecies: locationspecies.value,
+        speciesdiagnosis: speciesdiagnosis.value,
+        laboratories: this.laboratories,
+        diagnosisBases: this.diagnosisBases,
+        diagnosisCauses: this.diagnosisCauses,
+        diagnoses: this.allDiagnoses,
+        eventlocationIndex: eventLocationIndex,
+        locationspeciesIndex: locationSpeciesIndex,
+        species_diagnosis_action: 'editInFormArray',
+        title: 'Edit Species Diagnosis',
+        titleIcon: 'edit',
+        actionButtonIcon: 'save',
+        action_button_text: 'Save'
+      }
+    });
+
+    this.editSpeciesDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        (speciesDiagnosisObj) => {
+
+          ///////////////////////////////////////////////////////////////////
+          if (speciesDiagnosisObj.action === 'cancel') {
+            // remove last species diagnosis added
+            // tslint:disable-next-line:max-line-length
+            // this.removeSpeciesDiagnosis(speciesDiagnosisObj.eventlocationIndex, speciesDiagnosisObj.locationspeciesIndex, speciesDiagnosisIndex);
+            return;
+          } else if (speciesDiagnosisObj.action === 'editInFormArray') {
+
+            this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventlocationIndex]
+              .get('new_location_species')['controls'][speciesDiagnosisObj.locationspeciesIndex]
+              .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
+                diagnosis: speciesDiagnosisObj.formValue.diagnosis,
+                cause: speciesDiagnosisObj.formValue.cause,
+                basis: speciesDiagnosisObj.formValue.basis,
+                suspect: speciesDiagnosisObj.formValue.suspect,
+                tested_count: speciesDiagnosisObj.formValue.tested_count,
+                diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
+                positive_count: speciesDiagnosisObj.formValue.positive_count,
+                suspect_count: speciesDiagnosisObj.formValue.suspect_count,
+                pooled: speciesDiagnosisObj.formValue.pooled,
+                new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
+              });
+
+
+            for (const diagnosis of this.allDiagnoses) {
+              if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
+
+                let diagnosisFound = false;
+                // check to see if the diagnosis just added already exists in the availableDiagnoses array
+                for (const availableDiagnosis of this.availableDiagnoses) {
+                  if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
+                    // if found, increment the count for that diagnosis
+                    availableDiagnosis.count++;
+                    // if found, set local var found to true
+                    diagnosisFound = true;
+                    // if found, stop. do not add to availableDiagnoses array
+                    break;
+                  }
+                }
+                // if diagnosis is not found to already exist in the availableDiagnoses array, add it
+                if (!diagnosisFound) {
+                  diagnosis.suspect = speciesDiagnosisObj.formValue.suspect;
+                  // set diagnosis count to 1
+                  diagnosis.count = 1;
+                  this.availableDiagnoses.push(diagnosis);
+                }
+
+              }
+            }
+
+            this.checkSpeciesDiagnoses();
+          }
+
+          //////////////////////////////////////////////////////////////////
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
   }
 
   openGNISLookupDialog(eventLocationIndex) {
@@ -820,6 +915,27 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       .subscribe(
         organizations => {
           this.organizations = organizations;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get diagnosisBases from the diagnosisBasis service
+    this.diagnosisBasisService.getDiagnosisBases()
+      .subscribe(
+        (diagnosisBases) => {
+          this.diagnosisBases = diagnosisBases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get diagnosisCauses from the diagnosisCause service
+    this.diagnosisCauseService.getDiagnosisCauses()
+      .subscribe(
+        (diagnosisCauses) => {
+          this.diagnosisCauses = diagnosisCauses;
         },
         error => {
           this.errorMessage = <any>error;
@@ -1717,6 +1833,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     return form.controls.new_species_diagnoses.controls;
   }
 
+  getDiagnosisOrganizations(form) {
+    return form.controls.new_species_diagnosis_organizations.value;
+  }
+
   // location comments
   addLocationComments(eventLocationIndex) {
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('comments');
@@ -1824,6 +1944,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   setEventLocationForGNISSelect(eventLocationIndex) {
     console.log('Selecting GNIS record for Event Location Number' + (eventLocationIndex + 1));
   }
+
 
   openAddSpeciesDiagnosisDialog(eventLocationIndex, locationSpeciesIndex) {
 

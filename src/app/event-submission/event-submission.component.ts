@@ -200,6 +200,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   filteredAdminLevelTwos = [];
   filteredSpecies = [];
   filteredContacts = [];
+
+  filteredOrganizations = [];
+  organizationFilterCtrl: FormControl = new FormControl();
+
   /** Subject that emits when the component has been destroyed. */
   private _onDestroy = new Subject<void>();
 
@@ -207,6 +211,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild('adminLevelTwoSelect') adminLevelTwoSelect: MatSelect;
   @ViewChild('speciesSelect') speciesSelect: MatSelect;
   @ViewChild('contactSelect') contactSelect: MatSelect;
+
+  @ViewChild('organizationSelect') organizationSelect: MatSelect;
 
   /** controls for the MatSelect filter keyword */
   adminLevelOneFilterCtrl: FormControl = new FormControl();
@@ -265,12 +271,16 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this.ManageSpeciesControl(0, 0);
     // this.filteredSpecies.push(new ReplaySubject<Species[]>());
 
-
     const eventLocationContacts = new Array<ReplaySubject<Contact[]>>();
     this.filteredContacts.push(eventLocationContacts);
     // initiate an empty replaysubject
     this.filteredContacts[0].push(new ReplaySubject<Contact[]>());
     this.ManageContactControl(0, 0);
+
+    this.filteredOrganizations = new Array<ReplaySubject<Organization[]>>();
+    this.filteredOrganizations.push(new ReplaySubject<Organization[]>());
+    this.ManageOrganizationControl(0);
+
     // this.filteredSpecies.push(new ReplaySubject<Species[]>());
 
     // this.filteredAdminLevelOnes = new Array<Observable<any>>();
@@ -323,7 +333,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
-      this.eventSubmissionForm.get('new_organizations')['controls'][0].get('org').setValue(this.currentUser.organization.toString());
+      this.eventSubmissionForm.get('new_organizations')['controls'][0].get('org').setValue(this.currentUser.organization);
     });
 
     createContactSevice.getCreatedContact().subscribe(
@@ -651,6 +661,37 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   }
 
+  ManageOrganizationControl(organizationIndex: number) {
+
+    // populate the organizations options list for the specific control
+    this.filteredOrganizations[organizationIndex].next(this.organizations);
+
+    // listen for search field value changes
+    this.organizationFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterOrganizations(organizationIndex);
+      });
+  }
+
+  private filterOrganizations(organizationIndex) {
+    if (!this.organizations) {
+      return;
+    }
+    // get the search keyword
+    let search = this.organizationFilterCtrl.value;
+    if (!search) {
+      this.filteredOrganizations[organizationIndex].next(this.organizations.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the organizations
+    this.filteredOrganizations[organizationIndex].next(
+      this.organizations.filter(organization => organization.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
   inputChangeTrigger(event) {
     event.currentTarget.dispatchEvent(new Event('input'));
   }
@@ -915,6 +956,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       .subscribe(
         organizations => {
           this.organizations = organizations;
+          this.filteredOrganizations[0].next(this.organizations);
+          // set the default starting org to user's org after loading the options list
+          this.eventSubmissionForm.get('new_organizations')['controls'][0].get('org').setValue(this.currentUser.organization);
         },
         error => {
           this.errorMessage = <any>error;
@@ -1678,6 +1722,11 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   addEventOrganization() {
     const control = <FormArray>this.eventSubmissionForm.get('new_organizations');
     control.push(this.initEventOrganization());
+    const organizationIndex = control.length - 1;
+
+    this.filteredOrganizations.push(new ReplaySubject<Organization[]>());
+    this.ManageOrganizationControl(organizationIndex);
+
   }
 
   removeEventOrganization(eventOrgIndex) {

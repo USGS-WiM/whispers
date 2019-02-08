@@ -55,6 +55,9 @@ import { EventLocationContactService } from '@services/event-location-contact.se
 
 import { ContactService } from '@services/contact.service';
 
+import { CreateContactComponent } from '@create-contact/create-contact.component';
+import { CreateContactService } from '@create-contact/create-contact.service';
+
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -97,7 +100,7 @@ export class EventDetailsComponent implements OnInit {
   editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
   addEventLocationContactDialogRef: MatDialogRef<AddEventLocationContactComponent>;
   addServiceRequestDialogRef: MatDialogRef<AddServiceRequestComponent>;
-
+  createContactDialogRef: MatDialogRef<CreateContactComponent>;
 
   addCommentDialogRef: MatDialogRef<AddCommentComponent>;
 
@@ -161,6 +164,7 @@ export class EventDetailsComponent implements OnInit {
     private userService: UserService,
     private currentUserService: CurrentUserService,
     private dataUpdatedService: DataUpdatedService,
+    private createContactSevice: CreateContactService,
     private dialog: MatDialog,
     private speciesService: SpeciesService,
     private adminLevelOneService: AdministrativeLevelOneService,
@@ -187,6 +191,16 @@ export class EventDetailsComponent implements OnInit {
         this.refreshEvent();
       }
     });
+
+    createContactSevice.getCreatedContact().subscribe(
+      createdContact => {
+        this.userContacts.push(createdContact);
+        this.userContacts.sort(function (a, b) {
+          if (a.last_name < b.last_name) { return -1; }
+          if (a.last_name > b.last_name) { return 1; }
+          return 0;
+        });
+      });
   }
 
   ngOnInit() {
@@ -831,8 +845,15 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
-
-
+  openCreateContactDialog() {
+    this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      minWidth: '50em',
+      disableClose: true,
+      data: {
+        contact_action: 'create'
+      }
+    });
+  }
 
   addEventLocation() {
     this.showAddEventLocation = true;

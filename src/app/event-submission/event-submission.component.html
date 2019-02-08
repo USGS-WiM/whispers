@@ -1186,7 +1186,7 @@
                       <mat-icon>pageview</mat-icon> Review Event Submission
                     </button>
                     <p>
-                      <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation"
+                      <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation || submitLoading"
                         (click)="submitEvent(eventSubmissionForm.value)">
                         <mat-icon>done</mat-icon> Save Event
                       </button>

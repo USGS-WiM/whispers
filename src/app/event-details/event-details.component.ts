@@ -32,6 +32,7 @@ import { LandOwnershipService } from '@services/land-ownership.service';
 import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { marker } from 'leaflet';
 import { EventLocationService } from '@app/services/event-location.service';
+import { EventOrganizationService } from '@app/services/event-organization.service';
 import { EventDetailsShareComponent } from '@app/event-details/event-details-share/event-details-share.component';
 import { AddEventLocationComponent } from '@app/add-event-location/add-event-location.component';
 import { UserService } from '@app/services/user.service';
@@ -63,6 +64,7 @@ import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 import { OrganizationService } from '@app/services/organization.service';
 import { Organization } from '@interfaces/organization';
+
 
 
 @Component({
@@ -172,6 +174,7 @@ export class EventDetailsComponent implements OnInit {
     private eventLocationService: EventLocationService,
     private eventDiagnosisService: EventDiagnosisService,
     private eventLocationContactService: EventLocationContactService,
+    private eventOrganizationService: EventOrganizationService,
     private ageBiasService: AgeBiasService,
     private sexBiasService: SexBiasService,
     private commentTypeService: CommentTypeService,
@@ -946,6 +949,42 @@ export class EventDetailsComponent implements OnInit {
         error => {
           this.errorMessage = <any>error;
           this.openSnackBar('Error. Event diagnosis not deleted. Error message: ' + error, 'OK', 8000);
+        }
+      );
+  }
+
+  openEventOrganizationDeleteConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Event Organization Confirm',
+          titleIcon: 'delete_forever',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to delete this event organization? This action cannot be undone.',
+          confirmButtonText: 'Yes, Delete Event Organization',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventOrganization(id);
+      }
+    });
+  }
+
+  deleteEventOrganization(id: number) {
+    this.eventOrganizationService.delete(id)
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Event organization successfully deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Event organzation not deleted. Error message: ' + error, 'OK', 8000);
         }
       );
   }

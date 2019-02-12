@@ -23,7 +23,7 @@ export class APP_SETTINGS {
         return environment.banner_content;
     }
 
-    public static get BANNER_TEXT_COLOR(){
+    public static get BANNER_TEXT_COLOR() {
         return environment.banner_text_color;
     }
 
@@ -163,6 +163,13 @@ export class APP_SETTINGS {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
             'Content-Type': 'text/plain', 'Accept': 'application/json'
+        });
+    }
+
+    public static get AUTH_REQUEST_HEADERS() {
+        return new Headers({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password)
+            // ,'X-Requested-With': 'XMLHttpRequest'
         });
     }
 

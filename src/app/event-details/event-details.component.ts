@@ -26,12 +26,14 @@ import { EventLocation } from '@interfaces/event-location';
 import { LocationSpecies } from '@interfaces/location-species';
 import { EditEventComponent } from '@app/edit-event/edit-event.component';
 import { AddEventDiagnosisComponent } from '@app/add-event-diagnosis/add-event-diagnosis.component';
+import { AddEventOrganizationComponent } from '@app/add-event-organization/add-event-organization.component';
 import { EditEventLocationComponent } from '@app/edit-event-location/edit-event-location.component';
 import { EditLocationSpeciesComponent } from '@app/edit-location-species/edit-location-species.component';
 import { LandOwnershipService } from '@services/land-ownership.service';
 import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { marker } from 'leaflet';
 import { EventLocationService } from '@app/services/event-location.service';
+import { EventOrganizationService } from '@app/services/event-organization.service';
 import { EventDetailsShareComponent } from '@app/event-details/event-details-share/event-details-share.component';
 import { AddEventLocationComponent } from '@app/add-event-location/add-event-location.component';
 import { UserService } from '@app/services/user.service';
@@ -65,6 +67,7 @@ import { OrganizationService } from '@app/services/organization.service';
 import { Organization } from '@interfaces/organization';
 
 
+
 @Component({
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
@@ -96,6 +99,7 @@ export class EventDetailsComponent implements OnInit {
 
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
+  addEventOrganizationDialogRef: MatDialogRef<AddEventOrganizationComponent>;
   editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
   editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
   addEventLocationContactDialogRef: MatDialogRef<AddEventLocationContactComponent>;
@@ -172,6 +176,7 @@ export class EventDetailsComponent implements OnInit {
     private eventLocationService: EventLocationService,
     private eventDiagnosisService: EventDiagnosisService,
     private eventLocationContactService: EventLocationContactService,
+    private eventOrganizationService: EventOrganizationService,
     private ageBiasService: AgeBiasService,
     private sexBiasService: SexBiasService,
     private commentTypeService: CommentTypeService,
@@ -581,11 +586,29 @@ export class EventDetailsComponent implements OnInit {
         event_id: id,
         diagnosis_options: this.possibleEventDiagnoses
       }
-      // minWidth: 200
-      // height: '75%'
     });
 
     this.addEventDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
+  addEventOrganization(id: string) {
+    // Open dialog for adding event diagnosis
+    this.addEventOrganizationDialogRef = this.dialog.open(AddEventOrganizationComponent, {
+      data: {
+        event_id: id,
+        organizations: this.organizations
+      }
+    });
+
+    this.addEventOrganizationDialogRef.afterClosed()
       .subscribe(
         () => {
           this.refreshEvent();
@@ -946,6 +969,42 @@ export class EventDetailsComponent implements OnInit {
         error => {
           this.errorMessage = <any>error;
           this.openSnackBar('Error. Event diagnosis not deleted. Error message: ' + error, 'OK', 8000);
+        }
+      );
+  }
+
+  openEventOrganizationDeleteConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Event Organization Confirm',
+          titleIcon: 'delete_forever',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to delete this event organization? This action cannot be undone.',
+          confirmButtonText: 'Yes, Delete Event Organization',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventOrganization(id);
+      }
+    });
+  }
+
+  deleteEventOrganization(id: number) {
+    this.eventOrganizationService.delete(id)
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Event organization successfully deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Event organzation not deleted. Error message: ' + error, 'OK', 8000);
         }
       );
   }

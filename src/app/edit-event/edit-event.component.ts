@@ -49,13 +49,7 @@ export class EditEventComponent implements OnInit {
   eventID;
 
   editEventForm: FormGroup;
-
-  filteredOrganizations = [];
-  organizationFilterCtrl: FormControl = new FormControl();
-
-  /** Subject that emits when the component has been destroyed. */
-  private _onDestroy = new Subject<void>();
-
+  
   submitLoading = false;
 
   buildEditEventForm() {
@@ -65,9 +59,6 @@ export class EditEventComponent implements OnInit {
       event_type: null,
       complete: null,
       public: null,
-      new_organizations: this.formBuilder.array([
-        this.initEventOrganization()
-      ]),
       // NWHC only
       staff: null,
       event_status: null,
@@ -77,9 +68,6 @@ export class EditEventComponent implements OnInit {
       // end NWHC only
     });
 
-    this.filteredOrganizations = new Array<ReplaySubject<Organization[]>>();
-    this.filteredOrganizations.push(new ReplaySubject<Organization[]>());
-    this.ManageOrganizationControl(0);
   }
 
   constructor(
@@ -108,19 +96,13 @@ export class EditEventComponent implements OnInit {
   ngOnInit() {
     this.eventID = this.data.eventData.id;
 
-    if (this.data.organizations) {
-      this.organizations = this.data.organizations;
-
-      this.filteredOrganizations[0].next(this.organizations);
-    }
-
     this.editEventForm.patchValue({
       id: this.data.eventData.id,
       event_reference: this.data.eventData.event_reference,
       event_type: this.data.eventData.event_type,
       complete: this.data.eventData.complete,
       public: this.data.eventData.public,
-      // new_organizations: [],
+
       // NWHC only
       staff: this.data.eventData.staff,
       event_status: this.data.eventData.event_status,
@@ -134,33 +116,6 @@ export class EditEventComponent implements OnInit {
       this.editEventForm.get('quality_check').disable();
     }
 
-    if (this.data.eventData.eventorganizations.length > 0) {
-      this.removeEventOrganization(0);
-      // remove filteredOrganizations array for first index
-      this.filteredOrganizations.pop();
-
-      for (let i = 0, j = this.data.eventData.eventorganizations.length; i < j; i++) {
-        this.addEventOrganization();
-        // tslint:disable-next-line:max-line-length
-        this.editEventForm.get('new_organizations')['controls'][i].get('org').setValue(this.data.eventData.eventorganizations[i].id);
-      }
-    }
-
-    // get organizations from the OrganizationService
-    this.organizationService.getOrganizations()
-      .subscribe(
-        organizations => {
-          //this.organizations = organizations;
-          // const eventOrganizationsArray = [];
-          // for (const eventOrganization of this.data.eventData.eventorganizations) {
-          //   eventOrganizationsArray.push(eventOrganization.id);
-          // }
-          //this.editEventForm.get('new_organizations').setValue(eventOrganizationsArray);
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
 
     this.eventTypeService.getEventTypes()
       .subscribe(
@@ -216,68 +171,6 @@ export class EditEventComponent implements OnInit {
       }
     });
 
-  }
-
-  // begin event organizations array functions
-  initEventOrganization() {
-    return this.formBuilder.group({
-      org: [null, Validators.required],
-    });
-  }
-
-  addEventOrganization() {
-    const control = <FormArray>this.editEventForm.get('new_organizations');
-    control.push(this.initEventOrganization());
-    const organizationIndex = control.length - 1;
-
-    this.filteredOrganizations.push(new ReplaySubject<Organization[]>());
-    this.ManageOrganizationControl(organizationIndex);
-
-    // this.checkLabSuspectCompliance();
-    // this.checkLabCompliance();
-  }
-
-  removeEventOrganization(eventOrgIndex) {
-    const control = <FormArray>this.editEventForm.get('new_organizations');
-    control.removeAt(eventOrgIndex);
-    // this.checkLabSuspectCompliance();
-    // this.checkLabCompliance();
-  }
-
-  getEventOrganizations(form) {
-    return form.controls.new_organizations.controls;
-  }
-  // end diagnosis organizations array functions
-
-  ManageOrganizationControl(organizationIndex: number) {
-
-    // populate the laboratories options list for the specific control
-    this.filteredOrganizations[organizationIndex].next(this.organizations);
-
-    // listen for search field value changes
-    this.organizationFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.filterOrganizations(organizationIndex);
-      });
-  }
-
-  private filterOrganizations(organizationIndex) {
-    if (!this.organizations) {
-      return;
-    }
-    // get the search keyword
-    let search = this.organizationFilterCtrl.value;
-    if (!search) {
-      this.filteredOrganizations[organizationIndex].next(this.organizations.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    // filter the laboratories
-    this.filteredOrganizations[organizationIndex].next(
-      this.organizations.filter(organization => organization.name.toLowerCase().indexOf(search) > -1)
-    );
   }
 
   openSnackBar(message: string, action: string, duration: number) {

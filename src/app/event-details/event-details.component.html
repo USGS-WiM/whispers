@@ -287,6 +287,10 @@
                 (click)="addEventDiagnosis(eventData.id)">
                 <mat-icon>add</mat-icon> Add Event Diagnosis
               </button>
+              <button mat-button color="primary" class="event-detail-action-button" [disabled]="eventData.complete || !eventData.permissions.update"
+              (click)="addEventOrganization(eventData.id)">
+              <mat-icon>add</mat-icon> Add Event Organization
+            </button>
             </div>
 
             <div class="event-page-group">
@@ -333,8 +337,9 @@
                     <td> {{eventOrganization.city}} {{eventOrganization.administrative_level_one |
                       displayValue:'abbreviation':this.administrative_level_one }} </td>
                     <td>
+                      <!--eventOrganization.id will need to be updated (unless service response is updated - currently this is the org ID, not eventOrg ID-->
                       <button mat-icon-button aria-label="delete event organization" color="warn" [disabled]="!eventData.permissions.destroy || eventData.complete"
-                        (click)="openEventOrganizationDeleteConfirm(eventorganization.id)">
+                        (click)="openEventOrganizationDeleteConfirm(eventOrganization.id)">
                         <mat-icon>remove_circle</mat-icon>
                       </button>
                     </td>
@@ -632,7 +637,7 @@
                     <button mat-button color="primary" class="event-detail-action-button" (click)="addEventLocationContact(eventLocation.id)"
                       [disabled]="!eventData.permissions.update || userContactsLoading || eventData.complete"
                       matTooltip="Associate contact with this event location">
-                      <mat-icon>add_comment</mat-icon>
+                      <mat-icon>add_circle</mat-icon>
                       Add Contact
                     </button>
                   </div>

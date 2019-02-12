@@ -26,6 +26,7 @@ import { EventLocation } from '@interfaces/event-location';
 import { LocationSpecies } from '@interfaces/location-species';
 import { EditEventComponent } from '@app/edit-event/edit-event.component';
 import { AddEventDiagnosisComponent } from '@app/add-event-diagnosis/add-event-diagnosis.component';
+import { AddEventOrganizationComponent } from '@app/add-event-organization/add-event-organization.component';
 import { EditEventLocationComponent } from '@app/edit-event-location/edit-event-location.component';
 import { EditLocationSpeciesComponent } from '@app/edit-location-species/edit-location-species.component';
 import { LandOwnershipService } from '@services/land-ownership.service';
@@ -98,6 +99,7 @@ export class EventDetailsComponent implements OnInit {
 
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
+  addEventOrganizationDialogRef: MatDialogRef<AddEventOrganizationComponent>;
   editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
   editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
   addEventLocationContactDialogRef: MatDialogRef<AddEventLocationContactComponent>;
@@ -584,11 +586,29 @@ export class EventDetailsComponent implements OnInit {
         event_id: id,
         diagnosis_options: this.possibleEventDiagnoses
       }
-      // minWidth: 200
-      // height: '75%'
     });
 
     this.addEventDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
+  addEventOrganization(id: string) {
+    // Open dialog for adding event diagnosis
+    this.addEventOrganizationDialogRef = this.dialog.open(AddEventOrganizationComponent, {
+      data: {
+        event_id: id,
+        organizations: this.organizations
+      }
+    });
+
+    this.addEventOrganizationDialogRef.afterClosed()
       .subscribe(
         () => {
           this.refreshEvent();

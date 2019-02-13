@@ -19,6 +19,6 @@
   <mat-dialog-actions>
   
     <button mat-button color="warn" (click)="this.addEventDiagnosisDialogRef.close('cancel');"><mat-icon>cancel</mat-icon>&nbsp;Cancel</button>
-    <button mat-button type="submit" color="primary" [disabled]="addEventDiagnosisForm.invalid" (click)="onSubmit(addEventDiagnosisForm.value)"><mat-icon>send</mat-icon>&nbsp;Submit</button>
+    <button mat-button type="submit" color="primary" [disabled]="addEventDiagnosisForm.invalid" (click)="onSubmit(addEventDiagnosisForm.value)"><mat-icon>save</mat-icon>&nbsp;Save</button>
     <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
   </mat-dialog-actions>

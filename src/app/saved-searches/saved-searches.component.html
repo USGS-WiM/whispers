@@ -1,25 +1,31 @@
 <div class="suggested-searches">
   <div class="button-row" *ngFor="let search of parsedSearches" (click)="implementSearch(search)">
-    
+
     <button mat-button>
       <!-- Name -->
       <span class="search-param search-name" *ngIf="search.name">
-          <b><i>{{search.name}}</i></b>
+        <b><i>{{search.name}}</i></b>
       </span>
       <!-- Start Date -->
       <span class="search-param" *ngIf="search.start_date">
-          <b>START DATE</b>
-          <span class="value">{{search.start_date | date:'mediumDate'}}</span>
+        <b>START DATE</b>
+        <span class="value">{{search.start_date | date:'mediumDate'}}</span>
       </span>
       <!-- End Date -->
       <span class="search-param" *ngIf="search.end_date">
-          <b>END DATE</b>
-          <span class="value">{{search.end_date|date:'mediumDate'}}</span>
+        <b>END DATE</b>
+        <span class="value">{{search.end_date|date:'mediumDate'}}</span>
       </span>
       <!-- Affected Count -->
-      <span *ngIf="search.affected_count" class="search-param"> 
+      <span *ngIf="search.affected_count" class="search-param">
         <b>AFFECTED COUNT</b>
         <span class="value">{{search.affected_count}}</span>
+      </span>
+      <!-- WHISPers Record Status -->
+      <span class="search-param">
+        <b>WHISPers Record Status</b>
+        <span>{{search.complete === true ? 'Complete Events Only' :
+          search.complete === false ? 'Incomplete Events Only' : 'Complete and incomplete events' }}</span>
       </span>
 
       <!-- Event Type -->
@@ -37,7 +43,7 @@
 
       <!-- Diagnosis Type -->
       <span class="search-param" *ngIf="search.diagnosis_type">
-        <b>DIAGNOSIS TYPE</b> 
+        <b>DIAGNOSIS TYPE</b>
         <div class="value-list">
           <span *ngFor="let diagnosisType of search.diagnosis_type" class="value">
             {{diagnosisType| displayValue:'name':this.diagnosisTypes}}
@@ -53,7 +59,7 @@
         <b>DIAGNOSIS</b>
         <div class="value-list">
           <span *ngFor="let diagnosis of search.diagnosis" class="value">
-            {{diagnosis | displayValue:'name':this.diagnoses}} 
+            {{diagnosis | displayValue:'name':this.diagnoses}}
             <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)" class="value-list-or">
               {{(search.diagnosis_includes_all) ? "and" : "or"}}
             </span>
@@ -75,12 +81,13 @@
       </span>
 
       <!-- STATE -->
-      <span class="search-param" *ngIf="search.administrative_level_one"> 
+      <span class="search-param" *ngIf="search.administrative_level_one">
         <b>STATE</b>
         <div class="value-list">
           <span *ngFor="let adminLevel1 of search.administrative_level_one" class="value">
             {{adminLevel1 | displayValue:'name':this.administrative_level_one}}
-            <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)" class="value-list-or">
+            <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)"
+              class="value-list-or">
               {{(search.administrative_level_one_includes_all) ? "and" : "or"}}
             </span>
           </span>
@@ -92,8 +99,9 @@
         <b>COUNTY</b>
         <div class="value-list">
           <span *ngFor="let adminLevel2 of search.administrative_level_two" class="value">
-            {{adminLevel2 | displayValue:'name':this.administrative_level_two}} 
-            <span *ngIf="(search.administrative_level_two.indexOf(adminLevel2)) < (search.administrative_level_two.length - 1)" class="value-list-or">
+            {{adminLevel2 | displayValue:'name':this.administrative_level_two}}
+            <span *ngIf="(search.administrative_level_two.indexOf(adminLevel2)) < (search.administrative_level_two.length - 1)"
+              class="value-list-or">
               {{(search.administrative_level_two_includes_all) ? "and" : "or"}}\
             </span>
           </span>
@@ -107,7 +115,7 @@
 
 </div>
 
-    <!-- <div *ngIf="savedSearchesDataSource" class="results-table-div">
+<!-- <div *ngIf="savedSearchesDataSource" class="results-table-div">
 
       <mat-table [dataSource]="savedSearchesDataSource" matSort matSortActive="name" matSortDirection="asc">
 

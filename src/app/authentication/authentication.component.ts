@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '@services/authentication.service';
 import { CurrentUserService } from '@services/current-user.service';
 
@@ -38,6 +38,7 @@ export class AuthenticationComponent implements OnInit {
     public authenticationDialogRef: MatDialogRef<AuthenticationComponent>,
     public currentUserService: CurrentUserService,
     public router: Router,
+    private route: ActivatedRoute,
     public snackBar: MatSnackBar
   ) {
     this.loginForm = formBuilder.group({
@@ -90,6 +91,7 @@ export class AuthenticationComponent implements OnInit {
 
   onLogout() {
     this.authenticationService.logout();
+    this.router.navigate([`../home/`], { relativeTo: this.route });
   }
 
 }

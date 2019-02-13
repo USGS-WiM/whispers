@@ -30,6 +30,8 @@ export class AppComponent implements OnInit {
   title = 'app';
 
   public whispersVersion = '';
+  public bannerWarning = '';
+  public bannerTextColor = '';
   //public isLoggedIn;
 
   public currentUser;
@@ -53,6 +55,10 @@ export class AppComponent implements OnInit {
   ngOnInit() {
 
     this.whispersVersion = APP_SETTINGS.VERSION;
+
+    this.bannerWarning = APP_SETTINGS.BANNER_WARNING;
+
+    this.bannerTextColor = APP_SETTINGS.BANNER_TEXT_COLOR;
 
     //this.isLoggedIn = APP_SETTINGS.IS_LOGGEDIN;
 
@@ -94,14 +100,12 @@ export class AppComponent implements OnInit {
   }
 
   openAboutDialog() {
-    this.aboutDialogRef = this.dialog.open(AboutComponent, {
-      // minWidth: '60%',
-      // height: '75%'
-    });
+    this.aboutDialogRef = this.dialog.open(AboutComponent, {});
   }
 
   logout() {
     this.authenticationService.logout();
+    this.router.navigate([`../home/`], { relativeTo: this.route });
   }
 
   openAuthenticationDialog() {

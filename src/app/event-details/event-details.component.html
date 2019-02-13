@@ -82,7 +82,7 @@
               <!-- Event organizations -->
               <div class="event-page-split-half">
                 <div class="event-table-header">Event Organizations</div>
-                <table id="speciesList">
+                <table>
                   <tr>
                     <th>Organization</th>
                     <th>Location</th>
@@ -142,18 +142,24 @@
                     <td>
                       <span *ngIf="loc_species.speciesdiagnoses.length > 0">
                         <span *ngFor="let speciesdiagnosis of loc_species.speciesdiagnoses">
-                          <span class="text-bold" *ngIf="speciesdiagnosis">{{speciesdiagnosis.diagnosis_string}}</span>
+                          <span class="text-bold text-larger" *ngIf="speciesdiagnosis">{{speciesdiagnosis.diagnosis_string}}</span>
                           <br />
-                          <span *ngIf="speciesdiagnosis.tested_count !== null">{{speciesdiagnosis.tested_count}}
-                            specimens tested </span> <span *ngIf="speciesdiagnosis.tested_count !== null && speciesdiagnosis.positive_count !== null">| </span>
-                          <span *ngIf="speciesdiagnosis.positive_count !== null">{{speciesdiagnosis.positive_count}}
-                            positive</span>
+                          <span>Number Assessed:<span *ngIf="speciesdiagnosis.tested_count !== null" class="text-bold">
+                              {{speciesdiagnosis.tested_count}}</span><span *ngIf="speciesdiagnosis.tested_count === null">
+                              N/A</span>
+                          </span> <br>
+                          <span>Number with this diagnosis:<span *ngIf="speciesdiagnosis.diagnosis_count !== null"
+                              class="text-bold">
+                              {{speciesdiagnosis.diagnosis_count}}</span><span *ngIf="speciesdiagnosis.diagnosis_count === null">
+                              N/A</span>
+                          </span>
                           <br>
-                          <!-- <span *ngIf="speciesdiagnosis.organizations_string.length > 0">Tested by
-                              <span *ngFor="let org of speciesdiagnosis.organizations_string">{{org}} </span>
-                          </span><br /> -->
+                          <span *ngIf="speciesdiagnosis.organizations_string.length > 0">Tested by
+                            <span *ngFor="let org of speciesdiagnosis.organizations_string">{{org}} </span>
+                          </span><br />
                         </span>
                       </span>
+
                       <span *ngIf="loc_species.speciesdiagnoses.length === 0">Not assessed</span>
                     </td>
                   </tr>
@@ -192,11 +198,12 @@
               <div class="permissions">
                 <div class="permission" *ngIf="eventData.permissions.read === true">Read</div>
                 <div class="permission" *ngIf="eventData.permissions.update === true">Update</div>
-                <div class="permission" *ngIf="eventData.permissions.write === true">Create</div>
+                <!-- <div class="permission" *ngIf="eventData.permissions.write === true">Create</div> -->
                 <div class="permission red" *ngIf="eventData.permissions.destroy === true">Delete</div>
               </div>
-              <span class="title" *ngIf="eventData.complete && (eventData.permissions.update === true || eventData.permissions.write === true || eventData.permissions.destroy === true)">Editing
-                is locked because event is marked Complete. Change WHISPers Record Status (Edit Event) to Incomplete to unlock editing.
+              <span class="title" *ngIf="eventData.complete && (eventData.permissions.update === true || eventData.permissions.destroy === true)">Editing
+                is locked because event is marked Complete. Change WHISPers Record Status (Edit Event) to Incomplete to
+                unlock editing.
               </span>
             </div>
 
@@ -215,8 +222,8 @@
               <div class="item">
                 <div class="label">Event Owner</div>
                 <div class="value">
-                  <span *ngIf="eventOwner">{{eventOwner.first_name}} {{eventOwner.last_name}}
-                    ({{eventOwner.organization_string}})</span>
+                  <span>{{eventData.created_by_first_name}} {{eventData.created_by_last_name}}
+                    ({{eventData.created_by_organization_string}})</span>
                   <span *ngIf="!eventOwner">&nbsp;</span>
                 </div>
               </div>
@@ -242,7 +249,8 @@
               </div>
               <div class="item">
                 <div class="label">Quality Check</div>
-                <div class="value">{{eventData.quality_check ? 'Yes' : 'No'}}</div>
+                <div class="value">{{eventData.quality_check === null ? 'Not Done' : eventData.quality_check !== null ?
+                  (eventData.quality_check | date:'shortDate') : 'Not Done' }}</div>
               </div>
               <div class="item">
                 <div class="label">WHISPers Record Status</div>
@@ -266,8 +274,7 @@
 
           <!--  
               Event Diagnosis
-              Event Diagnosis
-              Event Diagnosis
+              Event Organizations
              -->
           <div class="event-detail-wrapper">
 
@@ -276,10 +283,14 @@
                 [disabled]="!eventData.permissions.update">
                 <mat-icon>edit</mat-icon> Edit Event
               </button>
-              <button mat-button color="primary" class="event-detail-action-button" [disabled]="eventData.complete"
-                (click)="addEventDiagnosis(eventData.id)" [disabled]="!eventData.permissions.write">
+              <button mat-button color="primary" class="event-detail-action-button" [disabled]="eventData.complete || !eventData.permissions.update"
+                (click)="addEventDiagnosis(eventData.id)">
                 <mat-icon>add</mat-icon> Add Event Diagnosis
               </button>
+              <button mat-button color="primary" class="event-detail-action-button" [disabled]="eventData.complete || !eventData.permissions.update"
+              (click)="addEventOrganization(eventData.id)">
+              <mat-icon>add</mat-icon> Add Event Organization
+            </button>
             </div>
 
             <div class="event-page-group">
@@ -298,8 +309,6 @@
 
                   <tr *ngFor="let eventdiagnosis of eventData.eventdiagnoses">
                     <td>{{eventdiagnosis.diagnosis_string}}</td>
-                    <!--<td>{{eventdiagnosis.diagnosis_type_string}}</td>
-                    <td>{{eventdiagnosis.suspect ? 'Yes' : 'No'}}</td>-->
                     <td>
                       <button mat-icon-button aria-label="delete event diagnosis" color="warn" [disabled]="!eventData.permissions.destroy || eventData.complete"
                         (click)="openEventDiagnosisDeleteConfirm(eventdiagnosis.id)">
@@ -312,6 +321,33 @@
 
               </div>
             </div>
+
+            <div class="event-page-group">
+              <div class="event-table-header">Event Organizations</div>
+
+              <div *ngIf="eventData.eventdiagnoses.length > 0">
+                <table id="speciesList">
+                  <tr>
+                    <th>Organization</th>
+                    <th>Location</th>
+                    <th>Delete</th>
+                  </tr>
+                  <tr *ngFor="let eventOrganization of eventData.eventorganizations">
+                    <td>{{eventOrganization.name}}</td>
+                    <td> {{eventOrganization.city}} {{eventOrganization.administrative_level_one |
+                      displayValue:'abbreviation':this.administrative_level_one }} </td>
+                    <td>
+                      <!--eventOrganization.id will need to be updated (unless service response is updated - currently this is the org ID, not eventOrg ID-->
+                      <button mat-icon-button aria-label="delete event organization" color="warn" [disabled]="!eventData.permissions.destroy || eventData.complete"
+                        (click)="openEventOrganizationDeleteConfirm(eventOrganization.id)">
+                        <mat-icon>remove_circle</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+
+              </div>
+            </div>
           </div>
 
           <!-- 
@@ -319,7 +355,7 @@
             Comments
             Comments
            -->
-          <div class="event-detail-wrapper">
+          <div class="event-detail-wrapper" *ngIf="eventData.comments">
 
             <div class="event-page-group">
 
@@ -353,7 +389,7 @@
 
                 <div class="detail-section-buttons">
                   <button mat-button color="primary" class="event-detail-action-button" (click)="addEventComment(eventData.id)"
-                    [disabled]="!eventData.permissions.write || eventData.complete">
+                    [disabled]="!eventData.permissions.update || eventData.complete">
                     <mat-icon>add_comment</mat-icon> Add Comment
                   </button>
                 </div>
@@ -368,7 +404,7 @@
             Service Requests
             Service Requests
            -->
-          <div class="event-detail-wrapper">
+          <div class="event-detail-wrapper" *ngIf="eventData.servicerequests">
 
             <div class="event-page-group">
 
@@ -416,7 +452,7 @@
 
                 <div class="detail-section-buttons">
                   <button mat-button color="primary" class="event-detail-action-button" (click)="addServiceRequest(eventData.id)"
-                    [disabled]="!eventData.permissions.write || eventData.complete">
+                    [disabled]="!eventData.permissions.update || eventData.complete">
                     <mat-icon>question_answer</mat-icon> Add Service Request
                   </button>
                 </div>
@@ -523,7 +559,7 @@
 
                   <div class="detail-section-buttons">
                     <button mat-button color="primary" class="event-detail-action-button" (click)="addEventLocationComment(eventLocation.id)"
-                      [disabled]="!eventData.permissions.write">
+                      [disabled]="!eventData.permissions.update">
                       <mat-icon>add_comment</mat-icon> Add Comment
                     </button>
                   </div>
@@ -570,7 +606,7 @@
                         <td>{{eventlocationcontact.email}}</td>
                         <td>{{eventlocationcontact.phone}}</td>
                         <td>
-                          <button mat-icon-button aria-label="remove contact" color="warn" [disabled]="!eventData.permissions.destroy"
+                          <button mat-icon-button aria-label="remove contact" color="warn" [disabled]="!eventData.permissions.destroy || eventData.complete"
                             (click)="openLocationContactRemoveConfirm(eventlocationcontact.id)" matTooltip="Disassociate contact from this event location">
                             <mat-icon>remove_circle</mat-icon>
                           </button>
@@ -599,9 +635,16 @@
                     -->
                   <div class="detail-section-buttons">
                     <button mat-button color="primary" class="event-detail-action-button" (click)="addEventLocationContact(eventLocation.id)"
-                      [disabled]="!eventData.permissions.write || userContactsLoading" matTooltip="Associate contact with this event location">
-                      <mat-icon>add_comment</mat-icon>
+                      [disabled]="!eventData.permissions.update || userContactsLoading || eventData.complete"
+                      matTooltip="Associate contact with this event location">
+                      <mat-icon>add_circle</mat-icon>
                       Add Contact
+                    </button>
+                  </div>
+                  <div class="detail-section-buttons">
+                    <button mat-button color="primary" class="event-detail-action-button" (click)="openCreateContactDialog()"
+                      matTooltip="Create a new contact">
+                      <mat-icon>person_add</mat-icon> Create New Contact
                     </button>
                   </div>
                 </mat-expansion-panel>
@@ -623,7 +666,7 @@
 
                   <div *ngIf="eventLocation.locationspecies" class="event-table-header">Species at this location</div>
 
-                  <app-location-species-table [eventData]="eventData" [locationspecies]="eventLocation.locationspecies"
+                  <app-location-species-table [eventData]="eventData" [laboratories]="laboratories" [locationspecies]="eventLocation.locationspecies"
                     [permissions]="eventData.permissions" [ageBiases]="ageBiases" [sexBiases]="sexBiases"></app-location-species-table>
 
                   <div class="detail-section-buttons">
@@ -634,7 +677,7 @@
                   </div>
                   <div class="detail-section-buttons">
                     <button mat-button color="primary" class="event-detail-action-button" (click)="addLocationSpecies(eventLocation)"
-                      [disabled]="!eventData.permissions.write || speciesLoading || eventData.complete">
+                      [disabled]="!eventData.permissions.update || speciesLoading || eventData.complete">
                       <mat-icon>add</mat-icon> Add species to this location
                     </button>
                   </div>
@@ -652,7 +695,7 @@
           <div class="event-detail-wrapper">
 
             <button mat-raised-button color="primary" class="event-detail-action-button" (click)="addEventLocation()"
-              [disabled]="!eventData.permissions.write || eventData.complete">
+              [disabled]="!eventData.permissions.update || eventData.complete">
               <mat-icon>add_location</mat-icon> Add New Event Location
             </button>
             <button mat-raised-button color="warn" *ngIf="showAddEventLocation" class="event-detail-action-button"

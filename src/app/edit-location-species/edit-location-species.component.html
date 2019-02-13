@@ -9,10 +9,11 @@
       {{administrative_level_one}}</b></h3>
 
   <form [formGroup]="locationSpeciesForm" autocomplete="off">
+
     <div class="horizontal-form-container">
 
       <mat-form-field class="form-control" *ngIf="data.location_species_action !== 'edit'">
-        <mat-select formControlName="species" placeholder="Species" #speciesSelect>
+        <mat-select formControlName="species" placeholder="Species" #speciesSelect required>
           <ngx-mat-select-search [formControl]="speciesFilterCtrl" [placeholderLabel]="'Find species...'"
             [noEntriesFoundLabel]="'no matching species found'"></ngx-mat-select-search>
           <mat-option *ngFor="let species of filteredSpecies | async" [value]="species.id">

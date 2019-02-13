@@ -85,6 +85,8 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 
 import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
 
+import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
+import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 import { DateValidators } from '@validators/date.validator';
@@ -124,6 +126,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   countries: Country[];
   staff: Staff[];
+
+  laboratories: Organization[] = [];
 
   adminLevelOnes: AdministrativeLevelOne[];
   // expermental, for autocomplete
@@ -180,17 +184,26 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   usgsSearch;
 
   missingCommentFlag = false;
+  diagnosisBases = [];
+  diagnosisCauses = [];
 
   locationSpeciesNumbersViolation = false;
   // starts as true  because no start dates provided by default
   locationStartDatesViolation = true;
   // starts as false because event must be complete = true to trigger violation
   locationEndDatesViolation = false;
+  speciesDiagnosisViolation = false;
+
+  nonCompliantSpeciesDiagnoses = [];
 
   filteredAdminLevelOnes = [];
   filteredAdminLevelTwos = [];
   filteredSpecies = [];
   filteredContacts = [];
+
+  filteredOrganizations = [];
+  organizationFilterCtrl: FormControl = new FormControl();
+
   /** Subject that emits when the component has been destroyed. */
   private _onDestroy = new Subject<void>();
 
@@ -198,6 +211,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild('adminLevelTwoSelect') adminLevelTwoSelect: MatSelect;
   @ViewChild('speciesSelect') speciesSelect: MatSelect;
   @ViewChild('contactSelect') contactSelect: MatSelect;
+
+  @ViewChild('organizationSelect') organizationSelect: MatSelect;
 
   /** controls for the MatSelect filter keyword */
   adminLevelOneFilterCtrl: FormControl = new FormControl();
@@ -256,12 +271,16 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this.ManageSpeciesControl(0, 0);
     // this.filteredSpecies.push(new ReplaySubject<Species[]>());
 
-
     const eventLocationContacts = new Array<ReplaySubject<Contact[]>>();
     this.filteredContacts.push(eventLocationContacts);
     // initiate an empty replaysubject
     this.filteredContacts[0].push(new ReplaySubject<Contact[]>());
     this.ManageContactControl(0, 0);
+
+    this.filteredOrganizations = new Array<ReplaySubject<Organization[]>>();
+    this.filteredOrganizations.push(new ReplaySubject<Organization[]>());
+    this.ManageOrganizationControl(0);
+
     // this.filteredSpecies.push(new ReplaySubject<Species[]>());
 
     // this.filteredAdminLevelOnes = new Array<Observable<any>>();
@@ -306,13 +325,15 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     private eventService: EventService,
     private eventStatusService: EventStatusService,
     private staffService: StaffService,
+    private diagnosisBasisService: DiagnosisBasisService,
+    private diagnosisCauseService: DiagnosisCauseService,
     public snackBar: MatSnackBar
   ) {
     this.buildEventSubmissionForm();
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
-      this.eventSubmissionForm.get('new_organizations')['controls'][0].get('org').setValue(this.currentUser.organization.toString());
+      this.eventSubmissionForm.get('new_organizations')['controls'][0].get('org').setValue(this.currentUser.organization);
     });
 
     createContactSevice.getCreatedContact().subscribe(
@@ -324,7 +345,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           return 0;
         });
       });
-
   }
 
   ngOnDestroy() {
@@ -348,11 +368,101 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      minWidth: '50em',
       disableClose: true,
       data: {
         contact_action: 'create'
       }
     });
+  }
+
+  editSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex, speciesdiagnosis, locationspecies) {
+
+    this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+      minWidth: '40em',
+      disableClose: true,
+      data: {
+        locationspecies: locationspecies.value,
+        speciesdiagnosis: speciesdiagnosis.value,
+        laboratories: this.laboratories,
+        diagnosisBases: this.diagnosisBases,
+        diagnosisCauses: this.diagnosisCauses,
+        diagnoses: this.allDiagnoses,
+        eventlocationIndex: eventLocationIndex,
+        locationspeciesIndex: locationSpeciesIndex,
+        species_diagnosis_action: 'editInFormArray',
+        title: 'Edit Species Diagnosis',
+        titleIcon: 'edit',
+        actionButtonIcon: 'save',
+        action_button_text: 'Save'
+      }
+    });
+
+    this.editSpeciesDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        (speciesDiagnosisObj) => {
+
+          ///////////////////////////////////////////////////////////////////
+          if (speciesDiagnosisObj.action === 'cancel') {
+            // remove last species diagnosis added
+            // tslint:disable-next-line:max-line-length
+            // this.removeSpeciesDiagnosis(speciesDiagnosisObj.eventlocationIndex, speciesDiagnosisObj.locationspeciesIndex, speciesDiagnosisIndex);
+            return;
+          } else if (speciesDiagnosisObj.action === 'editInFormArray') {
+
+            this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventlocationIndex]
+              .get('new_location_species')['controls'][speciesDiagnosisObj.locationspeciesIndex]
+              .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
+                diagnosis: speciesDiagnosisObj.formValue.diagnosis,
+                cause: speciesDiagnosisObj.formValue.cause,
+                basis: speciesDiagnosisObj.formValue.basis,
+                suspect: speciesDiagnosisObj.formValue.suspect,
+                tested_count: speciesDiagnosisObj.formValue.tested_count,
+                diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
+                positive_count: speciesDiagnosisObj.formValue.positive_count,
+                suspect_count: speciesDiagnosisObj.formValue.suspect_count,
+                pooled: speciesDiagnosisObj.formValue.pooled,
+                new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
+              });
+
+
+            for (const diagnosis of this.allDiagnoses) {
+              if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
+
+                let diagnosisFound = false;
+                // check to see if the diagnosis just added already exists in the availableDiagnoses array
+                for (const availableDiagnosis of this.availableDiagnoses) {
+                  if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
+                    // if found, increment the count for that diagnosis
+                    availableDiagnosis.count++;
+                    // if found, set local var found to true
+                    diagnosisFound = true;
+                    // if found, stop. do not add to availableDiagnoses array
+                    break;
+                  }
+                }
+                // if diagnosis is not found to already exist in the availableDiagnoses array, add it
+                if (!diagnosisFound) {
+                  diagnosis.suspect = speciesDiagnosisObj.formValue.suspect;
+                  // set diagnosis count to 1
+                  diagnosis.count = 1;
+                  this.availableDiagnoses.push(diagnosis);
+                }
+
+              }
+            }
+
+            this.checkSpeciesDiagnoses();
+          }
+
+          //////////////////////////////////////////////////////////////////
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
   }
 
   openGNISLookupDialog(eventLocationIndex) {
@@ -551,6 +661,37 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   }
 
+  ManageOrganizationControl(organizationIndex: number) {
+
+    // populate the organizations options list for the specific control
+    this.filteredOrganizations[organizationIndex].next(this.organizations);
+
+    // listen for search field value changes
+    this.organizationFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterOrganizations(organizationIndex);
+      });
+  }
+
+  private filterOrganizations(organizationIndex) {
+    if (!this.organizations) {
+      return;
+    }
+    // get the search keyword
+    let search = this.organizationFilterCtrl.value;
+    if (!search) {
+      this.filteredOrganizations[organizationIndex].next(this.organizations.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the organizations
+    this.filteredOrganizations[organizationIndex].next(
+      this.organizations.filter(organization => organization.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
   inputChangeTrigger(event) {
     event.currentTarget.dispatchEvent(new Event('input'));
   }
@@ -598,11 +739,14 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       }
     });
 
+    window.scrollTo(0, 0);
+
+
   }
 
   ngOnInit() {
 
-    this.onFormChanges();
+    //this.onFormChanges();
 
     // get event types from the EventTypeService
     this.eventTypeService.getEventTypes()
@@ -697,6 +841,18 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       .subscribe(
         staff => {
           this.staff = staff;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get 'laboratories' from the organizations service
+    // aliases the subset of organization records where laboratory = true to an array called 'laboratories'
+    this.organizationService.getLaboratories()
+      .subscribe(
+        (laboratories) => {
+          this.laboratories = laboratories;
         },
         error => {
           this.errorMessage = <any>error;
@@ -800,6 +956,30 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       .subscribe(
         organizations => {
           this.organizations = organizations;
+          this.filteredOrganizations[0].next(this.organizations);
+          // set the default starting org to user's org after loading the options list
+          this.eventSubmissionForm.get('new_organizations')['controls'][0].get('org').setValue(this.currentUser.organization);
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get diagnosisBases from the diagnosisBasis service
+    this.diagnosisBasisService.getDiagnosisBases()
+      .subscribe(
+        (diagnosisBases) => {
+          this.diagnosisBases = diagnosisBases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get diagnosisCauses from the diagnosisCause service
+    this.diagnosisCauseService.getDiagnosisCauses()
+      .subscribe(
+        (diagnosisCauses) => {
+          this.diagnosisCauses = diagnosisCauses;
         },
         error => {
           this.errorMessage = <any>error;
@@ -841,16 +1021,17 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         this.eventSubmissionForm.get('quality_check').enable();
       } else if (value === false) {
         this.eventSubmissionForm.get('quality_check').disable();
+        this.eventSubmissionForm.get('quality_check').setValue(null);
       }
     });
 
   }
 
-  onFormChanges(): void {
-    this.eventSubmissionForm.valueChanges.subscribe(() => {
-      this.checkLocationSpeciesNumbers();
-    });
-  }
+  // onFormChanges(): void {
+  //   this.eventSubmissionForm.valueChanges.subscribe(() => {
+  //     this.checkLocationSpeciesNumbers();
+  //   });
+  // }
 
   getErrorMessage(formControlName) {
 
@@ -1134,6 +1315,28 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
+  checkEventCompleteRules() {
+
+    if (this.eventSubmissionForm.get('complete').value === true) {
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Marking event as complete',
+            titleIcon: 'warning',
+            message: 'Submitting an event as complete will lock all editing on the event after submission.',
+            messageIcon: '',
+            confirmButtonText: 'OK',
+            showCancelButton: false
+          }
+        }
+      );
+    }
+
+    this.checkLocationEndDates();
+    this.checkSpeciesDiagnoses();
+  }
+
   checkLocationEndDates() {
     this.locationEndDatesViolation = false;
     if (this.eventSubmissionForm.get('complete').value === true) {
@@ -1152,20 +1355,52 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       } else {
         this.locationEndDatesViolation = true;
       }
+    }
+  }
 
-      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-        {
-          disableClose: true,
-          data: {
-            title: 'Marking event as complete',
-            titleIcon: 'warning',
-            message: 'Submitting an event as complete will lock all editing on the event after submission.',
-            messageIcon: '',
-            confirmButtonText: 'OK',
-            showCancelButton: false
+  checkSpeciesDiagnoses() {
+    this.speciesDiagnosisViolation = false;
+    this.nonCompliantSpeciesDiagnoses = [];
+    if (this.eventSubmissionForm.get('complete').value === true) {
+
+      ////////////////////////////////////////////////////////////////////////
+      let requirementMet = true;
+      const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+      // tslint:disable-next-line:max-line-length
+      for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
+        const locationspecies = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
+        // loop through each new_location_species array
+        // tslint:disable-next-line:max-line-length
+        for (let locationspeciesindex = 0, locationspecieslength = locationspecies.length; locationspeciesindex < locationspecieslength; locationspeciesindex++) {
+          const locationspeciesform = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex];
+          // tslint:disable-next-line:max-line-length
+          const speciesdiagnoses = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex].get('new_species_diagnoses');
+          for (let speciesdiagnosisindex = 0, speciesdiagnoseslength = speciesdiagnoses.length; speciesdiagnosisindex < speciesdiagnoseslength; speciesdiagnosisindex++) {
+            // tslint:disable-next-line:max-line-length
+            const speciesdiagnosisform = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex].get('new_species_diagnoses')['controls'][speciesdiagnosisindex];
+            // if any of the species diagnoses are missing a cause or basis value, requirement is not met and validation check fails
+            if (speciesdiagnosisform.get('cause').value === null || speciesdiagnosisform.get('basis').value === null) {
+              requirementMet = false;
+              // add to an object storing the non-compliant species diagnoses
+              this.nonCompliantSpeciesDiagnoses.push({
+                eventLocationNumber: eventLocationIndex + 1,
+                locationSpeciesNumber: locationspeciesindex + 1,
+                locationSpeciesName: this.displayValuePipe.transform(locationspeciesform.controls.species.value, 'name', this.species),
+                speciesDiagnosisNumber: speciesdiagnosisindex + 1,
+                speciesDiagnosisName: this.displayValuePipe.transform(speciesdiagnosisform.controls.diagnosis.value, 'name', this.allDiagnoses)
+              });
+            }
           }
         }
-      );
+      }
+
+      if (requirementMet) {
+        this.speciesDiagnosisViolation = false;
+      } else {
+        this.speciesDiagnosisViolation = true;
+
+      }
+      ////////////////////////////////////////////////////////////////////
 
     }
   }
@@ -1213,6 +1448,30 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           this.eventSubmissionForm.get('public').setValue(true);
         }
       });
+    }
+  }
+
+  enforceCaptiveRule(selected_captive_value) {
+    if (selected_captive_value) {
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Location species captive',
+            titleIcon: 'warning',
+            message: 'Setting this species as captive will set the event record to private (Not Visible to Public). Select "Cancel" to maintain current event visibility. Select "OK" to change to private.',
+            confirmButtonText: 'OK',
+            showCancelButton: true
+          }
+        }
+      );
+
+      this.confirmDialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.eventSubmissionForm.get('public').setValue(false);
+        }
+      });
+
     }
   }
 
@@ -1463,6 +1722,11 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   addEventOrganization() {
     const control = <FormArray>this.eventSubmissionForm.get('new_organizations');
     control.push(this.initEventOrganization());
+    const organizationIndex = control.length - 1;
+
+    this.filteredOrganizations.push(new ReplaySubject<Organization[]>());
+    this.ManageOrganizationControl(organizationIndex);
+
   }
 
   removeEventOrganization(eventOrgIndex) {
@@ -1618,6 +1882,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     return form.controls.new_species_diagnoses.controls;
   }
 
+  getDiagnosisOrganizations(form) {
+    return form.controls.new_species_diagnosis_organizations.value;
+  }
+
   // location comments
   addLocationComments(eventLocationIndex) {
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('comments');
@@ -1726,6 +1994,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     console.log('Selecting GNIS record for Event Location Number' + (eventLocationIndex + 1));
   }
 
+
   openAddSpeciesDiagnosisDialog(eventLocationIndex, locationSpeciesIndex) {
 
     const speciesDiagnosisIndex = this.addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex);
@@ -1735,6 +2004,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       disableClose: true,
       data: {
         species_diagnosis_action: 'addToFormArray',
+        laboratories: this.laboratories,
         eventlocationIndex: eventLocationIndex,
         locationspeciesIndex: locationSpeciesIndex,
         title: 'Add Species Diagnosis',
@@ -1795,6 +2065,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
               }
             }
+
+            this.checkSpeciesDiagnoses();
           }
 
         },
@@ -1885,7 +2157,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           // when user clicks OK, reset the form and stepper using resetStepper()
           this.confirmDialogRef.afterClosed().subscribe(result => {
             if (result === true) {
-              this.resetStepper();
+              // temporarily disabling the resetStepper function in favor of full page reload.
+              // tons of issues with resetting this form because of its complexity. full page reload works for now. 
+              //this.resetStepper();
+              location.reload();
             }
           });
 

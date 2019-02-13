@@ -26,12 +26,14 @@ import { EventLocation } from '@interfaces/event-location';
 import { LocationSpecies } from '@interfaces/location-species';
 import { EditEventComponent } from '@app/edit-event/edit-event.component';
 import { AddEventDiagnosisComponent } from '@app/add-event-diagnosis/add-event-diagnosis.component';
+import { AddEventOrganizationComponent } from '@app/add-event-organization/add-event-organization.component';
 import { EditEventLocationComponent } from '@app/edit-event-location/edit-event-location.component';
 import { EditLocationSpeciesComponent } from '@app/edit-location-species/edit-location-species.component';
 import { LandOwnershipService } from '@services/land-ownership.service';
 import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { marker } from 'leaflet';
 import { EventLocationService } from '@app/services/event-location.service';
+import { EventOrganizationService } from '@app/services/event-organization.service';
 import { EventDetailsShareComponent } from '@app/event-details/event-details-share/event-details-share.component';
 import { AddEventLocationComponent } from '@app/add-event-location/add-event-location.component';
 import { UserService } from '@app/services/user.service';
@@ -55,9 +57,15 @@ import { EventLocationContactService } from '@services/event-location-contact.se
 
 import { ContactService } from '@services/contact.service';
 
+import { CreateContactComponent } from '@create-contact/create-contact.component';
+import { CreateContactService } from '@create-contact/create-contact.service';
+
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
+import { OrganizationService } from '@app/services/organization.service';
+import { Organization } from '@interfaces/organization';
+
 
 
 @Component({
@@ -87,15 +95,16 @@ export class EventDetailsComponent implements OnInit {
 
   showAddEventLocation = false;
 
-  locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
+  //locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
 
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
+  addEventOrganizationDialogRef: MatDialogRef<AddEventOrganizationComponent>;
   editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
   editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
   addEventLocationContactDialogRef: MatDialogRef<AddEventLocationContactComponent>;
   addServiceRequestDialogRef: MatDialogRef<AddServiceRequestComponent>;
-
+  createContactDialogRef: MatDialogRef<CreateContactComponent>;
 
   addCommentDialogRef: MatDialogRef<AddCommentComponent>;
 
@@ -109,6 +118,9 @@ export class EventDetailsComponent implements OnInit {
   selection = [];
 
   possibleEventDiagnoses = [];
+
+  laboratories: Organization[] = [];
+  organizations: Organization[] = [];
 
   eventDataLoading = true;
 
@@ -156,6 +168,7 @@ export class EventDetailsComponent implements OnInit {
     private userService: UserService,
     private currentUserService: CurrentUserService,
     private dataUpdatedService: DataUpdatedService,
+    private createContactSevice: CreateContactService,
     private dialog: MatDialog,
     private speciesService: SpeciesService,
     private adminLevelOneService: AdministrativeLevelOneService,
@@ -163,9 +176,11 @@ export class EventDetailsComponent implements OnInit {
     private eventLocationService: EventLocationService,
     private eventDiagnosisService: EventDiagnosisService,
     private eventLocationContactService: EventLocationContactService,
+    private eventOrganizationService: EventOrganizationService,
     private ageBiasService: AgeBiasService,
     private sexBiasService: SexBiasService,
     private commentTypeService: CommentTypeService,
+    private organizationService: OrganizationService,
     private commentService: CommentService,
     private contactService: ContactService,
     public snackBar: MatSnackBar
@@ -181,6 +196,16 @@ export class EventDetailsComponent implements OnInit {
         this.refreshEvent();
       }
     });
+
+    createContactSevice.getCreatedContact().subscribe(
+      createdContact => {
+        this.userContacts.push(createdContact);
+        this.userContacts.sort(function (a, b) {
+          if (a.last_name < b.last_name) { return -1; }
+          if (a.last_name > b.last_name) { return 1; }
+          return 0;
+        });
+      });
   }
 
   ngOnInit() {
@@ -214,27 +239,11 @@ export class EventDetailsComponent implements OnInit {
               }
             }
 
-            for (const diagnosis of APP_SETTINGS.UNDET_PENDING_DIAGNOSES) {
-              this.possibleEventDiagnoses.push(diagnosis);
+            if (eventdetails.complete === true) {
+              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+            } else if (eventdetails.complete === false) {
+              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
             }
-
-            for (let i = 0; i < this.eventData.eventlocations.length; i++) {
-              this.selection[i] = new SelectionModel<LocationSpecies>(allowMultiSelect, initialSelection);
-            }
-
-            this.locationSpeciesDataSource = new MatTableDataSource(this.eventLocationSpecies);
-            // this.speciesTableRows = this.eventLocationSpecies;
-
-            // TODO: lookup user for created_by
-            this.userService.getUserDetail(eventdetails.created_by)
-              .subscribe(
-                (userDetail) => {
-                  this.eventOwner = userDetail;
-                },
-                error => {
-                  this.errorMessage = <any>error;
-                }
-              );
 
             this.eventDataLoading = false;
           },
@@ -242,7 +251,6 @@ export class EventDetailsComponent implements OnInit {
             this.errorMessage = <any>error;
           }
         );
-
     });
 
     // get administrative_level_one  from the adminLevelOne service
@@ -288,6 +296,30 @@ export class EventDetailsComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
+
+    // get 'laboratories' from the organizations service
+    // aliases the subset of organization records where laboratory = true to an array called 'laboratories'
+    this.organizationService.getLaboratories()
+      .subscribe(
+        (laboratories) => {
+          this.laboratories = laboratories;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get organizations from the OrganizationService
+    this.organizationService.getOrganizations()
+      .subscribe(
+        organizations => {
+          this.organizations = organizations;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
 
     // get comment types from the commentTypes service
     this.commentTypeService.getCommentTypes()
@@ -509,7 +541,8 @@ export class EventDetailsComponent implements OnInit {
     this.editEventDialogRef = this.dialog.open(EditEventComponent, {
       disableClose: true,
       data: {
-        eventData: this.eventData
+        eventData: this.eventData,
+        organizations: this.organizations
       },
     });
 
@@ -553,11 +586,29 @@ export class EventDetailsComponent implements OnInit {
         event_id: id,
         diagnosis_options: this.possibleEventDiagnoses
       }
-      // minWidth: 200
-      // height: '75%'
     });
 
     this.addEventDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
+  addEventOrganization(id: string) {
+    // Open dialog for adding event diagnosis
+    this.addEventOrganizationDialogRef = this.dialog.open(AddEventOrganizationComponent, {
+      data: {
+        event_id: id,
+        organizations: this.organizations
+      }
+    });
+
+    this.addEventOrganizationDialogRef.afterClosed()
       .subscribe(
         () => {
           this.refreshEvent();
@@ -709,16 +760,16 @@ export class EventDetailsComponent implements OnInit {
 
   deleteEventComment(id: number) {
     this.commentService.delete(id)
-    .subscribe(
-      () => {
-        this.refreshEvent();
-        this.openSnackBar('Comment successfully deleted', 'OK', 5000);
-      },
-      error => {
-        this.errorMessage = <any>error;
-        this.openSnackBar('Error. Comment not deleted. Error message: ' + error, 'OK', 8000);
-      }
-    );
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Comment successfully deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Comment not deleted. Error message: ' + error, 'OK', 8000);
+        }
+      );
 
   }
 
@@ -817,8 +868,15 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
-
-
+  openCreateContactDialog() {
+    this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      minWidth: '50em',
+      disableClose: true,
+      data: {
+        contact_action: 'create'
+      }
+    });
+  }
 
   addEventLocation() {
     this.showAddEventLocation = true;
@@ -915,6 +973,42 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
+  openEventOrganizationDeleteConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Event Organization Confirm',
+          titleIcon: 'delete_forever',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to delete this event organization? This action cannot be undone.',
+          confirmButtonText: 'Yes, Delete Event Organization',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventOrganization(id);
+      }
+    });
+  }
+
+  deleteEventOrganization(id: number) {
+    this.eventOrganizationService.delete(id)
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Event organization successfully deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Event organzation not deleted. Error message: ' + error, 'OK', 8000);
+        }
+      );
+  }
+
 
   refreshEvent() {
     this.viewPanelStates = new Object();
@@ -925,17 +1019,28 @@ export class EventDetailsComponent implements OnInit {
           this.eventData = eventdetails;
 
           this.eventLocationSpecies = [];
+          this.possibleEventDiagnoses = [];
           for (const event_location of this.eventData.eventlocations) {
             for (const locationspecies of event_location.locationspecies) {
               locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
               locationspecies.administrative_level_one_string = event_location.administrative_level_one_string;
               locationspecies.country_string = event_location.country_string;
               this.eventLocationSpecies.push(locationspecies);
-            }
 
+              for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
+                  this.possibleEventDiagnoses.push(speciesdiagnosis);
+                }
+              }
+            }
           }
-          // console.log('eventLocationSpecies:', this.eventLocationSpecies);
-          // this.speciesTableRows = this.eventLocationSpecies;
+
+          if (eventdetails.complete === true) {
+            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+          } else if (eventdetails.complete === false) {
+            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+          }
+
           this.eventDataLoading = false;
 
           setTimeout(() => {
@@ -1028,18 +1133,18 @@ export class EventDetailsComponent implements OnInit {
 
   // From angular material table sample on material api reference site
   /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected(i: number) {
-    const numSelected = this.selection[i].selected.length;
-    const numRows = this.locationSpeciesDataSource.data.length;
-    return numSelected === numRows;
-  }
+  // isAllSelected(i: number) {
+  //   const numSelected = this.selection[i].selected.length;
+  //   const numRows = this.locationSpeciesDataSource.data.length;
+  //   return numSelected === numRows;
+  // }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle(i: number) {
-    this.isAllSelected(i) ?
-      this.selection[i].clear() :
-      this.locationSpeciesDataSource.data.forEach(row => this.selection[i].select(row));
-  }
+  // masterToggle(i: number) {
+  //   this.isAllSelected(i) ?
+  //     this.selection[i].clear() :
+  //     this.locationSpeciesDataSource.data.forEach(row => this.selection[i].select(row));
+  // }
 
   exportEventDetails() {
     this._eventService.getEventDetailsCSV(this.eventID);

@@ -6,7 +6,6 @@
   <form [formGroup]="eventLocationContactForm" autocomplete="off">
     <div class="vertical-form-container">
 
-      <!-- new experimental contact search select -->
       <mat-form-field class="contact-select">
         <mat-select formControlName="contact" placeholder="Contact Person" #contactSelect>
           <ngx-mat-select-search [formControl]="contactFilterCtrl" [placeholderLabel]="'Find contact...'"
@@ -17,7 +16,6 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <!-- end new experimental contact search select -->
 
       <mat-form-field class="form-control  contact-type-select">
         <mat-select placeholder="Contact Type" formControlName="contact_type">

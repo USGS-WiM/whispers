@@ -106,7 +106,7 @@
               <th>Significance of Diagnosis for Species</th>
               <th>Basis of Diagnosis</th>
               <th>Number Assessed</th>
-              <th>Number with diagnosis</th>
+              <th>Number with this diagnosis</th>
               <th>Species Diagnosis Suspect </th>
               <th>Diagnosing Lab </th>
               <th>Edit</th>
@@ -139,7 +139,7 @@
 
         <div class="species-detail-action-bar-left">
           <button mat-button color="primary" class="species-detail-action-button" (click)="addSpeciesDiagnosis(detail.element)"
-            [disabled]="!permissions.write || eventData.complete">
+            [disabled]="!permissions.update || eventData.complete">
             <mat-icon>add</mat-icon> Add Species Diagnosis
           </button>
         </div>

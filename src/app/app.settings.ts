@@ -19,6 +19,14 @@ export class APP_SETTINGS {
         return environment.api_root;
     }
 
+    public static get BANNER_WARNING() {
+        return environment.banner_content;
+    }
+
+    public static get BANNER_TEXT_COLOR() {
+        return environment.banner_text_color;
+    }
+
     public static set environment(env: string) { this._environment = env; }
     public static get API_USERNAME(): string { return 'admin'; }
     public static get API_PASSWORD(): string { return 'whispersadmin'; }
@@ -46,6 +54,20 @@ export class APP_SETTINGS {
                 'diagnosis_string': 'Pending',
             }
         ];
+    }
+
+    public static get EVENT_COMPLETE_DIAGNOSIS_UNKNOWN() {
+        return {
+            'diagnosis': 469,
+            'diagnosis_string': 'Undetermined',
+        }
+    }
+
+    public static get EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN() {
+        return {
+            'diagnosis': 104,
+            'diagnosis_string': 'Pending',
+        }
     }
 
     public static get AUTH_URL(): string { return this.API_ROOT + 'auth/'; }
@@ -141,6 +163,13 @@ export class APP_SETTINGS {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
             'Content-Type': 'text/plain', 'Accept': 'application/json'
+        });
+    }
+
+    public static get AUTH_REQUEST_HEADERS() {
+        return new Headers({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password)
+            // ,'X-Requested-With': 'XMLHttpRequest'
         });
     }
 

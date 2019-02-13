@@ -43,7 +43,7 @@
             </mat-form-field>
 
             <mat-form-field class="form-control">
-              <mat-select placeholder="WHISPers Record Status" formControlName="complete" required (ngModelChange)="checkLocationEndDates()">
+              <mat-select placeholder="WHISPers Record Status" formControlName="complete" required (ngModelChange)="checkEventCompleteRules()">
                 <mat-option [value]="true">Complete</mat-option>
                 <mat-option [value]="false">Incomplete</mat-option>
               </mat-select>
@@ -77,7 +77,7 @@
 
                 <div class="horizontal-form-container">
 
-                  <mat-form-field class="form-control event-org-select">
+                  <!-- <mat-form-field class="form-control event-org-select">
                     <mat-select placeholder="Contact Organization" formControlName="org" required>
                       <mat-option *ngFor="let organization of organizations" value="{{organization.id}}">{{organization.name}}</mat-option>
                     </mat-select>
@@ -87,7 +87,27 @@
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
                     </mat-hint>
+                  </mat-form-field> -->
+
+                  <!------------------------------------------>
+                  <mat-form-field class="form-control event-org-select">
+                    <mat-select placeholder="Contact Organization" formControlName="org" #orgSelect required>
+                      <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="'Find organization...'"
+                        [noEntriesFoundLabel]="'no matching organization found'"></ngx-mat-select-search>
+                      <mat-option *ngFor="let organization of filteredOrganizations[eventOrgIndex] | async" [value]="organization.id">
+                        {{organization.name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-hint align="start">
+                      Contact organization for display to general public, for general inquries
+                    </mat-hint>
+                    <mat-hint align="end" matTooltip="Public field">
+                      <mat-icon>public</mat-icon>
+                    </mat-hint>
+                    <!-- <mat-error *ngIf="speciesDiagnosisForm.get('new_species_diagnosis_organizations').controls[diagnosisOrgIndex].get('org').invalid">Please
+                      enter a value</mat-error> -->
                   </mat-form-field>
+                  <!------------------------------------------>
 
                   <button mat-icon-button color="warn" aria-label="Remove this organization" (click)="removeEventOrganization(eventOrgIndex)"
                     matTooltip="Remove this organization" *ngIf="eventOrgIndex > 0">
@@ -99,10 +119,10 @@
           </div>
 
           <div class="button-row">
-              <button mat-button color="primary" matTooltip="Add contact organization" (click)="addEventOrganization()">
-                <mat-icon>add_circle</mat-icon> Add Contact Organization
-              </button>
-            </div>
+            <button mat-button color="primary" matTooltip="Add contact organization" (click)="addEventOrganization()">
+              <mat-icon>add_circle</mat-icon> Add Contact Organization
+            </button>
+          </div>
           <!-- </div> -->
 
           <!-- NWHC staff only section -->
@@ -414,7 +434,7 @@
                         <!-- event location species step -->
                         <mat-step [stepControl]="eventSubmissionForm">
 
-                          <ng-template matStepLabel>Species & Species Diagnosis</ng-template>
+                          <ng-template matStepLabel>Species</ng-template>
                           <div>
 
                             <div formArrayName="new_location_species">
@@ -527,7 +547,7 @@
                                     </mat-form-field>
 
                                     <mat-form-field class="form-control-short">
-                                      <mat-select placeholder="Captive" formControlName="captive">
+                                      <mat-select placeholder="Captive" formControlName="captive" (ngModelChange)="enforceCaptiveRule($event)">
                                         <mat-option [value]="true">Captive > 72 hours</mat-option>
                                         <mat-option [value]="false">Wild and/or free-ranging</mat-option>
                                       </mat-select>
@@ -549,20 +569,20 @@
                                       </button>
                                     </div>
 
-                                    <!-- Add species diagnosis  -->
-                                    <div class="add-content-button">
+                                    <!-- Add species diagnosis button -->
+                                    <!-- <div class="add-content-button">
                                       <button mat-button color="accent" aria-label="Add Species Diagnosis" matTooltip="Add Species Diagnosis"
                                         (click)="openAddSpeciesDiagnosisDialog(eventLocationIndex,locationSpeciesIndex)">
                                         <mat-icon>note_add</mat-icon> Add Species Diagnosis
                                       </button>
-                                    </div>
+                                    </div> -->
 
                                   </div>
 
-                                  <br />
+                                  <!-- <br /> -->
                                   <!-- div for displaying species diagnoses added to the location species -->
                                   <!-- *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index" -->
-                                  <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
+                                  <!-- <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
                                     <mat-card>
                                       <mat-card-header>
                                         <mat-card-title class="text-bold text-larger">Diagnoses for this Species</mat-card-title>
@@ -581,7 +601,7 @@
                                         </mat-list>
                                       </mat-card-content>
                                     </mat-card>
-                                  </div>
+                                  </div> -->
 
                                 </div>
                               </div>
@@ -612,6 +632,124 @@
 
                         </mat-step>
                         <!-- end event location species step -->
+
+                        <!-- event location species diagnosis step -->
+                        <mat-step [stepControl]="eventSubmissionForm">
+
+                          <ng-template matStepLabel>Species Diagnosis</ng-template>
+                          <div *ngIf="getLocationSpecies(eventLocation).length === 0 || getLocationSpecies(eventLocation)[0].get('species').value === null">
+                            <span class="text-large text-bold">Species Diagnoses: No species selected</span><br><span
+                              class="text-smaller">Return
+                              to previous step to select a species</span>
+                          </div>
+
+                          <div *ngIf="getLocationSpecies(eventLocation).length > 0 && getLocationSpecies(eventLocation)[0].get('species').value !== null">
+                            <span class="text-large text-bold">Species Diagnoses</span>
+
+                            <div formArrayName="new_location_species">
+                              <div *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index">
+
+                                <div class="species-container" [formGroupName]="locationSpeciesIndex" *ngIf="locationSpecies.get('species').value !== null">
+
+                                  <div class="horizontal-form-container" class="species-controls-container">
+
+                                    <div>
+                                      <span class="text-larger text-bold">{{locationSpecies.get('species').value |
+                                        displayValue:'name':this.species}}</span>
+
+                                      <!-- div for displaying species diagnoses added to the location species -->
+                                      <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
+
+                                        <!-- <mat-list dense>
+                                          <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
+                                            {{speciesDiagnosis.get('diagnosis').value |
+                                            displayValue:'name':this.allDiagnoses}}
+                                            {{speciesDiagnosis.get('suspect').value ? '(suspect)': '' }} Number
+                                            Assessed: {{speciesDiagnosis.get('tested_count').value}}
+                                            <button mat-icon-button color="warn" aria-label="Remove this diagnosis"
+                                              matTooltip="Remove this diagnosis" (click)="openSpeciesDiagnosisRemoveConfirm(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
+                                              <mat-icon>remove_circle</mat-icon>
+                                            </button>
+                                          </mat-list-item>
+                                        </mat-list> -->
+
+                                        <table class="species-diagnosis-table">
+                                          <tr>
+                                            <th>Species Diagnosis</th>
+                                            <th>Significance of Diagnosis for Species</th>
+                                            <th>Basis of Diagnosis</th>
+                                            <th>Number Assessed</th>
+                                            <th>Number with this diagnosis</th>
+                                            <th>Species Diagnosis Suspect </th>
+                                            <th>Diagnosing Lab </th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+                                          </tr>
+
+                                          <tr *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
+                                            <td>{{speciesDiagnosis.get('diagnosis').value |
+                                              displayValue:'name':this.allDiagnoses}}</td>
+                                            <td>{{speciesDiagnosis.get('cause').value |
+                                              displayValue:'name':this.diagnosisCauses}}</td>
+                                            <td>{{speciesDiagnosis.get('basis').value |
+                                              displayValue:'name':this.diagnosisBases}}</td>
+                                            <td>{{speciesDiagnosis.get('tested_count').value}}</td>
+                                            <td>{{speciesDiagnosis.get('diagnosis_count').value}}</td>
+                                            <td>{{speciesDiagnosis.get('suspect').value ? 'Yes' : 'No'}}</td>
+                                            <td>
+                                              <ul *ngIf="getDiagnosisOrganizations(speciesDiagnosis)" class="table-cell-list">
+                                                <li *ngFor="let organizationID of getDiagnosisOrganizations(speciesDiagnosis); let diagnosisOrganizationIndex = index;">{{organizationID
+                                                  | displayValue:'name':this.organizations}}</li><br>
+                                              </ul>
+                                            </td>
+                                            <td>
+                                              <button mat-icon-button aria-label="Edit species diagnosis" color="accent"
+                                                (click)="editSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex, speciesDiagnosis, locationSpecies)">
+                                                <mat-icon>edit</mat-icon>
+                                              </button>
+                                            </td>
+                                            <td>
+                                              <button mat-icon-button aria-label="delete species diagnosis" color="warn"
+                                                (click)="openSpeciesDiagnosisRemoveConfirm(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
+                                                <mat-icon>remove_circle</mat-icon>
+                                              </button>
+                                            </td>
+                                          </tr>
+                                        </table>
+                                      </div>
+                                    </div>
+                                    <!-- Add species diagnosis button -->
+                                    <div class="button-row">
+                                      <button mat-button color="primary" matTooltip="Add diagnosis to this species"
+                                        (click)="openAddSpeciesDiagnosisDialog(eventLocationIndex,locationSpeciesIndex)">
+                                        <mat-icon>add_circle</mat-icon> Add Diagnosis
+                                      </button>
+                                    </div>
+                                    <!-- End Add species diagnosis button -->
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="submissionReviewErrors">
+                            <mat-error color="warn" *ngIf="this.eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_species').hasError('minSpecies')">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">Location must have at least one species.</span>
+                            </mat-error>
+                          </div>
+
+                          <div class="form-nav-buttons">
+                            <button mat-button matStepperPrevious type="button">
+                              <mat-icon> navigate_before </mat-icon> Back
+                            </button>
+                            <button mat-button matStepperNext type="button"> Next
+                              <mat-icon> navigate_next </mat-icon>
+                            </button>
+                          </div>
+
+                        </mat-step>
+                        <!-- end event location species diagnosis step -->
 
                         <!-- event location comments step -->
                         <mat-step [stepControl]="eventSubmissionForm">
@@ -989,11 +1127,7 @@
                   suggestions, recommended
                   personal protective gear, etc.) from the USGS National Wildlife Health Center</span>
                 <p>
-                  <mat-card *ngIf="currentUser.role === 1 || currentUser.role === 2 ">
-                    <!-- <mat-card-header>
-                        <mat-card-title> Specimen Consultation and Diagnostic Services Request</mat-card-title>
-                        <mat-card-subtitle>Request consultation and diagnostic services for this event.</mat-card-subtitle>
-                      </mat-card-header> -->
+                  <mat-card>
                     <mat-card-content>
 
                       <form [formGroup]="eventSubmissionForm" autocomplete="off">
@@ -1036,6 +1170,14 @@
                       <span class="alert-text">If an event is marked as complete, it must have end date provided for
                         each location.</span>
                     </mat-error>
+
+                    <mat-error color="warn" *ngIf="speciesDiagnosisViolation">
+                      <mat-icon class="icon">error</mat-icon>
+                      <span class="alert-text">If an event is marked as complete, all species diagnoses must have a
+                        Basis of Diagnosis and Signicance of Diagnosis selected. <br>
+                        Non-compliant species diagnoses: <span *ngFor="let item of nonCompliantSpeciesDiagnoses">Location&nbsp;{{item.eventLocationNumber}},&nbsp;Species&nbsp;{{item.locationSpeciesNumber}}&nbsp;({{item.locationSpeciesName}}),&nbsp;Diagnosis&nbsp;{{item.speciesDiagnosisNumber}}&nbsp;({{item.speciesDiagnosisName}})</span>
+                      </span>
+                    </mat-error>
                   </div>
 
                   <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar "></mat-progress-bar>
@@ -1044,7 +1186,7 @@
                       <mat-icon>pageview</mat-icon> Review Event Submission
                     </button>
                     <p>
-                      <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation"
+                      <button mat-raised-button color="primary" [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation || submitLoading"
                         (click)="submitEvent(eventSubmissionForm.value)">
                         <mat-icon>done</mat-icon> Save Event
                       </button>

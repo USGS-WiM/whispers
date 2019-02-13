@@ -6,6 +6,8 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MatRadioModule } from '@angular/material';
+import { Subject, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { EventStatus } from '@interfaces/event-status';
 import { EventType } from '@interfaces/event-type';
@@ -23,6 +25,7 @@ import { Staff } from '@interfaces/staff';
 import { DatePipe } from '@angular/common';
 import { StaffService } from '@app/services/staff.service';
 import { ConfirmComponent } from '@app/confirm/confirm.component';
+import { DataUpdatedService } from '@app/services/data-updated.service';
 declare let gtag: Function;
 
 @Component({
@@ -46,7 +49,7 @@ export class EditEventComponent implements OnInit {
   eventID;
 
   editEventForm: FormGroup;
-
+  
   submitLoading = false;
 
   buildEditEventForm() {
@@ -56,7 +59,6 @@ export class EditEventComponent implements OnInit {
       event_type: null,
       complete: null,
       public: null,
-      new_organizations: [],
       // NWHC only
       staff: null,
       event_status: null,
@@ -65,6 +67,7 @@ export class EditEventComponent implements OnInit {
       legal_number: '',
       // end NWHC only
     });
+
   }
 
   constructor(
@@ -78,6 +81,7 @@ export class EditEventComponent implements OnInit {
     private eventTypeService: EventTypeService,
     private legalStatusService: LegalStatusService,
     private staffService: StaffService,
+    private dataUpdatedService: DataUpdatedService,
     private datePipe: DatePipe,
     public snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -91,19 +95,14 @@ export class EditEventComponent implements OnInit {
 
   ngOnInit() {
     this.eventID = this.data.eventData.id;
-   
-    //const eventOrganizationsArray = [];
-    // for (const eventOrganization of this.data.eventData.eventorganizations) {
-    //   eventOrganizationsArray.push(eventOrganization.id.toString());
-    // }
 
-    this.editEventForm.setValue({
+    this.editEventForm.patchValue({
       id: this.data.eventData.id,
       event_reference: this.data.eventData.event_reference,
       event_type: this.data.eventData.event_type,
       complete: this.data.eventData.complete,
       public: this.data.eventData.public,
-      new_organizations: [],
+
       // NWHC only
       staff: this.data.eventData.staff,
       event_status: this.data.eventData.event_status,
@@ -113,21 +112,10 @@ export class EditEventComponent implements OnInit {
       // end NWHC only
     });
 
-    // get organizations from the OrganizationService
-    this.organizationService.getOrganizations()
-      .subscribe(
-        organizations => {
-          this.organizations = organizations;
-          const eventOrganizationsArray = [];
-          for (const eventOrganization of this.data.eventData.eventorganizations) {
-            eventOrganizationsArray.push(eventOrganization.id);
-          }
-          this.editEventForm.get('new_organizations').setValue(eventOrganizationsArray);
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    if (this.data.eventData.complete === false) {
+      this.editEventForm.get('quality_check').disable();
+    }
+
 
     this.eventTypeService.getEventTypes()
       .subscribe(
@@ -174,6 +162,15 @@ export class EditEventComponent implements OnInit {
         }
       );
 
+    this.editEventForm.get('complete').valueChanges.subscribe(value => {
+      if (value === true) {
+        this.editEventForm.get('quality_check').enable();
+      } else if (value === false) {
+        this.editEventForm.get('quality_check').disable();
+        this.editEventForm.get('quality_check').setValue(null);
+      }
+    });
+
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -197,6 +194,26 @@ export class EditEventComponent implements OnInit {
           }
         }
       );
+    } else if (this.editEventForm.get('complete').value === false) {
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Marking event as incomplete',
+            titleIcon: 'warning',
+            message: 'Updating an event to incomplete will remove any existing Quality Check date and unlock editing of the event.',
+            messageIcon: '',
+            confirmButtonText: 'OK',
+            showCancelButton: false
+          }
+        }
+      );
+
+      this.confirmDialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.editEventForm.get('quality_check').setValue(null);
+        }
+      });
     }
   }
 
@@ -249,13 +266,24 @@ export class EditEventComponent implements OnInit {
   updateEvent(formValue) {
     formValue.id = this.data.eventData.id;
     formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');
+
+    const new_orgs_array = [];
+    // loop through and convert new_organizations
+    for (const org of formValue.new_organizations) {
+      if (org !== null) {
+        new_orgs_array.push(org.org);
+      }
+    }
+    formValue.new_organizations = new_orgs_array;
+
     this.eventService.update(formValue)
       .subscribe(
         (event) => {
           this.submitLoading = false;
           this.openSnackBar('Event Updated', 'OK', 5000);
+          this.dataUpdatedService.triggerRefresh();
           this.editEventDialogRef.close();
-          gtag('event', 'click', {'event_category': 'Event Details','event_label': 'Event Edited'});
+          gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Event Edited' });
         },
         error => {
           this.submitLoading = false;

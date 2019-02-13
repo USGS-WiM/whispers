@@ -82,7 +82,7 @@
               <!-- Event organizations -->
               <div class="event-page-split-half">
                 <div class="event-table-header">Event Organizations</div>
-                <table id="speciesList">
+                <table>
                   <tr>
                     <th>Organization</th>
                     <th>Location</th>
@@ -274,8 +274,7 @@
 
           <!--  
               Event Diagnosis
-              Event Diagnosis
-              Event Diagnosis
+              Event Organizations
              -->
           <div class="event-detail-wrapper">
 
@@ -288,6 +287,10 @@
                 (click)="addEventDiagnosis(eventData.id)">
                 <mat-icon>add</mat-icon> Add Event Diagnosis
               </button>
+              <button mat-button color="primary" class="event-detail-action-button" [disabled]="eventData.complete || !eventData.permissions.update"
+              (click)="addEventOrganization(eventData.id)">
+              <mat-icon>add</mat-icon> Add Event Organization
+            </button>
             </div>
 
             <div class="event-page-group">
@@ -306,8 +309,6 @@
 
                   <tr *ngFor="let eventdiagnosis of eventData.eventdiagnoses">
                     <td>{{eventdiagnosis.diagnosis_string}}</td>
-                    <!--<td>{{eventdiagnosis.diagnosis_type_string}}</td>
-                    <td>{{eventdiagnosis.suspect ? 'Yes' : 'No'}}</td>-->
                     <td>
                       <button mat-icon-button aria-label="delete event diagnosis" color="warn" [disabled]="!eventData.permissions.destroy || eventData.complete"
                         (click)="openEventDiagnosisDeleteConfirm(eventdiagnosis.id)">
@@ -315,6 +316,33 @@
                       </button>
                     </td>
 
+                  </tr>
+                </table>
+
+              </div>
+            </div>
+
+            <div class="event-page-group">
+              <div class="event-table-header">Event Organizations</div>
+
+              <div *ngIf="eventData.eventdiagnoses.length > 0">
+                <table id="speciesList">
+                  <tr>
+                    <th>Organization</th>
+                    <th>Location</th>
+                    <th>Delete</th>
+                  </tr>
+                  <tr *ngFor="let eventOrganization of eventData.eventorganizations">
+                    <td>{{eventOrganization.name}}</td>
+                    <td> {{eventOrganization.city}} {{eventOrganization.administrative_level_one |
+                      displayValue:'abbreviation':this.administrative_level_one }} </td>
+                    <td>
+                      <!--eventOrganization.id will need to be updated (unless service response is updated - currently this is the org ID, not eventOrg ID-->
+                      <button mat-icon-button aria-label="delete event organization" color="warn" [disabled]="!eventData.permissions.destroy || eventData.complete"
+                        (click)="openEventOrganizationDeleteConfirm(eventOrganization.id)">
+                        <mat-icon>remove_circle</mat-icon>
+                      </button>
+                    </td>
                   </tr>
                 </table>
 
@@ -376,7 +404,7 @@
             Service Requests
             Service Requests
            -->
-          <div class="event-detail-wrapper" *ngIf="eventData.cservicerequests">
+          <div class="event-detail-wrapper" *ngIf="eventData.servicerequests">
 
             <div class="event-page-group">
 
@@ -607,9 +635,16 @@
                     -->
                   <div class="detail-section-buttons">
                     <button mat-button color="primary" class="event-detail-action-button" (click)="addEventLocationContact(eventLocation.id)"
-                      [disabled]="!eventData.permissions.update || userContactsLoading || eventData.complete" matTooltip="Associate contact with this event location">
-                      <mat-icon>add_comment</mat-icon>
+                      [disabled]="!eventData.permissions.update || userContactsLoading || eventData.complete"
+                      matTooltip="Associate contact with this event location">
+                      <mat-icon>add_circle</mat-icon>
                       Add Contact
+                    </button>
+                  </div>
+                  <div class="detail-section-buttons">
+                    <button mat-button color="primary" class="event-detail-action-button" (click)="openCreateContactDialog()"
+                      matTooltip="Create a new contact">
+                      <mat-icon>person_add</mat-icon> Create New Contact
                     </button>
                   </div>
                 </mat-expansion-panel>

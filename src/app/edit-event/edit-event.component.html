@@ -43,16 +43,9 @@
 
       </div>
 
-      <!-- Contact Organizations -->
-      <!-- <mat-form-field class="form-control org-select">
-        <mat-select placeholder="Event Organizations" formControlName="new_organizations" multiple [disabled]="editEventForm.get('complete').value">
-          <mat-option value="">--</mat-option>
-          <mat-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</mat-option>
-        </mat-select>
-      </mat-form-field> -->
-
+      <!--Event Organization select removed because it needs to treated as an individual for CRUD -->
       <!----------------------------------------------->
-      <div formArrayName="new_organizations">
+      <!-- <div formArrayName="new_organizations">
         <div *ngFor="let organization of getEventOrganizations(editEventForm); let eventOrgIndex = index">
 
           <div [formGroupName]="eventOrgIndex">
@@ -80,7 +73,7 @@
         <button mat-button color="primary" matTooltip="Add contact organization" (click)="addEventOrganization()">
           <mat-icon>add_circle</mat-icon> Add Contact Organization
         </button>
-      </div>
+      </div> -->
       <!----------------------------------------------->
 
       <!-- NWHC staff only section -->

@@ -1,0 +1,38 @@
+<h1 mat-dialog-title>
+  <i class="material-icons">add</i> Add Event Organization for Event {{eventID}}</h1>
+<mat-dialog-content>
+  <form [formGroup]="addEventOrganizationForm" autocomplete="off">
+
+    <div class="vertical-form-container">
+
+      <!-- <mat-form-field class="form-control event-organization-select">
+        <mat-select placeholder="Organization" formControlName="organization">
+          <mat-option value="">--</mat-option>
+          <mat-option *ngFor="let org of organizations" value="{{org.id}}">{{org.name}}</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+
+      <mat-form-field class="form-control event-organization-select">
+        <mat-select formControlName="organization" placeholder="Organization" #organizationSelect>
+          <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="'Find organization...'"
+            [noEntriesFoundLabel]="'no matching organization found'"></ngx-mat-select-search>
+          <mat-option *ngFor="let organization of filteredOrganizations | async" [value]="organization.id">
+            <span>{{organization.name}}</span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+
+  <button mat-button color="warn" (click)="this.addEventOrganizationDialogRef.close('cancel');">
+    <mat-icon>cancel</mat-icon>&nbsp;Cancel
+  </button>
+  <button mat-button type="submit" color="primary" [disabled]="addEventOrganizationForm.invalid" (click)="onSubmit(addEventOrganizationForm.value)">
+    <mat-icon>save</mat-icon>&nbsp;Save
+  </button>
+  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+</mat-dialog-actions>

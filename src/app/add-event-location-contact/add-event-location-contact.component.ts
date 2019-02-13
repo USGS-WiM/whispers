@@ -43,7 +43,6 @@ export class AddEventLocationContactComponent implements OnInit {
   eventLocationContactForm: FormGroup;
 
   public filteredContacts: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>(1);
-
   contactFilterCtrl: FormControl = new FormControl();
 
   /** Subject that emits when the component has been destroyed. */
@@ -98,22 +97,6 @@ export class AddEventLocationContactComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
-
-    const arrayControl = this.eventLocationContactForm.get('contact') as FormControl;
-    this.filteredUserContacts = arrayControl.valueChanges
-      .startWith(null)
-      .map(val => this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
-
-  }
-
-  displayFnContact(contactId?: Contact): string | undefined {
-    let contact_id_match;
-    for (let i = 0; i < this["options"]._results.length; i++) {
-      if (this["options"]._results[i].value === contactId) {
-        contact_id_match = this["options"]._results[i].viewValue;
-      }
-    }
-    return contact_id_match;
   }
 
   private filterContact() {
@@ -158,31 +141,8 @@ export class AddEventLocationContactComponent implements OnInit {
         error => {
           this.errorMessage = <any>error;
           this.openSnackBar('Error. Contact association not saved. Error message: ' + error, 'OK', 8000);
-
         }
       );
-  }
-
-  filter(val: any, searchArray: any, searchProperties: string[]): string[] {
-    let result = [];
-    for (let searchProperty of searchProperties) {
-      if (isNaN(val)) {
-        const realval = val && typeof val === 'object' ? val[searchProperty] : val;
-        let lastOption = null;
-        if (searchArray !== undefined) {
-          for (let i = 0; i < searchArray.length; i++) {
-            if (searchArray[i][searchProperty] != null && (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase()))) {
-              if (searchArray[i][searchProperty] !== lastOption) {
-                lastOption = searchArray[i][searchProperty];
-                result.push(searchArray[i]);
-              }
-            }
-          }
-        }
-      }
-    }
-    // this will return all records matching the val string
-    return result;
   }
 
 }

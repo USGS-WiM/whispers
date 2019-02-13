@@ -108,6 +108,7 @@ import { NewLookupRequestComponent } from './new-lookup-request/new-lookup-reque
 import { SaveSearchComponent } from './save-search/save-search.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { ViewContactDetailsComponent } from './view-contact-details/view-contact-details.component';
+import { AddEventOrganizationComponent } from './add-event-organization/add-event-organization.component';
 
 
 
@@ -144,7 +145,8 @@ import { ViewContactDetailsComponent } from './view-contact-details/view-contact
     NewLookupRequestComponent,
     SaveSearchComponent,
     UserRegistrationComponent,
-    ViewContactDetailsComponent
+    ViewContactDetailsComponent,
+    AddEventOrganizationComponent
   ],
   imports: [
     BrowserModule,
@@ -236,6 +238,7 @@ import { ViewContactDetailsComponent } from './view-contact-details/view-contact
     AuthenticationComponent,
     EditEventComponent,
     AddEventDiagnosisComponent,
+    AddEventOrganizationComponent,
     EditLocationSpeciesComponent,
     EditSpeciesDiagnosisComponent,
     EditEventLocationComponent,

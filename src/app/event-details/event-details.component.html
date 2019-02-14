@@ -89,8 +89,8 @@
                   </tr>
 
                   <tr *ngFor="let eventOrganization of eventData.eventorganizations">
-                    <td>{{eventOrganization.name}}</td>
-                    <td> {{eventOrganization.city}} {{eventOrganization.administrative_level_one |
+                    <td>{{eventOrganization.organization.name}}</td>
+                    <td> {{eventOrganization.organization.city}} {{eventOrganization.organization.administrative_level_one |
                       displayValue:'abbreviation':this.administrative_level_one }} </td>
                   </tr>
                 </table>
@@ -333,8 +333,8 @@
                     <th>Delete</th>
                   </tr>
                   <tr *ngFor="let eventOrganization of eventData.eventorganizations">
-                    <td>{{eventOrganization.name}}</td>
-                    <td> {{eventOrganization.city}} {{eventOrganization.administrative_level_one |
+                    <td>{{eventOrganization.organization.name}}</td>
+                    <td> {{eventOrganization.organization.city}} {{eventOrganization.organization.administrative_level_one |
                       displayValue:'abbreviation':this.administrative_level_one }} </td>
                     <td>
                       <!--eventOrganization.id will need to be updated (unless service response is updated - currently this is the org ID, not eventOrg ID-->

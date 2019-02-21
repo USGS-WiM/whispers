@@ -699,6 +699,34 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
+  addServiceRequestResponse(servicerequest) {
+    // Open add service request dialog for response field update
+    this.addServiceRequestDialogRef = this.dialog.open(AddServiceRequestComponent, {
+      disableClose: true,
+      // minWidth: '60%',
+      data: {
+        event_id: this.eventData.id,
+        servicerequest: servicerequest,
+        comment_types: this.commentTypes,
+        title: 'Respond to service request',
+        titleIcon: 'question_answer',
+        showCancelButton: true,
+        action_button_text: 'Save Response',
+        actionButtonIcon: 'question_answer',
+        action: 'respond'
+      }
+    });
+
+    this.addServiceRequestDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
 
 
   addEventLocationContact(id: string) {
@@ -734,6 +762,7 @@ export class EventDetailsComponent implements OnInit {
     // Open dialog for adding event location contact
     this.addServiceRequestDialogRef = this.dialog.open(AddServiceRequestComponent, {
       disableClose: true,
+      // minWidth: '60%',
       data: {
         event_id: id,
         comment_types: this.commentTypes,
@@ -741,7 +770,8 @@ export class EventDetailsComponent implements OnInit {
         titleIcon: 'add_circle',
         showCancelButton: true,
         action_button_text: 'Submit request',
-        actionButtonIcon: 'question_answer'
+        actionButtonIcon: 'question_answer',
+        action: 'add'
       }
     });
 

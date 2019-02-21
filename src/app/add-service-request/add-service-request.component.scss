@@ -17,38 +17,42 @@
     width: 35em;
 }
 
-.alert{ 
+.alert {
     width: 100%;
     background-color: lightcoral;
 }
-
 
 .text-small {
     font-size: small;
 }
 
 // Prev and next buttons
-.detail-section-buttons{
+.detail-section-buttons {
     display: flex;
     justify-content: space-between;
     width: 100%;
-
-    &.centered{
+    &.centered {
         justify-content: center;
     }
-
-    button{
+    button {
         position: relative;
         top: -2px;
-
-        &:hover{
+        &:hover {
             cursor: pointer;
         }
     }
 }
 
+.add-service-request-form {
+    width: 40em;
+}
 
+.general-comment-text-area {
+    width: 40em;
+    margin-bottom: 2em;
+}
 
-.add-service-request-form{
-
+.form-control {
+    width: 18em;
+    margin: 10px;
 }

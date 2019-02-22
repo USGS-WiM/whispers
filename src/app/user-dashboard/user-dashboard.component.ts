@@ -148,13 +148,14 @@ export class UserDashboardComponent implements OnInit {
         (eventsummaries) => {
           this.events = eventsummaries;
           this.dataSource = new MatTableDataSource(this.events);
+          console.log(this.dataSource.data);
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
 
-    this.dataSource = new MatTableDataSource(this.events);
+    // this.dataSource = new MatTableDataSource(this.events);
   }
 
   _setDataSource(indexNumber) {

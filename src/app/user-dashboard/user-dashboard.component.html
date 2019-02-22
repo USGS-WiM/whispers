@@ -56,11 +56,11 @@
               <i class="material-icons">
                 add_box
               </i> Add</button>
-            <button mat-button color="accent" (click)="openEditContactDialog()">
+            <button mat-button color="accent" (click)="openEditContactDialog()" [disabled]="selection.selected.length === 0">
               <i class="material-icons">
                 edit
               </i> Edit</button>
-            <button mat-button color="accent" (click)="openContactRemoveConfirm()">
+            <button mat-button color="accent" (click)="openContactRemoveConfirm()" [disabled]="selection.selected.length === 0">
               <i class="material-icons">
                 remove_circle
               </i> Delete</button>
@@ -72,16 +72,14 @@
         <div *ngIf="contactsDataSource" class="results-table-div">
 
 
-          <!-- <mat-form-field>
-                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-                </mat-form-field> -->
-
-          <mat-table [dataSource]="contactsDataSource" matSort matSortActive="last_name" matSortDirection="asc">
+          <mat-table [dataSource]="contactsDataSource" matSort matSortActive="last_name" matSortDirection="asc"
+            *ngIf="contactsDataSource.data.length > 0">
 
             <!-- Selection column -->
             <ng-container matColumnDef="select">
               <mat-header-cell *matHeaderCellDef>
-                <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
                   [indeterminate]="selection.hasValue() && !isAllSelected()">
                 </mat-checkbox>
               </mat-header-cell>
@@ -132,6 +130,10 @@
             <mat-row *matRowDef="let event; columns: contactDisplayedColumns;"></mat-row>
           </mat-table>
 
+          <div *ngIf="contactsDataSource.data.length === 0">
+            <h3>No contacts found</h3>
+          </div>
+
           <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
         </div>
       </mat-card-content>
@@ -142,9 +144,9 @@
   <mat-tab label="Your Events">
 
     <mat-card>
-      <mat-card-title>
+      <mat-card-title *ngIf="dataSource">
 
-        <div class="results-card-title-row">
+        <div class="results-card-title-row" *ngIf="dataSource.data.length > 0">
           <span class="results-button-row">
             <button mat-button color="accent">
               <i class="material-icons">
@@ -157,12 +159,7 @@
       <mat-card-content>
         <div *ngIf="dataSource" class="results-table-div">
 
-
-          <!-- <mat-form-field>
-                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-                </mat-form-field> -->
-
-          <mat-table #eventSort='matSort' [dataSource]="dataSource" matSort>
+          <mat-table #eventSort='matSort' [dataSource]="dataSource" matSort *ngIf="dataSource.data.length > 0">
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
@@ -196,22 +193,23 @@
 
             <!-- Location Column -->
             <ng-container matColumnDef="locations">
-              <mat-header-cell *matHeaderCellDef matTooltip="Displayed as County (or equivalent), State (or equivalent), Country - where values are available">Location</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef
+                matTooltip="Displayed as County (or equivalent), State (or equivalent), Country - where values are available">
+                Location</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let administrativeleveltwo of event.administrativeleveltwos">
                     <span>{{administrativeleveltwo.name}}</span>
-                    <span *ngIf="administrativeleveltwo.administrative_level_one_string !== null && administrativeleveltwo.administrative_level_one_string !== ''">,&nbsp;</span>
+                    <span
+                      *ngIf="administrativeleveltwo.administrative_level_one_string !== null && administrativeleveltwo.administrative_level_one_string !== ''">,&nbsp;</span>
                     <span>{{administrativeleveltwo.administrative_level_one_string}}</span>
-                    <span *ngIf="administrativeleveltwo.country_string !== null && administrativeleveltwo.country_string !== ''">,&nbsp;</span>
+                    <span
+                      *ngIf="administrativeleveltwo.country_string !== null && administrativeleveltwo.country_string !== ''">,&nbsp;</span>
                     <span>{{administrativeleveltwo.country_string}}
                     </span>
 
                   </li>
                 </ul>
-                <!-- <span *ngFor="let administrativelevelone of event.administrativelevelones">{{administrativelevelone.name}}
-                    <span *ngIf="(event.administrativelevelones.indexOf(administrativelevelone)) < (event.administrativelevelones.length - 1)">, </span>
-                  </span> -->
               </mat-cell>
             </ng-container>
 
@@ -244,7 +242,7 @@
                 <!--<span *ngFor="let species of event.species">{{species.name}}
                   <span *ngIf="(event.species.indexOf(species)) < (event.species.length - 1)"> </span>
                 </span>-->
-                <ul>
+                <ul  class="table-cell-list">
                   <li *ngFor="let species of event.species">{{species.name}}</li>
                 </ul>
               </mat-cell>
@@ -254,7 +252,7 @@
             <ng-container matColumnDef="eventdiagnoses">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Event Diagnosis </mat-header-cell>
               <mat-cell *matCellDef="let event">
-                <ul *ngIf="event.eventdiagnoses !== null">
+                <ul *ngIf="event.eventdiagnoses !== null"  class="table-cell-list">
                   <li *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}</li>
                 </ul>
               </mat-cell>
@@ -269,8 +267,11 @@
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"></mat-row>
           </mat-table>
-
+          <div *ngIf="dataSource.data.length === 0">
+            <h3>No events found</h3>
+          </div>
           <mat-paginator #eventPaginator='matPaginator' [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+
         </div>
       </mat-card-content>
     </mat-card>

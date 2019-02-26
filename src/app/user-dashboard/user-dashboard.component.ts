@@ -9,7 +9,6 @@ import { MatSnackBar } from '@angular/material';
 import { ContactService } from '@app/services/contact.service';
 
 import { Contact } from '@interfaces/contact';
-import { EventSummary } from '@interfaces/event-summary';
 
 import { CreateContactComponent } from '@create-contact/create-contact.component';
 import { CurrentUserService } from '@services/current-user.service';
@@ -32,8 +31,8 @@ import { NewLookupRequestComponent } from '@app/new-lookup-request/new-lookup-re
 })
 export class UserDashboardComponent implements OnInit {
 
-  dataSource: MatTableDataSource<EventSummary>;
   contactsDataSource: MatTableDataSource<Contact>;
+  contactsLoading = false;
 
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
@@ -50,20 +49,6 @@ export class UserDashboardComponent implements OnInit {
   currentUser;
 
   username = APP_SETTINGS.API_USERNAME;
-
-  displayedColumns = [
-    'id',
-    'event_type_string',
-    'affected_count',
-    'start_date',
-    'end_date',
-    // 'administrativelevelones',
-    // 'administrativeleveltwos',
-    'locations',
-    'species',
-    'eventdiagnoses',
-    'permission_source'
-  ];
 
   contactDisplayedColumns = [
     'select',
@@ -106,6 +91,8 @@ export class UserDashboardComponent implements OnInit {
     const allowMultiSelect = true;
     this.selection = new SelectionModel<Contact>(allowMultiSelect, initialSelection);
 
+    this.contactsLoading = true;
+
     this._contactService.getContacts()
       .subscribe(
         (usercontacts) => {
@@ -113,9 +100,11 @@ export class UserDashboardComponent implements OnInit {
           this.contactsDataSource = new MatTableDataSource(this.contacts);
           this.contactsDataSource.paginator = this.contactPaginator;
           this.contactsDataSource.sort = this.contactSort;
+          this.contactsLoading = false;
         },
         error => {
           this.errorMessage = <any>error;
+          this.contactsLoading = false;
         }
       );
 
@@ -143,19 +132,6 @@ export class UserDashboardComponent implements OnInit {
 
     this.contactsDataSource = new MatTableDataSource(this.contacts);
 
-    this._eventService.getUserDashboardEventSummaries()
-      .subscribe(
-        (eventsummaries) => {
-          this.events = eventsummaries;
-          this.dataSource = new MatTableDataSource(this.events);
-          console.log(this.dataSource.data);
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-
-    // this.dataSource = new MatTableDataSource(this.events);
   }
 
   _setDataSource(indexNumber) {
@@ -164,9 +140,6 @@ export class UserDashboardComponent implements OnInit {
         case 0:
           !this.contactsDataSource.paginator ? this.contactsDataSource.paginator = this.contactPaginator : null;
           break;
-        case 1:
-          !this.dataSource.paginator ? this.dataSource.paginator = this.paginator : null;
-          !this.dataSource.sort ? this.dataSource.sort = this.sort : null;
       }
     });
   }
@@ -183,7 +156,6 @@ export class UserDashboardComponent implements OnInit {
       data: {
         contact_action: 'create'
       }
-      // height: '75%'
     });
 
     this.createContactDialogRef.afterClosed()
@@ -347,16 +319,6 @@ export class UserDashboardComponent implements OnInit {
           }
         );
     }
-  }
-
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
-  }
-
-  selectEvent(event) {
-    this.router.navigate([`../event/${event.id}`], { relativeTo: this.route });
   }
 
   // From angular material table sample on material api reference site

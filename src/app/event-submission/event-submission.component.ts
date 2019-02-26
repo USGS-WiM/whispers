@@ -89,6 +89,7 @@ import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
 import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DateValidators } from '@validators/date.validator';
 
 import * as search_api from 'usgs-search-api';
@@ -327,7 +328,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     private staffService: StaffService,
     private diagnosisBasisService: DiagnosisBasisService,
     private diagnosisCauseService: DiagnosisCauseService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.buildEventSubmissionForm();
 
@@ -351,6 +354,11 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this._onDestroy.next();
     this._onDestroy.complete();
   }
+
+  navigateToHome() {
+    this.router.navigate([`../home`], { relativeTo: this.route });
+  }
+
 
   openEventSubmitConfirm(formValue): void {
     this.bottomSheet.open(EventSubmissionConfirmComponent, {
@@ -2104,7 +2112,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   submitEvent(formValue) {
 
     this.submitLoading = true;
-
+    
     // KEEP. Bring this back pending introduction of generic event location comment.
     // check if extra event location comment is blank, if so, delete it from the object
     // for (const event_location of formValue.new_event_locations) {
@@ -2135,6 +2143,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       //delete the event_type superficially attached to event locations
       delete event_location.event_type;
     }
+
+    sessionStorage.setItem('eventSubmission', formValue);
 
     this.eventService.create(formValue)
       .subscribe(

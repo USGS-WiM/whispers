@@ -139,7 +139,6 @@ export class HomeComponent implements OnInit {
     private eventService: EventService,
     private dialog: MatDialog,
     public snackBar: MatSnackBar,
-    private router: Router,
     private searchDialogService: SearchDialogService,
     private displayValuePipe: DisplayValuePipe,
     private adminLevelOneService: AdministrativeLevelOneService,
@@ -150,6 +149,7 @@ export class HomeComponent implements OnInit {
     private speciesService: SpeciesService,
     private currentUserService: CurrentUserService,
     private searchService: SearchService,
+    private router: Router,
     private route: ActivatedRoute
   ) {
 

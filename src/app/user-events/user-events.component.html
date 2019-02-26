@@ -1,0 +1,94 @@
+<div class="spinner-container" *ngIf="dataSource.loading$ | async">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="dataSource" class="results-table-div">
+
+  <mat-table class="user-events-table" [dataSource]="dataSource" matSort matSortDirection="asc"
+    matSortDisableClear>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+      <mat-cell *matCellDef="let event"> {{event.id}} </mat-cell>
+    </ng-container>
+
+    <!-- Event Type Column -->
+    <ng-container matColumnDef="event_type">
+      <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+      <mat-cell *matCellDef="let event"> {{event.event_type_string}} </mat-cell>
+    </ng-container>
+
+    <!-- Affected Count Column -->
+    <ng-container matColumnDef="affected_count">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Affected </mat-header-cell>
+      <mat-cell *matCellDef="let event"> {{event.affected_count}} </mat-cell>
+    </ng-container>
+
+    <!-- Start Date Column -->
+    <ng-container matColumnDef="start_date">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </mat-header-cell>
+      <mat-cell *matCellDef="let event"> {{event.start_date | date:'mediumDate'}} </mat-cell>
+    </ng-container>
+
+    <!-- End Date Column -->
+    <ng-container matColumnDef="end_date">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> End Date </mat-header-cell>
+      <mat-cell *matCellDef="let event"> {{event.end_date | date:'mediumDate'}} </mat-cell>
+    </ng-container>
+
+    <!-- Location Column -->
+    <ng-container matColumnDef="locations">
+      <mat-header-cell *matHeaderCellDef
+        matTooltip="Displayed as County (or equivalent), State (or equivalent), Country - where values are available">
+        Location</mat-header-cell>
+      <mat-cell *matCellDef="let event">
+        <ul class="table-cell-list">
+          <li *ngFor="let administrativeleveltwo of event.administrativeleveltwos">
+            <span>{{administrativeleveltwo.name}}</span>
+            <span
+              *ngIf="administrativeleveltwo.administrative_level_one_string !== null && administrativeleveltwo.administrative_level_one_string !== ''">,&nbsp;</span>
+            <span>{{administrativeleveltwo.administrative_level_one_string}}</span>
+            <span
+              *ngIf="administrativeleveltwo.country_string !== null && administrativeleveltwo.country_string !== ''">,&nbsp;</span>
+            <span>{{administrativeleveltwo.country_string}}
+            </span>
+
+          </li>
+        </ul>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Species Column -->
+    <ng-container matColumnDef="species">
+      <mat-header-cell *matHeaderCellDef> Species </mat-header-cell>
+      <mat-cell *matCellDef="let event">
+        <ul class="table-cell-list">
+          <li *ngFor="let species of event.species">{{species.name}}</li>
+        </ul>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Event Diagnosis Column -->
+    <ng-container matColumnDef="eventdiagnoses">
+      <mat-header-cell *matHeaderCellDef> Event Diagnosis </mat-header-cell>
+      <mat-cell *matCellDef="let event">
+        <ul *ngIf="event.eventdiagnoses !== null" class="table-cell-list">
+          <li *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}</li>
+        </ul>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Permission Source Column -->
+    <ng-container matColumnDef="permission_source">
+      <mat-header-cell *matHeaderCellDef> Permission Source </mat-header-cell>
+      <mat-cell *matCellDef="let event"> {{event.permission_source}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"
+      matTooltip="Click event to see details"></mat-row>
+  </mat-table>
+
+  <mat-paginator [length]="eventCount" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+</div>

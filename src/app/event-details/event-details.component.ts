@@ -249,6 +249,7 @@ export class EventDetailsComponent implements OnInit {
           },
           error => {
             this.errorMessage = <any>error;
+            this.eventDataLoading = false;
           }
         );
     });

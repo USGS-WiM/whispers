@@ -287,7 +287,7 @@ export class EditEventComponent implements OnInit {
         },
         error => {
           this.submitLoading = false;
-          this.openSnackBar('Error. Event not updated. Error message: ' + error, 'OK', 8000);
+          this.openSnackBar('Error. Event not updated. Error message: ' + error, 'OK', 15000);
         }
       );
   }

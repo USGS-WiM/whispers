@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, AfterViewChecked } from '@angular/core';
 //declare let L: any;
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -280,6 +280,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
+
   ngOnInit() {
 
     const defaultEventQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
@@ -288,10 +289,9 @@ export class HomeComponent implements OnInit {
 
     this.currentSearchQuery.and_params = [];
 
-    if (sessionStorage.getItem('currentSearch')) {
-      this.openSnackBar('Current Search has been loaded from your previous visit.', 'OK', 8000);
-
-    }
+    //if (sessionStorage.getItem('currentSearch')) {
+    //   this.openSnackBar('Current Search has been loaded from your previous visit.', 'OK', 8000);
+    // }
 
     if (this.currentSearchQuery.diagnosis_type_includes_all === true) {
       this.currentSearchQuery.and_params.push('diagnosis_type');

@@ -1177,6 +1177,14 @@
                         in the event at the time of event creation.</span>
                     </mat-error>
 
+                    <mat-error color="warn" *ngIf="closedEventLocationSpeciesNumbersViolation">
+                        <mat-icon class="icon">error</mat-icon>
+                        <span class="alert-text">For morbidity/mortality events marked as Closed, there must be at least one value greater
+                          than 0
+                          between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for all species
+                          in the event.</span>
+                      </mat-error>
+
                     <mat-error color="warn" *ngIf="locationStartDatesViolation">
                       <mat-icon class="icon">error</mat-icon>
                       <span class="alert-text">An event must have a start date provided for at least one
@@ -1208,7 +1216,7 @@
                     </button>
                     <p>
                       <button mat-raised-button color="primary"
-                        [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation || submitLoading"
+                        [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation || closedEventLocationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation || submitLoading"
                         (click)="submitEvent(eventSubmissionForm.value)">
                         <mat-icon>done</mat-icon> Save Event
                       </button>

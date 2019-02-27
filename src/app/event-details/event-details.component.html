@@ -1,7 +1,15 @@
 <div class="page-loader" *ngIf="eventDataLoading">
   <mat-spinner></mat-spinner>
 </div>
-<div id="eventDetailsContainer" *ngIf="!eventDataLoading">
+<div *ngIf="eventNotFound">
+  <mat-card>
+    <h3>Event {{eventID}} not found in the WHISPers database</h3>
+    <p><button mat-raised-button color="primary" (click)="navigateToHome()">
+        <mat-icon class="icon">home</mat-icon> Return Home
+      </button></p>
+  </mat-card>
+</div>
+<div id="eventDetailsContainer" *ngIf="!eventDataLoading && !eventNotFound">
 
   <div class="detailsDiv">
 
@@ -547,7 +555,8 @@
 
 
                 <!-- Begin Event Location Comments section -->
-                <mat-expansion-panel (opened)="locationCommentsPanelOpen = true" (closed)="locationCommentsPanelOpen = false">
+                <mat-expansion-panel (opened)="locationCommentsPanelOpen = true"
+                  (closed)="locationCommentsPanelOpen = false">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       {{locationCommentsPanelOpen ? 'Hide Location Comments' : 'View Location Comments'}}
@@ -594,8 +603,8 @@
 
 
                 <!-- Begin Event Location Contacts section -->
-                <mat-expansion-panel (opened)="locationContactsPanelOpen = true" (closed)="locationContactsPanelOpen = false"
-                  style="margin: 18px 0;">
+                <mat-expansion-panel (opened)="locationContactsPanelOpen = true"
+                  (closed)="locationContactsPanelOpen = false" style="margin: 18px 0;">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       {{locationContactsPanelOpen ? 'Hide Location Contacts' : 'View Location Contacts'}}

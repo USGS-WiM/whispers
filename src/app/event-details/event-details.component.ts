@@ -93,6 +93,8 @@ export class EventDetailsComponent implements OnInit {
 
   eventOwner;
 
+  eventNotFound = false;
+
   showAddEventLocation = false;
 
   //locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
@@ -183,7 +185,8 @@ export class EventDetailsComponent implements OnInit {
     private organizationService: OrganizationService,
     private commentService: CommentService,
     private contactService: ContactService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.eventLocationSpecies = [];
 
@@ -249,6 +252,10 @@ export class EventDetailsComponent implements OnInit {
           },
           error => {
             this.errorMessage = <any>error;
+            this.eventDataLoading = false;
+            if (error = '"detail":"Not found."') {
+              this.eventNotFound = true;
+            }
           }
         );
     });
@@ -534,6 +541,10 @@ export class EventDetailsComponent implements OnInit {
       this.map.fitBounds(bounds);
     }
 
+  }
+
+  navigateToHome() {
+    this.router.navigate([`../../home`], { relativeTo: this.route });
   }
 
   editEvent(id: string) {

@@ -126,9 +126,6 @@ export class SavedSearchesComponent implements OnInit {
               }
             );
 
-          console.log('User saved searches: ' + this.parsedSearches);
-
-          // this.savedSearchesDataSource = new MatTableDataSource(this.searches);
           this.savedSearchesDataSource = new MatTableDataSource(this.parsedSearches);
           this.savedSearchesDataSource.paginator = this.searchPaginator;
           this.savedSearchesDataSource.sort = this.searchSort;
@@ -137,9 +134,6 @@ export class SavedSearchesComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
-
-    // this.savedSearchesDataSource = new MatTableDataSource(this.searches);
-
 
     // get event types from the eventType service
     this.eventTypeService.getEventTypes()
@@ -257,7 +251,7 @@ export class SavedSearchesComponent implements OnInit {
   }
 
   implementSearch(search) {
-    
+
 
     // TODO: currentDiplayQuery needs to be parsed from the search object
     const displayQuery: DisplayQuery = {

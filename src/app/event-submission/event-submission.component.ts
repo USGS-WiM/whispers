@@ -89,6 +89,7 @@ import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
 import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DateValidators } from '@validators/date.validator';
 
 import * as search_api from 'usgs-search-api';
@@ -188,11 +189,14 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   diagnosisCauses = [];
 
   locationSpeciesNumbersViolation = false;
+  closedEventLocationSpeciesNumbersViolation = false;
   // starts as true  because no start dates provided by default
   locationStartDatesViolation = true;
   // starts as false because event must be complete = true to trigger violation
   locationEndDatesViolation = false;
   speciesDiagnosisViolation = false;
+
+  // duplicateEventOrgViolation = false;
 
   nonCompliantSpeciesDiagnoses = [];
 
@@ -327,7 +331,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     private staffService: StaffService,
     private diagnosisBasisService: DiagnosisBasisService,
     private diagnosisCauseService: DiagnosisCauseService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.buildEventSubmissionForm();
 
@@ -350,6 +356,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   ngOnDestroy() {
     this._onDestroy.next();
     this._onDestroy.complete();
+  }
+
+  navigateToHome() {
+    this.router.navigate([`../home`], { relativeTo: this.route });
   }
 
   openEventSubmitConfirm(formValue): void {
@@ -1223,6 +1233,23 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     return null;
   }
 
+  // checkForDuplicateEventOrg(orgID) {
+
+  //   this.duplicateEventOrgViolation = false;
+  //   const eventOrganizations = <FormArray>this.eventSubmissionForm.get('new_organizations')['controls'];
+
+  //   for (let i = 0, j = eventOrganizations.length; i < j; i++) {
+  //     // do not check last item in array because it is the one just added and will always match
+  //     const lastAddedIndex = j - 1;
+  //     if (i !== lastAddedIndex) {
+  //       if (this.eventSubmissionForm.get('new_organizations')['controls'][i].get('org').value === orgID) {
+  //         this.duplicateEventOrgViolation = true;
+  //       }
+  //     }
+
+  //   }
+  // }
+
   checkforMissingSpecies(eventLocationIndex) {
 
     // tslint:disable-next-line:max-line-length
@@ -1258,17 +1285,40 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   checkLocationSpeciesNumbers() {
-    this.locationSpeciesNumbersViolation = false;
 
+    this.locationSpeciesNumbersViolation = false;
+    this.closedEventLocationSpeciesNumbersViolation = false;
     // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
     if (this.eventSubmissionForm.get('event_type').value === 1 || this.eventSubmissionForm.get('event_type').value === '1') {
       // set var to capture of requirement is met at any of the event locations
-      let requirementMet = false;
+      let requirementMetEventOpen = false;
+      let requirementMetEventClosed = true;
       const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
       // tslint:disable-next-line:max-line-length
       for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
         const locationspecies = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
-        // loop through each new_location_species array, set requirementMet true if any species has the number requirement.
+
+        // if event is marked as complete
+        if (this.eventSubmissionForm.get('complete').value === true) {
+
+          // loop through each new_location_species array, set requirementMetEventClosed false if any species lacks the number requirement.
+          // tslint:disable-next-line:max-line-length
+          for (let locationspeciesindex = 0, locationspecieslength = locationspecies.length; locationspeciesindex < locationspecieslength; locationspeciesindex++) {
+            const locationspeciesform = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex];
+            if (
+              (
+                locationspeciesform.get('sick_count').value +
+                locationspeciesform.get('dead_count').value +
+                locationspeciesform.get('sick_count_estimated').value +
+                locationspeciesform.get('dead_count_estimated').value
+              ) < 1
+            ) {
+              requirementMetEventClosed = false;
+            }
+          }
+        }
+
+        // loop through each new_location_species array, set requirementMetEventOpen true if any species has the number requirement.
         // if even one meets the criteria, the event is valid for submission.
         // tslint:disable-next-line:max-line-length
         for (let locationspeciesindex = 0, locationspecieslength = locationspecies.length; locationspeciesindex < locationspecieslength; locationspeciesindex++) {
@@ -1281,17 +1331,22 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
               locationspeciesform.get('dead_count_estimated').value
             ) >= 1
           ) {
-            requirementMet = true;
+            requirementMetEventOpen = true;
           }
-
         }
-      }
 
-      if (requirementMet) {
+      }// end eventlocations array loop
+
+      if (requirementMetEventOpen) {
         this.locationSpeciesNumbersViolation = false;
       } else {
         this.locationSpeciesNumbersViolation = true;
+      }
 
+      if (requirementMetEventClosed) {
+        this.closedEventLocationSpeciesNumbersViolation = false;
+      } else {
+        this.closedEventLocationSpeciesNumbersViolation = true;
       }
     }
   }
@@ -1335,6 +1390,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.checkLocationEndDates();
     this.checkSpeciesDiagnoses();
+    this.checkLocationSpeciesNumbers();
   }
 
   checkLocationEndDates() {
@@ -1781,6 +1837,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this.filteredSpecies[eventLocationIndex].push(new ReplaySubject<Species[]>());
     this.ManageSpeciesControl(eventLocationIndex, locationSpeciesIndex);
 
+    this.checkLocationSpeciesNumbers();
+
     return ({ eventLocationIndex: eventLocationIndex, locationSpeciesIndex: locationSpeciesIndex });
   }
 
@@ -2135,6 +2193,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       //delete the event_type superficially attached to event locations
       delete event_location.event_type;
     }
+
+    sessionStorage.setItem('eventSubmission', formValue);
 
     this.eventService.create(formValue)
       .subscribe(

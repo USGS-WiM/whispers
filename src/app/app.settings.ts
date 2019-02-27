@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers } from '@angular/http';
+import { HttpHeaders } from '@angular/common/http';
 import { environment } from 'environments/environment';
 
 import { DisplayQuery } from '@interfaces/display-query';
@@ -153,6 +154,14 @@ export class APP_SETTINGS {
             'Accept': 'application/json'
         });
     }
+
+    public static get HTTP_CLIENT_MIN_AUTH_JSON_HEADERS() {
+        return new HttpHeaders({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+            'Accept': 'application/json'
+        });
+    }
+
     public static get AUTH_JSON_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),

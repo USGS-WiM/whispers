@@ -8,6 +8,7 @@ import { DiagnosticServicesComponent } from './diagnostic-services/diagnostic-se
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { CreateContactComponent } from '@app/create-contact/create-contact.component';
 import { AuthenticationGuard } from '@authentication/authentication.guard';
+import { CurrentUserService } from '@services/current-user.service';
 
 export const ROUTES: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -17,20 +18,6 @@ export const ROUTES: Routes = [
     { path: 'diagnostic', component: DiagnosticServicesComponent, canActivate: [AuthenticationGuard] },
     { path: 'userdashboard', component: UserDashboardComponent, canActivate: [AuthenticationGuard] },
     { path: 'createcontact', component: CreateContactComponent, canActivate: [AuthenticationGuard] }
-    // {
-    //     path: 'admin', 
-    //     component: AdminComponent,
-    //     resolve: {
-    //         concentrationTypes: ConcentrationResolve,
-    //         units: UnitResolve,
-    //         extractionMethods: ExtractionResolve,
-    //         filterTypes: FilterResolve,
-    //         matrixTypes: MatrixResolve,
-    //         sampleTypes: SampleTypeResolve,
-    //         targets: TargetResolve,
-    //         users: UserResolve
-    //     }
-    // }
 ];
 
 export const ROUTING: ModuleWithProviders = RouterModule.forRoot(ROUTES);

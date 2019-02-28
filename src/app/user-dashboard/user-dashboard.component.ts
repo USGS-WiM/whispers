@@ -223,7 +223,6 @@ export class UserDashboardComponent implements OnInit {
             this.errorMessage = <any>error;
           }
         );
-      ////////////////////////////////////////////////////////////////////
     }
   }
 

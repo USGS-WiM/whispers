@@ -4,7 +4,9 @@
 
     <mat-card *ngIf="currentUser.role === 7">
       <h2>You do not have permission to create an event</h2>
-      <p><button mat-raised-button color="primary" (click)="navigateToHome()"><mat-icon class="icon">home</mat-icon> Return Home</button></p>
+      <p><button mat-raised-button color="primary" (click)="navigateToHome()">
+          <mat-icon class="icon">home</mat-icon> Return Home
+        </button></p>
     </mat-card>
     <mat-card *ngIf="currentUser.role !== 7">
 
@@ -97,6 +99,14 @@
                   </button>
                 </div>
               </div>
+            </div>
+
+            <div class="submissionReviewErrors">
+
+              <mat-error color="warn" *ngIf="duplicateEventOrgViolation">
+                <mat-icon class="icon">error</mat-icon>
+                <span class="alert-text">Contact organization cannot be duplicated.</span>
+              </mat-error>
             </div>
           </div>
 
@@ -1169,6 +1179,11 @@
 
                   <div class="submissionReviewErrors">
 
+                    <mat-error color="warn" *ngIf="duplicateEventOrgViolation">
+                      <mat-icon class="icon">error</mat-icon>
+                      <span class="alert-text">Contact organization cannot be duplicated.</span>
+                    </mat-error>
+
                     <mat-error color="warn" *ngIf="locationSpeciesNumbersViolation">
                       <mat-icon class="icon">error</mat-icon>
                       <span class="alert-text">For morbidity/mortality events, there must be at least one value greater
@@ -1178,12 +1193,13 @@
                     </mat-error>
 
                     <mat-error color="warn" *ngIf="closedEventLocationSpeciesNumbersViolation">
-                        <mat-icon class="icon">error</mat-icon>
-                        <span class="alert-text">For morbidity/mortality events marked as Closed, there must be at least one value greater
-                          than 0
-                          between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for all species
-                          in the event.</span>
-                      </mat-error>
+                      <mat-icon class="icon">error</mat-icon>
+                      <span class="alert-text">For morbidity/mortality events marked as Closed, there must be at least
+                        one value greater
+                        than 0
+                        between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for all species
+                        in the event.</span>
+                    </mat-error>
 
                     <mat-error color="warn" *ngIf="locationStartDatesViolation">
                       <mat-icon class="icon">error</mat-icon>
@@ -1216,7 +1232,7 @@
                     </button>
                     <p>
                       <button mat-raised-button color="primary"
-                        [disabled]="eventSubmissionForm.invalid || locationSpeciesNumbersViolation || closedEventLocationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation || submitLoading"
+                        [disabled]="eventSubmissionForm.invalid || duplicateEventOrgViolation || locationSpeciesNumbersViolation || closedEventLocationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation || submitLoading"
                         (click)="submitEvent(eventSubmissionForm.value)">
                         <mat-icon>done</mat-icon> Save Event
                       </button>

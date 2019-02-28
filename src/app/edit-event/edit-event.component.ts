@@ -267,14 +267,14 @@ export class EditEventComponent implements OnInit {
     formValue.id = this.data.eventData.id;
     formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');
 
-    const new_orgs_array = [];
+    // const new_orgs_array = [];
     // loop through and convert new_organizations
-    for (const org of formValue.new_organizations) {
-      if (org !== null) {
-        new_orgs_array.push(org.org);
-      }
-    }
-    formValue.new_organizations = new_orgs_array;
+    // for (const org of formValue.new_organizations) {
+    //   if (org !== null) {
+    //     new_orgs_array.push(org.org);
+    //   }
+    // }
+    // formValue.new_organizations = new_orgs_array;
 
     this.eventService.update(formValue)
       .subscribe(
@@ -287,7 +287,7 @@ export class EditEventComponent implements OnInit {
         },
         error => {
           this.submitLoading = false;
-          this.openSnackBar('Error. Event not updated. Error message: ' + error, 'OK', 8000);
+          this.openSnackBar('Error. Event not updated. Error message: ' + error, 'OK', 15000);
         }
       );
   }

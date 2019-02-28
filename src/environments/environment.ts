@@ -7,7 +7,6 @@ export const environment = {
   hmr: false,
   version: require('../../package.json').version,
   api_root: 'https://whispersdev.wim.usgs.gov/whispersservices/',
-  //api_root: 'https://whispersbeta.wim.usgs.gov/test/whispersservices/',
   banner_content: 'This website is under development and CONTAINS FICTICIOUS DATA. ',
   banner_text_color: '#FFFF00'
 };

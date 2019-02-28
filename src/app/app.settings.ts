@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers } from '@angular/http';
+import { HttpHeaders } from '@angular/common/http';
 import { environment } from 'environments/environment';
 
 import { DisplayQuery } from '@interfaces/display-query';
@@ -114,6 +115,7 @@ export class APP_SETTINGS {
     public static get SEARCH_URL(): string { return this.API_ROOT + 'searches/'; }
     public static get SERVICE_REQUEST_URL(): string { return this.API_ROOT + 'servicerequests/'; }
     public static get SERVICE_REQUEST_TYPES_URL(): string { return this.API_ROOT + 'servicerequesttypes/'; }
+    public static get SERVICE_REQUEST_RESPONSES_URL(): string { return this.API_ROOT + 'servicerequestresponses/'; }
 
     public static get GO_USA_GOV_SHORTEN_URL(): string { return 'https://go.usa.gov/api/shorten.json'; }
     public static get GO_USA_GOV_USER(): string { return 'bdraper'; }
@@ -152,6 +154,14 @@ export class APP_SETTINGS {
             'Accept': 'application/json'
         });
     }
+
+    public static get HTTP_CLIENT_MIN_AUTH_JSON_HEADERS() {
+        return new HttpHeaders({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+            'Accept': 'application/json'
+        });
+    }
+
     public static get AUTH_JSON_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),

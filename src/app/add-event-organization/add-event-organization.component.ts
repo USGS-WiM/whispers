@@ -23,6 +23,8 @@ export class AddEventOrganizationComponent implements OnInit {
   errorMessage = '';
   organizations: Organization[];
 
+  existingEventOrgs = [];
+
   addEventOrganizationForm: FormGroup;
 
   eventID;
@@ -55,6 +57,8 @@ export class AddEventOrganizationComponent implements OnInit {
 
   ngOnInit() {
     this.eventID = this.data.event_id;
+
+    this.existingEventOrgs = this.data.existing_event_orgs;
 
     // populate the search select options for the organization control
     this.filteredOrganizations.next(this.data.organizations);
@@ -97,6 +101,18 @@ export class AddEventOrganizationComponent implements OnInit {
   onSubmit(formValue) {
 
     this.submitLoading = true;
+
+    const orgIDArray = [];
+    for (const eventOrg of this.existingEventOrgs) {
+      orgIDArray.push(eventOrg.organization.id);
+    }
+
+    const eventOrgSet = new Set(orgIDArray);
+    if (eventOrgSet.has(formValue.organization)) {
+      this.submitLoading = false;
+      this.openSnackBar('The selected organization is already associated with this event.', 'OK', 8000);
+      return;
+    }
 
     formValue.event = this.data.event_id;
     this.eventOrganizationService.create(formValue)

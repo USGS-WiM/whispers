@@ -615,7 +615,8 @@ export class EventDetailsComponent implements OnInit {
     this.addEventOrganizationDialogRef = this.dialog.open(AddEventOrganizationComponent, {
       data: {
         event_id: id,
-        organizations: this.organizations
+        organizations: this.organizations,
+        existing_event_orgs: this.eventData.eventorganizations
       }
     });
 

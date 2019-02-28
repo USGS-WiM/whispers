@@ -196,7 +196,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   locationEndDatesViolation = false;
   speciesDiagnosisViolation = false;
 
-  // duplicateEventOrgViolation = false;
+  duplicateEventOrgViolation = false;
 
   nonCompliantSpeciesDiagnoses = [];
 
@@ -245,7 +245,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       new_organizations: this.formBuilder.array([
         this.initEventOrganization()
       ]),
-      // new_organizations: [[], Validators.required],
       new_service_request: this.formBuilder.group({
         request_type: 0,
         new_comments: this.formBuilder.array([])
@@ -1035,6 +1034,14 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       }
     });
 
+    this.eventSubmissionForm.get('new_organizations').valueChanges.subscribe(orgArray => {
+      this.duplicateEventOrgViolation = false;
+      const duplicateExists = APP_UTILITIES.checkDuplicateInObject('org', orgArray);
+      // console.log('Duplicate event org exists? ' + duplicateExists);
+      if (duplicateExists) { this.duplicateEventOrgViolation = true; }
+    });
+
+
   }
 
   // onFormChanges(): void {
@@ -1233,22 +1240,22 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     return null;
   }
 
-  // checkForDuplicateEventOrg(orgID) {
+  checkForDuplicateEventOrg(orgID) {
 
-  //   this.duplicateEventOrgViolation = false;
-  //   const eventOrganizations = <FormArray>this.eventSubmissionForm.get('new_organizations')['controls'];
+    this.duplicateEventOrgViolation = false;
+    const eventOrganizations = <FormArray>this.eventSubmissionForm.get('new_organizations')['controls'];
 
-  //   for (let i = 0, j = eventOrganizations.length; i < j; i++) {
-  //     // do not check last item in array because it is the one just added and will always match
-  //     const lastAddedIndex = j - 1;
-  //     if (i !== lastAddedIndex) {
-  //       if (this.eventSubmissionForm.get('new_organizations')['controls'][i].get('org').value === orgID) {
-  //         this.duplicateEventOrgViolation = true;
-  //       }
-  //     }
+    for (let i = 0, j = eventOrganizations.length; i < j; i++) {
+      // do not check last item in array because it is the one just added and will always match
+      const lastAddedIndex = j - 1;
+      if (i !== lastAddedIndex) {
+        if (this.eventSubmissionForm.get('new_organizations')['controls'][i].get('org').value === orgID) {
+          this.duplicateEventOrgViolation = true;
+        }
+      }
 
-  //   }
-  // }
+    }
+  }
 
   checkforMissingSpecies(eventLocationIndex) {
 

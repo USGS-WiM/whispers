@@ -97,7 +97,15 @@ export class EventDetailsComponent implements OnInit {
 
   showAddEventLocation = false;
 
-  //locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
+  // temporary
+  tempGroupEventsList = [
+    {
+      'id': 178893,
+      'name': 'G178893',
+      'category': 1,
+      'events': [170591, 170591, 170592]
+    }
+  ];
 
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
@@ -545,6 +553,10 @@ export class EventDetailsComponent implements OnInit {
 
   navigateToHome() {
     this.router.navigate([`../../home`], { relativeTo: this.route });
+  }
+
+  navigateToEventDetails(eventID) {
+    this.router.navigate([`../${eventID}`], { relativeTo: this.route });
   }
 
   editEvent(id: string) {

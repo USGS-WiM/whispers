@@ -82,20 +82,18 @@
                     <td><span>{{eventData.complete ? 'Complete' : 'Incomplete'}}</span></td>
                   </tr>
                 </table>
-              </div>
 
+                <br>
 
-              <!-- Event organizations -->
-              <!-- Event organizations -->
-              <!-- Event organizations -->
-              <div class="event-page-split-half">
+                <!-- Event organizations -->
+                <!-- Event organizations -->
+                <!-- Event organizations -->
                 <div class="event-table-header">Event Organizations</div>
                 <table>
                   <tr>
                     <th>Organization</th>
                     <th>Location</th>
                   </tr>
-
                   <tr *ngFor="let eventOrganization of eventData.eventorganizations">
                     <td>{{eventOrganization.organization.name}}</td>
                     <td> {{eventOrganization.organization.city}} {{eventOrganization.organization.administrative_level_one |
@@ -104,13 +102,37 @@
                 </table>
               </div>
 
+              <!-- Event groups -->
+              <!-- Event groups -->
+              <!-- Event groups -->
+              <div class="event-page-split-half" *ngIf="eventData.eventgroups">
+                <div class="event-table-header">Associated Events</div>
+                <table>
+                  <tr>
+                    <th>Event Group</th>
+                    <th>Events</th>
+                  </tr>
+                  <tr *ngFor="let eventGroup of tempGroupEventsList">
+                    <td>{{eventGroup.name}}</td>
+                    <td>
+                      <button mat-button *ngFor="let eventID of eventGroup.events" routerLink="../{{eventID}}">{{eventID}}</button>
+                    </td>
+                  </tr>
+                  <!-- <tr *ngFor="let eventGroup of eventData.eventgroups">
+                    <td>{{eventGroup.id}}</td>
+                    next line: loop of eventIDs, each one a link to that event details page
+                    <td> </td>
+                  </tr> -->
+                </table>
+              </div>
+
             </div>
+
           </div>
 
-
-          <!-- Event Details -->
-          <!-- Event Details -->
-          <!-- Event Details -->
+          <!-- Species Details -->
+          <!-- Species Details -->
+          <!-- Species Details -->
           <div class="event-detail-wrapper">
             <div class="event-page-group">
               <div class="event-table-header">Species Details</div>
@@ -745,7 +767,8 @@
             </button>
 
             <app-add-event-location *ngIf="showAddEventLocation" [eventData]="eventData"
-              [eventTypeID]="eventData.event_type"></app-add-event-location>
+              [eventTypeID]="eventData.event_type">
+            </app-add-event-location>
 
           </div>
 

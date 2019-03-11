@@ -3,6 +3,7 @@ import { Event } from '@interfaces/event';
 import { History } from '@interfaces/history';
 import { EventLocation } from '@interfaces/event-location';
 import { EventDiagnosis } from '@app/interfaces/event-diagnosis';
+import { Organization } from '@interfaces/organization';
 import { SuperEvent } from '@app/interfaces/super-event';
 
 export interface EventDetail extends History {
@@ -26,4 +27,5 @@ export interface EventDetail extends History {
     superevents: SuperEvent[];
     eventdiagnoses: EventDiagnosis[];
     eventlocations: EventLocation[];
+    eventorganizations: Organization[];
 }

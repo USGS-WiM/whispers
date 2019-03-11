@@ -13,6 +13,7 @@ import { CommentType } from '@interfaces/comment-type';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
 import { ServiceRequestService } from '@services/service-request.service';
+import { ServiceRequestResponse } from '@app/interfaces/service-request-response';
 declare let gtag: Function;
 
 @Component({
@@ -25,12 +26,16 @@ export class AddServiceRequestComponent implements OnInit {
   submitLoading = false;
   event_id;
 
+  action;
+
   serviceRequestForm: FormGroup;
 
   commentTypes: CommentType[];
+  serviceRequestResponses: ServiceRequestResponse[];
 
   buildServiceRequestForm() {
     this.serviceRequestForm = this.formBuilder.group({
+      id: null,
       event: null,
       request_type: null,
       request_response: null,
@@ -56,6 +61,25 @@ export class AddServiceRequestComponent implements OnInit {
     this.commentTypes = this.data.comment_types;
 
     this.serviceRequestForm.get('event').setValue(this.data.event_id);
+
+    if (this.data.action === 'respond') {
+
+      this.serviceRequestForm.patchValue({
+        id: this.data.servicerequest.id,
+        event: this.data.event_id,
+        request_response: null,
+      });
+
+      this.serviceRequestService.getServiceRequestResponses()
+        .subscribe(
+          serviceRequestResponses => {
+            this.serviceRequestResponses = serviceRequestResponses;
+          },
+          error => {
+            this.errorMessage = <any>error;
+          }
+        );
+    }
   }
 
   addComment() {
@@ -89,21 +113,45 @@ export class AddServiceRequestComponent implements OnInit {
 
     this.submitLoading = true;
 
-    this.serviceRequestService.create(formValue)
-      .subscribe(
-        (serviceRequest) => {
-          this.submitLoading = false;
-          this.openSnackBar('Service request successfully submitted', 'OK', 5000);
-          this.dataUpdatedService.triggerRefresh();
-          this.addServiceRequestDialogRef.close();
-          gtag('event', 'click', {'event_category': 'Event Details','event_label': 'Service Request Submitted'});
-        },
-        error => {
-          this.errorMessage = <any>error;
-          this.openSnackBar('Error. Service request not submitted. Error message: ' + error, 'OK', 8000);
+    if (this.data.action === 'add') {
+      this.serviceRequestService.create(formValue)
+        .subscribe(
+          (serviceRequest) => {
+            this.submitLoading = false;
+            this.openSnackBar('Service request successfully submitted', 'OK', 5000);
+            this.dataUpdatedService.triggerRefresh();
+            this.addServiceRequestDialogRef.close();
+            gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Service Request Submitted' });
+          },
+          error => {
+            this.errorMessage = <any>error;
+            this.openSnackBar('Error. Service request not submitted. Error message: ' + error, 'OK', 8000);
 
-        }
-      );
+          }
+        );
+    } else if (this.data.action === 'respond') {
+
+      delete formValue.request_type;
+      delete formValue.new_comments;
+
+      this.serviceRequestService.update(formValue)
+        .subscribe(
+          (serviceRequest) => {
+            this.submitLoading = false;
+            this.openSnackBar('Service request response successfully saved', 'OK', 5000);
+            this.dataUpdatedService.triggerRefresh();
+            this.addServiceRequestDialogRef.close();
+          },
+          error => {
+            this.errorMessage = <any>error;
+            this.openSnackBar('Error. Service request response not submitted. Error message: ' + error, 'OK', 8000);
+          }
+        );
+    }
+
+
+
+
   }
 
 

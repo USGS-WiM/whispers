@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -109,6 +110,8 @@ import { SaveSearchComponent } from './save-search/save-search.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { ViewContactDetailsComponent } from './view-contact-details/view-contact-details.component';
 import { AddEventOrganizationComponent } from './add-event-organization/add-event-organization.component';
+import { UserEventsComponent } from './user-events/user-events.component';
+import { ResultsCountService } from '@services/results-count.service';
 
 
 
@@ -146,7 +149,8 @@ import { AddEventOrganizationComponent } from './add-event-organization/add-even
     SaveSearchComponent,
     UserRegistrationComponent,
     ViewContactDetailsComponent,
-    AddEventOrganizationComponent
+    AddEventOrganizationComponent,
+    UserEventsComponent
   ],
   imports: [
     BrowserModule,
@@ -154,6 +158,7 @@ import { AddEventOrganizationComponent } from './add-event-organization/add-even
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    HttpClientModule,
     ROUTING,
     FlexLayoutModule,
     NgxDatatableModule,
@@ -226,7 +231,8 @@ import { AddEventOrganizationComponent } from './add-event-organization/add-even
     EventLocationContactService,
     ServiceRequestService,
     DisplayValuePipe,
-    DatePipe
+    DatePipe,
+    ResultsCountService
   ],
   bootstrap: [AppComponent],
   entryComponents: [

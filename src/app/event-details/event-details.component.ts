@@ -93,9 +93,19 @@ export class EventDetailsComponent implements OnInit {
 
   eventOwner;
 
+  eventNotFound = false;
+
   showAddEventLocation = false;
 
-  //locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
+  // temporary
+  tempGroupEventsList = [
+    {
+      'id': 178893,
+      'name': 'G178893',
+      'category': 1,
+      'events': [170591, 170591, 170592]
+    }
+  ];
 
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
@@ -183,7 +193,8 @@ export class EventDetailsComponent implements OnInit {
     private organizationService: OrganizationService,
     private commentService: CommentService,
     private contactService: ContactService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.eventLocationSpecies = [];
 
@@ -249,6 +260,10 @@ export class EventDetailsComponent implements OnInit {
           },
           error => {
             this.errorMessage = <any>error;
+            this.eventDataLoading = false;
+            if (error = '"detail":"Not found."') {
+              this.eventNotFound = true;
+            }
           }
         );
     });
@@ -536,6 +551,14 @@ export class EventDetailsComponent implements OnInit {
 
   }
 
+  navigateToHome() {
+    this.router.navigate([`../../home`], { relativeTo: this.route });
+  }
+
+  navigateToEventDetails(eventID) {
+    this.router.navigate([`../${eventID}`], { relativeTo: this.route });
+  }
+
   editEvent(id: string) {
     // Open dialog for editing event
     this.editEventDialogRef = this.dialog.open(EditEventComponent, {
@@ -604,7 +627,8 @@ export class EventDetailsComponent implements OnInit {
     this.addEventOrganizationDialogRef = this.dialog.open(AddEventOrganizationComponent, {
       data: {
         event_id: id,
-        organizations: this.organizations
+        organizations: this.organizations,
+        existing_event_orgs: this.eventData.eventorganizations
       }
     });
 
@@ -699,6 +723,34 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
+  addServiceRequestResponse(servicerequest) {
+    // Open add service request dialog for response field update
+    this.addServiceRequestDialogRef = this.dialog.open(AddServiceRequestComponent, {
+      disableClose: true,
+      // minWidth: '60%',
+      data: {
+        event_id: this.eventData.id,
+        servicerequest: servicerequest,
+        comment_types: this.commentTypes,
+        title: 'Respond to service request',
+        titleIcon: 'question_answer',
+        showCancelButton: true,
+        action_button_text: 'Save Response',
+        actionButtonIcon: 'question_answer',
+        action: 'respond'
+      }
+    });
+
+    this.addServiceRequestDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
 
 
   addEventLocationContact(id: string) {
@@ -734,6 +786,7 @@ export class EventDetailsComponent implements OnInit {
     // Open dialog for adding event location contact
     this.addServiceRequestDialogRef = this.dialog.open(AddServiceRequestComponent, {
       disableClose: true,
+      // minWidth: '60%',
       data: {
         event_id: id,
         comment_types: this.commentTypes,
@@ -741,7 +794,8 @@ export class EventDetailsComponent implements OnInit {
         titleIcon: 'add_circle',
         showCancelButton: true,
         action_button_text: 'Submit request',
-        actionButtonIcon: 'question_answer'
+        actionButtonIcon: 'question_answer',
+        action: 'add'
       }
     });
 

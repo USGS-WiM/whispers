@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
@@ -13,11 +15,17 @@ import { APP_UTILITIES } from '@app/app.utilities';
 import { Event } from '@interfaces/event';
 import { EventSummary } from '@interfaces/event-summary';
 import { EventDetail } from '@interfaces/event-detail';
+import { PageData } from '@interfaces/page-data';
+import { ResultsCountService } from '@services/results-count.service';
 
 @Injectable()
 export class EventService {
+  // [x: string]: any;
 
-  constructor(private _http: Http) { }
+  // _http for deprecated Http
+  constructor(private _http: Http,
+    private http: HttpClient,
+    private resultsCountService: ResultsCountService) { }
 
   public getEventDetailsCSV(eventID) {
 
@@ -71,7 +79,7 @@ export class EventService {
     if (eventQuery.administrative_level_two && eventQuery.administrative_level_two.length > 0) {
       queryString = queryString + '&administrative_level_two=' + eventQuery.administrative_level_two;
     }
-    
+
     if (eventQuery.and_params) {
       if (eventQuery.and_params.length > 0) {
         queryString = queryString + '&and_params=' + eventQuery.and_params;
@@ -141,7 +149,7 @@ export class EventService {
     if (eventQuery.complete === true) {
       queryString = queryString + '&complete=True';
     }
-   
+
     const options = new RequestOptions({
       headers: APP_SETTINGS.JSON_HEADERS
     });
@@ -251,12 +259,33 @@ export class EventService {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
-    })
+    });
 
     return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'user_events?no_page', options)
       .map((response: Response) => <EventSummary[]>response.json())
       .catch(this.handleError);
 
+  }
+
+  public getUserEvents(orderParams = '', pageNumber = 1, pageSize = 10): Observable<any> {
+
+    const self = this;
+    // tslint:disable-next-line:max-line-length
+    return this.http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'user_events', { headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS, params: new HttpParams().set('ordering', orderParams).set('page', pageNumber.toString()).set('page_size', pageSize.toString()) })
+      .map((res: any) => {
+        //const response = res.json();
+        this.resultsCountService.updateResultsCount(res.count);
+        return res.results;
+      });
+    // .pipe(
+    //   map(response => {
+    //     response['payload'] = response;
+    //     // this.resultsCountService.updateResultsCount(response['payload'].count);
+    //     return response['payload'].results;
+    //     // set a value for length here with observable
+
+    //   })
+    // );
   }
 
 

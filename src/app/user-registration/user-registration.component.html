@@ -53,8 +53,17 @@
         <mat-form-field class="form-control">
           <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword">
           <mat-error *ngIf="userRegistrationForm.controls.confirmPassword.errors?.matchPassword">Passwords do not match</mat-error>
+          <mat-error *ngIf="userRegistrationForm.controls.password.errors">Passwords do not meet requirements</mat-error>
         </mat-form-field>
+      </div>
 
+      <div>
+            <h5>Password must be at least 12 characters long and contain at least one: </h5>
+            <ul class="text-smaller">
+                <li>Lowercase letter (a, b, c, ..., z)</li>
+                <li>Number (0, 1, 2, ..., 3)</li>
+                <li>Symbol (!, #, @, etc.)</li>
+              </ul>
       </div>
 
       <div>

@@ -251,7 +251,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       }),
       new_event_diagnoses: this.formBuilder.array([]),
       new_comments: this.formBuilder.array([]),
-      new_superevents: this.formBuilder.array([]),
+      new_eventgroups: this.formBuilder.array([]),
       new_event_locations: this.formBuilder.array([
         this.initEventLocation()
       ])

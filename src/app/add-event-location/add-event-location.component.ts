@@ -365,6 +365,18 @@ export class AddEventLocationComponent implements OnInit {
     if (formValue.longitude === '') {
       formValue.longitude = null;
     }
+
+    // empty value from datepicker does not work with datePipe transform. This converts empty dates to null for the datePipe
+    if (formValue.end_date !== null) {
+      if (formValue.end_date.toJSON() === null) {
+        formValue.end_date = null;
+      }
+    }
+    if (formValue.start_date !== null) {
+      if (formValue.start_date.toJSON() === null) {
+        formValue.start_date = null;
+      }
+    }
     // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
     // can be removed if configure datepicker to output this format
     // (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
@@ -381,7 +393,7 @@ export class AddEventLocationComponent implements OnInit {
           this.openSnackBar('New event location successfully created. Page will reload.', 'OK', 5000);
           this.addEventLocationForm.reset();
           location.reload();
-          gtag('event', 'click', {'event_category': 'Event Details','event_label': 'New Location Added'});
+          gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'New Location Added' });
         },
         error => {
           this.errorMessage = <any>error;

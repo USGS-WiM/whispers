@@ -242,6 +242,18 @@ export class EditEventLocationComponent implements OnInit {
       formValue.longitude = null;
     }
 
+    // empty value from datepicker does not work with datePipe transform. This converts empty dates to null for the datePipe
+    if (formValue.end_date !== null) {
+      if (formValue.end_date.toJSON() === null) {
+        formValue.end_date = null;
+      }
+    }
+    if (formValue.start_date !== null) {
+      if (formValue.start_date.toJSON() === null) {
+        formValue.start_date = null;
+      }
+    }
+
     formValue.start_date = this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd');
     formValue.end_date = this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd');
 
@@ -252,7 +264,7 @@ export class EditEventLocationComponent implements OnInit {
           this.openSnackBar('Event Location Details Updated', 'OK', 5000);
           this.editEventLocationDialogRef.close();
           this.dataUpdatedService.triggerRefresh();
-          gtag('event', 'click', {'event_category': 'Event Location Details','event_label': 'Event Location Details Edited'});
+          gtag('event', 'click', { 'event_category': 'Event Location Details', 'event_label': 'Event Location Details Edited' });
         },
         error => {
           this.submitLoading = false;

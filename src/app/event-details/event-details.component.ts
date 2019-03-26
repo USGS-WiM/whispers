@@ -1063,6 +1063,9 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
+  addToEventGroup() {
+
+  }
 
   refreshEvent() {
     this.viewPanelStates = new Object();

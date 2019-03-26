@@ -105,7 +105,7 @@
               <!-- Event groups -->
               <!-- Event groups -->
               <!-- Event groups -->
-              <div class="event-page-split-half" *ngIf="eventData.eventgroups">
+              <div class="event-page-split-half">
                 <div class="event-table-header">Associated Events</div>
                 <table>
                   <tr>
@@ -115,7 +115,8 @@
                   <tr *ngFor="let eventGroup of tempGroupEventsList">
                     <td>{{eventGroup.name}}</td>
                     <td>
-                      <button mat-button *ngFor="let eventID of eventGroup.events" routerLink="../{{eventID}}">{{eventID}}</button>
+                      <button mat-button *ngFor="let eventID of eventGroup.events"
+                        routerLink="../{{eventID}}">{{eventID}}</button>
                     </td>
                   </tr>
                   <!-- <tr *ngFor="let eventGroup of eventData.eventgroups">
@@ -301,7 +302,7 @@
                 <div class="value">{{eventData.legal_number || " "}}</div>
               </div>
               <div class="item">
-                <div class="label">Superevent</div>
+                <div class="label">Event Group</div>
                 <div class="value">&nbsp;</div>
               </div>
             </div>
@@ -328,6 +329,12 @@
                 [disabled]="eventData.complete || !eventData.permissions.update"
                 (click)="addEventOrganization(eventData.id)">
                 <mat-icon>add</mat-icon> Add Event Organization
+              </button>
+              <button mat-stroked-button color="primary" class="event-detail-action-button"
+                *ngIf="currentUser.role === 1 || currentUser.role === 2"
+                [disabled]="eventData.complete || !eventData.permissions.update"
+                (click)="addToEventGroup(eventData.id)">
+                <mat-icon>group_work</mat-icon> Add to Event Group
               </button>
             </div>
 

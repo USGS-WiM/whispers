@@ -70,9 +70,9 @@ export class AddCommentComponent implements OnInit {
         this.commentObjectString = 'Service Request';
         this.commentForm.get('new_content_type').setValue('servicerequest');
         break;
-      case 'superevent':
-        this.commentObjectString = 'Super Event';
-        this.commentForm.get('new_content_type').setValue('superevent');
+      case 'eventgroup':
+        this.commentObjectString = 'Event Group';
+        this.commentForm.get('new_content_type').setValue('eventgroup');
         break;
     }
 

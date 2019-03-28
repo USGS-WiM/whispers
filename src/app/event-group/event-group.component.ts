@@ -9,55 +9,48 @@ import { EventService } from '@services/event.service';
 
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { UserEventsDataSource } from '@app/user-events/user-events.datasource';
+import { EventGroupsDataSource } from '@app/event-group/event-groups.datasource';
 import { ResultsCountService } from '@services/results-count.service';
+import { EventGroupService } from '@services/event-group.service';
 
 @Component({
-  selector: 'app-user-events',
-  templateUrl: './user-events.component.html',
-  styleUrls: ['./user-events.component.scss']
+  selector: 'app-event-group',
+  templateUrl: './event-group.component.html',
+  styleUrls: ['./event-group.component.scss']
 })
-@Injectable()
-export class UserEventsComponent implements AfterViewInit, OnInit {
+export class EventGroupComponent implements AfterViewInit, OnInit {
 
-  dataSource: UserEventsDataSource;
+  dataSource: EventGroupsDataSource;
 
-  // pageData: PageData;
-
-  eventCount;
+  eventGroupCount;
 
   orderParams = '';
 
   displayedColumns = [
     'id',
-    'event_type',
-    'affected_count',
-    'start_date',
-    'end_date',
-    'locations',
-    'species',
-    'eventdiagnoses',
-    'permission_source'
+    'category',
+    'comment',
+    'events'
   ];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
-    private eventService: EventService,
+    private eventGroupService: EventGroupService,
     private resultsCountService: ResultsCountService,
     private router: Router,
     private route: ActivatedRoute,
   ) {
 
-    resultsCountService.userEventsResultsCount.subscribe(count => {
-      this.eventCount = count;
+    resultsCountService.eventGroupResultsCount.subscribe(count => {
+      this.eventGroupCount = count;
     });
   }
 
   ngOnInit() {
-    this.dataSource = new UserEventsDataSource(this.eventService);
-    this.dataSource.loadEvents('', 1, 5);
+    this.dataSource = new EventGroupsDataSource(this.eventGroupService);
+    this.dataSource.loadEventGroups('', 1, 5);
   }
 
   ngAfterViewInit() {
@@ -66,24 +59,18 @@ export class UserEventsComponent implements AfterViewInit, OnInit {
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => this.loadEventsPage())
+        tap(() => this.loadEventGroupsPage())
       )
       .subscribe();
-
-    // this.paginator.page
-    //   .pipe(
-    //     tap(() => this.loadEventsPage())
-    //   )
-    //   .subscribe();
   }
 
-  loadEventsPage() {
+  loadEventGroupsPage() {
 
     this.orderParams = this.sort.active;
     if (this.sort.direction === 'desc') {
       this.orderParams = '-' + this.sort.active;
     }
-    this.dataSource.loadEvents(
+    this.dataSource.loadEventGroups(
       this.orderParams,
       this.paginator.pageIndex + 1,
       this.paginator.pageSize);

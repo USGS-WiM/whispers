@@ -1,0 +1,20 @@
+<h1 mat-dialog-title *ngIf="title">
+  <mat-icon *ngIf="titleIcon !== ''">{{titleIcon}}</mat-icon> {{title}}
+</h1>
+
+<mat-dialog-content>
+
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="detail-section-buttons">
+    <button mat-button color="warn" (click)="this.eventGroupManagementDialogRef.close('cancel');">
+      <mat-icon>cancel</mat-icon>&nbsp;Cancel
+    </button>
+    <button mat-button color="primary" type="submit" (click)="onSubmit()">
+      <mat-icon>{{actionButtonIcon}}</mat-icon>{{actionButtonText}}
+    </button>
+    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+  </div>
+</mat-dialog-actions>

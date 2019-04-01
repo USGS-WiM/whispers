@@ -17,19 +17,22 @@ export class EventsDataSource implements DataSource<EventSummary> {
 
     public loading$ = this.loadingSubject.asObservable();
 
+    public eventList: EventSummary[] = [];
+
     constructor(private eventService: EventService) { }
 
-    queryEvents(searchQuery, orderParams: string, pageNumber = 1, pageSize = 10) {
+    queryEvents(searchQuery, orderParams: string, pageNumber, pageSize) {
 
         this.loadingSubject.next(true);
 
-        this.eventService.queryEventsPage(searchQuery).pipe(
+        this.eventService.queryEventsPage(searchQuery, orderParams, pageNumber, pageSize).pipe(
             catchError(() => of([])),
             finalize(() => this.loadingSubject.next(false))
         )
             .subscribe(
-                (pageData) => {
-                    this.eventsSubject.next(pageData);
+                (results) => {
+                    this.eventsSubject.next(results);
+                    this.eventList = results;
                 }
             );
     }

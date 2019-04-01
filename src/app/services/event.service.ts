@@ -275,7 +275,7 @@ export class EventService {
   }
 
   // below is the pagination version of the query events function. may eventually convert home page query to use this pagination approach
-  public queryEventsPage(eventQuery, orderParams = '', pageNumber = 1, pageSize = 10): Observable<any[]> {
+  public queryEventsPage(eventQuery, orderParams, pageNumber, pageSize): Observable<any[]> {
 
     let queryString = '?';
 

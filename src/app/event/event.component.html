@@ -78,9 +78,9 @@
 
 <div class="selection-display-div" *ngIf="selection.selected.length > 0">
   <mat-chip-list aria-label="Event Selection">
-    <span class="text-bold text-large">Current Selection (Event IDs)&nbsp;</span>
+    <span class="text-bold text-large">Current Selection ({{selection.selected.length}})&nbsp;</span>
     <mat-chip color="accent" selected *ngFor="let selection of selection.selected" [removable]="removable"
-      (removed)="remove(selection)">{{selection.id}}</mat-chip>
+      (removed)="remove(selection)">{{selection}}</mat-chip>
   </mat-chip-list>
 
   <!-- 
@@ -100,6 +100,8 @@
 
 </div>
 
+
+
 <div>
   <span class="results-button-row">
     <button mat-button color="accent" (click)="openSearchDialog()">
@@ -109,7 +111,7 @@
     <button mat-button color="accent" (click)="openEventGroupManagementDialog('edit')"
       [disabled]="selection.selected.length === 0">
       <mat-icon>
-        playlist_add
+        add
       </mat-icon>
       Add Selection to Event Group
     </button>
@@ -119,11 +121,11 @@
         fiber_new
       </mat-icon> Create New Event Group from Selection
     </button>
-    <!-- <button mat-button color="accent" (click)="openContactRemoveConfirm()"
+    <button mat-button color="warn" (click)="selection.clear()"
       [disabled]="selection.selected.length === 0">
       <i class="material-icons">
-        remove_circle
-      </i> Delete</button> -->
+          clear
+      </i> Clear Selection</button>
   </span>
 
 </div>
@@ -139,12 +141,14 @@
     <!-- Checkbox column -->
     <ng-container matColumnDef="select">
       <mat-header-cell *matHeaderCellDef>
-        <mat-checkbox [checked]="selection.hasValue()" [indeterminate]="selection.hasValue()">
+        <mat-checkbox (change)="$event ? masterToggle() : null;" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue()  && !isAllSelected()">
         </mat-checkbox>
+
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-          [checked]="selection.isSelected(row)">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="($event ? selection.toggle(row['id']) : null)"
+          [checked]="selection.isSelected(row['id'])">
         </mat-checkbox>
       </mat-cell>
     </ng-container>

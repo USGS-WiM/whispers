@@ -59,7 +59,10 @@ export class EventComponent implements AfterViewInit, OnInit {
 
   initialSelection = [];
   allowMultiSelect = true;
-  selection = new SelectionModel<EventSummary>(this.allowMultiSelect, this.initialSelection);
+  selection = new SelectionModel<Number>(this.allowMultiSelect, this.initialSelection);
+  docsOnThisPage: any[] = [];
+  from: number;
+  pageSize: number;
 
   displayedColumns = [
     'select',
@@ -169,7 +172,10 @@ export class EventComponent implements AfterViewInit, OnInit {
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => this.loadEventsPage())
+        tap(() => {
+          this.docsOnThisPage.length = 0;
+          this.loadEventsPage();
+        })
       )
       .subscribe();
   }
@@ -246,6 +252,26 @@ export class EventComponent implements AfterViewInit, OnInit {
         query: this.currentDisplayQuery
       }
     });
+  }
+
+  isAllSelected() {
+    const numSelected = this.docsOnThisPage.length;
+    const numRows = this.dataSource.eventList.length;
+    return (numSelected === numRows);
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+      (
+        this.docsOnThisPage.length = 0,
+        this.dataSource.eventList.forEach(row => this.selection.deselect(row.id))
+      ) :
+      this.dataSource.eventList.forEach(
+        row => {
+          this.selection.select(row.id);
+          this.docsOnThisPage.push(row);
+        }
+      );
   }
 
   // code below is for implementation of removeable chips (WIP)

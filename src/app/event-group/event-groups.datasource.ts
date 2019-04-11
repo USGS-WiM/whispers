@@ -4,22 +4,23 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 
-import { EventSummary } from '@interfaces/event-summary';
-import { PageData } from '@interfaces/page-data';
+import { EventGroup } from '@interfaces/event-group';
 import { EventGroupService } from '@services/event-group.service';
 import { MAT_PAGINATOR_INTL_PROVIDER_FACTORY } from '@angular/material';
 
-export class EventGroupsDataSource implements DataSource<EventSummary> {
+export class EventGroupsDataSource implements DataSource<EventGroup> {
 
-    private eventsSubject = new BehaviorSubject<EventSummary[]>([]);
+    private eventGroupsSubject = new BehaviorSubject<EventGroup[]>([]);
 
     private loadingSubject = new BehaviorSubject<boolean>(false);
 
     public loading$ = this.loadingSubject.asObservable();
 
+    public eventGroupList: EventGroup[] = [];
+
     constructor(private eventService: EventGroupService) { }
 
-    loadEventGroups(orderParams: string, pageNumber = 1, pageSize = 10) {
+    loadEventGroups(orderParams: string, pageNumber = 1, pageSize = 20) {
 
         this.loadingSubject.next(true);
 
@@ -28,60 +29,22 @@ export class EventGroupsDataSource implements DataSource<EventSummary> {
             finalize(() => this.loadingSubject.next(false))
         )
             .subscribe(
-                (pageData) => {
-                    this.eventsSubject.next(pageData);
+                (results) => {
+                    this.eventGroupsSubject.next(results);
+                    this.eventGroupList = results;
                 }
             );
 
     }
 
-    connect(collectionViewer: CollectionViewer): Observable<EventSummary[]> {
+    connect(collectionViewer: CollectionViewer): Observable<EventGroup[]> {
         console.log('Connecting data source');
-        return this.eventsSubject.asObservable();
+        return this.eventGroupsSubject.asObservable();
     }
 
     disconnect(collectionViewer: CollectionViewer): void {
-        this.eventsSubject.complete();
+        this.eventGroupsSubject.complete();
         this.loadingSubject.complete();
     }
 
 }
-
-
-// export class UserEventsDataSource implements DataSource<PageData> {
-
-//     private eventsSubject = new BehaviorSubject<PageData>({ count: null, next: null, previous: null, results: [] });
-
-//     private loadingSubject = new BehaviorSubject<boolean>(false);
-
-//     public loading$ = this.loadingSubject.asObservable();
-
-//     constructor(private eventService: EventService) { }
-
-//     loadEvents(orderParams: string, pageNumber = 1, pageSize = 10) {
-
-//         this.loadingSubject.next(true);
-
-//         this.eventService.getUserEvents(orderParams, pageNumber, pageSize).pipe(
-//             catchError(() => of([])),
-//             finalize(() => this.loadingSubject.next(false))
-//         )
-//             .subscribe(
-//                 (pageData) => {
-//                     this.eventsSubject.next(pageData);
-//                 }
-//             );
-
-//     }
-
-//     connect(collectionViewer: CollectionViewer): Observable<PageData> {
-//         console.log('Connecting data source');
-//         return this.eventsSubject.asObservable();
-//     }
-
-//     disconnect(collectionViewer: CollectionViewer): void {
-//         this.eventsSubject.complete();
-//         this.loadingSubject.complete();
-//     }
-
-// }

@@ -192,7 +192,8 @@ export class EventComponent implements AfterViewInit, OnInit {
     this.eventGroupManagementDialogRef = this.dialog.open(EventGroupManagementComponent, {
       disableClose: true,
       data: {
-        action: selectedAction
+        action: selectedAction,
+        selectedEvents: this.selection.selected
       }
     });
 

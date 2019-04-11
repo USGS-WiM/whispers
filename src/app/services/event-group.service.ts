@@ -24,6 +24,7 @@ import { ResultsCountService } from '@services/results-count.service';
 export class EventGroupService {
 
   constructor(
+    private _http: Http,
     private http: HttpClient,
     private resultsCountService: ResultsCountService
   ) { }
@@ -42,29 +43,52 @@ export class EventGroupService {
 
   }
 
-  // public create(formValue): Observable<Event> {
+  public getEventGroupCategories(): Observable<any> {
 
-  //   const options = new RequestOptions({
-  //     headers: APP_SETTINGS.AUTH_JSON_HEADERS
-  //   });
+    return this.http.get(APP_SETTINGS.EVENT_GROUP_CATEGORIES_URL, {
+      headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS,
+      params: new HttpParams().set('no_page', null)
+    })
+      .map((res: any) => {
+        return res;
+      });
 
-  //   return this.http.post(APP_SETTINGS.EVENT_GROUPS_URL, formValue, options)
-  //     .map((response: Response) => <Event>response.json())
-  //     .catch(this.handleError);
+  }
 
-  // }
+  public create(formValue): Observable<Event> {
 
-  // public update(formValue): Observable<Event> {
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.AUTH_JSON_HEADERS
+    });
 
-  //   const options = new RequestOptions({
-  //     headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
-  //   });
+    return this._http.post(APP_SETTINGS.EVENT_GROUPS_URL, formValue, options)
+      .map((response: Response) => <Event>response.json())
+      .catch(this.handleError);
 
-  //   return this.http.put(APP_SETTINGS.EVENT_GROUPS_URL + formValue.id + '/', formValue, options)
-  //     .map((response: Response) => <Event>response.json())
-  //     .catch(this.handleError);
+  }
 
-  // }
+  public update(formValue): Observable<Event> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.put(APP_SETTINGS.EVENT_GROUPS_URL + formValue.id + '/', formValue, options)
+      .map((response: Response) => <Event>response.json())
+      .catch(this.handleError);
+
+  }
+
+  public delete(id): Observable<any> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.delete(APP_SETTINGS.EVENT_GROUPS_URL + id + '/', options)
+      .map((response: Response) => <any>response.json())
+      .catch(this.handleError);
+  }
 
   private handleError(error: Response) {
     console.error(error);

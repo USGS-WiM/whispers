@@ -1,0 +1,33 @@
+.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.form-control {
+    width: 320px;
+    margin: 10px;
+}
+
+.alert {
+    width: 100%;
+    background-color: lightcoral;
+}
+
+.general-comment-text-area {
+    width: 40em;
+    margin-bottom: 2em;
+}
+
+.text-larger {
+    font-size: larger;
+}
+
+.events-chip-list {
+    width: 100%;
+}

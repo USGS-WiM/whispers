@@ -4,7 +4,46 @@
 
 <mat-dialog-content>
 
+  <form [formGroup]="eventGroupForm">
 
+    <div class="vertical-form-container">
+
+      <div *ngIf="data.action === 'create'" class="text-larger">
+        <span>Events: </span>{{selectedEvents}}
+      </div>
+
+      <div *ngIf="data.action === 'edit'">
+
+        <mat-form-field class="events-chip-list">
+          <mat-chip-list #chipList>
+            <mat-chip *ngFor="let event of events" [selectable]="selectable" [removable]="removable"
+              (removed)="remove(event)">
+              {{event}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <!-- <input placeholder="New event..." [matChipInputFor]="chipList" formControlName="new_events"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event)"> -->
+          </mat-chip-list>
+        </mat-form-field>
+
+      </div>
+
+      <mat-form-field class="form-control">
+        <mat-select placeholder="Event Group Category" formControlName="category">
+          <mat-option *ngFor="let category of eventGroupCategories" [value]="category.id">{{category.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="general-comment-text-area">
+        <textarea matInput maxlength="1000" #comment placeholder="Justification for Event Grouping"
+          formControlName="new_comment" rows="4"></textarea>
+        <mat-hint align="end">{{comment.value.length}} / 1000</mat-hint>
+      </mat-form-field>
+
+    </div>
+  </form>
 </mat-dialog-content>
 
 <mat-dialog-actions>
@@ -12,7 +51,7 @@
     <button mat-button color="warn" (click)="this.eventGroupManagementDialogRef.close('cancel');">
       <mat-icon>cancel</mat-icon>&nbsp;Cancel
     </button>
-    <button mat-button color="primary" type="submit" (click)="onSubmit()">
+    <button mat-button color="primary" type="submit" (click)="onSubmit(eventGroupForm.value)">
       <mat-icon>{{actionButtonIcon}}</mat-icon>{{actionButtonText}}
     </button>
     <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>

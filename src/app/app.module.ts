@@ -238,7 +238,8 @@ import { EventGroupManagementComponent } from './event-group-management/event-gr
     ServiceRequestService,
     DisplayValuePipe,
     DatePipe,
-    ResultsCountService
+    ResultsCountService,
+    EventGroupComponent
   ],
   bootstrap: [AppComponent],
   entryComponents: [

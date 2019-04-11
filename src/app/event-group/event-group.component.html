@@ -1,3 +1,29 @@
+<div>
+  <span class="results-button-row">
+    <button mat-button color="accent" (click)="openEventGroupManagementDialog('edit')"
+      [disabled]="selection.selected.length === 0">
+      <mat-icon>
+        edit
+      </mat-icon>
+      Edit Selected Event Group
+    </button>
+    <button mat-button color="warn" (click)="openEventGroupDeleteConfirm(selection.selected[0].id)"
+      [disabled]="selection.selected.length === 0">
+      <mat-icon>
+        delete
+      </mat-icon>
+      Delete Selected Event Group
+    </button>
+    <button mat-button color="accent" (click)="refreshTable()">
+    <mat-icon>
+      refresh
+    </mat-icon>
+   Refresh table
+  </button>
+  </span>
+
+</div>
+
 <div class="spinner-container" *ngIf="dataSource.loading$ | async">
   <mat-spinner></mat-spinner>
 </div>
@@ -6,33 +32,51 @@
 
   <mat-table class="user-events-table" [dataSource]="dataSource" matSort matSortDirection="asc" matSortDisableClear>
 
+    <!-- Checkbox column -->
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <!-- <mat-checkbox (change)="$event ? masterToggle() : null;" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue()  && !isAllSelected()">
+        </mat-checkbox> -->
+
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="($event ? selection.toggle(row) : null)"
+          [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
     <!-- ID/Name Column -->
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-      <mat-cell *matCellDef="let eventGroup"> {{event.name}} </mat-cell>
+      <mat-cell *matCellDef="let eventGroup"> {{eventGroup.name}} </mat-cell>
     </ng-container>
 
     <!-- Event Group Category Column -->
     <ng-container matColumnDef="category">
       <mat-header-cell *matHeaderCellDef> Category </mat-header-cell>
-      <mat-cell *matCellDef="let eventGroup"> {{eventGroup.category}} </mat-cell>
+      <mat-cell *matCellDef="let eventGroup"> {{eventGroup.category  | displayValue:'name':this.eventGroupCategories}}
+      </mat-cell>
     </ng-container>
 
     <!-- Comment/'Justification' Column -->
     <ng-container matColumnDef="comment">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Justification for Event Grouping </mat-header-cell>
-      <mat-cell *matCellDef="let eventGroup"> {{eventGroup.comment}} </mat-cell>
+      <mat-cell *matCellDef="let eventGroup"> {{eventGroup.comments[0].comment}} </mat-cell>
     </ng-container>
 
     <!-- Event List Column -->
     <ng-container matColumnDef="events">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Events </mat-header-cell>
-      <mat-cell *matCellDef="let eventGroup"> {{eventGroup.events}} </mat-cell>
+      <mat-cell *matCellDef="let eventGroup">
+        <button mat-button *ngFor="let event of eventGroup.events" routerLink="../event/{{event}}">{{event}}</button>
+      </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let eventGroup; columns: displayedColumns;"></mat-row>
   </mat-table>
 
-  <mat-paginator [length]="eventGroupCount" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+  <mat-paginator [length]="eventGroupCount" [pageSize]="20" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
 </div>

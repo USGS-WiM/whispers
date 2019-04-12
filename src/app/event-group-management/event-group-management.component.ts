@@ -15,6 +15,8 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { EventGroupService } from '@services/event-group.service';
 import { EventGroupsDataSource } from '@app/event-group/event-groups.datasource';
+import { EventGroupManagementService } from '@services/event-group-management.service';
+
 
 @Component({
   selector: 'app-event-group-management',
@@ -45,6 +47,8 @@ export class EventGroupManagementComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
   events = [];
+  repeats = [];
+  duplicateEventsViolation = false;
 
   // modes of this component:
   // 1. User has already selected a list of Events and wants to create a new Event Group with the list - 'create'
@@ -54,8 +58,8 @@ export class EventGroupManagementComponent implements OnInit {
   buildEventGroupForm() {
     this.eventGroupForm = this.formBuilder.group({
       id: null,
-      category: null,
-      new_comment: '',
+      category: [null, Validators.required],
+      new_comment: ['', Validators.required],
       new_events: this.formBuilder.array([])
     });
   }
@@ -64,6 +68,7 @@ export class EventGroupManagementComponent implements OnInit {
     private formBuilder: FormBuilder,
     public eventGroupManagementDialogRef: MatDialogRef<EventGroupManagementComponent>,
     private eventGroupService: EventGroupService,
+    private eventGroupManagementService: EventGroupManagementService,
     public snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -102,6 +107,11 @@ export class EventGroupManagementComponent implements OnInit {
             this.eventGroupForm.get('new_events')['controls'][i].get('id').setValue(this.data.eventGroup.events[i]);
             this.events.push(this.data.eventGroup.events[i]);
           }
+        }
+        this.selectedEvents = this.data.selectedEvents;
+
+        if (this.data.selectedEvents) {
+          this.checkForRepeatEvents();
         }
 
         break;
@@ -161,6 +171,31 @@ export class EventGroupManagementComponent implements OnInit {
     }
   }
 
+  removeFromSelected(event: number): void {
+    const index = this.selectedEvents.indexOf(event);
+
+    if (index >= 0) {
+      this.selectedEvents.splice(index, 1);
+    }
+
+    this.checkForRepeatEvents();
+  }
+
+
+  checkForRepeatEvents() {
+    // compare events to selectedEvents
+    const self = this;
+
+    this.repeats = this.events.filter(function (val) {
+      return self.selectedEvents.indexOf(val) !== -1;
+    });
+
+    if (this.repeats.length > 0) {
+      this.duplicateEventsViolation = true;
+    } else {
+      this.duplicateEventsViolation = false;
+    }
+  }
 
   onSubmit(formValue) {
 
@@ -168,14 +203,14 @@ export class EventGroupManagementComponent implements OnInit {
 
     if (this.data.action === 'create') {
 
-      formValue.new_events = formValue.new_events.concat(this.data.selectedEvents);
+      formValue.new_events = formValue.new_events.concat(this.selectedEvents);
 
       this.eventGroupService.create(formValue)
         .subscribe(
           eventGroup => {
             this.submitLoading = false;
             this.openSnackBar('Event Group successfully created.', 'OK', 5000);
-             this.refreshEventGroupsTable();
+            this.eventGroupManagementService.setEventGroupReload();
             this.eventGroupManagementDialogRef.close();
 
           },
@@ -191,13 +226,16 @@ export class EventGroupManagementComponent implements OnInit {
 
       formValue.new_events = this.events;
 
+      if (this.selectedEvents) {
+        formValue.new_events = formValue.new_events.concat(this.selectedEvents);
+      }
+
       this.eventGroupService.update(formValue)
         .subscribe(
           eventGroup => {
             this.submitLoading = false;
             this.openSnackBar('Event Group successfully updated.', 'OK', 5000);
-            this.refreshEventGroupsTable();
-            // this.dataUpdatedService.triggerRefresh();
+            this.eventGroupManagementService.setEventGroupReload();
             this.eventGroupManagementDialogRef.close();
 
           },

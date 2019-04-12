@@ -9,6 +9,7 @@ import { EventService } from '@services/event.service';
 import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar } from '@angular/material';
+import { Subscription } from 'rxjs/Subscription';
 
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -16,7 +17,7 @@ import { EventGroupsDataSource } from '@app/event-group/event-groups.datasource'
 import { ResultsCountService } from '@services/results-count.service';
 import { EventGroupService } from '@services/event-group.service';
 import { EventGroupManagementComponent } from '@app/event-group-management/event-group-management.component';
-
+import { EventGroupManagementService } from '@services/event-group-management.service';
 
 @Component({
   selector: 'app-event-group',
@@ -28,6 +29,8 @@ export class EventGroupComponent implements AfterViewInit, OnInit {
   eventGroupManagementDialogRef: MatDialogRef<EventGroupManagementComponent>;
   dataSource: EventGroupsDataSource;
   errorMessage = '';
+
+  private eventGroupSubscription: Subscription;
 
   eventGroupCount;
 
@@ -58,20 +61,30 @@ export class EventGroupComponent implements AfterViewInit, OnInit {
   constructor(
     private eventGroupService: EventGroupService,
     private resultsCountService: ResultsCountService,
+    private eventGroupManagementService: EventGroupManagementService,
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     public snackBar: MatSnackBar,
   ) {
 
-    resultsCountService.eventGroupResultsCount.subscribe(count => {
+    this.resultsCountService.eventGroupResultsCount.subscribe(count => {
       this.eventGroupCount = count;
+      // this.refreshTable();
     });
   }
 
   ngOnInit() {
     this.dataSource = new EventGroupsDataSource(this.eventGroupService);
     this.dataSource.loadEventGroups('', 1, 20);
+
+    ///////////////////
+    this.eventGroupSubscription = this.eventGroupManagementService.getEventGroupReload().subscribe(
+      response => {
+        this.dataSource.loadEventGroups('', 1, 20);
+
+      });
+    ///////////////////////////
 
     this.eventGroupService.getEventGroupCategories()
       .subscribe(
@@ -121,6 +134,15 @@ export class EventGroupComponent implements AfterViewInit, OnInit {
     });
   }
 
+  updateSelectedEventGroup(eventGroup) {
+
+    if (eventGroup === undefined) {
+      this.eventGroupManagementService.setSelectedEventGroup(null);
+    } else {
+      this.eventGroupManagementService.setSelectedEventGroup(eventGroup);
+    }
+  }
+
   openEventGroupManagementDialog(selectedAction) {
 
     this.eventGroupManagementDialogRef = this.dialog.open(EventGroupManagementComponent, {
@@ -148,6 +170,7 @@ export class EventGroupComponent implements AfterViewInit, OnInit {
       .subscribe(
         () => {
           this.openSnackBar('Event Group successfully deleted', 'OK', 5000);
+          this.refreshTable();
         },
         error => {
           this.errorMessage = <any>error;

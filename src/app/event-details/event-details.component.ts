@@ -97,16 +97,6 @@ export class EventDetailsComponent implements OnInit {
 
   showAddEventLocation = false;
 
-  // temporary
-  tempGroupEventsList = [
-    {
-      'id': 178893,
-      'name': 'G178893',
-      'category': 1,
-      'events': [170591, 170591, 170592]
-    }
-  ];
-
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
   addEventOrganizationDialogRef: MatDialogRef<AddEventOrganizationComponent>;

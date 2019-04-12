@@ -27,6 +27,7 @@ import { ResultsCountService } from '@services/results-count.service';
 import { EventSummary } from '@interfaces/event-summary';
 import { ConfirmComponent } from '@confirm/confirm.component';
 import { EventGroupManagementComponent } from '@app/event-group-management/event-group-management.component';
+import { EventGroupManagementService } from '@services/event-group-management.service';
 
 @Component({
   selector: 'app-event-table',
@@ -38,6 +39,7 @@ export class EventComponent implements AfterViewInit, OnInit {
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
   searchDialogRef: MatDialogRef<SearchDialogComponent>;
   private searchQuerySubscription: Subscription;
+  private selectedEventGroupSubscription: Subscription;
   errorMessage: string;
 
   resultsLoading = false;
@@ -54,6 +56,8 @@ export class EventComponent implements AfterViewInit, OnInit {
   dataSource: EventsDataSource;
 
   eventCount;
+
+  selectedEventGroup = null;
 
   orderParams = '';
 
@@ -90,6 +94,7 @@ export class EventComponent implements AfterViewInit, OnInit {
     private eventService: EventService,
     private resultsCountService: ResultsCountService,
     private searchDialogService: SearchDialogService,
+    private eventGroupManagementService: EventGroupManagementService,
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
@@ -130,6 +135,11 @@ export class EventComponent implements AfterViewInit, OnInit {
         }
 
 
+      });
+
+    this.selectedEventGroupSubscription = this.eventGroupManagementService.getSelectedEventGroup().subscribe(
+      selectedEventGroup => {
+        this.selectedEventGroup = selectedEventGroup;
       });
 
     this.searchQuerySubscription = this.searchDialogService.getDisplayQuery().subscribe(
@@ -188,12 +198,12 @@ export class EventComponent implements AfterViewInit, OnInit {
 
   openEventGroupManagementDialog(selectedAction) {
 
-    console.log(this.selection);
     this.eventGroupManagementDialogRef = this.dialog.open(EventGroupManagementComponent, {
       disableClose: true,
       data: {
         action: selectedAction,
-        selectedEvents: this.selection.selected
+        selectedEvents: this.selection.selected,
+        eventGroup: this.selectedEventGroup
       }
     });
 
@@ -240,6 +250,21 @@ export class EventComponent implements AfterViewInit, OnInit {
         this.navigateToEvent(event);
       }
     });
+  }
+
+  showEventGroupSelectionInfo() {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Event Group Selection Help',
+          message: 'You can update your Event Group selection on the Event Groups tab.',
+          confirmButtonText: 'OK',
+          messageIcon: 'help',
+          titleIcon: 'help',
+          showCancelButton: false
+        }
+      }
+    );
   }
 
   navigateToEvent(event) {

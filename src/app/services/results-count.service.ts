@@ -4,13 +4,28 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class ResultsCountService {
 
-  private countSource = new BehaviorSubject('None');
-  resultsCount = this.countSource.asObservable();
+  private userEventsResultsCountSource = new BehaviorSubject('None');
+  userEventsResultsCount = this.userEventsResultsCountSource.asObservable();
+
+  private eventQueryResultsCountSource = new BehaviorSubject('None');
+  eventQueryResultsCount = this.eventQueryResultsCountSource.asObservable();
+
+  private eventGroupResultsCountSource = new BehaviorSubject('None');
+  eventGroupResultsCount = this.eventGroupResultsCountSource.asObservable();
 
   constructor() { }
 
-  updateResultsCount(count) {
-    this.countSource.next(count);
+  updateUserEventsResultsCount(count) {
+    this.userEventsResultsCountSource.next(count);
   }
-  
+
+  updateEventQueryResultsCount(count) {
+    this.eventQueryResultsCountSource.next(count);
+  }
+
+  updateEventGroupResultsCount(count) {
+    this.eventGroupResultsCountSource.next(count);
+  }
+
 }
+

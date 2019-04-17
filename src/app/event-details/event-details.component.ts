@@ -97,16 +97,6 @@ export class EventDetailsComponent implements OnInit {
 
   showAddEventLocation = false;
 
-  // temporary
-  tempGroupEventsList = [
-    {
-      'id': 178893,
-      'name': 'G178893',
-      'category': 1,
-      'events': [170591, 170591, 170592]
-    }
-  ];
-
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
   addEventOrganizationDialogRef: MatDialogRef<AddEventOrganizationComponent>;
@@ -605,6 +595,7 @@ export class EventDetailsComponent implements OnInit {
   addEventDiagnosis(id: string) {
     // Open dialog for adding event diagnosis
     this.addEventDiagnosisDialogRef = this.dialog.open(AddEventDiagnosisComponent, {
+      minWidth: '75%',
       data: {
         event_id: id,
         diagnosis_options: this.possibleEventDiagnoses
@@ -625,6 +616,7 @@ export class EventDetailsComponent implements OnInit {
   addEventOrganization(id: string) {
     // Open dialog for adding event diagnosis
     this.addEventOrganizationDialogRef = this.dialog.open(AddEventOrganizationComponent, {
+      minWidth: '75%',
       data: {
         event_id: id,
         organizations: this.organizations,
@@ -924,7 +916,7 @@ export class EventDetailsComponent implements OnInit {
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-      minWidth: '50em',
+      minWidth: '75%',
       disableClose: true,
       data: {
         contact_action: 'create'

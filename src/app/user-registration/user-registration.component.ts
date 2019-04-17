@@ -37,6 +37,8 @@ export class UserRegistrationComponent implements OnInit {
   organizations: Organization[];
   roles: Role[];
 
+  passwordPattern: RegExp = (/^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?\d)(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?\d)(?=.*?[^a-zA-Z0-9])).{12,}$/);
+
   userRegistrationForm: FormGroup;
 
   public filteredOrganizations: ReplaySubject<Organization[]> = new ReplaySubject<Organization[]>(1);
@@ -79,8 +81,14 @@ export class UserRegistrationComponent implements OnInit {
       last_name: '',
       email: ['', [Validators.required, Validators.email]],
       confirmEmail: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      confirmPassword: '',
+      password: ['', Validators.compose([
+        Validators.required, Validators.pattern(this.passwordPattern)
+        ])
+      ],
+      confirmPassword: ['', Validators.compose([
+        Validators.required, Validators.pattern(this.passwordPattern)
+        ])
+      ],
       organization: null,
       role: null,
       message: '',

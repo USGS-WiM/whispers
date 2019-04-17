@@ -23,6 +23,7 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 
 import { EditUserComponent } from '@app/edit-user/edit-user.component';
 import { NewLookupRequestComponent } from '@app/new-lookup-request/new-lookup-request.component';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -152,6 +153,7 @@ export class UserDashboardComponent implements OnInit {
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      minWidth: '75%',
       disableClose: true,
       data: {
         contact_action: 'create'
@@ -186,7 +188,7 @@ export class UserDashboardComponent implements OnInit {
 
     // Add code to determine how many are selected
 
-    console.log(this.selection.selected);
+    console.log('selection.selected: ' + JSON.parse(this.selection.selected) );
 
     if (this.selection.selected.length > 1) {
       alert('you have too many contacts selected for edit. select only one.');

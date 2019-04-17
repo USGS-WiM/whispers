@@ -13,11 +13,11 @@ import { MatSnackBar } from '@angular/material';
 import { DisplayValuePipe } from '../pipes/display-value.pipe';
 
 import { SearchDialogComponent } from '@search-dialog/search-dialog.component';
+import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { APP_UTILITIES } from '@app/app.utilities';
-import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 
 import { DisplayQuery } from '@interfaces/display-query';
 import { APP_SETTINGS } from '@app/app.settings';
@@ -80,9 +80,7 @@ export class HomeComponent implements OnInit {
   isloggedIn = APP_SETTINGS.IS_LOGGEDIN;
 
   currentSearchQuery = sessionStorage.getItem('currentSearch') ? JSON.parse(sessionStorage.getItem('currentSearch')) : APP_SETTINGS.DEFAULT_SEARCH_QUERY;
-  //currentSearchQuery;
   currentDisplayQuery: DisplayQuery = sessionStorage.getItem('currentDisplayQuery') ? JSON.parse(sessionStorage.getItem('currentDisplayQuery')) : APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
-  //currentDisplayQuery;
 
   currentResults: EventSummary[];
 
@@ -276,7 +274,6 @@ export class HomeComponent implements OnInit {
       data: {
         query: this.currentDisplayQuery
       }
-      // height: '75%'
     });
   }
 

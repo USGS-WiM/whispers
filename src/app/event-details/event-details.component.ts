@@ -97,8 +97,6 @@ export class EventDetailsComponent implements OnInit {
 
   showAddEventLocation = false;
 
-  //locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
-
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
   addEventOrganizationDialogRef: MatDialogRef<AddEventOrganizationComponent>;
@@ -547,6 +545,10 @@ export class EventDetailsComponent implements OnInit {
     this.router.navigate([`../../home`], { relativeTo: this.route });
   }
 
+  navigateToEventDetails(eventID) {
+    this.router.navigate([`../${eventID}`], { relativeTo: this.route });
+  }
+
   editEvent(id: string) {
     // Open dialog for editing event
     this.editEventDialogRef = this.dialog.open(EditEventComponent, {
@@ -593,6 +595,7 @@ export class EventDetailsComponent implements OnInit {
   addEventDiagnosis(id: string) {
     // Open dialog for adding event diagnosis
     this.addEventDiagnosisDialogRef = this.dialog.open(AddEventDiagnosisComponent, {
+      minWidth: '75%',
       data: {
         event_id: id,
         diagnosis_options: this.possibleEventDiagnoses
@@ -613,6 +616,7 @@ export class EventDetailsComponent implements OnInit {
   addEventOrganization(id: string) {
     // Open dialog for adding event diagnosis
     this.addEventOrganizationDialogRef = this.dialog.open(AddEventOrganizationComponent, {
+      minWidth: '75%',
       data: {
         event_id: id,
         organizations: this.organizations,
@@ -912,7 +916,7 @@ export class EventDetailsComponent implements OnInit {
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-      minWidth: '50em',
+      minWidth: '75%',
       disableClose: true,
       data: {
         contact_action: 'create'
@@ -1051,6 +1055,9 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
+  addToEventGroup() {
+
+  }
 
   refreshEvent() {
     this.viewPanelStates = new Object();

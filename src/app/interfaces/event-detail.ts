@@ -4,7 +4,7 @@ import { History } from '@interfaces/history';
 import { EventLocation } from '@interfaces/event-location';
 import { EventDiagnosis } from '@app/interfaces/event-diagnosis';
 import { Organization } from '@interfaces/organization';
-import { SuperEvent } from '@app/interfaces/super-event';
+import { EventGroup } from '@app/interfaces/event-group';
 
 export interface EventDetail extends History {
     id: number;
@@ -24,7 +24,7 @@ export interface EventDetail extends History {
     legal_number: string;
     quality_check: string;
     public: boolean;
-    superevents: SuperEvent[];
+    eventgroups: EventGroup[];
     eventdiagnoses: EventDiagnosis[];
     eventlocations: EventLocation[];
     eventorganizations: Organization[];

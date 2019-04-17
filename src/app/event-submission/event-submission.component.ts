@@ -251,7 +251,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       }),
       new_event_diagnoses: this.formBuilder.array([]),
       new_comments: this.formBuilder.array([]),
-      new_superevents: this.formBuilder.array([]),
+      new_eventgroups: this.formBuilder.array([]),
       new_event_locations: this.formBuilder.array([
         this.initEventLocation()
       ])
@@ -377,7 +377,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-      minWidth: '50em',
+      minWidth: '75%',
       disableClose: true,
       data: {
         contact_action: 'create'
@@ -1463,8 +1463,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         this.speciesDiagnosisViolation = true;
 
       }
-      ////////////////////////////////////////////////////////////////////
-
     }
   }
 

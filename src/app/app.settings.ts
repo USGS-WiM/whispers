@@ -117,6 +117,10 @@ export class APP_SETTINGS {
     public static get SERVICE_REQUEST_TYPES_URL(): string { return this.API_ROOT + 'servicerequesttypes/'; }
     public static get SERVICE_REQUEST_RESPONSES_URL(): string { return this.API_ROOT + 'servicerequestresponses/'; }
 
+    public static get EVENT_GROUPS_URL(): string { return this.API_ROOT + 'eventgroups/'; }
+    public static get EVENT_EVENT_GROUPS_URL(): string { return this.API_ROOT + 'eventeventgroups/'; }
+    public static get EVENT_GROUP_CATEGORIES_URL(): string { return this.API_ROOT + 'eventgroupcategories/'; }
+
     public static get GO_USA_GOV_SHORTEN_URL(): string { return 'https://go.usa.gov/api/shorten.json'; }
     public static get GO_USA_GOV_USER(): string { return 'bdraper'; }
     public static get GO_USA_GOV_API_KEY(): string { return 'c9f06b2f3be4a9f764a4421df159a2e0'; }
@@ -151,7 +155,8 @@ export class APP_SETTINGS {
     public static get MIN_AUTH_JSON_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         });
     }
 
@@ -165,7 +170,8 @@ export class APP_SETTINGS {
     public static get AUTH_JSON_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
-            'Accept': 'application/json', 'Content-Type': 'application/json'
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         });
     }
 

@@ -112,6 +112,9 @@ import { ViewContactDetailsComponent } from './view-contact-details/view-contact
 import { AddEventOrganizationComponent } from './add-event-organization/add-event-organization.component';
 import { UserEventsComponent } from './user-events/user-events.component';
 import { ResultsCountService } from '@services/results-count.service';
+import { EventComponent } from './event/event.component';
+import { EventGroupComponent } from './event-group/event-group.component';
+import { EventGroupManagementComponent } from './event-group-management/event-group-management.component';
 
 
 
@@ -150,7 +153,10 @@ import { ResultsCountService } from '@services/results-count.service';
     UserRegistrationComponent,
     ViewContactDetailsComponent,
     AddEventOrganizationComponent,
-    UserEventsComponent
+    UserEventsComponent,
+    EventComponent,
+    EventGroupComponent,
+    EventGroupManagementComponent
   ],
   imports: [
     BrowserModule,
@@ -232,7 +238,8 @@ import { ResultsCountService } from '@services/results-count.service';
     ServiceRequestService,
     DisplayValuePipe,
     DatePipe,
-    ResultsCountService
+    ResultsCountService,
+    EventGroupComponent
   ],
   bootstrap: [AppComponent],
   entryComponents: [
@@ -258,7 +265,8 @@ import { ResultsCountService } from '@services/results-count.service';
     NewLookupRequestComponent,
     SaveSearchComponent,
     UserRegistrationComponent,
-    ViewContactDetailsComponent
+    ViewContactDetailsComponent,
+    EventGroupManagementComponent
   ]
 })
 export class AppModule { }

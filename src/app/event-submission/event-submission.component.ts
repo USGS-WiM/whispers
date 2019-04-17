@@ -377,7 +377,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-      minWidth: '50em',
+      minWidth: '75%',
       disableClose: true,
       data: {
         contact_action: 'create'
@@ -1463,8 +1463,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         this.speciesDiagnosisViolation = true;
 
       }
-      ////////////////////////////////////////////////////////////////////
-
     }
   }
 

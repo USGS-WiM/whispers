@@ -180,7 +180,7 @@ export class EventGroupComponent implements AfterViewInit, OnInit {
 
   }
 
-  openEventGroupDeleteConfirm(id) {
+  openEventGroupDeleteConfirm(eventGroup) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
         data: {
@@ -197,7 +197,7 @@ export class EventGroupComponent implements AfterViewInit, OnInit {
 
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.deleteEventGroup(id);
+        this.deleteEventGroup(eventGroup.id);
       }
     });
   }

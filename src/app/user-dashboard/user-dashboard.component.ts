@@ -153,6 +153,7 @@ export class UserDashboardComponent implements OnInit {
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      minWidth: '75%',
       disableClose: true,
       data: {
         contact_action: 'create'

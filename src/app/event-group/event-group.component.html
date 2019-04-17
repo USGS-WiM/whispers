@@ -7,7 +7,7 @@
       </mat-icon>
       Edit Selected Event Group
     </button>
-    <button mat-button color="warn" (click)="openEventGroupDeleteConfirm(selection.selected[0].id)"
+    <button mat-button color="warn" (click)="openEventGroupDeleteConfirm(selection.selected[0])"
       [disabled]="selection.selected.length === 0">
       <mat-icon>
         delete

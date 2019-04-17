@@ -105,14 +105,6 @@
     <div class="vertical-form-container" *ngIf="data.registration_type === 'partner'">
 
       <span class="reg-hint">Select the organization you would like to join</span>
-
-      <!-- <mat-form-field class="form-control org-select">
-        <mat-select placeholder="Organization" formControlName="organization">
-          <mat-option value="">--</mat-option>
-          <mat-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</mat-option>
-        </mat-select>
-      </mat-form-field> -->
-
       <mat-form-field class="form-control org-select">
         <mat-select formControlName="organization" placeholder="Organization" #organizationSelect>
           <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="'Find organization...'"

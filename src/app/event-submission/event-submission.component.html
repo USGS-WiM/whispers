@@ -395,7 +395,6 @@
 
                                   <div class="horizontal-form-container" class="species-controls-container">
 
-                                    <!-- new experimental species search select -->
                                     <mat-form-field class="form-control">
                                       <mat-select formControlName="species" placeholder="Species" #speciesSelect
                                         required>
@@ -413,9 +412,8 @@
                                         Species
                                         selection is required</mat-error>
                                     </mat-form-field>
-                                    <!-- end new experimental species search select -->
 
-
+                                    <!--Known Dead control -->
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Known Dead" type="number" min="0"
                                         formControlName="dead_count" (ngModelChange)="checkLocationSpeciesNumbers()">
@@ -434,7 +432,9 @@
                                         Must
                                         be an integer (whole number)</mat-error>
                                     </mat-form-field>
+                                    <!--End Known Dead control -->
 
+                                    <!-- Estimated Dead control -->
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Estimated Dead" type="number" min="0"
                                         formControlName="dead_count_estimated"
@@ -458,7 +458,9 @@
                                         Must
                                         be higher than known dead</mat-error>
                                     </mat-form-field>
+                                    <!--End Estimated Dead control -->
 
+                                    <!--Known Sick control -->
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Known Sick" type="number" min="0"
                                         formControlName="sick_count" (ngModelChange)="checkLocationSpeciesNumbers()">
@@ -477,7 +479,9 @@
                                         Must
                                         be an integer (whole number)</mat-error>
                                     </mat-form-field>
+                                    <!--End Known Sick control -->
 
+                                    <!--Estimated sick control-->
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Estimated Sick" type="number" min="0"
                                         formControlName="sick_count_estimated"
@@ -501,7 +505,9 @@
                                         Must
                                         be higher than known sick</mat-error>
                                     </mat-form-field>
+                                    <!--End Estimated sick control-->
 
+                                    <!--Population count control-->
                                     <mat-form-field class="species-bias-control">
                                       <input matInput placeholder="Population" type="number" min="0"
                                         formControlName="population_count">
@@ -517,7 +523,9 @@
                                         Must
                                         be an integer (whole number)</mat-error>
                                     </mat-form-field>
+                                    <!--End Population count control-->
 
+                                    <!-- Age Bias Control -->
                                     <mat-form-field class="species-bias-control">
                                       <mat-select placeholder="Age Bias" formControlName="age_bias">
                                         <mat-option *ngFor="let ageBias of ageBiases" value="{{ageBias.id}}">
@@ -527,7 +535,9 @@
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
                                     </mat-form-field>
+                                    <!-- End Age Bias Control -->
 
+                                    <!--Sex bias control-->
                                     <mat-form-field class="species-number-control">
                                       <mat-select placeholder="Sex Bias" formControlName="sex_bias">
                                         <mat-option *ngFor="let sexBias of sexBiases" value="{{sexBias.id}}">
@@ -537,7 +547,9 @@
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
                                     </mat-form-field>
+                                    <!--End Sex bias control-->
 
+                                    <!--Captive control-->
                                     <mat-form-field class="form-control-short">
                                       <mat-select placeholder="Captive" formControlName="captive"
                                         (ngModelChange)="enforceCaptiveRule($event)">
@@ -548,6 +560,7 @@
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
                                     </mat-form-field>
+                                    <!--End Captive control-->
 
                                     <div class="contact-button-div">
                                       <button mat-icon-button color="accent" aria-label="Apply species to all locations"
@@ -563,40 +576,7 @@
                                         <mat-icon>remove_circle</mat-icon>
                                       </button>
                                     </div>
-
-                                    <!-- Add species diagnosis button -->
-                                    <!-- <div class="add-content-button">
-                                      <button mat-button color="accent" aria-label="Add Species Diagnosis" matTooltip="Add Species Diagnosis"
-                                        (click)="openAddSpeciesDiagnosisDialog(eventLocationIndex,locationSpeciesIndex)">
-                                        <mat-icon>note_add</mat-icon> Add Species Diagnosis
-                                      </button>
-                                    </div> -->
-
                                   </div>
-
-                                  <!-- <br /> -->
-                                  <!-- div for displaying species diagnoses added to the location species -->
-                                  <!-- *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index" -->
-                                  <!-- <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
-                                    <mat-card>
-                                      <mat-card-header>
-                                        <mat-card-title class="text-bold text-larger">Diagnoses for this Species</mat-card-title>
-                                      </mat-card-header>
-                                      <mat-card-content>
-                                        <mat-list dense>
-                                          <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
-                                            {{speciesDiagnosis.get('diagnosis').value |
-                                            displayValue:'name':this.allDiagnoses}}
-                                            {{speciesDiagnosis.get('suspect').value ? '(suspect)': '' }}
-                                            <button mat-icon-button color="warn" aria-label="Remove this diagnosis"
-                                              matTooltip="Remove this diagnosis" (click)="openSpeciesDiagnosisRemoveConfirm(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
-                                              <mat-icon>remove_circle</mat-icon>
-                                            </button>
-                                          </mat-list-item>
-                                        </mat-list>
-                                      </mat-card-content>
-                                    </mat-card>
-                                  </div> -->
 
                                 </div>
                               </div>
@@ -609,9 +589,8 @@
                               <mat-icon class="icon">error</mat-icon>
                               <span class="alert-text">Location must have at least one species.</span>
                             </mat-error>
-
                           </div>
-
+                          
                           <div class="button-row">
                             <button mat-button color="primary" matTooltip="Add species to this location"
                               (click)="addLocationSpecies(eventLocationIndex)">
@@ -660,19 +639,6 @@
 
                                       <!-- div for displaying species diagnoses added to the location species -->
                                       <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
-
-                                        <!-- <mat-list dense>
-                                          <mat-list-item *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
-                                            {{speciesDiagnosis.get('diagnosis').value |
-                                            displayValue:'name':this.allDiagnoses}}
-                                            {{speciesDiagnosis.get('suspect').value ? '(suspect)': '' }} Number
-                                            Assessed: {{speciesDiagnosis.get('tested_count').value}}
-                                            <button mat-icon-button color="warn" aria-label="Remove this diagnosis"
-                                              matTooltip="Remove this diagnosis" (click)="openSpeciesDiagnosisRemoveConfirm(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex)">
-                                              <mat-icon>remove_circle</mat-icon>
-                                            </button>
-                                          </mat-list-item>
-                                        </mat-list> -->
 
                                         <table class="species-diagnosis-table">
                                           <tr>

@@ -75,6 +75,11 @@
       <mat-icon class="icon">error</mat-icon>
       <span class="alert-text">Remove duplicate events: {{repeats}}</span>
     </mat-error>
+
+    <mat-error color="warn" *ngIf="minimumCountViolation">
+        <mat-icon class="icon">error</mat-icon>
+        <span class="alert-text">An Event Group must contain at least 2 events.</span>
+      </mat-error>
   </div>
 
 </mat-dialog-content>
@@ -84,7 +89,7 @@
     <button mat-button color="warn" (click)="this.eventGroupManagementDialogRef.close('cancel');">
       <mat-icon>cancel</mat-icon>&nbsp;Cancel
     </button>
-    <button mat-button color="primary" type="submit" [disabled]="duplicateEventsViolation || eventGroupForm.invalid"
+    <button mat-button color="primary" type="submit" [disabled]="duplicateEventsViolation || minimumCountViolation || eventGroupForm.invalid"
       (click)="onSubmit(eventGroupForm.value)">
       <mat-icon>{{actionButtonIcon}}</mat-icon>{{actionButtonText}}
     </button>

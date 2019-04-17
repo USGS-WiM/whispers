@@ -52,6 +52,13 @@ import { EventService } from '@app/services/event.service';
 import { CreateContactComponent } from '@create-contact/create-contact.component';
 import { CreateContactService } from '@create-contact/create-contact.service';
 
+import { Diagnosis } from '@interfaces/diagnosis';
+import { DiagnosisService } from '@services/diagnosis.service';
+
+import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
+import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
+import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
+
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 
@@ -61,6 +68,8 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 import { ViewContactDetailsComponent } from '@app/view-contact-details/view-contact-details.component';
 
 import { EventDetail } from '@interfaces/event-detail';
+
+import { DisplayValuePipe } from '../pipes/display-value.pipe';
 
 import * as search_api from 'usgs-search-api';
 
@@ -89,6 +98,7 @@ export class AddEventLocationComponent implements OnInit {
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   viewContactDetailsDialogRef: MatDialogRef<ViewContactDetailsComponent>;
+  editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
 
   landOwnerships: LandOwnership[];
   countries: Country[];
@@ -99,12 +109,19 @@ export class AddEventLocationComponent implements OnInit {
   sexBiases: SexBias[];
   ageBiases: AgeBias[];
   organizations: Organization[];
+  laboratories: Organization[];
   contactTypes: ContactType[];
   commentTypes: CommentType[];
+  allDiagnoses: Diagnosis[];
+  diagnosisBases = [];
+  diagnosisCauses = [];
 
   userContacts = [];
   userContactsLoading = false;
   submitLoading = false;
+
+  speciesDiagnosisViolation = false;
+  nonCompliantSpeciesDiagnoses = [];
 
   /** Subject that emits when the component has been destroyed. */
   private _onDestroy = new Subject<void>();
@@ -174,9 +191,13 @@ export class AddEventLocationComponent implements OnInit {
     private contactTypeService: ContactTypeService,
     private commentTypeService: CommentTypeService,
     private organizationService: OrganizationService,
+    private diagnosisService: DiagnosisService,
+    private diagnosisBasisService: DiagnosisBasisService,
+    private diagnosisCauseService: DiagnosisCauseService,
     private contactService: ContactService,
     private createContactSevice: CreateContactService,
     private eventLocationService: EventLocationService,
+    private displayValuePipe: DisplayValuePipe,
     public snackBar: MatSnackBar,
     // @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -272,6 +293,43 @@ export class AddEventLocationComponent implements OnInit {
         }
       );
 
+    // get diagnoses from the diagnoses service
+    this.diagnosisService.getDiagnoses()
+      .subscribe(
+        (diagnoses) => {
+          this.allDiagnoses = diagnoses;
+          this.allDiagnoses.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get diagnosisBases from the diagnosisBasis service
+    this.diagnosisBasisService.getDiagnosisBases()
+      .subscribe(
+        (diagnosisBases) => {
+          this.diagnosisBases = diagnosisBases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+    // get diagnosisCauses from the diagnosisCause service
+    this.diagnosisCauseService.getDiagnosisCauses()
+      .subscribe(
+        (diagnosisCauses) => {
+          this.diagnosisCauses = diagnosisCauses;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
 
     // get sexBiases from the sexBias service
     this.sexBiasService.getSexBiases()
@@ -328,6 +386,18 @@ export class AddEventLocationComponent implements OnInit {
         }
       );
 
+    // get 'laboratories' from the organizations service
+    // aliases the subset of organization records where laboratory = true to an array called 'laboratories'
+    this.organizationService.getLaboratories()
+      .subscribe(
+        (laboratories) => {
+          this.laboratories = laboratories;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
     // TEMPORARY- will need to use user creds to query user contact list
     // get contact types from the ContactTypeService
     this.userContactsLoading = true;
@@ -367,16 +437,16 @@ export class AddEventLocationComponent implements OnInit {
     }
 
     // empty value from datepicker does not work with datePipe transform. This converts empty dates to null for the datePipe
-    if (formValue.end_date !== null) {
-      if (formValue.end_date.toJSON() === null) {
-        formValue.end_date = null;
-      }
-    }
-    if (formValue.start_date !== null) {
-      if (formValue.start_date.toJSON() === null) {
-        formValue.start_date = null;
-      }
-    }
+    // if (formValue.end_date !== null) {
+    //   if (formValue.end_date.toJSON() === null) {
+    //     formValue.end_date = null;
+    //   }
+    // }
+    // if (formValue.start_date !== null) {
+    //   if (formValue.start_date.toJSON() === null) {
+    //     formValue.start_date = null;
+    //   }
+    // }
     // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
     // can be removed if configure datepicker to output this format
     // (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
@@ -480,12 +550,28 @@ export class AddEventLocationComponent implements OnInit {
       priority: null,
       captive: false,
       age_bias: null,
-      sex_bias: null
+      sex_bias: null,
+      new_species_diagnoses: this.formBuilder.array([])
     },
       {
         validator: [this.integer, this.estimatedSick, this.estimatedDead]
       }
     );
+  }
+
+  initSpeciesDiagnosis() {
+    return this.formBuilder.group({
+      diagnosis: [null, Validators.required],
+      cause: null,
+      basis: null,
+      suspect: false,
+      tested_count: [null, Validators.min(0)],
+      diagnosis_count: [null, Validators.min(0)],
+      positive_count: null,
+      suspect_count: null,
+      pooled: false,
+      new_species_diagnosis_organizations: null
+    });
   }
 
   integer(AC: AbstractControl) {
@@ -601,9 +687,9 @@ export class AddEventLocationComponent implements OnInit {
     this.ManageSpeciesControl(locationSpeciesIndex);
   }
 
-  removeLocationSpecies(i, j) {
+  removeLocationSpecies(locationSpeciesIndex) {
     const control = <FormArray>this.addEventLocationForm.get('new_location_species');
-    control.removeAt(j);
+    control.removeAt(locationSpeciesIndex);
   }
   getLocationSpecies() {
     return this.addEventLocationForm.controls.new_location_species['controls'];
@@ -628,6 +714,31 @@ export class AddEventLocationComponent implements OnInit {
   getLocationContacts() {
     return this.addEventLocationForm.controls.new_location_contacts['controls'];
   }
+
+  // species diagnosis
+  addSpeciesDiagnosis(locationSpeciesIndex) {
+    // tslint:disable-next-line:max-line-length
+    const control = <FormArray>this.addEventLocationForm.get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
+    control.push(this.initSpeciesDiagnosis());
+    // tslint:disable-next-line:max-line-length
+    const speciesDiagnosisIndex = this.addEventLocationForm.get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses').length - 1;
+    return speciesDiagnosisIndex;
+  }
+
+  removeSpeciesDiagnosis(locationSpeciesIndex, speciesDiagnosisIndex) {
+    // tslint:disable-next-line:max-line-length
+    const control = <FormArray>this.addEventLocationForm.get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
+    control.removeAt(speciesDiagnosisIndex);
+  }
+
+  getSpeciesDiagnoses(form) {
+    return form.controls.new_species_diagnoses.controls;
+  }
+
+  getDiagnosisOrganizations(form) {
+    return form.controls.new_species_diagnosis_organizations.value;
+  }
+
 
   viewContactDetailsDialog(locationContactIndex) {
 
@@ -746,11 +857,71 @@ export class AddEventLocationComponent implements OnInit {
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
+      minWidth: '75%',
       disableClose: true,
       data: {
         contact_action: 'create'
       }
     });
+  }
+
+  openEditSpeciesDiagnosisDialog(locationSpeciesIndex, speciesDiagnosisIndex, speciesdiagnosis, locationspecies) {
+
+    this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+      minWidth: '40em',
+      disableClose: true,
+      data: {
+        locationspecies: locationspecies.value,
+        speciesdiagnosis: speciesdiagnosis.value,
+        laboratories: this.laboratories,
+        diagnosisBases: this.diagnosisBases,
+        diagnosisCauses: this.diagnosisCauses,
+        diagnoses: this.allDiagnoses,
+        // eventlocationIndex: eventLocationIndex,
+        locationspeciesIndex: locationSpeciesIndex,
+        species_diagnosis_action: 'editInFormArray',
+        title: 'Edit Species Diagnosis',
+        titleIcon: 'edit',
+        actionButtonIcon: 'save',
+        action_button_text: 'Save'
+      }
+    });
+
+    this.editSpeciesDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        (speciesDiagnosisObj) => {
+
+          if (speciesDiagnosisObj.action === 'cancel') {
+            // remove last species diagnosis added
+            // tslint:disable-next-line:max-line-length
+            // this.removeSpeciesDiagnosis(speciesDiagnosisObj.eventlocationIndex, speciesDiagnosisObj.locationspeciesIndex, speciesDiagnosisIndex);
+            return;
+          } else if (speciesDiagnosisObj.action === 'editInFormArray') {
+
+            this.addEventLocationForm.get('new_location_species')['controls'][speciesDiagnosisObj.locationspeciesIndex]
+              .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
+                diagnosis: speciesDiagnosisObj.formValue.diagnosis,
+                cause: speciesDiagnosisObj.formValue.cause,
+                basis: speciesDiagnosisObj.formValue.basis,
+                suspect: speciesDiagnosisObj.formValue.suspect,
+                tested_count: speciesDiagnosisObj.formValue.tested_count,
+                diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
+                positive_count: speciesDiagnosisObj.formValue.positive_count,
+                suspect_count: speciesDiagnosisObj.formValue.suspect_count,
+                pooled: speciesDiagnosisObj.formValue.pooled,
+                new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
+              });
+
+            // not needed for add event location because Complete events cannot be edited
+            // this.checkSpeciesDiagnoses();
+          }
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
   }
 
   openGNISLookupDialog() {
@@ -766,6 +937,79 @@ export class AddEventLocationComponent implements OnInit {
 
     });
   }
+
+  clearGNISEntry() {
+    this.addEventLocationForm.get('gnis_id').setValue('');
+    this.addEventLocationForm.get('gnis_name').setValue('');
+  }
+
+  openSpeciesDiagnosisRemoveConfirm(locationSpeciesIndex, speciesDiagnosisIndex) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Remove Species Diagnosis',
+          titleIcon: 'remove_circle',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to remove this species diagnosis?',
+          messageIcon: '',
+          confirmButtonText: 'Remove',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+
+        // remove the diagnosis from the available diagnoses unless another species has it
+        // tslint:disable-next-line:max-line-length
+        const diagnosisID = this.addEventLocationForm.get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].get('diagnosis').value;
+
+        // remove the speciesdiagnosis form array instance
+        this.removeSpeciesDiagnosis(locationSpeciesIndex, speciesDiagnosisIndex);
+      }
+    });
+  }
+
+  // not needed for add event location because Complete events cannot be edited
+  // checkSpeciesDiagnoses() {
+  //   this.speciesDiagnosisViolation = false;
+  //   this.nonCompliantSpeciesDiagnoses = [];
+  //   if (this.eventData.complete === true) {
+
+  //     let requirementMet = true;
+  //     const locationspecies = <FormArray>this.addEventLocationForm.get('new_location_species');
+  //     // loop through each new_location_species array
+  //     // tslint:disable-next-line:max-line-length
+  //     for (let locationspeciesindex = 0, locationspecieslength = locationspecies.length; locationspeciesindex < locationspecieslength; locationspeciesindex++) {
+  //       const locationspeciesform = this.addEventLocationForm.get('new_location_species')['controls'][locationspeciesindex];
+  //       // tslint:disable-next-line:max-line-length
+  //       const speciesdiagnoses = <FormArray>this.addEventLocationForm.get('new_location_species')['controls'][locationspeciesindex].get('new_species_diagnoses');
+  //       for (let speciesdiagnosisindex = 0, speciesdiagnoseslength = speciesdiagnoses.length; speciesdiagnosisindex < speciesdiagnoseslength; speciesdiagnosisindex++) {
+  //         // tslint:disable-next-line:max-line-length
+  //         const speciesdiagnosisform = this.addEventLocationForm.get('new_location_species')['controls'][locationspeciesindex].get('new_species_diagnoses')['controls'][speciesdiagnosisindex];
+  //         // if any of the species diagnoses are missing a cause or basis value, requirement is not met and validation check fails
+  //         if (speciesdiagnosisform.get('cause').value === null || speciesdiagnosisform.get('basis').value === null) {
+  //           requirementMet = false;
+  //           // add to an object storing the non-compliant species diagnoses
+  //           this.nonCompliantSpeciesDiagnoses.push({
+  //             locationSpeciesNumber: locationspeciesindex + 1,
+  //             locationSpeciesName: this.displayValuePipe.transform(locationspeciesform.controls.species.value, 'name', this.species),
+  //             speciesDiagnosisNumber: speciesdiagnosisindex + 1,
+  //             speciesDiagnosisName: this.displayValuePipe.transform(speciesdiagnosisform.controls.diagnosis.value, 'name', this.allDiagnoses)
+  //           });
+  //         }
+  //       }
+  //     }
+
+  //     if (requirementMet) {
+  //       this.speciesDiagnosisViolation = false;
+  //     } else {
+  //       this.speciesDiagnosisViolation = true;
+
+  //     }
+  //   }
+  // }
 
   ManageSpeciesControl(locationSpeciesIndex: number) {
     // populate the species options list for the specific control
@@ -791,6 +1035,62 @@ export class AddEventLocationComponent implements OnInit {
       });
   }
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  openAddSpeciesDiagnosisDialog(locationSpeciesIndex) {
+
+    const speciesDiagnosisIndex = this.addSpeciesDiagnosis(locationSpeciesIndex);
+
+    // Open dialog for adding species diagnosis
+    this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
+      disableClose: true,
+      data: {
+        species_diagnosis_action: 'addToFormArray',
+        laboratories: this.laboratories,
+        // eventlocationIndex: eventLocationIndex,
+        locationspeciesIndex: locationSpeciesIndex,
+        title: 'Add Species Diagnosis',
+        titleIcon: 'note_add',
+        actionButtonIcon: 'note_add'
+      }
+    });
+
+    this.editSpeciesDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        (speciesDiagnosisObj) => {
+
+          if (speciesDiagnosisObj.action === 'cancel') {
+            // remove last species diagnosis added
+            // tslint:disable-next-line:max-line-length
+            this.removeSpeciesDiagnosis(speciesDiagnosisObj.locationspeciesIndex, speciesDiagnosisIndex);
+            return;
+          } else if (speciesDiagnosisObj.action === 'add') {
+
+            this.addEventLocationForm.get('new_location_species')['controls'][speciesDiagnosisObj.locationspeciesIndex]
+              .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
+                diagnosis: speciesDiagnosisObj.formValue.diagnosis,
+                cause: speciesDiagnosisObj.formValue.cause,
+                basis: speciesDiagnosisObj.formValue.basis,
+                suspect: speciesDiagnosisObj.formValue.suspect,
+                tested_count: speciesDiagnosisObj.formValue.tested_count,
+                diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
+                positive_count: speciesDiagnosisObj.formValue.positive_count,
+                suspect_count: speciesDiagnosisObj.formValue.suspect_count,
+                pooled: speciesDiagnosisObj.formValue.pooled,
+                new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
+              });
+
+            // not needed for add event location because Complete events cannot be edited
+            // this.checkSpeciesDiagnoses();
+          }
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+  }
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   private filterSpecies(locationSpeciesIndex) {
     if (!this.species) {

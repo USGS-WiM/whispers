@@ -49,6 +49,7 @@ export class EventGroupManagementComponent implements OnInit {
   events = [];
   repeats = [];
   duplicateEventsViolation = false;
+  minimumCountViolation = false;
 
   // modes of this component:
   // 1. User has already selected a list of Events and wants to create a new Event Group with the list - 'create'
@@ -179,6 +180,7 @@ export class EventGroupManagementComponent implements OnInit {
     }
 
     this.checkForRepeatEvents();
+    this.checkMinimumCount();
   }
 
 
@@ -195,6 +197,15 @@ export class EventGroupManagementComponent implements OnInit {
     } else {
       this.duplicateEventsViolation = false;
     }
+  }
+
+  checkMinimumCount() {
+    if (this.selectedEvents.length + this.events.length < 2) {
+      this.minimumCountViolation = true;
+    } else {
+      this.minimumCountViolation = false;
+    }
+
   }
 
   onSubmit(formValue) {

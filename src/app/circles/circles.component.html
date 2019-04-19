@@ -1,0 +1,72 @@
+<div>
+  <span class="results-button-row">
+    <button mat-button color="accent" (click)="openCircleManagementDialog('edit')"
+      [disabled]="selection.selected.length === 0">
+      <mat-icon>
+        edit
+      </mat-icon>
+      Edit Selected Circle
+    </button>
+    <button mat-button color="warn" (click)="openCircleDeleteConfirm(selection.selected[0])"
+      [disabled]="selection.selected.length === 0">
+      <mat-icon>
+        delete
+      </mat-icon>
+      Delete Selected Circle
+    </button>
+
+  </span>
+
+</div>
+
+<div class="spinner-container" *ngIf="dataSource.loading$ | async">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="dataSource" class="results-table-div">
+
+  <mat-table class="circles-table" [dataSource]="dataSource" matSort matSortDirection="asc" matSortDisableClear>
+
+    <!-- Checkbox column -->
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <!-- <mat-checkbox (change)="$event ? masterToggle() : null;" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue()  && !isAllSelected()">
+        </mat-checkbox> -->
+
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation();"
+          (change)="($event ? selection.toggle(row) : null); updateSelectedEventGroup(selection.selected[0]);"
+          [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-cell *matCellDef="let circle"> {{circle.name}} </mat-cell>
+    </ng-container>
+
+    <!-- Description Column -->
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+      <mat-cell *matCellDef="let circle"> {{circle.description}}
+      </mat-cell>
+    </ng-container>
+
+    <!-- User List Column -->
+    <ng-container matColumnDef="users">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Users </mat-header-cell>
+      <mat-cell *matCellDef="let circle">
+        <span *ngFor="let user of circle.users">{{user}}</span>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let circle; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator [length]="circlesCount" [pageSize]="20" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+</div>

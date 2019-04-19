@@ -112,6 +112,7 @@ export class APP_SETTINGS {
     public static get CONTACT_TYPES_URL(): string { return this.API_ROOT + 'contacttypes/'; }
     public static get COMMENT_TYPES_URL(): string { return this.API_ROOT + 'commenttypes/'; }
     public static get GROUPS_URL(): string { return this.API_ROOT + 'groups/'; }
+    public static get CIRCLES_URL(): string { return this.API_ROOT + 'circles/'; }
     public static get SEARCH_URL(): string { return this.API_ROOT + 'searches/'; }
     public static get SERVICE_REQUEST_URL(): string { return this.API_ROOT + 'servicerequests/'; }
     public static get SERVICE_REQUEST_TYPES_URL(): string { return this.API_ROOT + 'servicerequesttypes/'; }

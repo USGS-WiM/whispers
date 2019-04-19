@@ -14,12 +14,12 @@
       </mat-icon>
       Delete Selected Event Group
     </button>
-    <button mat-button color="accent" (click)="refreshTable()">
+    <!-- <button mat-button color="accent" (click)="refreshTable()">
     <mat-icon>
       refresh
     </mat-icon>
    Refresh table
-  </button>
+  </button> -->
   </span>
 
 </div>
@@ -41,7 +41,8 @@
 
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <mat-checkbox (click)="$event.stopPropagation();" (change)="($event ? selection.toggle(row) : null); updateSelectedEventGroup(selection.selected[0]);"
+        <mat-checkbox (click)="$event.stopPropagation();"
+          (change)="($event ? selection.toggle(row) : null); updateSelectedEventGroup(selection.selected[0]);"
           [checked]="selection.isSelected(row)">
         </mat-checkbox>
       </mat-cell>
@@ -63,7 +64,8 @@
     <!-- Comment/'Justification' Column -->
     <ng-container matColumnDef="comment">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Justification for Event Grouping </mat-header-cell>
-      <mat-cell *matCellDef="let eventGroup"> <span *ngIf="eventGroup.comments.length > 0">{{eventGroup.comments[0].comment}} </span></mat-cell>
+      <mat-cell *matCellDef="let eventGroup"> <span
+          *ngIf="eventGroup.comments.length > 0">{{eventGroup.comments[0].comment}} </span></mat-cell>
     </ng-container>
 
     <!-- Event List Column -->

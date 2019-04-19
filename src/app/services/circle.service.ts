@@ -13,12 +13,15 @@ import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 
 import { Event } from '@interfaces/event';
+import { EventSummary } from '@interfaces/event-summary';
+import { EventDetail } from '@interfaces/event-detail';
+import { PageData } from '@interfaces/page-data';
 import { ResultsCountService } from '@services/results-count.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EventGroupService {
+export class CircleService {
 
   constructor(
     private _http: Http,
@@ -26,28 +29,16 @@ export class EventGroupService {
     private resultsCountService: ResultsCountService
   ) { }
 
-  public getEventGroups(orderParams = '', pageNumber = 1, pageSize = 10): Observable<any> {
+  public getCircles(orderParams = '', pageNumber = 1, pageSize = 10): Observable<any> {
 
-    return this.http.get(APP_SETTINGS.EVENT_GROUPS_URL, {
+    return this.http.get(APP_SETTINGS.CIRCLES_URL, {
       headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS,
       params: new HttpParams().set('ordering', orderParams).set('page', pageNumber.toString()).set('page_size', pageSize.toString())
     })
       .map((res: any) => {
         // const response = res.json();
-        this.resultsCountService.updateEventGroupResultsCount(res.count);
+        // this.resultsCountService.updateEventGroupResultsCount(res.count);
         return res.results;
-      });
-
-  }
-
-  public getEventGroupCategories(): Observable<any> {
-
-    return this.http.get(APP_SETTINGS.EVENT_GROUP_CATEGORIES_URL, {
-      headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS,
-      params: new HttpParams().set('no_page', null)
-    })
-      .map((res: any) => {
-        return res;
       });
 
   }
@@ -58,7 +49,7 @@ export class EventGroupService {
       headers: APP_SETTINGS.AUTH_JSON_HEADERS
     });
 
-    return this._http.post(APP_SETTINGS.EVENT_GROUPS_URL, formValue, options)
+    return this._http.post(APP_SETTINGS.CIRCLES_URL, formValue, options)
       .map((response: Response) => <Event>response.json())
       .catch(this.handleError);
 
@@ -70,7 +61,7 @@ export class EventGroupService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.put(APP_SETTINGS.EVENT_GROUPS_URL + formValue.id + '/', formValue, options)
+    return this._http.put(APP_SETTINGS.CIRCLES_URL + formValue.id + '/', formValue, options)
       .map((response: Response) => <Event>response.json())
       .catch(this.handleError);
 
@@ -82,7 +73,7 @@ export class EventGroupService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.delete(APP_SETTINGS.EVENT_GROUPS_URL + id + '/', options)
+    return this._http.delete(APP_SETTINGS.CIRCLES_URL + id + '/', options)
       .map((response: Response) => <any>response.json())
       .catch(this.handleError);
   }

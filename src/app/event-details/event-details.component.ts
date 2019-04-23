@@ -358,7 +358,6 @@ export class EventDetailsComponent implements OnInit {
       );
 
     // TEMPORARY- will need to use user creds to query user contact list
-    // get contact types from the ContactTypeService
     this.userContactsLoading = true;
     this.contactService.getContacts()
       .subscribe(

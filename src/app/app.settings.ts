@@ -152,8 +152,21 @@ export class APP_SETTINGS {
         );
     }*/
 
-    public static get AUTH_HEADERS() { return new Headers({ 'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password) }); }
+    public static get AUTH_HEADERS() {
+        return new Headers({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password)
+        });
+    }
+
     public static get MIN_AUTH_JSON_HEADERS() {
+        return new Headers({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        });
+    }
+
+    public static get AUTH_JSON_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
             'Accept': 'application/json',
@@ -165,14 +178,6 @@ export class APP_SETTINGS {
         return new HttpHeaders({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
             'Accept': 'application/json'
-        });
-    }
-
-    public static get AUTH_JSON_HEADERS() {
-        return new Headers({
-            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
         });
     }
 

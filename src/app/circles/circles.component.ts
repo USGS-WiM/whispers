@@ -17,7 +17,8 @@ import { ResultsCountService } from '@services/results-count.service';
 import { CircleManagementComponent } from '@app/circle-management/circle-management.component';
 import { CirclesDataSource } from '@app/circles/circles.datasource';
 import { CircleService } from '@services/circle.service';
-import { Circle } from 'leaflet';
+import { Circle } from '@interfaces/circle';
+import { CircleManagementService } from '@app/services/circle-management.service';
 
 @Component({
   selector: 'app-circles',
@@ -59,6 +60,7 @@ export class CirclesComponent implements AfterViewInit, OnInit {
   constructor(
     private circleService: CircleService,
     private resultsCountService: ResultsCountService,
+    private circleManagementService: CircleManagementService,
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
@@ -74,6 +76,13 @@ export class CirclesComponent implements AfterViewInit, OnInit {
 
     this.dataSource = new CirclesDataSource(this.circleService);
     this.dataSource.loadCircles('', 1, 10);
+
+       // the following block triggers the reloading of the circles after a change is made to a circle
+       this.circlesSubscription = this.circleManagementService.getCircleReload().subscribe(
+        response => {
+          this.dataSource.loadCircles('', 1, 20);
+  
+        });
   }
 
   ngAfterViewInit() {

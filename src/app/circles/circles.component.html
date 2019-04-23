@@ -1,11 +1,25 @@
 <div>
   <span class="results-button-row">
+    <button mat-button color="accent" (click)="openCircleManagementDialog('create')">
+      <mat-icon>
+        fiber_new
+      </mat-icon>
+      Create New Circle
+    </button>
     <button mat-button color="accent" (click)="openCircleManagementDialog('edit')"
       [disabled]="selection.selected.length === 0">
       <mat-icon>
         edit
       </mat-icon>
       Edit Selected Circle
+    </button>
+
+    <button mat-button color="accent" (click)="openCircleManagementDialog('addUser')"
+      [disabled]="selection.selected.length === 0">
+      <mat-icon>
+        person_add
+      </mat-icon>
+      Add User to Circle
     </button>
     <button mat-button color="warn" (click)="openCircleDeleteConfirm(selection.selected[0])"
       [disabled]="selection.selected.length === 0">
@@ -36,8 +50,7 @@
 
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <mat-checkbox (click)="$event.stopPropagation();"
-          (change)="($event ? selection.toggle(row) : null); updateSelectedEventGroup(selection.selected[0]);"
+        <mat-checkbox (click)="$event.stopPropagation();" (change)="($event ? selection.toggle(row) : null);"
           [checked]="selection.isSelected(row)">
         </mat-checkbox>
       </mat-cell>
@@ -60,7 +73,11 @@
     <ng-container matColumnDef="users">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Users </mat-header-cell>
       <mat-cell *matCellDef="let circle">
-        <span *ngFor="let user of circle.users">{{user}}</span>
+        <ul class="table-cell-list">
+          <li *ngFor="let user of circle.users">
+            {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}</li>
+        </ul>
+        <!-- <span *ngFor="let user of circle.users">{{user}}</span> -->
       </mat-cell>
     </ng-container>
 

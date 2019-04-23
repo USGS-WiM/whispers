@@ -270,7 +270,8 @@ import { CirclesComponent } from './circles/circles.component';
     SaveSearchComponent,
     UserRegistrationComponent,
     ViewContactDetailsComponent,
-    EventGroupManagementComponent
+    EventGroupManagementComponent,
+    CircleManagementComponent
   ]
 })
 export class AppModule { }

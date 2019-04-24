@@ -30,6 +30,18 @@ export class UserService {
       .catch(this.handleError);
   }
 
+  public queryUserByEmail(emailArray): Observable<any> {
+
+    // add message(?)
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_JSON_HEADERS
+    });
+
+    return this._http.post(APP_SETTINGS.USERS_URL + 'verify_email/', emailArray, options)
+      .map((response: Response) => <any>response.json())
+      .catch(this.handleError);
+  }
+
   public updateUser(formValue): Observable<User> {
 
     const options = new RequestOptions({

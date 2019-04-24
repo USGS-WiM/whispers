@@ -78,13 +78,12 @@ export class EventGroupComponent implements AfterViewInit, OnInit {
     this.dataSource = new EventGroupsDataSource(this.eventGroupService);
     this.dataSource.loadEventGroups('', 1, 20);
 
-    ///////////////////
+    // the following block triggers the reloading of the eventGroups after a change is made to an event group
     this.eventGroupSubscription = this.eventGroupManagementService.getEventGroupReload().subscribe(
       response => {
         this.dataSource.loadEventGroups('', 1, 20);
 
       });
-    ///////////////////////////
 
     this.eventGroupService.getEventGroupCategories()
       .subscribe(

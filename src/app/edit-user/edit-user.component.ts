@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material';
 import { MatRadioModule } from '@angular/material';
 
 import { User } from '@interfaces/user';
-import { UserService } from '@app/services/user.service';
+import { UserService } from '@services/user.service';
 import { CurrentUserService } from '@services/current-user.service';
 
 @Component({

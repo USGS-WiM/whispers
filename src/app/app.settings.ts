@@ -112,6 +112,7 @@ export class APP_SETTINGS {
     public static get CONTACT_TYPES_URL(): string { return this.API_ROOT + 'contacttypes/'; }
     public static get COMMENT_TYPES_URL(): string { return this.API_ROOT + 'commenttypes/'; }
     public static get GROUPS_URL(): string { return this.API_ROOT + 'groups/'; }
+    public static get CIRCLES_URL(): string { return this.API_ROOT + 'circles/'; }
     public static get SEARCH_URL(): string { return this.API_ROOT + 'searches/'; }
     public static get SERVICE_REQUEST_URL(): string { return this.API_ROOT + 'servicerequests/'; }
     public static get SERVICE_REQUEST_TYPES_URL(): string { return this.API_ROOT + 'servicerequesttypes/'; }
@@ -151,8 +152,21 @@ export class APP_SETTINGS {
         );
     }*/
 
-    public static get AUTH_HEADERS() { return new Headers({ 'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password) }); }
+    public static get AUTH_HEADERS() {
+        return new Headers({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password)
+        });
+    }
+
     public static get MIN_AUTH_JSON_HEADERS() {
+        return new Headers({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        });
+    }
+
+    public static get AUTH_JSON_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
             'Accept': 'application/json',
@@ -164,14 +178,6 @@ export class APP_SETTINGS {
         return new HttpHeaders({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
             'Accept': 'application/json'
-        });
-    }
-
-    public static get AUTH_JSON_HEADERS() {
-        return new Headers({
-            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
         });
     }
 

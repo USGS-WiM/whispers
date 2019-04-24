@@ -112,9 +112,11 @@ import { ViewContactDetailsComponent } from './view-contact-details/view-contact
 import { AddEventOrganizationComponent } from './add-event-organization/add-event-organization.component';
 import { UserEventsComponent } from './user-events/user-events.component';
 import { ResultsCountService } from '@services/results-count.service';
-import { EventComponent } from './event/event.component';
+import { EventsComponent } from '@events/events.component';
 import { EventGroupComponent } from './event-group/event-group.component';
 import { EventGroupManagementComponent } from './event-group-management/event-group-management.component';
+import { CircleManagementComponent } from './circle-management/circle-management.component';
+import { CirclesComponent } from './circles/circles.component';
 
 
 
@@ -154,9 +156,11 @@ import { EventGroupManagementComponent } from './event-group-management/event-gr
     ViewContactDetailsComponent,
     AddEventOrganizationComponent,
     UserEventsComponent,
-    EventComponent,
+    EventsComponent,
     EventGroupComponent,
-    EventGroupManagementComponent
+    EventGroupManagementComponent,
+    CircleManagementComponent,
+    CirclesComponent
   ],
   imports: [
     BrowserModule,
@@ -266,7 +270,8 @@ import { EventGroupManagementComponent } from './event-group-management/event-gr
     SaveSearchComponent,
     UserRegistrationComponent,
     ViewContactDetailsComponent,
-    EventGroupManagementComponent
+    EventGroupManagementComponent,
+    CircleManagementComponent
   ]
 })
 export class AppModule { }

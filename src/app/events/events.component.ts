@@ -22,7 +22,7 @@ import { DisplayQuery } from '@interfaces/display-query';
 import { APP_UTILITIES } from '@app/app.utilities';
 import { APP_SETTINGS } from '@app/app.settings';
 
-import { EventsDataSource } from '@app/event/events.datasource';
+import { EventsDataSource } from '@app/events/events.datasource';
 import { ResultsCountService } from '@services/results-count.service';
 import { EventSummary } from '@interfaces/event-summary';
 import { ConfirmComponent } from '@confirm/confirm.component';
@@ -31,10 +31,10 @@ import { EventGroupManagementService } from '@services/event-group-management.se
 
 @Component({
   selector: 'app-event-table',
-  templateUrl: './event.component.html',
-  styleUrls: ['./event.component.scss']
+  templateUrl: './events.component.html',
+  styleUrls: ['./events.component.scss']
 })
-export class EventComponent implements AfterViewInit, OnInit {
+export class EventsComponent implements AfterViewInit, OnInit {
 
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
   searchDialogRef: MatDialogRef<SearchDialogComponent>;

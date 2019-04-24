@@ -46,6 +46,7 @@
 
 <mat-tab-group (selectedIndexChange)="_setDataSource($event)">
 
+  <!-- Events tab -->
   <mat-tab label="Events">
     <mat-card>
       <div class="app-event-table">
@@ -53,7 +54,29 @@
       </div>
     </mat-card>
   </mat-tab>
+  <!-- End Events tab-->
 
+  <!-- Event Groups tab-->
+  <mat-tab label="Event Groups">
+    <mat-card>
+      <div class="app-event-group">
+        <app-event-group></app-event-group>
+      </div>
+    </mat-card>
+  </mat-tab>
+  <!-- End Event Groups tab-->
+
+  <!-- Your Events Tab -->
+  <mat-tab label="Your Events">
+    <mat-card>
+      <div class="user-events-div">
+        <app-user-events></app-user-events>
+      </div>
+    </mat-card>
+  </mat-tab>
+  <!-- End Your Events Tab -->
+
+  <!-- Contacts tab -->
   <mat-tab label="Contacts">
 
     <mat-card>
@@ -154,30 +177,22 @@
     </mat-card>
 
   </mat-tab>
+  <!-- End Contacts tab -->
 
-  <mat-tab label="Your Events">
-    <mat-card>
-      <div class="user-events-div">
-        <app-user-events></app-user-events>
-      </div>
-    </mat-card>
-
-  </mat-tab>
-
+  <!-- Saved Searches Tab -->
   <mat-tab label="Saved Searches">
     <div class="saved-searches-div">
       <app-saved-searches></app-saved-searches>
     </div>
   </mat-tab>
+  <!-- End Saved Searches Tab -->
 
-  <mat-tab label="Event Groups">
-    <mat-card>
-      <div class="app-event-group">
-        <app-event-group></app-event-group>
-      </div>
-    </mat-card>
+  <!-- Circles Tab -->
+  <mat-tab label="Circles">
+    <div class="circles-div">
+      <app-circles></app-circles>
+    </div>
   </mat-tab>
-
-
+  <!-- End Circles Tab -->
 
 </mat-tab-group>

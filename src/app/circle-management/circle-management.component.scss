@@ -1,0 +1,124 @@
+.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.form-control {
+    width: 320px;
+    margin: 10px;
+}
+
+.alert {
+    width: 100%;
+    background-color: lightcoral;
+}
+
+.general-comment-text-area {
+    width: 40em;
+    margin-bottom: 2em;
+}
+
+.text-larger {
+    font-size: larger;
+}
+
+.circles-chip-list {
+    width: 100%;
+}
+
+.circle-label {
+    color: rgba(40, 40, 60, 0.5);
+    font-size: smaller;
+}
+
+.submissionReviewErrors {
+    display: block;
+    margin: 0 auto;
+    padding: 25px 0 40px 0;
+    width: 40em;
+
+    .mat-error {
+        display: flex;
+        margin: 6px 0;
+        width: 40em;
+
+        .mat-icon,
+        span {
+            display: flex;
+            flex-direction: column;
+            justify-content: left;
+        }
+
+        span {
+            font-size: 16px;
+            font-weight: 600;
+            padding-left: 4px;
+            padding-bottom: 1px;
+        }
+    }
+}
+
+.autocomplete-form {
+    // min-width: 300px;
+    // max-width: 500px;
+    width: 100%;
+}
+
+.autocomplete-input {
+    width: 40%;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.autocomplete-input {
+    display: inline-block;
+    margin-right: 2em;
+}
+
+.contact-select {
+    width: 60em;
+    flex-grow: 2;
+}
+
+.no-email {
+    background-color: lightcoral;
+}
+
+.text-smaller {
+    font-size: smaller;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+.text-bold {
+    font-style: bold;
+}
+
+.button-row button,
+.button-row a {
+    margin-right: 8px;
+}
+
+.match-div {
+    border: 2px solid darkgray;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.contact-lookup-card {
+    background-color: #fafafa
+}
+
+.line-through {
+    text-decoration: line-through
+}

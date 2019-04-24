@@ -188,8 +188,6 @@ export class UserDashboardComponent implements OnInit {
 
     // Add code to determine how many are selected
 
-    console.log('selection.selected: ' + JSON.parse(this.selection.selected) );
-
     if (this.selection.selected.length > 1) {
       alert('you have too many contacts selected for edit. select only one.');
     } else if (this.selection.selected.length === 1) {
@@ -234,7 +232,8 @@ export class UserDashboardComponent implements OnInit {
         data: {
           title: 'Delete Contact',
           message: 'Are you sure you want to delete the contact?',
-          confirmButtonText: 'Yes, Delete'
+          confirmButtonText: 'Yes, Delete',
+          showCancelButton: true
         }
       }
     );

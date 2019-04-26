@@ -590,7 +590,7 @@
                               <span class="alert-text">Location must have at least one species.</span>
                             </mat-error>
                           </div>
-                          
+
                           <div class="button-row">
                             <button mat-button color="primary" matTooltip="Add species to this location"
                               (click)="addLocationSpecies(eventLocationIndex)">
@@ -1141,73 +1141,148 @@
                   </mat-card>
                   <!-- end Service request section -->
 
-                  <mat-divider [inset]="true"></mat-divider>
-
-                  <div class="submissionReviewErrors">
-
-                    <mat-error color="warn" *ngIf="duplicateEventOrgViolation">
-                      <mat-icon class="icon">error</mat-icon>
-                      <span class="alert-text">Contact organization cannot be duplicated.</span>
-                    </mat-error>
-
-                    <mat-error color="warn" *ngIf="locationSpeciesNumbersViolation">
-                      <mat-icon class="icon">error</mat-icon>
-                      <span class="alert-text">For morbidity/mortality events, there must be at least one value greater
-                        than 0
-                        between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for at least one species
-                        in the event at the time of event creation.</span>
-                    </mat-error>
-
-                    <mat-error color="warn" *ngIf="closedEventLocationSpeciesNumbersViolation">
-                      <mat-icon class="icon">error</mat-icon>
-                      <span class="alert-text">For morbidity/mortality events marked as Closed, there must be at least
-                        one value greater
-                        than 0
-                        between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for all species
-                        in the event.</span>
-                    </mat-error>
-
-                    <mat-error color="warn" *ngIf="locationStartDatesViolation">
-                      <mat-icon class="icon">error</mat-icon>
-                      <span class="alert-text">An event must have a start date provided for at least one
-                        location.</span>
-                    </mat-error>
-
-                    <mat-error color="warn" *ngIf="locationEndDatesViolation">
-                      <mat-icon class="icon">error</mat-icon>
-                      <span class="alert-text">If an event is marked as complete, it must have end date provided for
-                        each location.</span>
-                    </mat-error>
-
-                    <mat-error color="warn" *ngIf="speciesDiagnosisViolation">
-                      <mat-icon class="icon">error</mat-icon>
-                      <span class="alert-text">If an event is marked as complete, all species diagnoses must have a
-                        Basis of Diagnosis and Signicance of Diagnosis selected. <br>
-                        Non-compliant species diagnoses: <span
-                          *ngFor="let item of nonCompliantSpeciesDiagnoses">Location&nbsp;{{item.eventLocationNumber}},&nbsp;Species&nbsp;{{item.locationSpeciesNumber}}&nbsp;({{item.locationSpeciesName}}),&nbsp;Diagnosis&nbsp;{{item.speciesDiagnosisNumber}}&nbsp;({{item.speciesDiagnosisName}})</span>
-                      </span>
-                    </mat-error>
-                  </div>
-
-                  <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar ">
-                  </mat-progress-bar>
                   <p>
-                    <button mat-raised-button color="primary"
-                      (click)="openEventSubmitConfirm(eventSubmissionForm.value)">
-                      <mat-icon>pageview</mat-icon> Review Event Submission
-                    </button>
+                    <!-- Collaborators section -->
+                    <h3>
+                      <mat-icon>group</mat-icon> Collaborators
+                    </h3>
+                    <span>Add collaborators to this event with read or write access. These selections extend the
+                      visibility and editibility of your event data to specific Users beyond your own
+                      organization.</span>
                     <p>
-                      <button mat-raised-button color="primary"
-                        [disabled]="eventSubmissionForm.invalid || duplicateEventOrgViolation || locationSpeciesNumbersViolation || closedEventLocationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation || submitLoading"
-                        (click)="submitEvent(eventSubmissionForm.value)">
-                        <mat-icon>done</mat-icon> Save Event
-                      </button>
+                      <mat-card>
+                        <mat-card-content>
 
-                      <div class="temporary-form-value-display ">
-                        <h3>Temporary Form Value display (not for production)</h3>
-                        <p>Form Status: {{eventSubmissionForm.status}}
-                          <pre> {{eventSubmissionForm.value | json}} </pre>
+                          <form [formGroup]="eventSubmissionForm" autocomplete="off">
+                            <div>
+
+                              <div>
+                                <h4>
+                                  <mat-icon>lock</mat-icon>Read Only Access
+                                </h4>
+                                <mat-list role="list">
+                                  <mat-list-item *ngIf="readCollaboratorArray.length === 0">No Read Only Collaborators</mat-list-item>
+                                  <mat-list-item *ngFor="let user of readCollaboratorArray" role="listitem">
+                                    {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
+                                    <button mat-icon-button aria-label="remove collaborator" color="warn"
+                                      (click)="removeCollaborator(user.id, 'read')">
+                                      <mat-icon>remove_circle</mat-icon>
+                                    </button></mat-list-item>
+                                </mat-list>
+                                <div class="button-row">
+                                  <button mat-button color="primary" matTooltip="Add Individual Read Only Collaborator"
+                                    (click)="addCollaborator('read')">
+                                    <mat-icon>person_add</mat-icon> Add Individual
+                                  </button>
+                                  <button mat-button color="primary"
+                                    matTooltip="Add Read Only Collaborators from Circle"
+                                    (click)="openCircleChooseDialog('read')">
+                                    <mat-icon>group_add</mat-icon> Add Circle
+                                  </button>
+                                </div>
+                              </div>
+
+                              <div>
+                                <h4>
+                                  <mat-icon>lock_open</mat-icon>Read and Write Access
+                                </h4>
+                                <mat-list role="list">
+                                  <mat-list-item *ngIf="writeCollaboratorArray.length === 0">No Read and Write Collaborators</mat-list-item>
+                                  <mat-list-item *ngFor="let user of writeCollaboratorArray" role="listitem">
+                                    {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
+                                    <button mat-icon-button aria-label="remove collaborator" color="warn"
+                                      (click)="removeCollaborator(user.id, 'write')">
+                                      <mat-icon>remove_circle</mat-icon>
+                                    </button></mat-list-item>
+                                </mat-list>
+                                <div class="button-row">
+                                  <button mat-button color="primary" matTooltip="Add Read and Write Collaborator"
+                                    (click)="addCollaborator('write')">
+                                    <mat-icon>person_add</mat-icon> Add Individual
+                                  </button>
+                                  <button mat-button color="primary"
+                                    matTooltip="Add Read and Write Collaborators from Circle"
+                                    (click)="openCircleChooseDialog('write')">
+                                    <mat-icon>group_add</mat-icon> Add Circle
+                                  </button>
+                                </div>
+                              </div>
+
+                            </div>
+                          </form>
+                        </mat-card-content>
+                      </mat-card>
+                      <!-- end Collaborators section -->
+
+                      <mat-divider [inset]="true"></mat-divider>
+
+                      <div class="submissionReviewErrors">
+
+                        <mat-error color="warn" *ngIf="duplicateEventOrgViolation">
+                          <mat-icon class="icon">error</mat-icon>
+                          <span class="alert-text">Contact organization cannot be duplicated.</span>
+                        </mat-error>
+
+                        <mat-error color="warn" *ngIf="locationSpeciesNumbersViolation">
+                          <mat-icon class="icon">error</mat-icon>
+                          <span class="alert-text">For morbidity/mortality events, there must be at least one value
+                            greater
+                            than 0
+                            between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for at least one species
+                            in the event at the time of event creation.</span>
+                        </mat-error>
+
+                        <mat-error color="warn" *ngIf="closedEventLocationSpeciesNumbersViolation">
+                          <mat-icon class="icon">error</mat-icon>
+                          <span class="alert-text">For morbidity/mortality events marked as Closed, there must be at
+                            least
+                            one value greater
+                            than 0
+                            between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for all species
+                            in the event.</span>
+                        </mat-error>
+
+                        <mat-error color="warn" *ngIf="locationStartDatesViolation">
+                          <mat-icon class="icon">error</mat-icon>
+                          <span class="alert-text">An event must have a start date provided for at least one
+                            location.</span>
+                        </mat-error>
+
+                        <mat-error color="warn" *ngIf="locationEndDatesViolation">
+                          <mat-icon class="icon">error</mat-icon>
+                          <span class="alert-text">If an event is marked as complete, it must have end date provided for
+                            each location.</span>
+                        </mat-error>
+
+                        <mat-error color="warn" *ngIf="speciesDiagnosisViolation">
+                          <mat-icon class="icon">error</mat-icon>
+                          <span class="alert-text">If an event is marked as complete, all species diagnoses must have a
+                            Basis of Diagnosis and Signicance of Diagnosis selected. <br>
+                            Non-compliant species diagnoses: <span
+                              *ngFor="let item of nonCompliantSpeciesDiagnoses">Location&nbsp;{{item.eventLocationNumber}},&nbsp;Species&nbsp;{{item.locationSpeciesNumber}}&nbsp;({{item.locationSpeciesName}}),&nbsp;Diagnosis&nbsp;{{item.speciesDiagnosisNumber}}&nbsp;({{item.speciesDiagnosisName}})</span>
+                          </span>
+                        </mat-error>
                       </div>
+
+                      <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar ">
+                      </mat-progress-bar>
+                      <p>
+                        <button mat-raised-button color="primary"
+                          (click)="openEventSubmitConfirm(eventSubmissionForm.value)">
+                          <mat-icon>pageview</mat-icon> Review Event Submission
+                        </button>
+                        <p>
+                          <button mat-raised-button color="primary"
+                            [disabled]="eventSubmissionForm.invalid || duplicateEventOrgViolation || locationSpeciesNumbersViolation || closedEventLocationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation || submitLoading"
+                            (click)="submitEvent(eventSubmissionForm.value)">
+                            <mat-icon>done</mat-icon> Save Event
+                          </button>
+
+                          <div class="temporary-form-value-display ">
+                            <h3>Temporary Form Value display (not for production)</h3>
+                            <p>Form Status: {{eventSubmissionForm.status}}
+                              <pre> {{eventSubmissionForm.value | json}} </pre>
+                          </div>
 
       </mat-card-content>
     </mat-card>

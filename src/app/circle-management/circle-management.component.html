@@ -23,7 +23,8 @@
           <div *ngIf="data.action === 'edit'">
             <label class="text-bold">Remove Users from Circle</label>
             <mat-list role="list">
-              <mat-list-item *ngFor="let user of data.circle.users" role="listitem" [ngClass]="{'line-through' : user.removed === true, '': user.removed === undefined}">
+              <mat-list-item *ngFor="let user of data.circle.users" role="listitem"
+                [ngClass]="{'line-through' : user.removed === true, '': user.removed === undefined}">
                 {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
                 <button mat-icon-button aria-label="remove user from circle" color="warn" (click)="removeUser(user.id)">
                   <mat-icon>remove_circle</mat-icon>
@@ -34,7 +35,7 @@
         </div>
       </div>
 
-     
+
 
       <!-- <div *ngIf="data.action === 'edit'">
         <label class="circle-label">Current Members</label>
@@ -70,7 +71,7 @@
         </mat-form-field>
       </div> -->
 
-      <div *ngIf="data.action === 'addUser'">
+      <div *ngIf="data.action === 'addUser' || data.action === 'selectUser'">
         <p>
           <span class="text-smaller">Lookup a WHISPers User by email address. You may freely enter an email address or
             use
@@ -106,8 +107,12 @@
             <!-- <div class="horizontal-form-container"> -->
             <span>{{matchingUser.first_name}}&nbsp;{{matchingUser.last_name}}&nbsp;|&nbsp;{{matchingUser.organization_string}}</span><br>
             <div class="button-row">
-              <button mat-flat-button color="primary" (click)="addUserToCircle();">
+              <button mat-flat-button color="primary" *ngIf="data.action === 'addUser'" (click)="addUserToCircle();">
                 <mat-icon class="icon">person_add</mat-icon>Add to Circle
+              </button>
+              <button mat-flat-button color="primary" *ngIf="data.action === 'selectUser'"
+                (click)="addUserAsCollaborator();">
+                <mat-icon class="icon">person_add</mat-icon>Add as Collaborator
               </button>
             </div>
             <!-- </div> -->

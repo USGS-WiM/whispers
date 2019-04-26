@@ -196,6 +196,11 @@ export class CircleManagementComponent implements OnInit {
         this.actionButtonIcon = 'save';
 
         break;
+      case 'selectUser':
+        this.title = 'Select User for Collaborator List';
+        this.titleIcon = 'person_add';
+        this.actionButtonText = 'Save Changes';
+        this.actionButtonIcon = 'save';
     }
   }
 
@@ -259,6 +264,12 @@ export class CircleManagementComponent implements OnInit {
           this.userAddSubmitLoading = false;
         }
       );
+  }
+
+  // this function exists slightly outside the Circles workflow, though related.
+  // this is for adding a verified User to an event's collaborator list (read or write)
+  addUserAsCollaborator() {
+    this.circleManagementDialogRef.close(this.matchingUser);
   }
 
   removeUser(id) {

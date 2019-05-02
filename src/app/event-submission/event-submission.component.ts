@@ -94,6 +94,13 @@ import { DateValidators } from '@validators/date.validator';
 
 import * as search_api from 'usgs-search-api';
 import { getTreeMultipleDefaultNodeDefsError } from '@angular/cdk/tree';
+import { CircleManagementComponent } from '@app/circle-management/circle-management.component';
+import { CircleChooseComponent } from '@app/circle-management/circle-choose/circle-choose.component';
+import { CircleService } from '@services/circle.service';
+// beware possible collision with Circle class from leaflet
+import { Circle } from '@interfaces/circle';
+import { User } from '@interfaces/user';
+import { fromPromise } from 'rxjs/internal-compatibility';
 declare let gtag: Function;
 
 declare const search_api: search_api;
@@ -111,6 +118,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   editSpeciesDiagnosisDialogRef: MatDialogRef<EditSpeciesDiagnosisComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
   viewContactDetailsDialogRef: MatDialogRef<ViewContactDetailsComponent>;
+  circleChooseDialogRef: MatDialogRef<CircleChooseComponent>;
+  circleManagementDialogRef: MatDialogRef<CircleManagementComponent>;
 
   eventSubmitConfirm: MatBottomSheetRef<EventSubmissionConfirmComponent>;
 
@@ -124,6 +133,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   landOwnerships: LandOwnership[];
   allDiagnoses: Diagnosis[];
   availableDiagnoses: Diagnosis[] = [];
+  userCircles: Circle[] = [];
 
   countries: Country[];
   staff: Staff[];
@@ -168,6 +178,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   eventLocationArray: FormArray;
   locationContactsArray: FormArray;
   locationSpeciesArray: FormArray;
+
+  readCollaboratorArray: User[] = [];
+  writeCollaboratorArray: User[] = [];
 
   submitLoading = false;
 
@@ -251,10 +264,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       }),
       new_event_diagnoses: this.formBuilder.array([]),
       new_comments: this.formBuilder.array([]),
-      new_superevents: this.formBuilder.array([]),
+      new_eventgroups: this.formBuilder.array([]),
       new_event_locations: this.formBuilder.array([
         this.initEventLocation()
-      ])
+      ]),
+      new_read_collaborators: [],
+      new_write_collaborators: []
     });
 
     this.eventLocationArray = this.eventSubmissionForm.get('new_event_locations') as FormArray;
@@ -330,6 +345,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     private staffService: StaffService,
     private diagnosisBasisService: DiagnosisBasisService,
     private diagnosisCauseService: DiagnosisCauseService,
+    private circleService: CircleService,
     public snackBar: MatSnackBar,
     private router: Router,
     private route: ActivatedRoute
@@ -377,12 +393,31 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-      minWidth: '50em',
+      minWidth: '75%',
       disableClose: true,
       data: {
         contact_action: 'create'
       }
     });
+  }
+
+  openCircleChooseDialog(accessType) {
+    this.circleChooseDialogRef = this.dialog.open(CircleChooseComponent, {
+      minWidth: '60em',
+      data: {
+        userCircles: this.userCircles
+      }
+    });
+
+    this.circleChooseDialogRef.afterClosed().subscribe(result => {
+      if (accessType === 'read') {
+        // add the users array to the new_read_collaborators array
+        this.readCollaboratorArray = this.readCollaboratorArray.concat(result.users);
+      } else if (accessType === 'write') {
+        this.writeCollaboratorArray = this.writeCollaboratorArray.concat(result.users);
+      }
+    });
+
   }
 
   editSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex, speciesdiagnosis, locationspecies) {
@@ -411,7 +446,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
       .subscribe(
         (speciesDiagnosisObj) => {
 
-          ///////////////////////////////////////////////////////////////////
           if (speciesDiagnosisObj.action === 'cancel') {
             // remove last species diagnosis added
             // tslint:disable-next-line:max-line-length
@@ -463,8 +497,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
             this.checkSpeciesDiagnoses();
           }
-
-          //////////////////////////////////////////////////////////////////
 
         },
         error => {
@@ -755,7 +787,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   ngOnInit() {
 
-    //this.onFormChanges();
+    this.eventSubmissionForm.get('new_read_collaborators').setValue([]);
+    this.eventSubmissionForm.get('new_write_collaborators').setValue([]);
 
     // get event types from the EventTypeService
     this.eventTypeService.getEventTypes()
@@ -1022,6 +1055,17 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         error => {
           this.errorMessage = <any>error;
           this.userContactsLoading = false;
+        }
+      );
+
+
+    this.circleService.getAllUserCircles()
+      .subscribe(
+        circles => {
+          this.userCircles = circles;
+        },
+        error => {
+          this.errorMessage = <any>error;
         }
       );
 
@@ -1463,8 +1507,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         this.speciesDiagnosisViolation = true;
 
       }
-      ////////////////////////////////////////////////////////////////////
-
     }
   }
 
@@ -2059,6 +2101,46 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     console.log('Selecting GNIS record for Event Location Number' + (eventLocationIndex + 1));
   }
 
+  removeCollaborator(userID, list) {
+    switch (list) {
+      case 'read':
+        const readIndex = this.readCollaboratorArray.findIndex(function (o) {
+          return o.id === userID;
+        });
+        if (readIndex !== -1) { this.readCollaboratorArray.splice(readIndex, 1); }
+        break;
+      case 'write':
+        const writeIndex = this.writeCollaboratorArray.findIndex(function (o) {
+          return o.id === userID;
+        });
+        if (writeIndex !== -1) { this.writeCollaboratorArray.splice(writeIndex, 1); }
+        break;
+    }
+
+  }
+
+  addCollaborator(accessType) {
+    this.circleManagementDialogRef = this.dialog.open(CircleManagementComponent, {
+      disableClose: true,
+      data: {
+        action: 'selectUser',
+      }
+    });
+
+    this.circleManagementDialogRef.afterClosed()
+      .subscribe(
+        (selectedUser) => {
+          if (accessType === 'read') {
+            this.readCollaboratorArray.push(selectedUser);
+          } else if (accessType === 'write') {
+            this.writeCollaboratorArray.push(selectedUser);
+          }
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
 
   openAddSpeciesDiagnosisDialog(eventLocationIndex, locationSpeciesIndex) {
 
@@ -2177,6 +2259,15 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     //     delete event_location.comment;
     //   }
     // }
+    // adds the read collaborators list to the new_read_collaborators array for submission
+    for (const user of this.readCollaboratorArray) {
+      formValue.new_read_collaborators.push(user.id);
+    }
+    // adds the write collaborators list to the new_write_collaborators array for submission
+    for (const user of this.writeCollaboratorArray) {
+      formValue.new_write_collaborators.push(user.id);
+    }
+
     const new_orgs_array = [];
     // loop through and convert new_organizations
     for (const org of formValue.new_organizations) {

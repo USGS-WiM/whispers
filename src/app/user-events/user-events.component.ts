@@ -43,13 +43,14 @@ export class UserEventsComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private eventService: EventService,
+  constructor(
+    private eventService: EventService,
     private resultsCountService: ResultsCountService,
     private router: Router,
     private route: ActivatedRoute,
   ) {
 
-    resultsCountService.resultsCount.subscribe(count => {
+    resultsCountService.userEventsResultsCount.subscribe(count => {
       this.eventCount = count;
     });
   }

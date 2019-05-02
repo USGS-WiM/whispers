@@ -242,6 +242,9 @@ export class EventDetailsComponent implements OnInit {
                 locationspecies.country_string = event_location.country_string;
                 this.eventLocationSpecies.push(locationspecies);
 
+                this.readCollaboratorArray = eventdetails.read_collaborators;
+                this.writeCollaboratorArray = eventdetails.write_collaborators;
+
                 for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
                   if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
                     this.possibleEventDiagnoses.push(speciesdiagnosis);
@@ -1109,6 +1112,9 @@ export class EventDetailsComponent implements OnInit {
             this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
           }
 
+          this.readCollaboratorArray = eventdetails.read_collaborators;
+          this.writeCollaboratorArray = eventdetails.write_collaborators;
+
           this.eventDataLoading = false;
 
           setTimeout(() => {
@@ -1199,7 +1205,6 @@ export class EventDetailsComponent implements OnInit {
     return comment_type;
   }
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   removeCollaborator(userID, list) {
     switch (list) {
       case 'read':
@@ -1240,25 +1245,31 @@ export class EventDetailsComponent implements OnInit {
       .subscribe(
         (selectedUser) => {
 
-          if (accessType === 'read') {
+          if (selectedUser !== 'cancel') {
 
-            this.readCollaboratorArray.push(selectedUser);
-            const readCollaboratorIDArray = [];
-            for (const user of this.readCollaboratorArray) {
-              readCollaboratorIDArray.push(user.id);
+            if (accessType === 'read') {
+
+              // move this to inside success
+              this.readCollaboratorArray.push(selectedUser);
+
+              const readCollaboratorIDArray = [];
+              for (const user of this.readCollaboratorArray) {
+                readCollaboratorIDArray.push(user.id);
+              }
+              this.updateCollaboratorList('read', readCollaboratorIDArray);
+
+            } else if (accessType === 'write') {
+
+              this.writeCollaboratorArray.push(selectedUser);
+              const writeCollaboratorIDArray = [];
+              for (const user of this.writeCollaboratorArray) {
+                writeCollaboratorIDArray.push(user.id);
+              }
+              this.updateCollaboratorList('write', writeCollaboratorIDArray);
+
             }
-            this.updateCollaboratorList('read', readCollaboratorIDArray);
-
-          } else if (accessType === 'write') {
-
-            this.writeCollaboratorArray.push(selectedUser);
-            const writeCollaboratorIDArray = [];
-            for (const user of this.writeCollaboratorArray) {
-              writeCollaboratorIDArray.push(user.id);
-            }
-            this.updateCollaboratorList('write', writeCollaboratorIDArray);
-
           }
+
         },
         error => {
           this.errorMessage = <any>error;
@@ -1309,10 +1320,9 @@ export class EventDetailsComponent implements OnInit {
     this._eventService.patchUpdate(update)
       .subscribe(
         (event) => {
-          //this.submitLoading = false;
+          // this.submitLoading = false;
           this.openSnackBar('Collaborator list updated.', 'OK', 5000);
           this.dataUpdatedService.triggerRefresh();
-          this.editEventDialogRef.close();
         },
         error => {
           // this.submitLoading = false;
@@ -1320,8 +1330,6 @@ export class EventDetailsComponent implements OnInit {
         }
       );
   }
-
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // From angular material table sample on material api reference site
   /** Whether the number of selected elements matches the total number of rows. */

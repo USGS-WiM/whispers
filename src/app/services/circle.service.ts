@@ -17,6 +17,7 @@ import { EventSummary } from '@interfaces/event-summary';
 import { EventDetail } from '@interfaces/event-detail';
 import { PageData } from '@interfaces/page-data';
 import { ResultsCountService } from '@services/results-count.service';
+import { Circle } from '@interfaces/circle';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,16 @@ export class CircleService {
         return res.results;
       });
 
+  }
+
+  public getAllUserCircles(): Observable<Circle[]> {
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.get(APP_SETTINGS.CIRCLES_URL + '?no_page', options)
+      .map((response: Response) => <Circle[]>response.json())
+      .catch(this.handleError);
   }
 
   public create(formValue): Observable<Event> {

@@ -357,6 +357,17 @@ export class EventService {
       .catch(this.handleError);
   }
 
+  public patchUpdate(formValue): Observable<Event> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.patch(APP_SETTINGS.EVENTS_URL + formValue.id + '/', formValue, options)
+      .map((response: Response) => <Event>response.json())
+      .catch(this.handleError);
+  }
+
   private handleError(error: Response) {
     console.error(error);
     return throwError(JSON.stringify(error.json()) || 'Server error');

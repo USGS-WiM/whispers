@@ -117,6 +117,7 @@ import { EventGroupComponent } from './event-group/event-group.component';
 import { EventGroupManagementComponent } from './event-group-management/event-group-management.component';
 import { CircleManagementComponent } from './circle-management/circle-management.component';
 import { CirclesComponent } from './circles/circles.component';
+import { CircleChooseComponent } from './circle-management/circle-choose/circle-choose.component';
 
 
 
@@ -160,7 +161,8 @@ import { CirclesComponent } from './circles/circles.component';
     EventGroupComponent,
     EventGroupManagementComponent,
     CircleManagementComponent,
-    CirclesComponent
+    CirclesComponent,
+    CircleChooseComponent
   ],
   imports: [
     BrowserModule,
@@ -271,7 +273,8 @@ import { CirclesComponent } from './circles/circles.component';
     UserRegistrationComponent,
     ViewContactDetailsComponent,
     EventGroupManagementComponent,
-    CircleManagementComponent
+    CircleManagementComponent,
+    CircleChooseComponent
   ]
 })
 export class AppModule { }

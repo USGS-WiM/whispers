@@ -6,8 +6,10 @@ import { Subscription } from 'rxjs/Subscription';
 import { startWith } from 'rxjs-compat/operator/startWith';
 import { map } from 'rxjs/operators';
 import { take, takeUntil } from 'rxjs/operators';
+import { ComponentCanDeactivate, PendingChangesGuard } from './pending-changes.guard';
+import { HostListener } from '@angular/core';
 
-import { ReplaySubject, Subject } from 'rxjs';
+import { ReplaySubject, Subject, observable } from 'rxjs';
 
 import { DisplayValuePipe } from '../pipes/display-value.pipe';
 
@@ -110,7 +112,7 @@ declare const search_api: search_api;
   templateUrl: './event-submission.component.html',
   styleUrls: ['./event-submission.component.scss']
 })
-export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewInit {
+export class EventSubmissionComponent implements OnInit, OnDestroy, ComponentCanDeactivate, AfterViewInit {
   @ViewChild('stepper') stepper: MatStepper;
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
@@ -134,7 +136,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   allDiagnoses: Diagnosis[];
   availableDiagnoses: Diagnosis[] = [];
   userCircles: Circle[] = [];
-
   countries: Country[];
   staff: Staff[];
 
@@ -241,6 +242,19 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   // filteredAdminLevelTwos: ReplaySubject<AdministrativeLevelTwo[]> = new ReplaySubject<AdministrativeLevelTwo[]>();
   // filteredSpecies: ReplaySubject<Species[]> = new ReplaySubject<Species[]>();
   // filteredContacts: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>();
+
+  // @HostListener allows us to also guard against browser refresh, close, etc.
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    // logic to check if there are pending changes here;
+    if (this.eventSubmissionForm.touched === true) {
+      // returning false will show a confirm dialog before navigating away
+      return false;
+    } else {
+      // returning true will navigate without confirmation
+      return true;
+    }
+  }
 
   buildEventSubmissionForm() {
     this.eventSubmissionForm = this.formBuilder.group({
@@ -2249,6 +2263,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
 
   submitEvent(formValue) {
+    this.eventSubmissionForm.markAsUntouched();
 
     this.submitLoading = true;
 

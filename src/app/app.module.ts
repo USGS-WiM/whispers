@@ -83,6 +83,7 @@ import { EditEventComponent } from './edit-event/edit-event.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { AuthenticationService } from '@app/services/authentication.service';
 import { AuthenticationGuard } from '@authentication/authentication.guard';
+import { PendingChangesGuard } from './event-submission/pending-changes.guard';
 import { CurrentUserService } from '@app/services/current-user.service';
 import { RoleService } from '@app/services/role.service';
 import { AddEventDiagnosisComponent } from './add-event-diagnosis/add-event-diagnosis.component';
@@ -213,6 +214,7 @@ import { CircleChooseComponent } from './circle-management/circle-choose/circle-
   providers: [
     AuthenticationService,
     AuthenticationGuard,
+    PendingChangesGuard,
     CurrentUserService,
     DataUpdatedService,
     EventService,

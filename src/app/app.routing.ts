@@ -8,6 +8,7 @@ import { DiagnosticServicesComponent } from './diagnostic-services/diagnostic-se
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { CreateContactComponent } from '@app/create-contact/create-contact.component';
 import { AuthenticationGuard } from '@authentication/authentication.guard';
+import { PendingChangesGuard } from './event-submission/pending-changes.guard';
 import { CurrentUserService } from '@services/current-user.service';
 
 export const ROUTES: Routes = [
@@ -15,6 +16,7 @@ export const ROUTES: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'event/:id', component: EventDetailsComponent },
     { path: 'eventsubmission', component: EventSubmissionComponent, canActivate: [AuthenticationGuard] },
+    { path: '', component: EventSubmissionComponent, canDeactivate: [PendingChangesGuard] },
     { path: 'diagnostic', component: DiagnosticServicesComponent, canActivate: [AuthenticationGuard] },
     { path: 'userdashboard', component: UserDashboardComponent, canActivate: [AuthenticationGuard] },
     { path: 'createcontact', component: CreateContactComponent, canActivate: [AuthenticationGuard] }

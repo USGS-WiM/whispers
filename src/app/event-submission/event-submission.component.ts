@@ -410,11 +410,14 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     this.circleChooseDialogRef.afterClosed().subscribe(result => {
-      if (accessType === 'read') {
-        // add the users array to the new_read_collaborators array
-        this.readCollaboratorArray = this.readCollaboratorArray.concat(result.users);
-      } else if (accessType === 'write') {
-        this.writeCollaboratorArray = this.writeCollaboratorArray.concat(result.users);
+
+      if (result !== 'cancel') {
+        if (accessType === 'read') {
+          // add the users array to the new_read_collaborators array
+          this.readCollaboratorArray = this.readCollaboratorArray.concat(result.users);
+        } else if (accessType === 'write') {
+          this.writeCollaboratorArray = this.writeCollaboratorArray.concat(result.users);
+        }
       }
     });
 
@@ -2130,10 +2133,13 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this.circleManagementDialogRef.afterClosed()
       .subscribe(
         (selectedUser) => {
-          if (accessType === 'read') {
-            this.readCollaboratorArray.push(selectedUser);
-          } else if (accessType === 'write') {
-            this.writeCollaboratorArray.push(selectedUser);
+          if (selectedUser !== 'cancel') {
+
+            if (accessType === 'read') {
+              this.readCollaboratorArray.push(selectedUser);
+            } else if (accessType === 'write') {
+              this.writeCollaboratorArray.push(selectedUser);
+            }
           }
         },
         error => {

@@ -1,20 +1,57 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable, pipe } from 'rxjs';
+import { Observer } from 'rxjs';
+import { first, map } from 'rxjs/operators';
+import { CanDeactivate,
+         ActivatedRouteSnapshot,
+         RouterStateSnapshot } from '@angular/router';
+import { MatDialog, MatDialogRef, MatSelect } from '@angular/material';
+import { ConfirmComponent } from '@confirm/confirm.component';
+import { EventSubmissionComponent } from '@app/event-submission/event-submission.component';
 
-export interface ComponentCanDeactivate {
-  canDeactivate: () => boolean | Observable<boolean>;
-}
+@Injectable({
+  providedIn: 'root',
+})
+export class CanDeactivateGuard implements CanDeactivate<EventSubmissionComponent> {
 
-@Injectable()
-export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate> {
-  canDeactivate(component: ComponentCanDeactivate): boolean | Observable<boolean> {
-    // if there are no pending changes, just allow deactivation; else confirm first
-    return component.canDeactivate() ?
-      true :
-      // NOTE: this warning message will only be shown when navigating elsewhere within your angular app;
-      // when navigating away from your angular app, the browser will show a generic warning message
-      // see http://stackoverflow.com/a/42207299/7307355
-      confirm('WARNING: You have unsaved changes. Press Cancel to go back and save these changes, or OK to lose these changes.');
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
+  constructor(public publicDialog: MatDialog) { }
+
+  canDeactivate(
+    component: EventSubmissionComponent,
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean> | boolean | Promise<boolean> | boolean {
+
+    // Get the current URL
+    console.log(state.url);
+
+    // Allow synchronous navigation (`true`) if no crisis or the crisis is unchanged
+    if (!component.eventSubmissionForm.touched) {
+
+      return true;
+    }
+    // observable which resolves to true or false when the user decides
+    // below commented out return is alternate method using a dialog service to create a window notification
+    // return component.dialogService.confirm('Discard changes?');
+    return Observable.create((observer: Observer<boolean>) => {
+      this.confirmDialogRef = this.publicDialog.open(ConfirmComponent, {
+        data: {
+          title: 'Are you sure you want to leave?',
+          message: 'Any data entered into the form will be lost.',
+          showCancelButton: true,
+          confirmButtonText: 'Leave this page',
+        }
+      });
+
+      // resets the boolean observable for the dialog after closing
+      this.confirmDialogRef.afterClosed().subscribe(result => {
+        observer.next(result);
+        observer.complete();
+      }, (error) => {
+        observer.next(false);
+        observer.complete();
+      });
+    });
   }
 }

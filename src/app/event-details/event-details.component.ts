@@ -66,7 +66,10 @@ import { APP_UTILITIES } from '@app/app.utilities';
 import { OrganizationService } from '@app/services/organization.service';
 import { Organization } from '@interfaces/organization';
 
-
+import { CircleManagementComponent } from '@app/circle-management/circle-management.component';
+import { CircleChooseComponent } from '@app/circle-management/circle-choose/circle-choose.component';
+import { CircleService } from '@services/circle.service';
+import { Circle } from '@interfaces/circle';
 
 @Component({
   selector: 'app-event-details',
@@ -97,16 +100,6 @@ export class EventDetailsComponent implements OnInit {
 
   showAddEventLocation = false;
 
-  // temporary
-  tempGroupEventsList = [
-    {
-      'id': 178893,
-      'name': 'G178893',
-      'category': 1,
-      'events': [170591, 170591, 170592]
-    }
-  ];
-
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
   addEventOrganizationDialogRef: MatDialogRef<AddEventOrganizationComponent>;
@@ -115,6 +108,8 @@ export class EventDetailsComponent implements OnInit {
   addEventLocationContactDialogRef: MatDialogRef<AddEventLocationContactComponent>;
   addServiceRequestDialogRef: MatDialogRef<AddServiceRequestComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
+  circleChooseDialogRef: MatDialogRef<CircleChooseComponent>;
+  circleManagementDialogRef: MatDialogRef<CircleManagementComponent>;
 
   addCommentDialogRef: MatDialogRef<AddCommentComponent>;
 
@@ -131,6 +126,7 @@ export class EventDetailsComponent implements OnInit {
 
   laboratories: Organization[] = [];
   organizations: Organization[] = [];
+  userCircles: Circle[] = [];
 
   eventDataLoading = true;
 
@@ -168,6 +164,9 @@ export class EventDetailsComponent implements OnInit {
     'diagnosis'
   ];
 
+  readCollaboratorArray: User[] = [];
+  writeCollaboratorArray: User[] = [];
+
   @ViewChild(MatPaginator) locationSpeciesPaginator: MatPaginator;
   @ViewChild(MatSort) locationSpeciesSort: MatSort;
 
@@ -193,6 +192,7 @@ export class EventDetailsComponent implements OnInit {
     private organizationService: OrganizationService,
     private commentService: CommentService,
     private contactService: ContactService,
+    private circleService: CircleService,
     public snackBar: MatSnackBar,
     private router: Router
   ) {
@@ -241,6 +241,9 @@ export class EventDetailsComponent implements OnInit {
                 locationspecies.administrative_level_one_string = event_location.administrative_level_one_string;
                 locationspecies.country_string = event_location.country_string;
                 this.eventLocationSpecies.push(locationspecies);
+
+                this.readCollaboratorArray = eventdetails.read_collaborators;
+                this.writeCollaboratorArray = eventdetails.write_collaborators;
 
                 for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
                   if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
@@ -368,7 +371,6 @@ export class EventDetailsComponent implements OnInit {
       );
 
     // TEMPORARY- will need to use user creds to query user contact list
-    // get contact types from the ContactTypeService
     this.userContactsLoading = true;
     this.contactService.getContacts()
       .subscribe(
@@ -385,6 +387,16 @@ export class EventDetailsComponent implements OnInit {
         error => {
           this.errorMessage = <any>error;
           this.userContactsLoading = false;
+        }
+      );
+
+    this.circleService.getAllUserCircles()
+      .subscribe(
+        circles => {
+          this.userCircles = circles;
+        },
+        error => {
+          this.errorMessage = <any>error;
         }
       );
 
@@ -605,6 +617,7 @@ export class EventDetailsComponent implements OnInit {
   addEventDiagnosis(id: string) {
     // Open dialog for adding event diagnosis
     this.addEventDiagnosisDialogRef = this.dialog.open(AddEventDiagnosisComponent, {
+      minWidth: '75%',
       data: {
         event_id: id,
         diagnosis_options: this.possibleEventDiagnoses
@@ -625,6 +638,7 @@ export class EventDetailsComponent implements OnInit {
   addEventOrganization(id: string) {
     // Open dialog for adding event diagnosis
     this.addEventOrganizationDialogRef = this.dialog.open(AddEventOrganizationComponent, {
+      minWidth: '75%',
       data: {
         event_id: id,
         organizations: this.organizations,
@@ -924,7 +938,7 @@ export class EventDetailsComponent implements OnInit {
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-      minWidth: '50em',
+      minWidth: '75%',
       disableClose: true,
       data: {
         contact_action: 'create'
@@ -1063,6 +1077,9 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
+  addToEventGroup() {
+
+  }
 
   refreshEvent() {
     this.viewPanelStates = new Object();
@@ -1094,6 +1111,9 @@ export class EventDetailsComponent implements OnInit {
           } else if (eventdetails.complete === false) {
             this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
           }
+
+          this.readCollaboratorArray = eventdetails.read_collaborators;
+          this.writeCollaboratorArray = eventdetails.write_collaborators;
 
           this.eventDataLoading = false;
 
@@ -1183,6 +1203,137 @@ export class EventDetailsComponent implements OnInit {
         break;
     }
     return comment_type;
+  }
+
+  removeCollaborator(userID, list) {
+    switch (list) {
+      case 'read':
+        const readIndex = this.readCollaboratorArray.findIndex(function (o) {
+          return o.id === userID;
+        });
+        if (readIndex !== -1) { this.readCollaboratorArray.splice(readIndex, 1); }
+        const readCollaboratorIDArray = [];
+        for (const user of this.readCollaboratorArray) {
+          readCollaboratorIDArray.push(user.id);
+        }
+        this.updateCollaboratorList('read', readCollaboratorIDArray);
+        break;
+      case 'write':
+        const writeIndex = this.writeCollaboratorArray.findIndex(function (o) {
+          return o.id === userID;
+        });
+        if (writeIndex !== -1) { this.writeCollaboratorArray.splice(writeIndex, 1); }
+        const writeCollaboratorIDArray = [];
+        for (const user of this.writeCollaboratorArray) {
+          writeCollaboratorIDArray.push(user.id);
+        }
+        this.updateCollaboratorList('write', writeCollaboratorIDArray);
+        break;
+    }
+
+  }
+
+  addCollaborator(accessType) {
+    this.circleManagementDialogRef = this.dialog.open(CircleManagementComponent, {
+      disableClose: true,
+      data: {
+        action: 'selectUser',
+      }
+    });
+
+    this.circleManagementDialogRef.afterClosed()
+      .subscribe(
+        (selectedUser) => {
+
+          if (selectedUser !== 'cancel') {
+
+            if (accessType === 'read') {
+
+              // move this to inside success
+              this.readCollaboratorArray.push(selectedUser);
+
+              const readCollaboratorIDArray = [];
+              for (const user of this.readCollaboratorArray) {
+                readCollaboratorIDArray.push(user.id);
+              }
+              this.updateCollaboratorList('read', readCollaboratorIDArray);
+
+            } else if (accessType === 'write') {
+
+              this.writeCollaboratorArray.push(selectedUser);
+              const writeCollaboratorIDArray = [];
+              for (const user of this.writeCollaboratorArray) {
+                writeCollaboratorIDArray.push(user.id);
+              }
+              this.updateCollaboratorList('write', writeCollaboratorIDArray);
+
+            }
+          }
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
+  openCircleChooseDialog(accessType) {
+    this.circleChooseDialogRef = this.dialog.open(CircleChooseComponent, {
+      minWidth: '60em',
+      data: {
+        userCircles: this.userCircles
+      }
+    });
+
+    this.circleChooseDialogRef.afterClosed().subscribe(result => {
+
+      if (result !== 'cancel') {
+
+        if (accessType === 'read') {
+          // add the users array to the new_read_collaborators array
+          this.readCollaboratorArray = this.readCollaboratorArray.concat(result.users);
+          const readCollaboratorIDArray = [];
+          for (const user of this.readCollaboratorArray) {
+            readCollaboratorIDArray.push(user.id);
+          }
+          this.updateCollaboratorList('read', readCollaboratorIDArray);
+
+        } else if (accessType === 'write') {
+          this.writeCollaboratorArray = this.writeCollaboratorArray.concat(result.users);
+          const writeCollaboratorIDArray = [];
+          for (const user of this.writeCollaboratorArray) {
+            writeCollaboratorIDArray.push(user.id);
+          }
+          this.updateCollaboratorList('write', writeCollaboratorIDArray);
+
+        }
+
+      }
+    });
+
+  }
+
+  updateCollaboratorList(accessType, userArray) {
+
+    let update;
+    if (accessType === 'read') {
+      update = { 'id': this.eventData.id, 'new_read_collaborators': userArray };
+    } else if (accessType === 'write') {
+      update = { 'id': this.eventData.id, 'new_write_collaborators': userArray };
+    }
+
+    this._eventService.patchUpdate(update)
+      .subscribe(
+        (event) => {
+          // this.submitLoading = false;
+          this.openSnackBar('Collaborator list updated.', 'OK', 5000);
+          this.dataUpdatedService.triggerRefresh();
+        },
+        error => {
+          // this.submitLoading = false;
+          this.openSnackBar('Error. Collaborator list not updated. Error message: ' + error, 'OK', 15000);
+        }
+      );
   }
 
   // From angular material table sample on material api reference site

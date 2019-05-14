@@ -1,7 +1,9 @@
 import { History } from '@interfaces/history';
+import { Contact } from '@interfaces/contact';
+import { Organization } from '@interfaces/organization';
+import { Comment } from '@interfaces/comment';
 
 export interface Event extends History {
-    superevent: string;
     legal_number: string;
     legal_status: string;
     event_status_string: string;
@@ -16,4 +18,7 @@ export interface Event extends History {
     event_type: number;
     id: number;
     permission_source: string;
+    organizations: Organization[];
+    contacts: Contact[];
+    comments: Comment[];
 }

@@ -105,26 +105,27 @@
               <!-- Event groups -->
               <!-- Event groups -->
               <!-- Event groups -->
-              <!-- <div class="event-page-split-half" *ngIf="eventData.eventgroups">
+              <div class="event-page-split-half" *ngIf="eventData.eventgroups && eventData.eventgroups.length > 0">
                 <div class="event-table-header">Associated Events</div>
                 <table>
                   <tr>
                     <th>Event Group</th>
                     <th>Events</th>
                   </tr>
-                  <tr *ngFor="let eventGroup of tempGroupEventsList">
+                  <tr *ngFor="let eventGroup of eventData.eventgroups">
                     <td>{{eventGroup.name}}</td>
                     <td>
-                      <button mat-button *ngFor="let eventID of eventGroup.events" routerLink="../{{eventID}}">{{eventID}}</button>
+                      <button mat-button *ngFor="let eventID of eventGroup.events"
+                        routerLink="../{{eventID}}">{{eventID}}</button>
                     </td>
-                  </tr> -->
+                  </tr>
                   <!-- <tr *ngFor="let eventGroup of eventData.eventgroups">
                     <td>{{eventGroup.id}}</td>
                     next line: loop of eventIDs, each one a link to that event details page
                     <td> </td>
                   </tr> -->
-                <!-- </table>
-              </div> -->
+                </table>
+              </div>
 
             </div>
 
@@ -301,7 +302,7 @@
                 <div class="value">{{eventData.legal_number || " "}}</div>
               </div>
               <div class="item">
-                <div class="label">Superevent</div>
+                <div class="label">Event Group</div>
                 <div class="value">&nbsp;</div>
               </div>
             </div>
@@ -329,6 +330,12 @@
                 (click)="addEventOrganization(eventData.id)">
                 <mat-icon>add</mat-icon> Add Event Organization
               </button>
+              <!-- <button mat-stroked-button color="primary" class="event-detail-action-button"
+                *ngIf="currentUser.role === 1 || currentUser.role === 2"
+                [disabled]="eventData.complete || !eventData.permissions.update"
+                (click)="addToEventGroup(eventData.id)">
+                <mat-icon>group_work</mat-icon> Add to Event Group
+              </button> -->
             </div>
 
             <div class="event-page-group">
@@ -402,7 +409,8 @@
               <mat-expansion-panel (opened)="eventCommentsPanelOpen = true" (closed)="eventCommentsPanelOpen = false">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                    {{eventCommentsPanelOpen ? 'Hide Event Comments' : 'View Event Comments'}}
+                    <mat-icon>comment</mat-icon>
+                    &nbsp;{{eventCommentsPanelOpen ? 'Hide Event Comments' : 'View Event Comments'}}
                   </mat-panel-title>
                 </mat-expansion-panel-header>
 
@@ -454,7 +462,8 @@
               <mat-expansion-panel (opened)="serviceRequestPanelOpen = true" (closed)="serviceRequestPanelOpen = false">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                    {{serviceRequestPanelOpen ? 'Hide Service Requests' : 'View Service Requests'}}
+                    <mat-icon>question_answer</mat-icon>
+                    &nbsp;{{serviceRequestPanelOpen ? 'Hide Service Requests' : 'View Service Requests'}}
                   </mat-panel-title>
                 </mat-expansion-panel-header>
 
@@ -512,6 +521,108 @@
             </div>
           </div>
           <!-- End Service Requests Section -->
+
+          <!-- 
+            Collaborators
+            Collaborators
+            Collaborators
+           -->
+          <div class="event-detail-wrapper">
+
+            <div class="event-page-group">
+
+              <mat-expansion-panel (opened)="collaboratorsPanelOpen = true" (closed)="collaboratorsPanelOpen = false">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <mat-icon>group</mat-icon>
+                    &nbsp;{{collaboratorsPanelOpen ? 'Hide Collaborators' : 'View Collaborators'}}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <!-- <div class="event-group-no-data" *ngIf="">No collaborators</div> -->
+
+                <!-- <h3>
+                  <mat-icon>group</mat-icon> Collaborators
+                </h3> -->
+                <span class="text-smaller">Collaborators on this event with read or write access. These are Users beyond
+                  your own
+                  organization who are granted these permissions for this specific event.</span>
+                <p>
+                  <mat-card>
+                    <mat-card-content>
+
+                      <!-- <form [formGroup]="eventSubmissionForm" autocomplete="off"> -->
+                      <div>
+
+                        <div>
+                          <h4>
+                            <mat-icon>lock</mat-icon>Read Only Access
+                          </h4>
+                          <mat-list role="list">
+                            <mat-list-item *ngIf="readCollaboratorArray.length === 0">No Read Only Collaborators
+                            </mat-list-item>
+                            <mat-list-item *ngFor="let user of readCollaboratorArray" role="listitem">
+                              {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
+                              <button mat-icon-button aria-label="remove collaborator" color="warn"
+                                (click)="removeCollaborator(user.id, 'read')">
+                                <mat-icon>remove_circle</mat-icon>
+                              </button></mat-list-item>
+                          </mat-list>
+                          <div class="button-row">
+                            <button mat-button color="primary" matTooltip="Add Individual Read Only Collaborator"
+                              (click)="addCollaborator('read')">
+                              <mat-icon>person_add</mat-icon> Add Individual
+                            </button>
+                            <button mat-button color="primary" matTooltip="Add Read Only Collaborators from Circle"
+                              (click)="openCircleChooseDialog('read')">
+                              <mat-icon>group_add</mat-icon> Add Circle
+                            </button>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4>
+                            <mat-icon>lock_open</mat-icon>Read and Write Access
+                          </h4>
+                          <mat-list role="list">
+                            <mat-list-item *ngIf="writeCollaboratorArray.length === 0">No Read and Write Collaborators
+                            </mat-list-item>
+                            <mat-list-item *ngFor="let user of writeCollaboratorArray" role="listitem">
+                              {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
+                              <button mat-icon-button aria-label="remove collaborator" color="warn"
+                                (click)="removeCollaborator(user.id, 'write')">
+                                <mat-icon>remove_circle</mat-icon>
+                              </button></mat-list-item>
+                          </mat-list>
+                          <div class="button-row">
+                            <button mat-button color="primary" matTooltip="Add Read and Write Collaborator"
+                              (click)="addCollaborator('write')">
+                              <mat-icon>person_add</mat-icon> Add Individual
+                            </button>
+                            <button mat-button color="primary" matTooltip="Add Read and Write Collaborators from Circle"
+                              (click)="openCircleChooseDialog('write')">
+                              <mat-icon>group_add</mat-icon> Add Circle
+                            </button>
+                          </div>
+                        </div>
+
+                      </div>
+                      <!-- </form> -->
+                    </mat-card-content>
+                  </mat-card>
+
+
+                  <!-- <div class="detail-section-buttons">
+                  <button mat-button color="primary" class="event-detail-action-button"
+                    (click)="addServiceRequest(eventData.id)"
+                    [disabled]="!eventData.permissions.update || eventData.complete">
+                    <mat-icon>question_answer</mat-icon> Add Service Request
+                  </button>
+                </div> -->
+              </mat-expansion-panel>
+            </div>
+          </div>
+          <!-- End Collaborators Section -->
 
           <!-- 
             Location Details

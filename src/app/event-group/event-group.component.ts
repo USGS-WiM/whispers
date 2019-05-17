@@ -135,7 +135,7 @@ export class EventGroupComponent implements AfterViewInit, OnInit {
 
   updateSelectedEventGroup(eventGroup) {
 
-    if (eventGroup === undefined) {
+    if (eventGroup === undefined || eventGroup === null) {
       this.eventGroupManagementService.setSelectedEventGroup(null);
     } else {
       this.eventGroupManagementService.setSelectedEventGroup(eventGroup);
@@ -169,6 +169,9 @@ export class EventGroupComponent implements AfterViewInit, OnInit {
       .subscribe(
         () => {
           this.openSnackBar('Event Group successfully deleted', 'OK', 5000);
+          // clear selection
+          this.selection.deselect(id);
+          this.updateSelectedEventGroup(null);
           this.refreshTable();
         },
         error => {

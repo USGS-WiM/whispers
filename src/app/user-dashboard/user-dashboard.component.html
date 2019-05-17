@@ -57,7 +57,7 @@
   <!-- End Events tab-->
 
   <!-- Event Groups tab-->
-  <mat-tab label="Event Groups">
+  <mat-tab label="Event Groups"  *ngIf="currentUser.role === 1 || currentUser.role === 2">
     <mat-card>
       <div class="app-event-group">
         <app-event-group></app-event-group>

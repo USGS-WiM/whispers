@@ -461,6 +461,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       }
     });
 
+    const originalDiagnosisID = speciesdiagnosis.value.diagnosis;
+
     this.editSpeciesDiagnosisDialogRef.afterClosed()
       .subscribe(
         (speciesDiagnosisObj) => {
@@ -487,6 +489,23 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
                 new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
               });
 
+            // if the diagnosis ID has changed, remove the outgoing one from the availableDiagnoses array
+            if (originalDiagnosisID !== Number(speciesDiagnosisObj.formValue.diagnosis)) {
+              // delete from availableDiagnoses unless count > 1
+              for (const availableDiagnosis of this.availableDiagnoses) {
+                if (availableDiagnosis.id === originalDiagnosisID) {
+                  if (availableDiagnosis.count > 1) {
+                    // decrement the count
+                    availableDiagnosis.count--;
+                    break;
+                  } else if (availableDiagnosis.count === 1) {
+                    // remove it
+                    // tslint:disable-next-line:max-line-length
+                    this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== originalDiagnosisID);
+                  }
+                }
+              }
+            }
 
             for (const diagnosis of this.allDiagnoses) {
               if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
@@ -496,9 +515,14 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
                 for (const availableDiagnosis of this.availableDiagnoses) {
                   if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
                     // if found, increment the count for that diagnosis
-                    availableDiagnosis.count++;
-                    // if found, set local var found to true
+                    // only increment count if this diagnosis has changed
+                    if (originalDiagnosisID !== Number(speciesDiagnosisObj.formValue.diagnosis)) {
+                      availableDiagnosis.count++;
+                    }
+                    // also if found, set local var found to true
                     diagnosisFound = true;
+                    // also if found, update the suspect value to whatever it is now (though it may not have changed)
+                    availableDiagnosis.suspect = speciesDiagnosisObj.formValue.suspect;
                     // if found, stop. do not add to availableDiagnoses array
                     break;
                   }
@@ -575,7 +599,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
               // decrement the count
               availableDiagnosis.count--;
               break;
-            } else if (availableDiagnosis.count < 2) {
+            } else if (availableDiagnosis.count === 1) {
               // remove it
               this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== diagnosisID);
             }
@@ -2208,23 +2232,26 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
                 new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
               });
 
-
+            // loops through the allDiagnoses list
             for (const diagnosis of this.allDiagnoses) {
+              // checks if the just-added specices id matches a diagnosis
               if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
 
+                // instantiate a boolean variable for use in the scope of this function, true if the diagnosis just added
+                // already exists within the availableDiagnoses array
                 let diagnosisFound = false;
                 // check to see if the diagnosis just added already exists in the availableDiagnoses array
                 for (const availableDiagnosis of this.availableDiagnoses) {
                   if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
                     // if found, increment the count for that diagnosis
                     availableDiagnosis.count++;
-                    // if found, set local var found to true
+                    // if found, set local diagnosisFound var found to true
                     diagnosisFound = true;
                     // if found, stop. do not add to availableDiagnoses array
                     break;
                   }
                 }
-                // if diagnosis is not found to already exist in the availableDiagnoses array, add it
+                // if diagnosis is not found to already exist in the availableDiagnoses array, add it.
                 if (!diagnosisFound) {
                   diagnosis.suspect = speciesDiagnosisObj.formValue.suspect;
                   // set diagnosis count to 1

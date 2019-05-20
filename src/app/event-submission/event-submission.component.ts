@@ -879,7 +879,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
           });
 
           for (const diagnosis of this.allDiagnoses) {
-            if (diagnosis.name === 'Undetermined') {
+            if (diagnosis.id === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
               this.availableDiagnoses.push(diagnosis);
             }
           }
@@ -1485,6 +1485,36 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     this.checkLocationEndDates();
     this.checkSpeciesDiagnoses();
     this.checkLocationSpeciesNumbers();
+    this.updateAvailableDiagnoses();
+  }
+
+  updateAvailableDiagnoses() {
+
+    if (this.eventSubmissionForm.get('complete').value === true) {
+
+      // tslint:disable-next-line:max-line-length
+      // remove the 'unknown' diagnosis for incomplete events
+      this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis);
+      // add the 'unknown' diagnosis for complete events
+      for (const diagnosis of this.allDiagnoses) {
+        if (diagnosis.id === APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
+          this.availableDiagnoses.push(diagnosis);
+        }
+      }
+
+    } else if (this.eventSubmissionForm.get('complete').value === false) {
+
+      // tslint:disable-next-line:max-line-length
+      // remove the 'unknown' diagnosis for complete events
+      this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis);
+      // add the 'unknown' diagnosis for incomplete events
+      for (const diagnosis of this.allDiagnoses) {
+        if (diagnosis.id === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
+          this.availableDiagnoses.push(diagnosis);
+        }
+      }
+
+    }
   }
 
   checkLocationEndDates() {

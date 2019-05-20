@@ -451,8 +451,13 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     this.labSuspectViolation = false;
     this.diagnosisSuspectViolation = false;
     // tslint:disable-next-line:max-line-length
+    // if no diagnosis organization is selected (length = 0) and suspect is not true
     if (this.speciesDiagnosisForm['controls'].new_species_diagnosis_organizations['controls'].length === 0 && !this.speciesDiagnosisForm.get('suspect').value) {
-      this.labSuspectViolation = true;
+      // if the diagnosis selected is NOT one of the unknowns, then show violation
+      // tslint:disable-next-line:max-line-length
+      if ((this.speciesDiagnosisForm.get('diagnosis').value !== APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis && this.speciesDiagnosisForm.get('diagnosis').value !== APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
+        this.labSuspectViolation = true;
+      }
     }
     // tslint:disable-next-line:max-line-length
     if ((this.speciesDiagnosisForm.get('diagnosis').value === APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis || this.speciesDiagnosisForm.get('diagnosis').value === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) && this.speciesDiagnosisForm.get('suspect').value) {

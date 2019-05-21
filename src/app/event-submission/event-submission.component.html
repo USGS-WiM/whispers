@@ -1029,7 +1029,7 @@
 
                             <mat-form-field class="form-control event-diagnosis-select">
                               <mat-select placeholder="Event Diagnosis" formControlName="diagnosis">
-                                <mat-option *ngFor="let diagnosis of availableDiagnoses" value="{{diagnosis.id}}">
+                                <mat-option *ngFor="let diagnosis of availableDiagnoses" value="{{diagnosis.id}}" [disabled]="checkForDuplicateEventDiagnosis(diagnosis.id)">
                                   {{diagnosis.name}}<span *ngIf="diagnosis.suspect"> (suspect)</span></mat-option>
                               </mat-select>
                               <mat-hint align="end" matTooltip="Public field">

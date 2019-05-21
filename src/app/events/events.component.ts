@@ -28,6 +28,8 @@ import { EventSummary } from '@interfaces/event-summary';
 import { ConfirmComponent } from '@confirm/confirm.component';
 import { EventGroupManagementComponent } from '@app/event-group-management/event-group-management.component';
 import { EventGroupManagementService } from '@services/event-group-management.service';
+import { CurrentUserService } from '@services/current-user.service';
+
 
 @Component({
   selector: 'app-event-table',
@@ -41,6 +43,7 @@ export class EventsComponent implements AfterViewInit, OnInit {
   private searchQuerySubscription: Subscription;
   private selectedEventGroupSubscription: Subscription;
   errorMessage: string;
+  currentUser;
 
   resultsLoading = false;
 
@@ -94,11 +97,17 @@ export class EventsComponent implements AfterViewInit, OnInit {
     private eventService: EventService,
     private resultsCountService: ResultsCountService,
     private searchDialogService: SearchDialogService,
+    private currentUserService: CurrentUserService,
     private eventGroupManagementService: EventGroupManagementService,
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
   ) {
+
+    currentUserService.currentUser.subscribe(user => {
+      this.currentUser = user;
+    });
+
     resultsCountService.eventQueryResultsCount.subscribe(count => {
       this.eventCount = count;
     });

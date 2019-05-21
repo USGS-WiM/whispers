@@ -441,6 +441,20 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   editSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex, speciesdiagnosis, locationspecies) {
 
+    // create local array of selected diagnoses to feed to the dialog
+    const existingSpeciesDiagnoses = [];
+    // create a list of the already selected diagnoses for this species to prevent duplicate selection
+    // tslint:disable-next-line:max-line-length
+    const speciesdiagnoses = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
+    // tslint:disable-next-line:max-line-length
+    for (let speciesdiagnosisindex = 0, speciesdiagnoseslength = speciesdiagnoses.length; speciesdiagnosisindex < speciesdiagnoseslength; speciesdiagnosisindex++) {
+      // tslint:disable-next-line:max-line-length
+      const diagnosis = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses')['controls'][speciesdiagnosisindex].controls.diagnosis.value;
+      if (diagnosis !== null) {
+        existingSpeciesDiagnoses.push(diagnosis);
+      }
+    }
+
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
       minWidth: '40em',
       disableClose: true,
@@ -453,6 +467,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
         diagnoses: this.allDiagnoses,
         eventlocationIndex: eventLocationIndex,
         locationspeciesIndex: locationSpeciesIndex,
+        existing_diagnoses: existingSpeciesDiagnoses,
         species_diagnosis_action: 'editInFormArray',
         title: 'Edit Species Diagnosis',
         titleIcon: 'edit',
@@ -879,7 +894,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
           });
 
           for (const diagnosis of this.allDiagnoses) {
-            if (diagnosis.name === 'Undetermined') {
+            if (diagnosis.id === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
               this.availableDiagnoses.push(diagnosis);
             }
           }
@@ -1344,6 +1359,15 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     }
   }
 
+  checkForDuplicateEventDiagnosis(diagnosisID) {
+    const eventDiagnoses = <FormArray>this.eventSubmissionForm.get('new_event_diagnoses')['controls'];
+    for (let i = 0, j = eventDiagnoses.length; i < j; i++) {
+      if (Number(this.eventSubmissionForm.get('new_event_diagnoses')['controls'][i].get('diagnosis').value) === diagnosisID) {
+        return true;
+      }
+    }
+  }
+
   checkforMissingSpecies(eventLocationIndex) {
 
     // tslint:disable-next-line:max-line-length
@@ -1485,6 +1509,36 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     this.checkLocationEndDates();
     this.checkSpeciesDiagnoses();
     this.checkLocationSpeciesNumbers();
+    this.updateAvailableDiagnoses();
+  }
+
+  updateAvailableDiagnoses() {
+
+    if (this.eventSubmissionForm.get('complete').value === true) {
+
+      // tslint:disable-next-line:max-line-length
+      // remove the 'unknown' diagnosis for incomplete events
+      this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis);
+      // add the 'unknown' diagnosis for complete events
+      for (const diagnosis of this.allDiagnoses) {
+        if (diagnosis.id === APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
+          this.availableDiagnoses.push(diagnosis);
+        }
+      }
+
+    } else if (this.eventSubmissionForm.get('complete').value === false) {
+
+      // tslint:disable-next-line:max-line-length
+      // remove the 'unknown' diagnosis for complete events
+      this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis);
+      // add the 'unknown' diagnosis for incomplete events
+      for (const diagnosis of this.allDiagnoses) {
+        if (diagnosis.id === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
+          this.availableDiagnoses.push(diagnosis);
+        }
+      }
+
+    }
   }
 
   checkLocationEndDates() {
@@ -2190,7 +2244,21 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   openAddSpeciesDiagnosisDialog(eventLocationIndex, locationSpeciesIndex) {
 
+    // create local variable for speciesDiagnosis index
     const speciesDiagnosisIndex = this.addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex);
+    // create local array of selected diagnoses to feed to the dialog
+    const existingSpeciesDiagnoses = [];
+    // create a list of the already selected diagnoses for this species to prevent duplicate selection
+    // tslint:disable-next-line:max-line-length
+    const speciesdiagnoses = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
+    // tslint:disable-next-line:max-line-length
+    for (let speciesdiagnosisindex = 0, speciesdiagnoseslength = speciesdiagnoses.length; speciesdiagnosisindex < speciesdiagnoseslength; speciesdiagnosisindex++) {
+      // tslint:disable-next-line:max-line-length
+      const diagnosis = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses')['controls'][speciesdiagnosisindex].controls.diagnosis.value;
+      if (diagnosis !== null) {
+        existingSpeciesDiagnoses.push(diagnosis);
+      }
+    }
 
     // Open dialog for adding species diagnosis
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
@@ -2200,6 +2268,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
         laboratories: this.laboratories,
         eventlocationIndex: eventLocationIndex,
         locationspeciesIndex: locationSpeciesIndex,
+        existing_diagnoses: existingSpeciesDiagnoses,
         title: 'Add Species Diagnosis',
         titleIcon: 'note_add',
         actionButtonIcon: 'note_add'

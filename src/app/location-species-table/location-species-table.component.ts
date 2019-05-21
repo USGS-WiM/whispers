@@ -166,13 +166,20 @@ export class LocationSpeciesTableComponent implements OnInit {
 
   editSpeciesDiagnosis(speciesdiagnosis, locationspecies) {
 
+    // form the exisiting diagnosis id array
+    const existingDiagnoses = [];
+    for (const item of locationspecies.speciesdiagnoses) {
+      existingDiagnoses.push(item.diagnosis);
+    }
+
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
-      minWidth: '40em',
+      minWidth: '75%',
       disableClose: true,
       data: {
         locationspecies: locationspecies,
         speciesdiagnosis: speciesdiagnosis,
         laboratories: this.laboratories,
+        existing_diagnoses: existingDiagnoses,
         species_diagnosis_action: 'edit',
         title: 'Edit Species Diagnosis',
         titleIcon: 'edit',
@@ -196,12 +203,19 @@ export class LocationSpeciesTableComponent implements OnInit {
 
   addSpeciesDiagnosis(locationspecies) {
 
+    // form the exisiting diagnosis id array
+    const existingDiagnoses = [];
+    for (const item of locationspecies.speciesdiagnoses) {
+      existingDiagnoses.push(item.diagnosis);
+    }
+
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
-      minWidth: '40em',
+      minWidth: '75%',
       disableClose: true,
       data: {
         locationspecies: locationspecies,
         laboratories: this.laboratories,
+        existing_diagnoses: existingDiagnoses,
         species_diagnosis_action: 'add',
         title: 'Add diagnosis for this species',
         titleIcon: 'add',

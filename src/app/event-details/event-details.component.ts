@@ -253,10 +253,13 @@ export class EventDetailsComponent implements OnInit {
               }
             }
 
-            if (eventdetails.complete === true) {
-              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
-            } else if (eventdetails.complete === false) {
-              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+            // check if there are any current possible event diagnoses. If not, add the appropriate unknown value as an option.
+            if (this.possibleEventDiagnoses.length === 0) {
+              if (eventdetails.complete === true) {
+                this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+              } else if (eventdetails.complete === false) {
+                this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+              }
             }
 
             this.eventDataLoading = false;
@@ -489,7 +492,7 @@ export class EventDetailsComponent implements OnInit {
         }
       });
 
-    }, 2000);
+    }, 3000);
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -620,7 +623,8 @@ export class EventDetailsComponent implements OnInit {
       minWidth: '75%',
       data: {
         event_id: id,
-        diagnosis_options: this.possibleEventDiagnoses
+        diagnosis_options: this.possibleEventDiagnoses,
+        event_data: this.eventData
       }
     });
 
@@ -1106,10 +1110,13 @@ export class EventDetailsComponent implements OnInit {
             }
           }
 
-          if (eventdetails.complete === true) {
-            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
-          } else if (eventdetails.complete === false) {
-            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+          // check if there are any current possible event diagnoses. If not, add the appropriate unknown value as an option.
+          if (this.possibleEventDiagnoses.length === 0) {
+            if (eventdetails.complete === true) {
+              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+            } else if (eventdetails.complete === false) {
+              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+            }
           }
 
           this.readCollaboratorArray = eventdetails.read_collaborators;

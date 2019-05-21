@@ -794,7 +794,8 @@ export class HomeComponent implements OnInit {
             '<span class="popupLabel">Location:</span> ' + locationContent +
             '<span class="popupLabel">Species:</span> ' + speciesContent +
             '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            // '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            '<span class="popupLabel">Diagnosis:</span> ' + eventDiagnosesString + '<br/>' +
             '<span class="popupLabel"><a href="./event/' + this.testForUndefined(event['id']) + '">View Event Details </a> </span><p></div>';
         }
       }

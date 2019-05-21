@@ -623,7 +623,8 @@ export class EventDetailsComponent implements OnInit {
       minWidth: '75%',
       data: {
         event_id: id,
-        diagnosis_options: this.possibleEventDiagnoses
+        diagnosis_options: this.possibleEventDiagnoses,
+        event_data: this.eventData
       }
     });
 

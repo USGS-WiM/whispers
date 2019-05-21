@@ -48,6 +48,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
   labSuspectViolation = false;
   diagnosisSuspectViolation = false;
+  duplicateDiagnosisViolation = false;
   labViolation = false;
 
   diagnoses: Diagnosis[];
@@ -78,6 +79,8 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
   action_text;
   action_button_text;
+
+  existingDiagnoses;
 
   buildspeciesDiagnosisForm() {
     this.speciesDiagnosisForm = this.formBuilder.group({
@@ -134,6 +137,10 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
     if (this.data.speciesdiagnosis) {
       this.speciesdiagnosis = this.data.speciesdiagnosis;
+    }
+
+    if (this.data.existing_diagnoses) {
+      this.existingDiagnoses = this.data.existing_diagnoses;
     }
 
     if (this.data.locationspecies) {
@@ -455,13 +462,22 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     if (this.speciesDiagnosisForm['controls'].new_species_diagnosis_organizations['controls'].length === 0 && !this.speciesDiagnosisForm.get('suspect').value) {
       // if the diagnosis selected is NOT one of the unknowns, then show violation
       // tslint:disable-next-line:max-line-length
-      if ((this.speciesDiagnosisForm.get('diagnosis').value !== APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis && this.speciesDiagnosisForm.get('diagnosis').value !== APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
+      if (this.speciesDiagnosisForm.get('diagnosis').value !== APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis && this.speciesDiagnosisForm.get('diagnosis').value !== APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
         this.labSuspectViolation = true;
       }
     }
     // tslint:disable-next-line:max-line-length
     if ((this.speciesDiagnosisForm.get('diagnosis').value === APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis || this.speciesDiagnosisForm.get('diagnosis').value === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) && this.speciesDiagnosisForm.get('suspect').value) {
       this.diagnosisSuspectViolation = true;
+    }
+  }
+
+  checkForDuplicateDiagnosis() {
+    this.duplicateDiagnosisViolation = false;
+    for (const existingDiagnosis of this.existingDiagnoses) {
+      if (existingDiagnosis === this.speciesDiagnosisForm.get('diagnosis').value) {
+        this.duplicateDiagnosisViolation = true;
+      }
     }
   }
 

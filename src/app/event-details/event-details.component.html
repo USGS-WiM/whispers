@@ -439,8 +439,7 @@
 
                 <div class="detail-section-buttons">
                   <button mat-button color="primary" class="event-detail-action-button"
-                    (click)="addEventComment(eventData.id)"
-                    [disabled]="!eventData.permissions.update">
+                    (click)="addEventComment(eventData.id)" [disabled]="!eventData.permissions.update">
                     <mat-icon>add_comment</mat-icon> Add Comment
                   </button>
                 </div>
@@ -558,7 +557,7 @@
                           <h4>
                             <mat-icon>lock</mat-icon>Read Only Access
                           </h4>
-                          <mat-list role="list">
+                          <mat-list role="list" *ngIf="readCollaboratorArray">
                             <mat-list-item *ngIf="readCollaboratorArray.length === 0">No Read Only Collaborators
                             </mat-list-item>
                             <mat-list-item *ngFor="let user of readCollaboratorArray" role="listitem">
@@ -584,7 +583,7 @@
                           <h4>
                             <mat-icon>lock_open</mat-icon>Read and Write Access
                           </h4>
-                          <mat-list role="list">
+                          <mat-list role="list" *ngIf="writeCollaboratorArray">
                             <mat-list-item *ngIf="writeCollaboratorArray.length === 0">No Read and Write Collaborators
                             </mat-list-item>
                             <mat-list-item *ngFor="let user of writeCollaboratorArray" role="listitem">
@@ -812,8 +811,9 @@
                     </button>
                   </div>
                   <div class="detail-section-buttons">
-                    <button mat-button color="primary" class="event-detail-action-button" [disabled]="eventData.complete"
-                      (click)="openCreateContactDialog()" matTooltip="Create a new contact">
+                    <button mat-button color="primary" class="event-detail-action-button"
+                      [disabled]="eventData.complete" (click)="openCreateContactDialog()"
+                      matTooltip="Create a new contact">
                       <mat-icon>person_add</mat-icon> Create New Contact
                     </button>
                   </div>

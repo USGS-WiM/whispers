@@ -86,7 +86,8 @@
 
 <div>
   <span class="text-bold text-large" *ngIf="selectedEventGroup !== null">Current Event Group Selection:
-    {{selectedEventGroup.name}}&nbsp;<span class="text-smaller">{{selectedEventGroup.comments[0].comment}}</span>&nbsp;<button mat-icon-button>
+    {{selectedEventGroup.name}}&nbsp;<span
+      class="text-smaller">{{selectedEventGroup.comments[0].comment}}</span>&nbsp;<button mat-icon-button>
       <mat-icon aria-label="Help" (click)=showEventGroupSelectionInfo()>help</mat-icon>
     </button></span>
 </div>
@@ -99,6 +100,7 @@
         search
       </i> Search</button>
     <button mat-button color="accent" (click)="openEventGroupManagementDialog('edit')"
+      *ngIf="currentUser.role === 1 || currentUser.role === 2"
       [disabled]="selection.selected.length === 0 || selectedEventGroup === null">
       <mat-icon>
         add
@@ -106,7 +108,7 @@
       Add Selection to Event Group <span *ngIf="selectedEventGroup !== null">{{selectedEventGroup.name}}</span>
     </button>
     <button mat-button color="accent" (click)="openEventGroupManagementDialog('create')"
-      [disabled]="selection.selected.length < 2">
+      [disabled]="selection.selected.length < 2" *ngIf="currentUser.role === 1 || currentUser.role === 2">
       <mat-icon>
         fiber_new
       </mat-icon> Create New Event Group from Selection

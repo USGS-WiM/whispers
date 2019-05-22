@@ -288,10 +288,8 @@ export class CircleManagementComponent implements OnInit {
 
   }
 
-  private filterContact() {
-    if (!this.data.userContacts) {
-      return;
-    }
+  filterContact() {
+
     // get the search keyword
     let search = this.contactFilterCtrl.value;
     if (!search) {

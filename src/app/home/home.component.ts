@@ -754,6 +754,15 @@ export class HomeComponent implements OnInit {
 
         // if one event represented by marker, do a simple display. If multiple, display in collapsing panels
         if (marker.events.length === 1) {
+
+          // create a string with all the event diagnoses
+          let eventDiagnosesString = '';
+          for (const eventdiagnosis of event.eventdiagnoses) {
+            eventDiagnosesString = eventDiagnosesString + eventdiagnosis['diagnosis_string'] + ',';
+          }
+          // rmeoves the trailing comma
+          eventDiagnosesString = eventDiagnosesString.slice(0, -1);
+
           // tslint:disable-next-line:max-line-length
           popupContent = popupContent + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
             '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Incomplete') + '</span><br/>' +
@@ -762,10 +771,19 @@ export class HomeComponent implements OnInit {
             '<span class="popupLabel">Location:</span> ' + locationContent +
             '<span class="popupLabel">Species:</span> ' + speciesContent +
             '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            // '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            '<span class="popupLabel">Diagnosis:</span> ' + eventDiagnosesString + '<br/>' +
             '<a href="./event/' + this.testForUndefined(event['id']) + '">View Event Details </a>';
 
         } else if (marker.events.length > 1) {
+
+          // create a string with all the event diagnoses
+          let eventDiagnosesString = '';
+          for (const eventdiagnosis of event.eventdiagnoses) {
+            eventDiagnosesString = eventDiagnosesString + eventdiagnosis['diagnosis_string'] + ',';
+          }
+          // removes the trailing comma
+          eventDiagnosesString = eventDiagnosesString.slice(0, -1);
 
           popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
             // '<h4>Event ' + this.testForUndefined(event['id']) + '</h4>' +
@@ -776,7 +794,8 @@ export class HomeComponent implements OnInit {
             '<span class="popupLabel">Location:</span> ' + locationContent +
             '<span class="popupLabel">Species:</span> ' + speciesContent +
             '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            // '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            '<span class="popupLabel">Diagnosis:</span> ' + eventDiagnosesString + '<br/>' +
             '<span class="popupLabel"><a href="./event/' + this.testForUndefined(event['id']) + '">View Event Details </a> </span><p></div>';
         }
       }
@@ -803,7 +822,7 @@ export class HomeComponent implements OnInit {
               } else {
                 panel.style.maxHeight = panel.scrollHeight + 'px';
               }
-              //let acc = document.getElementsByClassName('accordion');
+              // let acc = document.getElementsByClassName('accordion');
               let j;
               for (j = 0; j < acc.length; j++) {
                 if (i !== j) {

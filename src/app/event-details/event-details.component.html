@@ -439,8 +439,7 @@
 
                 <div class="detail-section-buttons">
                   <button mat-button color="primary" class="event-detail-action-button"
-                    (click)="addEventComment(eventData.id)"
-                    [disabled]="!eventData.permissions.update">
+                    (click)="addEventComment(eventData.id)" [disabled]="!eventData.permissions.update">
                     <mat-icon>add_comment</mat-icon> Add Comment
                   </button>
                 </div>
@@ -812,8 +811,9 @@
                     </button>
                   </div>
                   <div class="detail-section-buttons">
-                    <button mat-button color="primary" class="event-detail-action-button" [disabled]="eventData.complete"
-                      (click)="openCreateContactDialog()" matTooltip="Create a new contact">
+                    <button mat-button color="primary" class="event-detail-action-button"
+                      [disabled]="eventData.complete" (click)="openCreateContactDialog()"
+                      matTooltip="Create a new contact">
                       <mat-icon>person_add</mat-icon> Create New Contact
                     </button>
                   </div>

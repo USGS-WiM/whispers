@@ -6,8 +6,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { startWith } from 'rxjs-compat/operator/startWith';
 import { map } from 'rxjs/operators';
 import { take, takeUntil } from 'rxjs/operators';
-
-import { ReplaySubject, Subject } from 'rxjs';
+import { CanDeactivateGuard } from './pending-changes.guard';
+import { HostListener } from '@angular/core';
+import { ReplaySubject, Subject, observable } from 'rxjs';
 
 import { DisplayValuePipe } from '../pipes/display-value.pipe';
 
@@ -110,7 +111,7 @@ declare const search_api: search_api;
   templateUrl: './event-submission.component.html',
   styleUrls: ['./event-submission.component.scss']
 })
-export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewInit {
+export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivateGuard, AfterViewInit {
   @ViewChild('stepper') stepper: MatStepper;
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
@@ -134,7 +135,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   allDiagnoses: Diagnosis[];
   availableDiagnoses: Diagnosis[] = [];
   userCircles: Circle[] = [];
-
   countries: Country[];
   staff: Staff[];
 
@@ -242,6 +242,21 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   // filteredSpecies: ReplaySubject<Species[]> = new ReplaySubject<Species[]>();
   // filteredContacts: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>();
 
+  // @HostListener guards against refresh, close, etc.
+  @HostListener('window:beforeunload')
+
+  // canDeactivate passess back a boolean based on whether the form has been touched or not
+  canDeactivate(): Observable<boolean> | boolean {
+    // logic to check if there are pending changes here;
+    if (this.eventSubmissionForm.touched === true) {
+      // returning false will show a confirm dialog before navigating away
+      return false;
+    } else {
+      // returning true will navigate without confirmation
+      return true;
+    }
+  }
+
   buildEventSubmissionForm() {
     this.eventSubmissionForm = this.formBuilder.group({
       event_reference: '',
@@ -320,6 +335,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
   constructor(
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
+    public publicDialog: MatDialog,
     private bottomSheet: MatBottomSheet,
     private currentUserService: CurrentUserService,
     // private matStepper: MatStepper,
@@ -410,17 +426,34 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     this.circleChooseDialogRef.afterClosed().subscribe(result => {
-      if (accessType === 'read') {
-        // add the users array to the new_read_collaborators array
-        this.readCollaboratorArray = this.readCollaboratorArray.concat(result.users);
-      } else if (accessType === 'write') {
-        this.writeCollaboratorArray = this.writeCollaboratorArray.concat(result.users);
+
+      if (result !== 'cancel') {
+        if (accessType === 'read') {
+          // add the users array to the new_read_collaborators array
+          this.readCollaboratorArray = this.readCollaboratorArray.concat(result.users);
+        } else if (accessType === 'write') {
+          this.writeCollaboratorArray = this.writeCollaboratorArray.concat(result.users);
+        }
       }
     });
 
   }
 
   editSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex, speciesdiagnosis, locationspecies) {
+
+    // create local array of selected diagnoses to feed to the dialog
+    const existingSpeciesDiagnoses = [];
+    // create a list of the already selected diagnoses for this species to prevent duplicate selection
+    // tslint:disable-next-line:max-line-length
+    const speciesdiagnoses = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
+    // tslint:disable-next-line:max-line-length
+    for (let speciesdiagnosisindex = 0, speciesdiagnoseslength = speciesdiagnoses.length; speciesdiagnosisindex < speciesdiagnoseslength; speciesdiagnosisindex++) {
+      // tslint:disable-next-line:max-line-length
+      const diagnosis = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses')['controls'][speciesdiagnosisindex].controls.diagnosis.value;
+      if (diagnosis !== null) {
+        existingSpeciesDiagnoses.push(diagnosis);
+      }
+    }
 
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
       minWidth: '40em',
@@ -434,6 +467,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         diagnoses: this.allDiagnoses,
         eventlocationIndex: eventLocationIndex,
         locationspeciesIndex: locationSpeciesIndex,
+        existing_diagnoses: existingSpeciesDiagnoses,
         species_diagnosis_action: 'editInFormArray',
         title: 'Edit Species Diagnosis',
         titleIcon: 'edit',
@@ -441,6 +475,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         action_button_text: 'Save'
       }
     });
+
+    const originalDiagnosisID = speciesdiagnosis.value.diagnosis;
 
     this.editSpeciesDiagnosisDialogRef.afterClosed()
       .subscribe(
@@ -468,6 +504,23 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
                 new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
               });
 
+            // if the diagnosis ID has changed, remove the outgoing one from the availableDiagnoses array
+            if (originalDiagnosisID !== Number(speciesDiagnosisObj.formValue.diagnosis)) {
+              // delete from availableDiagnoses unless count > 1
+              for (const availableDiagnosis of this.availableDiagnoses) {
+                if (availableDiagnosis.id === originalDiagnosisID) {
+                  if (availableDiagnosis.count > 1) {
+                    // decrement the count
+                    availableDiagnosis.count--;
+                    break;
+                  } else if (availableDiagnosis.count === 1) {
+                    // remove it
+                    // tslint:disable-next-line:max-line-length
+                    this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== originalDiagnosisID);
+                  }
+                }
+              }
+            }
 
             for (const diagnosis of this.allDiagnoses) {
               if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
@@ -477,9 +530,14 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
                 for (const availableDiagnosis of this.availableDiagnoses) {
                   if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
                     // if found, increment the count for that diagnosis
-                    availableDiagnosis.count++;
-                    // if found, set local var found to true
+                    // only increment count if this diagnosis has changed
+                    if (originalDiagnosisID !== Number(speciesDiagnosisObj.formValue.diagnosis)) {
+                      availableDiagnosis.count++;
+                    }
+                    // also if found, set local var found to true
                     diagnosisFound = true;
+                    // also if found, update the suspect value to whatever it is now (though it may not have changed)
+                    availableDiagnosis.suspect = speciesDiagnosisObj.formValue.suspect;
                     // if found, stop. do not add to availableDiagnoses array
                     break;
                   }
@@ -556,7 +614,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
               // decrement the count
               availableDiagnosis.count--;
               break;
-            } else if (availableDiagnosis.count < 2) {
+            } else if (availableDiagnosis.count === 1) {
               // remove it
               this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== diagnosisID);
             }
@@ -836,7 +894,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
           });
 
           for (const diagnosis of this.allDiagnoses) {
-            if (diagnosis.name === 'Undetermined') {
+            if (diagnosis.id === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
               this.availableDiagnoses.push(diagnosis);
             }
           }
@@ -1301,6 +1359,15 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
+  checkForDuplicateEventDiagnosis(diagnosisID) {
+    const eventDiagnoses = <FormArray>this.eventSubmissionForm.get('new_event_diagnoses')['controls'];
+    for (let i = 0, j = eventDiagnoses.length; i < j; i++) {
+      if (Number(this.eventSubmissionForm.get('new_event_diagnoses')['controls'][i].get('diagnosis').value) === diagnosisID) {
+        return true;
+      }
+    }
+  }
+
   checkforMissingSpecies(eventLocationIndex) {
 
     // tslint:disable-next-line:max-line-length
@@ -1442,6 +1509,36 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this.checkLocationEndDates();
     this.checkSpeciesDiagnoses();
     this.checkLocationSpeciesNumbers();
+    this.updateAvailableDiagnoses();
+  }
+
+  updateAvailableDiagnoses() {
+
+    if (this.eventSubmissionForm.get('complete').value === true) {
+
+      // tslint:disable-next-line:max-line-length
+      // remove the 'unknown' diagnosis for incomplete events
+      this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis);
+      // add the 'unknown' diagnosis for complete events
+      for (const diagnosis of this.allDiagnoses) {
+        if (diagnosis.id === APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
+          this.availableDiagnoses.push(diagnosis);
+        }
+      }
+
+    } else if (this.eventSubmissionForm.get('complete').value === false) {
+
+      // tslint:disable-next-line:max-line-length
+      // remove the 'unknown' diagnosis for complete events
+      this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis);
+      // add the 'unknown' diagnosis for incomplete events
+      for (const diagnosis of this.allDiagnoses) {
+        if (diagnosis.id === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
+          this.availableDiagnoses.push(diagnosis);
+        }
+      }
+
+    }
   }
 
   checkLocationEndDates() {
@@ -2130,10 +2227,13 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
     this.circleManagementDialogRef.afterClosed()
       .subscribe(
         (selectedUser) => {
-          if (accessType === 'read') {
-            this.readCollaboratorArray.push(selectedUser);
-          } else if (accessType === 'write') {
-            this.writeCollaboratorArray.push(selectedUser);
+          if (selectedUser !== 'cancel') {
+
+            if (accessType === 'read') {
+              this.readCollaboratorArray.push(selectedUser);
+            } else if (accessType === 'write') {
+              this.writeCollaboratorArray.push(selectedUser);
+            }
           }
         },
         error => {
@@ -2144,7 +2244,21 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
   openAddSpeciesDiagnosisDialog(eventLocationIndex, locationSpeciesIndex) {
 
+    // create local variable for speciesDiagnosis index
     const speciesDiagnosisIndex = this.addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex);
+    // create local array of selected diagnoses to feed to the dialog
+    const existingSpeciesDiagnoses = [];
+    // create a list of the already selected diagnoses for this species to prevent duplicate selection
+    // tslint:disable-next-line:max-line-length
+    const speciesdiagnoses = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
+    // tslint:disable-next-line:max-line-length
+    for (let speciesdiagnosisindex = 0, speciesdiagnoseslength = speciesdiagnoses.length; speciesdiagnosisindex < speciesdiagnoseslength; speciesdiagnosisindex++) {
+      // tslint:disable-next-line:max-line-length
+      const diagnosis = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses')['controls'][speciesdiagnosisindex].controls.diagnosis.value;
+      if (diagnosis !== null) {
+        existingSpeciesDiagnoses.push(diagnosis);
+      }
+    }
 
     // Open dialog for adding species diagnosis
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
@@ -2154,6 +2268,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
         laboratories: this.laboratories,
         eventlocationIndex: eventLocationIndex,
         locationspeciesIndex: locationSpeciesIndex,
+        existing_diagnoses: existingSpeciesDiagnoses,
         title: 'Add Species Diagnosis',
         titleIcon: 'note_add',
         actionButtonIcon: 'note_add'
@@ -2186,23 +2301,26 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
                 new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
               });
 
-
+            // loops through the allDiagnoses list
             for (const diagnosis of this.allDiagnoses) {
+              // checks if the just-added specices id matches a diagnosis
               if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
 
+                // instantiate a boolean variable for use in the scope of this function, true if the diagnosis just added
+                // already exists within the availableDiagnoses array
                 let diagnosisFound = false;
                 // check to see if the diagnosis just added already exists in the availableDiagnoses array
                 for (const availableDiagnosis of this.availableDiagnoses) {
                   if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
                     // if found, increment the count for that diagnosis
                     availableDiagnosis.count++;
-                    // if found, set local var found to true
+                    // if found, set local diagnosisFound var found to true
                     diagnosisFound = true;
                     // if found, stop. do not add to availableDiagnoses array
                     break;
                   }
                 }
-                // if diagnosis is not found to already exist in the availableDiagnoses array, add it
+                // if diagnosis is not found to already exist in the availableDiagnoses array, add it.
                 if (!diagnosisFound) {
                   diagnosis.suspect = speciesDiagnosisObj.formValue.suspect;
                   // set diagnosis count to 1
@@ -2249,6 +2367,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, AfterViewIni
 
 
   submitEvent(formValue) {
+    this.eventSubmissionForm.markAsUntouched();
 
     this.submitLoading = true;
 

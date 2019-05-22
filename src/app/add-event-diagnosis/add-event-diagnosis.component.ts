@@ -26,6 +26,7 @@ export class AddEventDiagnosisComponent implements OnInit {
   addEventDiagnosisForm: FormGroup;
 
   eventID;
+  eventData;
 
   submitLoading = false;
 
@@ -49,6 +50,7 @@ export class AddEventDiagnosisComponent implements OnInit {
   ngOnInit() {
 
     this.eventID = this.data.event_id;
+    this.eventData = this.data.event_data;
     this.diagnoses = this.data.diagnosis_options;
 
     // get diagnoses from the DiagnosisService
@@ -70,6 +72,15 @@ export class AddEventDiagnosisComponent implements OnInit {
     });
   }
 
+  checkForDuplicateEventDiagnosis(diagnosisID) {
+
+    for (const eventdiagnosis of this.eventData.eventdiagnoses) {
+      if (eventdiagnosis.diagnosis === diagnosisID) {
+        return true;
+      }
+    }
+  }
+
   onSubmit(formValue) {
 
     this.submitLoading = true;
@@ -81,7 +92,7 @@ export class AddEventDiagnosisComponent implements OnInit {
           this.submitLoading = false;
           this.openSnackBar('Event Diagnosis Added', 'OK', 5000);
           this.addEventDiagnosisDialogRef.close();
-          gtag('event', 'click', {'event_category': 'Event Diagnosis','event_label': 'Event Diagnosis Added, Diagnosis: ' + contact.diagnosis});
+          gtag('event', 'click', { 'event_category': 'Event Diagnosis', 'event_label': 'Event Diagnosis Added, Diagnosis: ' + contact.diagnosis });
         },
         error => {
           this.submitLoading = false;

@@ -253,10 +253,13 @@ export class EventDetailsComponent implements OnInit {
               }
             }
 
-            if (eventdetails.complete === true) {
-              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
-            } else if (eventdetails.complete === false) {
-              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+            // check if there are any current possible event diagnoses. If not, add the appropriate unknown value as an option.
+            if (this.possibleEventDiagnoses.length === 0) {
+              if (eventdetails.complete === true) {
+                this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+              } else if (eventdetails.complete === false) {
+                this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+              }
             }
 
             this.eventDataLoading = false;
@@ -489,7 +492,7 @@ export class EventDetailsComponent implements OnInit {
         }
       });
 
-    }, 2000);
+    }, 3000);
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -620,7 +623,8 @@ export class EventDetailsComponent implements OnInit {
       minWidth: '75%',
       data: {
         event_id: id,
-        diagnosis_options: this.possibleEventDiagnoses
+        diagnosis_options: this.possibleEventDiagnoses,
+        event_data: this.eventData
       }
     });
 
@@ -1106,10 +1110,13 @@ export class EventDetailsComponent implements OnInit {
             }
           }
 
-          if (eventdetails.complete === true) {
-            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
-          } else if (eventdetails.complete === false) {
-            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+          // check if there are any current possible event diagnoses. If not, add the appropriate unknown value as an option.
+          if (this.possibleEventDiagnoses.length === 0) {
+            if (eventdetails.complete === true) {
+              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+            } else if (eventdetails.complete === false) {
+              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+            }
           }
 
           this.readCollaboratorArray = eventdetails.read_collaborators;
@@ -1286,22 +1293,27 @@ export class EventDetailsComponent implements OnInit {
     });
 
     this.circleChooseDialogRef.afterClosed().subscribe(result => {
-      if (accessType === 'read') {
-        // add the users array to the new_read_collaborators array
-        this.readCollaboratorArray = this.readCollaboratorArray.concat(result.users);
-        const readCollaboratorIDArray = [];
-        for (const user of this.readCollaboratorArray) {
-          readCollaboratorIDArray.push(user.id);
-        }
-        this.updateCollaboratorList('read', readCollaboratorIDArray);
 
-      } else if (accessType === 'write') {
-        this.writeCollaboratorArray = this.writeCollaboratorArray.concat(result.users);
-        const writeCollaboratorIDArray = [];
-        for (const user of this.writeCollaboratorArray) {
-          writeCollaboratorIDArray.push(user.id);
+      if (result !== 'cancel') {
+
+        if (accessType === 'read') {
+          // add the users array to the new_read_collaborators array
+          this.readCollaboratorArray = this.readCollaboratorArray.concat(result.users);
+          const readCollaboratorIDArray = [];
+          for (const user of this.readCollaboratorArray) {
+            readCollaboratorIDArray.push(user.id);
+          }
+          this.updateCollaboratorList('read', readCollaboratorIDArray);
+
+        } else if (accessType === 'write') {
+          this.writeCollaboratorArray = this.writeCollaboratorArray.concat(result.users);
+          const writeCollaboratorIDArray = [];
+          for (const user of this.writeCollaboratorArray) {
+            writeCollaboratorIDArray.push(user.id);
+          }
+          this.updateCollaboratorList('write', writeCollaboratorIDArray);
+
         }
-        this.updateCollaboratorList('write', writeCollaboratorIDArray);
 
       }
     });

@@ -1,0 +1,70 @@
+<h1 mat-dialog-title>
+  <mat-icon>info</mat-icon> Suitable Specimen Criteria
+</h1>
+
+<mat-dialog-content id="aboutModal">
+  <h2>Suitable Specimen Criteria</h2>
+  <p>
+    In order for the USGS National Wildlife Health Center (NWHC) to provide the best possible diagnostic services,
+    please review the following criteria regarding specimen suitability for diagnostic evaluation.
+  </p>
+
+  <ul>
+    <li>Free-living wildlife under federal, state, or tribal management authority (e.g., birds, mammals, reptiles,
+      amphibians, echinoderms, mollusks, and corals).
+      <ul>
+        <li>Wildlife in rehab &#60;72 hours that did not receive antibiotics or other drugs might be suitable. Please
+          provide details on rehabilitation in the comment field before submitting the diagnostic request.</li>
+      </ul>
+    </li>
+    <li>Whole carcasses (2-3 per species, usually no more than 5-6 total) with intact body cavity (no or very light
+      scavenging, not previously necropsied).
+      <ul>
+        <li>If the carcass is &#62;100lbs or too large to ship please make a note in the comment field before submitting
+          the diagnostic request.</li>
+      </ul>
+    </li>
+    <li>Freshly dead or freshly euthanized with none of the following present: slippage of the fur/feathers/scales and
+      skin with gentle rubbing; pronounced odor; green, black or discolored tissues; mushy carcass; extensive maggot or
+      insect activity.
+      <ul>
+        <li>If euthanized, please be sure to indicate method of euthanasia in the comment field.</li>
+      </ul>
+    </li>
+    <li>Unknown cause of death.</li>
+    <li>Not part of an active state or federal legal investigation. USFWS Special Agents with a specific request, please
+      call NWHC at 608-270-2480; for NWHC Hawaii call 808-792-9520 to discuss. </li>
+    <li>Collector possesses the appropriate state and federal permits for specimen collection and shipment.</li>
+  </ul>
+
+  <p>
+    If you have suitable carcasses newly in hand and are submitting this request:
+    Sunday - Wednesday, please hold carcasses chilled.
+    Thursday - Saturday, please hold carcasses frozen.
+  </p>
+
+  <p>
+    If you need field or management guidance regarding selecting carcasses (e.g., species and number to collect),
+    packaging and shipping, disease response consultation, or safety information, please make a note in the comments
+    field and select “Request diagnostic and consultative services”.
+  </p>
+
+  <p>
+    If you do not have or can not obtain suitable specimens but would like a disease response consultation, make a note
+    in the comments field and select “Request Consultative Services ONLY”.
+  </p>
+
+  <p>
+    If this is an urgent wildlife disease situation, call NWHC at 608-270-2480; for NWHC Hawaii call 808-792-9520.
+  </p>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+
+  <div class="form-buttons-flex center">
+    <button mat-button color="primary" type="submit" (click)="this.diagnosticInfoDialogRef.close('cancel');">
+      <mat-icon>close</mat-icon>&nbsp;Close
+    </button>
+  </div>
+
+</mat-dialog-actions>

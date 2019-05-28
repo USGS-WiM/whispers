@@ -877,6 +877,7 @@ export class AddEventLocationComponent implements OnInit {
         diagnosisBases: this.diagnosisBases,
         diagnosisCauses: this.diagnosisCauses,
         diagnoses: this.allDiagnoses,
+        species: this.species,
         // eventlocationIndex: eventLocationIndex,
         locationspeciesIndex: locationSpeciesIndex,
         species_diagnosis_action: 'editInFormArray',
@@ -1038,7 +1039,21 @@ export class AddEventLocationComponent implements OnInit {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   openAddSpeciesDiagnosisDialog(locationSpeciesIndex) {
 
+    // create local variable for speciesDiagnosis index
     const speciesDiagnosisIndex = this.addSpeciesDiagnosis(locationSpeciesIndex);
+    // create local array of selected diagnoses to feed to the dialog
+    const existingSpeciesDiagnoses = [];
+    // create a list of the already selected diagnoses for this species to prevent duplicate selection
+    // tslint:disable-next-line:max-line-length
+    const speciesdiagnoses = <FormArray>this.addEventLocationForm.get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
+    // tslint:disable-next-line:max-line-length
+    for (let speciesdiagnosisindex = 0, speciesdiagnoseslength = speciesdiagnoses.length; speciesdiagnosisindex < speciesdiagnoseslength; speciesdiagnosisindex++) {
+      // tslint:disable-next-line:max-line-length
+      const diagnosis = this.addEventLocationForm.get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses')['controls'][speciesdiagnosisindex].controls.diagnosis.value;
+      if (diagnosis !== null) {
+        existingSpeciesDiagnoses.push(diagnosis);
+      }
+    }
 
     // Open dialog for adding species diagnosis
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
@@ -1048,6 +1063,7 @@ export class AddEventLocationComponent implements OnInit {
         laboratories: this.laboratories,
         // eventlocationIndex: eventLocationIndex,
         locationspeciesIndex: locationSpeciesIndex,
+        existing_diagnoses: existingSpeciesDiagnoses,
         title: 'Add Species Diagnosis',
         titleIcon: 'note_add',
         actionButtonIcon: 'note_add'

@@ -13,7 +13,7 @@ export class APP_SETTINGS {
 
     private static _environment = 'development';
     // tslint:disable-next-line:max-line-length
-    //private static API_ROOT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersbeta.wim.usgs.gov/test/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
+    // private static API_ROOT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersbeta.wim.usgs.gov/test/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
 
     // default env is development
     public static get API_ROOT() {

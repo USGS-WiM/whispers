@@ -14,6 +14,7 @@ import { CommentType } from '@interfaces/comment-type';
 import { DataUpdatedService } from '@app/services/data-updated.service';
 import { ServiceRequestService } from '@services/service-request.service';
 import { ServiceRequestResponse } from '@app/interfaces/service-request-response';
+import { APP_SETTINGS } from '@app/app.settings';
 declare let gtag: Function;
 
 @Component({
@@ -59,6 +60,14 @@ export class AddServiceRequestComponent implements OnInit {
   ngOnInit() {
 
     this.commentTypes = this.data.comment_types;
+
+    for (const type of APP_SETTINGS.SPECIAL_COMMENT_TYPES) {
+      for (const commentType of this.commentTypes) {
+        if (commentType.id === type.id) {
+          this.commentTypes = this.commentTypes.filter(commenttype => commenttype.id !== type.id);
+        }
+      }
+    }
 
     this.serviceRequestForm.get('event').setValue(this.data.event_id);
 

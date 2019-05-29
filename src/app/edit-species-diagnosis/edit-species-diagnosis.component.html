@@ -4,12 +4,26 @@
 
 <mat-dialog-content>
 
-  <h3 *ngIf="locationspeciesString || data.locationspecies || data.speciesdiagnosis">
-    <span *ngIf="locationspeciesString">Species: {{locationspeciesString}} </span> <br />
-    <span *ngIf="data.locationspecies">Location: {{administrative_level_two}}, {{administrative_level_one}}</span>
-    <br />
-    <span *ngIf="data.speciesdiagnosis">Species Diagnosis: {{data.speciesdiagnosis.diagnosis_string}} </span>
-  </h3>
+  <div *ngIf="data.species_diagnosis_action === 'edit'">
+    <h3 *ngIf="locationspeciesString || data.locationspecies || data.speciesdiagnosis">
+      <span *ngIf="locationspeciesString">Species: {{locationspeciesString}} </span> <br />
+      <span *ngIf="data.locationspecies">Location: {{administrative_level_two}}, {{administrative_level_one}}</span>
+      <br />
+      <span *ngIf="data.speciesdiagnosis">Species Diagnosis: {{data.speciesdiagnosis.diagnosis_string}} </span>
+    </h3>
+  </div>
+
+  <div *ngIf="data.species_diagnosis_action  === 'editInFormArray'">
+    <h3>
+      <span *ngIf="data.locationspecies">Species: {{data.locationspecies.species | displayValue:'name':this.species}}
+      </span> <br />
+      <!-- <span *ngIf="data.locationspecies">Location: {{administrative_level_two}}, {{administrative_level_one}}</span> -->
+      <br />
+      <span *ngIf="data.speciesdiagnosis">Species Diagnosis:
+        {{data.speciesdiagnosis.diagnosis | displayValue:'name':this.diagnoses}} </span>
+    </h3>
+  </div>
+
 
   <form [formGroup]="speciesDiagnosisForm" autocomplete="off">
 
@@ -25,7 +39,8 @@
 
       <div class="horizontal-form-container">
 
-        <mat-form-field class="form-control diagnosis-select" *ngIf="data.species_diagnosis_action !== 'edit'">
+        <mat-form-field class="form-control diagnosis-select"
+          *ngIf="data.species_diagnosis_action !== 'edit' && data.species_diagnosis_action !== 'editInFormArray'">
           <mat-select formControlName="diagnosis" placeholder="Species Diagnosis" #diagnosisSelect required
             (ngModelChange)="checkSuspectCompliance(); checkForDuplicateDiagnosis();">
             <ngx-mat-select-search [formControl]="diagnosisFilterCtrl" [placeholderLabel]="'Find diagnosis...'"
@@ -172,7 +187,8 @@
 
       <mat-error color="warn" *ngIf="duplicateDiagnosisViolation">
         <mat-icon class="icon">error</mat-icon>
-        <span class="alert-text">The selected diagnosis has already been selected for this species at this location.</span>
+        <span class="alert-text">The selected diagnosis has already been selected for this species at this
+          location.</span>
       </mat-error>
     </div>
 

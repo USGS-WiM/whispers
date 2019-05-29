@@ -85,6 +85,7 @@ import { ViewContactDetailsComponent } from '@app/view-contact-details/view-cont
 import { ConfirmComponent } from '@confirm/confirm.component';
 
 import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
+import { DiagnosticInfoComponent } from '@app/diagnostic-info/diagnostic-info.component';
 
 import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
 import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
@@ -121,6 +122,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   viewContactDetailsDialogRef: MatDialogRef<ViewContactDetailsComponent>;
   circleChooseDialogRef: MatDialogRef<CircleChooseComponent>;
   circleManagementDialogRef: MatDialogRef<CircleManagementComponent>;
+  diagnosticInfoDialogRef: MatDialogRef<DiagnosticInfoComponent>;
 
   eventSubmitConfirm: MatBottomSheetRef<EventSubmissionConfirmComponent>;
 
@@ -441,19 +443,20 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   editSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex, speciesdiagnosis, locationspecies) {
 
-    // create local array of selected diagnoses to feed to the dialog
-    const existingSpeciesDiagnoses = [];
-    // create a list of the already selected diagnoses for this species to prevent duplicate selection
-    // tslint:disable-next-line:max-line-length
-    const speciesdiagnoses = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
-    // tslint:disable-next-line:max-line-length
-    for (let speciesdiagnosisindex = 0, speciesdiagnoseslength = speciesdiagnoses.length; speciesdiagnosisindex < speciesdiagnoseslength; speciesdiagnosisindex++) {
-      // tslint:disable-next-line:max-line-length
-      const diagnosis = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses')['controls'][speciesdiagnosisindex].controls.diagnosis.value;
-      if (diagnosis !== null) {
-        existingSpeciesDiagnoses.push(diagnosis);
-      }
-    }
+    // NOTE: do not need the block below for editing a species diagnosis - the ability to edit the diagnosis selection has been removed.
+    // // create local array of selected diagnoses to feed to the dialog
+    // const existingSpeciesDiagnoses = [];
+    // // create a list of the already selected diagnoses for this species to prevent duplicate selection
+    // // tslint:disable-next-line:max-line-length
+    // const speciesdiagnoses = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
+    // // tslint:disable-next-line:max-line-length
+    // for (let speciesdiagnosisindex = 0, speciesdiagnoseslength = speciesdiagnoses.length; speciesdiagnosisindex < speciesdiagnoseslength; speciesdiagnosisindex++) {
+    //   // tslint:disable-next-line:max-line-length
+    //   const diagnosis = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses')['controls'][speciesdiagnosisindex].controls.diagnosis.value;
+    //   if (diagnosis !== null) {
+    //     existingSpeciesDiagnoses.push(diagnosis);
+    //   }
+    // }
 
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
       minWidth: '40em',
@@ -465,9 +468,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
         diagnosisBases: this.diagnosisBases,
         diagnosisCauses: this.diagnosisCauses,
         diagnoses: this.allDiagnoses,
+        species: this.species,
         eventlocationIndex: eventLocationIndex,
         locationspeciesIndex: locationSpeciesIndex,
-        existing_diagnoses: existingSpeciesDiagnoses,
+        // existing_diagnoses: existingSpeciesDiagnoses,
         species_diagnosis_action: 'editInFormArray',
         title: 'Edit Species Diagnosis',
         titleIcon: 'edit',
@@ -893,11 +897,13 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
             return 0;
           });
 
-          for (const diagnosis of this.allDiagnoses) {
-            if (diagnosis.id === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
-              this.availableDiagnoses.push(diagnosis);
-            }
-          }
+          // adds the "Pending" diagnosis (unknown, incomplete) to availableDiagnoses list
+          // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of "Pending".
+          // for (const diagnosis of this.allDiagnoses) {
+          //   if (diagnosis.id === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
+          //     this.availableDiagnoses.push(diagnosis);
+          //   }
+          // }
         },
         error => {
           this.errorMessage = <any>error;
@@ -1045,6 +1051,14 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       .subscribe(
         commentTypes => {
           this.commentTypes = commentTypes;
+          // remove the 'special' comment types, as they should not be available for general event comments
+          for (const type of APP_SETTINGS.SPECIAL_COMMENT_TYPES) {
+            for (const commentType of this.commentTypes) {
+              if (commentType.id === type.id) {
+                this.commentTypes = this.commentTypes.filter(commenttype => commenttype.id !== type.id);
+              }
+            }
+          }
         },
         error => {
           this.errorMessage = <any>error;
@@ -1156,6 +1170,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
     return this.eventSubmissionForm.get(formControlName).hasError('required') ? 'Please enter a value' :
       this.eventSubmissionForm.get(formControlName).hasError('email') ? 'Not a valid email' : '';
+  }
+
+  openDiagnosticInfoDialog() {
+    this.diagnosticInfoDialogRef = this.dialog.open(DiagnosticInfoComponent, {});
   }
 
   private filterAdminLevelOnes(eventLocationIndex) {
@@ -1514,11 +1532,15 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   updateAvailableDiagnoses() {
 
+    // TODO: clear all event diagnosis selections
+
     if (this.eventSubmissionForm.get('complete').value === true) {
 
-      // tslint:disable-next-line:max-line-length
       // remove the 'unknown' diagnosis for incomplete events
-      this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis);
+      // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of "Pending".
+      // tslint:disable-next-line:max-line-length
+      // this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis);
+
       // add the 'unknown' diagnosis for complete events
       for (const diagnosis of this.allDiagnoses) {
         if (diagnosis.id === APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
@@ -1532,11 +1554,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       // remove the 'unknown' diagnosis for complete events
       this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis);
       // add the 'unknown' diagnosis for incomplete events
-      for (const diagnosis of this.allDiagnoses) {
-        if (diagnosis.id === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
-          this.availableDiagnoses.push(diagnosis);
-        }
-      }
+      // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of "Pending".
+      // for (const diagnosis of this.allDiagnoses) {
+      //   if (diagnosis.id === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
+      //     this.availableDiagnoses.push(diagnosis);
+      //   }
+      // }
 
     }
   }
@@ -1820,6 +1843,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     });
   }
 
+  initServiceRequestComment() {
+    return this.formBuilder.group({
+      comment: ''
+    });
+  }
+
   initEventDiagnosis() {
     return this.formBuilder.group({
       // TODO: make this value configurbale for the "Undetermined" value
@@ -1953,6 +1982,21 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   getEventComments(form) {
     return form.controls.new_comments.controls;
+  }
+
+  // service request comments
+  addServiceRequestComment() {
+    const control = <FormArray>this.eventSubmissionForm.get('new_service_request').get('new_comments');
+    control.push(this.initServiceRequestComment());
+  }
+
+  removeServiceRequestComment(serviceRequestCommentIndex) {
+    const control = <FormArray>this.eventSubmissionForm.get('new_service_request').get('new_comments');
+    control.removeAt(serviceRequestCommentIndex);
+  }
+
+  getServiceRequestComments(form) {
+    return form.controls.new_service_request.controls.new_comments.controls;
   }
 
   // event diagnoses

@@ -13,7 +13,7 @@ export class APP_SETTINGS {
 
     private static _environment = 'development';
     // tslint:disable-next-line:max-line-length
-    //private static API_ROOT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersbeta.wim.usgs.gov/test/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
+    // private static API_ROOT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersbeta.wim.usgs.gov/test/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
 
     // default env is development
     public static get API_ROOT() {
@@ -69,6 +69,35 @@ export class APP_SETTINGS {
             'diagnosis': 104,
             'diagnosis_string': 'Pending',
         }
+    }
+
+    public static get SPECIAL_COMMENT_TYPES() {
+        return [
+            {
+                'id': 1,
+                'name': 'Site Description',
+            },
+            {
+                'id': 2,
+                'name': 'History',
+            },
+            {
+                'id': 3,
+                'name': 'Environmental factors',
+            },
+            {
+                'id': 4,
+                'name': 'Clinical signs',
+            },
+            {
+                'id': 8,
+                'name': 'NWHC',
+            },
+            {
+                'id': 11,
+                'name': 'Event Group',
+            }
+        ];
     }
 
     public static get AUTH_URL(): string { return this.API_ROOT + 'auth/'; }

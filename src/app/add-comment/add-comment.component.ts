@@ -14,6 +14,7 @@ import { CommentTypeService } from '@app/services/comment-type.service';
 import { CommentType } from '@interfaces/comment-type';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
+import { APP_SETTINGS } from '@app/app.settings';
 declare let gtag: Function;
 
 @Component({
@@ -81,6 +82,16 @@ export class AddCommentComponent implements OnInit {
       .subscribe(
         commentTypes => {
           this.commentTypes = commentTypes;
+          // if the comment context is  event comment or service request comment, remove the 'special' comment types
+          if (this.data.comment_object === 'event' || this.data.comment_object === 'servicerequest') {
+            for (const type of APP_SETTINGS.SPECIAL_COMMENT_TYPES) {
+              for (const commentType of this.commentTypes) {
+                if (commentType.id === type.id) {
+                  this.commentTypes = this.commentTypes.filter(commenttype => commenttype.id !== type.id);
+                }
+              }
+            }
+          }
         },
         error => {
           this.errorMessage = <any>error;
@@ -98,21 +109,21 @@ export class AddCommentComponent implements OnInit {
 
     this.submitLoading = true;
 
-      this.commentService.create(formValue)
-        .subscribe(
-          (comment) => {
-            this.submitLoading = false;
-            this.openSnackBar('Comment Successfully Saved', 'OK', 5000);
-            this.dataUpdatedService.triggerRefresh();
-            this.addCommentDialogRef.close();
-            gtag('event', 'click', {'event_category': 'Comments','event_label': 'Comment submitted, type: ' + comment.comment_type });
-          },
-          error => {
-            this.errorMessage = <any>error;
-            this.openSnackBar('Error. Comment not saved. Error message: ' + error, 'OK', 8000);
+    this.commentService.create(formValue)
+      .subscribe(
+        (comment) => {
+          this.submitLoading = false;
+          this.openSnackBar('Comment Successfully Saved', 'OK', 5000);
+          this.dataUpdatedService.triggerRefresh();
+          this.addCommentDialogRef.close();
+          gtag('event', 'click', { 'event_category': 'Comments', 'event_label': 'Comment submitted, type: ' + comment.comment_type });
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Comment not saved. Error message: ' + error, 'OK', 8000);
 
-          }
-        );
-    }
-
+        }
+      );
   }
+
+}

@@ -914,7 +914,7 @@
                           <ng-template matStepLabel>Review</ng-template>
 
                           <div id="submissionReviewComplete"
-                            *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].valid">
+                            *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].valid && checkEventLocationCommentMin(eventLocationIndex) === false">
                             <mat-icon>check</mat-icon>
                             <b>Finished with Location {{eventLocationIndex+1}}</b>
                           </div>
@@ -1136,11 +1136,12 @@
                                 <mat-radio-button [value]="2">Request consultative services ONLY </mat-radio-button>
                           </mat-radio-group>
 
-                          <div class="text-bold text-larger"
+                          <div class="text-bold text-larger diagnostic-info-text"
                             *ngIf="this.eventSubmissionForm.get('new_service_request').get('request_type').value === 1">
                             For diagnostic services, indicate in comment A) species and numbers of FRESH carcasses
                             available to send, B) whether carcasses are chilled or frozen, and C) if
-                            euthanized and how. See <span class="link"><a role="button" (click)="openDiagnosticInfoDialog();">Suitable Specimen Criteria</a></span> for
+                            euthanized and how. See <span class="link"><a role="button"
+                                (click)="openDiagnosticInfoDialog();">Suitable Specimen Criteria</a></span> for
                             details on suitable specimens. Wait for NWHC approval
                             before shipping.
                           </div>
@@ -1154,9 +1155,9 @@
                                 <div class="horizontal-form-container">
 
                                   <mat-form-field class="general-comment-text-area">
-                                    <textarea matInput maxlength="1000" #comment placeholder="Comment"
+                                    <textarea matInput maxlength="2000" #comment placeholder="Comment"
                                       formControlName="comment"></textarea>
-                                    <mat-hint align="end">{{comment.value.length}} / 1000</mat-hint>
+                                    <mat-hint align="end">{{comment.value.length}} / 2000</mat-hint>
                                   </mat-form-field>
 
                                   <button mat-icon-button color="warn" aria-label="Remove this comment"
@@ -1169,7 +1170,8 @@
                             </div>
                           </div>
 
-                          <div class="add-content-button">
+                          <div class="add-content-button"
+                            *ngIf="this.eventSubmissionForm.get('new_service_request').get('new_comments').value.length < 1">
                             <button mat-button color="primary" matTooltip="Add comment to this event"
                               (click)="addServiceRequestComment()">
                               <mat-icon>add_comment</mat-icon> Add Comment

@@ -71,6 +71,35 @@ export class APP_SETTINGS {
         }
     }
 
+    public static get SPECIAL_COMMENT_TYPES() {
+        return [
+            {
+                'id': 1,
+                'name': 'Site Description',
+            },
+            {
+                'id': 2,
+                'name': 'History',
+            },
+            {
+                'id': 3,
+                'name': 'Environmental factors',
+            },
+            {
+                'id': 4,
+                'name': 'Clinical signs',
+            },
+            {
+                'id': 8,
+                'name': 'NWHC',
+            },
+            {
+                'id': 11,
+                'name': 'Event Group',
+            }
+        ];
+    }
+
     public static get AUTH_URL(): string { return this.API_ROOT + 'auth/'; }
     public static get EVENTS_URL(): string { return this.API_ROOT + 'events/'; }
     public static get EVENT_DETAILS_URL(): string { return this.API_ROOT + 'eventdetails/'; }

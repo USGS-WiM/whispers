@@ -1051,6 +1051,14 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       .subscribe(
         commentTypes => {
           this.commentTypes = commentTypes;
+          // remove the 'special' comment types, as they should not be available for general event comments
+          for (const type of APP_SETTINGS.SPECIAL_COMMENT_TYPES) {
+            for (const commentType of this.commentTypes) {
+              if (commentType.id === type.id) {
+                this.commentTypes = this.commentTypes.filter(commenttype => commenttype.id !== type.id);
+              }
+            }
+          }
         },
         error => {
           this.errorMessage = <any>error;

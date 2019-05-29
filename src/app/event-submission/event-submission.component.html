@@ -914,7 +914,7 @@
                           <ng-template matStepLabel>Review</ng-template>
 
                           <div id="submissionReviewComplete"
-                            *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].valid">
+                            *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].valid && checkEventLocationCommentMin(eventLocationIndex) === false">
                             <mat-icon>check</mat-icon>
                             <b>Finished with Location {{eventLocationIndex+1}}</b>
                           </div>
@@ -1029,7 +1029,8 @@
 
                             <mat-form-field class="form-control event-diagnosis-select">
                               <mat-select placeholder="Event Diagnosis" formControlName="diagnosis">
-                                <mat-option *ngFor="let diagnosis of availableDiagnoses" value="{{diagnosis.id}}" [disabled]="checkForDuplicateEventDiagnosis(diagnosis.id)">
+                                <mat-option *ngFor="let diagnosis of availableDiagnoses" value="{{diagnosis.id}}"
+                                  [disabled]="checkForDuplicateEventDiagnosis(diagnosis.id)">
                                   {{diagnosis.name}}<span *ngIf="diagnosis.suspect"> (suspect)</span></mat-option>
                               </mat-select>
                               <mat-hint align="end" matTooltip="Public field">
@@ -1135,6 +1136,48 @@
                                 <mat-radio-button [value]="2">Request consultative services ONLY </mat-radio-button>
                           </mat-radio-group>
 
+                          <div class="text-bold text-larger diagnostic-info-text"
+                            *ngIf="this.eventSubmissionForm.get('new_service_request').get('request_type').value === 1">
+                            For diagnostic services, indicate in comment A) species and numbers of FRESH carcasses
+                            available to send, B) whether carcasses are chilled or frozen, and C) if
+                            euthanized and how. See <span class="link"><a role="button"
+                                (click)="openDiagnosticInfoDialog();">Suitable Specimen Criteria</a></span> for
+                            details on suitable specimens. Wait for NWHC approval
+                            before shipping.
+                          </div>
+
+                          <div formArrayName="new_comments">
+                            <div
+                              *ngFor="let comments of getServiceRequestComments(eventSubmissionForm); let serviceRequestCommentIndex = index">
+
+                              <div [formGroupName]="serviceRequestCommentIndex">
+
+                                <div class="horizontal-form-container">
+
+                                  <mat-form-field class="general-comment-text-area">
+                                    <textarea matInput maxlength="2000" #comment placeholder="Comment"
+                                      formControlName="comment"></textarea>
+                                    <mat-hint align="end">{{comment.value.length}} / 2000</mat-hint>
+                                  </mat-form-field>
+
+                                  <button mat-icon-button color="warn" aria-label="Remove this comment"
+                                    (click)="removeServiceRequestComment(serviceRequestCommentIndex)"
+                                    matTooltip="Remove this comment">
+                                    <mat-icon>remove_circle</mat-icon>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="add-content-button"
+                            *ngIf="this.eventSubmissionForm.get('new_service_request').get('new_comments').value.length < 1">
+                            <button mat-button color="primary" matTooltip="Add comment to this event"
+                              (click)="addServiceRequestComment()">
+                              <mat-icon>add_comment</mat-icon> Add Comment
+                            </button>
+                          </div>
+
                         </div>
                       </form>
                     </mat-card-content>
@@ -1161,7 +1204,8 @@
                                   <mat-icon>lock</mat-icon>Read Only Access
                                 </h4>
                                 <mat-list role="list">
-                                  <mat-list-item *ngIf="readCollaboratorArray.length === 0">No Read Only Collaborators</mat-list-item>
+                                  <mat-list-item *ngIf="readCollaboratorArray.length === 0">No Read Only Collaborators
+                                  </mat-list-item>
                                   <mat-list-item *ngFor="let user of readCollaboratorArray" role="listitem">
                                     {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
                                     <button mat-icon-button aria-label="remove collaborator" color="warn"
@@ -1187,7 +1231,8 @@
                                   <mat-icon>lock_open</mat-icon>Read and Write Access
                                 </h4>
                                 <mat-list role="list">
-                                  <mat-list-item *ngIf="writeCollaboratorArray.length === 0">No Read and Write Collaborators</mat-list-item>
+                                  <mat-list-item *ngIf="writeCollaboratorArray.length === 0">No Read and Write
+                                    Collaborators</mat-list-item>
                                   <mat-list-item *ngFor="let user of writeCollaboratorArray" role="listitem">
                                     {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
                                     <button mat-icon-button aria-label="remove collaborator" color="warn"

@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { Diagnosis } from '@interfaces/diagnosis';
+import { Species } from '@interfaces/species';
 import { DiagnosisService } from '@services/diagnosis.service';
 import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
 import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
@@ -52,6 +53,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
   labViolation = false;
 
   diagnoses: Diagnosis[];
+  species: Species[];
   diagnosisBases: DiagnosisBasis[];
   diagnosisCauses: DiagnosisCause[];
   laboratories: Organization[] = [];
@@ -143,12 +145,6 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       this.existingDiagnoses = this.data.existing_diagnoses;
     }
 
-    if (this.data.locationspecies) {
-      this.locationspeciesString = this.data.locationspecies.species_string;
-      this.administrative_level_one = this.data.locationspecies.administrative_level_one_string;
-      this.administrative_level_two = this.data.locationspecies.administrative_level_two_string;
-    }
-
     // add mode
     if (this.data.species_diagnosis_action === 'add') {
       this.action_text = 'Add';
@@ -165,7 +161,8 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
       // this.diagnosisBases = this.data.diagnosisBases;
       // this.diagnosisCauses = this.data.diagnosisCauses;
-      // this.diagnoses = this.data.diagnoses;
+      this.diagnoses = this.data.diagnoses;
+      this.species = this.data.species;
 
       // Access the form here and set the value to the objects property/value
       this.speciesDiagnosisForm.patchValue({
@@ -198,6 +195,12 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     } else if (this.data.species_diagnosis_action === 'edit') {
       this.action_text = 'Edit';
       this.action_button_text = 'Save Changes';
+
+      if (this.data.locationspecies) {
+        this.locationspeciesString = this.data.locationspecies.species_string;
+        this.administrative_level_one = this.data.locationspecies.administrative_level_one_string;
+        this.administrative_level_two = this.data.locationspecies.administrative_level_two_string;
+      }
 
       // Access the form here and set the value to the objects property/value
       this.speciesDiagnosisForm.patchValue({
@@ -247,6 +250,10 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
             if (a.name > b.name) { return 1; }
             return 0;
           });
+
+          // remove the 'unknown' diagnosis for incomplete events ("Pending")
+          // NWHC requsted this not be available to users as choice.
+          this.diagnoses = this.diagnoses.filter(diagnosis => diagnosis.id !== APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis);
           // populate the search select options for the species control
           this.filteredDiagnoses.next(diagnoses);
 
@@ -474,9 +481,11 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
   checkForDuplicateDiagnosis() {
     this.duplicateDiagnosisViolation = false;
-    for (const existingDiagnosis of this.existingDiagnoses) {
-      if (existingDiagnosis === this.speciesDiagnosisForm.get('diagnosis').value) {
-        this.duplicateDiagnosisViolation = true;
+    if (this.data.species_diagnosis_action === 'add' || this.data.species_diagnosis_action === 'addToFormArray') {
+      for (const existingDiagnosis of this.existingDiagnoses) {
+        if (existingDiagnosis === this.speciesDiagnosisForm.get('diagnosis').value) {
+          this.duplicateDiagnosisViolation = true;
+        }
       }
     }
   }

@@ -345,7 +345,7 @@
             <mat-datepicker #endDate></mat-datepicker>
             <mat-error *ngIf="searchForm.get('end_date').hasError('endDateBeforeStart')">Cannot precede start date</mat-error>
           </mat-form-field>
-          <button mat-icon-button color="accent">
+          <button mat-icon-button color="accent" matTooltip="Clear dates">
             <mat-icon aria-label="Clear dates" (click)="clearDates()">clear_all</mat-icon>
           </button>
 

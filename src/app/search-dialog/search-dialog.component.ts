@@ -618,7 +618,7 @@ export class SearchDialogComponent implements OnInit {
     //this.searchDialogService.setSearchQuery(this.defaultSearchQuery);
 
     this.clearDates();
-
+    this.searchForm.reset();
   }
 
   clearDates() {

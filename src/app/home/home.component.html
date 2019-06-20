@@ -117,7 +117,7 @@
 
           <mat-list-item *ngIf="currentDisplayQuery.diagnosis && currentDisplayQuery.diagnosis.length > 0">
             <h4 mat-line>
-              <strong>Diagnosis</strong>
+              <strong>Event Diagnosis</strong>
             </h4>
             <p mat-line>
               <span *ngFor="let diagnosis of currentDisplayQuery.diagnosis">{{diagnosis}}
@@ -235,7 +235,7 @@
 
             <!-- DIAGNOSIS -->
             <span class="search-param" *ngIf="search.diagnosis">
-              <b>DIAGNOSIS</b>
+              <b>EVENT DIAGNOSIS</b>
               <div class="value-list">
                 <span *ngFor="let diagnosis of search.diagnosis" class="value">
                   {{diagnosis | displayValue:'name':this.diagnoses}}

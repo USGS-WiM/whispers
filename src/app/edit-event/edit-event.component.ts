@@ -49,8 +49,10 @@ export class EditEventComponent implements OnInit {
   eventID;
 
   editEventForm: FormGroup;
-  
+
   submitLoading = false;
+  basisAndCauseViolation = false;
+  completeEventLocationSpeciesNumbersViolation = false;
 
   buildEditEventForm() {
     this.editEventForm = this.formBuilder.group({
@@ -177,6 +179,57 @@ export class EditEventComponent implements OnInit {
     this.snackBar.open(message, action, {
       duration: duration,
     });
+  }
+
+  checkLocationSpeciesNumbers() {
+    this.completeEventLocationSpeciesNumbersViolation = false;
+
+    let completeEventLocationSpeciesNumbersViolated = false;
+    // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
+    if (this.data.eventData.event_type === 1 || this.data.eventData.event_type_string === 'Mortality/Morbidity') {
+      for (const eventlocation of this.data.eventData.eventlocations) {
+        for (const locationspecies of eventlocation.locationspecies) {
+
+          if (
+            (
+              locationspecies.sick_count +
+              locationspecies.dead_count +
+              locationspecies.sick_count_estimated +
+              locationspecies.dead_count_estimated
+            ) < 1
+          ) {
+            completeEventLocationSpeciesNumbersViolated = true;
+          }
+        }
+      }
+    }
+    if (completeEventLocationSpeciesNumbersViolated) {
+      this.completeEventLocationSpeciesNumbersViolation = true;
+    }
+  }
+
+
+  checkRulesEventComplete() {
+    this.basisAndCauseViolation = false;
+    // check to see if all event location species diagnoses
+    // have a basis and cause of diagnosis (using the common terms, not DB field names)
+    // loop through each event location > loop through each species
+    // if species has a diagnosis, must have non-null value for cause and basis fields
+    // if ANY of the species lack this, show error
+    let basisAndCauseRuleViolated = false;
+    for (const eventlocation of this.data.eventData.eventlocations) {
+      for (const locationspecies of eventlocation.locationspecies) {
+        for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+          if (speciesdiagnosis.cause === null || speciesdiagnosis.basis === null) {
+            basisAndCauseRuleViolated = true;
+          }
+        }
+      }
+    }
+    if (basisAndCauseRuleViolated) {
+      this.basisAndCauseViolation = true;
+    }
+
   }
 
   openCompleteWarning() {

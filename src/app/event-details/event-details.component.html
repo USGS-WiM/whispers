@@ -418,22 +418,25 @@
 
                 <ul *ngIf="eventData.comments.length > 0" class="eventDetailCommentsList">
                   <li *ngFor="let comment of eventData.comments">
+
                     <div class="comment-meta">
                       <span class="type">
                         <b>{{comment.comment_type | displayValue:'name':this.commentTypes}}</b>
                       </span>
-                      <span class="date">{{comment.created_date | date:'shortDate' }}</span><span
-                        class="identifier">{{comment.created_by_first_name}}
+                      <span class="date">{{comment.created_date | date:'shortDate' }}</span>
+                      <span class="identifier">{{comment.created_by_first_name}}
                         {{comment.created_by_last_name}} | {{comment.created_by_organization_string}}</span>
                       <button mat-icon-button aria-label="delete event comment" color="warn"
                         [disabled]="!eventData.permissions.destroy || eventData.complete"
-                        (click)="openEventCommentDeleteConfirm(comment.id)">
+                        (click)="openCommentDeleteConfirm(comment.id)">
                         Delete
                       </button>
                     </div>
+
                     <div class="comment-text">
                       {{comment.comment}}
                     </div>
+
                   </li>
                 </ul>
 
@@ -469,11 +472,13 @@
                 <div class="event-group-no-data" *ngIf="eventData.servicerequests.length === 0">No service requests to
                   show</div>
 
-                <ul *ngIf="eventData.servicerequests.length > 0" class="eventDetailCommentsList has-sub-comments">
+                <!-- <ul *ngIf="eventData.servicerequests.length > 0" class="eventDetailCommentsList has-sub-comments"> -->
+                <ul *ngIf="eventData.servicerequests.length > 0" class="eventDetailCommentsList">
                   <li *ngFor="let servicerequest of eventData.servicerequests; last as last">
                     <div class="comment-meta">
-                      <span class="type">
-                        <b>{{servicerequest.request_type_string}}</b>
+                      Request:&nbsp;
+                      <span class="text-bold">
+                        {{servicerequest.request_type_string}}&nbsp;&nbsp;
                       </span>
                       <span class="date">{{servicerequest.created_date | date:'mediumDate'}}</span>
                       <span class="response">Response: {{servicerequest.request_response_string}}</span>
@@ -482,12 +487,37 @@
                       <!-- Request: {{servicerequest.request_type_string}} <br> -->
 
                       <label>Comments</label><br>
-                      <span *ngIf="servicerequest.comments.length > 0">
-                        <div class="comment-response" *ngFor="let comment of servicerequest.comments">
-                          <span class="date">{{comment.created_date | date:'shortDate' }}</span>
-                          <span class="response-text">{{comment.comment}}</span>
-                        </div>
-                      </span>
+                      <!-- <span *ngIf="servicerequest.comments.length > 0"> -->
+
+                      <ul *ngIf="servicerequest.comments.length > 0" class="eventDetailCommentsList">
+                        <li *ngFor="let comment of servicerequest.comments">
+
+                          <div class="comment-meta">
+                            <span class="type">
+                              <b>{{comment.comment_type | displayValue:'name':this.commentTypes}}</b>
+                            </span>
+                            <span class="date">{{comment.created_date | date:'shortDate' }}</span>
+                            <span class="identifier">{{comment.created_by_first_name}}
+                              {{comment.created_by_last_name}} | {{comment.created_by_organization_string}}</span>
+                            <button mat-icon-button aria-label="delete event comment" color="warn"
+                              [disabled]="!eventData.permissions.destroy || eventData.complete"
+                              (click)="openCommentDeleteConfirm(comment.id)">
+                              Delete
+                            </button>
+                          </div>
+
+                          <div class="comment-text">
+                            {{comment.comment}}
+                          </div>
+
+                        </li>
+                      </ul>
+
+
+                      <!-- <div class="comment-response eventDetailCommentsList"
+                        *ngFor="let comment of servicerequest.comments">
+                      </div> -->
+                      <!-- </span> -->
                     </div>
 
                     <button mat-icon-button aria-label="add comment to service request" color="primary"
@@ -834,8 +864,7 @@
                   </button>
                 </div>
 
-                <div *ngIf="eventLocation.locationspecies.length > 0">
-
+                <div>
                   <div *ngIf="eventLocation.locationspecies" class="event-table-header">Species at this location</div>
 
                   <app-location-species-table [eventData]="eventData" [laboratories]="laboratories"

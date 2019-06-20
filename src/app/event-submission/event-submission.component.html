@@ -1277,9 +1277,9 @@
                             in the event at the time of event creation.</span>
                         </mat-error>
 
-                        <mat-error color="warn" *ngIf="closedEventLocationSpeciesNumbersViolation">
+                        <mat-error color="warn" *ngIf="completeEventLocationSpeciesNumbersViolation">
                           <mat-icon class="icon">error</mat-icon>
-                          <span class="alert-text">For morbidity/mortality events marked as Closed, there must be at
+                          <span class="alert-text">For morbidity/mortality events marked as Complete, there must be at
                             least
                             one value greater
                             than 0
@@ -1318,7 +1318,7 @@
                         </button>
                         <p>
                           <button mat-raised-button color="primary"
-                            [disabled]="eventSubmissionForm.invalid || duplicateEventOrgViolation || locationSpeciesNumbersViolation || closedEventLocationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation || submitLoading"
+                            [disabled]="eventSubmissionForm.invalid || duplicateEventOrgViolation || locationSpeciesNumbersViolation || completeEventLocationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation || submitLoading"
                             (click)="submitEvent(eventSubmissionForm.value)">
                             <mat-icon>done</mat-icon> Save Event
                           </button>

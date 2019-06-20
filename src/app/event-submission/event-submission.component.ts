@@ -204,7 +204,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   diagnosisCauses = [];
 
   locationSpeciesNumbersViolation = false;
-  closedEventLocationSpeciesNumbersViolation = false;
+  completeEventLocationSpeciesNumbersViolation = false;
   // starts as true  because no start dates provided by default
   locationStartDatesViolation = true;
   // starts as false because event must be complete = true to trigger violation
@@ -1423,7 +1423,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   checkLocationSpeciesNumbers() {
 
     this.locationSpeciesNumbersViolation = false;
-    this.closedEventLocationSpeciesNumbersViolation = false;
+    this.completeEventLocationSpeciesNumbersViolation = false;
     // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
     if (this.eventSubmissionForm.get('event_type').value === 1 || this.eventSubmissionForm.get('event_type').value === '1') {
       // set var to capture of requirement is met at any of the event locations
@@ -1480,9 +1480,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       }
 
       if (requirementMetEventClosed) {
-        this.closedEventLocationSpeciesNumbersViolation = false;
+        this.completeEventLocationSpeciesNumbersViolation = false;
       } else {
-        this.closedEventLocationSpeciesNumbersViolation = true;
+        this.completeEventLocationSpeciesNumbersViolation = true;
       }
     }
   }

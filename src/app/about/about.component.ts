@@ -15,7 +15,7 @@ export class AboutComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    gtag('event', 'click', {'event_category': 'About','event_label': 'About Modal Opened'});
+    gtag('event', 'click', {'event_category': 'About', 'event_label': 'About Modal Opened'});
   }
 
 }

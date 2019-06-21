@@ -1044,6 +1044,14 @@
                             </button>
                           </div>
 
+                          <div class="submissionReviewErrors">
+
+                            <mat-error color="warn" *ngIf="availableDiagnoses.length < 1">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">Please select a species diagnosis to populate event diagnosis selection list.</span>
+                            </mat-error>
+                          </div>
+
                         </div>
                         <!-- <mat-divider [inset]="true"></mat-divider> -->
                         <br>

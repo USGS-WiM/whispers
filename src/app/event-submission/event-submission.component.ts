@@ -1851,8 +1851,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   initEventDiagnosis() {
     return this.formBuilder.group({
-      // TODO: make this value configurbale for the "Undetermined" value
-      diagnosis: '469'
+      // TODO: make this value configurable for the "Undetermined" value
+      diagnosis: null
     });
   }
 

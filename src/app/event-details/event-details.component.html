@@ -891,19 +891,23 @@
   <div class="mapDiv">
     <mat-card>
       <div id="map">
-        <mat-card class="unmappable-warning" *ngIf="unMappables.length > 0"
-          matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
-          [matTooltipPosition]="'above'">
-          <span>
-            <mat-icon>warning</mat-icon>&nbsp;Some location data absent. The following locations are not mapped:
-
-            <span *ngFor="let unmappable of unMappables">{{unmappable.name}}
-              ({{unmappable.administrative_level_two_string}},
-              {{unmappable.administrative_level_one_string}})
-              <span *ngIf="(unMappables.indexOf(unmappable)) < (unMappables.length - 1)">;</span></span>
-
+        <span *ngIf="currentUser.username != ''">
+          <span *ngIf="currentUser.role !== 7">
+            <mat-card class="unmappable-warning" *ngIf="unMappables.length > 0"
+              matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
+              [matTooltipPosition]="'above'">
+              <span>
+                <mat-icon>warning</mat-icon>&nbsp;Some location data absent. The following locations are not mapped:
+        
+                <span *ngFor="let unmappable of unMappables">{{unmappable.name}}
+                  ({{unmappable.administrative_level_two_string}},
+                  {{unmappable.administrative_level_one_string}})
+                  <span *ngIf="(unMappables.indexOf(unmappable)) < (unMappables.length - 1)">;</span></span>
+        
+              </span>
+            </mat-card>
           </span>
-        </mat-card>
+        </span>
 
         <mat-expansion-panel id="legend" class="legend">
           <mat-expansion-panel-header>

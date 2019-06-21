@@ -17,21 +17,21 @@
     width: 35em;
 }
 
-.alert{ 
+.alert {
     width: 100%;
     background-color: lightcoral;
 }
 
-.nwhc-only{
+.nwhc-only {
     display: block;
     box-sizing: border-box;
     padding: 15px;
     margin: 25px 10px;
-    border: 1px solid rgba(0,0,0,0.125);
+    border: 1px solid rgba(0, 0, 0, 0.125);
     border-left: 4px solid #182041;
     background-color: #FAFCFF !important;
 
-    .nwhc-only-header{
+    .nwhc-only-header {
         display: block;
         box-sizing: border-box;
         font-size: 16px;
@@ -40,18 +40,46 @@
         margin-bottom: 10px;
     }
 }
+
 // Prev and next buttons
-.detail-section-buttons{
+.detail-section-buttons {
     display: flex;
     justify-content: center;
     width: 100%;
 
-    button{
+    button {
         position: relative;
         top: -2px;
 
-        &:hover{
+        &:hover {
             cursor: pointer;
+        }
+    }
+}
+
+.submissionReviewErrors {
+    display: block;
+    margin: 0 auto;
+    padding: 25px 0 40px 0;
+    width: 40em;
+
+    .mat-error {
+        display: flex;
+        margin: 6px 0;
+        width: 40em;
+
+        .mat-icon,
+        span {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        span {
+            font-size: 16px;
+            font-weight: 600;
+            padding-left: 4px;
+            padding-bottom: 1px;
         }
     }
 }

@@ -42,6 +42,9 @@ Mapping](https://wim.usgs.gov/)
 * **[Nick Estes](https://github.com/njestes)**  - *Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
 Mapping](https://wim.usgs.gov/)
 
+* **[Lauren Privette](https://github.com/lprivette)**  - *Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
+Mapping](https://wim.usgs.gov/)
+
 See also the list of [contributors](../../graphs/contributors) who participated in this project.
 
 ## License

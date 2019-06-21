@@ -25,6 +25,16 @@
         </mat-select>
       </mat-form-field>
 
+      <div class="text-bold text-larger diagnostic-info-text"
+        *ngIf="this.serviceRequestForm.get('request_type').value === 1">
+        For diagnostic services, indicate in comment A) species and numbers of FRESH carcasses
+        available to send, B) whether carcasses are chilled or frozen, and C) if
+        euthanized and how. See <span class="link"><a role="button" (click)="openDiagnosticInfoDialog();">Suitable
+            Specimen Criteria</a></span> for
+        details on suitable specimens. Wait for NWHC approval
+        before shipping.
+      </div>
+
       <div formArrayName="new_comments" *ngIf="data.action == 'add'">
         <div *ngFor="let comment of getComments(serviceRequestForm); let commentIndex = index"
           class="add-service-request-form">
@@ -54,7 +64,8 @@
       <div class="detail-section-buttons centered" *ngIf="data.action == 'add'">
         <button mat-button color="primary" matTooltip="Add comment" (click)="addComment()">
           <mat-icon>add_comment</mat-icon>
-          Add Comment <span style="opacity: 0.5;">(optional)</span>
+          Add Comment 
+          <!-- <span style="opacity: 0.5;">(optional)</span> -->
         </button>
       </div>
 

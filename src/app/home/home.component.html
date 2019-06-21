@@ -28,7 +28,8 @@
             (click)="register('public')">
             General User
           </button>
-          <button class="" mat-stroked-button matTooltip="Select this if you are a current Natural Resource Management Professional"
+          <button class="" mat-stroked-button
+            matTooltip="Select this if you are a current Natural Resource Management Professional"
             (click)="register('partner')">
             Natural Resource Management Professional
           </button>
@@ -57,16 +58,24 @@
 
           <h3 mat-subheader>Current Search</h3>
 
-          <mat-list-item *ngIf="(currentDisplayQuery.start_date !== null && currentDisplayQuery.start_date !== '') || (currentDisplayQuery.end_date !== null && currentDisplayQuery.end_date !== '')">
+          <mat-list-item
+            *ngIf="(currentDisplayQuery.start_date !== null && currentDisplayQuery.start_date !== '') || (currentDisplayQuery.end_date !== null && currentDisplayQuery.end_date !== '')">
             <h4 mat-line>
               <strong>Date Range</strong>
             </h4>
             <p mat-line>
-              <span *ngIf="currentDisplayQuery.start_date !== null || currentDisplayQuery.start_date !== ''">{{currentDisplayQuery.start_date | date:'mediumDate'}}</span>
-              <span style="color: lightcoral" *ngIf="currentDisplayQuery.start_date == null || currentDisplayQuery.start_date == ''">[no event start date entered]</span>
-              <span *ngIf="(currentDisplayQuery.start_date !== null) || (currentDisplayQuery.end_date !== null) || (currentDisplayQuery.start_date !== '') || (currentDisplayQuery.end_date !== '')">&nbsp;thru&nbsp;</span>
-              <span *ngIf="currentDisplayQuery.end_date !== null || currentDisplayQuery.end_date !== ''">{{currentDisplayQuery.end_date | date:'mediumDate'}}</span>
-              <span style="color: lightcoral" *ngIf="currentDisplayQuery.end_date == null || currentDisplayQuery.end_date == ''">[no event end date entered]</span>
+              <span
+                *ngIf="currentDisplayQuery.start_date !== null || currentDisplayQuery.start_date !== ''">{{currentDisplayQuery.start_date | date:'mediumDate'}}</span>
+              <span style="color: lightcoral"
+                *ngIf="currentDisplayQuery.start_date == null || currentDisplayQuery.start_date == ''">[no event start
+                date entered]</span>
+              <span
+                *ngIf="(currentDisplayQuery.start_date !== null) || (currentDisplayQuery.end_date !== null) || (currentDisplayQuery.start_date !== '') || (currentDisplayQuery.end_date !== '')">&nbsp;thru&nbsp;</span>
+              <span
+                *ngIf="currentDisplayQuery.end_date !== null || currentDisplayQuery.end_date !== ''">{{currentDisplayQuery.end_date | date:'mediumDate'}}</span>
+              <span style="color: lightcoral"
+                *ngIf="currentDisplayQuery.end_date == null || currentDisplayQuery.end_date == ''">[no event end date
+                entered]</span>
             </p>
           </mat-list-item>
 
@@ -86,7 +95,8 @@
               <strong>WHISPers Record Status</strong>
             </h4>
             <p mat-line>
-              <span> {{ currentDisplayQuery.complete === true ? 'Complete Events Only' :
+              <span>
+                {{ currentDisplayQuery.complete === true ? 'Complete Events Only' :
                 currentDisplayQuery.complete === false ? 'Incomplete Events Only' : 'Complete and incomplete events' }}</span>
             </p>
           </mat-list-item>
@@ -98,7 +108,8 @@
             <p mat-line>
               <!-- <span>{{currentDisplayQuery.event_type}}</span> -->
               <span *ngFor="let event_type of currentDisplayQuery.event_type">{{event_type}}
-                <span *ngIf="(currentDisplayQuery.event_type.indexOf(event_type)) < (currentDisplayQuery.event_type.length - 1)">or&nbsp;</span>
+                <span
+                  *ngIf="(currentDisplayQuery.event_type.indexOf(event_type)) < (currentDisplayQuery.event_type.length - 1)">or&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
@@ -109,7 +120,8 @@
             </h4>
             <p mat-line>
               <span *ngFor="let diagnosis_type of currentDisplayQuery.diagnosis_type">{{diagnosis_type}}
-                <span *ngIf="(currentDisplayQuery.diagnosis_type.indexOf(diagnosis_type)) < (currentDisplayQuery.diagnosis_type.length - 1)">{{(currentDisplayQuery.diagnosis_type_includes_all)
+                <span
+                  *ngIf="(currentDisplayQuery.diagnosis_type.indexOf(diagnosis_type)) < (currentDisplayQuery.diagnosis_type.length - 1)">{{(currentDisplayQuery.diagnosis_type_includes_all)
                   ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
@@ -121,7 +133,8 @@
             </h4>
             <p mat-line>
               <span *ngFor="let diagnosis of currentDisplayQuery.diagnosis">{{diagnosis}}
-                <span *ngIf="(currentDisplayQuery.diagnosis.indexOf(diagnosis)) < (currentDisplayQuery.diagnosis.length - 1)">{{(currentDisplayQuery.diagnosis_includes_all)
+                <span
+                  *ngIf="(currentDisplayQuery.diagnosis.indexOf(diagnosis)) < (currentDisplayQuery.diagnosis.length - 1)">{{(currentDisplayQuery.diagnosis_includes_all)
                   ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
@@ -139,25 +152,29 @@
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.administrative_level_one && currentDisplayQuery.administrative_level_one.length > 0">
+          <mat-list-item
+            *ngIf="currentDisplayQuery.administrative_level_one && currentDisplayQuery.administrative_level_one.length > 0">
             <h4 mat-line>
               <strong>State</strong>
             </h4>
             <p mat-line>
               <span *ngFor="let adminLevelOne of currentDisplayQuery.administrative_level_one">{{adminLevelOne}}
-                <span *ngIf="(currentDisplayQuery.administrative_level_one.indexOf(adminLevelOne)) < (currentDisplayQuery.administrative_level_one.length - 1)">{{(currentDisplayQuery.administrative_level_one_includes_all)
+                <span
+                  *ngIf="(currentDisplayQuery.administrative_level_one.indexOf(adminLevelOne)) < (currentDisplayQuery.administrative_level_one.length - 1)">{{(currentDisplayQuery.administrative_level_one_includes_all)
                   ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
           </mat-list-item>
 
-          <mat-list-item *ngIf="currentDisplayQuery.administrative_level_two && currentDisplayQuery.administrative_level_two.length > 0">
+          <mat-list-item
+            *ngIf="currentDisplayQuery.administrative_level_two && currentDisplayQuery.administrative_level_two.length > 0">
             <h4 mat-line>
               <strong>County</strong>
             </h4>
             <p mat-line>
               <span *ngFor="let adminLevelTwo of currentDisplayQuery.administrative_level_two">{{adminLevelTwo}}
-                <span *ngIf="(currentDisplayQuery.administrative_level_two.indexOf(adminLevelTwo)) < (currentDisplayQuery.administrative_level_two.length - 1)">{{(currentDisplayQuery.administrative_level_two_includes_all)
+                <span
+                  *ngIf="(currentDisplayQuery.administrative_level_two.indexOf(adminLevelTwo)) < (currentDisplayQuery.administrative_level_two.length - 1)">{{(currentDisplayQuery.administrative_level_two_includes_all)
                   ? "and" : "or"}}&nbsp;</span>
               </span>
             </p>
@@ -170,7 +187,8 @@
 
       <!-- Save search & Search button -->
       <mat-action-row class="search-button-row">
-        <button mat-button color="accent" (click)="saveSearch()" matTooltip="Save the currently displayed search to your user profile">
+        <button mat-button color="accent" (click)="saveSearch()"
+          matTooltip="Save the currently displayed search to your user profile">
           <mat-icon>save</mat-icon> Save Search
         </button>
 
@@ -212,7 +230,8 @@
               <div class="value-list">
                 <span *ngFor="let eventType of search.event_type" class="value">
                   {{eventType | displayValue:'name':this.eventTypes}}
-                  <span *ngIf="(search.event_type.indexOf(eventType)) < (search.event_type.length - 1)" class="value-list-or">
+                  <span *ngIf="(search.event_type.indexOf(eventType)) < (search.event_type.length - 1)"
+                    class="value-list-or">
                     or
                   </span>
                 </span>
@@ -239,7 +258,8 @@
               <div class="value-list">
                 <span *ngFor="let diagnosis of search.diagnosis" class="value">
                   {{diagnosis | displayValue:'name':this.diagnoses}}
-                  <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)" class="value-list-or">
+                  <span *ngIf="(search.diagnosis.indexOf(diagnosis)) < (search.diagnosis.length - 1)"
+                    class="value-list-or">
                     {{(search.diagnosis_includes_all) ? "and" : "or"}}
                   </span>
                 </span>
@@ -265,7 +285,8 @@
               <div class="value-list">
                 <span *ngFor="let adminLevel1 of search.administrative_level_one" class="value">
                   {{adminLevel1 | displayValue:'name':this.administrative_level_one}}
-                  <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)"
+                  <span
+                    *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)"
                     class="value-list-or">
                     {{(search.administrative_level_one_includes_all) ? "and" : "or"}}
                   </span>
@@ -279,7 +300,8 @@
               <div class="value-list">
                 <span *ngFor="let adminLevel2 of search.administrative_level_two" class="value">
                   {{adminLevel2 | displayValue:'name':this.administrative_level_two}}
-                  <span *ngIf="(search.administrative_level_two.indexOf(adminLevel2)) < (search.administrative_level_two.length - 1)"
+                  <span
+                    *ngIf="(search.administrative_level_two.indexOf(adminLevel2)) < (search.administrative_level_two.length - 1)"
                     class="value-list-or">
                     {{(search.administrative_level_two_includes_all) ? "and" : "or"}}\
                   </span>
@@ -328,7 +350,8 @@
 
         <div id="latLngScale" class="latLngScale">
           <span class="hover-content"> <b>Map scale </b></span>
-          1:<span id="scale">{{mapScale}}</span> | <span class="hover-content"> <b>Zoom level </b></span> <span id="zoomLevel">
+          1:<span id="scale">{{mapScale}}</span> | <span class="hover-content"> <b>Zoom level </b></span> <span
+            id="zoomLevel">
             {{zoomLevel}}</span><br>
           <span class="hover-content"><b>Latitude</b></span>
           <span id="latitude"> {{latitude}}</span> |
@@ -404,6 +427,8 @@
               <label>Virus</label>
             </div>
 
+            <label class="legend-hint">White center indicates incomplete event</label>
+
             <!-- <div class='legend-icon'>
               <div class='wmm-square wmm-mutedblue wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
               <label style="font-style: italic;">Multiple</label>
@@ -413,13 +438,13 @@
             <!-- <label class="legend-hint">Number indicates event count</label>
             <label class="legend-hint">White center indicates incomplete event</label> -->
 
-            <label class="legend-label">Multiple Events</label>
+            <label class="legend-label">Multiple Events in One County (or equivalent)</label>
             <div class='legend-icon' style="padding-bottom: 5px;">
               <div class='wmm-square wmm-mutedblue wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
               <label style="font-size: 13px">Multiple Diagnosis Types</label>
             </div>
             <label class="legend-hint">Number indicates event count</label>
-            <label class="legend-hint">White center indicates incomplete event</label>
+
 
 
             <div id="flywaysLegend" *ngIf="flywaysVisible">
@@ -527,14 +552,18 @@
 
             <!-- Location Column -->
             <ng-container matColumnDef="locations">
-              <mat-header-cell *matHeaderCellDef matTooltip="Displayed as County (or equivalent), State (or equivalent), Country - where values are available">Location</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef
+                matTooltip="Displayed as County (or equivalent), State (or equivalent), Country - where values are available">
+                Location</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let administrativeleveltwo of event.administrativeleveltwos">
                     <span>{{administrativeleveltwo.name}}</span>
-                    <span *ngIf="administrativeleveltwo.administrative_level_one_string !== null && administrativeleveltwo.administrative_level_one_string !== ''">,&nbsp;</span>
+                    <span
+                      *ngIf="administrativeleveltwo.administrative_level_one_string !== null && administrativeleveltwo.administrative_level_one_string !== ''">,&nbsp;</span>
                     <span>{{administrativeleveltwo.administrative_level_one_string}}</span>
-                    <span *ngIf="administrativeleveltwo.country_string !== null && administrativeleveltwo.country_string !== ''">,&nbsp;</span>
+                    <span
+                      *ngIf="administrativeleveltwo.country_string !== null && administrativeleveltwo.country_string !== ''">,&nbsp;</span>
                     <span>{{administrativeleveltwo.country_string}}
                     </span>
 

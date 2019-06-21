@@ -57,7 +57,7 @@
   <!-- End Events tab-->
 
   <!-- Event Groups tab-->
-  <mat-tab label="Event Groups"  *ngIf="currentUser.role === 1 || currentUser.role === 2">
+  <mat-tab label="Event Groups" *ngIf="currentUser.role === 1 || currentUser.role === 2">
     <mat-card>
       <div class="app-event-group">
         <app-event-group></app-event-group>
@@ -67,7 +67,7 @@
   <!-- End Event Groups tab-->
 
   <!-- Your Events Tab -->
-  <mat-tab label="Your Events">
+  <mat-tab label="Your Events" *ngIf="currentUser.role !== 7">
     <mat-card>
       <div class="user-events-div">
         <app-user-events></app-user-events>
@@ -77,7 +77,7 @@
   <!-- End Your Events Tab -->
 
   <!-- Contacts tab -->
-  <mat-tab label="Contacts">
+  <mat-tab label="Contacts" *ngIf="currentUser.role !== 7">
 
     <mat-card>
       <mat-card-title>
@@ -188,7 +188,7 @@
   <!-- End Saved Searches Tab -->
 
   <!-- Circles Tab -->
-  <mat-tab label="Circles">
+  <mat-tab label="Circles" *ngIf="currentUser.role !== 7">
     <div class="circles-div">
       <app-circles></app-circles>
     </div>

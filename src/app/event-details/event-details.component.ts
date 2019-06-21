@@ -801,7 +801,7 @@ export class EventDetailsComponent implements OnInit {
     // Open dialog for adding event location contact
     this.addServiceRequestDialogRef = this.dialog.open(AddServiceRequestComponent, {
       disableClose: true,
-      // minWidth: '60%',
+      minWidth: '75%',
       data: {
         event_id: id,
         comment_types: this.commentTypes,
@@ -827,7 +827,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
 
-  deleteEventComment(id: number) {
+  deleteComment(id: number) {
     this.commentService.delete(id)
       .subscribe(
         () => {
@@ -842,11 +842,11 @@ export class EventDetailsComponent implements OnInit {
 
   }
 
-  openEventCommentDeleteConfirm(id) {
+  openCommentDeleteConfirm(id) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
         data: {
-          title: 'Delete Event Comment Confirm',
+          title: 'Delete Comment Confirm',
           titleIcon: 'delete_forever',
           // tslint:disable-next-line:max-line-length
           message: 'Are you sure you want to delete this comment?\nThis action cannot be undone.',
@@ -859,7 +859,7 @@ export class EventDetailsComponent implements OnInit {
 
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.deleteEventComment(id);
+        this.deleteComment(id);
       }
     });
   }

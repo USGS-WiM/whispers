@@ -57,7 +57,7 @@
 
       <!-- DIAGNOSIS -->
       <span class="search-param" *ngIf="search.diagnosis">
-        <b>DIAGNOSIS</b>
+        <b>EVENT DIAGNOSIS</b>
         <div class="value-list">
           <span *ngFor="let diagnosis of search.diagnosis" class="value">
             {{diagnosis | displayValue:'name':this.diagnoses}}

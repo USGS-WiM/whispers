@@ -10,7 +10,7 @@
 
       <!-- Username -->
       <mat-form-field class="form-control">
-        <input matInput placeholder="Username" formControlName="username">
+        <input matInput placeholder="Username" formControlName="username" required>
       </mat-form-field>
 
       <div class="horizontal-form-container">
@@ -48,11 +48,11 @@
 
         <!-- Password -->
         <mat-form-field class="form-control">
-          <input matInput type="password" placeholder="Password" formControlName="password">
+          <input matInput type="password" placeholder="Password" formControlName="password" required>
         </mat-form-field>
         <!-- Confirm Password -->
         <mat-form-field class="form-control">
-          <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword">
+          <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword" required>
           <mat-error *ngIf="userRegistrationForm.controls.confirmPassword.errors?.matchPassword">Passwords do not match
           </mat-error>
           <mat-error *ngIf="userRegistrationForm.controls.password.errors">Passwords do not meet requirements

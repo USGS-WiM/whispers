@@ -103,7 +103,7 @@
             {{adminLevel2 | displayValue:'name':this.administrative_level_two}}
             <span *ngIf="(search.administrative_level_two.indexOf(adminLevel2)) < (search.administrative_level_two.length - 1)"
               class="value-list-or">
-              {{(search.administrative_level_two_includes_all) ? "and" : "or"}}\
+              {{(search.administrative_level_two_includes_all) ? "and" : "or"}}
             </span>
           </span>
         </div>

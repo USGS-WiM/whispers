@@ -96,6 +96,8 @@ export class SavedSearchesComponent implements OnInit {
         (searches) => {
           this.searches = searches;
 
+          this.searches.reverse();
+
           for (const search of this.searches) {
             const parsedSearch = APP_UTILITIES.parseSearch(search);
             this.parsedSearches.push(parsedSearch);

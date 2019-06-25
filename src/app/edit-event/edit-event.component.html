@@ -47,6 +47,24 @@
 
       </div>
 
+       <div class="submissionReviewErrors">
+        <mat-error color="warn" *ngIf="basisAndCauseViolation">
+          <mat-icon class="icon">error</mat-icon>
+          <span class="alert-text">The event may not be marked complete until all of its location species
+            diagnoses have a basis of diagnosis and significance of diagnosis selected.</span>
+        </mat-error>
+
+        <mat-error color="warn" *ngIf="completeEventLocationSpeciesNumbersViolation">
+          <mat-icon class="icon">error</mat-icon>
+          <span class="alert-text">For morbidity/mortality events marked as Complete, there must be at
+            least
+            one value greater
+            than 0
+            between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for all species
+            in the event.</span>
+        </mat-error>
+      </div>
+
       <!--Event Organization select removed because it needs to treated as an individual for CRUD -->
       <!----------------------------------------------->
       <!-- <div formArrayName="new_organizations">
@@ -144,7 +162,7 @@
         </mat-card-content>
       </mat-card>
       <!-- End NWHC staff only section -->
-      <div class="submissionReviewErrors">
+      <!-- <div class="submissionReviewErrors">
         <mat-error color="warn" *ngIf="basisAndCauseViolation">
           <mat-icon class="icon">error</mat-icon>
           <span class="alert-text">The event may not be marked complete until all of its location species
@@ -160,7 +178,7 @@
             between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for all species
             in the event.</span>
         </mat-error>
-      </div>
+      </div> -->
 
     </div>
 

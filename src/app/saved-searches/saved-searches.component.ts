@@ -14,6 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { APP_UTILITIES } from '@app/app.utilities';
 import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
+import { DataUpdatedService } from '@app/services/data-updated.service';
 import { AdministrativeLevelOneService } from '@app/services/administrative-level-one.service';
 import { AdministrativeLevelTwoService } from '@app/services/administrative-level-two.service';
 import { EventTypeService } from '@app/services/event-type.service';
@@ -54,6 +55,7 @@ export class SavedSearchesComponent implements OnInit {
   selection;
 
   speciesLoading = false;
+  searchesLoading = false;
 
 
   searchDisplayedColumns = [
@@ -72,6 +74,7 @@ export class SavedSearchesComponent implements OnInit {
     private dialog: MatDialog,
     private displayValuePipe: DisplayValuePipe,
     private searchDialogService: SearchDialogService,
+    private dataUpdatedService: DataUpdatedService,
     private adminLevelOneService: AdministrativeLevelOneService,
     private adminLevelTwoService: AdministrativeLevelTwoService,
     private eventTypeService: EventTypeService,
@@ -81,59 +84,24 @@ export class SavedSearchesComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
 
+    dataUpdatedService.trigger.subscribe((action) => {
+      if (action === 'refresh') {
+        this.loadSavedSearches();
+      }
+    });
+
   }
 
   ngOnInit() {
 
     this.speciesLoading = true;
+    this.searchesLoading = true;
 
     const initialSelection = [];
     const allowMultiSelect = true;
     this.selection = new SelectionModel<any>(allowMultiSelect, initialSelection);
 
-    this._searchService.getUserDashboardSearches()
-      .subscribe(
-        (searches) => {
-          this.searches = searches;
-
-          for (const search of this.searches) {
-            const parsedSearch = APP_UTILITIES.parseSearch(search);
-            this.parsedSearches.push(parsedSearch);
-          }
-
-          // build a list of relevant adminL1s
-          let adminLevelOnes = [];
-          for (const parsedSearch of this.parsedSearches) {
-            if (parsedSearch.administrative_level_one) {
-              for (const adminLevelOne of parsedSearch.administrative_level_one) {
-                adminLevelOnes.push(adminLevelOne);
-              }
-            }
-          }
-
-          // query adminL2s from the relevant adminL1 list
-          adminLevelOnes = adminLevelOnes.map(function (e) {
-            return JSON.stringify(e);
-          });
-          const adminLevelOneString = adminLevelOnes.join(',');
-          this.adminLevelTwoService.queryAdminLevelTwos(adminLevelOneString)
-            .subscribe(
-              (adminLevelTwos) => {
-                this.administrative_level_two = adminLevelTwos;
-              },
-              error => {
-                this.errorMessage = <any>error;
-              }
-            );
-
-          this.savedSearchesDataSource = new MatTableDataSource(this.parsedSearches);
-          this.savedSearchesDataSource.paginator = this.searchPaginator;
-          this.savedSearchesDataSource.sort = this.searchSort;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.loadSavedSearches();
 
     // get event types from the eventType service
     this.eventTypeService.getEventTypes()
@@ -188,6 +156,58 @@ export class SavedSearchesComponent implements OnInit {
         }
       );
 
+
+  }
+
+  loadSavedSearches() {
+
+    this.parsedSearches = [];
+    this._searchService.getUserDashboardSearches()
+      .subscribe(
+        (searches) => {
+          this.searches = searches;
+
+          this.searches.reverse();
+
+          for (const search of this.searches) {
+            const parsedSearch = APP_UTILITIES.parseSearch(search);
+            this.parsedSearches.push(parsedSearch);
+          }
+
+          // build a list of relevant adminL1s
+          let adminLevelOnes = [];
+          for (const parsedSearch of this.parsedSearches) {
+            if (parsedSearch.administrative_level_one) {
+              for (const adminLevelOne of parsedSearch.administrative_level_one) {
+                adminLevelOnes.push(adminLevelOne);
+              }
+            }
+          }
+
+          // query adminL2s from the relevant adminL1 list
+          adminLevelOnes = adminLevelOnes.map(function (e) {
+            return JSON.stringify(e);
+          });
+          const adminLevelOneString = adminLevelOnes.join(',');
+          this.adminLevelTwoService.queryAdminLevelTwos(adminLevelOneString)
+            .subscribe(
+              (adminLevelTwos) => {
+                this.administrative_level_two = adminLevelTwos;
+              },
+              error => {
+                this.errorMessage = <any>error;
+              }
+            );
+
+          this.savedSearchesDataSource = new MatTableDataSource(this.parsedSearches);
+          this.savedSearchesDataSource.paginator = this.searchPaginator;
+          this.savedSearchesDataSource.sort = this.searchSort;
+          this.searchesLoading = false;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
   }
 

@@ -41,7 +41,7 @@
         </button>
 
         <!-- Create Event -->
-        <button mat-button aria-label="Create Event" *ngIf="currentUser.username != ''" (click)="navigateToEventSubmit()">
+        <button mat-button aria-label="Create Event" *ngIf="currentUser.username !== '' && currentUser.role !== 7 && currentUser.role !== 6" (click)="navigateToEventSubmit()">
           <i class="material-icons">library_add</i>
           <span class="header-button-text">Create Event</span>
         </button>

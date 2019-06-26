@@ -38,7 +38,7 @@
   </mat-card-actions>
 
   <mat-card-actions>
-    <button mat-button (click)="openNewLookupRequestDialog()" [disabled]="currentUser.role === 7">
+    <button mat-button (click)="openNewLookupRequestDialog()" *ngIf="currentUser.role !== 7">
       <mat-icon>add</mat-icon> Request New Species, Organization, or Diagnosis
     </button>
   </mat-card-actions>

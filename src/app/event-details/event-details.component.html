@@ -256,7 +256,7 @@
           <div class="event-detail-wrapper">
 
             <div class="privileged-meta">
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Event Owner</div>
                 <div class="value">
                   <span>{{eventData.created_by_first_name}} {{eventData.created_by_last_name}}
@@ -280,11 +280,11 @@
                 <div class="label">Last Modified Date</div>
                 <div class="value">{{eventData.modified_date || " "}}</div>
               </div>
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Staff</div>
                 <div class="value">{{eventData.staff_string}}</div>
               </div>
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Quality Check</div>
                 <div class="value">{{eventData.quality_check === null ? 'Not Done' : eventData.quality_check !== null ?
                   (eventData.quality_check | date:'shortDate') : 'Not Done' }}</div>
@@ -293,11 +293,11 @@
                 <div class="label">WHISPers Record Status</div>
                 <div class="value">{{eventData.complete ? 'Complete' : 'Incomplete'}}</div>
               </div>
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Legal Status</div>
                 <div class="value">{{eventData.legal_status_string || " "}}</div>
               </div>
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Legal Number</div>
                 <div class="value">{{eventData.legal_number || " "}}</div>
               </div>
@@ -918,7 +918,9 @@
   <div class="mapDiv">
     <mat-card>
       <div id="map">
-        <mat-card class="unmappable-warning" *ngIf="unMappables.length > 0"
+
+        <mat-card class="unmappable-warning"
+          *ngIf="unMappables.length > 0 && currentUser.username != '' && currentUser.role !== 7"
           matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
           [matTooltipPosition]="'above'">
           <span>
@@ -931,6 +933,7 @@
 
           </span>
         </mat-card>
+
 
         <mat-expansion-panel id="legend" class="legend">
           <mat-expansion-panel-header>
@@ -946,26 +949,33 @@
               <label>Event Location</label>
             </div>
 
+            <div class='legend-icon'>
+              <div class='wmm-square wmm-00f wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+              <label>County</label>
+            </div>
+
 
             <div id="flywaysLegend">
               <!-- <div id="flywaysLegend" *ngIf="flywaysVisible"> -->
               <label class="legend-label">Flyways</label>
 
               <div class='legend-icon'>
-                <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-blue'></div>
+                <div class='wmm-square wmm-28995b wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
                 <label>Atlantic Flyways</label>
               </div>
 
               <div class='legend-icon'>
-                <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-yellow'></div>
+                <div class='wmm-square wmm-b43cc7 wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
                 <label>Central Flyway</label>
               </div>
+
               <div class='legend-icon'>
-                <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-green'></div>
+                <div class='wmm-square wmm-eb5834 wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
                 <label>Mississippi Flyway</label>
               </div>
+
               <div class='legend-icon'>
-                <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-red'></div>
+                <div class='wmm-square wmm-ffbd4f wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
                 <label>Pacific Flyway</label>
               </div>
             </div>

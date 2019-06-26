@@ -16,6 +16,8 @@ import { AgeBias } from '@interfaces/age-bias';
 import { SexBias } from '@interfaces/sex-bias';
 
 import { LocationSpeciesService } from '@services/location-species.service';
+import { AgeBiasService } from '@app/services/age-bias.service';
+import { SexBiasService } from '@app/services/sex-bias.service';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
 declare let gtag: Function;
@@ -106,6 +108,8 @@ export class EditLocationSpeciesComponent implements OnInit {
     private formBuilder: FormBuilder,
     public editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>,
     private locationSpeciesService: LocationSpeciesService,
+    private ageBiasService: AgeBiasService,
+    private sexBiasService: SexBiasService,
     private dataUpdatedService: DataUpdatedService,
     public snackBar: MatSnackBar,
     private speciesService: SpeciesService,
@@ -115,6 +119,26 @@ export class EditLocationSpeciesComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.ageBiasService.getAgeBiases()
+      .subscribe(
+        ageBiases => {
+          this.ageBiases = ageBiases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    this.sexBiasService.getSexBiases()
+      .subscribe(
+        sexBiases => {
+          this.sexBiases = sexBiases;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
     // populate the search select options for the species control
     this.filteredSpecies.next(this.data.species);
@@ -162,6 +186,13 @@ export class EditLocationSpeciesComponent implements OnInit {
         age_bias: this.data.locationspecies.age_bias,
         sex_bias: this.data.locationspecies.sex_bias,
       });
+
+      if (this.data.locationspecies.age_bias !== null) {
+        this.locationSpeciesForm.get('age_bias').setValue(this.data.locationspecies.age_bias.toString());
+      }
+      if (this.data.locationspecies.sex_bias !== null) {
+        this.locationSpeciesForm.get('sex_bias').setValue(this.data.locationspecies.sex_bias.toString());
+      }
 
       //this.locationSpeciesForm.get('species').disable();
 

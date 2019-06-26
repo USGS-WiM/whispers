@@ -4,6 +4,8 @@
 
 <mat-dialog-content>
 
+  <span class="text-smaller text-italic">Circles can be created from your User Dashboard.</span>
+
   <mat-form-field class="form-control full-width">
     <mat-select placeholder="Circle" [formControl]="circleControl">
       <mat-option *ngFor="let circle of userCircles" [value]="circle">{{circle.name}} | {{circle.description}}

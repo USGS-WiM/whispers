@@ -326,6 +326,14 @@ input[type=checkbox]{
     font-size: larger;
 }
 
+// Fix loading spinner on multiselect/type dropdown
+// Position absolute at right so it doesn't bump down a line
+// ref: https://github.com/USGS-WiM/whispers/issues/425
+.mat-form-field-wrapper .mat-spinner {
+    position: absolute !important;
+    right: 0;
+}
+
 
 // =====================================================================================================================
 // =====================================================================================================================
@@ -595,6 +603,10 @@ input[type=checkbox]{
     }
 }
 
+// Change spacing between form elements 
+.form-control{
+	margin: 6px 10px !important;
+}
 
 
 // =====================================================================================================================
@@ -618,7 +630,6 @@ input[type=checkbox]{
     padding: 0;
 
     .mat-expansion-panel-body{
-        max-height: 210px !important;
         overflow: auto !important;
     }
 
@@ -653,6 +664,8 @@ input[type=checkbox]{
 #mapPanel .mat-expansion-panel-body{
     padding: 0 !important;
 }
+
+
 
 
 

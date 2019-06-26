@@ -27,13 +27,15 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
-        <mat-error *ngIf="this.locationSpeciesForm.get('population_count').hasError('min')">Minimum value is 0</mat-error>
+        <mat-error *ngIf="this.locationSpeciesForm.get('population_count').hasError('min')">Minimum value is 0
+        </mat-error>
         <mat-error *ngIf="this.locationSpeciesForm.get('population_count').hasError('integer')">Must be an integer
           (whole number)</mat-error>
       </mat-form-field>
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count" (ngModelChange)="checkLocationSpeciesNumbers()">
+        <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count"
+          (ngModelChange)="checkLocationSpeciesNumbers()">
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -48,7 +50,8 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
-        <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('min')">Minimum value is 0</mat-error>
+        <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('min')">Minimum value is 0
+        </mat-error>
         <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('integer')">Must be an integer
           (whole number)</mat-error>
         <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('estimatedDead')">Must be
@@ -72,7 +75,8 @@
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
-        <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('min')">Minimum value is 0</mat-error>
+        <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('min')">Minimum value is 0
+        </mat-error>
         <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('integer')">Must be an integer
           (whole number)</mat-error>
         <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('estimatedSick')">Must be
@@ -83,6 +87,7 @@
     <div class="horizontal-form-container">
       <mat-form-field class="species-bias-control">
         <mat-select placeholder="Age Bias" formControlName="age_bias">
+          <mat-option [value]="null">--</mat-option>
           <mat-option *ngFor="let ageBias of ageBiases" value="{{ageBias.id}}">{{ageBias.name}}</mat-option>
         </mat-select>
         <mat-hint align="end" matTooltip="Public field">
@@ -92,6 +97,7 @@
 
       <mat-form-field class="species-bias-control">
         <mat-select placeholder="Sex Bias" formControlName="sex_bias">
+          <mat-option [value]="null">--</mat-option>
           <mat-option *ngFor="let sexBias of sexBiases" value="{{sexBias.id}}">{{sexBias.name}}</mat-option>
         </mat-select>
         <mat-hint align="end" matTooltip="Public field">
@@ -126,8 +132,12 @@
   <button mat-button color="warn" (click)="this.editLocationSpeciesDialogRef.close('cancel');">
     <mat-icon>cancel</mat-icon>&nbsp;Cancel
   </button>
-  <button mat-button color="primary" type="submit" [disabled]="locationSpeciesForm.invalid" (click)="onSubmit(locationSpeciesForm.value)">
+  <button mat-button color="primary" type="submit" (click)="onSubmit(locationSpeciesForm.value)">
     <mat-icon>send</mat-icon> {{action_button_text}}
   </button>
+  <!-- <button mat-button color="primary" type="submit" [disabled]="locationSpeciesForm.invalid"
+  (click)="onSubmit(locationSpeciesForm.value)">
+  <mat-icon>send</mat-icon> {{action_button_text}}
+</button> -->
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

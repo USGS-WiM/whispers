@@ -433,13 +433,13 @@ export class EventDetailsComponent implements OnInit {
         url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
         style: function (feature) {
           if (feature.properties.NAME === 'Atlantic Flyway') {
-            return { color: 'blue', weight: 2 };
+            return { color: '#28995b', weight: 2 };
           } else if (feature.properties.NAME === 'Pacific Flyway') {
-            return { color: 'red', weight: 2 };
+            return { color: '#ffbd4f', weight: 2 };
           } else if (feature.properties.NAME === 'Mississippi Flyway') {
-            return { color: 'green', weight: 2 };
+            return { color: '#eb5834', weight: 2 };
           } else if (feature.properties.NAME === 'Central Flyway') {
-            return { color: 'yellow', weight: 2 };
+            return { color: '#b43cc7', weight: 2 };
           }
         }
       });
@@ -451,7 +451,7 @@ export class EventDetailsComponent implements OnInit {
       });
 
       // Land use hosted by USGS
-      var landUse = esri.dynamicMapLayer({
+      const landUse = esri.dynamicMapLayer({
         url: 'https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer',
         opacity: 0.7
       });

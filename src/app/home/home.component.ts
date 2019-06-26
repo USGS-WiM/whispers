@@ -351,13 +351,13 @@ export class HomeComponent implements OnInit {
               url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
               style: function (feature) {
                 if (feature.properties.NAME === 'Atlantic Flyway') {
-                  return { color: 'blue', weight: 2 };
+                  return { color: '#28995b', weight: 2 };
                 } else if (feature.properties.NAME === 'Pacific Flyway') {
-                  return { color: 'red', weight: 2 };
+                  return { color: '#ffbd4f', weight: 2 };
                 } else if (feature.properties.NAME === 'Mississippi Flyway') {
-                  return { color: 'green', weight: 2 };
+                  return { color: '#eb5834', weight: 2 };
                 } else if (feature.properties.NAME === 'Central Flyway') {
-                  return { color: 'yellow', weight: 2 };
+                  return { color: '#b43cc7', weight: 2 };
                 }
               }
             });
@@ -371,7 +371,7 @@ export class HomeComponent implements OnInit {
             const overlays = {
               'Flyways': flyways,
               'Watersheds (HUC 2)': watersheds
-            }
+            };
 
             L.control.layers(baseMaps, overlays, { position: 'topleft' }).addTo(this.map);
             L.control.scale({ position: 'bottomright' }).addTo(this.map);

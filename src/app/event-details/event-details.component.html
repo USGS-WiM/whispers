@@ -256,7 +256,7 @@
           <div class="event-detail-wrapper">
 
             <div class="privileged-meta">
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Event Owner</div>
                 <div class="value">
                   <span>{{eventData.created_by_first_name}} {{eventData.created_by_last_name}}
@@ -280,11 +280,11 @@
                 <div class="label">Last Modified Date</div>
                 <div class="value">{{eventData.modified_date || " "}}</div>
               </div>
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Staff</div>
                 <div class="value">{{eventData.staff_string}}</div>
               </div>
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Quality Check</div>
                 <div class="value">{{eventData.quality_check === null ? 'Not Done' : eventData.quality_check !== null ?
                   (eventData.quality_check | date:'shortDate') : 'Not Done' }}</div>
@@ -293,11 +293,11 @@
                 <div class="label">WHISPers Record Status</div>
                 <div class="value">{{eventData.complete ? 'Complete' : 'Incomplete'}}</div>
               </div>
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Legal Status</div>
                 <div class="value">{{eventData.legal_status_string || " "}}</div>
               </div>
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Legal Number</div>
                 <div class="value">{{eventData.legal_number || " "}}</div>
               </div>
@@ -918,23 +918,22 @@
   <div class="mapDiv">
     <mat-card>
       <div id="map">
-        <span *ngIf="currentUser.username != ''">
-          <span *ngIf="currentUser.role !== 7">
-            <mat-card class="unmappable-warning" *ngIf="unMappables.length > 0"
-              matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
-              [matTooltipPosition]="'above'">
-              <span>
-                <mat-icon>warning</mat-icon>&nbsp;Some location data absent. The following locations are not mapped:
-        
-                <span *ngFor="let unmappable of unMappables">{{unmappable.name}}
-                  ({{unmappable.administrative_level_two_string}},
-                  {{unmappable.administrative_level_one_string}})
-                  <span *ngIf="(unMappables.indexOf(unmappable)) < (unMappables.length - 1)">;</span></span>
-        
-              </span>
-            </mat-card>
+
+        <mat-card class="unmappable-warning"
+          *ngIf="unMappables.length > 0 && currentUser.username != '' && currentUser.role !== 7"
+          matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
+          [matTooltipPosition]="'above'">
+          <span>
+            <mat-icon>warning</mat-icon>&nbsp;Some location data absent. The following locations are not mapped:
+
+            <span *ngFor="let unmappable of unMappables">{{unmappable.name}}
+              ({{unmappable.administrative_level_two_string}},
+              {{unmappable.administrative_level_one_string}})
+              <span *ngIf="(unMappables.indexOf(unmappable)) < (unMappables.length - 1)">;</span></span>
+
           </span>
-        </span>
+        </mat-card>
+
 
         <mat-expansion-panel id="legend" class="legend">
           <mat-expansion-panel-header>
@@ -964,7 +963,7 @@
                 <div class='wmm-square wmm-28995b wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
                 <label>Atlantic Flyways</label>
               </div>
-              
+
               <div class='legend-icon'>
                 <div class='wmm-square wmm-b43cc7 wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
                 <label>Central Flyway</label>

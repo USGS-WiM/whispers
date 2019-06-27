@@ -167,6 +167,13 @@ body {
         }
     }
 }
+// Max width cant overflow cell and
+// Words break if too long
+.mat-cell * {
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
 .page-loader{
     display: flex;
     flex-direction: column;
@@ -482,6 +489,18 @@ input[type=checkbox]{
     text-decoration: underline;
 }
 
+// Turn basic white button into a link
+// Blue text with underline
+.link-button {
+	text-decoration: underline !important;
+	color: #334EFF;
+
+	&:hover{
+		color: darken(#334EFF, 15%);
+		cursor: pointer;
+	}
+}
+
 // =====================================================================================================================
 // =====================================================================================================================
 // Suggested Searches
@@ -664,6 +683,7 @@ input[type=checkbox]{
 #mapPanel .mat-expansion-panel-body{
     padding: 0 !important;
 }
+
 
 
 

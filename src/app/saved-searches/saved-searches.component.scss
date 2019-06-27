@@ -25,6 +25,9 @@
 // Suggested Searches
 .suggested-searches {
 
+	max-height: 400px;
+	overflow: auto;
+
     .button-row {
         // border-bottom: 1px solid fade-out($black, 0.85);
 

@@ -129,6 +129,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   private subscription: Subscription;
 
   currentUser;
+  showJSON = false;
 
   eventTypes: EventType[];
   legalStatuses: LegalStatus[];

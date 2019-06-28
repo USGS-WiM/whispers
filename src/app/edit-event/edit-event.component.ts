@@ -68,6 +68,8 @@ export class EditEventComponent implements OnInit {
       legal_status: null,
       legal_number: '',
       // end NWHC only
+      new_read_collaborators: [],
+      new_write_collaborators: []
     });
 
   }
@@ -98,6 +100,19 @@ export class EditEventComponent implements OnInit {
   ngOnInit() {
     this.eventID = this.data.eventData.id;
 
+    const readCollaboratorsArray = [];
+    if (this.data.eventData.read_collaborators.length > 0) {
+      for (const collaborator of this.data.eventData.read_collaborators) {
+        readCollaboratorsArray.push(collaborator.id);
+      }
+    }
+    const writeCollaboratorsArray = [];
+    if (this.data.eventData.write_collaborators.length > 0) {
+      for (const collaborator of this.data.eventData.write_collaborators) {
+        writeCollaboratorsArray.push(collaborator.id);
+      }
+    }
+
     this.editEventForm.patchValue({
       id: this.data.eventData.id,
       event_reference: this.data.eventData.event_reference,
@@ -110,8 +125,10 @@ export class EditEventComponent implements OnInit {
       event_status: this.data.eventData.event_status,
       quality_check: this.data.eventData.quality_check,
       legal_status: this.data.eventData.legal_status,
-      legal_number: this.data.eventData.legal_number
+      legal_number: this.data.eventData.legal_number,
       // end NWHC only
+      new_read_collaborators: readCollaboratorsArray,
+      new_write_collaborators: writeCollaboratorsArray,
     });
 
     if (this.data.eventData.complete === false) {

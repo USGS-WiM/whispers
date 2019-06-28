@@ -254,7 +254,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
           // remove the 'unknown' diagnosis for incomplete events ("Pending")
           // NWHC requsted this not be available to users as choice.
           this.diagnoses = this.diagnoses.filter(diagnosis => diagnosis.id !== APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis);
-          // populate the search select options for the species control
+          // populate the search select options for the diagnosis control
           this.filteredDiagnoses.next(diagnoses);
 
           // listen for search field value changes

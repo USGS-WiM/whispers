@@ -101,7 +101,7 @@ export class HomeComponent implements OnInit {
   popularSearches = [];
   parsedPopularSearches = [];
 
-  resultsLoading = false;
+  searchResultsLoading = false;
 
   speciesLoading = true;
 
@@ -160,7 +160,7 @@ export class HomeComponent implements OnInit {
 
         const countLimit = 300;
 
-        this.resultsLoading = true;
+        this.searchResultsLoading = true;
 
         // this is the listener for a new search query
 
@@ -170,7 +170,7 @@ export class HomeComponent implements OnInit {
               if (count.count >= countLimit) {
                 // this.sampleQuerySizeErrorFlag = true;
                 this.openSnackBar('Your Query result is too large. Please narrow your search and try again', 'OK', 8000);
-                this.resultsLoading = false;
+                this.searchResultsLoading = false;
               } else if (count.count < countLimit) {
 
                 if (searchQuery) {
@@ -181,7 +181,7 @@ export class HomeComponent implements OnInit {
                         this.dataSource = new MatTableDataSource(this.currentResults);
                         this.dataSource.paginator = this.paginator;
                         this.dataSource.sort = this.sort;
-                        this.resultsLoading = false;
+                        this.searchResultsLoading = false;
 
                         setTimeout(() => {
                           /*this.map = new L.Map('map', {
@@ -200,7 +200,7 @@ export class HomeComponent implements OnInit {
 
                       },
                       error => {
-                        this.resultsLoading = false;
+                        this.searchResultsLoading = false;
                         this.openSnackBar('Query failed due to web service error. Please try again later.', 'OK', 8000);
                         this.errorMessage = <any>error;
                       }
@@ -284,6 +284,8 @@ export class HomeComponent implements OnInit {
 
     this.speciesLoading = true;
 
+    this.searchResultsLoading = true;
+
     this.currentSearchQuery.and_params = [];
 
     //if (sessionStorage.getItem('currentSearch')) {
@@ -316,6 +318,7 @@ export class HomeComponent implements OnInit {
           this.dataSource = new MatTableDataSource(this.currentResults);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
+          this.searchResultsLoading = false;
 
           setTimeout(() => {
 

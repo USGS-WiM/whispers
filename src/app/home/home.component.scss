@@ -242,7 +242,7 @@ mat-table>.mat-row:hover {
     left: 15px;
     /*width:250px*/
     /*height:320px;*/
-    z-index: 1000;
+    z-index: 799;
     color: black;
     background-color: rgb(255, 255, 255);
     background-color: rgba(255, 255, 255, 0.8);
@@ -260,7 +260,7 @@ mat-table>.mat-row:hover {
     right: 10px;
     width:200px;
     /*height:320px;*/
-    z-index: 1000;
+    z-index: 799;
     color: black;
     background-color: rgb(255, 255, 255);
     background-color: rgba(255, 255, 255, 0.8);
@@ -413,7 +413,7 @@ mat-table>.mat-row:hover {
     right: 10px;
     width:200px;
     /*height:320px;*/
-    z-index: 1000;
+    z-index: 799;
     color: black;
     background-color: rgb(255, 255, 255);
     background-color: rgba(255, 255, 255, 0.8);
@@ -464,7 +464,7 @@ mat-table>.mat-row:hover {
 
 // Results loading shade
 .data-loading-shade {
-    z-index: 1001;
+    z-index: 800;
 	position: absolute;
 	top: 0;
 	left: 0;

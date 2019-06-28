@@ -467,3 +467,9 @@ mat-table>.mat-row:hover {
 .wmm-eb5834:after{border-color:#eb5834;background-color: #EDD0C8}.wmm-square.wmm-eb5834{border-bottom-color: rgba(0, 0, 0, 0.5);}.wmm-square.wmm-eb5834:after{color: #eb5834;}
 .wmm-b43cc7:after{border-color:#b43cc7;background-color: #E2CAE6}.wmm-square.wmm-b43cc7{border-bottom-color: rgba(0, 0, 0, 0.5);}.wmm-square.wmm-b43cc7:after{color: #b43cc7;}
 
+
+
+.suggested-searches {
+	max-height: 400px;
+	overflow: auto;
+}

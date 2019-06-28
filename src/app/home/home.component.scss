@@ -28,7 +28,8 @@
     .resultsDiv {
         flex-grow: 3;
         width: auto;
-        min-width: 550px;
+		min-width: 550px;
+		position: relative;
 
         #resultsMapHeader {
             justify-content: flex-end;
@@ -273,19 +274,6 @@ mat-table>.mat-row:hover {
     display: inline-block;
 }
 
-.data-loading-shade {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 56px;
-    right: 0;
-    background: rgba(0, 0, 0, 0.15);
-    z-index: 999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .legendIcon {
     display: inline-block;
 }
@@ -472,4 +460,35 @@ mat-table>.mat-row:hover {
 .suggested-searches {
 	max-height: 400px;
 	overflow: auto;
+}
+
+// Results loading shade
+.data-loading-shade {
+    z-index: 1001;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+	background-color: rgba(255,255,255,0.75);
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0 0 55px 0;
+
+	.mat-spinner{
+		margin: 0 auto;
+	}
+
+	&:after{
+		content: 'Results Loading...';
+		display: block;
+		text-align: center;
+		padding-top: 50px;
+		box-sizing: border-box;
+		font-size: 20px;
+		font-weight: 600;
+	}
 }

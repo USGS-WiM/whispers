@@ -848,7 +848,8 @@
                                       *ngFor="let contact of filteredContacts[eventLocationIndex][locationContactIndex] | async"
                                       [value]="contact.id">
                                       <span>{{contact.first_name}}
-                                        {{contact.last_name}} | {{contact.organization_string}}</span>
+                                        {{contact.last_name}} | <span
+                                          class="text-smaller">{{contact.organization_string}}</span></span>
                                     </mat-option>
                                   </mat-select>
                                 </mat-form-field>
@@ -1334,11 +1335,26 @@
                             <mat-icon>done</mat-icon> Save Event
                           </button>
 
-                          <div class="temporary-form-value-display ">
-                            <h3>Temporary Form Value display (not for production)</h3>
-                            <p>Form Status: {{eventSubmissionForm.status}}
-                              <pre> {{eventSubmissionForm.value | json}} </pre>
+                          <div *ngIf="currentUser.role === 1 || currentUser.role === 2">
+                            <p>
+                              <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                  <mat-panel-title>
+                                    Form data JSON
+                                  </mat-panel-title>
+                                  <mat-panel-description>
+                                    JSON format of this form entry, for debugging purposes
+                                  </mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <div class="temporary-form-value-display">
+                                  <p>Form Status: {{eventSubmissionForm.status}}
+                                    <pre> {{eventSubmissionForm.value | json}} </pre>
+                                </div>
+                              </mat-expansion-panel>
+                            </p>
                           </div>
+
+
 
       </mat-card-content>
     </mat-card>

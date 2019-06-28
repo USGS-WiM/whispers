@@ -984,7 +984,7 @@ export class HomeComponent implements OnInit {
 
   register(type) {
     this.userRegistrationDialogRef = this.dialog.open(UserRegistrationComponent, {
-      minWidth: '50em',
+      minWidth: '60em',
       disableClose: true,
       data: {
         title: 'WHISPers Registration',

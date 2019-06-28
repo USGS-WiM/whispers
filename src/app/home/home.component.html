@@ -336,6 +336,15 @@
   </div>
 
   <div class="resultsDiv">
+
+	<!-- Results Loading Shade -->
+	<!-- Covers map and results, not sidebar -->
+	<div class="data-loading-shade" *ngIf="searchResultsLoading">
+		<mat-spinner></mat-spinner>
+	</div>
+	<!-- <div class="data-loading-shade" *ngIf="searchResultsLoading"></div> -->
+		  
+
     <mat-expansion-panel expanded id="mapPanel">
       <mat-expansion-panel-header>
         <mat-panel-title id="resultsMapHeader">
@@ -343,7 +352,6 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <div class="data-loading-shade" *ngIf="searchResultsLoading"></div>
 
       <div id="map">
 
@@ -516,9 +524,6 @@
 
         <div *ngIf="dataSource" class="results-table-div">
 
-          <div class="data-loading-shade" *ngIf="searchResultsLoading">
-            <mat-spinner *ngIf="searchResultsLoading"></mat-spinner>
-          </div>
           <!-- <mat-form-field>
                   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
                 </mat-form-field> -->

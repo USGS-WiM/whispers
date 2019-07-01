@@ -41,7 +41,9 @@
         </button>
 
         <!-- Create Event -->
-        <button mat-button aria-label="Create Event" *ngIf="currentUser.username !== '' && currentUser.role !== 7 && currentUser.role !== 6" (click)="navigateToEventSubmit()">
+        <button mat-button aria-label="Create Event"
+          *ngIf="currentUser.username !== '' && currentUser.role !== 7 && currentUser.role !== 6"
+          (click)="navigateToEventSubmit()">
           <i class="material-icons">library_add</i>
           <span class="header-button-text">Create Event</span>
         </button>
@@ -49,18 +51,21 @@
       </div>
 
       <!-- App alert -->
-      <span class="app-header-alert" [ngStyle]="{'color': bannerTextColor}">
+      <!-- <span class="app-header-alert" [ngStyle]="{'color': bannerTextColor}">
         <span>{{bannerWarning}}</span>
-        <!-- Please see
+      </span> -->
+
+      <!-- this used to live within the App alert span-->
+      <!-- Please see
         <a href="http://www.nwhc.usgs.gov/WHISPers">nwhc.usgs.gov/WHISPers</a> for the current production version,
         WHISPers 1.0. -->
-      </span>
 
       <!-- Right side of bottom toolbar -->
       <div class="right">
 
         <!-- Login Status -->
-        <span *ngIf="currentUser.username == ''" class="login-status signin-button" [matMenuTriggerFor]="menu">Log In</span>
+        <span *ngIf="currentUser.username == ''" class="login-status signin-button" [matMenuTriggerFor]="menu">Log
+          In</span>
         <span *ngIf="currentUser.username !== ''" class="login-status">{{currentUser.first_name}}
           {{currentUser.last_name}}</span>
 
@@ -74,7 +79,8 @@
         </button>
 
         <mat-menu #menu="matMenu">
-          <button mat-menu-item aria-label="Login" (click)="openAuthenticationDialog()" *ngIf="currentUser.username == ''">
+          <button mat-menu-item aria-label="Login" (click)="openAuthenticationDialog()"
+            *ngIf="currentUser.username == ''">
             <mat-icon>account_box</mat-icon>
             <span class="header-button-text">Login</span>
           </button>
@@ -84,7 +90,8 @@
             <span class="header-button-text">Logout</span>
           </button>
 
-          <button mat-menu-item aria-label="User Dashboard" (click)="openUserDashboard()" *ngIf="currentUser.username != ''">
+          <button mat-menu-item aria-label="User Dashboard" (click)="openUserDashboard()"
+            *ngIf="currentUser.username != ''">
             <mat-icon>dashboard</mat-icon>
             <span>User Dashboard</span>
           </button>
@@ -117,7 +124,8 @@
 
       <span class="app-meta">
         <span>Version {{whispersVersion}}</span>
-        <span>Developed by <a href="https://wim.usgs.gov" target="_blank">USGS Web Informatics and Mapping (WIM)</a></span>
+        <span>Developed by <a href="https://wim.usgs.gov" target="_blank">USGS Web Informatics and Mapping
+            (WIM)</a></span>
       </span>
 
     </mat-toolbar-row>

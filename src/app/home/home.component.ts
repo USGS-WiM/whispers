@@ -40,7 +40,9 @@ import { SaveSearchComponent } from '@app/save-search/save-search.component';
 
 import { User } from '@interfaces/user';
 
-import * as L from 'leaflet';
+declare let L: any;
+import 'leaflet';
+import 'leaflet-draw';
 import * as esri from 'esri-leaflet';
 import { UserRegistrationComponent } from '@app/user-registration/user-registration.component';
 
@@ -376,8 +378,92 @@ export class HomeComponent implements OnInit {
               'Watersheds (HUC 2)': watersheds
             };
 
-            L.control.layers(baseMaps, overlays, { position: 'topleft' }).addTo(this.map);
+            const drawnItems = L.featureGroup().addTo(this.map);
+
+            L.control.layers(
+              baseMaps,
+              {'drawlayer': drawnItems},
+              overlays, { position: 'topleft' }).addTo(this.map);
             L.control.scale({ position: 'bottomright' }).addTo(this.map);
+
+            this.map.addControl(new L.Control.Draw({
+              edit: {
+                  featureGroup: drawnItems,
+                  poly : {
+                      allowIntersection : false
+                  }
+              },
+              draw: {
+                  polygon : {
+                      allowIntersection: false,
+                      showArea: true
+                  }
+              }
+          }));
+
+        // Truncate value based on number of decimals
+        const _round = function(num, len) {
+          return Math.round(num * (Math.pow(10, len))) / (Math.pow(10, len));
+      };
+      // Helper method to format LatLng object (x.xxxxxx, y.yyyyyy)
+      const strLatLng = function(latlng) {
+          return '(' + _round(latlng.lat, 6) + ', ' + _round(latlng.lng, 6) + ')';
+      };
+
+      // Generate popup content based on layer type
+      // - Returns HTML string, or null if unknown object
+      const getPopupContent = function(layer) {
+          // Marker - add lat/long
+          if (layer instanceof L.Marker || layer instanceof L.CircleMarker) {
+              return strLatLng(layer.getLatLng());
+          // Circle - lat/long, radius
+          } else if (layer instanceof L.Circle) {
+            const center = layer.getLatLng(),
+                  radius = layer.getRadius();
+              return 'Center: ' + strLatLng(center) + '<br />'
+                    + 'Radius: ' + _round(radius, 2) + ' m';
+          // Rectangle/Polygon - area
+          } else if (layer instanceof L.Polygon) {
+            const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
+                  area = L.GeometryUtil.geodesicArea(latlngs);
+              return 'Area: ' + L.GeometryUtil.readableArea(area, true);
+          // Polyline - distance
+          } else if (layer instanceof L.Polyline) {
+              const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
+                 var distance = 0;
+              if (latlngs.length < 2) {
+                  return 'Distance: N/A';
+              } else {
+                  for (let i = 0; i < latlngs.length - 1; i++) {
+                      distance += latlngs[i].distanceTo(latlngs[i + 1]);
+                  }
+                  return 'Distance: ' + _round(distance, 2) + ' m';
+              }
+          }
+          return null;
+      };
+
+      // Object created - bind popup to layer, add to feature group
+      this.map.on(L.Draw.Event.CREATED, function(event) {
+        const layer = event.layer;
+        const content = getPopupContent(layer);
+          if (content !== null) {
+              layer.bindPopup(content);
+          }
+          drawnItems.addLayer(layer);
+      });
+
+      // Object(s) edited - update popups
+      this.map.on(L.Draw.Event.EDITED, function(event) {
+          const layers = event.layers;
+          // const content = null;
+          layers.eachLayer(function(layer) {
+              const content = getPopupContent(layer);
+              if (content !== null) {
+                  layer.setPopupContent(content);
+              }
+          });
+      });
 
             this.mapResults(this.currentResults);
 

@@ -6,7 +6,6 @@
     "whispers": {
       "root": "",
       "sourceRoot": "src",
-      
       "projectType": "application",
       "architect": {
         "build": {
@@ -23,11 +22,13 @@
             ],
             "styles": [
               "src/styles.scss",
+              "node_modules/leaflet-draw/dist/leaflet.draw-src.css",
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/usgs-search-api/dist/search_api.css"
             ],
             "scripts": [
               "node_modules/leaflet/dist/leaflet.js",
+              "node_modules/leaflet-draw/dist/leaflet.draw.js",
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/usgs-search-api/dist/search_api.js"
             ]
@@ -90,11 +91,13 @@
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [
               "node_modules/leaflet/dist/leaflet.js",
+              "node_modules/leaflet-draw/dist/leaflet.draw.js",
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/usgs-search-api/dist/search_api.js"
             ],
             "styles": [
               "src/styles.scss",
+              "node_modules/leaflet-draw/dist/leaflet.draw-src.css",
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/usgs-search-api/dist/search_api.css"
             ],

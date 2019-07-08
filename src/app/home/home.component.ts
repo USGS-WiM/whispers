@@ -406,21 +406,6 @@ export class HomeComponent implements OnInit {
             });
 
             this.map.addControl(drawControl);
-            /* this.map.addControl(new L.Control.Draw({
-              edit: {
-                  featureGroup: drawnItems,
-                  poly : {
-                      allowIntersection : false
-                  }
-              },
-              draw: {
-                  polygon : {
-                      allowIntersection: false,
-                      showArea: true,
-                      marker: false
-                  }
-              }
-          })); */
 
         // Truncate value based on number of decimals
         const _round = function(num, len) {

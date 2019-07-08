@@ -382,11 +382,31 @@ export class HomeComponent implements OnInit {
 
             L.control.layers(
               baseMaps,
-              {'drawlayer': drawnItems},
-              overlays, { position: 'topleft' }).addTo(this.map);
-            L.control.scale({ position: 'bottomright' }).addTo(this.map);
+              overlays, { position: 'topleft' }, { 'drawlayer': drawnItems} ).addTo(this.map);
 
-            this.map.addControl(new L.Control.Draw({
+              L.control.scale({ position: 'bottomright' }).addTo(this.map);
+
+              const drawControl = new L.Control.Draw({
+                edit: {
+                    featureGroup: drawnItems,
+                    poly : {
+                        allowIntersection : false
+                    }
+                },
+                draw: {
+                    polygon : {
+                        allowIntersection: false,
+                        showArea: true
+                    },
+                    marker: false,
+                    circle: false,
+                    circlemarker: false,
+                    rectangle: false
+                }
+            });
+
+            this.map.addControl(drawControl);
+            /* this.map.addControl(new L.Control.Draw({
               edit: {
                   featureGroup: drawnItems,
                   poly : {
@@ -396,10 +416,11 @@ export class HomeComponent implements OnInit {
               draw: {
                   polygon : {
                       allowIntersection: false,
-                      showArea: true
+                      showArea: true,
+                      marker: false
                   }
               }
-          }));
+          })); */
 
         // Truncate value based on number of decimals
         const _round = function(num, len) {
@@ -429,8 +450,8 @@ export class HomeComponent implements OnInit {
               return 'Area: ' + L.GeometryUtil.readableArea(area, true);
           // Polyline - distance
           } else if (layer instanceof L.Polyline) {
-              const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
-                 var distance = 0;
+              const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs();
+                 let distance = 0;
               if (latlngs.length < 2) {
                   return 'Distance: N/A';
               } else {

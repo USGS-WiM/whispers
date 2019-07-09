@@ -13,15 +13,15 @@
         <p id="welcome-text">
           This is the Wildlife Health Information Sharing Partnership event reporting system. It is a place to explore
           wildlife mortality data submitted by partners across North America and verified by trained biologists.
-		</p>
+        </p>
 
 
         <p *ngIf="currentUser.role != undefined">
-          	<b>
-				You are logged in as 
-				<span style="font-style: italic;">{{currentUser.first_name}}{{currentUser.last_name}}</span> 
-				({{currentUser.username}})
-			</b>
+          <b>
+            You are logged in as
+            <span style="font-style: italic;">{{currentUser.first_name}}{{currentUser.last_name}}</span>
+            ({{currentUser.username}})
+          </b>
         </p>
 
         <!-- User Role -->
@@ -336,6 +336,15 @@
   </div>
 
   <div class="resultsDiv">
+
+	<!-- Results Loading Shade -->
+	<!-- Covers map and results, not sidebar -->
+	<div class="data-loading-shade" *ngIf="searchResultsLoading">
+		<mat-spinner></mat-spinner>
+	</div>
+	<!-- <div class="data-loading-shade" *ngIf="searchResultsLoading"></div> -->
+		  
+
     <mat-expansion-panel expanded id="mapPanel">
       <mat-expansion-panel-header>
         <mat-panel-title id="resultsMapHeader">
@@ -343,7 +352,6 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <div class="data-loading-shade" *ngIf="resultsLoading"></div>
 
       <div id="map">
 
@@ -457,7 +465,7 @@
                 <div class='wmm-square wmm-28995b wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
                 <label>Atlantic Flyways</label>
               </div>
-              
+
               <div class='legend-icon'>
                 <div class='wmm-square wmm-b43cc7 wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
                 <label>Central Flyway</label>
@@ -514,12 +522,8 @@
       </mat-card-title>
       <mat-card-content>
 
-
         <div *ngIf="dataSource" class="results-table-div">
 
-          <div class="data-loading-shade" *ngIf="resultsLoading">
-            <mat-spinner *ngIf="resultsLoading"></mat-spinner>
-          </div>
           <!-- <mat-form-field>
                   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
                 </mat-form-field> -->

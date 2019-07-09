@@ -70,6 +70,7 @@ import { CircleManagementComponent } from '@app/circle-management/circle-managem
 import { CircleChooseComponent } from '@app/circle-management/circle-choose/circle-choose.component';
 import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-event-details',
@@ -1353,6 +1354,7 @@ export class EventDetailsComponent implements OnInit {
 
   exportEventDetails() {
     this._eventService.getEventDetailsCSV(this.eventID);
+    gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Exported Event Details' });
   }
 
 

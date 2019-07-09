@@ -45,6 +45,7 @@ import 'leaflet';
 import 'leaflet-draw';
 import * as esri from 'esri-leaflet';
 import { UserRegistrationComponent } from '@app/user-registration/user-registration.component';
+declare let gtag: Function;
 
 // export class ResultsDataSource extends MatTableDataSource<any> {
 //   constructor(private userService: EventService) {
@@ -964,10 +965,12 @@ export class HomeComponent implements OnInit {
 
   openMetadataLink() {
     window.open(APP_SETTINGS.WHISPERS_METADATA_URL, '_blank');
+    gtag('event', 'click', { 'event_category': 'Home', 'event_label': 'Metadata Opened' });
   }
 
   exportEventSummaries() {
     this.eventService.getEventSummaryCSV(this.currentSearchQuery);
+    gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'Current Search Query Exported' });
     // .subscribe(
     //   eventSummaries => {
 

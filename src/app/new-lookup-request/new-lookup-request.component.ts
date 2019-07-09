@@ -70,7 +70,7 @@ export class NewLookupRequestComponent implements OnInit {
           .subscribe(
             (response) => {
               this.openSnackBar('Species addition request sent', 'OK', 5000);
-              gtag('event', 'click', {'event_category': 'User Dashboard','event_label': 'Species Addition Request Submitted'});
+              gtag('event', 'click', {'event_category': 'User Dashboard', 'event_label': 'Species Addition Request Submitted'});
             },
             error => {
               this.openSnackBar('Error. Species addition request not sent. Error message: ' + error, 'OK', 8000);

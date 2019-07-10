@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
-
+import { APP_UTILITIES } from '@app/app.utilities';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
@@ -123,7 +123,7 @@ export class EditEventComponent implements OnInit {
       // NWHC only
       staff: this.data.eventData.staff,
       event_status: this.data.eventData.event_status,
-      quality_check: this.data.eventData.quality_check,
+      quality_check: APP_UTILITIES.timeZoneAdjust(this.data.eventData.quality_check),
       legal_status: this.data.eventData.legal_status,
       legal_number: this.data.eventData.legal_number,
       // end NWHC only

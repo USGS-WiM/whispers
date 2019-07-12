@@ -146,7 +146,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   adminLevelOnes: AdministrativeLevelOne[];
   // expermental, for autocomplete
   administrative_level_one: AdministrativeLevelOne[];
-  //filteredAdminLevelOnes;
+  // filteredAdminLevelOnes;
 
   adminLevelTwos: AdministrativeLevelTwo[];
   // expermental, for autocomplete
@@ -156,12 +156,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   species: Species[];
   // filteredSpecies: Observable<Species[]>[] = [];
 
-  //filteredSpecies = [];
-  //eventLocationSpecies: Observable<any[]>[] = [];
+  // filteredSpecies = [];
+  // eventLocationSpecies: Observable<any[]>[] = [];
   ///////////////////////////////////////////////////////
 
   contacts: Contact[];
-  //filteredContacts = [];
+  // filteredContacts = [];
 
   sexBiases: SexBias[];
   ageBiases: AgeBias[];
@@ -1944,6 +1944,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   removeEventLocation(eventLocationIndex) {
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations');
     control.removeAt(eventLocationIndex);
+    this.checkLocationEndDates();
   }
 
   getEventLocations(form) {
@@ -2435,7 +2436,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     const new_orgs_array = [];
     // loop through and convert new_organizations
     for (const org of formValue.new_organizations) {
-      new_orgs_array.push(org.org);
+      if (org !== undefined) {
+        new_orgs_array.push(org.org);
+      }
     }
     formValue.new_organizations = new_orgs_array;
     // if lat/long fields are deleted to blank, update to null to be a valid number type on PATCH

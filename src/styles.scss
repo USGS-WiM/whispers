@@ -685,6 +685,11 @@ input[type=checkbox]{
 #mapPanel .mat-expansion-panel-body{
     padding: 0 !important;
 }
+//leaflet draw adjustment
+.leaflet-touch .leaflet-draw-toolbar {
+    //background-position: 0px;
+    margin-top: -1px;
+}
 
 
 

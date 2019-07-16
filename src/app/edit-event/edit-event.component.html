@@ -19,8 +19,11 @@
           [disabled]="editEventForm.get('complete').value">
           <mat-option *ngFor="let event_type of event_types" [value]="event_type.id">{{event_type.name}}</mat-option>
         </mat-select>
+        <mat-icon class="hint-hover-text" matSuffix 
+              matTooltip={{eventTypeTooltip()}} matTooltipClass="tooltip-breakline">
+              help</mat-icon>
       </mat-form-field>
-
+      <!-- eventTypeTooltip -->
       <div class="horizontal-form-container">
         <mat-form-field class="form-control">
           <mat-select placeholder="Event Visibility" formControlName="public" required

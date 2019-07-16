@@ -333,6 +333,11 @@ export class EditEventComponent implements OnInit {
     }
   }
 
+  // Tooltip text
+  eventTypeTooltip(): string {
+    return 'Mortality/Morbidity: Noteworthy occurrence of one or more sick or dead animals clustered in space and time. \n \n  Surveillance: Positive detections of a pathogen during active surveillance of healthy live animals.';
+  }
+
   updateEvent(formValue) {
     formValue.id = this.data.eventData.id;
     formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');

@@ -129,6 +129,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   private subscription: Subscription;
 
   currentUser;
+  showJSON = false;
 
   eventTypes: EventType[];
   legalStatuses: LegalStatus[];
@@ -145,7 +146,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   adminLevelOnes: AdministrativeLevelOne[];
   // expermental, for autocomplete
   administrative_level_one: AdministrativeLevelOne[];
-  //filteredAdminLevelOnes;
+  // filteredAdminLevelOnes;
 
   adminLevelTwos: AdministrativeLevelTwo[];
   // expermental, for autocomplete
@@ -155,12 +156,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   species: Species[];
   // filteredSpecies: Observable<Species[]>[] = [];
 
-  //filteredSpecies = [];
-  //eventLocationSpecies: Observable<any[]>[] = [];
+  // filteredSpecies = [];
+  // eventLocationSpecies: Observable<any[]>[] = [];
   ///////////////////////////////////////////////////////
 
   contacts: Contact[];
-  //filteredContacts = [];
+  // filteredContacts = [];
 
   sexBiases: SexBias[];
   ageBiases: AgeBias[];
@@ -204,7 +205,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   diagnosisCauses = [];
 
   locationSpeciesNumbersViolation = false;
-  closedEventLocationSpeciesNumbersViolation = false;
+  completeEventLocationSpeciesNumbersViolation = false;
   // starts as true  because no start dates provided by default
   locationStartDatesViolation = true;
   // starts as false because event must be complete = true to trigger violation
@@ -1423,7 +1424,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   checkLocationSpeciesNumbers() {
 
     this.locationSpeciesNumbersViolation = false;
-    this.closedEventLocationSpeciesNumbersViolation = false;
+    this.completeEventLocationSpeciesNumbersViolation = false;
     // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
     if (this.eventSubmissionForm.get('event_type').value === 1 || this.eventSubmissionForm.get('event_type').value === '1') {
       // set var to capture of requirement is met at any of the event locations
@@ -1480,9 +1481,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       }
 
       if (requirementMetEventClosed) {
-        this.closedEventLocationSpeciesNumbersViolation = false;
+        this.completeEventLocationSpeciesNumbersViolation = false;
       } else {
-        this.closedEventLocationSpeciesNumbersViolation = true;
+        this.completeEventLocationSpeciesNumbersViolation = true;
       }
     }
   }
@@ -1851,8 +1852,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   initEventDiagnosis() {
     return this.formBuilder.group({
-      // TODO: make this value configurbale for the "Undetermined" value
-      diagnosis: '469'
+      // TODO: make this value configurable for the "Undetermined" value
+      diagnosis: null
     });
   }
 
@@ -1943,6 +1944,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   removeEventLocation(eventLocationIndex) {
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations');
     control.removeAt(eventLocationIndex);
+    this.checkLocationEndDates();
   }
 
   getEventLocations(form) {
@@ -2434,7 +2436,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     const new_orgs_array = [];
     // loop through and convert new_organizations
     for (const org of formValue.new_organizations) {
-      new_orgs_array.push(org.org);
+      if (org !== undefined) {
+        new_orgs_array.push(org.org);
+      }
     }
     formValue.new_organizations = new_orgs_array;
     // if lat/long fields are deleted to blank, update to null to be a valid number type on PATCH

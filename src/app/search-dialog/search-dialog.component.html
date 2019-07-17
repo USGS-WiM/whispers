@@ -109,7 +109,7 @@
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <b>Diagnosis</b>
+            <b>Event Diagnosis</b>
           </mat-panel-title>
           <mat-panel-description>
             <span>
@@ -131,7 +131,7 @@
         <div>
           <div class="autocomplete-input">
             <mat-form-field class="full-width">
-              <input type="text" matInput placeholder="Add Diagnosis" aria-label="Add Diagnosis" [matAutocomplete]="diagnosisAutoComplete"
+              <input type="text" matInput placeholder="Add Event Diagnosis" aria-label="Add Event Diagnosis" [matAutocomplete]="diagnosisAutoComplete"
                 [formControl]="diagnosisControl">
               <mat-autocomplete #diagnosisAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedDiagnoses, 'diagnosis')">
                 <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis">

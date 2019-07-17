@@ -3,7 +3,7 @@
 </h1>
 
 <mat-dialog-content>
-  <form [formGroup]="loginForm">
+  <form [formGroup]="loginForm" id="loginForm">
 
     <div class="vertical-form-container">
 
@@ -17,8 +17,8 @@
         <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
         <mat-error *ngIf="loginForm.get('password').invalid">{{getErrorMessage('password')}}</mat-error>
       </mat-form-field>
-    </div>
-
+	</div>
+	
   </form>
 
   <div class="forgot-password-div">
@@ -30,7 +30,7 @@
 
   <div class="form-buttons-flex">
     <button mat-button (click)="this.authenticationDialogRef.close('cancel');">Cancel</button>
-    <button mat-button type="submit" [disabled]="loginForm.invalid" (click)="onSubmit(loginForm.value)">Login</button>
+    <button mat-button type="submit" [disabled]="loginForm.invalid" (click)="onSubmit(loginForm.value)" form="loginForm">Login</button>
   </div>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 

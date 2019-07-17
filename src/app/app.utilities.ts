@@ -130,7 +130,7 @@ export class APP_UTILITIES {
             administrative_level_one_includes_all: false,
             administrative_level_two_includes_all: false,
             and_params: [],
-            complete: false
+            complete: null
         };
 
         parsedSearch.id = search.id;

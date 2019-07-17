@@ -612,7 +612,7 @@ export class SearchDialogComponent implements OnInit {
     this.selectedAdminLevelOnes = [];
     this.selectedAdminLevelTwos = [];
 
-    // use defaault displayQuery for display in markup, send to searchDialogService
+    // use default displayQuery for display in markup, send to searchDialogService
     //this.searchDialogService.setDisplayQuery(this.defaultDisplayQuery);
     // use default search query, send to searchDialogService
     //this.searchDialogService.setSearchQuery(this.defaultSearchQuery);

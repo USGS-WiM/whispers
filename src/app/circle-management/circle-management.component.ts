@@ -22,6 +22,7 @@ import { Circle } from '@interfaces/circle';
 import { Contact } from '@interfaces/contact';
 import { ContactService } from '@services/contact.service';
 import { UserService } from '@services/user.service';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-circle-management',
@@ -343,7 +344,7 @@ export class CircleManagementComponent implements OnInit {
             this.openSnackBar('Circle successfully created.', 'OK', 5000);
             this.circleManagementService.setCircleReload();
             this.circleManagementDialogRef.close();
-
+            gtag('event', 'click', {'event_category': 'User Dashboard', 'event_label': 'New Circle Created'});
           },
           error => {
             this.errorMessage = <any>error;

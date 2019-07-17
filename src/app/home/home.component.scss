@@ -28,7 +28,8 @@
     .resultsDiv {
         flex-grow: 3;
         width: auto;
-        min-width: 550px;
+		min-width: 550px;
+		position: relative;
 
         #resultsMapHeader {
             justify-content: flex-end;
@@ -117,7 +118,7 @@
         border: 1px solid rgba(160, 175, 205, 0.4);
 
         b{
-            color: #3356FA;
+            color: rgb(7, 7, 7);
             font-weight: 700;
             text-decoration: underline;
         }
@@ -241,7 +242,7 @@ mat-table>.mat-row:hover {
     left: 15px;
     /*width:250px*/
     /*height:320px;*/
-    z-index: 1000;
+    z-index: 799;
     color: black;
     background-color: rgb(255, 255, 255);
     background-color: rgba(255, 255, 255, 0.8);
@@ -259,7 +260,7 @@ mat-table>.mat-row:hover {
     right: 10px;
     width:200px;
     /*height:320px;*/
-    z-index: 1000;
+    z-index: 799;
     color: black;
     background-color: rgb(255, 255, 255);
     background-color: rgba(255, 255, 255, 0.8);
@@ -271,19 +272,6 @@ mat-table>.mat-row:hover {
 
 .latLngScale:hover .hover-content {
     display: inline-block;
-}
-
-.data-loading-shade {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 56px;
-    right: 0;
-    background: rgba(0, 0, 0, 0.15);
-    z-index: 999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .legendIcon {
@@ -425,7 +413,7 @@ mat-table>.mat-row:hover {
     right: 10px;
     width:200px;
     /*height:320px;*/
-    z-index: 1000;
+    z-index: 799;
     color: black;
     background-color: rgb(255, 255, 255);
     background-color: rgba(255, 255, 255, 0.8);
@@ -461,3 +449,46 @@ mat-table>.mat-row:hover {
     padding-top: 1em;
 }
 
+// styles for flyways
+.wmm-28995b:after{border-color:#28995b;background-color: #C6DDD0}.wmm-square.wmm-28995b{border-bottom-color: rgba(0, 0, 0, 0.5);}.wmm-square.wmm-28995b:after{color: #28995b;}
+.wmm-ffbd4f:after{border-color:#ffbd4f;background-color: #F1E4CE}.wmm-square.wmm-ffbd4f{border-bottom-color: rgba(0, 0, 0, 0.5);}.wmm-square.wmm-ffbd4f:after{color: #ffbd4f;}
+.wmm-eb5834:after{border-color:#eb5834;background-color: #EDD0C8}.wmm-square.wmm-eb5834{border-bottom-color: rgba(0, 0, 0, 0.5);}.wmm-square.wmm-eb5834:after{color: #eb5834;}
+.wmm-b43cc7:after{border-color:#b43cc7;background-color: #E2CAE6}.wmm-square.wmm-b43cc7{border-bottom-color: rgba(0, 0, 0, 0.5);}.wmm-square.wmm-b43cc7:after{color: #b43cc7;}
+
+
+
+.suggested-searches {
+	max-height: 400px;
+	overflow: auto;
+}
+
+// Results loading shade
+.data-loading-shade {
+    z-index: 800;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+	background-color: rgba(255,255,255,0.75);
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0 0 55px 0;
+
+	.mat-spinner{
+		margin: 0 auto;
+	}
+
+	&:after{
+		content: 'Results Loading...';
+		display: block;
+		text-align: center;
+		padding-top: 50px;
+		box-sizing: border-box;
+		font-size: 20px;
+		font-weight: 600;
+	}
+}

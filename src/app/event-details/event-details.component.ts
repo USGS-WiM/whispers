@@ -70,6 +70,7 @@ import { CircleManagementComponent } from '@app/circle-management/circle-managem
 import { CircleChooseComponent } from '@app/circle-management/circle-choose/circle-choose.component';
 import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-event-details',
@@ -433,13 +434,13 @@ export class EventDetailsComponent implements OnInit {
         url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
         style: function (feature) {
           if (feature.properties.NAME === 'Atlantic Flyway') {
-            return { color: 'blue', weight: 2 };
+            return { color: '#28995b', weight: 2 };
           } else if (feature.properties.NAME === 'Pacific Flyway') {
-            return { color: 'red', weight: 2 };
+            return { color: '#ffbd4f', weight: 2 };
           } else if (feature.properties.NAME === 'Mississippi Flyway') {
-            return { color: 'green', weight: 2 };
+            return { color: '#eb5834', weight: 2 };
           } else if (feature.properties.NAME === 'Central Flyway') {
-            return { color: 'yellow', weight: 2 };
+            return { color: '#b43cc7', weight: 2 };
           }
         }
       });
@@ -451,7 +452,7 @@ export class EventDetailsComponent implements OnInit {
       });
 
       // Land use hosted by USGS
-      var landUse = esri.dynamicMapLayer({
+      const landUse = esri.dynamicMapLayer({
         url: 'https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer',
         opacity: 0.7
       });
@@ -801,7 +802,7 @@ export class EventDetailsComponent implements OnInit {
     // Open dialog for adding event location contact
     this.addServiceRequestDialogRef = this.dialog.open(AddServiceRequestComponent, {
       disableClose: true,
-      // minWidth: '60%',
+      minWidth: '75%',
       data: {
         event_id: id,
         comment_types: this.commentTypes,
@@ -827,7 +828,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
 
-  deleteEventComment(id: number) {
+  deleteComment(id: number) {
     this.commentService.delete(id)
       .subscribe(
         () => {
@@ -842,11 +843,11 @@ export class EventDetailsComponent implements OnInit {
 
   }
 
-  openEventCommentDeleteConfirm(id) {
+  openCommentDeleteConfirm(id) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
         data: {
-          title: 'Delete Event Comment Confirm',
+          title: 'Delete Comment Confirm',
           titleIcon: 'delete_forever',
           // tslint:disable-next-line:max-line-length
           message: 'Are you sure you want to delete this comment?\nThis action cannot be undone.',
@@ -859,7 +860,7 @@ export class EventDetailsComponent implements OnInit {
 
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.deleteEventComment(id);
+        this.deleteComment(id);
       }
     });
   }
@@ -1207,30 +1208,32 @@ export class EventDetailsComponent implements OnInit {
   }
 
   removeCollaborator(userID, list) {
-    switch (list) {
-      case 'read':
-        const readIndex = this.readCollaboratorArray.findIndex(function (o) {
-          return o.id === userID;
-        });
-        if (readIndex !== -1) { this.readCollaboratorArray.splice(readIndex, 1); }
-        const readCollaboratorIDArray = [];
-        for (const user of this.readCollaboratorArray) {
-          readCollaboratorIDArray.push(user.id);
-        }
-        this.updateCollaboratorList('read', readCollaboratorIDArray);
-        break;
-      case 'write':
-        const writeIndex = this.writeCollaboratorArray.findIndex(function (o) {
-          return o.id === userID;
-        });
-        if (writeIndex !== -1) { this.writeCollaboratorArray.splice(writeIndex, 1); }
-        const writeCollaboratorIDArray = [];
-        for (const user of this.writeCollaboratorArray) {
-          writeCollaboratorIDArray.push(user.id);
-        }
-        this.updateCollaboratorList('write', writeCollaboratorIDArray);
-        break;
+
+    // WIP below. seems to be good. test a few more times.
+    if (list === 'read') {
+      const readIndex = this.readCollaboratorArray.findIndex(function (o) {
+        return o.id === userID;
+      });
+      if (readIndex !== -1) { this.readCollaboratorArray.splice(readIndex, 1); }
+    } else if (list === 'write') {
+      const writeIndex = this.writeCollaboratorArray.findIndex(function (o) {
+        return o.id === userID;
+      });
+      if (writeIndex !== -1) { this.writeCollaboratorArray.splice(writeIndex, 1); }
+
     }
+
+    const readCollaboratorIDArray = [];
+    for (const user of this.readCollaboratorArray) {
+      readCollaboratorIDArray.push(user.id);
+    }
+
+    const writeCollaboratorIDArray = [];
+    for (const user of this.writeCollaboratorArray) {
+      writeCollaboratorIDArray.push(user.id);
+    }
+
+    this.updateCollaboratorList(readCollaboratorIDArray, writeCollaboratorIDArray);
 
   }
 
@@ -1249,26 +1252,22 @@ export class EventDetailsComponent implements OnInit {
           if (selectedUser !== 'cancel') {
 
             if (accessType === 'read') {
-
-              // move this to inside success
               this.readCollaboratorArray.push(selectedUser);
-
-              const readCollaboratorIDArray = [];
-              for (const user of this.readCollaboratorArray) {
-                readCollaboratorIDArray.push(user.id);
-              }
-              this.updateCollaboratorList('read', readCollaboratorIDArray);
-
             } else if (accessType === 'write') {
-
               this.writeCollaboratorArray.push(selectedUser);
-              const writeCollaboratorIDArray = [];
-              for (const user of this.writeCollaboratorArray) {
-                writeCollaboratorIDArray.push(user.id);
-              }
-              this.updateCollaboratorList('write', writeCollaboratorIDArray);
-
             }
+
+            const readCollaboratorIDArray = [];
+            for (const user of this.readCollaboratorArray) {
+              readCollaboratorIDArray.push(user.id);
+            }
+
+            const writeCollaboratorIDArray = [];
+            for (const user of this.writeCollaboratorArray) {
+              writeCollaboratorIDArray.push(user.id);
+            }
+
+            this.updateCollaboratorList(readCollaboratorIDArray, writeCollaboratorIDArray);
           }
 
         },
@@ -1314,16 +1313,17 @@ export class EventDetailsComponent implements OnInit {
 
   }
 
-  updateCollaboratorList(accessType, userArray) {
+  updateCollaboratorList(readCollaboratorArray, writeCollaboratorArray) {
 
-    let update;
-    if (accessType === 'read') {
-      update = { 'id': this.eventData.id, 'new_read_collaborators': userArray };
-    } else if (accessType === 'write') {
-      update = { 'id': this.eventData.id, 'new_write_collaborators': userArray };
-    }
+    // tslint:disable-next-line:max-line-length
+    const update = { 'id': this.eventData.id, 'event_type': this.eventData.event_type, 'new_read_collaborators': readCollaboratorArray, 'new_write_collaborators': writeCollaboratorArray };
+    // if (accessType === 'read') {
+    //   update = { 'id': this.eventData.id, 'event_type': this.eventData.event_type, 'new_read_collaborators': userArray };
+    // } else if (accessType === 'write') {
+    //   update = { 'id': this.eventData.id, 'event_type': this.eventData.event_type, 'new_write_collaborators': userArray };
+    // }
 
-    this._eventService.patchUpdate(update)
+    this._eventService.update(update)
       .subscribe(
         (event) => {
           // this.submitLoading = false;
@@ -1354,6 +1354,7 @@ export class EventDetailsComponent implements OnInit {
 
   exportEventDetails() {
     this._eventService.getEventDetailsCSV(this.eventID);
+    gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Exported Event Details' });
   }
 
 

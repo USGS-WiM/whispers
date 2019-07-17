@@ -17,6 +17,7 @@
         <!-- <mat-error *ngIf="this.editEventLocationForm.get('start_date').hasError('required')">Must have a value</mat-error> -->
       </mat-form-field>
 
+
       <mat-form-field class="form-control">
         <input matInput [matDatepicker]="endDate" placeholder="Location End Date" formControlName="end_date">
         <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
@@ -43,11 +44,12 @@
         <mat-error *ngIf="editEventLocationForm.get('country').invalid">Please
           enter a value</mat-error>
       </mat-form-field>
-
+      <!-- 
       <mat-form-field class="form-control">
-        <mat-select placeholder="State (or equivalent)" formControlName="administrative_level_one" (ngModelChange)="updateAdminLevelTwoOptions($event)"
-          required>
-          <mat-option *ngFor="let adminLevelOne of adminLevelOnes" value="{{adminLevelOne.id}}">{{adminLevelOne.name}}</mat-option>
+        <mat-select placeholder="State (or equivalent)" formControlName="administrative_level_one"
+          (ngModelChange)="updateAdminLevelTwoOptions($event)" required>
+          <mat-option *ngFor="let adminLevelOne of adminLevelOnes" value="{{adminLevelOne.id}}">{{adminLevelOne.name}}
+          </mat-option>
         </mat-select>
         <mat-hint align="start">Select a country to populate/update state list </mat-hint>
         <mat-hint align="end" matTooltip="Public field">
@@ -55,11 +57,31 @@
         </mat-hint>
         <mat-error *ngIf="editEventLocationForm.get('administrative_level_one').invalid">Please
           enter a value</mat-error>
-      </mat-form-field>
+      </mat-form-field> -->
 
+      <!-------->
       <mat-form-field class="form-control">
+        <mat-select formControlName="administrative_level_one" placeholder="State (or equivalent)" #adminLevelOneSelect
+          required (ngModelChange)="updateAdminLevelTwoOptions($event)">
+          <ngx-mat-select-search [formControl]="adminLevelOneFilterCtrl"
+            [placeholderLabel]="'Find state (or equivalent)...'" [noEntriesFoundLabel]="'no match found'">
+          </ngx-mat-select-search>
+          <mat-option *ngFor="let adminLevelOne of filteredAdminLevelOnes | async" [value]="adminLevelOne.id">
+            {{adminLevelOne.name}}
+          </mat-option>
+        </mat-select>
+        <mat-hint align="end" matTooltip="Public field">
+          <mat-icon>public</mat-icon>
+        </mat-hint>
+        <mat-error *ngIf="editEventLocationForm.get('administrative_level_one').invalid">Please
+          enter a value</mat-error>
+      </mat-form-field>
+      <!-------->
+
+      <!-- <mat-form-field class="form-control">
         <mat-select placeholder="County (or equivalent)" formControlName="administrative_level_two" required>
-          <mat-option *ngFor="let adminLevelTwo of adminLevelTwos" value="{{adminLevelTwo.id}}">{{adminLevelTwo.name}}</mat-option>
+          <mat-option *ngFor="let adminLevelTwo of adminLevelTwos" value="{{adminLevelTwo.id}}">{{adminLevelTwo.name}}
+          </mat-option>
         </mat-select>
         <mat-hint align="start">Select a state to populate/update county list </mat-hint>
         <mat-hint align="end" matTooltip="Public field">
@@ -67,7 +89,27 @@
         </mat-hint>
         <mat-error *ngIf="editEventLocationForm.get('administrative_level_two').invalid">Please
           enter a value</mat-error>
+      </mat-form-field> -->
+
+      <!-------->
+      <mat-form-field class="form-control">
+        <mat-select formControlName="administrative_level_two" placeholder="County (or equivalent)" #adminLevelTwoSelect
+          required>
+          <ngx-mat-select-search [formControl]="adminLevelTwoFilterCtrl"
+            [placeholderLabel]="'Find county (or equivalent)...'" [noEntriesFoundLabel]="'no match found'">
+          </ngx-mat-select-search>
+          <mat-option *ngFor="let adminLevelTwo of filteredAdminLevelTwos | async" [value]="adminLevelTwo.id">
+            {{adminLevelTwo.name}}
+          </mat-option>
+        </mat-select>
+        <mat-hint align="end" matTooltip="Public field">
+          <mat-icon>public</mat-icon>
+        </mat-hint>
+        <mat-error *ngIf="editEventLocationForm.get('administrative_level_two').invalid">Please
+          enter a value</mat-error>
       </mat-form-field>
+      <!-------->
+
 
     </div>
 
@@ -78,7 +120,8 @@
 
       <mat-form-field class="form-control">
         <mat-select placeholder="Land Ownership" formControlName="land_ownership" required>
-          <mat-option *ngFor="let landOwnership of landOwnerships" value="{{landOwnership.id}}">{{landOwnership.name}}</mat-option>
+          <mat-option *ngFor="let landOwnership of landOwnerships" value="{{landOwnership.id}}">{{landOwnership.name}}
+          </mat-option>
         </mat-select>
         <mat-error *ngIf="editEventLocationForm.get('land_ownership').invalid">Please
           enter a value</mat-error>
@@ -107,12 +150,15 @@
       <mat-card-content>
 
         <div>
-          <button mat-stroked-button color="primary" aria-label="Look up feature in Geographic Names Information System (GNIS) database"
-            matTooltip="Look up feature in Geographic Names Information System (GNIS) database" (click)="openGNISLookupDialog(null)">
+          <button mat-stroked-button color="primary"
+            aria-label="Look up feature in Geographic Names Information System (GNIS) database"
+            matTooltip="Look up feature in Geographic Names Information System (GNIS) database"
+            (click)="openGNISLookupDialog(null)">
             <mat-icon>search</mat-icon>Look Up GNIS
           </button>
 
-          <button mat-stroked-button class="gnisid" color="primary" aria-label="Clear Geographic Names Information System (GNIS) entry"
+          <button mat-stroked-button class="gnisid" color="primary"
+            aria-label="Clear Geographic Names Information System (GNIS) entry"
             matTooltip="Clear Geographic Names Information System (GNIS) entry" (click)="clearGNISEntry()">
             <mat-icon>clear_all</mat-icon>Clear GNIS entry
           </button>
@@ -147,7 +193,8 @@
   <button mat-button color="warn" (click)="this.editEventLocationDialogRef.close('cancel');">
     <mat-icon>cancel</mat-icon>&nbsp;Cancel
   </button>
-  <button mat-button color="primary" type="submit" [disabled]="editEventLocationForm.invalid || startDateViolation" (click)="updateEventLocation(editEventLocationForm.value)">
+  <button mat-button color="primary" type="submit" [disabled]="editEventLocationForm.invalid || startDateViolation"
+    (click)="updateEventLocation(editEventLocationForm.value)">
     <mat-icon>send</mat-icon>&nbsp;Submit
   </button>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>

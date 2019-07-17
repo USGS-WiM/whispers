@@ -36,7 +36,7 @@ export class APP_SETTINGS {
 
     public static get APP_URL(): string { return 'https://test.wim.usgs.gov/whispersdev'; }
 
-    public static get WHISPERS_METADATA_URL(): string { return 'https://www.nwhc.usgs.gov/whispers/site/page?view=faq'; }
+    public static get WHISPERS_METADATA_URL(): string { return 'https://www.usgs.gov/centers/nwhc/science/whispers'; }
 
     public static get DEFAULT_COUNTRY(): string { return 'USA'; }
 

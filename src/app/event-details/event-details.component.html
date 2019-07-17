@@ -115,8 +115,8 @@
                   <tr *ngFor="let eventGroup of eventData.eventgroups">
                     <td>{{eventGroup.name}}</td>
                     <td>
-                      <button mat-button *ngFor="let eventID of eventGroup.events"
-                        routerLink="../{{eventID}}">{{eventID}}</button>
+                      <button mat-button *ngFor="let eventID of eventGroup.events" class="link-button"
+                        routerLink="../{{eventID}}" class="link-button">{{eventID}}</button>
                     </td>
                   </tr>
                   <!-- <tr *ngFor="let eventGroup of eventData.eventgroups">
@@ -256,7 +256,7 @@
           <div class="event-detail-wrapper">
 
             <div class="privileged-meta">
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Event Owner</div>
                 <div class="value">
                   <span>{{eventData.created_by_first_name}} {{eventData.created_by_last_name}}
@@ -280,11 +280,11 @@
                 <div class="label">Last Modified Date</div>
                 <div class="value">{{eventData.modified_date || " "}}</div>
               </div>
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Staff</div>
                 <div class="value">{{eventData.staff_string}}</div>
               </div>
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Quality Check</div>
                 <div class="value">{{eventData.quality_check === null ? 'Not Done' : eventData.quality_check !== null ?
                   (eventData.quality_check | date:'shortDate') : 'Not Done' }}</div>
@@ -293,11 +293,11 @@
                 <div class="label">WHISPers Record Status</div>
                 <div class="value">{{eventData.complete ? 'Complete' : 'Incomplete'}}</div>
               </div>
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Legal Status</div>
                 <div class="value">{{eventData.legal_status_string || " "}}</div>
               </div>
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Legal Number</div>
                 <div class="value">{{eventData.legal_number || " "}}</div>
               </div>
@@ -418,22 +418,25 @@
 
                 <ul *ngIf="eventData.comments.length > 0" class="eventDetailCommentsList">
                   <li *ngFor="let comment of eventData.comments">
+
                     <div class="comment-meta">
                       <span class="type">
                         <b>{{comment.comment_type | displayValue:'name':this.commentTypes}}</b>
                       </span>
-                      <span class="date">{{comment.created_date | date:'shortDate' }}</span><span
-                        class="identifier">{{comment.created_by_first_name}}
+                      <span class="date">{{comment.created_date | date:'shortDate' }}</span>
+                      <span class="identifier">{{comment.created_by_first_name}}
                         {{comment.created_by_last_name}} | {{comment.created_by_organization_string}}</span>
                       <button mat-icon-button aria-label="delete event comment" color="warn"
                         [disabled]="!eventData.permissions.destroy || eventData.complete"
-                        (click)="openEventCommentDeleteConfirm(comment.id)">
+                        (click)="openCommentDeleteConfirm(comment.id)">
                         Delete
                       </button>
                     </div>
+
                     <div class="comment-text">
                       {{comment.comment}}
                     </div>
+
                   </li>
                 </ul>
 
@@ -469,11 +472,13 @@
                 <div class="event-group-no-data" *ngIf="eventData.servicerequests.length === 0">No service requests to
                   show</div>
 
-                <ul *ngIf="eventData.servicerequests.length > 0" class="eventDetailCommentsList has-sub-comments">
+                <!-- <ul *ngIf="eventData.servicerequests.length > 0" class="eventDetailCommentsList has-sub-comments"> -->
+                <ul *ngIf="eventData.servicerequests.length > 0" class="eventDetailCommentsList">
                   <li *ngFor="let servicerequest of eventData.servicerequests; last as last">
                     <div class="comment-meta">
-                      <span class="type">
-                        <b>{{servicerequest.request_type_string}}</b>
+                      Request:&nbsp;
+                      <span class="text-bold">
+                        {{servicerequest.request_type_string}}&nbsp;&nbsp;
                       </span>
                       <span class="date">{{servicerequest.created_date | date:'mediumDate'}}</span>
                       <span class="response">Response: {{servicerequest.request_response_string}}</span>
@@ -482,12 +487,37 @@
                       <!-- Request: {{servicerequest.request_type_string}} <br> -->
 
                       <label>Comments</label><br>
-                      <span *ngIf="servicerequest.comments.length > 0">
-                        <div class="comment-response" *ngFor="let comment of servicerequest.comments">
-                          <span class="date">{{comment.created_date | date:'shortDate' }}</span>
-                          <span class="response-text">{{comment.comment}}</span>
-                        </div>
-                      </span>
+                      <!-- <span *ngIf="servicerequest.comments.length > 0"> -->
+
+                      <ul *ngIf="servicerequest.comments.length > 0" class="eventDetailCommentsList">
+                        <li *ngFor="let comment of servicerequest.comments">
+
+                          <div class="comment-meta">
+                            <span class="type">
+                              <b>{{comment.comment_type | displayValue:'name':this.commentTypes}}</b>
+                            </span>
+                            <span class="date">{{comment.created_date | date:'shortDate' }}</span>
+                            <span class="identifier">{{comment.created_by_first_name}}
+                              {{comment.created_by_last_name}} | {{comment.created_by_organization_string}}</span>
+                            <button mat-icon-button aria-label="delete event comment" color="warn"
+                              [disabled]="!eventData.permissions.destroy || eventData.complete"
+                              (click)="openCommentDeleteConfirm(comment.id)">
+                              Delete
+                            </button>
+                          </div>
+
+                          <div class="comment-text">
+                            {{comment.comment}}
+                          </div>
+
+                        </li>
+                      </ul>
+
+
+                      <!-- <div class="comment-response eventDetailCommentsList"
+                        *ngFor="let comment of servicerequest.comments">
+                      </div> -->
+                      <!-- </span> -->
                     </div>
 
                     <button mat-icon-button aria-label="add comment to service request" color="primary"
@@ -756,7 +786,6 @@
                         <th>Organization</th>
                         <th>Title</th>
                         <th>Position</th>
-                        <th>Affiliation</th>
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Remove</th>
@@ -768,7 +797,6 @@
                         <td>{{eventlocationcontact.organization_string}}</td>
                         <td>{{eventlocationcontact.title}}</td>
                         <td>{{eventlocationcontact.position}}</td>
-                        <td>{{eventlocationcontact.affiliation}}</td>
                         <td>{{eventlocationcontact.email}}</td>
                         <td>{{eventlocationcontact.phone}}</td>
                         <td>
@@ -834,8 +862,7 @@
                   </button>
                 </div>
 
-                <div *ngIf="eventLocation.locationspecies.length > 0">
-
+                <div>
                   <div *ngIf="eventLocation.locationspecies" class="event-table-header">Species at this location</div>
 
                   <app-location-species-table [eventData]="eventData" [laboratories]="laboratories"
@@ -891,7 +918,9 @@
   <div class="mapDiv">
     <mat-card>
       <div id="map">
-        <mat-card class="unmappable-warning" *ngIf="unMappables.length > 0"
+
+        <mat-card class="unmappable-warning"
+          *ngIf="unMappables.length > 0 && currentUser.username != '' && currentUser.role !== 7"
           matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
           [matTooltipPosition]="'above'">
           <span>
@@ -904,6 +933,7 @@
 
           </span>
         </mat-card>
+
 
         <mat-expansion-panel id="legend" class="legend">
           <mat-expansion-panel-header>
@@ -919,26 +949,33 @@
               <label>Event Location</label>
             </div>
 
+            <div class='legend-icon'>
+              <div class='wmm-square wmm-00f wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+              <label>County</label>
+            </div>
+
 
             <div id="flywaysLegend">
               <!-- <div id="flywaysLegend" *ngIf="flywaysVisible"> -->
               <label class="legend-label">Flyways</label>
 
               <div class='legend-icon'>
-                <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-blue'></div>
+                <div class='wmm-square wmm-28995b wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
                 <label>Atlantic Flyways</label>
               </div>
 
               <div class='legend-icon'>
-                <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-yellow'></div>
+                <div class='wmm-square wmm-b43cc7 wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
                 <label>Central Flyway</label>
               </div>
+
               <div class='legend-icon'>
-                <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-green'></div>
+                <div class='wmm-square wmm-eb5834 wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
                 <label>Mississippi Flyway</label>
               </div>
+
               <div class='legend-icon'>
-                <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20 flyway-red'></div>
+                <div class='wmm-square wmm-ffbd4f wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
                 <label>Pacific Flyway</label>
               </div>
             </div>

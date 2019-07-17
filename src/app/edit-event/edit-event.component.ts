@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
-
+import { APP_UTILITIES } from '@app/app.utilities';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
@@ -49,8 +49,10 @@ export class EditEventComponent implements OnInit {
   eventID;
 
   editEventForm: FormGroup;
-  
+
   submitLoading = false;
+  basisAndCauseViolation = false;
+  completeEventLocationSpeciesNumbersViolation = false;
 
   buildEditEventForm() {
     this.editEventForm = this.formBuilder.group({
@@ -66,6 +68,8 @@ export class EditEventComponent implements OnInit {
       legal_status: null,
       legal_number: '',
       // end NWHC only
+      new_read_collaborators: [],
+      new_write_collaborators: []
     });
 
   }
@@ -96,6 +100,19 @@ export class EditEventComponent implements OnInit {
   ngOnInit() {
     this.eventID = this.data.eventData.id;
 
+    const readCollaboratorsArray = [];
+    if (this.data.eventData.read_collaborators.length > 0) {
+      for (const collaborator of this.data.eventData.read_collaborators) {
+        readCollaboratorsArray.push(collaborator.id);
+      }
+    }
+    const writeCollaboratorsArray = [];
+    if (this.data.eventData.write_collaborators.length > 0) {
+      for (const collaborator of this.data.eventData.write_collaborators) {
+        writeCollaboratorsArray.push(collaborator.id);
+      }
+    }
+
     this.editEventForm.patchValue({
       id: this.data.eventData.id,
       event_reference: this.data.eventData.event_reference,
@@ -106,10 +123,12 @@ export class EditEventComponent implements OnInit {
       // NWHC only
       staff: this.data.eventData.staff,
       event_status: this.data.eventData.event_status,
-      quality_check: this.data.eventData.quality_check,
+      quality_check: APP_UTILITIES.timeZoneAdjust(this.data.eventData.quality_check),
       legal_status: this.data.eventData.legal_status,
-      legal_number: this.data.eventData.legal_number
+      legal_number: this.data.eventData.legal_number,
       // end NWHC only
+      new_read_collaborators: readCollaboratorsArray,
+      new_write_collaborators: writeCollaboratorsArray,
     });
 
     if (this.data.eventData.complete === false) {
@@ -177,6 +196,57 @@ export class EditEventComponent implements OnInit {
     this.snackBar.open(message, action, {
       duration: duration,
     });
+  }
+
+  checkLocationSpeciesNumbers() {
+    this.completeEventLocationSpeciesNumbersViolation = false;
+
+    let completeEventLocationSpeciesNumbersViolated = false;
+    // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
+    if (this.data.eventData.event_type === 1 || this.data.eventData.event_type_string === 'Mortality/Morbidity') {
+      for (const eventlocation of this.data.eventData.eventlocations) {
+        for (const locationspecies of eventlocation.locationspecies) {
+
+          if (
+            (
+              locationspecies.sick_count +
+              locationspecies.dead_count +
+              locationspecies.sick_count_estimated +
+              locationspecies.dead_count_estimated
+            ) < 1
+          ) {
+            completeEventLocationSpeciesNumbersViolated = true;
+          }
+        }
+      }
+    }
+    if (completeEventLocationSpeciesNumbersViolated) {
+      this.completeEventLocationSpeciesNumbersViolation = true;
+    }
+  }
+
+
+  checkRulesEventComplete() {
+    this.basisAndCauseViolation = false;
+    // check to see if all event location species diagnoses
+    // have a basis and cause of diagnosis (using the common terms, not DB field names)
+    // loop through each event location > loop through each species
+    // if species has a diagnosis, must have non-null value for cause and basis fields
+    // if ANY of the species lack this, show error
+    let basisAndCauseRuleViolated = false;
+    for (const eventlocation of this.data.eventData.eventlocations) {
+      for (const locationspecies of eventlocation.locationspecies) {
+        for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+          if (speciesdiagnosis.cause === null || speciesdiagnosis.basis === null) {
+            basisAndCauseRuleViolated = true;
+          }
+        }
+      }
+    }
+    if (basisAndCauseRuleViolated) {
+      this.basisAndCauseViolation = true;
+    }
+
   }
 
   openCompleteWarning() {

@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { CommentType } from '@interfaces/comment-type';
+import { DiagnosticInfoComponent } from '@app/diagnostic-info/diagnostic-info.component';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
 import { ServiceRequestService } from '@services/service-request.service';
@@ -33,6 +34,7 @@ export class AddServiceRequestComponent implements OnInit {
 
   commentTypes: CommentType[];
   serviceRequestResponses: ServiceRequestResponse[];
+  diagnosticInfoDialogRef: MatDialogRef<DiagnosticInfoComponent>;
 
   buildServiceRequestForm() {
     this.serviceRequestForm = this.formBuilder.group({
@@ -89,6 +91,10 @@ export class AddServiceRequestComponent implements OnInit {
           }
         );
     }
+  }
+
+  openDiagnosticInfoDialog() {
+    this.diagnosticInfoDialogRef = this.dialog.open(DiagnosticInfoComponent, {});
   }
 
   addComment() {

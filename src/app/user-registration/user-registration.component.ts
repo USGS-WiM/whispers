@@ -83,11 +83,11 @@ export class UserRegistrationComponent implements OnInit {
       confirmEmail: ['', [Validators.required, Validators.email]],
       password: ['', Validators.compose([
         Validators.required, Validators.pattern(this.passwordPattern)
-        ])
+      ])
       ],
       confirmPassword: ['', Validators.compose([
         Validators.required, Validators.pattern(this.passwordPattern)
-        ])
+      ])
       ],
       organization: null,
       role: null,
@@ -121,6 +121,11 @@ export class UserRegistrationComponent implements OnInit {
   ngOnInit() {
 
     console.log('Registration Type: ' + this.data.registration_type);
+
+    // if reg type is General User, set the terms to true to meet validation, since the terms checkbox not appear for General User reg.
+    if (this.data.registration_type === 'public') {
+      this.userRegistrationForm.get('terms').setValue(true);
+    }
 
     // get organizations from the OrganizationService
     this.organizationService.getOrganizations()

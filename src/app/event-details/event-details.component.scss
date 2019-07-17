@@ -1,5 +1,6 @@
 @import url("https://rawgit.com/USGS-WiM/marker-creator/master/stylesheets/css/markers.css");
 @import "../app.variables.scss";
+
 mat-expansion-panel {
     border: 1px solid rgba(210, 210, 220, 1);
 }
@@ -58,15 +59,18 @@ th {
 
 .privileged-permissions {
     display: block;
+
     .title {
         display: block;
         padding: 5px 0 10px 0;
         font-size: 14px;
         color: $text;
+
         b {
             font-weight: bolder;
         }
     }
+
     small {
         display: block;
         padding: 8px 0 2px 0;
@@ -75,9 +79,11 @@ th {
         color: $text-light;
         font-weight: 400;
     }
+
     .permissions {
         display: block;
         padding: 0px 0 25px 0;
+
         .permission {
             color: $text;
             font-style: italic;
@@ -88,6 +94,7 @@ th {
             margin-right: 20px;
             display: inline-block;
             letter-spacing: -0.2px;
+
             &.red {
                 color: $red;
             }
@@ -128,6 +135,7 @@ tr.noBorder td {
     align-items: flex-start;
     justify-content: flex-start;
     padding: 0 0 25px 0;
+
     button {
         margin: 0 10px 0 0;
     }
@@ -157,16 +165,19 @@ tr.noBorder td {
     .details-info {
         display: block;
         padding: 15px 0;
+
         .title {
             font-size: 26px;
             font-weight: 600;
             color: rgba(40, 40, 60, 1);
         }
+
         .subtitle {
             font-size: 18px;
             font-weight: 500;
             color: rgba(40, 40, 60, 1);
         }
+
         .meta {
             font-size: 14px;
             font-weight: 600;
@@ -188,6 +199,7 @@ tr.noBorder td {
     font-weight: 600;
     font-size: 12px;
     bottom: 65px;
+
     @media (max-width: 1500px) {
         right: auto;
         left: 18px;
@@ -256,6 +268,7 @@ tr.noBorder td {
 
 #iconHolder-inline {}
 
+// I don't see these used anywhere
 .flyway-blue:after {
     background-color: rgba(0, 0, 255, 0.3);
     border: 3px solid blue;
@@ -275,6 +288,14 @@ tr.noBorder td {
     background-color: rgba(255, 238, 0, 0.3);
     border: 3px solid red;
 }
+
+// styles for flyways
+.wmm-28995b:after{border-color:#28995b;background-color: #C6DDD0}.wmm-square.wmm-28995b{border-bottom-color: rgba(0, 0, 0, 0.5);}.wmm-square.wmm-28995b:after{color: #28995b;}
+.wmm-ffbd4f:after{border-color:#ffbd4f;background-color: #F1E4CE}.wmm-square.wmm-ffbd4f{border-bottom-color: rgba(0, 0, 0, 0.5);}.wmm-square.wmm-ffbd4f:after{color: #ffbd4f;}
+.wmm-eb5834:after{border-color:#eb5834;background-color: #EDD0C8}.wmm-square.wmm-eb5834{border-bottom-color: rgba(0, 0, 0, 0.5);}.wmm-square.wmm-eb5834:after{color: #eb5834;}
+.wmm-b43cc7:after{border-color:#b43cc7;background-color: #E2CAE6}.wmm-square.wmm-b43cc7{border-bottom-color: rgba(0, 0, 0, 0.5);}.wmm-square.wmm-b43cc7:after{color: #b43cc7;}
+
+.wmm-00f:after{border-color:#00f;background-color: #9ca8ba}.wmm-square.wmm-00f{border-bottom-color: rgba(0, 0, 0, 0.5);}.wmm-square.wmm-00f:after{color: #00f;}
 
 .huc-icon:after {
     border: 3px solid #b57dcf;
@@ -380,30 +401,38 @@ tr.noBorder td {
     .mat-header-row {
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
+
         .mat-header-cell {
             box-sizing: border-box;
             padding: 3px;
+
             &:first-child {
                 padding-left: 15px;
             }
+
             &:last-child {
                 padding-right: 15px;
             }
         }
     }
+
     .mat-row {
         .mat-cell {
             font-size: 12px;
             box-sizing: border-box;
             padding: 3px;
+
             &:first-child {
                 padding-left: 15px;
             }
+
             &:last-child {
                 padding-right: 15px;
             }
+
             ul {
                 padding-left: 15px;
+
                 li {
                     line-height: 12px;
                     padding: 3px 0;
@@ -453,6 +482,7 @@ tr.noBorder td {
     line-height: 13px;
     color: $text;
     z-index: 1001;
+
     .mat-icon {
         position: absolute;
         top: -8px;
@@ -471,19 +501,23 @@ tr.noBorder td {
     width: 100%;
     max-width: 2000px;
     margin: 0 auto;
+
     @media (max-width: 1500px) {
         flex-direction: column-reverse;
         flex-wrap: wrap;
     }
+
     .detailsDiv {
         width: 100%;
         max-width: 1500px;
         background-color: white;
+
         @media (max-width: 1500px) {
             width: 100%;
             max-width: none;
         }
     }
+
     .mapDiv {
         width: 100%;
         height: 100vh;
@@ -494,11 +528,14 @@ tr.noBorder td {
         top: 0;
         border-left: 1.5px solid fade-out($text, 0.3);
         max-width: 600px;
+
         #map {
             width: 100%;
             height: 100vh;
             height: calc(100vh - 104px);
-        } // Height where map moves to top instead of side
+        }
+
+        // Height where map moves to top instead of side
         // Height where map moves to top instead of side
         // Height where map moves to top instead of side
         @media (max-width: 1500px) {
@@ -508,11 +545,14 @@ tr.noBorder td {
             position: static;
             border-bottom: 2px solid #10152C;
             border-left: none;
+
             #map {
                 height: 340px;
             }
         }
-    } // Container for max with on certain elements
+    }
+
+    // Container for max with on certain elements
     // Container for max with on certain elements
     // Container for max with on certain elements
     .event-detail-wrapper {
@@ -520,7 +560,9 @@ tr.noBorder td {
         width: 94%;
         max-width: 1100px;
         margin: 0 auto;
-    } // Auto width wrapper to center content of any size.
+    }
+
+    // Auto width wrapper to center content of any size.
     // Auto width wrapper to center content of any size.
     // Auto width wrapper to center content of any size.
     .auto-width-center {
@@ -532,21 +574,26 @@ tr.noBorder td {
 
 .event-page-group {
     padding: 0 0 35px 0;
+
     &.split {
         display: flex;
         justify-content: space-between;
     }
+
     .event-page-split-half {
         box-sizing: border-box;
+
         table {
             td {
                 text-align: left;
             }
         }
     }
+
     .event-page-split-half:nth-child(1) {
         padding-right: 17px;
     }
+
     .event-page-split-half:nth-child(2) {
         padding-left: 17px;
     }
@@ -565,6 +612,7 @@ tr.noBorder td {
         flex-wrap: wrap;
         flex-direction: column;
     }
+
     .mapDiv,
     .detailsDiv {
         min-width: 100%;
@@ -576,10 +624,12 @@ tr.noBorder td {
 .privileged-meta {
     display: flex;
     flex-wrap: wrap;
+
     .item {
         display: flex;
         flex-direction: column;
         margin-bottom: 15px;
+
         .label,
         .value {
             display: flex;
@@ -587,6 +637,7 @@ tr.noBorder td {
             box-sizing: border-box;
             padding: 2px 25px 2px 0;
         }
+
         .label {
             justify-content: center;
             font-weight: 400;
@@ -595,6 +646,7 @@ tr.noBorder td {
             border-bottom: none;
             text-decoration: underline;
         }
+
         .value {
             justify-content: flex-start;
             color: $text;
@@ -621,29 +673,37 @@ tr.noBorder td {
     .mat-expansion-panel-header {
         border-bottom: 1px solid #D2D2DC !important;
     }
+
     .mat-expansion-panel {
         border-radius: 4px;
     }
+
     .event-detail-action-bar-left {
         margin-bottom: 15px;
     }
+
     .mat-table {
+
         .mat-header-cell,
         mat-header-cell {
             font-size: 11px !important;
             line-height: 11.5px !important;
             padding: 4px !important;
         }
+
         .mat-header-cell:first-child {
             padding-left: 6px !important;
         }
+
         .mat-row,
         mat-row {
+
             .mat-cell,
             mat-cell {
                 font-size: 11px !important;
                 line-height: 11.5px !important;
                 padding: 4px !important;
+
                 &:first-child {
                     padding-left: 6px !important;
                 }
@@ -658,6 +718,7 @@ tr.noBorder td {
 .event-location-detail-wrapper {
     margin: 6px 0 10px 0;
     border-radius: 0 !important;
+
     .mat-expansion-panel-header {
         border-bottom: none;
     }
@@ -667,6 +728,7 @@ tr.noBorder td {
     padding-top: 3px;
     padding-bottom: 3px;
 }
+
 // Comments
 // Comments
 // Comments
@@ -674,11 +736,14 @@ tr.noBorder td {
     list-style-type: none;
     margin: 0 auto 25px auto;
     padding: 0;
+
     li {
         display: block;
         margin-bottom: 30px;
+
         .comment-meta {
             display: flex;
+
             .date,
             .response,
             .type {
@@ -689,6 +754,7 @@ tr.noBorder td {
                 margin-right: 15px;
                 font-weight: 700;
                 font-size: 12px;
+
                 b {
                     background-color: #EEF1FB;
                     display: inline-block;
@@ -696,6 +762,7 @@ tr.noBorder td {
                     border-radius: 10px;
                 }
             }
+
             .identifier {
                 display: flex;
                 flex-direction: column;
@@ -704,6 +771,7 @@ tr.noBorder td {
                 margin-right: 15px;
                 font-weight: 900;
                 font-size: 12px;
+
                 b {
                     background-color: #EEF1FB;
                     display: inline-block;
@@ -711,11 +779,13 @@ tr.noBorder td {
                     border-radius: 10px;
                 }
             }
+
             button {
                 color: #EA3B47;
                 transition: 0.12s;
                 background-color: transparent;
                 opacity: 0.75;
+
                 &:hover {
                     cursor: pointer;
                     background-color: transparent;
@@ -726,8 +796,9 @@ tr.noBorder td {
                 }
             }
         }
+
         .comment-text {
-            font-weight: 600;
+            font-weight: 400;
             font-size: 14px;
             display: block;
             max-width: 720px;
@@ -735,10 +806,12 @@ tr.noBorder td {
             color: #313B57;
             padding-left: 4px;
             box-sizing: border-box;
+
             .comment-response {
                 display: block;
                 box-sizing: border-box;
                 padding: 22px 15px 0 30px;
+
                 .date {
                     display: block;
                     font-size: 12px;
@@ -746,6 +819,7 @@ tr.noBorder td {
                     opacity: 0.5;
                     line-height: 6px;
                 }
+
                 .response-text {
                     color: #313B57;
                     font-size: 14px;
@@ -756,10 +830,13 @@ tr.noBorder td {
                 }
             }
         }
-    } // Has sub comments (on location section)
+    }
+
+    // Has sub comments (on location section)
     // Has sub comments (on location section)
     &.has-sub-comments {
         margin-bottom: 0;
+
         li {
             margin-bottom: 0;
         }
@@ -773,9 +850,11 @@ tr.noBorder td {
     display: flex;
     justify-content: center;
     width: 100%;
+
     button {
         position: relative;
         top: -2px;
+
         &:hover {
             cursor: pointer;
         }
@@ -805,6 +884,7 @@ tr.noBorder td {
 
 .mat-cell {
     line-height: 12px !important;
+
     span {
         line-height: 12px !important;
     }
@@ -819,6 +899,7 @@ tr.noBorder td {
     padding: 0px 0 25px 0;
     font-size: larger;
     font-weight: bold;
+
     .public-status {
         color: $text;
         box-sizing: border-box;
@@ -829,11 +910,14 @@ tr.noBorder td {
         display: inline-block;
         letter-spacing: -0.2px;
         font-size: larger;
+
         &.red {
             color: $red;
         }
+
         &.green {
             color: $green;
         }
     }
 }
+

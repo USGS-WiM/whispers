@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/map';
+import { Subject, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
@@ -46,6 +50,15 @@ export class EditEventLocationComponent implements OnInit {
 
   latitudePattern: RegExp = (/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/);
   longitudePattern: RegExp = (/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/);
+
+  public filteredAdminLevelOnes: ReplaySubject<AdministrativeLevelOne[]> = new ReplaySubject<AdministrativeLevelOne[]>(1);
+  adminLevelOneFilterCtrl: FormControl = new FormControl();
+
+  public filteredAdminLevelTwos: ReplaySubject<AdministrativeLevelTwo[]> = new ReplaySubject<AdministrativeLevelTwo[]>(1);
+  adminLevelTwoFilterCtrl: FormControl = new FormControl();
+
+  /** Subject that emits when the component has been destroyed. */
+  private _onDestroy = new Subject<void>();
 
   endDateBeforeStart(AC: AbstractControl) {
     AC.get('end_date').setErrors(null);
@@ -126,12 +139,16 @@ export class EditEventLocationComponent implements OnInit {
         adminLevelOnes => {
           this.adminLevelOnes = adminLevelOnes;
 
-          // experimental
-          // this.filteredAdminLevelOnes = this.eventSubmissionForm.get('').valueChanges
-          //   .startWith(null)
-          //   .map(val => this.filter(val, this.administrative_level_one, 'name'));
+          // populate the search select options for the adminLevelOne control
+          this.filteredAdminLevelOnes.next(adminLevelOnes);
 
-          // end experimental
+          // listen for search field value changes
+          this.adminLevelOneFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+              this.filterAdminLevelOnes();
+            });
+
         },
         error => {
           this.errorMessage = <any>error;
@@ -147,6 +164,16 @@ export class EditEventLocationComponent implements OnInit {
             if (a.name > b.name) { return 1; }
             return 0;
           });
+
+          // populate the search select options for the adminLevelTwo control
+          this.filteredAdminLevelTwos.next(adminLevelTwos);
+
+          // listen for search field value changes
+          this.adminLevelTwoFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+              this.filterAdminLevelTwos();
+            });
         },
         error => {
           this.errorMessage = <any>error;
@@ -175,6 +202,43 @@ export class EditEventLocationComponent implements OnInit {
     this.preventStartDateRemoval();
 
   }
+
+  private filterAdminLevelOnes() {
+    if (!this.adminLevelOnes) {
+      return;
+    }
+    // get the search keyword
+    let search = this.adminLevelOneFilterCtrl.value;
+    if (!search) {
+      this.filteredAdminLevelOnes.next(this.adminLevelOnes.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the adminLevelOnes
+    this.filteredAdminLevelOnes.next(
+      this.adminLevelOnes.filter(admin_level_one => admin_level_one.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  private filterAdminLevelTwos() {
+    if (!this.adminLevelOnes) {
+      return;
+    }
+    // get the search keyword
+    let search = this.adminLevelTwoFilterCtrl.value;
+    if (!search) {
+      this.filteredAdminLevelTwos.next(this.adminLevelTwos.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the adminLevelTwos
+    this.filteredAdminLevelTwos.next(
+      this.adminLevelTwos.filter(admin_level_two => admin_level_two.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {
@@ -225,6 +289,16 @@ export class EditEventLocationComponent implements OnInit {
             if (a.name > b.name) { return 1; }
             return 0;
           });
+
+          // populate the search select options for the adminLevelTwo control
+          this.filteredAdminLevelTwos.next(adminLevelTwos);
+
+          // listen for search field value changes
+          this.adminLevelTwoFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+              this.filterAdminLevelTwos();
+            });
         },
         error => {
           this.errorMessage = <any>error;

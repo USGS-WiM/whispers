@@ -81,9 +81,8 @@
       <p>
         Authenticated users at partner natural resource agencies have access to enhanced WHISPers features such as
         the ability to see more detailed event information than the public can see, the ability to enter and update
-        event information for their agency, a communication interface with the USGS National Wildlife Health Center
-        and other agencies, and a robust collection of visualization and analytical tools designed for wildlife
-        disease professionals. Administrators within partner agencies and/or the USGS National Wildlife Health
+        event information for their agency, and a communication interface with the USGS National Wildlife Health Center
+        and other agencies. Administrators within partner agencies and/or the USGS National Wildlife Health
         Center can authenticate users who want access to these enhanced features.
       </p>
 
@@ -92,7 +91,8 @@
       <p>
         No, information in WHISPers is verified and provided by partner agencies and laboratories. If you are a
         private individual or entity with a mortality event to report, please contact your state department of
-        natural resources or state agency of game and fish. A list of state agencies can be at the <a href="https://www.fishwildlife.org/landing/membership/member-list">Association
+        natural resources or state agency of game and fish. A list of state agencies can be at the <a
+          href="https://www.fishwildlife.org/landing/membership/member-list">Association
           of Fish and Wildlife Agencies</a> website.
       </p>
 
@@ -104,8 +104,8 @@
         bacteria or toxins. The color key is on the map. For counties with multiple events, the color of the
         circle or triangle is gray. The number in the shape equals the number of events recorded in WHISPers
         that have occurred in that county. Clicking on the circle or triangle shows more information on the
-        events in that county. The map on the homepage displays the 20 most recent disease and surveillance
-        events reported in WHISPers.
+        events in that county. The map on the homepage displays disease and surveillance events that started over the
+        previous 4 weeks.
       </p>
 
       <label class="about-header"> Why are there many events in some places and no events in others?</label>
@@ -178,7 +178,8 @@
         best of our ability before inclusion in the database.
         WHISPers does not currently contain much information from designed surveillance programs;
         however, data on select surveillance projects that the USGS National Wildlife Health Center
-        has partnered on can be found on our <a href="https://www.usgs.gov/centers/nwhc/science/disease-surveillance">wildlife
+        has partnered on can be found on our <a
+          href="https://www.usgs.gov/centers/nwhc/science/disease-surveillance">wildlife
           pathogen surveillance websites</a>. Surveillance
         information is planned to be added in the next version of WHISPers.
         Event information is collected and shared opportunistically and therefore may not be a
@@ -258,7 +259,8 @@
         For fact sheets and other information about specific wildlife diseases, you may
         want to visit the USGS National Wildlife Health Center <a href="https://www.usgs.gov/centers/nwhc">website</a>
         or peruse the
-        <a href="https://www.usgs.gov/centers/nwhc/science/field-manual-wildlife-diseases?qt-science_center_objects=0#qt-science_center_objects">Field
+        <a
+          href="https://www.usgs.gov/centers/nwhc/science/field-manual-wildlife-diseases?qt-science_center_objects=0#qt-science_center_objects">Field
           Manual of Wildlife Disease</a>.
       </p>
 
@@ -290,7 +292,7 @@
       </p>
 
 
-      <label class="about-header"> What is a diagnostic or epidemiologic assistance request?</label>
+      <label class="about-header"> What is a diagnostic or consultative services request?</label>
       <p>
         The USGS National Wildlife Health Center (NWHC) is a full service
         diagnostic and research laboratory. Staff work with state, federal, and
@@ -301,19 +303,20 @@
         mortality events. Staff from natural resource agencies can request
         permission to ship specimens to NWHC for cause of death determination
         (diagnostic request), as well as seek input on responding to disease
-        events (epidemiologic assistance request).
+        events (consultative services request).
       </p>
 
-      <label class="about-header">How do I submit a carcass to the USGS National Wildlife Health Center or request
-        epidemiology assistance?</label>
+      <label class="about-header">How do I submit a carcass to the USGS National Wildlife Health Center or request a
+        consult?</label>
       <p>
         Requests for permission to ship specimens to the USGS National Wildlife
         Health Center (NWHC) can be made by authenticated natural resource
-        agency partner users from their WHISPers dashboard. For an urgent
+        agency partner users from the event details page. For an urgent
         wildlife disease situation, call NWHC at 608-270-2480; for NWHC Hawaii
         call 808-792-9520. Please do not submit carcasses without contacting
         NWHC first.
-        The general public should report sick or dead wildlife to their <a href="https://www.fishwildlife.org/landing/membership/member-list">local
+        The general public should report sick or dead wildlife to their <a
+          href="https://www.fishwildlife.org/landing/membership/member-list">local
           natural resource agency</a>.
       </p>
 
@@ -337,7 +340,6 @@
         Center.
       </p>
     </mat-tab>
-
 
     <mat-tab>
       <ng-template mat-tab-label>
@@ -369,18 +371,19 @@
 
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon class="example-tab-icon">info</mat-icon> <!-- maybe check_circle is a better icon? -->
-        Credits
+        <mat-icon class="example-tab-icon">info</mat-icon>
+        Credits, User Guides, Metadata
       </ng-template>
-      <h3>Credits and Sources</h3>
+      <h3>User Guides &amp; Metadata</h3>
 
-      <p> TODO: add credits and data sources
-          
-      </p>
       <p>
-
+        <button mat-button color="accent" (click)="openMetadataLink()">
+          <mat-icon>info</mat-icon> Click here for WHISPers User Guide &amp; Metadata (external link)
+        </button>
+      </p>
 
     </mat-tab>
+
   </mat-tab-group>
 </mat-dialog-content>
 <mat-dialog-actions>

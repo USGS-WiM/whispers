@@ -9,6 +9,7 @@
           (ngModelChange)="preventStartDateRemoval()">
         <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
         <mat-datepicker #startDate></mat-datepicker>
+        <mat-hint align="start">{{locationStartDateTooltip()}}</mat-hint>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -22,6 +23,7 @@
         <input matInput [matDatepicker]="endDate" placeholder="Location End Date" formControlName="end_date">
         <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
         <mat-datepicker #endDate></mat-datepicker>
+        <mat-hint align="start">{{locationEndDateTooltip()}}</mat-hint>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -38,6 +40,7 @@
           required>
           <mat-option *ngFor="let country of countries" value="{{country.id}}">{{country.name}}</mat-option>
         </mat-select>
+        <mat-hint align="start">{{countryTooltip()}}</mat-hint>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -70,6 +73,7 @@
             {{adminLevelOne.name}}
           </mat-option>
         </mat-select>
+        <mat-hint align="start">{{stateTooltip()}}</mat-hint>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -102,6 +106,7 @@
             {{adminLevelTwo.name}}
           </mat-option>
         </mat-select>
+        <mat-hint align="start">{{editCountyTooltip()}}</mat-hint>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -116,28 +121,38 @@
     <div class="vertical-form-container">
       <mat-form-field class="form-control">
         <input matInput placeholder="Location Name" formControlName="name">
+        <mat-icon class="hint-hover-text" matSuffix 
+              matTooltip={{editLocationNameTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
       </mat-form-field>
+      
 
       <mat-form-field class="form-control">
         <mat-select placeholder="Land Ownership" formControlName="land_ownership" required>
           <mat-option *ngFor="let landOwnership of landOwnerships" value="{{landOwnership.id}}">{{landOwnership.name}}
           </mat-option>
         </mat-select>
+        <mat-hint align="start">{{editLandOwnershipTooltip()}}</mat-hint>
         <mat-error *ngIf="editEventLocationForm.get('land_ownership').invalid">Please
           enter a value</mat-error>
       </mat-form-field>
-
     </div>
 
     <div class="horizontal-form-container">
       <mat-form-field class="form-control">
         <input matInput placeholder="Latitude" formControlName="latitude">
+        <mat-icon class="hint-hover-text" matSuffix 
+              matTooltip={{latitudeTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-error *ngIf="editEventLocationForm.get('latitude').invalid">Invalid
           latitude</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-control">
         <input matInput placeholder="Longitude" formControlName="longitude">
+        <mat-icon class="hint-hover-text" matSuffix 
+              matTooltip={{longitudeTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-error *ngIf="editEventLocationForm.get('longitude').invalid">Invalid
           longitude</mat-error>
       </mat-form-field>
@@ -145,7 +160,9 @@
 
     <mat-card>
       <mat-card-header>
-        <mat-card-title>GNIS Standardized Location Name</mat-card-title>
+        <mat-card-title>GNIS Standardized Location Name<mat-icon class="hint-hover-text" matSuffix 
+          matTooltip={{editStandardizedLocationNameTooltip()}} matTooltipClass="tooltip-breakline">
+    help</mat-icon></mat-card-title>
       </mat-card-header>
       <mat-card-content>
 

@@ -700,6 +700,20 @@ input[type=checkbox]{
     }
 }
 
+.hint-table-hover-text {
+    position: relative;
+    transform: scale(0.8);
+    transition: 0.125s;
+    opacity: 0.3;
+    font-size: 18px;
+
+    &:hover {
+        cursor: default;
+        opacity: 0.9;
+        transition: 0.125s; 
+    }
+}
+
 // this allows multiline text in tooltips
 .tooltip-breakline {
     white-space: pre-line;

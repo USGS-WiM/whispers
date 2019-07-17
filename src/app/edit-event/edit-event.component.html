@@ -9,6 +9,7 @@
       <mat-form-field class="form-control">
         <input matInput placeholder="Event Reference" formControlName="event_reference"
           [readonly]="editEventForm.get('complete').value">
+          <mat-hint align="start">{{userEventRefTooltip()}}</mat-hint>
         <mat-error *ngIf="editEventForm.get('event_reference').invalid">{{getErrorMessage('event_reference')}}
         </mat-error>
       </mat-form-field>
@@ -20,7 +21,7 @@
           <mat-option *ngFor="let event_type of event_types" [value]="event_type.id">{{event_type.name}}</mat-option>
         </mat-select>
         <mat-icon class="hint-hover-text" matSuffix 
-              matTooltip={{eventTypeTooltip()}} matTooltipClass="tooltip-breakline">
+              matTooltip={{editEventTypeTooltip()}} matTooltipClass="tooltip-breakline">
               help</mat-icon>
       </mat-form-field>
       <!-- eventTypeTooltip -->
@@ -31,7 +32,7 @@
             <mat-option [value]="true">Visible to Public</mat-option>
             <mat-option [value]="false">Not Visible to Public</mat-option>
           </mat-select>
-          <mat-hint align="start"></mat-hint>
+          <mat-hint align="start">{{editEventVisibilityTooltip()}}</mat-hint>
           <mat-error *ngIf="editEventForm.get('public').invalid">{{getErrorMessage('public')}}</mat-error>
         </mat-form-field>
 
@@ -41,6 +42,9 @@
             <mat-option [value]="true">Complete</mat-option>
             <mat-option [value]="false">Incomplete</mat-option>
           </mat-select>
+          <mat-icon class="hint-hover-text" matSuffix 
+              matTooltip={{editRecordStatusTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
           <mat-hint align="start"></mat-hint>
           <mat-hint align="end" matTooltip="Public field">
             <mat-icon>public</mat-icon>

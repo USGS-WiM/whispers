@@ -30,6 +30,7 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 import { DataUpdatedService } from '@app/services/data-updated.service';
 
 import { APP_SETTINGS } from '@app/app.settings';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 declare let gtag: Function;
 
 @Component({
@@ -497,6 +498,14 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       this.labViolation = true;
     }
   }
+
+  // hover text
+  numberAssessedTooltip() { const string = FIELD_HELP_TEXT.numberAssessedTooltip; return string; }
+  speciesDiagnosisTooltip() { const string = FIELD_HELP_TEXT.speciesDiagnosisTooltip; return string; }
+  basisOfDiagnosisTooltip() { const string = FIELD_HELP_TEXT.basisOfDiagnosisTooltip; return string; }
+  numberWithDiagnosisTooltip() { const string = FIELD_HELP_TEXT.numberWithDiagnosisTooltip; return string; }
+  labTooltip() { const string = FIELD_HELP_TEXT.labTooltip; return string; }
+  significanceOfDiagnosisForSpeciesTooltip() { const string = FIELD_HELP_TEXT.significanceOfDiagnosisForSpeciesTooltip; return string; }
 
   onSubmit(formValue) {
 

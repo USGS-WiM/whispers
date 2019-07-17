@@ -71,6 +71,9 @@
           <mat-option *ngFor="let diagnosisBasis of diagnosisBases" [value]="diagnosisBasis.id">{{diagnosisBasis.name}}
           </mat-option>
         </mat-select>
+        <mat-icon class="hint-hover-text" matSuffix 
+              matTooltip={{basisOfDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
       </mat-form-field>
 
       <mat-form-field class="form-control">
@@ -80,10 +83,17 @@
               *ngIf="this.speciesDiagnosisForm.get('suspect').value && diagnosisCause.id !== 4">Suspect&nbsp;</span>{{diagnosisCause.name}}
           </mat-option>
         </mat-select>
+        <mat-icon class="hint-hover-text" matSuffix 
+              matTooltip={{significanceOfDiagnosisForSpeciesTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
+        
       </mat-form-field>
 
       <mat-form-field class="form control species-number-control">
         <input matInput placeholder="Number Assessed" type="number" min="0" formControlName="tested_count">
+        <mat-icon class="hint-hover-text" matSuffix 
+              matTooltip={{numberAssessedTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -96,6 +106,9 @@
       <mat-form-field class="form control species-number-control">
         <input matInput placeholder="Number with this Diagnosis" type="number" min="0"
           formControlName="diagnosis_count">
+          <mat-icon class="hint-hover-text" matSuffix 
+              matTooltip={{numberWithDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -141,6 +154,9 @@
                     {{laboratory.name}}
                   </mat-option>
                 </mat-select>
+                <mat-icon class="hint-hover-text" matSuffix 
+                      matTooltip={{labTooltip()}} matTooltipClass="tooltip-breakline">
+                help</mat-icon>
                 <mat-hint align="end" matTooltip="Public field">
                   <mat-icon>public</mat-icon>
                 </mat-hint>

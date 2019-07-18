@@ -127,13 +127,15 @@
 
         <div class="horizontal-form-container">
           <mat-form-field class="form-control">
-            <input matInput placeholder="Latitude" formControlName="latitude">
+            <input matInput placeholder="Latitude" formControlName="latitude"
+              (ngModelChange)="truncateDecimalDegrees($event, 'latitude')">
             <mat-error *ngIf="addEventLocationForm.get('latitude').invalid">Invalid
               latitude</mat-error>
           </mat-form-field>
 
           <mat-form-field class="form-control">
-            <input matInput placeholder="Longitude" formControlName="longitude">
+            <input matInput placeholder="Longitude" formControlName="longitude"
+              (ngModelChange)="truncateDecimalDegrees($event, 'longitude')">
             <mat-error *ngIf="addEventLocationForm.get('longitude').invalid">Invalid
               longitude</mat-error>
           </mat-form-field>

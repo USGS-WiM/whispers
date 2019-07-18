@@ -505,6 +505,18 @@ export class AddEventLocationComponent implements OnInit {
     return null;
   }
 
+  truncateDecimalDegrees($event, field) {
+
+    const beforeDecimal = ($event + '').split('.')[0];
+    const afterDecimal = ($event + '').split('.')[1];
+
+    if (afterDecimal.length > 6) {
+      const truncatedValue = beforeDecimal + '.' + afterDecimal.substring(0, 6);
+      this.addEventLocationForm.get(field).setValue(truncatedValue);
+    }
+
+  }
+
   checkforMissingSpecies() {
 
     // tslint:disable-next-line:max-line-length

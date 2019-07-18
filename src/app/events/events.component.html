@@ -37,8 +37,9 @@
         *ngIf="(currentDisplayQuery.diagnosis_type.indexOf(diagnosis_type)) < (currentDisplayQuery.diagnosis_type.length - 1)">{{(currentDisplayQuery.diagnosis_type_includes_all)
             ? "and" : "or"}}&nbsp;</span>
     </span>
+    <span class="text-bold">&nbsp;|&nbsp;</span>
   </span>
-  <span class="text-bold">&nbsp;|&nbsp;</span>
+
   <!-- Diagnosis -->
   <span *ngIf="currentDisplayQuery.diagnosis && currentDisplayQuery.diagnosis.length > 0">
     <span *ngFor="let diagnosis of currentDisplayQuery.diagnosis">{{diagnosis}}
@@ -57,13 +58,14 @@
   </span>
   <!--Admin L1-->
   <span *ngIf="currentDisplayQuery.administrative_level_one && currentDisplayQuery.administrative_level_one.length > 0">
-    <span *ngFor="let adminLevelTwo of currentDisplayQuery.administrative_level_two">{{adminLevelTwo}}
-      <span *ngFor="let adminLevelOne of currentDisplayQuery.administrative_level_one">{{adminLevelOne}}
-        <span
-          *ngIf="(currentDisplayQuery.administrative_level_one.indexOf(adminLevelOne)) < (currentDisplayQuery.administrative_level_one.length - 1)">{{(currentDisplayQuery.administrative_level_one_includes_all)
+
+    <!-- <span *ngFor="let adminLevelTwo of currentDisplayQuery.administrative_level_two">{{adminLevelTwo}} -->
+    <span *ngFor="let adminLevelOne of currentDisplayQuery.administrative_level_one">{{adminLevelOne}}
+      <span
+        *ngIf="(currentDisplayQuery.administrative_level_one.indexOf(adminLevelOne)) < (currentDisplayQuery.administrative_level_one.length - 1)">{{(currentDisplayQuery.administrative_level_one_includes_all)
                 ? "and" : "or"}}&nbsp;</span>
-      </span>
     </span>
+    <!-- </span> -->
     <span class="text-bold">&nbsp;|&nbsp;</span>
   </span>
   <!-- Admin L2 -->
@@ -88,7 +90,7 @@
   <span class="text-bold text-large" *ngIf="selectedEventGroup !== null">Current Event Group Selection:
     {{selectedEventGroup.name}}&nbsp;<span
       class="text-smaller">{{selectedEventGroup.comments[0].comment}}</span>&nbsp;<button mat-icon-button>
-      <mat-icon aria-label="Help" (click)=showEventGroupSelectionInfo()>help</mat-icon>
+      <mat-icon aria-label="Help" (click)=showEventGroupSelectionInfo()>info</mat-icon>
     </button></span>
 </div>
 

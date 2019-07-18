@@ -327,7 +327,8 @@
 
                           <div class="horizontal-form-container">
                             <mat-form-field class="form-control">
-                              <input matInput placeholder="Latitude" formControlName="latitude">
+                              <input matInput placeholder="Latitude" formControlName="latitude"
+                                (ngModelChange)="truncateDecimalDegrees($event, eventLocationIndex, 'latitude')">
                               <mat-error
                                 *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('latitude').invalid">
                                 Invalid
@@ -335,7 +336,8 @@
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
-                              <input matInput placeholder="Longitude" formControlName="longitude">
+                              <input matInput placeholder="Longitude" formControlName="longitude"
+                                (ngModelChange)="truncateDecimalDegrees($event, eventLocationIndex, 'longitude')">
                               <mat-error
                                 *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('longitude').invalid">
                                 Invalid
@@ -1324,10 +1326,10 @@
                       <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar ">
                       </mat-progress-bar>
                       <p>
-                        <button mat-raised-button color="primary"
+                        <!-- <button mat-raised-button color="primary"
                           (click)="openEventSubmitConfirm(eventSubmissionForm.value)">
                           <mat-icon>pageview</mat-icon> Review Event Submission
-                        </button>
+                        </button> -->
                         <p>
                           <button mat-raised-button color="primary"
                             [disabled]="eventSubmissionForm.invalid || duplicateEventOrgViolation || locationSpeciesNumbersViolation || completeEventLocationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation || submitLoading"

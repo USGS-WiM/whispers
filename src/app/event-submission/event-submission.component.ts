@@ -1159,6 +1159,19 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     });
 
 
+    ///////////////
+    this.eventSubmissionForm.get('complete').valueChanges.subscribe(value => {
+      if (value === true) {
+        this.eventSubmissionForm.get('quality_check').enable();
+      } else if (value === false) {
+        this.eventSubmissionForm.get('quality_check').disable();
+        this.eventSubmissionForm.get('quality_check').setValue(null);
+      }
+    });
+
+    /////////////////////
+
+
   }
 
   // onFormChanges(): void {
@@ -1359,6 +1372,18 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       AC.get('new_location_species').setErrors({ minSpecies: true });
     }
     return null;
+  }
+
+  truncateDecimalDegrees($event, eventLocationIndex, field) {
+
+    const beforeDecimal = ($event + '').split('.')[0];
+    const afterDecimal = ($event + '').split('.')[1];
+
+    if (afterDecimal.length > 6) {
+      const truncatedValue = beforeDecimal + '.' + afterDecimal.substring(0, 6);
+      this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get(field).setValue(truncatedValue);
+    }
+
   }
 
   checkForDuplicateEventOrg(orgID) {

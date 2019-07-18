@@ -78,7 +78,7 @@ export class AddServiceRequestComponent implements OnInit {
       this.serviceRequestForm.patchValue({
         id: this.data.servicerequest.id,
         event: this.data.event_id,
-        request_response: null,
+        request_response: this.data.servicerequest.request_response,
       });
 
       this.serviceRequestService.getServiceRequestResponses()

@@ -368,5 +368,17 @@ export class EditEventLocationComponent implements OnInit {
     this.editEventLocationForm.get('gnis_name').setValue('');
   }
 
+  truncateDecimalDegrees($event, field) {
+
+    const beforeDecimal = ($event + '').split('.')[0];
+    const afterDecimal = ($event + '').split('.')[1];
+
+    if (afterDecimal.length > 6) {
+      const truncatedValue = beforeDecimal + '.' + afterDecimal.substring(0, 6);
+      this.editEventLocationForm.get(field).setValue(truncatedValue);
+    }
+
+  }
+
 
 }

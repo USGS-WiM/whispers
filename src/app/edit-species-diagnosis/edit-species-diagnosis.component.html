@@ -9,7 +9,9 @@
       <span *ngIf="locationspeciesString">Species: {{locationspeciesString}} </span> <br />
       <span *ngIf="data.locationspecies">Location: {{administrative_level_two}}, {{administrative_level_one}}</span>
       <br />
-      <span *ngIf="data.speciesdiagnosis">Species Diagnosis: {{data.speciesdiagnosis.diagnosis_string}} </span>
+      <span *ngIf="data.speciesdiagnosis">Species Diagnosis: {{data.speciesdiagnosis.diagnosis_string}} </span><mat-icon class="hint-hover-text" matSuffix 
+      matTooltip={{speciesDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
+help</mat-icon>
     </h3>
   </div>
 
@@ -19,8 +21,10 @@
       </span> <br />
       <!-- <span *ngIf="data.locationspecies">Location: {{administrative_level_two}}, {{administrative_level_one}}</span> -->
       <br />
-      <span *ngIf="data.speciesdiagnosis">Species Diagnosis:
-        {{data.speciesdiagnosis.diagnosis | displayValue:'name':this.diagnoses}} </span>
+      <span *ngIf="data.speciesdiagnosis">Species Diagnosis: 
+        {{data.speciesdiagnosis.diagnosis | displayValue:'name':this.diagnoses}} </span><mat-icon class="hint-hover-text" matSuffix 
+        matTooltip={{speciesDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
+  help</mat-icon>
     </h3>
   </div>
 
@@ -49,6 +53,9 @@
               {{diagnosis.name}}
             </mat-option>
           </mat-select>
+            <mat-icon class="hint-hover-text" matSuffix 
+                matTooltip={{speciesDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
           <mat-hint align="end" matTooltip="Public field">
             <mat-icon>public</mat-icon>
           </mat-hint>
@@ -58,9 +65,10 @@
 
         <mat-checkbox class="form-control suspect-checkbox" formControlName="suspect"
           (change)="checkSuspectCompliance()"
-          matTooltip="Check this box if this diagnosis is based on clinical signs, previous history, or field necropsy.  Also check this box if the laboratory diagnosis was 'disease suspect', such as Avian Cholera Suspect for example. Public field.">
+          matTooltip={{speciesDiagnosisSuspectTooltip()}}>
           Species
-          Diagnosis Suspect <mat-icon class="public-icon">public</mat-icon>
+          Diagnosis Suspect
+          <mat-icon class="public-icon">public</mat-icon>
         </mat-checkbox>
       </div>
 

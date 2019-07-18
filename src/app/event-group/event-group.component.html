@@ -50,7 +50,9 @@
 
     <!-- ID/Name Column -->
     <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> ID <mat-icon class="hint-table-hover-text" matSuffix 
+        matTooltip={{eventGroupIDTooltip()}} matTooltipClass="tooltip-breakline">
+  help</mat-icon></mat-header-cell>
       <mat-cell *matCellDef="let eventGroup"> {{eventGroup.name}} </mat-cell>
     </ng-container>
 

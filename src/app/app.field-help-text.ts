@@ -54,6 +54,7 @@ public static get editEventDiagnosisTooltip(): string { return 'The overall main
 public static get eventCommentTooltip(): string { return 'Observations or communications relevant to the entire event that aid interpretation of the data.'; }
 public static get eventCommentTypeTooltip(): string { return 'Flags comment as belonging to a certain category. \n\n Options are: "Field Update" - observation from the field as the event is ongoing; "Management" - disease management actions considered or performed; "Epidemiological" - epidemiological context or patterns; "Diagnostic" - laboratory diagnostic updates; "Other" - any other comments that do not fit within one of the other categories in this list.'; }
 
+public static get serviceRequestFullTooltip(): string { return 'Options are: "No services needed at this time" - user wants to enter an event but does not need consultative or diagnostic services from USGS National Wildlife Health Center (NWHC); "Request diagnostic and consultative services" - user has specimens that they want to submit to NWHC for diagnostic evaluation; "Request consultative services ONLY" - user does not have specimens to submit to NWHC but would like advice on disease management, personal protective gear, etc.'; }
 public static get serviceRequestNoServicesTooltip(): string { return 'User wants to enter an event but does not need consultative or diagnostic services from USGS National Wildlife Health Center (NWHC)'; }
 public static get serviceRequestRequestDiaAndConsultTooltip(): string { return 'User has specimens that they want to submit to NWHC for diagnostic evaluation'; }
 public static get serviceRequestRequestDiaServicesOnlyTooltip(): string { return 'User does not have specimens to submit to NWHC but would like advice on disease management, personal protective gear, etc.'; }
@@ -76,7 +77,7 @@ public static get eventVisibilityTooltip(): string { return 'Indicates whether e
 public static get editEventVisibilityTooltip(): string { return 'Indicates whether event is visible to the public or not.'; }
 
 public static get contactOrganizationTooltip(): string { return 'Organization(s) to display to general public for them to contact regarding general inquiries about the event. \n\n If correct organization is not in dropdown, request a new option via the dashboard.'; }
-public static get editContactOrganizationTooltip(): string { return 'County of location (or equivalent, such as parish or burough in the United States).'; }
+public static get editContactOrganizationTooltip(): string { return 'Organization(s) to contact regarding general inquiries about the event.'; }
 
 public static get locationStartDateTooltip(): string { return 'Estimated beginning date of the event at this location.'; }
 public static get locationEndDateTooltip(): string { return 'Estimated ending date of the event at this location.'; }

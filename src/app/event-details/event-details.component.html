@@ -31,14 +31,16 @@
       <div class="event-detail-wrapper">
 
         <mat-card-title class="details-info">
-          <div class="title">Event {{eventData.id}}</div>
+          <div class="title">Event {{eventData.id}}<mat-icon class="hint-hover-text" matSuffix 
+            matTooltip={{eventIDTooltip()}} matTooltipClass="tooltip-breakline">
+            help</mat-icon></div>
           <div class="subtitle">{{eventData.event_type_string}}<mat-icon class="hint-hover-text" matSuffix 
             matTooltip={{editEventTypeTooltip()}} matTooltipClass="tooltip-breakline">
             help</mat-icon></div>
           <div class="meta">
-            <span>{{eventData.start_date | date:'mediumDate'}}</span>
+            <span matTooltip={{eventStartDateTooltip()}}>{{eventData.start_date | date:'mediumDate'}}</span>
             <span *ngIf="eventData.end_date !== null && eventData.end_date !== ''"> thru </span>
-            <span>{{eventData.end_date | date:'mediumDate'}}</span>
+            <span matTooltip={{eventEndDateTooltip()}}>{{eventData.end_date | date:'mediumDate'}}</span>
           </div>
         </mat-card-title>
 
@@ -101,7 +103,9 @@
                 <div class="event-table-header">Event Organizations</div>
                 <table>
                   <tr>
-                    <th>Organization</th>
+                    <th>Organization<mat-icon class="hint-table-hover-text" matSuffix 
+                      matTooltip={{editContactOrganizationTooltip()}} matTooltipClass="tooltip-breakline">
+                      help</mat-icon></th>
                     <th>Location</th>
                   </tr>
                   <tr *ngFor="let eventOrganization of eventData.eventorganizations">
@@ -569,7 +573,6 @@
                       <mat-icon>add_comment</mat-icon>
                       Add Comment
                     </button><br>
-
                     <button mat-icon-button aria-label="respond to service request" color="primary"
                       [disabled]="!eventData.permissions.destroy || eventData.complete"
                       (click)="addServiceRequestResponse(servicerequest)"
@@ -577,9 +580,11 @@
                       <mat-icon>assignment_turned_in</mat-icon>
                       Respond
                     </button>
+                    <mat-icon style="margin-left: 40px;" class="hint-hover-text" matSuffix 
+                      matTooltip={{nwhcCarcassSubApprovalTooltip()}} matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
                     <mat-divider [inset]="true" *ngIf="!last" class="request-divider"></mat-divider>
                   </li>
-
                 </ul>
 
                 <div class="detail-section-buttons">
@@ -745,7 +750,7 @@
                       <div class="value">{{eventLocation.gnis_id}}</div>
                     </div>
                     <div class="item">
-                      <div class="label">Flyways
+                      <div class="label" matTooltip={{flywayTooltip()}}>Flyways
                       </div>
                       <div class="value"><span *ngFor="let flyway of eventLocation.flyways">{{flyway.name}}</span></div>
                     </div>

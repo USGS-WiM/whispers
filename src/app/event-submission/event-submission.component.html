@@ -336,6 +336,9 @@
                           <div class="vertical-form-container">
                             <mat-form-field class="form-control">
                               <input matInput placeholder="Location Name" formControlName="name">
+                              <mat-icon class="hint-hover-text" matSuffix 
+                                    matTooltip={{locationNameTooltip()}} matTooltipClass="tooltip-breakline">
+                              help</mat-icon>
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
@@ -1319,7 +1322,7 @@
                                     <mat-icon>person_add</mat-icon> Add Individual
                                   </button>
                                   <button mat-button color="primary"
-                                    matTooltip="Add Read Only Collaborators from Circle"
+                                    matTooltip={{collaboratorsAddCircleTooltip()}}
                                     (click)="openCircleChooseDialog('read')">
                                     <mat-icon>group_add</mat-icon> Add Circle
                                   </button>
@@ -1341,7 +1344,7 @@
                                     </button></mat-list-item>
                                 </mat-list>
                                 <div class="button-row">
-                                  <button mat-button color="primary" matTooltip="Add Read and Write Collaborator"
+                                  <button mat-button color="primary" matTooltip={{collaboratorsAddIndividualTooltip()}}
                                     (click)="addCollaborator('write')">
                                     <mat-icon>person_add</mat-icon> Add Individual
                                   </button>

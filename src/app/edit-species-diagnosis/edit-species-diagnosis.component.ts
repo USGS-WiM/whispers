@@ -501,11 +501,28 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
   // hover text
   numberAssessedTooltip() { const string = FIELD_HELP_TEXT.numberAssessedTooltip; return string; }
-  speciesDiagnosisTooltip() { const string = FIELD_HELP_TEXT.speciesDiagnosisTooltip; return string; }
+  speciesDiagnosisTooltip() {
+    let string;
+    if (this.data.species_diagnosis_action === 'edit' || this.data.species_diagnosis_action === 'editToFormArray') {
+      string = FIELD_HELP_TEXT.editSpeciesDiagnosisTooltip;
+    } else {
+      string = FIELD_HELP_TEXT.speciesDiagnosisTooltip;
+    }
+    return string;
+  }
   basisOfDiagnosisTooltip() { const string = FIELD_HELP_TEXT.basisOfDiagnosisTooltip; return string; }
   numberWithDiagnosisTooltip() { const string = FIELD_HELP_TEXT.numberWithDiagnosisTooltip; return string; }
-  labTooltip() { const string = FIELD_HELP_TEXT.labTooltip; return string; }
+  labTooltip() {
+    let string;
+    if (this.data.species_diagnosis_action === 'edit' || this.data.species_diagnosis_action === 'editToFormArray') {
+      string = FIELD_HELP_TEXT.editLabTooltip;
+    } else {
+      string = FIELD_HELP_TEXT.labTooltip;
+    }
+    return string;
+   }
   significanceOfDiagnosisForSpeciesTooltip() { const string = FIELD_HELP_TEXT.significanceOfDiagnosisForSpeciesTooltip; return string; }
+  speciesDiagnosisSuspectTooltip() { const string = FIELD_HELP_TEXT.speciesDiagnosisSuspectTooltip; return string; }
 
   onSubmit(formValue) {
 

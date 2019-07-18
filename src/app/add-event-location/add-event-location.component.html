@@ -610,6 +610,9 @@
                       <span>{{contact.first_name}} {{contact.last_name}} | {{contact.organization_string}}</span>
                     </mat-option>
                   </mat-select>
+                  <mat-icon class="hint-hover-text" matSuffix 
+                    matTooltip={{contactPersonTooltip()}} matTooltipClass="tooltip-breakline">
+                    help</mat-icon>
                 </mat-form-field>
 
                 <mat-form-field class="form-control  contact-type-select">
@@ -617,6 +620,9 @@
                     <mat-option *ngFor="let contactType of contactTypes" [value]="contactType.id">{{contactType.name}}
                     </mat-option>
                   </mat-select>
+                  <mat-icon class="hint-hover-text" matSuffix 
+                    matTooltip={{contactTypeTooltip()}} matTooltipClass="tooltip-breakline">
+                    help</mat-icon>
                 </mat-form-field>
 
                 <div class="contact-button-div">

@@ -2,6 +2,8 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef } from '@angular/material';
 import { Injectable } from '@angular/core';
 
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
+
 import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from '@angular/material';
 import { debounceTime, distinctUntilChanged, startWith, tap, delay } from 'rxjs/operators';
 import { merge } from 'rxjs/observable/merge';
@@ -224,5 +226,6 @@ export class EventGroupComponent implements AfterViewInit, OnInit {
       );
   }
 
+  eventGroupIDTooltip() { const string = FIELD_HELP_TEXT.eventGroupIDTooltip; return string; }
 
 }

@@ -688,10 +688,11 @@ input[type=checkbox]{
 
 .hint-hover-text {
     position: relative;
-    top: 6px;
+    top: 3px;
     transform: scale(0.8);
     transition: 0.125s;
     opacity: 0.3;
+    font-size: 20px;
 
     &:hover {
         cursor: default;

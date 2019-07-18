@@ -24,7 +24,7 @@
 
       <mat-form-field class="species-number-control">
         <input matInput placeholder="Population" type="number" min="0" formControlName="population_count">
-        <mat-icon class="hint-hover-text" matSuffix 
+        <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
               matTooltip={{populationTooltip()}} matTooltipClass="tooltip-breakline">
         help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
@@ -39,7 +39,7 @@
       <mat-form-field class="species-number-control">
         <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count"
           (ngModelChange)="checkLocationSpeciesNumbers()">
-          <mat-icon class="hint-hover-text" matSuffix 
+          <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
               matTooltip={{editKnownDeadTooltip()}} matTooltipClass="tooltip-breakline">
         help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
@@ -53,7 +53,7 @@
       <mat-form-field class="species-number-control">
         <input matInput placeholder="Estimated Dead" type="number" min="0" formControlName="dead_count_estimated"
           (ngModelChange)="checkLocationSpeciesNumbers()">
-          <mat-icon class="hint-hover-text" matSuffix 
+          <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
               matTooltip={{editEstimatedDeadTooltip()}} matTooltipClass="tooltip-breakline">
         help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
@@ -70,7 +70,7 @@
       <mat-form-field class="species-number-control">
         <input matInput placeholder="Known Sick" type="number" min="0" min="0" formControlName="sick_count"
           (ngModelChange)="checkLocationSpeciesNumbers()">
-          <mat-icon class="hint-hover-text" matSuffix 
+          <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
               matTooltip={{editKnownSickTooltip()}} matTooltipClass="tooltip-breakline">
         help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
@@ -84,7 +84,7 @@
       <mat-form-field class="species-number-control">
         <input matInput placeholder="Estimated Sick" type="number" min="0" formControlName="sick_count_estimated"
           (ngModelChange)="checkLocationSpeciesNumbers()">
-          <mat-icon class="hint-hover-text" matSuffix 
+          <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
               matTooltip={{editEstimatedSickTooltip()}} matTooltipClass="tooltip-breakline">
         help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
@@ -105,7 +105,7 @@
           <mat-option [value]="null">--</mat-option>
           <mat-option *ngFor="let ageBias of ageBiases" value="{{ageBias.id}}">{{ageBias.name}}</mat-option>
         </mat-select>
-        <mat-icon class="hint-hover-text" matSuffix 
+        <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
               matTooltip={{editAgeBiasTooltip()}} matTooltipClass="tooltip-breakline">
         help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
@@ -118,7 +118,7 @@
           <mat-option [value]="null">--</mat-option>
           <mat-option *ngFor="let sexBias of sexBiases" value="{{sexBias.id}}">{{sexBias.name}}</mat-option>
         </mat-select>
-        <mat-icon class="hint-hover-text" matSuffix 
+        <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
               matTooltip={{editSexBiasTooltip()}} matTooltipClass="tooltip-breakline">
         help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
@@ -131,7 +131,7 @@
           <mat-option [value]="true">Captive > 72 hours</mat-option>
           <mat-option [value]="false">Wild and/or free-ranging</mat-option>
         </mat-select>
-        <mat-icon class="hint-hover-text" matSuffix 
+        <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
               matTooltip={{editCaptiveTooltip()}} matTooltipClass="tooltip-breakline">
         help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">

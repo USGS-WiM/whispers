@@ -61,6 +61,7 @@ import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
@@ -1035,6 +1036,10 @@ export class AddEventLocationComponent implements OnInit {
         this.filterContacts(locationContactIndex);
       });
   }
+
+  // hover text
+  contactPersonTooltip() { const string = FIELD_HELP_TEXT.contactPersonTooltip; return string; }
+  contactTypeTooltip() { const string = FIELD_HELP_TEXT.contactTypeTooltip; return string; }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   openAddSpeciesDiagnosisDialog(locationSpeciesIndex) {

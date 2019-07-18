@@ -6,7 +6,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MatRadioModule } from '@angular/material';
-
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 import { User } from '@interfaces/user';
 import { UserService } from '@app/services/user.service';
 import { CurrentUserService } from '@services/current-user.service';
@@ -60,6 +60,9 @@ export class NewLookupRequestComponent implements OnInit {
       duration: duration,
     });
   }
+
+  itemTypeToRequestTooltip() { const string = FIELD_HELP_TEXT.itemTypeToRequestTooltip; return string; }
+  newRequestDetailsTooltip() { const string = FIELD_HELP_TEXT.newRequestDetailsTooltip; return string; }
 
   onSubmit(formValue) {
     // let request_url;

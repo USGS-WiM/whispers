@@ -20,6 +20,7 @@ import { Role } from '@interfaces/role';
 
 
 import { APP_SETTINGS } from '@app/app.settings';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 declare let gtag: Function;
 
 @Component({
@@ -184,6 +185,16 @@ export class UserRegistrationComponent implements OnInit {
       this.organizations.filter(organization => organization.name.toLowerCase().indexOf(search) > -1)
     );
   }
+
+  regUsernameTooltip() { const string = FIELD_HELP_TEXT.regUsernameTooltip; return string; }
+  regFirstNameTooltip() { const string = FIELD_HELP_TEXT.regFirstNameTooltip; return string; }
+  regLastNameTooltip() { const string = FIELD_HELP_TEXT.regLastNameTooltip; return string; }
+  regemailAddressTooltip() { const string = FIELD_HELP_TEXT.regemailAddressTooltip; return string; }
+  regPasswordTooltip() { const string = FIELD_HELP_TEXT.regPasswordTooltip; return string; }
+  regTermsOfUseTooltip() { const string = FIELD_HELP_TEXT.regTermsOfUseTooltip; return string; }
+  regOrganizationTooltip() { const string = FIELD_HELP_TEXT.regOrganizationTooltip; return string; }
+  regRoleTooltip() { const string = FIELD_HELP_TEXT.regRoleTooltip; return string; }
+  regCommentTooltip() { const string = FIELD_HELP_TEXT.regCommentTooltip; return string; }
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {

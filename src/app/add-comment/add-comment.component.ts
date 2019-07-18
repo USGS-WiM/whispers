@@ -14,6 +14,7 @@ import { CommentTypeService } from '@app/services/comment-type.service';
 import { CommentType } from '@interfaces/comment-type';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 import { APP_SETTINGS } from '@app/app.settings';
 declare let gtag: Function;
 
@@ -98,6 +99,9 @@ export class AddCommentComponent implements OnInit {
         }
       );
   }
+
+  eventCommentTooltip() { const string = FIELD_HELP_TEXT.eventCommentTooltip; return string; }
+  eventCommentTypeTooltip() { const string = FIELD_HELP_TEXT.eventCommentTypeTooltip; return string; }
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {

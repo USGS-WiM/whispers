@@ -9,11 +9,17 @@
     <div class="horizontal-form-container">
       <mat-form-field class="form-control">
         <input matInput placeholder="First Name" formControlName="first_name" required>
+        <mat-icon class="hint-hover-text" matSuffix 
+          matTooltip={{firstNameTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-error *ngIf="createContactForm.get('first_name').invalid">{{getErrorMessage('first_name')}}</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-control">
         <input matInput placeholder="Last Name" formControlName="last_name" required>
+        <mat-icon class="hint-hover-text" matSuffix 
+          matTooltip={{lastNameTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-error *ngIf="createContactForm.get('last_name').invalid">{{getErrorMessage('last_name')}}</mat-error>
       </mat-form-field>
     </div>
@@ -21,21 +27,33 @@
     <div class="horizontal-form-container">
       <mat-form-field class="form-control">
         <input matInput placeholder="Email Address" formControlName="email" required>
+        <mat-icon class="hint-hover-text" matSuffix 
+          matTooltip={{emailAddressTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-error *ngIf="createContactForm.get('email').invalid">{{getErrorMessage('email')}}</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-control">
         <input matInput placeholder="Phone Number" formControlName="phone">
+        <mat-icon class="hint-hover-text" matSuffix 
+          matTooltip={{phoneNumberTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
       </mat-form-field>
     </div>
 
     <div class="horizontal-form-container">
       <mat-form-field class="form-control">
         <input matInput placeholder="Title" formControlName="title">
+        <mat-icon class="hint-hover-text" matSuffix 
+          matTooltip={{titleTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
       </mat-form-field>
 
       <mat-form-field class="form-control">
         <input matInput placeholder="Position" formControlName="position">
+        <mat-icon class="hint-hover-text" matSuffix 
+          matTooltip={{positionTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
       </mat-form-field>
     </div>
 
@@ -49,12 +67,12 @@
             {{organization.name}}
           </mat-option>
         </mat-select>
+        <mat-hint align="start">{{ organizationTooltip() }}</mat-hint>
       </mat-form-field>
 
       <mat-form-field class="form-control org-select">
         <input matInput placeholder="Company/Business/Affiliation" formControlName="affiliation">
-        <mat-hint align="start">Contact's company or other affiliation, if not part of one of the Organizations listed
-          above </mat-hint>
+        <mat-hint align="start">{{ affiliationTooltip() }}</mat-hint>
       </mat-form-field>
 
     </div>

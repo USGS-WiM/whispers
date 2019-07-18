@@ -24,6 +24,7 @@ import { DataUpdatedService } from '@app/services/data-updated.service';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
 import { APP_UTILITIES } from '@app/app.utilities';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 import { DatePipe } from '@angular/common';
 declare let gtag: Function;
 
@@ -245,6 +246,17 @@ export class EditEventLocationComponent implements OnInit {
       duration: duration,
     });
   }
+
+  locationStartDateTooltip() { const string = FIELD_HELP_TEXT.locationStartDateTooltip; return string; }
+  locationEndDateTooltip() { const string = FIELD_HELP_TEXT.locationEndDateTooltip; return string; }
+  stateTooltip() { const string = FIELD_HELP_TEXT.stateTooltip; return string; }
+  countryTooltip() { const string = FIELD_HELP_TEXT.countryTooltip; return string; }
+  editCountyTooltip() { const string = FIELD_HELP_TEXT.editCountyTooltip; return string; }
+  editLocationNameTooltip() { const string = FIELD_HELP_TEXT.editLocationNameTooltip; return string; }
+  editLandOwnershipTooltip() { const string = FIELD_HELP_TEXT.editLandOwnershipTooltip; return string; }
+  longitudeTooltip() { const string = FIELD_HELP_TEXT.longitudeTooltip; return string; }
+  latitudeTooltip() { const string = FIELD_HELP_TEXT.latitudeTooltip; return string; }
+  editStandardizedLocationNameTooltip() { const string = FIELD_HELP_TEXT.editStandardizedLocationNameTooltip; return string; }
 
   updateAdminLevelOneOptions(selectedCountryID) {
     const id = Number(selectedCountryID);

@@ -10,6 +10,9 @@
           <mat-option *ngFor="let diagnosis of diagnoses" value="{{diagnosis.diagnosis}}"
             [disabled]="checkForDuplicateEventDiagnosis(diagnosis.diagnosis)">{{diagnosis.diagnosis_string}}</mat-option>
         </mat-select>
+        <mat-icon class="hint-hover-text" matSuffix 
+          matTooltip={{editEventDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
       </mat-form-field>
 
     </div>

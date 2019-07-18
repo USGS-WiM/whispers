@@ -58,13 +58,19 @@
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name <mat-icon class="hint-table-hover-text" matSuffix 
+              matTooltip={{circleNameTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
+      </mat-header-cell>
       <mat-cell *matCellDef="let circle"> {{circle.name}} </mat-cell>
     </ng-container>
 
     <!-- Description Column -->
     <ng-container matColumnDef="description">
-      <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Description <mat-icon class="hint-table-hover-text" matSuffix 
+              matTooltip={{circleDiscriptionTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
+      </mat-header-cell>
       <mat-cell *matCellDef="let circle"> {{circle.description}}
       </mat-cell>
     </ng-container>

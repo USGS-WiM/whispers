@@ -1,5 +1,8 @@
 <h1 mat-dialog-title>
   <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}}
+  <mat-icon class="hint-hover-text" matSuffix 
+  matTooltip={{serviceRequestFullTooltip()}} matTooltipClass="tooltip-breakline">
+  help</mat-icon>
 </h1>
 <mat-dialog-content>
 
@@ -62,7 +65,7 @@
       </div>
 
       <div class="detail-section-buttons centered" *ngIf="data.action == 'add'">
-        <button mat-button color="primary" matTooltip="Add comment" (click)="addComment()">
+        <button mat-button color="primary" matTooltip="{{serviceRequestCommentTooltip()}}" (click)="addComment()">
           <mat-icon>add_comment</mat-icon>
           Add Comment 
           <!-- <span style="opacity: 0.5;">(optional)</span> -->

@@ -690,8 +690,39 @@ input[type=checkbox]{
     margin-top: -1px;
 }
 
+.hint-hover-text {
+    position: relative;
+    top: 3px;
+    transform: scale(0.8);
+    transition: 0.125s;
+    opacity: 0.3;
+    font-size: 20px;
 
+    &:hover {
+        cursor: default;
+        opacity: 0.9;
+        transition: 0.125s; 
+    }
+}
 
+.hint-table-hover-text {
+    position: relative;
+    transform: scale(0.8);
+    transition: 0.125s;
+    opacity: 0.3;
+    font-size: 18px;
+
+    &:hover {
+        cursor: default;
+        opacity: 0.9;
+        transition: 0.125s; 
+    }
+}
+
+// this allows multiline text in tooltips
+.tooltip-breakline {
+    white-space: pre-line;
+}
 
 
 

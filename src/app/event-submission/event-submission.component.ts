@@ -1254,22 +1254,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   latitudeTooltip() { const string = FIELD_HELP_TEXT.latitudeTooltip; return string; }
   longitudeTooltip() { const string = FIELD_HELP_TEXT.longitudeTooltip; return string; }
   speciesTooltip() { const string = FIELD_HELP_TEXT.speciesTooltip; return string; }
-  populationTooltip() {
-    const string = FIELD_HELP_TEXT.populationTooltip;
-    return string;
-  }
-  ageBiasTooltip() {
-    const string = FIELD_HELP_TEXT.ageBiasTooltip;
-    return string;
-  }
-  sexBiasTooltip() {
-    const string = FIELD_HELP_TEXT.sexBiasTooltip;
-    return string;
-  }
-  captiveTooltip() {
-    const string = FIELD_HELP_TEXT.captiveTooltip;
-    return string;
-  }
+  populationTooltip() { const string = FIELD_HELP_TEXT.populationTooltip; return string; }
+  ageBiasTooltip() { const string = FIELD_HELP_TEXT.ageBiasTooltip; return string; }
+  sexBiasTooltip() { const string = FIELD_HELP_TEXT.sexBiasTooltip; return string; }
+  captiveTooltip() { const string = FIELD_HELP_TEXT.captiveTooltip; return string; }
 
   getErrorMessage(formControlName) {
 

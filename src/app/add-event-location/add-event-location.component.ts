@@ -423,10 +423,6 @@ export class AddEventLocationComponent implements OnInit {
 
   }
 
-  
-  longitudeTooltip() { const string = FIELD_HELP_TEXT.longitudeTooltip; return string; }
-  latitudeTooltip() { const string = FIELD_HELP_TEXT.latitudeTooltip; return string; }
-
   onSubmit(formValue) {
 
     this.submitLoading = true;
@@ -1056,6 +1052,26 @@ export class AddEventLocationComponent implements OnInit {
   // hover text
   contactPersonTooltip() { const string = FIELD_HELP_TEXT.contactPersonTooltip; return string; }
   contactTypeTooltip() { const string = FIELD_HELP_TEXT.contactTypeTooltip; return string; }
+  locationStartDateTooltip() { const string = FIELD_HELP_TEXT.locationStartDateTooltip; return string; }
+  locationEndDateTooltip() { const string = FIELD_HELP_TEXT.locationEndDateTooltip; return string; }
+  stateTooltip() { const string = FIELD_HELP_TEXT.stateTooltip; return string; }
+  countryTooltip() { const string = FIELD_HELP_TEXT.countryTooltip; return string; }
+  countyTooltip() { const string = FIELD_HELP_TEXT.countyTooltip; return string; }
+  locationNameTooltip() { const string = FIELD_HELP_TEXT.locationNameTooltip; return string; }
+  landOwnershipTooltip() { const string = FIELD_HELP_TEXT.landOwnershipTooltip; return string; }
+  longitudeTooltip() { const string = FIELD_HELP_TEXT.longitudeTooltip; return string; }
+  latitudeTooltip() { const string = FIELD_HELP_TEXT.latitudeTooltip; return string; }
+  standardizedLocationNameTooltip() { const string = FIELD_HELP_TEXT.standardizedLocationNameTooltip; return string; }
+  speciesTooltip() { const string = FIELD_HELP_TEXT.speciesTooltip; return string; }
+  populationTooltip() { const string = FIELD_HELP_TEXT.populationTooltip; return string; }
+  ageBiasTooltip() { const string = FIELD_HELP_TEXT.ageBiasTooltip; return string; }
+  sexBiasTooltip() { const string = FIELD_HELP_TEXT.sexBiasTooltip; return string; }
+  captiveTooltip() { const string = FIELD_HELP_TEXT.captiveTooltip; return string; }
+  knownDeadTooltip() { const string = FIELD_HELP_TEXT.knownDeadTooltip; return string; }
+  estimatedDeadTooltip() { const string = FIELD_HELP_TEXT.estimatedDeadTooltip; return string; }
+  estimatedSickTooltip() { const string = FIELD_HELP_TEXT.estimatedSickTooltip; return string; }
+  knownSickTooltip() { const string = FIELD_HELP_TEXT.knownSickTooltip; return string; }
+  locationCommentTooltip() { const string = FIELD_HELP_TEXT.locationCommentTooltip; return string; }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   openAddSpeciesDiagnosisDialog(locationSpeciesIndex) {

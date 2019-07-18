@@ -127,13 +127,21 @@
 
         <div class="horizontal-form-container">
           <mat-form-field class="form-control">
-            <input matInput placeholder="Latitude" formControlName="latitude">
+            <input matInput placeholder="Latitude" formControlName="latitude"
+              (ngModelChange)="truncateDecimalDegrees($event, 'latitude')">
+            <mat-icon class="hint-hover-text" matSuffix matTooltip={{latitudeTooltip()}}
+              matTooltipClass="tooltip-breakline">
+              help</mat-icon>
             <mat-error *ngIf="addEventLocationForm.get('latitude').invalid">Invalid
               latitude</mat-error>
           </mat-form-field>
 
           <mat-form-field class="form-control">
-            <input matInput placeholder="Longitude" formControlName="longitude">
+            <input matInput placeholder="Longitude" formControlName="longitude"
+              (ngModelChange)="truncateDecimalDegrees($event, 'longitude')">
+            <mat-icon class="hint-hover-text" matSuffix matTooltip={{longitudeTooltip()}}
+              matTooltipClass="tooltip-breakline">
+              help</mat-icon>
             <mat-error *ngIf="addEventLocationForm.get('longitude').invalid">Invalid
               longitude</mat-error>
           </mat-form-field>
@@ -610,6 +618,9 @@
                       <span>{{contact.first_name}} {{contact.last_name}} | {{contact.organization_string}}</span>
                     </mat-option>
                   </mat-select>
+                  <mat-icon class="hint-hover-text" matSuffix matTooltip={{contactPersonTooltip()}}
+                    matTooltipClass="tooltip-breakline">
+                    help</mat-icon>
                 </mat-form-field>
 
                 <mat-form-field class="form-control  contact-type-select">
@@ -617,6 +628,9 @@
                     <mat-option *ngFor="let contactType of contactTypes" [value]="contactType.id">{{contactType.name}}
                     </mat-option>
                   </mat-select>
+                  <mat-icon class="hint-hover-text" matSuffix matTooltip={{contactTypeTooltip()}}
+                    matTooltipClass="tooltip-breakline">
+                    help</mat-icon>
                 </mat-form-field>
 
                 <div class="contact-button-div">

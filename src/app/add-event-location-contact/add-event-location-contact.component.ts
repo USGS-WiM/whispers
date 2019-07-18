@@ -18,6 +18,7 @@ import { ContactTypeService } from '@services/contact-type.service';
 import { Contact } from '@interfaces/contact';
 import { ContactService } from '@services/contact.service';
 
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
 import { EventLocationContactService } from '@app/services/event-location-contact.service';
@@ -118,6 +119,8 @@ export class AddEventLocationContactComponent implements OnInit {
     );
   }
 
+  contactPersonTooltip() { const string = FIELD_HELP_TEXT.contactPersonTooltip; return string; }
+  contactTypeTooltip() { const string = FIELD_HELP_TEXT.contactTypeTooltip; return string; }
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {

@@ -9,7 +9,9 @@
 
     <div class="vertical-form-container">
 
-      <h4>Select Item Type to Request</h4>
+      <h4>Select Item Type to Request<mat-icon class="hint-hover-text" matSuffix 
+        matTooltip={{itemTypeToRequestTooltip()}} matTooltipClass="tooltip-breakline">
+  help</mat-icon></h4>
       <!-- Item Type -->
       <mat-form-field class="form-control">
         <mat-select required formControlName="item_type">
@@ -19,7 +21,9 @@
         </mat-select>
       </mat-form-field>
 
-      <h4>New request details</h4>
+      <h4>New request details<mat-icon class="hint-hover-text" matSuffix 
+            matTooltip={{newRequestDetailsTooltip()}} matTooltipClass="tooltip-breakline">
+      help</mat-icon></h4>
       <mat-form-field class="form-control" class="general-comment-text-area">
         <textarea matInput placeholder="Enter details of your request" formControlName="request_comment"></textarea>
       </mat-form-field>

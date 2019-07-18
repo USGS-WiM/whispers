@@ -61,6 +61,7 @@ import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
@@ -422,6 +423,10 @@ export class AddEventLocationComponent implements OnInit {
 
   }
 
+  
+  longitudeTooltip() { const string = FIELD_HELP_TEXT.longitudeTooltip; return string; }
+  latitudeTooltip() { const string = FIELD_HELP_TEXT.latitudeTooltip; return string; }
+
   onSubmit(formValue) {
 
     this.submitLoading = true;
@@ -503,6 +508,18 @@ export class AddEventLocationComponent implements OnInit {
       AC.get('new_location_species').setErrors({ minSpecies: true });
     }
     return null;
+  }
+
+  truncateDecimalDegrees($event, field) {
+
+    const beforeDecimal = ($event + '').split('.')[0];
+    const afterDecimal = ($event + '').split('.')[1];
+
+    if (afterDecimal.length > 6) {
+      const truncatedValue = beforeDecimal + '.' + afterDecimal.substring(0, 6);
+      this.addEventLocationForm.get(field).setValue(truncatedValue);
+    }
+
   }
 
   checkforMissingSpecies() {
@@ -1035,6 +1052,10 @@ export class AddEventLocationComponent implements OnInit {
         this.filterContacts(locationContactIndex);
       });
   }
+
+  // hover text
+  contactPersonTooltip() { const string = FIELD_HELP_TEXT.contactPersonTooltip; return string; }
+  contactTypeTooltip() { const string = FIELD_HELP_TEXT.contactTypeTooltip; return string; }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   openAddSpeciesDiagnosisDialog(locationSpeciesIndex) {

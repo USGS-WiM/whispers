@@ -20,6 +20,8 @@ import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
 import { CircleManagementService } from '@app/services/circle-management.service';
 
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
+
 @Component({
   selector: 'app-circles',
   templateUrl: './circles.component.html',
@@ -197,5 +199,7 @@ export class CirclesComponent implements AfterViewInit, OnInit {
       );
   }
 
-
+  // hover text
+  circleNameTooltip() { const string = FIELD_HELP_TEXT.circleNameTooltip; return string; }
+  circleDiscriptionTooltip() { const string = FIELD_HELP_TEXT.circleDiscriptionTooltip; return string; }
 }

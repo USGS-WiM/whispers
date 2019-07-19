@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
+
 import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
@@ -65,6 +67,8 @@ export class AddEventDiagnosisComponent implements OnInit {
     //   );
 
   }
+
+  editEventDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editEventDiagnosisTooltip; return string; }
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {

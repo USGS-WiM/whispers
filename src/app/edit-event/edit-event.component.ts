@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
-
+import { APP_UTILITIES } from '@app/app.utilities';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
@@ -123,7 +124,7 @@ export class EditEventComponent implements OnInit {
       // NWHC only
       staff: this.data.eventData.staff,
       event_status: this.data.eventData.event_status,
-      quality_check: this.data.eventData.quality_check,
+      quality_check: APP_UTILITIES.timeZoneAdjust(this.data.eventData.quality_check),
       legal_status: this.data.eventData.legal_status,
       legal_number: this.data.eventData.legal_number,
       // end NWHC only
@@ -332,6 +333,53 @@ export class EditEventComponent implements OnInit {
       });
     }
   }
+
+  // Tooltip text
+  editEventTypeTooltip() { const string = FIELD_HELP_TEXT.editEventTypeTooltip; return string; }
+  userEventRefTooltip() { const string = FIELD_HELP_TEXT.userEventRefTooltip; return string; }
+  editEventVisibilityTooltip() { const string = FIELD_HELP_TEXT.editEventVisibilityTooltip; return string; }
+  editRecordStatusTooltip() { const string = FIELD_HELP_TEXT.editRecordStatusTooltip; return string; }
+  editContactOrganizationTooltip() { const string = FIELD_HELP_TEXT.editContactOrganizationTooltip; return string; }
+  locationStartDateTooltip() { const string = FIELD_HELP_TEXT.locationStartDateTooltip; return string; }
+  locationEndDateTooltip() { const string = FIELD_HELP_TEXT.locationEndDateTooltip; return string; }
+  stateTooltip() { const string = FIELD_HELP_TEXT.stateTooltip; return string; }
+  countryTooltip() { const string = FIELD_HELP_TEXT.countryTooltip; return string; }
+  countyTooltip() { const string = FIELD_HELP_TEXT.countyTooltip; return string; }
+  editLocationNameTooltip() { const string = FIELD_HELP_TEXT.editLocationNameTooltip; return string; }
+  editLandOwnershipTooltip() { const string = FIELD_HELP_TEXT.editLandOwnershipTooltip; return string; }
+  longitudeTooltip() { const string = FIELD_HELP_TEXT.longitudeTooltip; return string; }
+  latitudeTooltip() { const string = FIELD_HELP_TEXT.latitudeTooltip; return string; }
+  //editStandardizedLocationNameTooltip() { const string = FIELD_HELP_TEXT.editStandardizedLocationNameTooltip; return string; }
+
+  /* editSpeciesTooltip() { const string = FIELD_HELP_TEXT.editSpeciesTooltip; return string; }
+  editKnownDeadTooltip() { const string = FIELD_HELP_TEXT.editKnownDeadTooltip; return string; }
+  editEstimatedDeadTooltip() { const string = FIELD_HELP_TEXT.editEstimatedDeadTooltip; return string; }
+  editKnownSickTooltip() { const string = FIELD_HELP_TEXT.editKnownSickTooltip; return string; }
+  editEstimatedSickTooltip() { const string = FIELD_HELP_TEXT.editEstimatedSickTooltip; return string; }
+  populationTooltip() { const string = FIELD_HELP_TEXT.populationTooltip; return string; }
+  editAgeBiasTooltip() { const string = FIELD_HELP_TEXT.editAgeBiasTooltip; return string; }
+  editSexBiasTooltip() { const string = FIELD_HELP_TEXT.editSexBiasTooltip; return string; }
+  editCaptiveTooltip() { const string = FIELD_HELP_TEXT.editCaptiveTooltip; return string; }
+  editSpeciesDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editSpeciesDiagnosisTooltip; return string; } */
+  speciesDiagnosisSuspectTooltip() { const string = FIELD_HELP_TEXT.speciesDiagnosisSuspectTooltip; return string; }
+  basisOfDiagnosisTooltip() { const string = FIELD_HELP_TEXT.basisOfDiagnosisTooltip; return string; }
+  significanceOfDiagnosisForSpeciesTooltip() { const string = FIELD_HELP_TEXT.significanceOfDiagnosisForSpeciesTooltip; return string; }
+  numberAssessedTooltip() { const string = FIELD_HELP_TEXT.numberAssessedTooltip; return string; }
+  numberWithDiagnosisTooltip() { const string = FIELD_HELP_TEXT.numberWithDiagnosisTooltip; return string; }
+  editLabTooltip() { const string = FIELD_HELP_TEXT.editLabTooltip; return string; }
+  editLocationCommentTooltip() { const string = FIELD_HELP_TEXT.editLocationCommentTooltip; return string; }
+  editEventDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editEventDiagnosisTooltip; return string; }
+  eventCommentTooltip() { const string = FIELD_HELP_TEXT.eventCommentTooltip; return string; }
+  serviceRequestCommentTooltip() { const string = FIELD_HELP_TEXT.serviceRequestCommentTooltip; return string; }
+  collaboratorsAddIndividualTooltip() { const string = FIELD_HELP_TEXT.collaboratorsAddIndividualTooltip; return string; }
+  collaboratorsAddCircleTooltip() { const string = FIELD_HELP_TEXT.collaboratorsAddCircleTooltip; return string; }
+  eventIDTooltip() { const string = FIELD_HELP_TEXT.eventIDTooltip; return string; }
+  eventStartDateTooltip() { const string = FIELD_HELP_TEXT.eventStartDateTooltip; return string; }
+  eventEndDateTooltip() { const string = FIELD_HELP_TEXT.eventEndDateTooltip; return string; }
+  numberAffectedTooltip() { const string = FIELD_HELP_TEXT.numberAffectedTooltip; return string; }
+  flywayTooltip() { const string = FIELD_HELP_TEXT.flywayTooltip; return string; }
+  nwhcCarcassSubApprovalTooltip() { const string = FIELD_HELP_TEXT.nwhcCarcassSubApprovalTooltip; return string; }
+  locationCommentTypeTooltip() { const string = FIELD_HELP_TEXT.locationCommentTypeTooltip; return string; }
 
   updateEvent(formValue) {
     formValue.id = this.data.eventData.id;

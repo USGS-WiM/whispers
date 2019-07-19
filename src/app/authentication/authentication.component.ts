@@ -91,7 +91,11 @@ export class AuthenticationComponent implements OnInit {
 
   onLogout() {
     this.authenticationService.logout();
-    this.router.navigate([`../home/`], { relativeTo: this.route });
+    if (this.router.url === '/home') {
+      location.reload();
+    } else {
+      this.router.navigate([`../home/`], { relativeTo: this.route });
+    }
   }
 
 }

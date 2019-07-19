@@ -16,6 +16,7 @@ import { DataUpdatedService } from '@app/services/data-updated.service';
 import { ServiceRequestService } from '@services/service-request.service';
 import { ServiceRequestResponse } from '@app/interfaces/service-request-response';
 import { APP_SETTINGS } from '@app/app.settings';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 declare let gtag: Function;
 
 @Component({
@@ -78,7 +79,7 @@ export class AddServiceRequestComponent implements OnInit {
       this.serviceRequestForm.patchValue({
         id: this.data.servicerequest.id,
         event: this.data.event_id,
-        request_response: null,
+        request_response: this.data.servicerequest.request_response,
       });
 
       this.serviceRequestService.getServiceRequestResponses()
@@ -123,6 +124,11 @@ export class AddServiceRequestComponent implements OnInit {
       duration: duration,
     });
   }
+
+  // hover text
+  serviceRequestFullTooltip() { const string = FIELD_HELP_TEXT.serviceRequestFullTooltip; return string; }
+  serviceRequestCommentTooltip() { const string = FIELD_HELP_TEXT.serviceRequestCommentTooltip; return string; }
+  nwhcCarcassSubApprovalTooltip() { const string = FIELD_HELP_TEXT.nwhcCarcassSubApprovalTooltip; return string; }
 
   onSubmit(formValue) {
 

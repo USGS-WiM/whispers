@@ -21,6 +21,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 import { CurrentUserService } from '@services/current-user.service';
 
@@ -146,7 +147,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   adminLevelOnes: AdministrativeLevelOne[];
   // expermental, for autocomplete
   administrative_level_one: AdministrativeLevelOne[];
-  //filteredAdminLevelOnes;
+  // filteredAdminLevelOnes;
 
   adminLevelTwos: AdministrativeLevelTwo[];
   // expermental, for autocomplete
@@ -156,12 +157,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   species: Species[];
   // filteredSpecies: Observable<Species[]>[] = [];
 
-  //filteredSpecies = [];
-  //eventLocationSpecies: Observable<any[]>[] = [];
+  // filteredSpecies = [];
+  // eventLocationSpecies: Observable<any[]>[] = [];
   ///////////////////////////////////////////////////////
 
   contacts: Contact[];
-  //filteredContacts = [];
+  // filteredContacts = [];
 
   sexBiases: SexBias[];
   ageBiases: AgeBias[];
@@ -1159,6 +1160,19 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     });
 
 
+    ///////////////
+    this.eventSubmissionForm.get('complete').valueChanges.subscribe(value => {
+      if (value === true) {
+        this.eventSubmissionForm.get('quality_check').enable();
+      } else if (value === false) {
+        this.eventSubmissionForm.get('quality_check').disable();
+        this.eventSubmissionForm.get('quality_check').setValue(null);
+      }
+    });
+
+    /////////////////////
+
+
   }
 
   // onFormChanges(): void {
@@ -1166,6 +1180,84 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   //     this.checkLocationSpeciesNumbers();
   //   });
   // }
+
+  // functions for getting mat-tooltip text from config file
+  eventTypeTooltip() { const string = FIELD_HELP_TEXT.eventTypeTooltip; return string; }
+  contactPersonTooltip() { const string = FIELD_HELP_TEXT.contactPersonTooltip; return string; }
+  recordStatusTooltip() { const string = FIELD_HELP_TEXT.recordStatusTooltip; return string; }
+
+  locationNameTooltip() { const string = FIELD_HELP_TEXT.locationNameTooltip; return string; }
+  standardizedLocationNameTooltip() { const string = FIELD_HELP_TEXT.standardizedLocationNameTooltip; return string; }
+  knownDeadTooltip() { const string = FIELD_HELP_TEXT.knownDeadTooltip; return string; }
+  estimatedDeadTooltip() { const string = FIELD_HELP_TEXT.estimatedDeadTooltip; return string; }
+  knownSickTooltip() { const string = FIELD_HELP_TEXT.knownSickTooltip; return string; }
+  estimatedSickTooltip() { const string = FIELD_HELP_TEXT.estimatedSickTooltip; return string; }
+  contactTypeTooltip() { const string = FIELD_HELP_TEXT.contactTypeTooltip; return string; }
+  locationCommentTooltip() { const string = FIELD_HELP_TEXT.locationCommentTooltip; return string; }
+  eventDiagnosisTooltip() { const string = FIELD_HELP_TEXT.eventDiagnosisTooltip; return string; }
+
+  eventCommentTooltip() { const string = FIELD_HELP_TEXT.eventCommentTooltip; return string; }
+  eventCommentTypeTooltip() { const string = FIELD_HELP_TEXT.eventCommentTypeTooltip; return string; }
+
+  collaboratorsAddIndividualTooltip() { const string = FIELD_HELP_TEXT.collaboratorsAddIndividualTooltip; return string; }
+  collaboratorsAddCircleTooltip() { const string = FIELD_HELP_TEXT.collaboratorsAddCircleTooltip; return string; }
+
+  serviceRequestRequestDiaServicesOnlyTooltip() { const string = FIELD_HELP_TEXT.serviceRequestRequestDiaServicesOnlyTooltip; return string; }
+  serviceRequestRequestDiaAndConsultTooltip() { const string = FIELD_HELP_TEXT.serviceRequestRequestDiaAndConsultTooltip; return string; }
+  serviceRequestNoServicesTooltip() { const string = FIELD_HELP_TEXT.serviceRequestNoServicesTooltip; return string; }
+
+  serviceRequestCommentTooltip() {
+    const string = FIELD_HELP_TEXT.serviceRequestCommentTooltip;
+    return string;
+  }
+
+  speciesDiagnosisTooltip() {
+    const string = FIELD_HELP_TEXT.speciesDiagnosisTooltip;
+    return string;
+  }
+
+  
+  
+  speciesDiagnosisSuspectTooltip() {
+    const string = FIELD_HELP_TEXT.speciesDiagnosisSuspectTooltip;
+    return string;
+  }
+  basisOfDiagnosisTooltip() {
+    const string = FIELD_HELP_TEXT.basisOfDiagnosisTooltip;
+    return string;
+  }
+  significanceOfDiagnosisForSpeciesTooltip() {
+    const string = FIELD_HELP_TEXT.significanceOfDiagnosisForSpeciesTooltip;
+    return string;
+  }
+  numberAssessedTooltip() {
+    const string = FIELD_HELP_TEXT.numberAssessedTooltip;
+    return string;
+  }
+  numberWithDiagnosisTooltip() {
+    const string = FIELD_HELP_TEXT.numberWithDiagnosisTooltip;
+    return string;
+  }
+  labTooltip() {
+    const string = FIELD_HELP_TEXT.labTooltip;
+    return string;
+  }
+  userEventRefTooltip() { const string = FIELD_HELP_TEXT.userEventRefTooltip; return string; }
+  eventVisibilityTooltip() { const string = FIELD_HELP_TEXT.eventVisibilityTooltip; return string; }
+  contactOrganizationTooltip() { const string = FIELD_HELP_TEXT.contactOrganizationTooltip; return string; }
+  locationStartDateTooltip() { const string = FIELD_HELP_TEXT.locationStartDateTooltip; return string; }
+  locationEndDateTooltip() { const string = FIELD_HELP_TEXT.locationEndDateTooltip; return string; }
+  countryTooltip() { const string = FIELD_HELP_TEXT.countryTooltip; return string; }
+  stateTooltip() { const string = FIELD_HELP_TEXT.stateTooltip; return string; }
+  countyTooltip() { const string = FIELD_HELP_TEXT.countyTooltip; return string; }
+  landOwnershipTooltip() { const string = FIELD_HELP_TEXT.landOwnershipTooltip; return string; }
+  latitudeTooltip() { const string = FIELD_HELP_TEXT.latitudeTooltip; return string; }
+  longitudeTooltip() { const string = FIELD_HELP_TEXT.longitudeTooltip; return string; }
+  speciesTooltip() { const string = FIELD_HELP_TEXT.speciesTooltip; return string; }
+  populationTooltip() { const string = FIELD_HELP_TEXT.populationTooltip; return string; }
+  ageBiasTooltip() { const string = FIELD_HELP_TEXT.ageBiasTooltip; return string; }
+  sexBiasTooltip() { const string = FIELD_HELP_TEXT.sexBiasTooltip; return string; }
+  captiveTooltip() { const string = FIELD_HELP_TEXT.captiveTooltip; return string; }
 
   getErrorMessage(formControlName) {
 
@@ -1359,6 +1451,18 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       AC.get('new_location_species').setErrors({ minSpecies: true });
     }
     return null;
+  }
+
+  truncateDecimalDegrees($event, eventLocationIndex, field) {
+
+    const beforeDecimal = ($event + '').split('.')[0];
+    const afterDecimal = ($event + '').split('.')[1];
+
+    if (afterDecimal.length > 6) {
+      const truncatedValue = beforeDecimal + '.' + afterDecimal.substring(0, 6);
+      this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get(field).setValue(truncatedValue);
+    }
+
   }
 
   checkForDuplicateEventOrg(orgID) {
@@ -1944,6 +2048,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   removeEventLocation(eventLocationIndex) {
     const control = <FormArray>this.eventSubmissionForm.get('new_event_locations');
     control.removeAt(eventLocationIndex);
+    this.checkLocationEndDates();
   }
 
   getEventLocations(form) {
@@ -2435,7 +2540,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     const new_orgs_array = [];
     // loop through and convert new_organizations
     for (const org of formValue.new_organizations) {
-      new_orgs_array.push(org.org);
+      if (org !== undefined) {
+        new_orgs_array.push(org.org);
+      }
     }
     formValue.new_organizations = new_orgs_array;
     // if lat/long fields are deleted to blank, update to null to be a valid number type on PATCH

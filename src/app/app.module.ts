@@ -165,7 +165,7 @@ import { DiagnosticInfoComponent } from './diagnostic-info/diagnostic-info.compo
     CircleManagementComponent,
     CirclesComponent,
     CircleChooseComponent,
-    DiagnosticInfoComponent
+    DiagnosticInfoComponent,
   ],
   imports: [
     BrowserModule,
@@ -279,7 +279,7 @@ import { DiagnosticInfoComponent } from './diagnostic-info/diagnostic-info.compo
     EventGroupManagementComponent,
     CircleManagementComponent,
     CircleChooseComponent,
-    DiagnosticInfoComponent
+    DiagnosticInfoComponent,
   ]
 })
 export class AppModule { }

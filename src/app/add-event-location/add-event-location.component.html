@@ -725,7 +725,7 @@
 
         <ng-template matStepLabel>Review & Submit</ng-template>
 
-        <div id="submissionReviewComplete" *ngIf="addEventLocationForm.valid">
+        <div id="submissionReviewComplete" *ngIf="addEventLocationForm.valid && checkEventLocationCommentMin() === false">
           <mat-icon>check</mat-icon>
           <b>Finished with New Location</b>
         </div>

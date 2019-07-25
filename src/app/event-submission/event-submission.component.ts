@@ -1923,7 +1923,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   initLocationContacts() {
     return this.formBuilder.group({
-      contact: [null, Validators.required],
+      contact: [null],
       contact_type: null
     });
   }
@@ -2520,6 +2520,22 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     this.eventSubmissionForm.markAsUntouched();
 
     this.submitLoading = true;
+
+    // empty array to put in the corrected location contacts
+    const contacts = [];
+
+     // check to see if there were blank contacts added and remove them if so
+     if (this.eventSubmissionForm.get('new_event_locations')['controls'].get('new_location_contacts') != null) {
+      const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'].get('new_location_contacts');
+      this.eventSubmissionForm.get('new_event_locations')['controls'].get('new_location_contacts').value.forEach(element => {
+        if (element.contact === null) {
+          control.removeAt(element);
+        } else {
+          contacts.push(element);
+        }
+      });
+      formValue.new_location_contacts = contacts;
+    }
 
     // KEEP. Bring this back pending introduction of generic event location comment.
     // check if extra event location comment is blank, if so, delete it from the object

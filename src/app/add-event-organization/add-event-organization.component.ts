@@ -13,6 +13,8 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 import { Organization } from '@app/interfaces/organization';
 import { OrganizationService } from '@services/organization.service';
 import { EventOrganizationService } from '@services/event-organization.service';
+
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 @Component({
   selector: 'app-add-event-organization',
   templateUrl: './add-event-organization.component.html',
@@ -72,6 +74,8 @@ export class AddEventOrganizationComponent implements OnInit {
 
 
   }
+
+  contactOrganizationTooltip() { const string = FIELD_HELP_TEXT.contactOrganizationTooltip; return string; }
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {

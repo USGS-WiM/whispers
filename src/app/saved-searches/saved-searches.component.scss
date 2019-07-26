@@ -19,14 +19,21 @@
     color: rgba(0, 0, 0, 0.34);
 }
 
+.deleteModeIndicator {
+    background: #ff020236;
+}
+
+.deleteToggle {
+    text-align: right;
+}
 
 // Suggested Searches
 // Suggested Searches
 // Suggested Searches
 .suggested-searches {
 
-	max-height: 400px;
-	overflow: auto;
+    max-height: 400px;
+    overflow: auto;
 
     .button-row {
         // border-bottom: 1px solid fade-out($black, 0.85);
@@ -97,4 +104,12 @@
 
         }
     }
+}
+
+.text-smaller {
+    font-size: smaller;
+}
+
+.text-italic {
+    font-style: italic;
 }

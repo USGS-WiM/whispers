@@ -21,6 +21,7 @@ import { APP_UTILITIES } from '@app/app.utilities';
 
 import { DisplayQuery } from '@interfaces/display-query';
 import { APP_SETTINGS } from '@app/app.settings';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 import { CurrentUserService } from '@services/current-user.service';
 
@@ -897,7 +898,7 @@ export class HomeComponent implements OnInit {
       }
 
       // establish leaflet popup var for binding to marker (include check for mapPanel height, to set max popup height)
-      const popup = L.popup({ maxHeight: document.getElementById('mapPanel').offsetHeight - 150 })
+      const popup = L.popup({ maxHeight: document.getElementById('mapPanel').offsetHeight - 50 })
         .setContent(popupContent);
 
       // establish leaflet marker var, passing in icon var from above, including on popupopen logic for accordion style collapsing panels
@@ -956,6 +957,15 @@ export class HomeComponent implements OnInit {
     return valueReturned;
 
   }
+
+  eventIDTooltip() { const string = FIELD_HELP_TEXT.eventIDTooltip; return string; }
+  editEventTypeTooltip() { const string = FIELD_HELP_TEXT.editEventTypeTooltip; return string; }
+  numberAffectedTooltip() { const string = FIELD_HELP_TEXT.numberAffectedTooltip; return string; }
+  eventStartDateTooltip() { const string = FIELD_HELP_TEXT.eventStartDateTooltip; return string; }
+  eventEndDateTooltip() { const string = FIELD_HELP_TEXT.eventEndDateTooltip; return string; }
+  editSpeciesTooltip() { const string = FIELD_HELP_TEXT.editSpeciesTooltip; return string; }
+  editEventDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editEventDiagnosisTooltip; return string; }
+  locationsTooltip() { const string = FIELD_HELP_TEXT.locationsTooltip; return string; }
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {

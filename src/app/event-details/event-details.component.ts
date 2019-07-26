@@ -256,7 +256,10 @@ export class EventDetailsComponent implements OnInit {
               }
             }
 
-            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+            // add the "Undetermined" diagnosis to possibleDiagnoses, only if not already in the list
+            if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis)) {
+              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+            }
             // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of "Pending".
             // else if (eventdetails.complete === false) {
             //   this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
@@ -857,6 +860,9 @@ export class EventDetailsComponent implements OnInit {
   eventStartDateTooltip() { const string = FIELD_HELP_TEXT.eventStartDateTooltip; return string; }
   eventEndDateTooltip() { const string = FIELD_HELP_TEXT.eventEndDateTooltip; return string; }
   nwhcCarcassSubApprovalTooltip() { const string = FIELD_HELP_TEXT.nwhcCarcassSubApprovalTooltip; return string; }
+  editEventDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editEventDiagnosisTooltip; return string; }
+  locationsTooltip() { const string = FIELD_HELP_TEXT.locationsTooltip; return string; }
+  contactPersonTooltip() { const string = FIELD_HELP_TEXT.contactPersonTooltip; return string; }
 
   deleteComment(id: number) {
     this.commentService.delete(id)
@@ -1138,7 +1144,10 @@ export class EventDetailsComponent implements OnInit {
             }
           }
 
-          this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+          // add the "Undetermined" diagnosis to possibleDiagnoses, only if not already in the list
+          if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis)) {
+            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+          }
           // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of "Pending".
           // else if (eventdetails.complete === false) {
           //   this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);

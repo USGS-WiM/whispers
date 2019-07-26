@@ -100,8 +100,43 @@ export class AddCommentComponent implements OnInit {
       );
   }
 
+  commentTooltip() {
+    let string;
+    if (this.data.comment_object === 'eventlocation') {
+      string = FIELD_HELP_TEXT.editLocationCommentTooltip;
+    } else if (this.data.comment_object === 'event') {
+      string = FIELD_HELP_TEXT.eventCommentTooltip;
+    } else if (this.data.comment_object === 'servicerequest') {
+      string = FIELD_HELP_TEXT.serviceRequestCommentTooltip;
+    } else if (this.data.comment_object === 'eventgroup') {
+      string = 'Comments on Event Group';
+    }
+    return string;
+   }
+
+   commentTypeTooltip() {
+    let string;
+    if (this.data.comment_object === 'eventlocation') {
+      string = FIELD_HELP_TEXT.locationCommentTypeTooltip;
+    } else if (this.data.comment_object === 'event') {
+      string = FIELD_HELP_TEXT.eventCommentTypeTooltip;
+    }else if (this.data.comment_object === 'servicerequest') {
+      string = 'Flags comment as belonging to a certain category.';
+    } else if (this.data.comment_object === 'eventgroup') {
+      string = 'Flags comment as belonging to a certain category.';
+    }
+    return string;
+   }
+
   eventCommentTooltip() { const string = FIELD_HELP_TEXT.eventCommentTooltip; return string; }
   eventCommentTypeTooltip() { const string = FIELD_HELP_TEXT.eventCommentTypeTooltip; return string; }
+
+  locationCommentTooltip() { const string = FIELD_HELP_TEXT.locationCommentTooltip; return string; }
+
+  editLocationCommentTooltip() { const string = FIELD_HELP_TEXT.editLocationCommentTooltip; return string; }
+  locationCommentTypeTooltip() { const string = FIELD_HELP_TEXT.locationCommentTypeTooltip; return string; }
+
+  serviceRequestCommentTooltip() { const string = FIELD_HELP_TEXT.serviceRequestCommentTooltip; return string; }
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {

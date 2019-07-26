@@ -186,7 +186,7 @@ export class EditEventComponent implements OnInit {
       if (value === true) {
         this.editEventForm.get('quality_check').enable();
       } else if (value === false) {
-        this.editEventForm.get('quality_check').disable();
+        // this.editEventForm.get('quality_check').disable();
         this.editEventForm.get('quality_check').setValue(null);
       }
     });
@@ -199,55 +199,60 @@ export class EditEventComponent implements OnInit {
     });
   }
 
-  checkLocationSpeciesNumbers() {
+  checkLocationSpeciesNumbers(selectedValue) {
+    console.log(selectedValue);
     this.completeEventLocationSpeciesNumbersViolation = false;
-
     let completeEventLocationSpeciesNumbersViolated = false;
-    // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
-    if (this.data.eventData.event_type === 1 || this.data.eventData.event_type_string === 'Mortality/Morbidity') {
-      for (const eventlocation of this.data.eventData.eventlocations) {
-        for (const locationspecies of eventlocation.locationspecies) {
+    // only do validation if user is changing the record status complete (i.e. 'true')
+    if (selectedValue === true) {
+      // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
+      if (this.data.eventData.event_type === 1 || this.data.eventData.event_type_string === 'Mortality/Morbidity') {
+        for (const eventlocation of this.data.eventData.eventlocations) {
+          for (const locationspecies of eventlocation.locationspecies) {
 
-          if (
-            (
-              locationspecies.sick_count +
-              locationspecies.dead_count +
-              locationspecies.sick_count_estimated +
-              locationspecies.dead_count_estimated
-            ) < 1
-          ) {
-            completeEventLocationSpeciesNumbersViolated = true;
+            if (
+              (
+                locationspecies.sick_count +
+                locationspecies.dead_count +
+                locationspecies.sick_count_estimated +
+                locationspecies.dead_count_estimated
+              ) < 1
+            ) {
+              completeEventLocationSpeciesNumbersViolated = true;
+            }
           }
         }
       }
-    }
-    if (completeEventLocationSpeciesNumbersViolated) {
-      this.completeEventLocationSpeciesNumbersViolation = true;
+      if (completeEventLocationSpeciesNumbersViolated) {
+        this.completeEventLocationSpeciesNumbersViolation = true;
+      }
     }
   }
 
 
-  checkRulesEventComplete() {
+  checkRulesEventComplete(selectedValue) {
     this.basisAndCauseViolation = false;
     // check to see if all event location species diagnoses
     // have a basis and cause of diagnosis (using the common terms, not DB field names)
     // loop through each event location > loop through each species
     // if species has a diagnosis, must have non-null value for cause and basis fields
     // if ANY of the species lack this, show error
+    // do all of this only if the complete field ("WHISPers Record Status") is true/complete
     let basisAndCauseRuleViolated = false;
-    for (const eventlocation of this.data.eventData.eventlocations) {
-      for (const locationspecies of eventlocation.locationspecies) {
-        for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
-          if (speciesdiagnosis.cause === null || speciesdiagnosis.basis === null) {
-            basisAndCauseRuleViolated = true;
+    if (selectedValue === true) {
+      for (const eventlocation of this.data.eventData.eventlocations) {
+        for (const locationspecies of eventlocation.locationspecies) {
+          for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+            if (speciesdiagnosis.cause === null || speciesdiagnosis.basis === null) {
+              basisAndCauseRuleViolated = true;
+            }
           }
         }
       }
+      if (basisAndCauseRuleViolated) {
+        this.basisAndCauseViolation = true;
+      }
     }
-    if (basisAndCauseRuleViolated) {
-      this.basisAndCauseViolation = true;
-    }
-
   }
 
   openCompleteWarning() {
@@ -383,6 +388,13 @@ export class EditEventComponent implements OnInit {
 
   updateEvent(formValue) {
     formValue.id = this.data.eventData.id;
+
+    // empty value from datepicker does not work with datePipe transform. This converts empty dates to null for the datePipe
+    if (formValue.quality_check !== null) {
+      if (formValue.quality_check.toJSON() === null) {
+        formValue.quality_check = null;
+      }
+    }
     formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');
 
     // const new_orgs_array = [];

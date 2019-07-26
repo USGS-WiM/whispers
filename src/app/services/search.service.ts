@@ -79,13 +79,13 @@ export class SearchService {
       .catch(this.handleError);
   }
 
-  public delete(formValue: Search): Observable<Search> {
+  public delete(id): Observable<any> {
 
     const options = new RequestOptions({
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.delete(APP_SETTINGS.SEARCH_URL + formValue.id + '/', options)
+    return this._http.delete(APP_SETTINGS.SEARCH_URL + id + '/', options)
       .map((response: Response) => <Search>response.json())
       .catch(this.handleError);
   }

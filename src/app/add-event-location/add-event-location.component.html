@@ -725,7 +725,7 @@
 
         <ng-template matStepLabel>Review & Submit</ng-template>
 
-        <div id="submissionReviewComplete" *ngIf="addEventLocationForm.valid">
+        <div id="submissionReviewComplete" *ngIf="addEventLocationForm.valid && checkEventLocationCommentMin() === false">
           <mat-icon>check</mat-icon>
           <b>Finished with New Location</b>
         </div>
@@ -741,7 +741,7 @@
             <span class="alert-text">Missing state selection.</span>
           </mat-error>
 
-          <mat-error color="warn" *ngIf="addEventLocationForm.get('administrative_level_one').invalid">
+          <mat-error color="warn" *ngIf="addEventLocationForm.get('administrative_level_two').invalid">
             <mat-icon class="icon">error</mat-icon>
             <span class="alert-text">Missing county selection.</span>
           </mat-error>

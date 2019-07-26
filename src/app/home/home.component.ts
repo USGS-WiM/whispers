@@ -897,7 +897,7 @@ export class HomeComponent implements OnInit {
       }
 
       // establish leaflet popup var for binding to marker (include check for mapPanel height, to set max popup height)
-      const popup = L.popup({ maxHeight: document.getElementById('mapPanel').offsetHeight - 150 })
+      const popup = L.popup({ maxHeight: document.getElementById('mapPanel').offsetHeight - 50 })
         .setContent(popupContent);
 
       // establish leaflet marker var, passing in icon var from above, including on popupopen logic for accordion style collapsing panels

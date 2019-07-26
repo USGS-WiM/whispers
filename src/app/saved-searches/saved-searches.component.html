@@ -3,6 +3,11 @@
   <span>Loading Saved Searches...</span>
 </span>
 
+<div class="deleteToggle">
+  <mat-slide-toggle color="warn" (click)="deleteMode()"><span class="text-small text-italic">{{deleteModeOn === true ? 'Delete mode (on)' :
+    deleteModeOn === false ? 'Delete mode (off)' : 'Delete mode' }}</span></mat-slide-toggle>
+</div>
+
 <div class="suggested-searches" id="searchList">
   <div *ngIf="parsedSearches.length === 0 && searchesLoading === false" class="no-searches-indicator">
     <h3>No saved searches found</h3>
@@ -119,11 +124,9 @@
         </div>
       </span>
 
-    </button><!-- END MAT BUTTON -->   
+    </button><!-- END MAT BUTTON -->
   </div>
-  <div class="deleteToggle">
-  <mat-slide-toggle color="warn" (click)="deleteMode()">Delete Mode</mat-slide-toggle>
-  </div>
+
 
 </div>
 

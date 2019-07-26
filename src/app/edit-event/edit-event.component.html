@@ -38,7 +38,7 @@
 
         <mat-form-field class="form-control">
           <mat-select placeholder="WHISPers Record Status" formControlName="complete" required
-            (ngModelChange)="checkRulesEventComplete(); openCompleteWarning(); checkLocationSpeciesNumbers();">
+            (ngModelChange)="checkRulesEventComplete($event); openCompleteWarning(); checkLocationSpeciesNumbers($event);">
             <mat-option [value]="true">Complete</mat-option>
             <mat-option [value]="false">Incomplete</mat-option>
           </mat-select>

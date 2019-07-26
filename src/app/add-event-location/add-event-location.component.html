@@ -639,6 +639,9 @@
           <button mat-button color="primary" class="event-detail-action-button" (click)="openCreateContactDialog()">
             <i class="material-icons">person_add</i> Create New Contact
           </button>
+          <mat-icon class="hint-hover-text" style="top: 40px;" matSuffix
+              matTooltip={{contactPersonTooltip()}} matTooltipClass="tooltip-breakline">
+              help</mat-icon>
         </div>
 
         <div formArrayName="new_location_contacts">
@@ -707,6 +710,9 @@
               <span>Loading contacts list...</span>
             </span>
           </button>
+          <mat-icon class="hint-hover-text" style="top: 45px;" matSuffix
+            matTooltip={{contactPersonTooltip()}} matTooltipClass="tooltip-breakline">
+            help</mat-icon>
         </div>
 
         <div class="form-nav-buttons">

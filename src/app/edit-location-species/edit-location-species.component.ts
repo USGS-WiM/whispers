@@ -321,6 +321,7 @@ export class EditLocationSpeciesComponent implements OnInit {
   latitudeTooltip() { const string = FIELD_HELP_TEXT.latitudeTooltip; return string; }
   editEventTypeTooltip() { const string = FIELD_HELP_TEXT.editEventTypeTooltip; return string; }
   editSpeciesTooltip() { const string = FIELD_HELP_TEXT.editSpeciesTooltip; return string; }
+  speciesTooltip() { const string = FIELD_HELP_TEXT.speciesTooltip; return string; }
   editKnownDeadTooltip() { const string = FIELD_HELP_TEXT.editKnownDeadTooltip; return string; }
   editEstimatedDeadTooltip() { const string = FIELD_HELP_TEXT.editEstimatedDeadTooltip; return string; }
   editKnownSickTooltip() { const string = FIELD_HELP_TEXT.editKnownSickTooltip; return string; }

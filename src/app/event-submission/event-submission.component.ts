@@ -1215,9 +1215,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     const string = FIELD_HELP_TEXT.speciesDiagnosisTooltip;
     return string;
   }
-
-  
-  
   speciesDiagnosisSuspectTooltip() {
     const string = FIELD_HELP_TEXT.speciesDiagnosisSuspectTooltip;
     return string;

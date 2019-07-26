@@ -69,7 +69,7 @@
                   </tr>
                   <tr>
                     <th [attr.rowspan]="eventData.eventdiagnoses.length + 1 ">Diagnosis<mat-icon class="hint-table-hover-text" matSuffix 
-                      matTooltip={{editSpeciesDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
+                      matTooltip={{editEventDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
                       help</mat-icon>
                     </th>
                   </tr>
@@ -77,7 +77,9 @@
                     <td><span>{{diagnosis.diagnosis_string}}</span></td>
                   </tr>
                   <tr>
-                    <th [attr.rowspan]="eventData.eventlocations.length + 1 ">Locations</th>
+                    <th [attr.rowspan]="eventData.eventlocations.length + 1 ">Locations<mat-icon class="hint-table-hover-text" matSuffix 
+                      matTooltip={{locationsTooltip()}} matTooltipClass="tooltip-breakline">
+                      help</mat-icon></th>
                   </tr>
                   <tr *ngFor="let eventLocation of eventData.eventlocations">
                     <td>{{eventLocation.administrative_level_two_string}},
@@ -159,7 +161,7 @@
                         matTooltipClass="tooltip-breakline">
                         help</mat-icon>
                     </th>
-                    <th>Location<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{editLocationNameTooltip()}}
+                    <th>Location<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{locationsTooltip()}}
                       matTooltipClass="tooltip-breakline">
                       help</mat-icon>
                     </th>
@@ -175,7 +177,7 @@
                       matTooltipClass="tooltip-breakline">
                       help</mat-icon>
                     </th>
-                    <th class="limit-width">Sick Estimate<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{editKnownDeadTooltip()}}
+                    <th class="limit-width">Sick Estimate<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{editEstimatedSickTooltip()}}
                       matTooltipClass="tooltip-breakline">
                       help</mat-icon>
                     </th>
@@ -885,7 +887,7 @@
                     <button mat-button color="primary" class="event-detail-action-button"
                       (click)="addEventLocationContact(eventLocation.id)"
                       [disabled]="!eventData.permissions.update || userContactsLoading || eventData.complete"
-                      matTooltip="Associate contact with this event location">
+                      matTooltip="{{contactPersonTooltip()}}">
                       <mat-icon>add_circle</mat-icon>
                       Add Contact
                     </button>
@@ -893,7 +895,7 @@
                   <div class="detail-section-buttons">
                     <button mat-button color="primary" class="event-detail-action-button"
                       [disabled]="eventData.complete" (click)="openCreateContactDialog()"
-                      matTooltip="Create a new contact">
+                      matTooltip="{{contactPersonTooltip()}}" matTooltipClass="tooltip-breakline">
                       <mat-icon>person_add</mat-icon> Create New Contact
                     </button>
                   </div>

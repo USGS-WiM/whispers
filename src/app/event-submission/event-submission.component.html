@@ -1033,6 +1033,12 @@
                               <span class="alert-text">At least one comment field must have a value.</span>
                             </mat-error>
 
+                            <mat-error color="warn" *ngIf="locationStartDatesViolation">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">An event must have a start date provided for at least one
+                                location.</span>
+                            </mat-error>
+
                             <!-- <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_contacts').invalid">
                                 <mat-icon class="icon">error</mat-icon>
                                 <span class="alert-text">Missing contact type selection.</span>

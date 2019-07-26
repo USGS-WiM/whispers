@@ -531,38 +531,38 @@
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Event ID</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventIDTooltip()}}" matTooltipClass="tooltip-breakline">Event ID</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.id}}</mat-cell>
             </ng-container>
 
             <!-- Event Type Column -->
             <ng-container matColumnDef="event_type_string">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Event Type</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{editEventTypeTooltip()}}" matTooltipClass="tooltip-breakline">Event Type</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.event_type_string}}</mat-cell>
             </ng-container>
 
             <!-- Affected Count Column -->
             <ng-container matColumnDef="affected_count">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Number Affected</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{numberAffectedTooltip()}}" matTooltipClass="tooltip-breakline">Number Affected</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.affected_count}}</mat-cell>
             </ng-container>
 
             <!-- Start Date Column -->
             <ng-container matColumnDef="start_date">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Event Start Date</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventStartDateTooltip()}}" matTooltipClass="tooltip-breakline">Event Start Date</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.start_date | date:'shortDate'}}</mat-cell>
             </ng-container>
 
             <!-- End Date Column -->
             <ng-container matColumnDef="end_date">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Event End Date</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventEndDateTooltip()}}" matTooltipClass="tooltip-breakline">Event End Date</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.end_date | date:'shortDate'}}</mat-cell>
             </ng-container>
 
             <!-- Location Column -->
             <ng-container matColumnDef="locations">
               <mat-header-cell *matHeaderCellDef
-                matTooltip="Displayed as County (or equivalent), State (or equivalent), Country - where values are available">
+                matTooltip="{{locationsTooltip()}}" matTooltipClass="tooltip-breakline">
                 Location</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
@@ -606,7 +606,7 @@
 
             <!-- Species Column -->
             <ng-container matColumnDef="species">
-              <mat-header-cell *matHeaderCellDef>Species</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef matTooltip="{{editSpeciesTooltip()}}" matTooltipClass="tooltip-breakline">Species</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let species of event.species">{{species.name}}</li>
@@ -619,7 +619,7 @@
 
             <!-- Event Diagnosis Column -->
             <ng-container matColumnDef="eventdiagnoses">
-              <mat-header-cell *matHeaderCellDef>Event Diagnosis</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef matTooltip="{{editEventDiagnosisTooltip()}}" matTooltipClass="tooltip-breakline">Event Diagnosis</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}</li>

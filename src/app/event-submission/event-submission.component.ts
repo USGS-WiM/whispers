@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy, OnChanges } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl, Form } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
@@ -1370,8 +1370,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
             // using the indexObject, push the species id value to the correct form instance
             // tslint:disable-next-line:max-line-length
             this.eventSubmissionForm.get('new_event_locations')['controls'][indexObject.eventLocationIndex].get('new_location_contacts')['controls'][indexObject.locationContactIndex].get('contact').setValue(contact.value.contact);
-
-
             // const locationContacts = eventLocations[i].get('location_contacts');
             // locationContacts.push(contact);
           }
@@ -2520,13 +2518,34 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     this.eventSubmissionForm.markAsUntouched();
 
     this.submitLoading = true;
-
+    // for (let i = 0; i < this.selection.selected.length; i++)
+    for ( let i = 0; i < this.eventSubmissionForm.get('new_event_locations').value.length; i++) {
+    // this.eventSubmissionForm.get('new_event_locations').value.forEach(element => {
+      const contacts = [];
+      const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('new_location_contacts');
+      this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('new_location_contacts').value.forEach(contact => {
+        if (contact.contact === null) {
+          control.removeAt(contact);
+        } else {
+          contacts.push(contact);
+        }
+      });
+      formValue.new_event_locations[i].new_location_contacts = contacts;
+      //eventlocations.new_location_contacts = contacts;
+    }
+    /* for (const contact of formValue.new_event_locations[i].new_location_contacts) {
+      if (contact.contact === null) {
+        const control = <FormArray>formValue.new_event_locations[i].new_location_contacts;
+        control.removeAt(contact);
+      }
+    } */
+  // this.eventSubmissionForm.value.new_event_locations[0].new_location_contacts
     // empty array to put in the corrected location contacts
-    const contacts = [];
-
      // check to see if there were blank contacts added and remove them if so
-     if (this.eventSubmissionForm.get('new_event_locations')['controls'].get('new_location_contacts') != null) {
-      const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'].get('new_location_contacts');
+     // const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
+
+    /*  if (this.eventSubmissionForm.get('new_event_locations')['controls'].get('new_location_contacts') != null) {
+      // const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'].get('new_location_contacts');
       this.eventSubmissionForm.get('new_event_locations')['controls'].get('new_location_contacts').value.forEach(element => {
         if (element.contact === null) {
           control.removeAt(element);
@@ -2535,7 +2554,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
         }
       });
       formValue.new_location_contacts = contacts;
-    }
+    } */
 
     // KEEP. Bring this back pending introduction of generic event location comment.
     // check if extra event location comment is blank, if so, delete it from the object

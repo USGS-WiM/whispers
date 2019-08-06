@@ -31,6 +31,9 @@ public static get numberAffectedTooltip(): string { return 'Total number affecte
 
 public static get flywayTooltip(): string { return 'United States Fish and Wildlife Service administrative Flyway at this location.'; }
 public static get nwhcCarcassSubApprovalTooltip(): string { return 'For USGS National Wildlife Health Center (NWHC) to fill out after a diagnostic service request has been received. \n\nOptions are: "Yes" - service request has been approved; "No" - service request has not been approved; "Maybe" - service request might be approved but NWHC needs more information via comments.'; }
+
+public static get permissionSourceTooltip(): string { return 'Your connection to this event. \n\n Options are: "user" - you created this event; "organization" - someone in your organization created this event; "collaborator" - you were invited to be a read or write collaborator on this event. If blank, then someone outside of your organization created this event and you have not been invited to be a collaborator.'; }
+
 // WIM wrote locationsTooltip (not in hover text spreadsheet)
 public static get locationsTooltip(): string { return 'Displayed as County (or equivalent), State (or equivalent), Country - where values are available'; }
 // END EVENT INFO
@@ -60,6 +63,7 @@ public static get longitudeTooltip(): string { return 'Longitude of location in 
 
 public static get speciesTooltip(): string { return 'Species affected at this location. \n\n Can select "unidentified" categories of animals. \n\n If correct species is not in dropdown, request a new option via the dashboard.'; }
 public static get editSpeciesTooltip(): string { return 'Species affected at this location.'; }
+public static get generalTableSpeciesTooltip(): string { return 'Species affected in event.'; } // displayed on home/events tab in dashboard/your events tab in dashboard
 
 public static get populationTooltip(): string { return 'Estimate of the maximum number of this species at this location, including live, sick, and dead.'; }
 

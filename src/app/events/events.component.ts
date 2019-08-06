@@ -21,6 +21,7 @@ import { DisplayQuery } from '@interfaces/display-query';
 
 import { APP_UTILITIES } from '@app/app.utilities';
 import { APP_SETTINGS } from '@app/app.settings';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 import { EventsDataSource } from '@app/events/events.datasource';
 import { ResultsCountService } from '@services/results-count.service';
@@ -198,6 +199,16 @@ export class EventsComponent implements AfterViewInit, OnInit {
       )
       .subscribe();
   }
+
+  eventIDTooltip() { const string = FIELD_HELP_TEXT.eventIDTooltip; return string; }
+  editEventTypeTooltip() { const string = FIELD_HELP_TEXT.editEventTypeTooltip; return string; }
+  numberAffectedTooltip() { const string = FIELD_HELP_TEXT.numberAffectedTooltip; return string; }
+  eventStartDateTooltip() { const string = FIELD_HELP_TEXT.eventStartDateTooltip; return string; }
+  eventEndDateTooltip() { const string = FIELD_HELP_TEXT.eventEndDateTooltip; return string; }
+  editEventDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editEventDiagnosisTooltip; return string; }
+  locationsTooltip() { const string = FIELD_HELP_TEXT.locationsTooltip; return string; }
+  generalTableSpeciesTooltip() { const string = FIELD_HELP_TEXT.generalTableSpeciesTooltip; return string; }
+  permissionSourceTooltip() { const string = FIELD_HELP_TEXT.permissionSourceTooltip; return string; }
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {

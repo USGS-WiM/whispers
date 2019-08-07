@@ -887,7 +887,7 @@
                     <button mat-button color="primary" class="event-detail-action-button"
                       (click)="addEventLocationContact(eventLocation.id)"
                       [disabled]="!eventData.permissions.update || userContactsLoading || eventData.complete"
-                      matTooltip="{{contactPersonTooltip()}}">
+                      matTooltip="{{contactPersonTooltip()}}" matTooltipClass="tooltip-breakline">
                       <mat-icon>add_circle</mat-icon>
                       Add Contact
                     </button>

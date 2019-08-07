@@ -124,6 +124,8 @@ export class AddEventLocationComponent implements OnInit {
   speciesDiagnosisViolation = false;
   nonCompliantSpeciesDiagnoses = [];
 
+  /* numberAffectedViolation = true; */
+
   /** Subject that emits when the component has been destroyed. */
   private _onDestroy = new Subject<void>();
 
@@ -535,6 +537,24 @@ export class AddEventLocationComponent implements OnInit {
       return false;
     }
   }
+
+  // This is a check to make sure there is at least one value for dead_count, sick_count, sick_count_estimated,
+  // or dead_count estimate for at least one event location. This isn't necessary for this component, but leaving it here
+  // incase one day it is.
+  /* checkNumberAffected() {
+    const locationspecies = <FormArray>this.addEventLocationForm.get('new_location_species');
+    let numbersAffectedRequirementMet = false;
+    for (let i = 0, j = locationspecies.length; i < j; i++) {
+      if ((locationspecies['controls'][i].get('sick_count').value !== null) || (locationspecies['controls'][i].get('dead_count').value !== null) || (locationspecies['controls'][i].get('sick_count_estimated').value !== null) || (locationspecies['controls'][i].get('dead_count_estimated').value !== null)) {
+        numbersAffectedRequirementMet = true;
+      }
+      if (numbersAffectedRequirementMet) {
+        this.numberAffectedViolation = false;
+      } else {
+        this.numberAffectedViolation = true;
+      }
+    }
+  } */
 
   checkEventLocationCommentMin() {
 

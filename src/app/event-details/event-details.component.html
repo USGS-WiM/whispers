@@ -305,7 +305,7 @@
           <div class="event-detail-wrapper">
 
             <div class="privileged-meta">
-              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2 || currentUser.role === 3 || currentUser.role === 4 || currentUser.role === 5">
                 <div class="label">Event Owner</div>
                 <div class="value">
                   <span>{{eventData.created_by_first_name}} {{eventData.created_by_last_name}}
@@ -317,7 +317,7 @@
                 <div class="label">Event Reference</div>
                 <div class="value">{{eventData.event_reference || " "}}</div>
               </div>
-              <div class="item">
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Process Status</div>
                 <div class="value">{{eventData.event_status_string || " "}}</div>
               </div>
@@ -349,10 +349,6 @@
               <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Legal Number</div>
                 <div class="value">{{eventData.legal_number || " "}}</div>
-              </div>
-              <div class="item">
-                <div class="label">Event Group</div>
-                <div class="value">&nbsp;</div>
               </div>
             </div>
           </div>

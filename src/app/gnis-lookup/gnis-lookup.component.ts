@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 
 import * as search_api from 'usgs-search-api';
 declare const search_api: search_api;
+declare let gtag: Function;
 
 @Component({
   selector: 'app-gnis-lookup',
@@ -84,7 +85,7 @@ export class GnisLookupComponent implements OnInit, AfterViewInit, AfterViewChec
       state: this.state
 
     };
-
+    gtag('event', 'click', { 'event_category': 'Event', 'event_label': 'Looked Up GNIS' });
     this.gnisLookupDialogRef.close(result);
   }
 

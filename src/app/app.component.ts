@@ -104,8 +104,12 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
+    if (this.router.url === '/home') {
+      location.reload();
+    } else {
+      this.router.navigate([`../home/`], { relativeTo: this.route });
+    }
     this.authenticationService.logout();
-    this.router.navigate([`../home/`], { relativeTo: this.route });
   }
 
   openAuthenticationDialog() {

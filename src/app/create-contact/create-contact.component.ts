@@ -15,6 +15,8 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 import { Organization } from '@interfaces/organization';
 import { OrganizationService } from '@services/organization.service';
 
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
+
 import { Contact } from '@interfaces/contact';
 import { ContactService } from '@services/contact.service';
 
@@ -138,6 +140,15 @@ export class CreateContactComponent implements OnInit {
       this.organizations.filter(organization => organization.name.toLowerCase().indexOf(search) > -1)
     );
   }
+
+  firstNameTooltip() {const string = FIELD_HELP_TEXT.firstNameTooltip; return string; }
+  lastNameTooltip() { const string = FIELD_HELP_TEXT.lastNameTooltip; return string; }
+  emailAddressTooltip() { const string = FIELD_HELP_TEXT.emailAddressTooltip; return string; }
+  phoneNumberTooltip() { const string = FIELD_HELP_TEXT.phoneNumberTooltip; return string; }
+  titleTooltip() { const string = FIELD_HELP_TEXT.titleTooltip; return string; }
+  positionTooltip() { const string = FIELD_HELP_TEXT.positionTooltip; return string; }
+  organizationTooltip() { const string = FIELD_HELP_TEXT.organizationTooltip; return string; }
+  affiliationTooltip() { const string = FIELD_HELP_TEXT.affiliationTooltip; return string; }
 
   getErrorMessage(formControlName) {
     return this.createContactForm.get(formControlName).hasError('required') ? 'Please enter a value' :

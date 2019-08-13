@@ -268,8 +268,8 @@ export class EventsComponent implements AfterViewInit, OnInit {
           title: 'Event Group Selection Help',
           message: 'You can update your Event Group selection on the Event Groups tab.',
           confirmButtonText: 'OK',
-          messageIcon: 'help',
-          titleIcon: 'help',
+          messageIcon: 'info',
+          titleIcon: 'info',
           showCancelButton: false
         }
       }

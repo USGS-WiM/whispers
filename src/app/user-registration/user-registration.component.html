@@ -11,6 +11,7 @@
       <!-- Username -->
       <mat-form-field class="form-control">
         <input matInput placeholder="Username" formControlName="username" required>
+        <mat-hint align="start">{{regUsernameTooltip()}}</mat-hint>
       </mat-form-field>
 
       <div class="horizontal-form-container">
@@ -18,11 +19,13 @@
         <!-- First Name -->
         <mat-form-field class="form-control">
           <input matInput placeholder="First Name" formControlName="first_name">
+          <mat-hint align="start">{{regFirstNameTooltip()}}</mat-hint>
         </mat-form-field>
 
         <!-- Last Name -->
         <mat-form-field class="form-control">
-          <input matInput placeholder="Last Name" formControlName="last_name">
+          <input matInput placeholder="Last Name" formControlName="last_name">          
+          <mat-hint align="start">{{regLastNameTooltip()}}</mat-hint>
         </mat-form-field>
 
       </div>
@@ -32,6 +35,9 @@
         <!-- Email address -->
         <mat-form-field class="form-control">
           <input matInput placeholder="Email Address" formControlName="email" required>
+          <mat-icon class="hint-hover-text" matSuffix 
+                matTooltip={{regemailAddressTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
           <mat-error *ngIf="userRegistrationForm.get('email').invalid">{{getErrorMessage('email')}}</mat-error>
         </mat-form-field>
 
@@ -49,6 +55,9 @@
         <!-- Password -->
         <mat-form-field class="form-control">
           <input matInput type="password" placeholder="Password" formControlName="password" required>
+          <mat-icon class="hint-hover-text" matSuffix 
+                matTooltip={{regPasswordTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
         </mat-form-field>
         <!-- Confirm Password -->
         <mat-form-field class="form-control">
@@ -71,7 +80,9 @@
 
       <div *ngIf="data.registration_type === 'partner'">
         <div>
-          <h3>Terms of Use</h3>
+          <h3>Terms of Use<mat-icon class="hint-hover-text" matSuffix 
+                  matTooltip={{regTermsOfUseTooltip()}} matTooltipClass="tooltip-breakline">
+            help</mat-icon></h3>
           <p class="text-smaller">The USGS National Wildlife Health Center (NWHC) conducts wildlife disease
             investigations in conjunction with state, federal, tribal, academic, and international partners and WHISPers
             provides a collaborative web-based interface for data entry and communication about wildlife health events.
@@ -120,6 +131,9 @@
             {{organization.name}}
           </mat-option>
         </mat-select>
+        <mat-icon class="hint-hover-text" matSuffix 
+                  matTooltip={{regOrganizationTooltip()}} matTooltipClass="tooltip-breakline">
+            help</mat-icon>
       </mat-form-field>
 
 
@@ -131,6 +145,9 @@
           <mat-option [value]="4">Manager</mat-option>
           <mat-option [value]="3">Administrator</mat-option>
         </mat-select>
+        <mat-icon class="hint-hover-text" matSuffix 
+                  matTooltip={{regRoleTooltip()}} matTooltipClass="tooltip-breakline">
+            help</mat-icon>
       </mat-form-field>
 
 
@@ -139,6 +156,9 @@
       <mat-form-field class="general-comment-text-area">
         <textarea matInput #requestComment maxlength="1000" minRows="3" placeholder="Comment"
           formControlName="message"></textarea>
+          <mat-icon class="hint-hover-text" matSuffix 
+                  matTooltip={{regCommentTooltip()}} matTooltipClass="tooltip-breakline">
+            help</mat-icon>
         <mat-hint align="end">{{requestComment.value.length}} / 1000</mat-hint>
       </mat-form-field>
 

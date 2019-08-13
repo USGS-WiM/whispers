@@ -53,6 +53,7 @@ export class SavedSearchesComponent implements OnInit {
   administrative_level_two = [];
 
   selection;
+  deleteModeOn = false;
 
   speciesLoading = false;
   searchesLoading = false;
@@ -156,6 +157,8 @@ export class SavedSearchesComponent implements OnInit {
         }
       );
 
+        /*  */
+
 
   }
 
@@ -211,30 +214,57 @@ export class SavedSearchesComponent implements OnInit {
 
   }
 
-  openSearchDeleteConfirm() {
+  openSearchDeleteConfirm(search) {
+
+    // Displaying the search id if the name is blank
+    let searchIdentifier = '';
+    if (search.name === '') {
+      searchIdentifier = 'ID: ' + search.id;
+    } else {
+      searchIdentifier = search.name;
+    }
+
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
         disableClose: true,
         data: {
           title: 'Delete Search',
-          message: 'Are you sure you want to delete the saved search "' + this.selection.selected[0].name + '" from your profile?',
-          confirmButtonText: 'Yes, Delete'
+          message: 'Are you sure you want to delete the saved search "' + searchIdentifier + '" from your profile?',
+          confirmButtonText: 'Yes, Delete',
+          showCancelButton: true
         }
       }
     );
 
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.deleteSearch();
+        this.deleteSearch(search.id);
       }
     });
   }
 
-  deleteSearch() {
+  deleteMode() {
+    this.deleteModeOn = !this.deleteModeOn;
 
-    if (this.selection.selected.length > 1) {
-      alert('you have too many searches selected for removal. select only one.');
-    } else if (this.selection.selected.length === 1) {
+    const element = document.getElementById('searchList');
+   element.classList.toggle('deleteModeIndicator');
+  }
+
+  deleteSearch(id) {
+    this._searchService.delete(id)
+          .subscribe(
+            () => {
+              this.openSnackBar('Search successfully deleted', 'OK', 5000);
+              this.loadSavedSearches();
+            },
+            error => {
+              this.errorMessage = <any>error;
+              this.openSnackBar('Error. Search not deleted. Error message: ' + error, 'OK', 8000);
+            }
+          );
+  }
+
+  /* deleteSearch() {
       this._searchService.delete(this.selection.selected[0])
         .subscribe(
           () => {
@@ -267,75 +297,78 @@ export class SavedSearchesComponent implements OnInit {
             this.errorMessage = <any>error;
           }
         );
-    }
-  }
+  } */
 
   implementSearch(search) {
+    if (this.deleteModeOn === false) {
 
+      // TODO: currentDiplayQuery needs to be parsed from the search object
+      const displayQuery: DisplayQuery = {
+        event_type: [],
+        diagnosis: [],
+        diagnosis_type: [],
+        species: [],
+        administrative_level_one: [],
+        administrative_level_two: [],
+        affected_count: search.affected_count,
+        affected_count_operator: search.affected_count_operator,
+        start_date: search.start_date,
+        end_date: search.end_date,
+        diagnosis_type_includes_all: search.diagnosis_type_includes_all,
+        diagnosis_includes_all: search.diagnosis_includes_all,
+        species_includes_all: search.species_includes_all,
+        administrative_level_one_includes_all: search.administrative_level_one_includes_all,
+        administrative_level_two_includes_all: search.administrative_level_two_includes_all,
+        and_params: [],
+        complete: search.complete
+      };
 
-    // TODO: currentDiplayQuery needs to be parsed from the search object
-    const displayQuery: DisplayQuery = {
-      event_type: [],
-      diagnosis: [],
-      diagnosis_type: [],
-      species: [],
-      administrative_level_one: [],
-      administrative_level_two: [],
-      affected_count: search.affected_count,
-      affected_count_operator: search.affected_count_operator,
-      start_date: search.start_date,
-      end_date: search.end_date,
-      diagnosis_type_includes_all: search.diagnosis_type_includes_all,
-      diagnosis_includes_all: search.diagnosis_includes_all,
-      species_includes_all: search.species_includes_all,
-      administrative_level_one_includes_all: search.administrative_level_one_includes_all,
-      administrative_level_two_includes_all: search.administrative_level_two_includes_all,
-      and_params: [],
-      complete: search.complete
-    };
-
-    if (search.event_type) {
-      for (const event_type of search.event_type) {
-        displayQuery.event_type.push(this.displayValuePipe.transform(event_type, 'name', this.eventTypes));
+      if (search.event_type) {
+        for (const event_type of search.event_type) {
+          displayQuery.event_type.push(this.displayValuePipe.transform(event_type, 'name', this.eventTypes));
+        }
       }
-    }
 
-    if (search.diagnosis) {
-      for (const diagnosis of search.diagnosis) {
-        displayQuery.diagnosis.push(this.displayValuePipe.transform(diagnosis, 'name', this.diagnoses));
+      if (search.diagnosis) {
+        for (const diagnosis of search.diagnosis) {
+          displayQuery.diagnosis.push(this.displayValuePipe.transform(diagnosis, 'name', this.diagnoses));
+        }
       }
-    }
-    if (search.diagnosis_type) {
-      for (const diagnosis_type of search.diagnosis_type) {
-        displayQuery.diagnosis_type.push(this.displayValuePipe.transform(diagnosis_type, 'name', this.diagnosisTypes));
+      if (search.diagnosis_type) {
+        for (const diagnosis_type of search.diagnosis_type) {
+          displayQuery.diagnosis_type.push(this.displayValuePipe.transform(diagnosis_type, 'name', this.diagnosisTypes));
+        }
       }
-    }
 
-    if (search.species) {
-      for (const species of search.species) {
-        displayQuery.species.push(this.displayValuePipe.transform(species, 'name', this.allSpecies));
+      if (search.species) {
+        for (const species of search.species) {
+          displayQuery.species.push(this.displayValuePipe.transform(species, 'name', this.allSpecies));
+        }
       }
-    }
 
-    if (search.administrative_level_one) {
-      for (const adminLevelOne of search.administrative_level_one) {
-        displayQuery.administrative_level_one.push(this.displayValuePipe.transform(adminLevelOne, 'name', this.administrative_level_one));
+      if (search.administrative_level_one) {
+        for (const adminLevelOne of search.administrative_level_one) {
+          displayQuery.administrative_level_one.push(this.displayValuePipe.transform(adminLevelOne, 'name', this.administrative_level_one));
+        }
       }
-    }
 
-    if (search.administrative_level_two) {
-      for (const adminLevelTwo of search.administrative_level_two) {
-        displayQuery.administrative_level_two.push(this.displayValuePipe.transform(adminLevelTwo, 'name', this.administrative_level_two));
+      if (search.administrative_level_two) {
+        for (const adminLevelTwo of search.administrative_level_two) {
+          displayQuery.administrative_level_two.push(this.displayValuePipe.transform(adminLevelTwo, 'name', this.administrative_level_two));
+        }
       }
+
+      sessionStorage.setItem('currentDisplayQuery', JSON.stringify(displayQuery));
+      // use displayQuery for display of current query in markup, send to searchDialogService
+      this.searchDialogService.setDisplayQuery(displayQuery);
+
+      sessionStorage.setItem('currentSearch', JSON.stringify(search));
+      this.searchDialogService.setSearchQuery(search);
+      this.router.navigate([`../home/`], { relativeTo: this.route });
+    } else {
+      this.openSearchDeleteConfirm(search);
+      // this.deleteSearch();
     }
-
-    sessionStorage.setItem('currentDisplayQuery', JSON.stringify(displayQuery));
-    // use displayQuery for display of current query in markup, send to searchDialogService
-    this.searchDialogService.setDisplayQuery(displayQuery);
-
-    sessionStorage.setItem('currentSearch', JSON.stringify(search));
-    this.searchDialogService.setSearchQuery(search);
-    this.router.navigate([`../home/`], { relativeTo: this.route });
   }
 
   openSnackBar(message: string, action: string, duration: number) {

@@ -27,6 +27,9 @@
                 <mat-option *ngFor="let eventType of eventTypes" value="{{eventType.id}}">{{eventType.name}}
                 </mat-option>
               </mat-select>
+              <mat-icon class="hint-hover-text" matSuffix matTooltip={{eventTypeTooltip()}}
+                matTooltipClass="tooltip-breakline">
+                help</mat-icon>
               <mat-hint align="end" matTooltip="Public field">
                 <mat-icon>public</mat-icon>
               </mat-hint>
@@ -36,9 +39,11 @@
 
             <mat-form-field class="form-control">
               <input matInput placeholder="User Event Reference" formControlName="event_reference">
+              <mat-icon class="hint-hover-text" matSuffix matTooltip={{userEventRefTooltip()}}
+                matTooltipClass="tooltip-breakline">
+                help</mat-icon>
               <mat-hint align="start">Reference name for this event (private) </mat-hint>
             </mat-form-field>
-
           </div>
 
           <div class="horizontal-form-container">
@@ -47,23 +52,27 @@
                 <mat-option [value]="true">Visible to Public</mat-option>
                 <mat-option [value]="false">Not Visible to Public</mat-option>
               </mat-select>
+              <mat-icon class="hint-hover-text" matSuffix matTooltip={{eventVisibilityTooltip()}}
+                matTooltipClass="tooltip-breakline">
+                help</mat-icon>
               <mat-hint align="start"></mat-hint>
               <mat-error *ngIf="eventSubmissionForm.get('public').invalid">{{getErrorMessage('public')}}</mat-error>
             </mat-form-field>
-
             <mat-form-field class="form-control">
               <mat-select placeholder="WHISPers Record Status" formControlName="complete" required
                 (ngModelChange)="checkEventCompleteRules()">
                 <mat-option [value]="true">Complete</mat-option>
                 <mat-option [value]="false">Incomplete</mat-option>
               </mat-select>
+              <mat-icon class="hint-hover-text" matSuffix matTooltip={{recordStatusTooltip()}}
+                matTooltipClass="tooltip-breakline">
+                help</mat-icon>
               <mat-hint align="start"></mat-hint>
               <mat-hint align="end" matTooltip="Public field">
                 <mat-icon>public</mat-icon>
               </mat-hint>
               <mat-error *ngIf="eventSubmissionForm.get('complete').invalid">{{getErrorMessage('complete')}}</mat-error>
             </mat-form-field>
-
           </div>
 
           <div formArrayName="new_organizations">
@@ -83,6 +92,9 @@
                         {{organization.name}}
                       </mat-option>
                     </mat-select>
+                    <mat-icon class="hint-hover-text" matSuffix matTooltip={{contactOrganizationTooltip()}}
+                      matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
                     <mat-hint align="start">
                       Contact organization for display to general public, for general inquries
                     </mat-hint>
@@ -216,6 +228,9 @@
                                 formControlName="start_date" (ngModelChange)="checkLocationStartDates()">
                               <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
                               <mat-datepicker #startDate></mat-datepicker>
+                              <mat-icon class="hint-hover-text" matSuffix matTooltip={{locationStartDateTooltip()}}
+                                matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
@@ -230,6 +245,9 @@
                                 formControlName="end_date" (ngModelChange)="checkLocationEndDates()">
                               <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                               <mat-datepicker #endDate></mat-datepicker>
+                              <mat-icon class="hint-hover-text" matSuffix matTooltip={{locationEndDateTooltip()}}
+                                matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
@@ -249,6 +267,9 @@
                                 <mat-option *ngFor="let country of countries" value="{{country.id}}">{{country.name}}
                                 </mat-option>
                               </mat-select>
+                              <mat-icon class="hint-hover-text" matSuffix matTooltip={{countryTooltip()}}
+                                matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
@@ -257,7 +278,6 @@
                                 Please
                                 enter a value</mat-error>
                             </mat-form-field>
-
                             <mat-form-field class="form-control">
                               <mat-spinner *ngIf="adminLevelOnesLoading" [diameter]="20"></mat-spinner>
                               <mat-select formControlName="administrative_level_one" placeholder="State (or equivalent)"
@@ -272,6 +292,9 @@
                                   {{admin_level_one.name}}
                                 </mat-option>
                               </mat-select>
+                              <mat-icon class="hint-hover-text" matSuffix matTooltip={{stateTooltip()}}
+                                matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
                               <mat-hint align="start">Select a country to populate/update state list </mat-hint>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
@@ -295,6 +318,9 @@
                                   {{admin_level_two.name}}
                                 </mat-option>
                               </mat-select>
+                              <mat-icon class="hint-hover-text" matSuffix matTooltip={{countyTooltip()}}
+                                matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
                               <mat-hint align="start">Select a state to populate/update county list </mat-hint>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
@@ -310,6 +336,9 @@
                           <div class="vertical-form-container">
                             <mat-form-field class="form-control">
                               <input matInput placeholder="Location Name" formControlName="name">
+                              <mat-icon class="hint-hover-text" matSuffix matTooltip={{locationNameTooltip()}}
+                                matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
@@ -317,6 +346,9 @@
                                 <mat-option *ngFor="let landOwnership of landOwnerships" value="{{landOwnership.id}}">
                                   {{landOwnership.name}}</mat-option>
                               </mat-select>
+                              <mat-icon class="hint-hover-text" matSuffix matTooltip={{landOwnershipTooltip()}}
+                                matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
                               <mat-error
                                 *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('land_ownership').invalid">
                                 Please
@@ -327,7 +359,11 @@
 
                           <div class="horizontal-form-container">
                             <mat-form-field class="form-control">
-                              <input matInput placeholder="Latitude" formControlName="latitude">
+                              <input matInput placeholder="Latitude" formControlName="latitude"
+                                (ngModelChange)="truncateDecimalDegrees($event, eventLocationIndex, 'latitude')">
+                              <mat-icon class="hint-hover-text" matSuffix matTooltip={{latitudeTooltip()}}
+                                matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
                               <mat-error
                                 *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('latitude').invalid">
                                 Invalid
@@ -335,7 +371,11 @@
                             </mat-form-field>
 
                             <mat-form-field class="form-control">
-                              <input matInput placeholder="Longitude" formControlName="longitude">
+                              <input matInput placeholder="Longitude" formControlName="longitude"
+                                (ngModelChange)="truncateDecimalDegrees($event, eventLocationIndex, 'longitude')">
+                              <mat-icon class="hint-hover-text" matSuffix matTooltip={{longitudeTooltip()}}
+                                matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
                               <mat-error
                                 *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('longitude').invalid">
                                 Invalid
@@ -343,7 +383,10 @@
                             </mat-form-field>
                           </div>
 
-                          <h4>GNIS Standardized Location Name</h4>
+                          <h4>GNIS Standardized Location Name<mat-icon class="hint-hover-text" matSuffix
+                              matTooltip={{standardizedLocationNameTooltip()}} matTooltipClass="tooltip-breakline">
+                              help</mat-icon>
+                          </h4>
 
                           <button mat-stroked-button color="primary"
                             aria-label="Look up feature in Geographic Names Information System (GNIS) database"
@@ -407,6 +450,9 @@
                                           {{species.name}}
                                         </mat-option>
                                       </mat-select>
+                                      <mat-icon class="hint-hover-text" matSuffix matTooltip={{speciesTooltip()}}
+                                        matTooltipClass="tooltip-breakline">
+                                        help</mat-icon>
                                       <mat-error
                                         *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('species').hasError('required')">
                                         Species
@@ -417,8 +463,8 @@
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Known Dead" type="number" min="0"
                                         formControlName="dead_count" (ngModelChange)="checkLocationSpeciesNumbers()">
-                                      <mat-icon class="hint-fix" matSuffix
-                                        matTooltip="Exact minimum count of the cumulative number of dead animals (not including euthanized) over the length of the event at this location. Include euthanized. If 0 observed, enter 0. Details can be provided in the Comment section.">
+                                      <mat-icon class="hint-hover-text" matSuffix matTooltip={{knownDeadTooltip()}}
+                                        matTooltipClass="tooltip-breakline">
                                         help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
@@ -439,8 +485,8 @@
                                       <input matInput placeholder="Estimated Dead" type="number" min="0"
                                         formControlName="dead_count_estimated"
                                         (ngModelChange)="checkLocationSpeciesNumbers()">
-                                      <mat-icon class="hint-fix" matSuffix
-                                        matTooltip="Best guess of the maximum number of animals that died (include any known dead animals) at this location over the length of the event. Include euthanized with sick. Details can be provided in the Comment section.">
+                                      <mat-icon class="hint-hover-text" matSuffix matTooltip={{estimatedDeadTooltip()}}
+                                        matTooltipClass="tooltip-breakline">
                                         help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
@@ -464,8 +510,8 @@
                                     <mat-form-field class="species-number-control-w-help">
                                       <input matInput placeholder="Known Sick" type="number" min="0"
                                         formControlName="sick_count" (ngModelChange)="checkLocationSpeciesNumbers()">
-                                      <mat-icon class="hint-fix" matSuffix
-                                        matTooltip="Exact minimum count of animals exhibiting clinical signs of illness at the point in time that the observation was made at this location. If site visited repeatedly, use number remaining sick/injured plus number recovered from being sick/injured. Include euthanized. If 0 observed, enter 0. Details can be provided in the Comment section.">
+                                      <mat-icon class="hint-hover-text" matSuffix matTooltip={{knownSickTooltip()}}
+                                        matTooltipClass="tooltip-breakline">
                                         help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
@@ -486,8 +532,8 @@
                                       <input matInput placeholder="Estimated Sick" type="number" min="0"
                                         formControlName="sick_count_estimated"
                                         (ngModelChange)="checkLocationSpeciesNumbers()">
-                                      <mat-icon class="hint-fix" matSuffix
-                                        matTooltip="Best guess of the maximum number of animals that might be showing clinical signs (include any known sick animals) at the point in time that the observation was made at this location. If site visited repeatedly, use number remaining sick/injured plus number recovered from being sick/injured. Include euthanized with sick. Details can be provided in the Comment section.">
+                                      <mat-icon class="hint-hover-text" matSuffix matTooltip={{estimatedSickTooltip()}}
+                                        matTooltipClass="tooltip-breakline">
                                         help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
@@ -511,6 +557,9 @@
                                     <mat-form-field class="species-bias-control">
                                       <input matInput placeholder="Population" type="number" min="0"
                                         formControlName="population_count">
+                                      <mat-icon class="hint-hover-text" matSuffix matTooltip={{populationTooltip()}}
+                                        matTooltipClass="tooltip-breakline">
+                                        help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
@@ -532,6 +581,9 @@
                                         <mat-option *ngFor="let ageBias of ageBiases" value="{{ageBias.id}}">
                                           {{ageBias.name}}</mat-option>
                                       </mat-select>
+                                      <mat-icon class="hint-hover-text" matSuffix matTooltip={{ageBiasTooltip()}}
+                                        matTooltipClass="tooltip-breakline">
+                                        help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
@@ -545,6 +597,9 @@
                                         <mat-option *ngFor="let sexBias of sexBiases" value="{{sexBias.id}}">
                                           {{sexBias.name}}</mat-option>
                                       </mat-select>
+                                      <mat-icon class="hint-hover-text" matSuffix matTooltip={{sexBiasTooltip()}}
+                                        matTooltipClass="tooltip-breakline">
+                                        help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
@@ -558,6 +613,9 @@
                                         <mat-option [value]="true">Captive > 72 hours</mat-option>
                                         <mat-option [value]="false">Wild and/or free-ranging</mat-option>
                                       </mat-select>
+                                      <mat-icon class="hint-hover-text" matSuffix matTooltip={{captiveTooltip()}}
+                                        matTooltipClass="tooltip-breakline">
+                                        help</mat-icon>
                                       <mat-hint align="end" matTooltip="Public field">
                                         <mat-icon>public</mat-icon>
                                       </mat-hint>
@@ -734,6 +792,9 @@
                               Text in at least one of the comment categories below is required. Please be as thorough
                               as possible to aid interpretation of data and to potentially guide cause of death
                               determination and management actions.
+                              <mat-icon class="hint-hover-text" matSuffix matTooltip={{locationCommentTooltip()}}
+                                matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
                             </p>
 
                             <mat-form-field class="comment-text-area">
@@ -830,6 +891,9 @@
                               (click)="openCreateContactDialog()">
                               <mat-icon>person_add</mat-icon> Create New Contact
                             </button>
+                            <mat-icon class="hint-hover-text" style="top: 40px;" matSuffix
+                              matTooltip={{contactPersonTooltip()}} matTooltipClass="tooltip-breakline">
+                              help</mat-icon>
                           </div>
 
                           <div formArrayName="new_location_contacts">
@@ -860,6 +924,9 @@
                                     <mat-option *ngFor="let contactType of contactTypes" [value]="contactType.id">
                                       {{contactType.name}}</mat-option>
                                   </mat-select>
+                                  <mat-icon class="hint-hover-text" matSuffix matTooltip={{contactTypeTooltip()}}
+                                    matTooltipClass="tooltip-breakline">
+                                    help</mat-icon>
                                 </mat-form-field>
 
                                 <div class="contact-button-div">
@@ -898,6 +965,9 @@
                                 <span>Loading contacts list...</span>
                               </span>
                             </button>
+                            <mat-icon class="hint-hover-text" style="top: 45px;" matSuffix
+                              matTooltip={{contactPersonTooltip()}} matTooltipClass="tooltip-breakline">
+                              help</mat-icon>
                           </div>
 
                           <div class="form-nav-buttons">
@@ -936,7 +1006,7 @@
                             </mat-error>
 
                             <mat-error color="warn"
-                              *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_one').invalid">
+                              *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('administrative_level_two').invalid">
                               <mat-icon class="icon">error</mat-icon>
                               <span class="alert-text">Missing county selection.</span>
                             </mat-error>
@@ -961,6 +1031,12 @@
                             <mat-error color="warn" *ngIf="checkEventLocationCommentMin(eventLocationIndex)">
                               <mat-icon class="icon">error</mat-icon>
                               <span class="alert-text">At least one comment field must have a value.</span>
+                            </mat-error>
+
+                            <mat-error color="warn" *ngIf="locationStartDatesViolation">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">An event must have a start date provided for at least one
+                                location.</span>
                             </mat-error>
 
                             <!-- <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_contacts').invalid">
@@ -1036,6 +1112,9 @@
                                   [disabled]="checkForDuplicateEventDiagnosis(diagnosis.id)">
                                   {{diagnosis.name}}<span *ngIf="diagnosis.suspect"> (suspect)</span></mat-option>
                               </mat-select>
+                              <mat-icon class="hint-hover-text" matSuffix matTooltip={{eventDiagnosisTooltip()}}
+                                matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
                               <mat-hint align="end" matTooltip="Public field">
                                 <mat-icon>public</mat-icon>
                               </mat-hint>
@@ -1094,6 +1173,10 @@
                             <mat-form-field class="general-comment-text-area">
                               <textarea matInput maxlength="1000" #comment placeholder="Comment"
                                 formControlName="comment"></textarea>
+                              <!-- <mat-icon class="hint-hover-text" matSuffix 
+                                  matTooltip={{eventCommentTooltip()}} matTooltipClass="tooltip-breakline">
+                                  help</mat-icon> -->
+                              <mat-hint align="start">{{eventCommentTooltip()}}</mat-hint>
                               <mat-hint align="end">{{comment.value.length}} / 1000</mat-hint>
                             </mat-form-field>
 
@@ -1102,6 +1185,9 @@
                                 <mat-option *ngFor="let commentType of commentTypes" [value]="commentType.id">
                                   {{commentType.name}}</mat-option>
                               </mat-select>
+                              <mat-icon class="hint-hover-text" matSuffix matTooltip={{eventCommentTypeTooltip()}}
+                                matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
                             </mat-form-field>
 
                             <button mat-icon-button color="warn" aria-label="Remove this comment"
@@ -1131,7 +1217,7 @@
                 </h3>
                 <span>Need help? Request diagnostic services and/or consult (e.g. management
                   suggestions, recommended
-                  personal protective gear, etc.) from the USGS National Wildlife Health Center</span>
+                  personal protective gear, etc.) from the USGS National Wildlife Health Center.</span>
                 <p>
                   <mat-card>
                     <mat-card-content>
@@ -1141,11 +1227,22 @@
 
                           <mat-radio-group formControlName="request_type">
                             <mat-radio-button [value]="0">No services needed at this time </mat-radio-button>
+                            <mat-icon class="hint-hover-text" matSuffix matTooltip={{serviceRequestNoServicesTooltip()}}
+                              matTooltipClass="tooltip-breakline">
+                              help</mat-icon>
                             <p>
                               <mat-radio-button [value]="1">Request diagnostic and consultative services
                               </mat-radio-button>
+                              <mat-icon class="hint-hover-text" matSuffix
+                                matTooltip={{serviceRequestRequestDiaAndConsultTooltip()}}
+                                matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
                               <p>
                                 <mat-radio-button [value]="2">Request consultative services ONLY </mat-radio-button>
+                                <mat-icon class="hint-hover-text" matSuffix
+                                  matTooltip={{serviceRequestRequestDiaServicesOnlyTooltip()}}
+                                  matTooltipClass="tooltip-breakline">
+                                  help</mat-icon>
                           </mat-radio-group>
 
                           <div class="text-bold text-larger diagnostic-info-text"
@@ -1169,6 +1266,10 @@
                                   <mat-form-field class="general-comment-text-area">
                                     <textarea matInput maxlength="2000" #comment placeholder="Comment"
                                       formControlName="comment"></textarea>
+                                    <mat-icon class="hint-hover-text" matSuffix
+                                      matTooltip={{serviceRequestCommentTooltip()}} matTooltipClass="tooltip-breakline">
+                                      help
+                                    </mat-icon>
                                     <mat-hint align="end">{{comment.value.length}} / 2000</mat-hint>
                                   </mat-form-field>
 
@@ -1226,12 +1327,11 @@
                                     </button></mat-list-item>
                                 </mat-list>
                                 <div class="button-row">
-                                  <button mat-button color="primary" matTooltip="Add Individual Read Only Collaborator"
+                                  <button mat-button color="primary" matTooltip={{collaboratorsAddIndividualTooltip()}}
                                     (click)="addCollaborator('read')">
                                     <mat-icon>person_add</mat-icon> Add Individual
                                   </button>
-                                  <button mat-button color="primary"
-                                    matTooltip="Add Read Only Collaborators from Circle"
+                                  <button mat-button color="primary" matTooltip={{collaboratorsAddCircleTooltip()}}
                                     (click)="openCircleChooseDialog('read')">
                                     <mat-icon>group_add</mat-icon> Add Circle
                                   </button>
@@ -1253,12 +1353,11 @@
                                     </button></mat-list-item>
                                 </mat-list>
                                 <div class="button-row">
-                                  <button mat-button color="primary" matTooltip="Add Read and Write Collaborator"
+                                  <button mat-button color="primary" matTooltip={{collaboratorsAddIndividualTooltip()}}
                                     (click)="addCollaborator('write')">
                                     <mat-icon>person_add</mat-icon> Add Individual
                                   </button>
-                                  <button mat-button color="primary"
-                                    matTooltip="Add Read and Write Collaborators from Circle"
+                                  <button mat-button color="primary" matTooltip={{collaboratorsAddCircleTooltip()}}
                                     (click)="openCircleChooseDialog('write')">
                                     <mat-icon>group_add</mat-icon> Add Circle
                                   </button>
@@ -1324,10 +1423,10 @@
                       <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar ">
                       </mat-progress-bar>
                       <p>
-                        <button mat-raised-button color="primary"
+                        <!-- <button mat-raised-button color="primary"
                           (click)="openEventSubmitConfirm(eventSubmissionForm.value)">
                           <mat-icon>pageview</mat-icon> Review Event Submission
-                        </button>
+                        </button> -->
                         <p>
                           <button mat-raised-button color="primary"
                             [disabled]="eventSubmissionForm.invalid || duplicateEventOrgViolation || locationSpeciesNumbersViolation || completeEventLocationSpeciesNumbersViolation || locationEndDatesViolation || locationStartDatesViolation || speciesDiagnosisViolation || submitLoading"

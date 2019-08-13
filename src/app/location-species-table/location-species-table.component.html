@@ -3,7 +3,10 @@
 
     <!-- Species Column -->
     <ng-container matColumnDef="species">
-      <mat-header-cell *matHeaderCellDef> Species </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Species <mat-icon class="hint-table-hover-text" matSuffix
+          matTooltip={{editSpeciesTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
+      </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.species_string}} </mat-cell>
     </ng-container>
 
@@ -18,60 +21,87 @@
 
     <!-- Population Column -->
     <ng-container matColumnDef="population">
-      <mat-header-cell *matHeaderCellDef> Population </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Population <mat-icon class="hint-table-hover-text" matSuffix
+        matTooltip={{populationTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
+      </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.population_count}} </mat-cell>
     </ng-container>
 
     <!-- Sick Count Column -->
     <ng-container matColumnDef="sick">
-      <mat-header-cell *matHeaderCellDef> Sick </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Sick <mat-icon class="hint-table-hover-text" matSuffix
+        matTooltip={{editKnownSickTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
+    </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.sick_count}} </mat-cell>
     </ng-container>
 
     <!-- Dead Count Column -->
     <ng-container matColumnDef="dead">
-      <mat-header-cell *matHeaderCellDef> Dead </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Dead <mat-icon class="hint-table-hover-text" matSuffix
+        matTooltip={{editKnownDeadTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
+      </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.dead_count}} </mat-cell>
     </ng-container>
 
     <!-- Sick Count Estimated Column -->
     <ng-container matColumnDef="sick_estimated">
-      <mat-header-cell *matHeaderCellDef> Sick Estimate </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Sick Estimate <mat-icon class="hint-table-hover-text" matSuffix
+        matTooltip={{editEstimatedSickTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
+      </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.sick_count_estimated}}
       </mat-cell>
     </ng-container>
 
     <!-- Dead Count Estimated Column -->
     <ng-container matColumnDef="dead_estimated">
-      <mat-header-cell *matHeaderCellDef> Dead Estimate </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Dead Estimate <mat-icon class="hint-table-hover-text" matSuffix
+        matTooltip={{editEstimatedDeadTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
+      </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.dead_count_estimated}}
       </mat-cell>
     </ng-container>
 
     <!-- Captive Column -->
     <ng-container matColumnDef="captive">
-      <mat-header-cell *matHeaderCellDef> Captive </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Captive <mat-icon class="hint-table-hover-text" matSuffix
+        matTooltip={{editCaptiveTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
+      </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.captive ? 'Yes': 'No'}}
       </mat-cell>
     </ng-container>
 
     <!-- Age Bias Column -->
     <ng-container matColumnDef="age_bias">
-      <mat-header-cell *matHeaderCellDef> Age Bias</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Age Bias <mat-icon class="hint-table-hover-text" matSuffix
+        matTooltip={{editAgeBiasTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
+      </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.age_bias | displayValue:'name':this.ageBiases}}
       </mat-cell>
     </ng-container>
 
     <!-- Sex Bias Column -->
     <ng-container matColumnDef="sex_bias">
-      <mat-header-cell *matHeaderCellDef> Sex Bias </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Sex Bias <mat-icon class="hint-table-hover-text" matSuffix
+        matTooltip={{editSexBiasTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
+      </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.sex_bias | displayValue:'name':this.sexBiases}}
       </mat-cell>
     </ng-container>
 
     <!-- Diagnosis Column -->
     <ng-container matColumnDef="diagnosis">
-      <mat-header-cell *matHeaderCellDef> Diagnosis </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> Diagnosis <mat-icon class="hint-table-hover-text" matSuffix
+        matTooltip={{editSpeciesDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
+      </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <span *ngIf="element.speciesdiagnoses">
           <ul class="table-cell-list">

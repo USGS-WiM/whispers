@@ -31,12 +31,16 @@
       <div class="event-detail-wrapper">
 
         <mat-card-title class="details-info">
-          <div class="title">Event {{eventData.id}}</div>
-          <div class="subtitle">{{eventData.event_type_string}}</div>
+          <div class="title">Event {{eventData.id}}<mat-icon class="hint-hover-text" matSuffix 
+            matTooltip={{eventIDTooltip()}} matTooltipClass="tooltip-breakline">
+            help</mat-icon></div>
+          <div class="subtitle">{{eventData.event_type_string}}<mat-icon class="hint-hover-text" matSuffix 
+            matTooltip={{editEventTypeTooltip()}} matTooltipClass="tooltip-breakline">
+            help</mat-icon></div>
           <div class="meta">
-            <span>{{eventData.start_date | date:'mediumDate'}}</span>
+            <span matTooltip={{eventStartDateTooltip()}}>{{eventData.start_date | date:'mediumDate'}}</span>
             <span *ngIf="eventData.end_date !== null && eventData.end_date !== ''"> thru </span>
-            <span>{{eventData.end_date | date:'mediumDate'}}</span>
+            <span matTooltip={{eventEndDateTooltip()}}>{{eventData.end_date | date:'mediumDate'}}</span>
           </div>
         </mat-card-title>
 
@@ -57,17 +61,25 @@
                 <div class="event-table-header">Event Details</div>
                 <table>
                   <tr>
-                    <th>Affected</th>
+                    <th>Affected<mat-icon class="hint-table-hover-text" matSuffix 
+                      matTooltip={{numberAffectedTooltip()}} matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
+                    </th>
                     <td>{{eventData.affected_count}}</td>
                   </tr>
                   <tr>
-                    <th [attr.rowspan]="eventData.eventdiagnoses.length + 1 ">Diagnosis</th>
+                    <th [attr.rowspan]="eventData.eventdiagnoses.length + 1 ">Diagnosis<mat-icon class="hint-table-hover-text" matSuffix 
+                      matTooltip={{editEventDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
+                    </th>
                   </tr>
                   <tr *ngFor="let diagnosis of eventData.eventdiagnoses" class="noBorder">
                     <td><span>{{diagnosis.diagnosis_string}}</span></td>
                   </tr>
                   <tr>
-                    <th [attr.rowspan]="eventData.eventlocations.length + 1 ">Locations</th>
+                    <th [attr.rowspan]="eventData.eventlocations.length + 1 ">Locations<mat-icon class="hint-table-hover-text" matSuffix 
+                      matTooltip={{locationsTooltip()}} matTooltipClass="tooltip-breakline">
+                      help</mat-icon></th>
                   </tr>
                   <tr *ngFor="let eventLocation of eventData.eventlocations">
                     <td>{{eventLocation.administrative_level_two_string}},
@@ -78,7 +90,9 @@
                         <span>{{eventLocation.end_date | date:'mediumDate'}}</span></span></td>
                   </tr>
                   <tr>
-                    <th>WHISPers Record Status</th>
+                    <th>WHISPers Record Status<mat-icon class="hint-table-hover-text" matSuffix 
+                      matTooltip={{editRecordStatusTooltip()}} matTooltipClass="tooltip-breakline">
+                      help</mat-icon></th>
                     <td><span>{{eventData.complete ? 'Complete' : 'Incomplete'}}</span></td>
                   </tr>
                 </table>
@@ -91,7 +105,9 @@
                 <div class="event-table-header">Event Organizations</div>
                 <table>
                   <tr>
-                    <th>Organization</th>
+                    <th>Organization<mat-icon class="hint-table-hover-text" matSuffix 
+                      matTooltip={{editContactOrganizationTooltip()}} matTooltipClass="tooltip-breakline">
+                      help</mat-icon></th>
                     <th>Location</th>
                   </tr>
                   <tr *ngFor="let eventOrganization of eventData.eventorganizations">
@@ -141,17 +157,50 @@
                 <!-- <label for="speciesList" class="event-detail-label">Species Affected</label> -->
                 <table id="speciesList">
                   <tr>
-                    <th>Species</th>
-                    <th>Location</th>
-                    <th>Population</th>
-                    <th>Sick</th>
-                    <th>Dead</th>
-                    <th class="limit-width">Sick Estimate </th>
-                    <th class="limit-width">Dead Estimate</th>
-                    <th class="limit-width">Captive</th>
-                    <th>Age Bias</th>
-                    <th>Sex Bias</th>
-                    <th>Diagnosis</th>
+                    <th>Species<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{editSpeciesTooltip()}}
+                        matTooltipClass="tooltip-breakline">
+                        help</mat-icon>
+                    </th>
+                    <th>Location<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{locationsTooltip()}}
+                      matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
+                    </th>
+                    <th>Population<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{populationTooltip()}}
+                      matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
+                    </th>
+                    <th>Sick<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{editKnownSickTooltip()}}
+                      matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
+                    </th>
+                    <th>Dead<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{editKnownDeadTooltip()}}
+                      matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
+                    </th>
+                    <th class="limit-width">Sick Estimate<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{editEstimatedSickTooltip()}}
+                      matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
+                    </th>
+                    <th class="limit-width">Dead Estimate<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{editEstimatedDeadTooltip()}}
+                      matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
+                    </th>
+                    <th class="limit-width">Captive<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{editCaptiveTooltip()}}
+                      matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
+                    </th>
+                    <th>Age Bias<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{editAgeBiasTooltip()}}
+                      matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
+                    </th>
+                    <th>Sex Bias<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{editSexBiasTooltip()}}
+                      matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
+                    </th>
+                    <th>Diagnosis<mat-icon style="display: inline; font-size: 14px;" class="hint-table-hover-text" matSuffix matTooltip={{editSpeciesDiagnosisTooltip()}}
+                      matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
+                    </th>
                   </tr>
 
                   <tr *ngFor="let loc_species of eventLocationSpecies">
@@ -526,7 +575,6 @@
                       <mat-icon>add_comment</mat-icon>
                       Add Comment
                     </button><br>
-
                     <button mat-icon-button aria-label="respond to service request" color="primary"
                       [disabled]="!eventData.permissions.destroy || eventData.complete"
                       (click)="addServiceRequestResponse(servicerequest)"
@@ -534,9 +582,11 @@
                       <mat-icon>assignment_turned_in</mat-icon>
                       Respond
                     </button>
+                    <mat-icon style="margin-left: 40px;" class="hint-hover-text" matSuffix 
+                      matTooltip={{nwhcCarcassSubApprovalTooltip()}} matTooltipClass="tooltip-breakline">
+                      help</mat-icon>
                     <mat-divider [inset]="true" *ngIf="!last" class="request-divider"></mat-divider>
                   </li>
-
                 </ul>
 
                 <div class="detail-section-buttons">
@@ -598,11 +648,11 @@
                               </button></mat-list-item>
                           </mat-list>
                           <div class="button-row">
-                            <button mat-button color="primary" matTooltip="Add Individual Read Only Collaborator"
+                            <button mat-button color="primary" matTooltip="{{collaboratorsAddIndividualTooltip()}}"
                               (click)="addCollaborator('read')">
                               <mat-icon>person_add</mat-icon> Add Individual
                             </button>
-                            <button mat-button color="primary" matTooltip="Add Read Only Collaborators from Circle"
+                            <button mat-button color="primary" matTooltip="{{collaboratorsAddCircleTooltip()}}"
                               (click)="openCircleChooseDialog('read')">
                               <mat-icon>group_add</mat-icon> Add Circle
                             </button>
@@ -624,11 +674,11 @@
                               </button></mat-list-item>
                           </mat-list>
                           <div class="button-row">
-                            <button mat-button color="primary" matTooltip="Add Read and Write Collaborator"
+                            <button mat-button color="primary" matTooltip="{{collaboratorsAddIndividualTooltip()}}"
                               (click)="addCollaborator('write')">
                               <mat-icon>person_add</mat-icon> Add Individual
                             </button>
-                            <button mat-button color="primary" matTooltip="Add Read and Write Collaborators from Circle"
+                            <button mat-button color="primary" matTooltip="{{collaboratorsAddCircleTooltip()}}"
                               (click)="openCircleChooseDialog('write')">
                               <mat-icon>group_add</mat-icon> Add Circle
                             </button>
@@ -687,12 +737,14 @@
 
                   <div class="privileged-meta">
                     <div class="item">
-                      <div class="label">Land ownership</div>
+                      <div class="label">Land ownership
+                      </div>
                       <div class="value">{{eventLocation.land_ownership | displayValue:'name':this.landownerships}}
                       </div>
                     </div>
                     <div class="item">
-                      <div class="label">GNIS Feature Name</div>
+                      <div class="label">GNIS Feature Name
+                      </div>
                       <div class="value">{{eventLocation.gnis_name}}</div>
                     </div>
                     <div class="item">
@@ -700,7 +752,8 @@
                       <div class="value">{{eventLocation.gnis_id}}</div>
                     </div>
                     <div class="item">
-                      <div class="label">Flyways</div>
+                      <div class="label" matTooltip={{flywayTooltip()}}>Flyways
+                      </div>
                       <div class="value"><span *ngFor="let flyway of eventLocation.flyways">{{flyway.name}}</span></div>
                     </div>
                     <div class="item">
@@ -708,7 +761,8 @@
                       <div class="value">{{eventLocation.latitude}}</div>
                     </div>
                     <div class="item">
-                      <div class="label">Longitude</div>
+                      <div class="label">Longitude
+                      </div>
                       <div class="value">{{eventLocation.longitude}}</div>
                     </div>
                   </div>
@@ -833,7 +887,7 @@
                     <button mat-button color="primary" class="event-detail-action-button"
                       (click)="addEventLocationContact(eventLocation.id)"
                       [disabled]="!eventData.permissions.update || userContactsLoading || eventData.complete"
-                      matTooltip="Associate contact with this event location">
+                      matTooltip="{{contactPersonTooltip()}}">
                       <mat-icon>add_circle</mat-icon>
                       Add Contact
                     </button>
@@ -841,7 +895,7 @@
                   <div class="detail-section-buttons">
                     <button mat-button color="primary" class="event-detail-action-button"
                       [disabled]="eventData.complete" (click)="openCreateContactDialog()"
-                      matTooltip="Create a new contact">
+                      matTooltip="{{contactPersonTooltip()}}" matTooltipClass="tooltip-breakline">
                       <mat-icon>person_add</mat-icon> Create New Contact
                     </button>
                   </div>

@@ -1040,6 +1040,11 @@
                                 location.</span>
                             </mat-error>
 
+                            <mat-error color="warn" *ngIf="numberAffectedViolation">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">An event must have at least one number among known sick, estimated sick, <br> known dead, or estimated dead for at least one species for at least one location.</span>
+                            </mat-error>
+
                             <!-- <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_contacts').invalid">
                                 <mat-icon class="icon">error</mat-icon>
                                 <span class="alert-text">Missing contact type selection.</span>

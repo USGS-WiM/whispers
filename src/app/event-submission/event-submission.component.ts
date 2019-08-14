@@ -209,6 +209,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   completeEventLocationSpeciesNumbersViolation = false;
   // starts as true  because no start dates provided by default
   locationStartDatesViolation = true;
+  numberAffectedViolation = true;
   // starts as false because event must be complete = true to trigger violation
   locationEndDatesViolation = false;
   speciesDiagnosisViolation = false;
@@ -1382,10 +1383,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
         this.commonEventData.species.push(this.formBuilder.group({
           species: species.value.species,
           population_count: null,
-          sick_count: null,
-          dead_count: null,
-          sick_count_estimated: null,
-          dead_count_estimated: null,
+          sick_count: [null, Validators.min(0)],
+          dead_count: [null, Validators.min(0)],
+          sick_count_estimated: [null, Validators.min(0)],
+          dead_count_estimated: [null, Validators.min(0)],
           priority: null,
           captive: null,
           age_bias: null,
@@ -1523,6 +1524,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   checkLocationSpeciesNumbers() {
 
     this.locationSpeciesNumbersViolation = false;
+    this.numberAffectedViolation = false;
     this.completeEventLocationSpeciesNumbersViolation = false;
     // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
     if (this.eventSubmissionForm.get('event_type').value === 1 || this.eventSubmissionForm.get('event_type').value === '1') {
@@ -1583,6 +1585,23 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
         this.completeEventLocationSpeciesNumbersViolation = false;
       } else {
         this.completeEventLocationSpeciesNumbersViolation = true;
+      }
+    }
+    const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+    let numbersAffectedRequirementMet = false;
+    for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
+      const locationspecies = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
+      for (let locationspeciesindex = 0, locationspecieslength = locationspecies.length; locationspeciesindex < locationspecieslength; locationspeciesindex++) {
+        const locationspeciesform = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex];
+        if ((locationspeciesform.get('sick_count').value !== null) || (locationspeciesform.get('dead_count').value !== null) || (locationspeciesform.get('sick_count_estimated').value !== null) || (locationspeciesform.get('dead_count_estimated').value !== null)) {
+          numbersAffectedRequirementMet = true;
+        }
+
+        if (numbersAffectedRequirementMet) {
+          this.numberAffectedViolation = false;
+        } else {
+          this.numberAffectedViolation = true;
+        }
       }
     }
   }

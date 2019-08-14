@@ -606,7 +606,7 @@
 
             <!-- Species Column -->
             <ng-container matColumnDef="species">
-              <mat-header-cell *matHeaderCellDef matTooltip="{{editSpeciesTooltip()}}" matTooltipClass="tooltip-breakline">Species</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef matTooltip="{{generalTableSpeciesTooltip()}}" matTooltipClass="tooltip-breakline">Species</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let species of event.species">{{species.name}}</li>

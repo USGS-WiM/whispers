@@ -225,7 +225,7 @@
 
                             <mat-form-field class="form-control">
                               <input matInput [matDatepicker]="startDate" placeholder="Location Start Date"
-                                formControlName="start_date" (ngModelChange)="checkLocationStartDates()">
+                                formControlName="start_date" (ngModelChange)="checkLocationStartDates()" required>
                               <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
                               <mat-datepicker #startDate></mat-datepicker>
                               <mat-icon class="hint-hover-text" matSuffix matTooltip={{locationStartDateTooltip()}}
@@ -431,6 +431,7 @@
                           <div>
 
                             <div formArrayName="new_location_species">
+                              <p>* A number in at least one of the sick or dead categories below is required for at least one species for at least one location.</p>
                               <div class="species-container"
                                 *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index">
 
@@ -789,7 +790,7 @@
 
                           <div id="submissionCommentsForm">
                             <p>
-                              Text in at least one of the comment categories below is required. Please be as thorough
+                              * Text in at least one of the comment categories below is required. Please be as thorough
                               as possible to aid interpretation of data and to potentially guide cause of death
                               determination and management actions.
                               <mat-icon class="hint-hover-text" matSuffix matTooltip={{locationCommentTooltip()}}

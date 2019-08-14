@@ -391,8 +391,10 @@ export class EditEventComponent implements OnInit {
 
     // empty value from datepicker does not work with datePipe transform. This converts empty dates to null for the datePipe
     if (formValue.quality_check !== null) {
-      if (formValue.quality_check.toJSON() === null) {
-        formValue.quality_check = null;
+      if (formValue.quality_check !== undefined) {
+        if (formValue.quality_check.toJSON() === null) {
+          formValue.quality_check = null;
+        }
       }
     }
     formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');

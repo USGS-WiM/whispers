@@ -1,7 +1,7 @@
 <div>
 
   <div class="detailsDiv" id="eventSubmissionPage">
-
+    
     <mat-card *ngIf="currentUser.role === 7">
       <h2>You do not have permission to create an event</h2>
       <p><button mat-raised-button color="primary" (click)="navigateToHome()">
@@ -1421,7 +1421,7 @@
                         </mat-error>
                       </div>
 
-                      <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar ">
+                      <mat-progress-bar mode="indeterminate" *ngIf="submitLoading" class="event-submit-progress-bar">
                       </mat-progress-bar>
                       <p>
                         <!-- <button mat-raised-button color="primary"

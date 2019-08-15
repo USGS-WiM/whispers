@@ -183,7 +183,7 @@ export class EventsComponent implements AfterViewInit, OnInit {
 
     // replace this direct call to the service with a call of the query function of the dataSource, allow it to do the actual query
     this.dataSource = new EventsDataSource(this.eventService);
-    this.dataSource.queryEvents(this.currentSearchQuery, '', 1, 5);
+    this.dataSource.queryEvents(this.currentSearchQuery, '-start_date', 1, 5);
   }
 
   ngAfterViewInit() {

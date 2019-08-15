@@ -34,7 +34,7 @@ export class UserService {
 
     // add message(?)
     const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_JSON_HEADERS
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
     return this._http.post(APP_SETTINGS.USERS_URL + 'verify_email/', emailArray, options)

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
 import { Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
@@ -90,6 +90,7 @@ export class AddEventLocationComponent implements OnInit {
   @ViewChild('adminLevelTwoSelect') adminLevelTwoSelect: MatSelect;
   @ViewChild('speciesSelect') speciesSelect: MatSelect;
   @ViewChild('contactSelect') contactSelect: MatSelect;
+  @Output() childReadyEvent: EventEmitter<string> = new EventEmitter();
 
   errorMessage = '';
   addEventLocationForm: FormGroup;
@@ -123,6 +124,8 @@ export class AddEventLocationComponent implements OnInit {
 
   speciesDiagnosisViolation = false;
   nonCompliantSpeciesDiagnoses = [];
+
+  /* numberAffectedViolation = true; */
 
   /** Subject that emits when the component has been destroyed. */
   private _onDestroy = new Subject<void>();
@@ -424,8 +427,12 @@ export class AddEventLocationComponent implements OnInit {
   }
 
   onSubmit(formValue) {
-
     this.submitLoading = true;
+    /* formValue.new_location_contacts.forEach(function (item, i) {
+      if (item.contact === null) {
+        formValue.new_location_contacts.splice(i, 1);
+      }
+     }); */
 
     formValue.event = this.eventData.id;
 
@@ -456,6 +463,22 @@ export class AddEventLocationComponent implements OnInit {
 
     // delete the event_type field, which was superficially attached to event location for validation purposes
     delete formValue.event_type;
+
+    // empty array to put in the corrected location contacts
+    const contacts = [];
+
+     // check to see if there were blank contacts added and remove them if so
+     if (this.addEventLocationForm.get('new_location_contacts') != null) {
+      const control = <FormArray>this.addEventLocationForm.get('new_location_contacts');
+      this.addEventLocationForm.get('new_location_contacts').value.forEach(element => {
+        if (element.contact === null) {
+          control.removeAt(element);
+        } else {
+          contacts.push(element);
+        }
+      });
+      formValue.new_location_contacts = contacts;
+    }
 
     this.eventLocationService.create(formValue)
       .subscribe(
@@ -535,6 +558,24 @@ export class AddEventLocationComponent implements OnInit {
       return false;
     }
   }
+
+  // This is a check to make sure there is at least one value for dead_count, sick_count, sick_count_estimated,
+  // or dead_count estimate for at least one event location. This isn't necessary for this component, but leaving it here
+  // incase one day it is.
+  /* checkNumberAffected() {
+    const locationspecies = <FormArray>this.addEventLocationForm.get('new_location_species');
+    let numbersAffectedRequirementMet = false;
+    for (let i = 0, j = locationspecies.length; i < j; i++) {
+      if ((locationspecies['controls'][i].get('sick_count').value !== null) || (locationspecies['controls'][i].get('dead_count').value !== null) || (locationspecies['controls'][i].get('sick_count_estimated').value !== null) || (locationspecies['controls'][i].get('dead_count_estimated').value !== null)) {
+        numbersAffectedRequirementMet = true;
+      }
+      if (numbersAffectedRequirementMet) {
+        this.numberAffectedViolation = false;
+      } else {
+        this.numberAffectedViolation = true;
+      }
+    }
+  } */
 
   checkEventLocationCommentMin() {
 

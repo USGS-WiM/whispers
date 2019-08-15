@@ -39,6 +39,12 @@
         <button mat-icon-button (click)="navigateToHome()">
           <mat-icon class="icon">home</mat-icon>
         </button>
+        
+        <!-- User Dashboard -->
+        <button mat-button aria-label="User Dashboard" *ngIf="currentUser.username != ''"(click)="openUserDashboard()">
+            <i class="material-icons">dashboard</i>
+            <span class="header-button-text">User Dashboard</span>
+        </button>
 
         <!-- Create Event -->
         <button mat-button aria-label="Create Event"
@@ -47,7 +53,6 @@
           <i class="material-icons">library_add</i>
           <span class="header-button-text">Create Event</span>
         </button>
-
       </div>
 
       <!-- App alert -->
@@ -62,21 +67,32 @@
       <div class="right">
 
         <!-- Login Status -->
-        <span *ngIf="currentUser.username == ''" class="login-status signin-button" [matMenuTriggerFor]="menu">Log
-          In</span>
+        <span *ngIf="currentUser.username == ''" class="login-status signin-button">
+          <button mat-button aria-label="Login" (click)="openAuthenticationDialog()" *ngIf="currentUser.username == ''">
+            Log In&nbsp;
+            <mat-icon>account_box</mat-icon>
+          </button>
+        </span>
+
         <span *ngIf="currentUser.username !== ''" class="login-status">{{currentUser.first_name}}
-          {{currentUser.last_name}}</span>
+          {{currentUser.last_name}}
+          <button mat-button aria-label="Logout" id="logoutIcon" (click)="logout()"  matTooltip="Logout">
+            <mat-icon class="icon">exit_to_app</mat-icon> <!-- Could also use power_settings_new icon -->
+          </button>
+        </span>
+
+
 
         <!-- Account Menu -->
         <!-- <button mat-button aria-label="Login">
           <mat-icon class="icon">account_box</mat-icon>
           <span class="header-button-text">Login</span>
           </button> -->
-        <button mat-icon-button [matMenuTriggerFor]="menu">
+        <!-- <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon class="icon">account_box</mat-icon>
-        </button>
+        </button> -->
 
-        <mat-menu #menu="matMenu">
+        <!-- <mat-menu #menu="matMenu">
           <button mat-menu-item aria-label="Login" (click)="openAuthenticationDialog()"
             *ngIf="currentUser.username == ''">
             <mat-icon>account_box</mat-icon>
@@ -93,7 +109,7 @@
             <mat-icon>dashboard</mat-icon>
             <span>User Dashboard</span>
           </button>
-        </mat-menu>
+        </mat-menu> -->
 
 
 

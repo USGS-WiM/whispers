@@ -1,7 +1,7 @@
 <div>
 
   <div class="detailsDiv" id="eventSubmissionPage">
-
+    
     <mat-card *ngIf="currentUser.role === 7">
       <h2>You do not have permission to create an event</h2>
       <p><button mat-raised-button color="primary" (click)="navigateToHome()">
@@ -225,7 +225,7 @@
 
                             <mat-form-field class="form-control">
                               <input matInput [matDatepicker]="startDate" placeholder="Location Start Date"
-                                formControlName="start_date" (ngModelChange)="checkLocationStartDates()">
+                                formControlName="start_date" (ngModelChange)="checkLocationStartDates()" required>
                               <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
                               <mat-datepicker #startDate></mat-datepicker>
                               <mat-icon class="hint-hover-text" matSuffix matTooltip={{locationStartDateTooltip()}}
@@ -431,6 +431,7 @@
                           <div>
 
                             <div formArrayName="new_location_species">
+                              <p>* A number in at least one of the sick or dead categories below is required for at least one species for at least one location.</p>
                               <div class="species-container"
                                 *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index">
 
@@ -789,7 +790,7 @@
 
                           <div id="submissionCommentsForm">
                             <p>
-                              Text in at least one of the comment categories below is required. Please be as thorough
+                              * Text in at least one of the comment categories below is required. Please be as thorough
                               as possible to aid interpretation of data and to potentially guide cause of death
                               determination and management actions.
                               <mat-icon class="hint-hover-text" matSuffix matTooltip={{locationCommentTooltip()}}
@@ -1037,6 +1038,11 @@
                               <mat-icon class="icon">error</mat-icon>
                               <span class="alert-text">An event must have a start date provided for at least one
                                 location.</span>
+                            </mat-error>
+
+                            <mat-error color="warn" *ngIf="numberAffectedViolation">
+                              <mat-icon class="icon">error</mat-icon>
+                              <span class="alert-text">An event must have at least one number among known sick, estimated sick, <br> known dead, or estimated dead for at least one species for at least one location.</span>
                             </mat-error>
 
                             <!-- <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_contacts').invalid">
@@ -1420,7 +1426,7 @@
                         </mat-error>
                       </div>
 
-                      <mat-progress-bar mode="indeterminate " *ngIf="submitLoading " class="event-submit-progress-bar ">
+                      <mat-progress-bar mode="indeterminate" *ngIf="submitLoading" class="event-submit-progress-bar">
                       </mat-progress-bar>
                       <p>
                         <!-- <button mat-raised-button color="primary"

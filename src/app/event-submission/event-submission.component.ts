@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy, OnChanges } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterViewInit, ViewChild, OnDestroy, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl, Form } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import { DatePipe } from '@angular/common';
@@ -115,6 +115,7 @@ declare const search_api: search_api;
 })
 export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivateGuard, AfterViewInit {
   @ViewChild('stepper') stepper: MatStepper;
+  @ViewChild('eventTypeRef') eventTypeRef: MatSelect;
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
@@ -235,6 +236,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   @ViewChild('contactSelect') contactSelect: MatSelect;
 
   @ViewChild('organizationSelect') organizationSelect: MatSelect;
+
 
   /** controls for the MatSelect filter keyword */
   adminLevelOneFilterCtrl: FormControl = new FormControl();
@@ -369,7 +371,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     private circleService: CircleService,
     public snackBar: MatSnackBar,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef
   ) {
     this.buildEventSubmissionForm();
 
@@ -832,6 +835,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   ngAfterViewInit() {
 
+    this.eventTypeRef.focus();
+    this.cd.detectChanges();
+
     const self = this;
     this.usgsSearch = search_api.create('search-api-div', {
       'verbose': true,
@@ -851,6 +857,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   }
 
   ngOnInit() {
+
+    this.eventTypeRef.focus();
 
     this.eventSubmissionForm.get('new_read_collaborators').setValue([]);
     this.eventSubmissionForm.get('new_write_collaborators').setValue([]);
@@ -2536,7 +2544,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     this.submitLoading = true;
 
     // check to see if there were blank contacts added and remove them if so
-    for ( let i = 0; i < this.eventSubmissionForm.get('new_event_locations').value.length; i++) {
+    for (let i = 0; i < this.eventSubmissionForm.get('new_event_locations').value.length; i++) {
       const contacts = [];
       const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('new_location_contacts');
       this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('new_location_contacts').value.forEach(contact => {

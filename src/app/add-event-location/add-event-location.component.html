@@ -35,7 +35,8 @@
         <div class="horizontal-form-container">
 
           <mat-form-field class="form-control">
-            <input matInput [matDatepicker]="startDate" placeholder="Location Start Date" formControlName="start_date">
+            <input matInput [matDatepicker]="startDate" placeholder="Location Start Date" formControlName="start_date"
+              required>
             <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
             <mat-datepicker #startDate></mat-datepicker>
             <mat-icon class="hint-hover-text" matSuffix matTooltip={{locationStartDateTooltip()}}
@@ -168,9 +169,10 @@
           </mat-form-field>
         </div>
 
-        <h4>GNIS Standardized Location Name<mat-icon class="hint-hover-text" matSuffix matTooltip={{standardizedLocationNameTooltip()}}
-          matTooltipClass="tooltip-breakline">
-          help</mat-icon></h4>
+        <h4>GNIS Standardized Location Name<mat-icon class="hint-hover-text" matSuffix
+            matTooltip={{standardizedLocationNameTooltip()}} matTooltipClass="tooltip-breakline">
+            help</mat-icon>
+        </h4>
 
         <button mat-stroked-button color="primary"
           aria-label="Look up feature in Geographic Names Information System (GNIS) database"
@@ -213,6 +215,8 @@
         <div>
 
           <div formArrayName="new_location_species">
+            <p>* A number in at least one of the sick or dead categories below is required for at least one species for
+              at least one location.</p>
             <div class="species-container"
               *ngFor="let locationSpecies of getLocationSpecies(); let locationSpeciesIndex = index">
 
@@ -229,9 +233,11 @@
                         {{species.name}}
                       </mat-option>
                     </mat-select>
-                    <mat-icon class="hint-hover-text" matSuffix
-                      matTooltip="{{speciesTooltip()}}">
+                    <mat-icon class="hint-hover-text" matSuffix matTooltip="{{speciesTooltip()}}">
                       help</mat-icon>
+                    <mat-hint align="end" matTooltip="Public field">
+                      <mat-icon>public</mat-icon>
+                    </mat-hint>
                     <mat-error
                       *ngIf="this.addEventLocationForm.get('new_location_species')['controls'][locationSpeciesIndex].get('species').hasError('required')">
                       Species
@@ -241,8 +247,7 @@
                   <!--Known Dead control -->
                   <mat-form-field class="species-number-control-w-help">
                     <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count">
-                    <mat-icon class="hint-hover-text" matSuffix
-                      matTooltip="{{knownDeadTooltip()}}">
+                    <mat-icon class="hint-hover-text" matSuffix matTooltip="{{knownDeadTooltip()}}">
                       help</mat-icon>
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
@@ -262,8 +267,7 @@
                   <mat-form-field class="species-number-control">
                     <input matInput placeholder="Estimated Dead" type="number" min="0"
                       formControlName="dead_count_estimated">
-                    <mat-icon class="hint-hover-text" matSuffix
-                      matTooltip="{{estimatedDeadTooltip()}}">
+                    <mat-icon class="hint-hover-text" matSuffix matTooltip="{{estimatedDeadTooltip()}}">
                       help</mat-icon>
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
@@ -286,8 +290,7 @@
                   <!--Known Sick control -->
                   <mat-form-field class="species-number-control-w-help">
                     <input matInput placeholder="Known Sick" type="number" min="0" formControlName="sick_count">
-                    <mat-icon class="hint-hover-text" matSuffix
-                      matTooltip="{{knownSickTooltip()}}">
+                    <mat-icon class="hint-hover-text" matSuffix matTooltip="{{knownSickTooltip()}}">
                       help</mat-icon>
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
@@ -307,8 +310,7 @@
                   <mat-form-field class="species-number-control-w-help">
                     <input matInput placeholder="Estimated Sick" type="number" min="0"
                       formControlName="sick_count_estimated">
-                    <mat-icon class="hint-hover-text" matSuffix
-                      matTooltip="{{estimatedSickTooltip()}}">
+                    <mat-icon class="hint-hover-text" matSuffix matTooltip="{{estimatedSickTooltip()}}">
                       help</mat-icon>
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
@@ -331,8 +333,7 @@
                   <!--Population count control-->
                   <mat-form-field class="species-number-control">
                     <input matInput placeholder="Population" type="number" min="0" formControlName="population_count">
-                    <mat-icon class="hint-hover-text" matSuffix
-                      matTooltip="{{populationTooltip()}}">
+                    <mat-icon class="hint-hover-text" matSuffix matTooltip="{{populationTooltip()}}">
                       help</mat-icon>
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
@@ -354,8 +355,7 @@
                       <mat-option [value]="null">--</mat-option>
                       <mat-option *ngFor="let ageBias of ageBiases" value="{{ageBias.id}}">{{ageBias.name}}</mat-option>
                     </mat-select>
-                    <mat-icon class="hint-hover-text" matSuffix
-                      matTooltip="{{ageBiasTooltip()}}">
+                    <mat-icon class="hint-hover-text" matSuffix matTooltip="{{ageBiasTooltip()}}">
                       help</mat-icon>
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
@@ -369,8 +369,7 @@
                       <mat-option [value]="null">--</mat-option>
                       <mat-option *ngFor="let sexBias of sexBiases" value="{{sexBias.id}}">{{sexBias.name}}</mat-option>
                     </mat-select>
-                    <mat-icon class="hint-hover-text" matSuffix
-                      matTooltip="{{sexBiasTooltip()}}">
+                    <mat-icon class="hint-hover-text" matSuffix matTooltip="{{sexBiasTooltip()}}">
                       help</mat-icon>
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
@@ -385,9 +384,8 @@
                       <mat-option [value]="true">Captive > 72 hours</mat-option>
                       <mat-option [value]="false">Wild and/or free-ranging</mat-option>
                     </mat-select>
-                    <mat-icon class="hint-hover-text" matSuffix
-                    matTooltip="{{captiveTooltip()}}">
-                    help</mat-icon>
+                    <mat-icon class="hint-hover-text" matSuffix matTooltip="{{captiveTooltip()}}">
+                      help</mat-icon>
                     <mat-hint align="end" matTooltip="Public field">
                       <mat-icon>public</mat-icon>
                     </mat-hint>
@@ -545,10 +543,10 @@
         <ng-template matStepLabel>Comments</ng-template>
 
         <p>
-          Text in at least one of the comment categories below is required. Please be as thorough as possible to aid
-          interpretation of data and to potentially guide cause of death determination and management actions.<mat-icon class="hint-hover-text" matSuffix
-          matTooltip="{{locationCommentTooltip()}}">
-          help</mat-icon>
+          * Text in at least one of the comment categories below is required. Please be as thorough as possible to aid
+          interpretation of data and to potentially guide cause of death determination and management actions.<mat-icon
+            class="hint-hover-text" matSuffix matTooltip="{{locationCommentTooltip()}}">
+            help</mat-icon>
         </p>
 
         <mat-form-field class="comment-text-area">
@@ -639,9 +637,9 @@
           <button mat-button color="primary" class="event-detail-action-button" (click)="openCreateContactDialog()">
             <i class="material-icons">person_add</i> Create New Contact
           </button>
-          <mat-icon class="hint-hover-text" style="top: 40px;" matSuffix
-              matTooltip={{contactPersonTooltip()}} matTooltipClass="tooltip-breakline">
-              help</mat-icon>
+          <mat-icon class="hint-hover-text" style="top: 40px;" matSuffix matTooltip={{contactPersonTooltip()}}
+            matTooltipClass="tooltip-breakline">
+            help</mat-icon>
         </div>
 
         <div formArrayName="new_location_contacts">
@@ -710,8 +708,8 @@
               <span>Loading contacts list...</span>
             </span>
           </button>
-          <mat-icon class="hint-hover-text" style="top: 45px;" matSuffix
-            matTooltip={{contactPersonTooltip()}} matTooltipClass="tooltip-breakline">
+          <mat-icon class="hint-hover-text" style="top: 45px;" matSuffix matTooltip={{contactPersonTooltip()}}
+            matTooltipClass="tooltip-breakline">
             help</mat-icon>
         </div>
 
@@ -728,10 +726,8 @@
 
       <!--Review Step-->
       <mat-step>
-
         <ng-template matStepLabel>Review & Submit</ng-template>
-
-        <div id="submissionReviewComplete" *ngIf="addEventLocationForm.valid && checkEventLocationCommentMin() === false">
+        <div id="submissionReviewComplete" *ngIf="addEventLocationForm.valid">
           <mat-icon>check</mat-icon>
           <b>Finished with New Location</b>
         </div>

@@ -6,6 +6,7 @@ import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortMo
 import { debounceTime, distinctUntilChanged, startWith, tap, delay } from 'rxjs/operators';
 import { merge } from 'rxjs/observable/merge';
 import { EventService } from '@services/event.service';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -76,6 +77,16 @@ export class UserEventsComponent implements AfterViewInit, OnInit {
     //   )
     //   .subscribe();
   }
+
+  eventIDTooltip() { const string = FIELD_HELP_TEXT.eventIDTooltip; return string; }
+  editEventTypeTooltip() { const string = FIELD_HELP_TEXT.editEventTypeTooltip; return string; }
+  numberAffectedTooltip() { const string = FIELD_HELP_TEXT.numberAffectedTooltip; return string; }
+  eventStartDateTooltip() { const string = FIELD_HELP_TEXT.eventStartDateTooltip; return string; }
+  eventEndDateTooltip() { const string = FIELD_HELP_TEXT.eventEndDateTooltip; return string; }
+  editEventDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editEventDiagnosisTooltip; return string; }
+  locationsTooltip() { const string = FIELD_HELP_TEXT.locationsTooltip; return string; }
+  generalTableSpeciesTooltip() { const string = FIELD_HELP_TEXT.generalTableSpeciesTooltip; return string; }
+  permissionSourceTooltip() { const string = FIELD_HELP_TEXT.permissionSourceTooltip; return string; }
 
   loadEventsPage() {
 

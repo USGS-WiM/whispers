@@ -1,5 +1,5 @@
-import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy, OnChanges } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
+import { Component, OnInit, ElementRef, AfterViewInit, ViewChild, OnDestroy, OnChanges, ChangeDetectorRef } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl, Form } from '@angular/forms/';
 import { Observable } from 'rxjs/Observable';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs/Subscription';
@@ -115,6 +115,7 @@ declare const search_api: search_api;
 })
 export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivateGuard, AfterViewInit {
   @ViewChild('stepper') stepper: MatStepper;
+  @ViewChild('eventTypeRef') eventTypeRef: MatSelect;
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
@@ -209,6 +210,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   completeEventLocationSpeciesNumbersViolation = false;
   // starts as true  because no start dates provided by default
   locationStartDatesViolation = true;
+  numberAffectedViolation = true;
   // starts as false because event must be complete = true to trigger violation
   locationEndDatesViolation = false;
   speciesDiagnosisViolation = false;
@@ -234,6 +236,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   @ViewChild('contactSelect') contactSelect: MatSelect;
 
   @ViewChild('organizationSelect') organizationSelect: MatSelect;
+
 
   /** controls for the MatSelect filter keyword */
   adminLevelOneFilterCtrl: FormControl = new FormControl();
@@ -368,7 +371,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     private circleService: CircleService,
     public snackBar: MatSnackBar,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef
   ) {
     this.buildEventSubmissionForm();
 
@@ -831,6 +835,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   ngAfterViewInit() {
 
+    this.eventTypeRef.focus();
+    this.cd.detectChanges();
+
     const self = this;
     this.usgsSearch = search_api.create('search-api-div', {
       'verbose': true,
@@ -850,6 +857,8 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   }
 
   ngOnInit() {
+
+    this.eventTypeRef.focus();
 
     this.eventSubmissionForm.get('new_read_collaborators').setValue([]);
     this.eventSubmissionForm.get('new_write_collaborators').setValue([]);
@@ -1367,8 +1376,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
             // using the indexObject, push the species id value to the correct form instance
             // tslint:disable-next-line:max-line-length
             this.eventSubmissionForm.get('new_event_locations')['controls'][indexObject.eventLocationIndex].get('new_location_contacts')['controls'][indexObject.locationContactIndex].get('contact').setValue(contact.value.contact);
-
-
             // const locationContacts = eventLocations[i].get('location_contacts');
             // locationContacts.push(contact);
           }
@@ -1384,10 +1391,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
         this.commonEventData.species.push(this.formBuilder.group({
           species: species.value.species,
           population_count: null,
-          sick_count: null,
-          dead_count: null,
-          sick_count_estimated: null,
-          dead_count_estimated: null,
+          sick_count: [null, Validators.min(0)],
+          dead_count: [null, Validators.min(0)],
+          sick_count_estimated: [null, Validators.min(0)],
+          dead_count_estimated: [null, Validators.min(0)],
           priority: null,
           captive: null,
           age_bias: null,
@@ -1525,6 +1532,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   checkLocationSpeciesNumbers() {
 
     this.locationSpeciesNumbersViolation = false;
+    this.numberAffectedViolation = false;
     this.completeEventLocationSpeciesNumbersViolation = false;
     // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
     if (this.eventSubmissionForm.get('event_type').value === 1 || this.eventSubmissionForm.get('event_type').value === '1') {
@@ -1585,6 +1593,23 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
         this.completeEventLocationSpeciesNumbersViolation = false;
       } else {
         this.completeEventLocationSpeciesNumbersViolation = true;
+      }
+    }
+    const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+    let numbersAffectedRequirementMet = false;
+    for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
+      const locationspecies = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
+      for (let locationspeciesindex = 0, locationspecieslength = locationspecies.length; locationspeciesindex < locationspecieslength; locationspeciesindex++) {
+        const locationspeciesform = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex];
+        if ((locationspeciesform.get('sick_count').value !== null) || (locationspeciesform.get('dead_count').value !== null) || (locationspeciesform.get('sick_count_estimated').value !== null) || (locationspeciesform.get('dead_count_estimated').value !== null)) {
+          numbersAffectedRequirementMet = true;
+        }
+
+        if (numbersAffectedRequirementMet) {
+          this.numberAffectedViolation = false;
+        } else {
+          this.numberAffectedViolation = true;
+        }
       }
     }
   }
@@ -1920,7 +1945,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   initLocationContacts() {
     return this.formBuilder.group({
-      contact: [null, Validators.required],
+      contact: [null],
       contact_type: null
     });
   }
@@ -2517,6 +2542,20 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     this.eventSubmissionForm.markAsUntouched();
 
     this.submitLoading = true;
+
+    // check to see if there were blank contacts added and remove them if so
+    for (let i = 0; i < this.eventSubmissionForm.get('new_event_locations').value.length; i++) {
+      const contacts = [];
+      const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('new_location_contacts');
+      this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('new_location_contacts').value.forEach(contact => {
+        if (contact.contact === null) {
+          control.removeAt(contact);
+        } else {
+          contacts.push(contact);
+        }
+      });
+      formValue.new_event_locations[i].new_location_contacts = contacts;
+    }
 
     // KEEP. Bring this back pending introduction of generic event location comment.
     // check if extra event location comment is blank, if so, delete it from the object

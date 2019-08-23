@@ -858,8 +858,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   ngOnInit() {
 
-    this.eventTypeRef.focus();
-
     this.eventSubmissionForm.get('new_read_collaborators').setValue([]);
     this.eventSubmissionForm.get('new_write_collaborators').setValue([]);
 

@@ -219,6 +219,10 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
         // new_species_diagnosis_organizations: this.data.speciesdiagnosis.organizations
       });
 
+      // this line had to be added because the patchValue function above was causing the diagnosis to be an array instead of a simple integer value,
+      // which was breaking the checkSuspectCompliance() function
+      this.speciesDiagnosisForm.get('diagnosis').setValue(this.data.speciesdiagnosis.diagnosis);
+
       if (this.data.speciesdiagnosis.organizations.length > 0) {
         this.removeDiagnosisOrganization(0);
         // remove filteredLaboratories array for first index
@@ -520,7 +524,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       string = FIELD_HELP_TEXT.labTooltip;
     }
     return string;
-   }
+  }
   significanceOfDiagnosisForSpeciesTooltip() { const string = FIELD_HELP_TEXT.significanceOfDiagnosisForSpeciesTooltip; return string; }
   speciesDiagnosisSuspectTooltip() { const string = FIELD_HELP_TEXT.speciesDiagnosisSuspectTooltip; return string; }
 

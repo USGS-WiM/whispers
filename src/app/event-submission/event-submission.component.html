@@ -1,7 +1,7 @@
 <div>
 
   <div class="detailsDiv" id="eventSubmissionPage">
-    
+
     <mat-card *ngIf="currentUser.role === 7">
       <h2>You do not have permission to create an event</h2>
       <p><button mat-raised-button color="primary" (click)="navigateToHome()">
@@ -22,8 +22,8 @@
           <div class="horizontal-form-container">
 
             <mat-form-field class="form-control">
-              <mat-select placeholder="Event Type" formControlName="event_type" required
-                (ngModelChange)="updateEventType($event)">
+              <mat-select #eventTypeRef placeholder="Event Type" formControlName="event_type" required 
+                (ngModelChange)="updateEventType($event)" focused>
                 <mat-option *ngFor="let eventType of eventTypes" value="{{eventType.id}}">{{eventType.name}}
                 </mat-option>
               </mat-select>
@@ -431,7 +431,8 @@
                           <div>
 
                             <div formArrayName="new_location_species">
-                              <p>* A number in at least one of the sick or dead categories below is required for at least one species for at least one location.</p>
+                              <p>* A number in at least one of the sick or dead categories below is required for at
+                                least one species for at least one location.</p>
                               <div class="species-container"
                                 *ngFor="let locationSpecies of getLocationSpecies(eventLocation); let locationSpeciesIndex = index">
 
@@ -454,6 +455,9 @@
                                       <mat-icon class="hint-hover-text" matSuffix matTooltip={{speciesTooltip()}}
                                         matTooltipClass="tooltip-breakline">
                                         help</mat-icon>
+                                      <mat-hint align="end" matTooltip="Public field">
+                                        <mat-icon>public</mat-icon>
+                                      </mat-hint>
                                       <mat-error
                                         *ngIf="this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('species').hasError('required')">
                                         Species
@@ -1042,7 +1046,9 @@
 
                             <mat-error color="warn" *ngIf="numberAffectedViolation">
                               <mat-icon class="icon">error</mat-icon>
-                              <span class="alert-text">An event must have at least one number among known sick, estimated sick, <br> known dead, or estimated dead for at least one species for at least one location.</span>
+                              <span class="alert-text">An event must have at least one number among known sick,
+                                estimated sick, <br> known dead, or estimated dead for at least one species for at least
+                                one location.</span>
                             </mat-error>
 
                             <!-- <mat-error color="warn" *ngIf="eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('new_location_contacts').invalid">
@@ -1408,6 +1414,13 @@
                           <mat-icon class="icon">error</mat-icon>
                           <span class="alert-text">An event must have a start date provided for at least one
                             location.</span>
+                        </mat-error>
+
+                        <mat-error color="warn" *ngIf="numberAffectedViolation">
+                          <mat-icon class="icon">error</mat-icon>
+                          <span class="alert-text">An event must have at least one number among known sick,
+                            estimated sick, <br> known dead, or estimated dead for at least one species for at least
+                            one location.</span>
                         </mat-error>
 
                         <mat-error color="warn" *ngIf="locationEndDatesViolation">

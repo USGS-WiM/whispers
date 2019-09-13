@@ -1,18 +1,15 @@
 <div>
-<mat-card-content>
+  <mat-card-content>
     <div class="spinner-container" *ngIf="commentsLoading">
       <mat-spinner></mat-spinner>
     </div>
-    <div *ngIf="commentsDataSource" class="results-table-div">
-
-      <mat-table [dataSource]="commentsDataSource" matSort matSortActive="comment" matSortDirection="asc"
-        *ngIf="commentsDataSource.data.length > 0">
-
+    <div  class="results-table-div"> <!-- *ngIf="commentsDataSource" -->
+      <mat-table [dataSource]="commentsDataSource" matSort matSortActive="created_date" matSortDirection="asc"
+      *ngIf="combinedComments.length > 0"> 
         <!-- Selection column -->
         <ng-container matColumnDef="select">
           <mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-              [checked]="selection.hasValue() && isAllSelected()"
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
               [indeterminate]="selection.hasValue() && !isAllSelected()">
             </mat-checkbox>
           </mat-header-cell>
@@ -24,47 +21,66 @@
         </ng-container>
 
         <!-- Last Name Column -->
+        <ng-container matColumnDef="comment">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Comment </mat-header-cell>
+          <mat-cell *matCellDef="let combinedComments"> {{combinedComments.comment}} </mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="comment_type">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Comment Type </mat-header-cell>
-          <mat-cell *matCellDef="let eventData"> {{eventData.comment_type}} </mat-cell>
+          <mat-cell *matCellDef="let combinedComments">
+            <span [ngSwitch]="combinedComments.comment_type">
+              <span *ngSwitchCase="1">Site description</span>
+              <span *ngSwitchCase="2">History</span>
+              <span *ngSwitchCase="3">Environmental factors</span>
+              <span *ngSwitchCase="4">Clinical signs</span>
+              <span *ngSwitchCase="5">Field Update</span>
+              <span *ngSwitchCase="6">Management</span>
+              <span *ngSwitchCase="7">Epidemiological</span>
+              <span *ngSwitchCase="8">NWHC</span>
+              <span *ngSwitchCase="9">Diagnostic</span>
+              <span *ngSwitchCase="10">Other</span>
+              <span *ngSwitchCase="11">Event Group</span>
+            </span> 
+          </mat-cell>
         </ng-container>
 
         <!-- First Name Column -->
         <ng-container matColumnDef="created_date">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </mat-header-cell>
-          <mat-cell *matCellDef="let contact"> {{contact.first_name}} </mat-cell>
+          <mat-cell *matCellDef="let combinedComments"> {{combinedComments.created_date}} </mat-cell>
         </ng-container>
 
         <!-- Phone Number Column -->
         <ng-container matColumnDef="created_by_first_name">
           <mat-header-cell *matHeaderCellDef mat-sort-header> First Name </mat-header-cell>
-          <mat-cell *matCellDef="let contact"> {{formatPhone(contact.phone)}} </mat-cell>
+          <mat-cell *matCellDef="let combinedComments"> {{combinedComments.created_by_first_name}} </mat-cell>
         </ng-container>
 
         <!-- Email Address Column -->
         <ng-container matColumnDef="created_by_last_name">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </mat-header-cell>
-          <mat-cell *matCellDef="let contact"> {{contact.email}} </mat-cell>
+          <mat-cell *matCellDef="let combinedComments"> {{combinedComments.created_by_last_name}} </mat-cell>
         </ng-container>
 
         <!-- Organization Column -->
         <ng-container matColumnDef="created_by_organization_string">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Organization </mat-header-cell>
-          <mat-cell *matCellDef="let contact"> {{contact.organization_string}} </mat-cell>
+          <mat-cell *matCellDef="let combinedComments"> {{combinedComments.created_by_organization_string}} </mat-cell>
         </ng-container>
 
         <!-- Permission Source Column -->
         <ng-container matColumnDef="content_type_string">
           <mat-header-cell *matHeaderCellDef mat-sort-header> location </mat-header-cell>
-          <mat-cell *matCellDef="let contact"> {{contact.permission_source}} </mat-cell>
+          <mat-cell *matCellDef="let combinedComments"> {{combinedComments.content_type_string}} </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="commentDisplayedColumns"></mat-header-row>
         <mat-row *matRowDef="let event; columns: commentDisplayedColumns;"></mat-row>
       </mat-table>
 
-      <div *ngIf="commentsDataSource.data.length === 0 && commentsLoading === false">
-        <h3>No contacts found</h3>
+      <div *ngIf="combinedComments.length === 0 && commentsLoading === false">
+        <h3>No comments found</h3>
       </div>
 
       <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>

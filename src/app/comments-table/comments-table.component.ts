@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -14,6 +14,7 @@ import { CommentTypeService } from '@services/comment-type.service';
 import { CommentService } from '@app/services/comment.service';
 
 import { CommentType } from '@interfaces/comment-type';
+import { EventDetail } from '@interfaces/event-detail';
 
 import { EventDetailsComponent } from '@app/event-details/event-details.component';
 
@@ -28,11 +29,12 @@ export class CommentsTableComponent implements OnInit {
   currentUser;
   eventID: string;
   resultsLoading = false;
-  eventData: any[];
+  eventData: EventDetail;
   commentsDataSource;
-
+  combinedComments = [];
+  commentTypes: CommentType[];
   orderParams = '';
-
+  commentsLoading = false;
   initialSelection = [];
   allowMultiSelect = true;
   selection = new SelectionModel<Number>(this.allowMultiSelect, this.initialSelection);
@@ -41,6 +43,7 @@ export class CommentsTableComponent implements OnInit {
   pageSize: number;
 
   commentDisplayedColumns = [
+    'select',
     'comment',
     'comment_type',
     'created_date',
@@ -51,16 +54,17 @@ export class CommentsTableComponent implements OnInit {
   ];
 
   @ViewChild(MatPaginator) commentsPaginator: MatPaginator;
-  @ViewChild(MatSort) commentsSort: MatSort;
-
+  @ViewChild(MatSort) set content(commentsSort: MatSort) {
+    this.commentsDataSource.sort = commentsSort;
+  }
   constructor(
     private route: ActivatedRoute,
     private eventService: EventService,
-    private router: Router
+    private commentTypeService: CommentTypeService
   ) { }
 
   ngOnInit() {
-
+    this.commentsLoading = true;
     this.route.paramMap.subscribe(params => {
       this.eventID = params.get('id');
 
@@ -69,17 +73,28 @@ export class CommentsTableComponent implements OnInit {
         .subscribe(
           (eventdetails) => {
             this.eventData = eventdetails;
-            this.dosomething();
+            this.combinedComments = this.eventData.combined_comments;
+            this.commentsDataSource = new MatTableDataSource(this.combinedComments);
+            this.commentsDataSource.paginator = this.commentsPaginator;
+            this.commentsLoading = false;
+            console.log(this.combinedComments.length);
           },
           error => {
-
+            this.commentsLoading = false;
           }
         );
     });
-  }
 
-  dosomething() {
-    console.log(this.eventData + ' hi');
+    // get comment types from the commentTypes service
+    this.commentTypeService.getCommentTypes()
+      .subscribe(
+        commentTypes => {
+          this.commentTypes = commentTypes;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
   _setDataSource(indexNumber) {
     setTimeout(() => {
@@ -103,5 +118,5 @@ export class CommentsTableComponent implements OnInit {
       this.selection.clear() :
       this.commentsDataSource.data.forEach(row => this.selection.select(row));
   }
+  
 }
-

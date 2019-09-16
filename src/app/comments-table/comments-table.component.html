@@ -1,4 +1,17 @@
-<div>
+<div class="commentsTab">
+    <mat-card-title>
+
+        <div class="results-card-title-row">
+          <span class="results-button-row">
+            <button mat-button color="accent" (click)="openCommentRemoveConfirm()"
+              [disabled]="selection.selected.length === 0">
+              <i class="material-icons">
+                remove_circle
+              </i> Delete</button>
+          </span>
+
+        </div>
+      </mat-card-title>
   <mat-card-content>
     <div class="spinner-container" *ngIf="commentsLoading">
       <mat-spinner></mat-spinner>
@@ -71,12 +84,14 @@
 
         <!-- Permission Source Column -->
         <ng-container matColumnDef="content_type_string">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> location </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Location </mat-header-cell>
           <mat-cell *matCellDef="let combinedComments"> {{combinedComments.content_type_string}} </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="commentDisplayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let event; columns: commentDisplayedColumns;"></mat-row>
+        <!-- <mat-row *matRowDef="let event; columns: commentDisplayedColumns;"></mat-row> -->
+          <mat-row *matRowDef="let comment; columns: commentDisplayedColumns;" (click)="selectEvent(comment)"
+            matTooltip="Click comment to see details"></mat-row>
       </mat-table>
 
       <div *ngIf="combinedComments.length === 0 && commentsLoading === false">

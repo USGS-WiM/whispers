@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>
+    <mat-icon>comment</mat-icon> Comment by {{data.creator_firstname}} {{data.creator_lastname}}
+</h1>
+  
+<mat-dialog-content>
+
+  <div class="user-info-card">
+    <div class="comment-detail">
+      <small>Date created</small> 
+      {{data.created_date}}
+    </div>
+    <div class="comment-detail">
+      <small>Comment</small> 
+      {{data.comment}}
+    </div>
+    <div class="comment-detail">
+      <small>Location</small> 
+      {{data.location}}
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="form-buttons-flex center">
+    <button mat-button color="primary" (click)="this.viewCommentDetailsDialogRef.close();">
+      &nbsp;Close
+    </button>
+  </div>
+</mat-dialog-actions>

@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -17,6 +17,8 @@ import { CommentType } from '@interfaces/comment-type';
 import { EventDetail } from '@interfaces/event-detail';
 
 import { EventDetailsComponent } from '@app/event-details/event-details.component';
+import { ConfirmComponent } from '@confirm/confirm.component';
+import { ViewCommentDetailsComponent } from '@app/view-comment-details/view-comment-details.component';
 
 @Component({
   selector: 'app-comments-table',
@@ -42,6 +44,9 @@ export class CommentsTableComponent implements OnInit {
   from: number;
   pageSize: number;
 
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
+  viewCommentDetailRef: MatDialogRef<ViewCommentDetailsComponent>;
+
   commentDisplayedColumns = [
     'select',
     'comment',
@@ -60,7 +65,8 @@ export class CommentsTableComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private eventService: EventService,
-    private commentTypeService: CommentTypeService
+    private commentTypeService: CommentTypeService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -106,6 +112,20 @@ export class CommentsTableComponent implements OnInit {
     });
   }
 
+  selectEvent(comment) {
+    this.viewCommentDetailRef = this.dialog.open(ViewCommentDetailsComponent,
+      {
+        data: {
+          creator_firstname: comment.created_by_first_name,
+          creator_lastname: comment.created_by_last_name,
+          comment: comment.comment,
+          created_date: comment.created_date,
+          location: comment.content_type_string
+        }
+      }
+    );
+  }
+
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.commentsDataSource.data.length;
@@ -118,5 +138,5 @@ export class CommentsTableComponent implements OnInit {
       this.selection.clear() :
       this.commentsDataSource.data.forEach(row => this.selection.select(row));
   }
-  
+
 }

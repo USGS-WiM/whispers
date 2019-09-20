@@ -3,6 +3,8 @@ import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef } fr
 import { MatSnackBar } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { merge } from 'rxjs/observable/merge';
+import { tap } from 'rxjs/operators';
 
 import { APP_UTILITIES } from '@app/app.utilities';
 import { APP_SETTINGS } from '@app/app.settings';
@@ -19,6 +21,8 @@ import { EventDetail } from '@interfaces/event-detail';
 import { EventDetailsComponent } from '@app/event-details/event-details.component';
 import { ConfirmComponent } from '@confirm/confirm.component';
 import { ViewCommentDetailsComponent } from '@app/view-comment-details/view-comment-details.component';
+import { forEach } from '@angular/router/src/utils/collection';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-comments-table',
@@ -31,6 +35,7 @@ export class CommentsTableComponent implements OnInit {
   currentUser;
   eventID: string;
   resultsLoading = false;
+  fullCommentOn = false;
   eventData: EventDetail;
   commentsDataSource;
   combinedComments = [];
@@ -43,12 +48,12 @@ export class CommentsTableComponent implements OnInit {
   docsOnThisPage: any[] = [];
   from: number;
   pageSize: number;
-
+  locationIdArray = [];
+  reOrderedLocationComments=[];
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
   viewCommentDetailRef: MatDialogRef<ViewCommentDetailsComponent>;
 
   commentDisplayedColumns = [
-    'select',
     'comment',
     'comment_type',
     'created_date',
@@ -59,9 +64,8 @@ export class CommentsTableComponent implements OnInit {
   ];
 
   @ViewChild(MatPaginator) commentsPaginator: MatPaginator;
-  @ViewChild(MatSort) set content(commentsSort: MatSort) {
-    this.commentsDataSource.sort = commentsSort;
-  }
+  @ViewChild(MatSort) sort: MatSort;
+
   constructor(
     private route: ActivatedRoute,
     private eventService: EventService,
@@ -70,6 +74,7 @@ export class CommentsTableComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.commentsLoading = true;
     this.route.paramMap.subscribe(params => {
       this.eventID = params.get('id');
@@ -80,10 +85,11 @@ export class CommentsTableComponent implements OnInit {
           (eventdetails) => {
             this.eventData = eventdetails;
             this.combinedComments = this.eventData.combined_comments;
+            this.getlocations();
             this.commentsDataSource = new MatTableDataSource(this.combinedComments);
             this.commentsDataSource.paginator = this.commentsPaginator;
+            this.commentsDataSource.sort = this.sort;
             this.commentsLoading = false;
-            console.log(this.combinedComments.length);
           },
           error => {
             this.commentsLoading = false;
@@ -102,6 +108,7 @@ export class CommentsTableComponent implements OnInit {
         }
       );
   }
+
   _setDataSource(indexNumber) {
     setTimeout(() => {
       switch (indexNumber) {
@@ -112,6 +119,55 @@ export class CommentsTableComponent implements OnInit {
     });
   }
 
+  loadEventsPage() {
+
+    this.orderParams = this.sort.active;
+    if (this.sort.direction === 'desc') {
+      this.orderParams = '-' + this.sort.active;
+    }
+    this.commentsDataSource.queryEvents(
+      this.orderParams,
+      this.commentsPaginator.pageIndex + 1,
+      this.commentsPaginator.pageSize);
+  }
+
+  eventLocationName(id) {
+    let locationName = '';
+    let count;
+    if (id.content_type_string === 'event') {
+      locationName = 'Event-wide';
+    } else if (id.content_type_string === 'eventlocation') {
+        if (id.object_name !== '') {
+
+          // Finding the index for the comments' object.id and the locationIdArray object.id. The locationIdArray has the correct order of location comments.
+          // Doing it this way to ensure that the number in the location name is the same on both the event details tab and comments tab.
+
+          count = (this.locationIdArray.findIndex(c => c.object_id === id.object_id)) + 1;
+          locationName = 'Location ' + count + ' - ' + id.object_name;
+        } else {
+          count = (this.locationIdArray.findIndex(c => c.object_id === id.object_id)) + 1;
+          locationName = 'Location ' + count;
+        }
+    }
+    return locationName;
+  }
+
+  getlocations() {
+   // getting the locations that eventlocations
+    this.eventData.eventlocations.forEach(e => {
+      e.comments.forEach(s => {
+        this.locationIdArray.push(s);
+      });
+    });
+
+    // stripping the objects that have duplicate object_ids so that the count is i++.
+    this.locationIdArray = this.locationIdArray.filter((v, i, a) => a.findIndex(t => (t.object_id === v.object_id)) === i);
+  }
+
+  fullCommentMode() {
+    this.fullCommentOn = !this.fullCommentOn;
+  }
+
   selectEvent(comment) {
     this.viewCommentDetailRef = this.dialog.open(ViewCommentDetailsComponent,
       {
@@ -120,7 +176,8 @@ export class CommentsTableComponent implements OnInit {
           creator_lastname: comment.created_by_last_name,
           comment: comment.comment,
           created_date: comment.created_date,
-          location: comment.content_type_string
+          location: comment.content_type_string,
+          id: comment.id
         }
       }
     );

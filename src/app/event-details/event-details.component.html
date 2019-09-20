@@ -814,6 +814,7 @@
                                   <div class="comment-text">
                                     {{comment.comment}}
                                   </div>
+
                                 </li>
                               </ul>
           
@@ -982,7 +983,7 @@
         <!-- End Events Tab-->
 
         <!-- Comments Tab -->
-        <mat-tab label="Comments" *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+        <mat-tab label="Comment Timeline" *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
           <mat-card>
             <div class="app-comments-table">
               <app-comments-table></app-comments-table>

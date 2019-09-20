@@ -5,6 +5,7 @@ import { EventLocation } from '@interfaces/event-location';
 import { EventDiagnosis } from '@interfaces/event-diagnosis';
 import { Organization } from '@interfaces/organization';
 import { EventGroup } from '@interfaces/event-group';
+import { CombinedComments } from '@interfaces/combined-comments';
 import { User } from '@interfaces/user';
 
 export interface EventDetail extends History {
@@ -29,7 +30,7 @@ export interface EventDetail extends History {
     eventdiagnoses: EventDiagnosis[];
     eventlocations: EventLocation[];
     eventorganizations: Organization[];
-    combined_comments: Comment[];
+    combined_comments: CombinedComments[];
     read_collaborators: User[];
     write_collaborators: User[];
 }

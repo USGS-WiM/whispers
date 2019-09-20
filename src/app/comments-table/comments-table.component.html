@@ -3,45 +3,28 @@
 
         <div class="results-card-title-row">
           <span class="results-button-row">
-            <button mat-button color="accent" (click)="openCommentRemoveConfirm()"
-              [disabled]="selection.selected.length === 0">
-              <i class="material-icons">
-                remove_circle
-              </i> Delete</button>
+              <mat-slide-toggle (click)="fullCommentMode()">{{fullCommentOn === true ? 'Display Full Comment (on)' :
+                  fullCommentOn === false ? 'Display Full Comment (off)' : 'Display Full Comment' }}</mat-slide-toggle>
           </span>
-
         </div>
       </mat-card-title>
   <mat-card-content>
     <div class="spinner-container" *ngIf="commentsLoading">
       <mat-spinner></mat-spinner>
     </div>
-    <div  class="results-table-div"> <!-- *ngIf="commentsDataSource" -->
-      <mat-table [dataSource]="commentsDataSource" matSort matSortActive="created_date" matSortDirection="asc"
+    <div class="results-table-div">
+      <table mat-table [dataSource]="commentsDataSource" [class.fullText]="fullCommentOn === true" matSort matSortActive="created_date" matSortDirection="asc"
       *ngIf="combinedComments.length > 0"> 
-        <!-- Selection column -->
-        <ng-container matColumnDef="select">
-          <mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()">
-            </mat-checkbox>
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-              [checked]="selection.isSelected(row)">
-            </mat-checkbox>
-          </mat-cell>
-        </ng-container>
-
-        <!-- Last Name Column -->
+        <!-- Comment Column -->
         <ng-container matColumnDef="comment">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Comment </mat-header-cell>
-          <mat-cell *matCellDef="let combinedComments"> {{combinedComments.comment}} </mat-cell>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Comment </th>
+          <td td mat-cell *matCellDef="let combinedComments"> {{combinedComments.comment}} </td>
         </ng-container>
 
+        <!-- Comment Type Column -->
         <ng-container matColumnDef="comment_type">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Comment Type </mat-header-cell>
-          <mat-cell *matCellDef="let combinedComments">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Comment Type </th>
+          <td mat-cell *matCellDef="let combinedComments" style="display: none;">
             <span [ngSwitch]="combinedComments.comment_type">
               <span *ngSwitchCase="1">Site description</span>
               <span *ngSwitchCase="2">History</span>
@@ -55,45 +38,46 @@
               <span *ngSwitchCase="10">Other</span>
               <span *ngSwitchCase="11">Event Group</span>
             </span> 
-          </mat-cell>
+          </td>
         </ng-container>
 
-        <!-- First Name Column -->
+        <!-- Created Date Column -->
         <ng-container matColumnDef="created_date">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </mat-header-cell>
-          <mat-cell *matCellDef="let combinedComments"> {{combinedComments.created_date}} </mat-cell>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
+          <td mat-cell *matCellDef="let combinedComments"> {{combinedComments.created_date}} </td>
         </ng-container>
 
-        <!-- Phone Number Column -->
+        <!-- Created By First Name Column -->
         <ng-container matColumnDef="created_by_first_name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> First Name </mat-header-cell>
-          <mat-cell *matCellDef="let combinedComments"> {{combinedComments.created_by_first_name}} </mat-cell>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
+          <td mat-cell *matCellDef="let combinedComments"> {{combinedComments.created_by_first_name}} </td>
         </ng-container>
 
-        <!-- Email Address Column -->
+        <!-- Created By First Name Column -->
         <ng-container matColumnDef="created_by_last_name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </mat-header-cell>
-          <mat-cell *matCellDef="let combinedComments"> {{combinedComments.created_by_last_name}} </mat-cell>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
+          <td mat-cell *matCellDef="let combinedComments"> {{combinedComments.created_by_last_name}} </td>
         </ng-container>
 
         <!-- Organization Column -->
         <ng-container matColumnDef="created_by_organization_string">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Organization </mat-header-cell>
-          <mat-cell *matCellDef="let combinedComments"> {{combinedComments.created_by_organization_string}} </mat-cell>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Organization </th>
+          <td mat-cell *matCellDef="let combinedComments"> {{combinedComments.created_by_organization_string}} </td>
         </ng-container>
 
-        <!-- Permission Source Column -->
+        <!-- Location Column -->
         <ng-container matColumnDef="content_type_string">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Location </mat-header-cell>
-          <mat-cell *matCellDef="let combinedComments"> {{combinedComments.content_type_string}} </mat-cell>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+          <!-- <td mat-cell *matCellDef="let combinedComments"> {{combinedComments.content_type_string}} </td> -->
+          <td td mat-cell *matCellDef="let combinedComments"> {{eventLocationName(combinedComments)}} </td>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="commentDisplayedColumns"></mat-header-row>
         <!-- <mat-row *matRowDef="let event; columns: commentDisplayedColumns;"></mat-row> -->
           <mat-row *matRowDef="let comment; columns: commentDisplayedColumns;" (click)="selectEvent(comment)"
             matTooltip="Click comment to see details"></mat-row>
-      </mat-table>
-
+      </table>
+      
       <div *ngIf="combinedComments.length === 0 && commentsLoading === false">
         <h3>No comments found</h3>
       </div>

@@ -1,8 +1,13 @@
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
 .commentsTab {
     max-width: 1035px;
 }
 
-.mat-cell,
+/* .mat-cell,
 .mat-header-cell {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -10,15 +15,46 @@
   white-space: nowrap;
   display: block;
   margin-top: 20px;
-}
+} */
 /* Ellipsis won't work with the flex attribute without the display: block. Might need to recruit Mitch for some CSS magic on this table.*/
 
-/* Custom styles making comment and organization columns wider */
-.mat-header-cell:first-child,.mat-cell:first-child{
-    max-width: 6%;
-  }
-.mat-header-cell:nth-child(2),.mat-cell:nth-child(2){
+/* .mat-header-cell:nth-child(2),.mat-cell:nth-child(2){
     flex:10%;
+  } */
+
+  th, td {
+    overflow: hidden;
+    width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
- 
+  .fullText {
+    th, td {
+      overflow: visible;
+      width: 200px;
+      height: 20px;
+      text-overflow: none;
+      white-space: normal;
+      display: table;
+    }
+  }
+
+  .untrucate {
+    overflow: visible;
+    width: 200px;
+    text-overflow: none;
+    white-space: normal;
+  }
+
+  td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
+    padding: 0;
+    border-bottom-width: 0px;
+    border-bottom-style: none;;
+  }
+  
+  /* .untrucate {
+    width: 200px;
+    text-overflow: none;
+    white-space: normal;
+  } */

@@ -550,18 +550,18 @@
         </p>
 
         <mat-form-field class="comment-text-area">
-          <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="History"
+          <textarea matInput #areaDescription maxlength="5000" minRows="3" placeholder="History"
             formControlName="history"></textarea>
           <mat-hint align="start" class="hint">
             <strong>chronological description of current observational information leading up to
               finding sick
               or dead wildlife, plus historical information about past events</strong>
           </mat-hint>
-          <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+          <mat-hint align="end">{{areaDescription.value.length}} / 5000</mat-hint>
         </mat-form-field>
 
         <mat-form-field class="comment-text-area">
-          <textarea matInput #areaDescription maxlength="1000" minRows="3" placeholder="Site Description"
+          <textarea matInput #areaDescription maxlength="5000" minRows="3" placeholder="Site Description"
             formControlName="site_description"></textarea>
           <mat-hint align="start" class="hint">
             <strong> animal and human land use (e.g., other species present, hunting and
@@ -572,11 +572,11 @@
               of
               the area</strong>
           </mat-hint>
-          <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+          <mat-hint align="end">{{areaDescription.value.length}} / 5000</mat-hint>
         </mat-form-field>
 
         <mat-form-field class="comment-text-area">
-          <textarea matInput #envFactors maxlength="1000" placeholder="Environmental Factors"
+          <textarea matInput #envFactors maxlength="5000" placeholder="Environmental Factors"
             formControlName="environmental_factors"></textarea>
           <mat-hint align="start">
             <strong>storms, precipitation, temperature changes, migration, toxins, or other
@@ -584,28 +584,28 @@
               may contribute to stress in the animals
             </strong>
           </mat-hint>
-          <mat-hint align="end">{{envFactors.value.length}} / 1000</mat-hint>
+          <mat-hint align="end">{{envFactors.value.length}} / 5000</mat-hint>
         </mat-form-field>
 
         <mat-form-field class="comment-text-area">
-          <textarea matInput #clinicalSigns maxlength="1000" placeholder="Clinical Signs"
+          <textarea matInput #clinicalSigns maxlength="5000" placeholder="Clinical Signs"
             formControlName="clinical_signs"></textarea>
           <mat-hint align="start">
             <strong>any unusual behavior or physical appearance in the animals</strong>
           </mat-hint>
-          <mat-hint align="end">{{clinicalSigns.value.length}} / 1000</mat-hint>
+          <mat-hint align="end">{{clinicalSigns.value.length}} / 5000</mat-hint>
         </mat-form-field>
 
         <!-- <div formArrayName="comments">
             <div *ngFor="let comments of getLocationComments(eventLocation); let c = index"> -->
 
         <mat-form-field class="comment-text-area">
-          <textarea matInput #generalComment maxlength="1000" placeholder="Additonal Comment"
+          <textarea matInput #generalComment maxlength="5000" placeholder="Additonal Comment"
             formControlName="comment"></textarea>
           <mat-hint align="start">
             <strong>any additional comment not covered by the fields above</strong>
           </mat-hint>
-          <mat-hint align="end">{{generalComment.value.length}} / 1000</mat-hint>
+          <mat-hint align="end">{{generalComment.value.length}} / 5000</mat-hint>
         </mat-form-field>
 
         <div class="submissionReviewErrors">

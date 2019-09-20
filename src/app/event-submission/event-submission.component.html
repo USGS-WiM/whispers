@@ -803,19 +803,19 @@
                             </p>
 
                             <mat-form-field class="comment-text-area">
-                              <textarea matInput #areaDescription maxlength="1000" rows="4" placeholder="History"
+                              <textarea matInput #history maxlength="5000" rows="4" placeholder="History"
                                 formControlName="history"></textarea>
                               <mat-hint align="start" class="hint">
                                 <strong>chronological description of current observational information leading up to
                                   finding sick
                                   or dead wildlife, plus historical information about past events</strong>
                               </mat-hint>
-                              <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+                              <mat-hint align="end">{{history.value.length}} / 5000</mat-hint>
                               <!-- <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('history').hasError('minComment')">At least one comment field must have a value</mat-error> -->
                             </mat-form-field>
 
                             <mat-form-field class="comment-text-area">
-                              <textarea matInput #areaDescription maxlength="1000" rows="4"
+                              <textarea matInput #areaDescription maxlength="5000" rows="4"
                                 placeholder="Site Description" formControlName="site_description"></textarea>
                               <mat-hint align="start" class="hint">
                                 <strong> animal and human land use (e.g., other species present, hunting and
@@ -826,13 +826,13 @@
                                   of
                                   the area</strong>
                               </mat-hint>
-                              <mat-hint align="end">{{areaDescription.value.length}} / 1000</mat-hint>
+                              <mat-hint align="end">{{areaDescription.value.length}} / 5000</mat-hint>
                               <!-- <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('site_description').hasError('minComment')">At least one comment field must have a value</mat-error> -->
                             </mat-form-field>
 
 
                             <mat-form-field class="comment-text-area">
-                              <textarea matInput #envFactors maxlength="1000" rows="4"
+                              <textarea matInput #envFactors maxlength="5000" rows="4"
                                 placeholder="Environmental Factors" formControlName="environmental_factors"></textarea>
                               <mat-hint align="start">
                                 <strong>storms, precipitation, temperature changes, migration, toxins, or other
@@ -840,29 +840,29 @@
                                   may contribute to stress in the animals
                                 </strong>
                               </mat-hint>
-                              <mat-hint align="end">{{envFactors.value.length}} / 1000</mat-hint>
+                              <mat-hint align="end">{{envFactors.value.length}} / 5000</mat-hint>
                               <!-- <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('environmental_factors').hasError('minComment')">At least one comment field must have a value</mat-error> -->
                             </mat-form-field>
 
 
 
                             <mat-form-field class="comment-text-area">
-                              <textarea matInput #clinicalSigns maxlength="1000" rows="4" placeholder="Clinical Signs"
+                              <textarea matInput #clinicalSigns maxlength="5000" rows="4" placeholder="Clinical Signs"
                                 formControlName="clinical_signs"></textarea>
                               <mat-hint align="start">
                                 <strong>any unusual behavior or physical appearance in the animals</strong>
                               </mat-hint>
-                              <mat-hint align="end">{{clinicalSigns.value.length}} / 1000</mat-hint>
+                              <mat-hint align="end">{{clinicalSigns.value.length}} / 5000</mat-hint>
                               <!-- <mat-error *ngIf="this.eventSubmissionForm.get('new_event_locations').controls[eventLocationIndex].get('clinical_signs').hasError('minComment')">At least one comment field must have a value</mat-error> -->
                             </mat-form-field>
 
                             <mat-form-field class="comment-text-area">
-                              <textarea matInput #generalComment maxlength="1000" rows="4"
+                              <textarea matInput #generalComment maxlength="5000" rows="4"
                                 placeholder="Additonal Comment" formControlName="comment"></textarea>
                               <mat-hint align="start">
                                 <strong>any additional comment not covered by the fields above</strong>
                               </mat-hint>
-                              <mat-hint align="end">{{generalComment.value.length}} / 1000</mat-hint>
+                              <mat-hint align="end">{{generalComment.value.length}} / 5000</mat-hint>
                             </mat-form-field>
 
                             <div class="submissionReviewErrors">
@@ -1183,13 +1183,13 @@
                           <div class="horizontal-form-container">
 
                             <mat-form-field class="general-comment-text-area">
-                              <textarea matInput maxlength="1000" #comment placeholder="Comment"
+                              <textarea matInput maxlength="5000" #comment placeholder="Comment"
                                 formControlName="comment"></textarea>
                               <!-- <mat-icon class="hint-hover-text" matSuffix 
                                   matTooltip={{eventCommentTooltip()}} matTooltipClass="tooltip-breakline">
                                   help</mat-icon> -->
                               <mat-hint align="start">{{eventCommentTooltip()}}</mat-hint>
-                              <mat-hint align="end">{{comment.value.length}} / 1000</mat-hint>
+                              <mat-hint align="end">{{comment.value.length}} / 5000</mat-hint>
                             </mat-form-field>
 
                             <mat-form-field class="form-control">

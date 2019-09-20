@@ -7,11 +7,11 @@
     <div class="vertical-form-container">
 
       <mat-form-field class="general-comment-text-area">
-        <textarea matInput maxlength="1000" #comment placeholder="Comment" formControlName="comment" rows="4"></textarea>
+        <textarea matInput maxlength="5000" #comment placeholder="Comment" formControlName="comment" rows="4"></textarea>
         <mat-icon class="hint-table-hover-text" matSuffix 
           matTooltip={{commentTooltip()}} matTooltipClass="tooltip-breakline">
           help</mat-icon>
-        <mat-hint align="end">{{comment.value.length}} / 1000</mat-hint>
+        <mat-hint align="end">{{comment.value.length}} / 5000</mat-hint>
       </mat-form-field>
 
       <mat-form-field class="form-control">

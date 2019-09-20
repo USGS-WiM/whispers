@@ -15,9 +15,9 @@
           </mat-form-field>
 
           <mat-form-field class="general-comment-text-area">
-            <textarea matInput maxlength="1000" #description placeholder="Description" formControlName="description"
+            <textarea matInput maxlength="5000" #description placeholder="Description" formControlName="description"
               rows="3"></textarea>
-            <mat-hint align="end">{{description.value.length}} / 1000</mat-hint>
+            <mat-hint align="end">{{description.value.length}} / 5000</mat-hint>
           </mat-form-field>
 
           <div *ngIf="data.action === 'edit'">

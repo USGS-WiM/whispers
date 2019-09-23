@@ -6,16 +6,40 @@
 
   <div class="user-info-card">
     <div class="comment-detail">
+      <small>Organization</small> 
+      {{data.created_by_organization_string}}
+    </div>
+    <div class="comment-detail">
       <small>Date created</small> 
       {{data.created_date}}
     </div>
     <div class="comment-detail">
-      <small>Comment</small> 
-      {{data.comment}}
+      <small>Last modified</small> 
+      {{data.modified_date}}
     </div>
     <div class="comment-detail">
-      <small>Location</small> 
-      {{data.location}}
+        <small>Location</small> 
+        {{data.location}}
+    </div>
+    <div class="comment-detail">
+      <small>Comment type</small> 
+      <span [ngSwitch]="data.comment_type">
+          <span *ngSwitchCase="1">Site description</span>
+          <span *ngSwitchCase="2">History</span>
+          <span *ngSwitchCase="3">Environmental factors</span>
+          <span *ngSwitchCase="4">Clinical signs</span>
+          <span *ngSwitchCase="5">Field Update</span>
+          <span *ngSwitchCase="6">Management</span>
+          <span *ngSwitchCase="7">Epidemiological</span>
+          <span *ngSwitchCase="8">NWHC</span>
+          <span *ngSwitchCase="9">Diagnostic</span>
+          <span *ngSwitchCase="10">Other</span>
+          <span *ngSwitchCase="11">Event Group</span>
+        </span>
+    </div>
+    <div class="comment-detail">
+      <small>Comment</small> 
+      {{data.comment}}
     </div>
   </div>
 </mat-dialog-content>

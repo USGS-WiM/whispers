@@ -29,7 +29,7 @@ import { element } from 'protractor';
   templateUrl: './comments-table.component.html',
   styleUrls: ['./comments-table.component.scss']
 })
-export class CommentsTableComponent implements OnInit {
+export class CommentsTableComponent implements OnInit, AfterViewInit {
 
   errorMessage: string;
   currentUser;
@@ -63,7 +63,7 @@ export class CommentsTableComponent implements OnInit {
     'content_type_string'
   ];
 
-  @ViewChild(MatPaginator) commentsPaginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
@@ -87,8 +87,8 @@ export class CommentsTableComponent implements OnInit {
             this.combinedComments = this.eventData.combined_comments;
             this.getlocations();
             this.commentsDataSource = new MatTableDataSource(this.combinedComments);
-            this.commentsDataSource.paginator = this.commentsPaginator;
-            this.commentsDataSource.sort = this.sort;
+            this.commentsDataSource.paginator = this.paginator;
+            // this.commentsDataSource.sort = this.sort;
             this.commentsLoading = false;
           },
           error => {
@@ -109,6 +109,13 @@ export class CommentsTableComponent implements OnInit {
       );
   }
 
+  ngAfterViewInit(): void  {
+
+    setTimeout(() => {
+      this.commentsDataSource.sort = this.sort;
+    }, 1000);
+  }
+
   _setDataSource(indexNumber) {
     setTimeout(() => {
       switch (indexNumber) {
@@ -127,8 +134,8 @@ export class CommentsTableComponent implements OnInit {
     }
     this.commentsDataSource.queryEvents(
       this.orderParams,
-      this.commentsPaginator.pageIndex + 1,
-      this.commentsPaginator.pageSize);
+      this.paginator.pageIndex + 1,
+      this.paginator.pageSize);
   }
 
   eventLocationName(id) {
@@ -139,7 +146,8 @@ export class CommentsTableComponent implements OnInit {
     } else if (id.content_type_string === 'eventlocation') {
         if (id.object_name !== '') {
 
-          // Finding the index for the comments' object.id and the locationIdArray object.id. The locationIdArray has the correct order of location comments.
+          // Finding the index for the comments' object.id and the locationIdArray object.id. The locationIdArray has the correct order of location
+          // comments (same as on event details tab).
           // Doing it this way to ensure that the number in the location name is the same on both the event details tab and comments tab.
 
           count = (this.locationIdArray.findIndex(c => c.object_id === id.object_id)) + 1;
@@ -177,7 +185,13 @@ export class CommentsTableComponent implements OnInit {
           comment: comment.comment,
           created_date: comment.created_date,
           location: comment.content_type_string,
-          id: comment.id
+          id: comment.id,
+          created_by_organization_string: comment.created_by_organization_string,
+          object_name: comment.object_name,
+          comment_type: comment.comment_type,
+          modified_date: comment.modified_date,
+          event_locations: this.locationIdArray,
+          object_id: comment.object_id
         }
       }
     );

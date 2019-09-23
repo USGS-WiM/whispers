@@ -24,7 +24,7 @@
         <!-- Comment Type Column -->
         <ng-container matColumnDef="comment_type">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Comment Type </th>
-          <td mat-cell *matCellDef="let combinedComments" style="display: none;">
+          <td mat-cell *matCellDef="let combinedComments">
             <span [ngSwitch]="combinedComments.comment_type">
               <span *ngSwitchCase="1">Site description</span>
               <span *ngSwitchCase="2">History</span>

@@ -1143,6 +1143,7 @@ export class EventDetailsComponent implements OnInit {
               }
             }
           }
+          console.log('species' + this.possibleEventDiagnoses);
 
           // add the "Undetermined" diagnosis to possibleDiagnoses, only if not already in the list
           if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis)) {

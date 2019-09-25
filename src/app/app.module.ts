@@ -120,6 +120,8 @@ import { CircleManagementComponent } from './circle-management/circle-management
 import { CirclesComponent } from './circles/circles.component';
 import { CircleChooseComponent } from './circle-management/circle-choose/circle-choose.component';
 import { DiagnosticInfoComponent } from './diagnostic-info/diagnostic-info.component';
+import { CommentsTableComponent } from './comments-table/comments-table.component';
+import { ViewCommentDetailsComponent } from './view-comment-details/view-comment-details.component';
 
 
 
@@ -166,6 +168,8 @@ import { DiagnosticInfoComponent } from './diagnostic-info/diagnostic-info.compo
     CirclesComponent,
     CircleChooseComponent,
     DiagnosticInfoComponent,
+    CommentsTableComponent,
+    ViewCommentDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -280,6 +284,7 @@ import { DiagnosticInfoComponent } from './diagnostic-info/diagnostic-info.compo
     CircleManagementComponent,
     CircleChooseComponent,
     DiagnosticInfoComponent,
+    ViewCommentDetailsComponent
   ]
 })
 export class AppModule { }

@@ -143,8 +143,6 @@ export class EventDetailsComponent implements OnInit {
   commentTypes: CommentType[];
 
   locationMarkers;
-  associatedEventLocationMarkers;
-
   unMappables = [];
   eventPolys;
   userContacts;
@@ -574,7 +572,6 @@ export class EventDetailsComponent implements OnInit {
     setTimeout(() => {
       this.locationMarkers.clearLayers();
       this.mapEvent(this.eventData);
-      //this.locationMarkers = L.featureGroup().addTo(this.map);
     }, 1000);
   }
 

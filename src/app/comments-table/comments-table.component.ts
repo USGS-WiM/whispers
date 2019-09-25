@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef } from '@angular/material';
+import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -15,6 +16,7 @@ import { CurrentUserService } from '@services/current-user.service';
 import { CommentTypeService } from '@services/comment-type.service';
 import { CommentService } from '@app/services/comment.service';
 
+import { Comment } from '@interfaces/comment';
 import { CommentType } from '@interfaces/comment-type';
 import { EventDetail } from '@interfaces/event-detail';
 
@@ -37,7 +39,9 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
   resultsLoading = false;
   fullCommentOn = true;
   eventData: EventDetail;
-  commentsDataSource;
+
+  commentsDataSource: MatTableDataSource<Comment>;
+
   combinedComments = [];
   commentTypes: CommentType[];
   orderParams = '';
@@ -91,6 +95,8 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
             this.commentsDataSource.paginator = this.paginator;
             // this.commentsDataSource.sort = this.sort;
             this.commentsLoading = false;
+
+            // this.commentsDataSource.sort = this.sort;
           },
           error => {
             this.commentsLoading = false;
@@ -114,29 +120,7 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
 
     setTimeout(() => {
       this.commentsDataSource.sort = this.sort;
-    }, 1000);
-  }
-
-  _setDataSource(indexNumber) {
-    setTimeout(() => {
-      switch (indexNumber) {
-        case 0:
-          !this.commentsDataSource.paginator ? this.commentsDataSource.paginator = this.commentsDataSource : null;
-          break;
-      }
-    });
-  }
-
-  loadEventsPage() {
-
-    this.orderParams = this.sort.active;
-    if (this.sort.direction === 'desc') {
-      this.orderParams = '-' + this.sort.active;
-    }
-    this.commentsDataSource.queryEvents(
-      this.orderParams,
-      this.paginator.pageIndex + 1,
-      this.paginator.pageSize);
+    }, 3000);
   }
 
   eventLocationName(id) {
@@ -177,7 +161,7 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
     this.fullCommentOn = !this.fullCommentOn;
   }
 
-  selectEvent(comment) {
+  selectComment(comment) {
     this.viewCommentDetailRef = this.dialog.open(ViewCommentDetailsComponent,
       {
         data: {
@@ -196,19 +180,6 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
         }
       }
     );
-  }
-
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.commentsDataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.commentsDataSource.data.forEach(row => this.selection.select(row));
   }
 
 }

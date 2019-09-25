@@ -143,9 +143,10 @@ export class EventDetailsComponent implements OnInit {
   commentTypes: CommentType[];
 
   locationMarkers;
+  associatedEventLocationMarkers;
 
   unMappables = [];
-
+  eventPolys;
   userContacts;
   userContactsLoading = false;
 
@@ -514,7 +515,6 @@ export class EventDetailsComponent implements OnInit {
   }
 
   mapEvent(eventData) {
-
     const markers = [];
     let countyPolys = [];
     this.unMappables = [];
@@ -524,14 +524,15 @@ export class EventDetailsComponent implements OnInit {
         countyPolys.push(JSON.parse(eventlocation.administrative_level_two_points.replace('Y', '')));
       }
     }
-
-    let eventPolys;
+    console.log('mapevents ' + this.locationMarkers);
+    // let eventPolys;
     if (countyPolys.length > 0) {
-      eventPolys = L.polygon(countyPolys, { color: 'blue' }).addTo(this.map);
+      if (this.eventPolys) {
+        this.map.removeLayer(this.eventPolys);
+      }
+      this.eventPolys = L.polygon(countyPolys, { color: 'blue' }).addTo(this.map);
     }
-
     for (const marker of markers) {
-
       if (marker.latitude === null || marker.longitude === null || marker.latitude === undefined || marker.longitude === undefined) {
         this.unMappables.push(marker);
       } else if (marker.latitude !== null || marker.longitude !== null || marker.latitude !== undefined || marker.longitude !== undefined) {
@@ -554,12 +555,12 @@ export class EventDetailsComponent implements OnInit {
     let bounds = L.latLngBounds([]);
 
     if (markers.length > this.unMappables.length) {
-      var markerBounds = this.locationMarkers.getBounds()
+      var markerBounds = this.locationMarkers.getBounds();
       bounds.extend(markerBounds);
     }
 
     if (countyPolys.length > 0) {
-      var countyBounds = eventPolys.getBounds();
+      var countyBounds = this.eventPolys.getBounds();
       bounds.extend(countyBounds);
     }
 
@@ -567,6 +568,14 @@ export class EventDetailsComponent implements OnInit {
       this.map.fitBounds(bounds);
     }
 
+  }
+
+  reloadMap() {
+    setTimeout(() => {
+      this.locationMarkers.clearLayers();
+      this.mapEvent(this.eventData);
+      //this.locationMarkers = L.featureGroup().addTo(this.map);
+    }, 1000);
   }
 
   navigateToHome() {

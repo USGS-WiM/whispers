@@ -270,9 +270,12 @@ export class EventDetailsComponent implements OnInit {
           error => {
             this.errorMessage = <any>error;
             this.eventDataLoading = false;
-            if (JSON.parse(error).detail === 'Not found.') {
+            if (error.status !== 200 ) {
               this.eventNotFound = true;
             }
+            // if (JSON.parse(error).detail === 'Not found.') {
+              
+            // }
           }
         );
     });

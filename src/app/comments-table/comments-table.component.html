@@ -1,0 +1,115 @@
+<div class="commentsTab">
+  <mat-card-title>
+
+    <div class="results-card-title-row">
+      <span class="results-button-row">
+        <!-- <mat-slide-toggle (click)="fullCommentMode()">{{fullCommentOn === true ? 'Display Full Comment (on)' :
+                  fullCommentOn === false ? 'Display Full Comment (off)' : 'Display Full Comment' }}</mat-slide-toggle> -->
+
+      </span>
+    </div>
+  </mat-card-title>
+  <mat-card-content>
+    <div class="spinner-container" *ngIf="commentsLoading">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <div>
+      <mat-button-toggle-group name="tableStyle" aria-label="Comment view">
+        <mat-button-toggle value="full" (click)="fullCommentMode()" checked>
+          <mat-icon>expand_more</mat-icon>Full
+        </mat-button-toggle>
+        <mat-button-toggle value="condensed" (click)="fullCommentMode()">
+          <mat-icon>expand_less</mat-icon>Condensed
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+
+    </div>
+
+    <br>
+
+    <div class="results-table-div">
+      <table mat-table [dataSource]="commentsDataSource" matSort [class.fullText]="fullCommentOn === true"
+        matSortActive="created_date" matSortDirection="desc" *ngIf="combinedComments.length > 0">
+        <!-- Comment Column -->
+        <ng-container matColumnDef="comment" class="comment-column">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="comment-column"> Comment </th>
+          <td td mat-cell *matCellDef="let comment" class="comment-column"> {{comment.comment}} </td>
+        </ng-container>
+
+        <!-- Comment Type Column -->
+        <ng-container matColumnDef="comment_type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Comment Type </th>
+          <td mat-cell *matCellDef="let comment">
+            <span [ngSwitch]="comment.comment_type">
+              <span *ngSwitchCase="1">Site description</span>
+              <span *ngSwitchCase="2">History</span>
+              <span *ngSwitchCase="3">Environmental factors</span>
+              <span *ngSwitchCase="4">Clinical signs</span>
+              <span *ngSwitchCase="5">Field Update</span>
+              <span *ngSwitchCase="6">Management</span>
+              <span *ngSwitchCase="7">Epidemiological</span>
+              <span *ngSwitchCase="8">NWHC</span>
+              <span *ngSwitchCase="9">Diagnostic</span>
+              <span *ngSwitchCase="10">Other</span>
+              <span *ngSwitchCase="11">Event Group</span>
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Created Date Column -->
+        <ng-container matColumnDef="created_date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
+          <td mat-cell *matCellDef="let comment"> {{comment.created_date}} </td>
+        </ng-container>
+
+        <!-- Created By First Name Column -->
+        <!-- <ng-container matColumnDef="created_by_first_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
+          <td mat-cell *matCellDef="let comment"> {{comment.created_by_first_name}} </td>
+        </ng-container> -->
+
+        <!-- Created By First Name Column -->
+        <!-- <ng-container matColumnDef="created_by_last_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
+          <td mat-cell *matCellDef="let comment"> {{comment.created_by_last_name}} </td>
+        </ng-container> -->
+
+        <!-- User Column -->
+        <ng-container matColumnDef="user">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> User </th>
+          <td mat-cell *matCellDef="let comment">
+            {{comment.created_by_first_name}}&nbsp;{{comment.created_by_last_name}} </td>
+        </ng-container>
+
+
+        <!-- Organization Column -->
+        <ng-container matColumnDef="created_by_organization_string">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Organization </th>
+          <td mat-cell *matCellDef="let comment"> {{comment.created_by_organization_string}} </td>
+        </ng-container>
+
+        <!-- Location Column -->
+        <ng-container matColumnDef="content_type_string">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+          <!-- <td mat-cell *matCellDef="let comment"> {{comment.content_type_string}} </td> -->
+          <td td mat-cell *matCellDef="let comment"
+            [ngClass]="{'text-italic' : comment.content_type_string === 'event', '': comment.content_type_string !== 'event' === ''}">
+            {{eventLocationName(comment)}} </td>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="commentDisplayedColumns"></mat-header-row>
+        <!-- <mat-row *matRowDef="let event; columns: commentDisplayedColumns;"></mat-row> -->
+        <mat-row *matRowDef="let comment; columns: commentDisplayedColumns;" (click)="selectComment(comment)"
+          matTooltip="Click comment to see details"></mat-row>
+      </table>
+
+      <div *ngIf="combinedComments.length === 0 && commentsLoading === false">
+        <h3>No comments found</h3>
+      </div>
+
+      <mat-paginator [pageSizeOptions]="[25, 50, 100]"></mat-paginator>
+    </div>
+
+  </mat-card-content>
+</div>

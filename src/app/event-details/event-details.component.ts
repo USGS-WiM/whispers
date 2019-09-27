@@ -423,7 +423,7 @@ export class EventDetailsComponent implements OnInit {
       this.map = new L.Map('map', {
         center: new L.LatLng(39.8283, -98.5795),
         zoom: 4,
-        layers: [osm]
+        layers: [streets]
       });
 
       this.locationMarkers = L.featureGroup().addTo(this.map);
@@ -1143,6 +1143,7 @@ export class EventDetailsComponent implements OnInit {
               }
             }
           }
+          console.log('species' + this.possibleEventDiagnoses);
 
           // add the "Undetermined" diagnosis to possibleDiagnoses, only if not already in the list
           if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis)) {

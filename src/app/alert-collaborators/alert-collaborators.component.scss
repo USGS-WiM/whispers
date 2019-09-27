@@ -3,55 +3,12 @@ table {
     table-layout: fixed;
   }
   
-  .commentsTab {
+  .alertsTab {
     max-width: 1035px;
   }
   
-  .comment-column {
-    width: 500px;
-  }
-  
-  /* .mat-cell,
-  .mat-header-cell {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-height: 10px;
-    white-space: nowrap;
-    display: block;
-    margin-top: 20px;
-  } */
-  /* Ellipsis won't work with the flex attribute without the display: block. Might need to recruit Mitch for some CSS magic on this table.*/
-  
-  /* .mat-header-cell:nth-child(2),.mat-cell:nth-child(2){
-      flex:10%;
-    } */
-  
-  th,
-  td {
-    overflow: hidden;
-    width: 200px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  
-  .fullText {
-  
-    th,
-    td {
-      overflow: visible;
-      // width: 200px;
-      height: 20px;
-      text-overflow: none;
-      white-space: normal;
-      display: table;
-    }
-  }
-  
-  .untrucate {
-    overflow: visible;
-    width: 200px;
-    text-overflow: none;
-    white-space: normal;
+  .user-column {
+    width: 800px;
   }
   
   mat-button-toggle-group {
@@ -66,12 +23,6 @@ table {
     border-bottom-style: none;
     ;
   }
-  
-  /* .untrucate {
-      width: 200px;
-      text-overflow: none;
-      white-space: normal;
-    } */
   
   
   .results-table-div {
@@ -176,3 +127,36 @@ table {
   .text-large {
     font-size: large;
   }
+
+  .hint-table-hover-text {
+    position: relative;
+    transform: scale(0.8);
+    transition: 0.125s;
+    opacity: 0.3;
+    font-size: 18px;
+
+    &:hover {
+        cursor: default;
+        opacity: 0.9;
+        transition: 0.125s; 
+    }
+}
+
+.general-comment-text-area {
+  width: 40em;
+  margin-bottom: 2em;
+}
+
+.vertical-form-container {
+  display: inline-block;
+  flex-direction: column;
+}
+
+.noCollaborators{
+  text-align: center;
+}
+
+.alertForm{
+  text-align: center;
+  margin-top: 20px;
+}

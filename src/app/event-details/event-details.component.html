@@ -137,8 +137,9 @@
                   <tr *ngFor="let eventGroup of eventData.eventgroups">
                     <td>{{eventGroup.name}}</td>
                     <td>
-                      <button mat-button *ngFor="let eventID of eventGroup.events" class="link-button"
-                        routerLink="../{{eventID}}" (click)="reloadMap()" class="link-button">{{eventID}}</button>
+                      <button mat-button *ngFor="let eventID of eventGroup.events" class="link-button" (click)="navigateToEventDetails(eventID);" class="link-button">{{eventID}}</button>
+                        <!-- <button mat-button *ngFor="let eventID of eventGroup.events" class="link-button"
+                        routerLink="../../event/{{eventID}}" class="link-button">{{eventID}}</button> -->
                     </td>
                   </tr>
                   <!-- <tr *ngFor="let eventGroup of eventData.eventgroups">

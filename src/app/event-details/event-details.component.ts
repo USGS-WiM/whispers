@@ -269,11 +269,11 @@ export class EventDetailsComponent implements OnInit {
           error => {
             this.errorMessage = <any>error;
             this.eventDataLoading = false;
-            if (error.status !== 200 ) {
+            if (error.status !== 200) {
               this.eventNotFound = true;
             }
             // if (JSON.parse(error).detail === 'Not found.') {
-              
+
             // }
           }
         );
@@ -575,7 +575,7 @@ export class EventDetailsComponent implements OnInit {
     setTimeout(() => {
       this.locationMarkers.clearLayers();
       this.mapEvent(this.eventData);
-    }, 1000);
+    }, 2500);
   }
 
   navigateToHome() {
@@ -583,7 +583,11 @@ export class EventDetailsComponent implements OnInit {
   }
 
   navigateToEventDetails(eventID) {
+    this.eventLocationSpecies = [];
     this.router.navigate([`../${eventID}`], { relativeTo: this.route });
+    this.reloadMap();
+    // location.reload();
+    // this.refreshEvent();
   }
 
   editEvent(id: string) {
@@ -614,7 +618,7 @@ export class EventDetailsComponent implements OnInit {
                   }
                 }
 
-                console.log('eventLocationSpecies:', this.eventLocationSpecies);
+                // console.log('eventLocationSpecies:', this.eventLocationSpecies);
                 //  this.speciesTableRows = this.eventLocationSpecies;
                 this.eventDataLoading = false;
               },
@@ -1131,13 +1135,21 @@ export class EventDetailsComponent implements OnInit {
   refreshEvent() {
     this.viewPanelStates = new Object();
     this.getViewPanelState(this.viewPanels);
+
+    console.log('Event Location Species list at start of refresh: ', this.eventLocationSpecies);
+
+    this.eventLocationSpecies = [];
+    console.log('Event Location Species list after set to blank array: ', this.eventLocationSpecies);
+
+    this.possibleEventDiagnoses = [];
+
     this._eventService.getEventDetails(this.eventID)
       .subscribe(
         (eventdetails) => {
           this.eventData = eventdetails;
 
-          this.eventLocationSpecies = [];
-          this.possibleEventDiagnoses = [];
+          // this.eventLocationSpecies = [];
+          // this.possibleEventDiagnoses = [];
           for (const event_location of this.eventData.eventlocations) {
             for (const locationspecies of event_location.locationspecies) {
               locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
@@ -1152,7 +1164,8 @@ export class EventDetailsComponent implements OnInit {
               }
             }
           }
-          console.log('species' + this.possibleEventDiagnoses);
+
+          console.log('Event Location Species list after populated: ', this.eventLocationSpecies);
 
           // add the "Undetermined" diagnosis to possibleDiagnoses, only if not already in the list
           if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis)) {

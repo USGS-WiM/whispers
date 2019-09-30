@@ -138,7 +138,9 @@
                     <td>{{eventGroup.name}}</td>
                     <td>
                       <button mat-button *ngFor="let eventID of eventGroup.events" class="link-button"
-                        routerLink="../{{eventID}}" class="link-button">{{eventID}}</button>
+                        (click)="navigateToEventDetails(eventID);" class="link-button">{{eventID}}</button>
+                      <!-- <button mat-button *ngFor="let eventID of eventGroup.events" class="link-button"
+                        routerLink="../../event/{{eventID}}" class="link-button">{{eventID}}</button> -->
                     </td>
                   </tr>
                   <!-- <tr *ngFor="let eventGroup of eventData.eventgroups">
@@ -267,94 +269,95 @@
         </div> <!-- End Public Info-->
         <mat-divider style="margin: 25px auto;" [inset]="true"></mat-divider>
 
-        <div class="event-detail-wrapper" *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+        <div class="event-detail-wrapper"
+          *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
 
-            <h3 class="event-detail-label">Privileged Event Data</h3>
+          <h3 class="event-detail-label">Privileged Event Data</h3>
 
-            <div class="privileged-permissions">
-              <span class="title">
-                You are logged in as <b>{{currentUser.first_name}} {{currentUser.last_name}}</b>
-                ({{currentUser.username}})
-              </span>
-              <small>
-                You have these permissions for this event:
-              </small>
-              <div class="permissions">
-                <div class="permission" *ngIf="eventData.permissions.read === true">Read</div>
-                <div class="permission" *ngIf="eventData.permissions.update === true">Update</div>
-                <!-- <div class="permission" *ngIf="eventData.permissions.write === true">Create</div> -->
-                <div class="permission red" *ngIf="eventData.permissions.destroy === true">Delete</div>
-              </div>
-              <span class="title"
-                *ngIf="eventData.complete && (eventData.permissions.update === true || eventData.permissions.destroy === true)">Editing
-                is locked because event is marked Complete. Change WHISPers Record Status (Edit Event) to
-                Incomplete to
-                unlock editing.
-              </span>
+          <div class="privileged-permissions">
+            <span class="title">
+              You are logged in as <b>{{currentUser.first_name}} {{currentUser.last_name}}</b>
+              ({{currentUser.username}})
+            </span>
+            <small>
+              You have these permissions for this event:
+            </small>
+            <div class="permissions">
+              <div class="permission" *ngIf="eventData.permissions.read === true">Read</div>
+              <div class="permission" *ngIf="eventData.permissions.update === true">Update</div>
+              <!-- <div class="permission" *ngIf="eventData.permissions.write === true">Create</div> -->
+              <div class="permission red" *ngIf="eventData.permissions.destroy === true">Delete</div>
             </div>
-
-            <div class="public">
-              <span>This event is </span><span *ngIf="eventData.public === true"
-                class="public-status green">Visible to
-                Public</span><span *ngIf="eventData.public !== true" class="public-status red">Not Visible to
-                Public</span>
-            </div>
+            <span class="title"
+              *ngIf="eventData.complete && (eventData.permissions.update === true || eventData.permissions.destroy === true)">Editing
+              is locked because event is marked Complete. Change WHISPers Record Status (Edit Event) to
+              Incomplete to
+              unlock editing.
+            </span>
           </div>
 
-          <!-- Meta - event details for privileged users -->
-          <!-- Meta - event details for privileged users -->
-          <!-- Meta - event details for privileged users -->
-          <div class="event-detail-wrapper" *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+          <div class="public">
+            <span>This event is </span><span *ngIf="eventData.public === true" class="public-status green">Visible to
+              Public</span><span *ngIf="eventData.public !== true" class="public-status red">Not Visible to
+              Public</span>
+          </div>
+        </div>
 
-            <div class="privileged-meta">
-              <div class="item"
-                *ngIf="currentUser.role === 1 || currentUser.role === 2 || currentUser.role === 3 || currentUser.role === 4 || currentUser.role === 5">
-                <div class="label">Event Owner</div>
-                <div class="value">
-                  <span>{{eventData.created_by_first_name}} {{eventData.created_by_last_name}}
-                    ({{eventData.created_by_organization_string}})</span>
-                  <span *ngIf="!eventOwner">&nbsp;</span>
-                </div>
+        <!-- Meta - event details for privileged users -->
+        <!-- Meta - event details for privileged users -->
+        <!-- Meta - event details for privileged users -->
+        <div class="event-detail-wrapper"
+          *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+
+          <div class="privileged-meta">
+            <div class="item"
+              *ngIf="currentUser.role === 1 || currentUser.role === 2 || currentUser.role === 3 || currentUser.role === 4 || currentUser.role === 5">
+              <div class="label">Event Owner</div>
+              <div class="value">
+                <span>{{eventData.created_by_first_name}} {{eventData.created_by_last_name}}
+                  ({{eventData.created_by_organization_string}})</span>
+                <span *ngIf="!eventOwner">&nbsp;</span>
               </div>
-              <div class="item">
-                <div class="label">Event Reference</div>
-                <div class="value">{{eventData.event_reference || " "}}</div>
-              </div>
-              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
-                <div class="label">Process Status</div>
-                <div class="value">{{eventData.event_status_string || " "}}</div>
-              </div>
-              <div class="item">
-                <div class="label">Created Date</div>
-                <div class="value">{{eventData.created_date || " "}}</div>
-              </div>
-              <div class="item">
-                <div class="label">Last Modified Date</div>
-                <div class="value">{{eventData.modified_date || " "}}</div>
-              </div>
-              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
-                <div class="label">Staff</div>
-                <div class="value">{{eventData.staff_string}}</div>
-              </div>
-              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
-                <div class="label">Quality Check</div>
-                <div class="value">{{eventData.quality_check === null ? 'Not Done' : eventData.quality_check !== null ?
+            </div>
+            <div class="item">
+              <div class="label">Event Reference</div>
+              <div class="value">{{eventData.event_reference || " "}}</div>
+            </div>
+            <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
+              <div class="label">Process Status</div>
+              <div class="value">{{eventData.event_status_string || " "}}</div>
+            </div>
+            <div class="item">
+              <div class="label">Created Date</div>
+              <div class="value">{{eventData.created_date || " "}}</div>
+            </div>
+            <div class="item">
+              <div class="label">Last Modified Date</div>
+              <div class="value">{{eventData.modified_date || " "}}</div>
+            </div>
+            <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
+              <div class="label">Staff</div>
+              <div class="value">{{eventData.staff_string}}</div>
+            </div>
+            <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
+              <div class="label">Quality Check</div>
+              <div class="value">{{eventData.quality_check === null ? 'Not Done' : eventData.quality_check !== null ?
                             (eventData.quality_check | date:'shortDate') : 'Not Done' }}</div>
-              </div>
-              <div class="item">
-                <div class="label">WHISPers Record Status</div>
-                <div class="value">{{eventData.complete ? 'Complete' : 'Incomplete'}}</div>
-              </div>
-              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
-                <div class="label">Legal Status</div>
-                <div class="value">{{eventData.legal_status_string || " "}}</div>
-              </div>
-              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
-                <div class="label">Legal Number</div>
-                <div class="value">{{eventData.legal_number || " "}}</div>
-              </div>
+            </div>
+            <div class="item">
+              <div class="label">WHISPers Record Status</div>
+              <div class="value">{{eventData.complete ? 'Complete' : 'Incomplete'}}</div>
+            </div>
+            <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
+              <div class="label">Legal Status</div>
+              <div class="value">{{eventData.legal_status_string || " "}}</div>
+            </div>
+            <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
+              <div class="label">Legal Number</div>
+              <div class="value">{{eventData.legal_number || " "}}</div>
             </div>
           </div>
+        </div>
 
         <mat-tab-group *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
           <!-- (selectedIndexChange)="_setDataSource($event)" -->
@@ -799,11 +802,11 @@
 
 
                         <!-- Begin Event Location Comments section -->
-                        <mat-expansion-panel (opened)="locationCommentsPanelOpen = true"
-                          (closed)="locationCommentsPanelOpen = false">
+                          <mat-expansion-panel (opened)="eventLocation.locationCommentsPanelOpen = true"
+                          (closed)="eventLocation.locationCommentsPanelOpen = false">
                           <mat-expansion-panel-header>
                             <mat-panel-title>
-                              {{locationCommentsPanelOpen ? 'Hide Location Comments' : 'View Location Comments'}}
+                              {{eventLocation.locationCommentsPanelOpen ? 'Hide Location Comments' : 'View Location Comments'}}
                             </mat-panel-title>
                           </mat-expansion-panel-header>
 
@@ -849,11 +852,11 @@
 
 
                         <!-- Begin Event Location Contacts section -->
-                        <mat-expansion-panel (opened)="locationContactsPanelOpen = true"
-                          (closed)="locationContactsPanelOpen = false" style="margin: 18px 0;">
+                        <mat-expansion-panel (opened)="eventLocation.locationContactsPanelOpen = true"
+                          (closed)="eventLocation.locationContactsPanelOpen = false" style="margin: 18px 0;">
                           <mat-expansion-panel-header>
                             <mat-panel-title>
-                              {{locationContactsPanelOpen ? 'Hide Location Contacts' : 'View Location Contacts'}}
+                              {{eventLocation.locationContactsPanelOpen ? 'Hide Location Contacts' : 'View Location Contacts'}}
                             </mat-panel-title>
                           </mat-expansion-panel-header>
 

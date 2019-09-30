@@ -71,7 +71,7 @@
       </mat-form-field>
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Known Sick" type="number" min="0" min="0" formControlName="sick_count"
+        <input matInput placeholder="Known Sick" type="number" min="0" formControlName="sick_count"
           (ngModelChange)="checkLocationSpeciesNumbers()">
           <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
               matTooltip={{editKnownSickTooltip()}} matTooltipClass="tooltip-breakline">
@@ -159,7 +159,7 @@
   <button mat-button color="warn" (click)="this.editLocationSpeciesDialogRef.close('cancel');">
     <mat-icon>cancel</mat-icon>&nbsp;Cancel
   </button>
-  <button mat-button color="primary" type="submit" (click)="onSubmit(locationSpeciesForm.value)">
+  <button mat-button color="primary" type="submit" (click)="onSubmit(locationSpeciesForm.value)" [disabled]="locationSpeciesForm.invalid">
     <mat-icon>send</mat-icon> {{action_button_text}}
   </button>
   <!-- <button mat-button color="primary" type="submit" [disabled]="locationSpeciesForm.invalid"

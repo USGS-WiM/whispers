@@ -196,7 +196,10 @@ export class EditLocationSpeciesComponent implements OnInit {
         this.locationSpeciesForm.get('sex_bias').setValue(this.data.locationspecies.sex_bias.toString());
       }
 
-      //this.locationSpeciesForm.get('species').disable();
+      this.locationSpeciesForm.get('dead_count_estimated').markAsTouched();
+      this.locationSpeciesForm.get('sick_count_estimated').markAsTouched();
+
+      // this.locationSpeciesForm.get('species').disable();
 
       this.checkLocationSpeciesNumbers();
     }

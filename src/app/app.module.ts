@@ -122,6 +122,7 @@ import { CircleChooseComponent } from './circle-management/circle-choose/circle-
 import { DiagnosticInfoComponent } from './diagnostic-info/diagnostic-info.component';
 import { CommentsTableComponent } from './comments-table/comments-table.component';
 import { ViewCommentDetailsComponent } from './view-comment-details/view-comment-details.component';
+import { AlertCollaboratorsComponent } from './alert-collaborators/alert-collaborators.component';
 
 
 
@@ -170,6 +171,7 @@ import { ViewCommentDetailsComponent } from './view-comment-details/view-comment
     DiagnosticInfoComponent,
     CommentsTableComponent,
     ViewCommentDetailsComponent,
+    AlertCollaboratorsComponent,
   ],
   imports: [
     BrowserModule,

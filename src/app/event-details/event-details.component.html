@@ -363,7 +363,7 @@
           <!-- (selectedIndexChange)="_setDataSource($event)" -->
           <!-- Events tab -->
 
-          <mat-tab label="Event Data">
+          <mat-tab label="Privileged Event Data">
             <ng-template matTabContent>
               <mat-card>
 
@@ -1016,8 +1016,23 @@
               </mat-card>
             </ng-template>
           </mat-tab>
+          <!-- End Comments Tab -->
+
+          <!-- Alerts Tab -->
+          <mat-tab label="Alert Collaborators"
+            *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+            <ng-template matTabContent>
+              <mat-card>
+                <div class="app-comments-table">
+                  <app-alert-collaborators></app-alert-collaborators>
+                </div>
+              </mat-card>
+            </ng-template>
+          </mat-tab>
+          <!-- Alerts Tab -->
+
         </mat-tab-group>
-        <!-- End Comments Tab -->
+        <!-- End Tabs -->
       </mat-card-content>
     </mat-card>
   </div>

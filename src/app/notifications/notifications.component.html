@@ -1,0 +1,45 @@
+<div>
+    <mat-card>
+      <mat-card-title>
+          Owned and Collaborating Events Notifications
+      </mat-card-title>
+      <mat-card-content>
+        <div class="results-table-div">
+            <div class="mat-table">
+                <div class="mat-header-row">
+                  <div class="mat-header-cell"></div>
+                  <div class="mat-header-cell">Notify me for qualifying events that are...</div>
+                  <div class="mat-header-cell">Send notification to my email address</div>
+                </div>
+                <div class="mat-row">
+                    <div class="mat-header-cell">Your Events</div>
+                    <div class="mat-cell">
+                      <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
+                    </div>
+                    <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{toggle1 === true ? '(on)' :
+                        toggle1 === false ? '(off)' : '(off)' }}</span></mat-slide-toggle></div>
+                </div>
+                <div class="mat-row">
+                  <div class="mat-header-cell">Your Organization's Events</div>
+                  <div class="mat-cell">
+                      <mat-checkbox>new</mat-checkbox>&nbsp;<mat-checkbox>updated</mat-checkbox>
+                    </div>
+                  <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{toggle2 === true ? '(on)' :
+                      toggle1 === false ? '(off)' : '(off)' }}</span></mat-slide-toggle></div>
+                </div>
+                <div class="mat-row">
+                  <div class="mat-header-cell">Events for which you are a Collaborator</div>
+                  <div class="mat-cell">
+                      <mat-checkbox>new</mat-checkbox>&nbsp;<mat-checkbox>updated</mat-checkbox>
+                    </div>
+                  <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{toggle3 === true ? '(on)' :
+                      toggle1 === false ? '(off)' : '(off)' }}</span></mat-slide-toggle></div>
+                </div>
+              </div>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+    <hr>
+    <h2>Custom Notifications</h2>
+</div>

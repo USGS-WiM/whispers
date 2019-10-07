@@ -123,6 +123,7 @@ import { DiagnosticInfoComponent } from './diagnostic-info/diagnostic-info.compo
 import { CommentsTableComponent } from './comments-table/comments-table.component';
 import { ViewCommentDetailsComponent } from './view-comment-details/view-comment-details.component';
 import { AlertCollaboratorsComponent } from './alert-collaborators/alert-collaborators.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 
 
@@ -172,6 +173,7 @@ import { AlertCollaboratorsComponent } from './alert-collaborators/alert-collabo
     CommentsTableComponent,
     ViewCommentDetailsComponent,
     AlertCollaboratorsComponent,
+    NotificationsComponent,
   ],
   imports: [
     BrowserModule,

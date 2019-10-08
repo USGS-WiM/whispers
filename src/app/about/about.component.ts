@@ -11,9 +11,13 @@ declare let gtag: Function;
 })
 export class AboutComponent implements OnInit {
 
+  apiRoot;
+
   constructor(
     public aboutDialogRef: MatDialogRef<AboutComponent>,
-  ) { }
+  ) {
+    this.apiRoot = APP_SETTINGS.API_ROOT;
+  }
 
   ngOnInit() {
     gtag('event', 'click', { 'event_category': 'About', 'event_label': 'About Modal Opened' });

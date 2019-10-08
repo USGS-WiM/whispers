@@ -124,6 +124,7 @@ import { CommentsTableComponent } from './comments-table/comments-table.componen
 import { ViewCommentDetailsComponent } from './view-comment-details/view-comment-details.component';
 import { AlertCollaboratorsComponent } from './alert-collaborators/alert-collaborators.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { CustomNotificationComponent } from './custom-notification/custom-notification.component';
 
 
 
@@ -174,6 +175,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
     ViewCommentDetailsComponent,
     AlertCollaboratorsComponent,
     NotificationsComponent,
+    CustomNotificationComponent,
   ],
   imports: [
     BrowserModule,

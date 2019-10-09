@@ -290,7 +290,8 @@ import { CustomNotificationComponent } from './custom-notification/custom-notifi
     CircleManagementComponent,
     CircleChooseComponent,
     DiagnosticInfoComponent,
-    ViewCommentDetailsComponent
+    ViewCommentDetailsComponent,
+    CustomNotificationComponent
   ]
 })
 export class AppModule { }

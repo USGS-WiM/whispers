@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Inject } from '@angular/core';
 
+import { MatDialog, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material';
+
+import { CustomNotificationComponent } from '@app/custom-notification/custom-notification.component';
 // remove this interface once actual data is being loaded
 export interface Triggers {
   name: string;
@@ -20,6 +25,9 @@ export class NotificationsComponent implements OnInit {
   toggle2;
   toggle3;
 
+  customNotificationRef: MatDialogRef<CustomNotificationComponent>;
+
+  // test data
   test_data: Triggers[] = [
     {position: 1, name: 'Event with Species: Alligator', weight: 1.0079, symbol: 'H'},
     {position: 2, name: 'Event with ID 17044', weight: 4.0026, symbol: 'He'},
@@ -33,9 +41,14 @@ export class NotificationsComponent implements OnInit {
     {position: 10, name: 'Event with ID 675465', weight: 20.1797, symbol: 'Ne'},
   ];
 
-  constructor() { }
+  constructor(
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit() {
   }
 
+  newCustomNotification() {
+    this.customNotificationRef = this.dialog.open(CustomNotificationComponent);
+  }
 }

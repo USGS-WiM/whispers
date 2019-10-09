@@ -135,6 +135,11 @@ export class AddServiceRequestComponent implements OnInit {
     this.submitLoading = true;
 
     if (this.data.action === 'add') {
+
+      // remove the request_response field entirely if this is a new request ('add') so that value gets assigned default Pending
+      delete formValue.request_response;
+      // remove the id field entirely if this is a new request ('add')
+      delete formValue.id;
       this.serviceRequestService.create(formValue)
         .subscribe(
           (serviceRequest) => {

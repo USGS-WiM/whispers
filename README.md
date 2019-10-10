@@ -75,26 +75,20 @@ Run `ng build --prod --base-href [relative path to web server root]` to build th
 
 *  **[Blake Draper](https://github.com/BlakeDraper)** - *Lead Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
 
-Mapping](https://wim.usgs.gov/)
 
-  
 
 *  **[Nick Estes](https://github.com/njestes)** - *Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
-
-Mapping](https://wim.usgs.gov/)
 
   
 
 *  **[Lauren Privette](https://github.com/lprivette)** - *Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
 
-Mapping](https://wim.usgs.gov/)
+
 
 *  **[Mitch Samuels](https://github.com/mitchas)** - *Designer/Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
 
-Mapping](https://wim.usgs.gov/)
 
   
-
 See also the list of [contributors](../../graphs/contributors) who participated in this project.
 
   

@@ -29,8 +29,8 @@
     <br>
 
     <div class="results-table-div">
-      <table mat-table [dataSource]="commentsDataSource" matSort [class.fullText]="fullCommentOn === true"
-        matSortActive="created_date" matSortDirection="desc" *ngIf="combinedComments.length > 0">
+      <table mat-table [dataSource]="commentsDataSource" matSort matSortActive="created_date" [class.fullText]="fullCommentOn === true"
+         matSortDirection="desc" *ngIf="combinedComments.length > 0">
         <!-- Comment Column -->
         <ng-container matColumnDef="comment" class="comment-column">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="comment-column"> Comment </th>
@@ -89,12 +89,12 @@
           <td mat-cell *matCellDef="let comment"> {{comment.created_by_organization_string}} </td>
         </ng-container>
 
-        <!-- Location Column -->
+        <!-- Comment Source Column -->
         <ng-container matColumnDef="content_type_string">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Comment Source </th>
           <!-- <td mat-cell *matCellDef="let comment"> {{comment.content_type_string}} </td> -->
           <td td mat-cell *matCellDef="let comment"
-            [ngClass]="{'text-italic' : comment.content_type_string === 'event', '': comment.content_type_string !== 'event' === ''}">
+            [ngClass]="{'' : comment.content_type_string === 'event', '': comment.content_type_string !== 'event' === ''}">
             {{eventLocationName(comment)}} </td>
         </ng-container>
 

@@ -127,7 +127,7 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
     let locationName = '';
     let count;
     if (id.content_type_string === 'event') {
-      locationName = 'Event-wide';
+      locationName = 'Event';
     } else if (id.content_type_string === 'eventlocation') {
       if (id.object_name !== '') {
 

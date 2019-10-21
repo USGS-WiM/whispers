@@ -247,11 +247,33 @@ export class EventDetailsComponent implements OnInit {
                 this.readCollaboratorArray = eventdetails.read_collaborators;
                 this.writeCollaboratorArray = eventdetails.write_collaborators;
 
+                // for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                //   if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
+                //     this.possibleEventDiagnoses.push(speciesdiagnosis);
+                //   }
+                // }
+
                 for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
                   if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
                     this.possibleEventDiagnoses.push(speciesdiagnosis);
+                  } else {
+                    // it is in there already:
+                    // check if this one's suspect field is false
+                    if (speciesdiagnosis.suspect === false) {
+                      // if it is, then we need to remove the previously added one and add this one which is suspect = false
+                      // loop thru possibleEventDiagnoses, if match, remove
+                      for (let i = 0; i < this.possibleEventDiagnoses.length; i++) {
+                        if (this.possibleEventDiagnoses[i].diagnosis === speciesdiagnosis.diagnosis) {
+                          this.possibleEventDiagnoses.splice(i, 1);
+                        }
+                      }
+                      // then add the non suspect one
+                      this.possibleEventDiagnoses.push(speciesdiagnosis);
+
+                    }
                   }
                 }
+
               }
             }
 
@@ -1160,8 +1182,24 @@ export class EventDetailsComponent implements OnInit {
               for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
                 if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
                   this.possibleEventDiagnoses.push(speciesdiagnosis);
+                } else {
+                  // it is in there already:
+                  // check if this one's suspect field is false
+                  if (speciesdiagnosis.suspect === false) {
+                    // if it is, then we need to remove the previously added one and add this one which is suspect = false
+                    // loop thru possibleEventDiagnoses, if match, remove
+                    for (let i = 0; i < this.possibleEventDiagnoses.length; i++) {
+                      if (this.possibleEventDiagnoses[i].diagnosis === speciesdiagnosis.diagnosis) {
+                        this.possibleEventDiagnoses.splice(i, 1);
+                      }
+                    }
+                    // then add the non suspect one
+                    this.possibleEventDiagnoses.push(speciesdiagnosis);
+
+                  }
                 }
               }
+
             }
           }
 

@@ -6,7 +6,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { merge } from 'rxjs/observable/merge';
 import { tap } from 'rxjs/operators';
-
 import { APP_UTILITIES } from '@app/app.utilities';
 import { APP_SETTINGS } from '@app/app.settings';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
@@ -60,7 +59,7 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
   commentDisplayedColumns = [
     'comment',
     'comment_type',
-    'created_date',
+    'date_sort',
     // 'created_by_first_name',
     // 'created_by_last_name',
     'user',

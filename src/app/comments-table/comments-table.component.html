@@ -29,7 +29,7 @@
     <br>
 
     <div class="results-table-div">
-      <table mat-table [dataSource]="commentsDataSource" matSort matSortActive="created_date" [class.fullText]="fullCommentOn === true"
+      <table mat-table [dataSource]="commentsDataSource" matSort matSortActive="date_sort" [class.fullText]="fullCommentOn === true"
          matSortDirection="desc" *ngIf="combinedComments.length > 0">
         <!-- Comment Column -->
         <ng-container matColumnDef="comment" class="comment-column">
@@ -58,7 +58,7 @@
         </ng-container>
 
         <!-- Created Date Column -->
-        <ng-container matColumnDef="created_date">
+        <ng-container matColumnDef="date_sort">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
           <td mat-cell *matCellDef="let comment"> {{comment.created_date}} </td>
         </ng-container>

@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewChild, Input } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef } from '@angular/material';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material';
@@ -20,6 +20,8 @@ import { Comment } from '@interfaces/comment';
 import { CommentType } from '@interfaces/comment-type';
 import { EventDetail } from '@interfaces/event-detail';
 
+import { DisplayValuePipe } from '../pipes/display-value.pipe';
+
 import { EventDetailsComponent } from '@app/event-details/event-details.component';
 import { ConfirmComponent } from '@confirm/confirm.component';
 import { ViewCommentDetailsComponent } from '@app/view-comment-details/view-comment-details.component';
@@ -32,18 +34,19 @@ import { element } from 'protractor';
   styleUrls: ['./comments-table.component.scss']
 })
 export class CommentsTableComponent implements OnInit, AfterViewInit {
+  @Input('eventData') eventData: EventDetail;
+  @Input('commentTypes') commentTypes: CommentType[];
 
   errorMessage: string;
   currentUser;
   eventID: string;
   resultsLoading = false;
   fullCommentOn = true;
-  eventData: EventDetail;
+  // eventData: EventDetail;
 
   commentsDataSource: MatTableDataSource<Comment>;
 
   combinedComments = [];
-  commentTypes: CommentType[];
   orderParams = '';
   commentsLoading = false;
   initialSelection = [];
@@ -59,7 +62,8 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
 
   commentDisplayedColumns = [
     'comment',
-    'comment_type',
+    // 'comment_type',
+    'comment_type_string',
     'created_date',
     // 'created_by_first_name',
     // 'created_by_last_name',
@@ -75,45 +79,19 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private eventService: EventService,
     private commentTypeService: CommentTypeService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private displayValuePipe: DisplayValuePipe,
   ) { }
 
   ngOnInit() {
 
-    this.commentsLoading = true;
-    this.route.paramMap.subscribe(params => {
-      this.eventID = params.get('id');
-
-      // Actual request to event details service, using id
-      this.eventService.getEventDetails(this.eventID)
-        .subscribe(
-          (eventdetails) => {
-            this.eventData = eventdetails;
-            this.combinedComments = this.eventData.combined_comments;
-            this.getlocations();
-            this.commentsDataSource = new MatTableDataSource(this.combinedComments);
-            this.commentsDataSource.paginator = this.paginator;
-            // this.commentsDataSource.sort = this.sort;
-            this.commentsLoading = false;
-
-            // this.commentsDataSource.sort = this.sort;
-          },
-          error => {
-            this.commentsLoading = false;
-          }
-        );
-    });
-
-    // get comment types from the commentTypes service
-    this.commentTypeService.getCommentTypes()
-      .subscribe(
-        commentTypes => {
-          this.commentTypes = commentTypes;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.combinedComments = this.eventData.combined_comments;
+    this.getlocations();
+    for (const comment of this.combinedComments) {
+      comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
+    }
+    this.commentsDataSource = new MatTableDataSource(this.combinedComments);
+    this.commentsDataSource.paginator = this.paginator;
   }
 
   ngAfterViewInit(): void {

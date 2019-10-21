@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -78,6 +78,7 @@ declare let gtag: Function;
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.scss'],
+  // encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('detailExpand', [
       state('void', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),

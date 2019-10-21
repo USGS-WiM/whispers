@@ -359,11 +359,11 @@
           </div>
         </div>
 
-        <mat-tab-group *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+        <mat-tab-group [backgroundColor]="'accent'" [color]="'primary'" *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
           <!-- (selectedIndexChange)="_setDataSource($event)" -->
           <!-- Events tab -->
 
-          <mat-tab label="Event Data">
+          <mat-tab label="Event Data" class="event-details-tab-label">
             <ng-template matTabContent>
               <mat-card>
 

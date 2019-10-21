@@ -6,7 +6,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { merge } from 'rxjs/observable/merge';
 import { tap } from 'rxjs/operators';
-
 import { APP_UTILITIES } from '@app/app.utilities';
 import { APP_SETTINGS } from '@app/app.settings';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
@@ -62,23 +61,20 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
 
   commentDisplayedColumns = [
     'comment',
-    // 'comment_type',
     'comment_type_string',
-    'created_date',
-    // 'created_by_first_name',
+    // 'created_date',
+    // 'comment_type',
+    'date_sort',
+    'created_by_first_name',
     // 'created_by_last_name',
-    'user',
     'created_by_organization_string',
-    'content_type_string'
+    'source'
   ];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
-    private route: ActivatedRoute,
-    private eventService: EventService,
-    private commentTypeService: CommentTypeService,
     private dialog: MatDialog,
     private displayValuePipe: DisplayValuePipe,
   ) { }
@@ -88,7 +84,10 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
     this.combinedComments = this.eventData.combined_comments;
     this.getlocations();
     for (const comment of this.combinedComments) {
+      // set the comment type string for each comment
       comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
+      // set the source string for each comment
+      comment.source = this.eventLocationName(comment);
     }
     this.commentsDataSource = new MatTableDataSource(this.combinedComments);
     this.commentsDataSource.paginator = this.paginator;
@@ -101,22 +100,22 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
     }, 3000);
   }
 
-  eventLocationName(id) {
+  eventLocationName(comment) {
     let locationName = '';
     let count;
-    if (id.content_type_string === 'event') {
+    if (comment.content_type_string === 'event') {
       locationName = 'Event';
-    } else if (id.content_type_string === 'eventlocation') {
-      if (id.object_name !== '') {
+    } else if (comment.content_type_string === 'eventlocation') {
+      if (comment.object_name !== '') {
 
         // Finding the index for the comments' object.id and the locationIdArray object.id. The locationIdArray has the correct order of location
         // comments (same as on event details tab).
         // Doing it this way to ensure that the number in the location name is the same on both the event details tab and comments tab.
 
-        count = (this.locationIdArray.findIndex(c => c.object_id === id.object_id)) + 1;
-        locationName = 'Location ' + count + ' - ' + id.object_name;
+        count = (this.locationIdArray.findIndex(c => c.object_id === comment.object_id)) + 1;
+        locationName = 'Location ' + count + ' - ' + comment.object_name;
       } else {
-        count = (this.locationIdArray.findIndex(c => c.object_id === id.object_id)) + 1;
+        count = (this.locationIdArray.findIndex(c => c.object_id === comment.object_id)) + 1;
         locationName = 'Location ' + count;
       }
     }

@@ -29,22 +29,23 @@
     <br>
 
     <div class="results-table-div">
-      <table mat-table [dataSource]="commentsDataSource" matSort matSortActive="created_date" [class.fullText]="fullCommentOn === true"
-         matSortDirection="desc" *ngIf="combinedComments.length > 0">
+      <table mat-table [dataSource]="commentsDataSource" matSort matSortActive="date_sort"
+        [class.fullText]="fullCommentOn === true" matSortDirection="desc" *ngIf="combinedComments.length > 0">
+
         <!-- Comment Column -->
         <ng-container matColumnDef="comment" class="comment-column">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="comment-column"> Comment </th>
-          <td td mat-cell *matCellDef="let comment" class="comment-column"> {{comment.comment}} </td>
+          <td td mat-cell *matCellDef="let comment" class="comment-column">{{comment.comment}} </td>
         </ng-container>
 
-         <!-- Alternate Comment Type Column -->
-         <ng-container matColumnDef="comment_type_string">
+        <!-- Comment Type Column -->
+        <ng-container matColumnDef="comment_type_string">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Comment Type</th>
           <td mat-cell *matCellDef="let comment"> {{comment.comment_type_string}} </td>
         </ng-container>
 
         <!-- Created Date Column -->
-        <ng-container matColumnDef="created_date">
+        <ng-container matColumnDef="date_sort">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
           <td mat-cell *matCellDef="let comment"> {{comment.created_date}} </td>
         </ng-container>
@@ -62,10 +63,12 @@
         </ng-container> -->
 
         <!-- User Column -->
-        <ng-container matColumnDef="user">
+        <ng-container matColumnDef="created_by_first_name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> User </th>
           <td mat-cell *matCellDef="let comment">
             {{comment.created_by_first_name}}&nbsp;{{comment.created_by_last_name}} </td>
+          <!-- <td mat-cell *matCellDef="let comment"> {{comment.created_by_first_name}} </td> -->
+
         </ng-container>
 
 
@@ -76,12 +79,18 @@
         </ng-container>
 
         <!-- Comment Source Column -->
-        <ng-container matColumnDef="content_type_string">
+        <!-- <ng-container matColumnDef="content_type_string">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Comment Source </th>
-          <!-- <td mat-cell *matCellDef="let comment"> {{comment.content_type_string}} </td> -->
           <td td mat-cell *matCellDef="let comment"
             [ngClass]="{'' : comment.content_type_string === 'event', '': comment.content_type_string !== 'event' === ''}">
             {{eventLocationName(comment)}} </td>
+        </ng-container> -->
+
+        <!-- Comment Source Column -->
+        <ng-container matColumnDef="source">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Comment Source </th>
+          <!-- <td mat-cell *matCellDef="let comment"> {{comment.content_type_string}} </td> -->
+          <td td mat-cell *matCellDef="let comment">{{comment.source}}</td>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="commentDisplayedColumns"></mat-header-row>

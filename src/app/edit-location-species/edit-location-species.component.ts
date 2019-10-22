@@ -165,6 +165,8 @@ export class EditLocationSpeciesComponent implements OnInit {
     if (this.data.location_species_action === 'add') {
       this.action_text = 'Add';
       this.action_button_text = 'Submit';
+      this.locationSpeciesForm.get('dead_count_estimated').markAsTouched();
+      this.locationSpeciesForm.get('sick_count_estimated').markAsTouched();
 
     } else if (this.data.location_species_action === 'edit') {
 

@@ -11,14 +11,10 @@
     </div>
     <div class="comment-detail">
       <small>Date created</small> 
-      {{data.created_date}}
+      {{data.created_date |date:'shortDate'}}
     </div>
     <div class="comment-detail">
-      <small>Last modified</small> 
-      {{data.modified_date}}
-    </div>
-    <div class="comment-detail">
-        <small>Location</small> 
+        <small>Comment Source</small> 
         {{data.location}}
     </div>
     <div class="comment-detail">

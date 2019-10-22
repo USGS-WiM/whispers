@@ -296,7 +296,8 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     DiagnosticInfoComponent,
     ViewCommentDetailsComponent,
     CustomNotificationComponent,
-    BrowserWarningComponent
+    BrowserWarningComponent,
+    CustomNotificationComponent
   ]
 })
 export class AppModule { }

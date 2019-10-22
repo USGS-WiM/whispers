@@ -293,7 +293,8 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     CircleChooseComponent,
     DiagnosticInfoComponent,
     ViewCommentDetailsComponent,
-    BrowserWarningComponent
+    BrowserWarningComponent,
+    CustomNotificationComponent
   ]
 })
 export class AppModule { }

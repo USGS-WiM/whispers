@@ -22,6 +22,11 @@ import { isPlatformBrowser } from '@angular/common';
 import * as $ from 'jquery';
 import * as search_api from 'usgs-search-api';
 
+export interface Notification {
+  notification: string;
+  event_id: number;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -33,9 +38,18 @@ export class AppComponent implements OnInit {
   public whispersVersion = '';
   public bannerWarning = '';
   public bannerTextColor = '';
-  //public isLoggedIn;
-
+  // public isLoggedIn;
+  notificationCount;
   public currentUser;
+
+  // dummy data to work with. delete once notifications backend complete
+  dummyNotifications: Notification[] = [
+    {notification: 'Mark Adams has added a species to Event 170666.', event_id: 170666},
+    {notification: 'Barb Smith has added a diagnosis to event 170131.', event_id: 170131},
+    {notification: 'An event with E.coli in Minnesota has been added: Event 170676.', event_id: 170676},
+    {notification: 'Jane Farmington (a member of your organization) has added an Event: Event 170773.', event_id: 170773},
+    {notification: 'An event with White-tailed deer in Minnesota or Wisconsin with the diagnosis Chronic wasting disease has been added: Event 170220.', event_id: 170220},
+  ];
 
   aboutDialogRef: MatDialogRef<AboutComponent>;
   authenticationDialogRef: MatDialogRef<AuthenticationComponent>;
@@ -144,6 +158,15 @@ export class AppComponent implements OnInit {
     this.router.navigate([`../eventsubmission/`], { relativeTo: this.route });
   }
 
+  navigateNotificationSelect(event) {
+    if (!event) {
+      // For some cases need to redirect to the user dashboard
+      this.router.navigate([`../userdashboard/`], { relativeTo: this.route });
+    } else {
+
+      this.router.navigate([`../event/${event}`], { relativeTo: this.route });
+    }
+  }
 
   // Scroll to top on each route change
   onActivate(event: any) {

@@ -41,7 +41,8 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatBottomSheetModule,
-  MatStepperModule
+  MatStepperModule,
+  MatBadgeModule,
 } from '@angular/material';
 
 
@@ -223,6 +224,7 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     MatTooltipModule,
     MatBottomSheetModule,
     MatStepperModule,
+    MatBadgeModule,
     NgxMatSelectSearchModule
   ],
   providers: [

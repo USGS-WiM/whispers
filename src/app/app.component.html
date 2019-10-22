@@ -74,6 +74,16 @@
           </button>
         </span>
 
+         <!-- Notifications -->
+         <span *ngIf="currentUser.username != ''" class="login-status signin-button">
+          <button mat-button aria-label="notifications" matBadge="8" matBadgePosition="after" matBadgeColor="warn" [matMenuTriggerFor]="menu">
+            Notifications&nbsp;
+          </button>
+          <mat-menu #menu="matMenu" [overlapTrigger]="false">
+            <button *ngFor="let notification of dummyNotifications" matTooltip="{{notification.notification}}" (click)="navigateNotificationSelect(notification.event_id)" mat-menu-item>{{notification.notification}}</button>
+          </mat-menu>
+        </span>
+
         <span *ngIf="currentUser.username !== ''" class="login-status">{{currentUser.first_name}}
           {{currentUser.last_name}}
           <button mat-button aria-label="Logout" id="logoutIcon" (click)="logout()"  matTooltip="Logout">

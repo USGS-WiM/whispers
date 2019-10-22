@@ -125,6 +125,7 @@ import { ViewCommentDetailsComponent } from './view-comment-details/view-comment
 import { AlertCollaboratorsComponent } from './alert-collaborators/alert-collaborators.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { CustomNotificationComponent } from './custom-notification/custom-notification.component';
+import { BrowserWarningComponent } from './browser-warning/browser-warning.component';
 
 
 
@@ -176,6 +177,7 @@ import { CustomNotificationComponent } from './custom-notification/custom-notifi
     AlertCollaboratorsComponent,
     NotificationsComponent,
     CustomNotificationComponent,
+    BrowserWarningComponent,
   ],
   imports: [
     BrowserModule,
@@ -290,7 +292,8 @@ import { CustomNotificationComponent } from './custom-notification/custom-notifi
     CircleManagementComponent,
     CircleChooseComponent,
     DiagnosticInfoComponent,
-    ViewCommentDetailsComponent
+    ViewCommentDetailsComponent,
+    BrowserWarningComponent
   ]
 })
 export class AppModule { }

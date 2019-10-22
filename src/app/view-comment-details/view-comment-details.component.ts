@@ -30,7 +30,7 @@ export class ViewCommentDetailsComponent implements OnInit {
     let locationName = '';
     let count;
     if (this.data.location === 'event') {
-      locationName = 'Event-wide';
+      locationName = 'Event';
     } else if (this.data.location === 'eventlocation') {
         if (this.data.object_name !== '') {
 

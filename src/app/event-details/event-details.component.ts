@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -78,6 +78,7 @@ declare let gtag: Function;
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.scss'],
+  // encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('detailExpand', [
       state('void', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
@@ -247,11 +248,33 @@ export class EventDetailsComponent implements OnInit {
                 this.readCollaboratorArray = eventdetails.read_collaborators;
                 this.writeCollaboratorArray = eventdetails.write_collaborators;
 
+                // for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                //   if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
+                //     this.possibleEventDiagnoses.push(speciesdiagnosis);
+                //   }
+                // }
+
                 for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
                   if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
                     this.possibleEventDiagnoses.push(speciesdiagnosis);
+                  } else {
+                    // it is in there already:
+                    // check if this one's suspect field is false
+                    if (speciesdiagnosis.suspect === false) {
+                      // if it is, then we need to remove the previously added one and add this one which is suspect = false
+                      // loop thru possibleEventDiagnoses, if match, remove
+                      for (let i = 0; i < this.possibleEventDiagnoses.length; i++) {
+                        if (this.possibleEventDiagnoses[i].diagnosis === speciesdiagnosis.diagnosis) {
+                          this.possibleEventDiagnoses.splice(i, 1);
+                        }
+                      }
+                      // then add the non suspect one
+                      this.possibleEventDiagnoses.push(speciesdiagnosis);
+
+                    }
                   }
                 }
+
               }
             }
 
@@ -1160,8 +1183,24 @@ export class EventDetailsComponent implements OnInit {
               for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
                 if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
                   this.possibleEventDiagnoses.push(speciesdiagnosis);
+                } else {
+                  // it is in there already:
+                  // check if this one's suspect field is false
+                  if (speciesdiagnosis.suspect === false) {
+                    // if it is, then we need to remove the previously added one and add this one which is suspect = false
+                    // loop thru possibleEventDiagnoses, if match, remove
+                    for (let i = 0; i < this.possibleEventDiagnoses.length; i++) {
+                      if (this.possibleEventDiagnoses[i].diagnosis === speciesdiagnosis.diagnosis) {
+                        this.possibleEventDiagnoses.splice(i, 1);
+                      }
+                    }
+                    // then add the non suspect one
+                    this.possibleEventDiagnoses.push(speciesdiagnosis);
+
+                  }
                 }
               }
+
             }
           }
 

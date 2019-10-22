@@ -41,6 +41,9 @@
       ],
       "@validators/*": [
         "app/validators/*"
+      ],
+      "@browser-warning/*": [
+        "app/browser-warning/*"
       ]
     },
     "target": "es5",

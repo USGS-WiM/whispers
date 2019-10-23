@@ -1,70 +1,153 @@
 <div>
-    <mat-card>
-      <mat-card-title>
-          Owned and Collaborating Events Notifications
-      </mat-card-title>
-      <mat-card-content>
-        <div class="results-table-div">
-            <div class="mat-table">
-                <div class="mat-header-row">
-                  <div class="mat-header-cell"></div>
-                  <div class="mat-header-cell" style="font-weight: bold;"><mat-icon class="icon">notification_important</mat-icon><span class="headerText">Notify me for qualifying events that are...</span></div>
-                  <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;"><mat-icon class="icon">email</mat-icon><span class="headerText"> Send notification to my email address</span></div>
+    <mat-accordion>
+        <mat-expansion-panel (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Notification Settings
+            </mat-panel-title>
+            <mat-panel-description>
+              Add custom notifications or edit existing ones
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-card>
+              <mat-card-title>
+                  Owned and Collaborating Events Notifications
+              </mat-card-title>
+              <mat-card-content>
+                <div class="results-table-div">
+                    <div class="mat-table">
+                        <div class="mat-header-row">
+                          <div class="mat-header-cell"></div>
+                          <div class="mat-header-cell" style="font-weight: bold;"><mat-icon class="icon">notification_important</mat-icon><span class="headerText">Notify me for qualifying events that are...</span></div>
+                          <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;"><mat-icon class="icon">email</mat-icon><span class="headerText"> Send notification to my email address</span></div>
+                        </div>
+                        <div class="mat-row">
+                            <div class="mat-header-cell">Your Events</div>
+                            <div class="mat-cell">
+                              <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
+                            </div>
+                            <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{toggle1 === true ? ' (on) ' :
+                                toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
+                        </div>
+                        <div class="mat-row">
+                          <div class="mat-header-cell">Your Organization's Events</div>
+                          <div class="mat-cell">
+                              <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
+                            </div>
+                          <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{toggle2 === true ? ' (on) ' :
+                              toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
+                        </div>
+                        <div class="mat-row">
+                          <div class="mat-header-cell">Events for which you are a Collaborator</div>
+                          <div class="mat-cell">
+                              <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
+                            </div>
+                          <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{toggle3 === true ? ' (on) ' :
+                              toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
+                        </div>
+                      </div>
                 </div>
-                <div class="mat-row">
-                    <div class="mat-header-cell">Your Events</div>
-                    <div class="mat-cell">
-                      <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                    </div>
-                    <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{toggle1 === true ? ' (on) ' :
-                        toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
-                </div>
-                <div class="mat-row">
-                  <div class="mat-header-cell">Your Organization's Events</div>
-                  <div class="mat-cell">
-                      <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                    </div>
-                  <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{toggle2 === true ? ' (on) ' :
-                      toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
-                </div>
-                <div class="mat-row">
-                  <div class="mat-header-cell">Events for which you are a Collaborator</div>
-                  <div class="mat-cell">
-                      <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                    </div>
-                  <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{toggle3 === true ? ' (on) ' :
-                      toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
-                </div>
-              </div>
-        </div>
-
-      </mat-card-content>
-    </mat-card>
-    <mat-divider style="margin: 25px auto;" [inset]="true"></mat-divider>
+        
+              </mat-card-content>
+            </mat-card>
+            <mat-divider style="margin: 25px auto;" [inset]="true"></mat-divider>
+            <mat-card>
+                <mat-card-title>
+                    Custom Notifications
+                    <button mat-button color="accent" (click)="newCustomNotification()"><mat-icon>add_alert</mat-icon>Add New Custom Notification</button>
+                </mat-card-title>
+                <mat-card-content>
+                  <div class="results-table-div">
+                      <div class="mat-table">
+                          <div class="mat-header-row">
+                            <div class="mat-header-cell" style="font-weight: bold;">Trigger</div>
+                            <div class="mat-header-cell" style="font-weight: bold;"><mat-icon class="icon">notification_important</mat-icon><span class="headerText">Notify me for qualifying events that are...</span></div>
+                            <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;"><mat-icon class="icon">email</mat-icon><span class="headerText"> Send notification to my email address</span></div>
+                          </div>
+                          <div class="mat-row" *ngFor="let trigger of test_data">
+                              <div class="mat-header-cell">{{trigger.name}}</div>
+                              <div class="mat-cell">
+                                <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
+                              </div>
+                              <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{toggle1 === true ? ' (on) ' :
+                                  toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
+                          </div>
+                        </div>
+                  </div>
+          
+                </mat-card-content>
+            </mat-card>
+        </mat-expansion-panel>
+      </mat-accordion>
     <mat-card>
         <mat-card-title>
-            Custom Notifications
-            <button mat-button color="accent" (click)="newCustomNotification()"><mat-icon>add_alert</mat-icon>Add New Custom Notification</button>
+            Notifications
         </mat-card-title>
-        <mat-card-content>
-          <div class="results-table-div">
-              <div class="mat-table">
-                  <div class="mat-header-row">
-                    <div class="mat-header-cell" style="font-weight: bold;">Trigger</div>
-                    <div class="mat-header-cell" style="font-weight: bold;"><mat-icon class="icon">notification_important</mat-icon><span class="headerText">Notify me for qualifying events that are...</span></div>
-                    <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;"><mat-icon class="icon">email</mat-icon><span class="headerText"> Send notification to my email address</span></div>
-                  </div>
-                  <div class="mat-row" *ngFor="let trigger of test_data">
-                      <div class="mat-header-cell">{{trigger.name}}</div>
-                      <div class="mat-cell">
-                        <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                      </div>
-                      <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{toggle1 === true ? ' (on) ' :
-                          toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
-                  </div>
-                </div>
-          </div>
+        <mat-card-title>
+
+            <div class="results-card-title-row">
+              <span class="results-button-row">
+                <button mat-button color="accent" (click)="openCreateContactDialog()">
+                  <i class="material-icons">
+                    check_circle_outline
+                  </i> Mark as Read</button>
+                <button mat-button color="warn" (click)="openContactRemoveConfirm()"
+                  [disabled]="selection.selected.length === 0">
+                  <i class="material-icons">
+                    remove_circle
+                  </i> Delete</button>
+              </span>
+    
+            </div>
+          </mat-card-title>
+        <div class="results-table-div">
+
+            <mat-table [dataSource]="notificationsDataSource" matSort matSortActive="created_date" matSortDirection="asc"
+              *ngIf="notificationsDataSource.data.length > 0">
   
-        </mat-card-content>
-      </mat-card>
+              <!-- Selection column -->
+              <ng-container matColumnDef="select">
+                <mat-header-cell *matHeaderCellDef>
+                  <mat-checkbox (change)="$event ? masterToggle() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+                  </mat-checkbox>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                    [checked]="selection.isSelected(row)">
+                  </mat-checkbox>
+                </mat-cell>
+              </ng-container>
+  
+              <!-- Message Column -->
+              <ng-container matColumnDef="notification">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Message </mat-header-cell>
+                <mat-cell *matCellDef="let notification"> {{notification.notification}} </mat-cell>
+              </ng-container>
+  
+              <!-- Source -->
+              <ng-container matColumnDef="created_date">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Date </mat-header-cell>
+                <mat-cell *matCellDef="let notification"> {{notification.created_date}} </mat-cell>
+              </ng-container>
+  
+              <!-- Date -->
+              <ng-container matColumnDef="source">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Source </mat-header-cell>
+                <mat-cell *matCellDef="let notification"> {{notification.source}} </mat-cell>
+              </ng-container>
+  
+              <mat-header-row *matHeaderRowDef="notificationDisplayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let event; columns: notificationDisplayedColumns;"></mat-row>
+            </mat-table>
+  
+            <div *ngIf="notificationsDataSource.data.length === 0 && notificationsLoading === false">
+              <h3>No notifications</h3>
+            </div>
+  
+            <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+          </div>
+    </mat-card>
 </div>

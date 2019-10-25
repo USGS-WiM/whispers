@@ -359,7 +359,7 @@
           </div>
         </div>
 
-        <mat-tab-group [backgroundColor]="'accent'" [color]="'primary'"
+        <mat-tab-group class="tab-bar" (selectedTabChange)="resetExpansionPanels()"
           *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
           <!-- (selectedIndexChange)="_setDataSource($event)" -->
           <!-- Events tab -->
@@ -476,7 +476,7 @@
                     <div class="event-page-group">
 
                       <mat-expansion-panel (opened)="eventCommentsPanelOpen = true"
-                        (closed)="eventCommentsPanelOpen = false">
+                        (closed)="eventCommentsPanelOpen = false"> 
                         <mat-expansion-panel-header>
                           <mat-panel-title>
                             <mat-icon>comment</mat-icon>
@@ -803,11 +803,11 @@
 
 
                         <!-- Begin Event Location Comments section -->
-                        <mat-expansion-panel (opened)="eventLocation.locationCommentsPanelOpen = true"
-                          (closed)="eventLocation.locationCommentsPanelOpen = false">
+                        <mat-expansion-panel (opened)="locationCommentsPanelOpen = true"
+                          (closed)="locationCommentsPanelOpen = false">
                           <mat-expansion-panel-header>
                             <mat-panel-title>
-                              {{eventLocation.locationCommentsPanelOpen ? 'Hide Location Comments' : 'View Location Comments'}}
+                              {{locationCommentsPanelOpen ? 'Hide Location Comments' : 'View Location Comments'}}
                             </mat-panel-title>
                           </mat-expansion-panel-header>
 
@@ -853,11 +853,11 @@
 
 
                         <!-- Begin Event Location Contacts section -->
-                        <mat-expansion-panel (opened)="eventLocation.locationContactsPanelOpen = true"
-                          (closed)="eventLocation.locationContactsPanelOpen = false" style="margin: 18px 0;">
+                        <mat-expansion-panel (opened)="locationContactsPanelOpen = true"
+                          (closed)="locationContactsPanelOpen = false" style="margin: 18px 0;">
                           <mat-expansion-panel-header>
                             <mat-panel-title>
-                              {{eventLocation.locationContactsPanelOpen ? 'Hide Location Contacts' : 'View Location Contacts'}}
+                              {{locationContactsPanelOpen ? 'Hide Location Contacts' : 'View Location Contacts'}}
                             </mat-panel-title>
                           </mat-expansion-panel-header>
 

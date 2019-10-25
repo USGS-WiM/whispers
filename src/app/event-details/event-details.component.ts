@@ -98,6 +98,12 @@ export class EventDetailsComponent implements OnInit {
   species: Species[] = [];
   speciesLoading = false;
 
+  eventCommentsPanelOpen = false;
+  serviceRequestPanelOpen = false;
+  collaboratorsPanelOpen = false;
+  locationCommentsPanelOpen = false;
+  locationContactsPanelOpen = false;
+
   eventOwner;
 
   eventNotFound = false;
@@ -611,6 +617,16 @@ export class EventDetailsComponent implements OnInit {
     this.reloadMap();
     // location.reload();
     // this.refreshEvent();
+  }
+
+  // panels are closed when tabs are switched, but the panel boolean isn't actually changed. This is setting them all to false.
+  resetExpansionPanels() {
+    this.eventCommentsPanelOpen = false;
+    this.serviceRequestPanelOpen = false;
+    this.collaboratorsPanelOpen = false;
+    this.locationCommentsPanelOpen = false;
+    this.locationContactsPanelOpen = false;
+
   }
 
   editEvent(id: string) {

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Inject } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -6,6 +7,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { CustomNotificationComponent } from '@app/custom-notification/custom-notification.component';
+import { ConfirmComponent } from '@app/confirm/confirm.component';
 // remove this interface once actual data is being loaded
 export interface Triggers {
   name: string;
@@ -19,6 +21,7 @@ export interface Notification {
   event_id: number;
   created_date: string;
   source: string;
+  state: number; // 0 is unseen; 1 is seen
 }
 
 @Component({
@@ -28,6 +31,7 @@ export interface Notification {
 })
 export class NotificationsComponent implements OnInit {
 
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
   notificationsDataSource: MatTableDataSource<Notification>;
   panelOpenState = false;
   selection;
@@ -54,11 +58,11 @@ export class NotificationsComponent implements OnInit {
   ];
 
   dummyNotifications: Notification[] = [
-    {notification: 'Mark Adams has added a species to Event 170666.', event_id: 170666, created_date: '9/3/2019', source: 'Mark Adams'},
-    {notification: 'Barb Smith has added a diagnosis to event 170131.', event_id: 170131, created_date: '9/3/2019', source: 'Custom Trigger'},
-    {notification: 'An event with E.coli in Minnesota has been added: Event 170676.', event_id: 170676, created_date: '9/3/2019', source: 'System'},
-    {notification: 'Jane Farmington (a member of your organization) has added an Event: Event 170773.', event_id: 170773, created_date: '9/3/2019', source: 'Barb Smith'},
-    {notification: 'An event with White-tailed deer in Minnesota or Wisconsin with the diagnosis Chronic wasting disease has been added: Event 170220.', event_id: 170220, created_date: '9/3/2019', source: 'Custom Trigger'},
+    {notification: 'Mark Adams has added a species to Event 170666.', event_id: 170666, created_date: '9/3/2019', source: 'Mark Adams', state: 0},
+    {notification: 'Barb Smith has added a diagnosis to event 170131.', event_id: 170131, created_date: '9/3/2019', source: 'Custom Trigger', state: 0},
+    {notification: 'An event with E.coli in Minnesota has been added: Event 170676.', event_id: 170676, created_date: '9/3/2019', source: 'System', state: 0},
+    {notification: 'Jane Farmington (a member of your organization) has added an Event: Event 170773.', event_id: 170773, created_date: '9/3/2019', source: 'Barb Smith', state: 1},
+    {notification: 'An event with White-tailed deer in Minnesota or Wisconsin with the diagnosis Chronic wasting disease has been added: Event 170220.', event_id: 170220, created_date: '9/3/2019', source: 'Custom Trigger', state: 1},
   ];
 
   notificationDisplayedColumns = [
@@ -72,7 +76,9 @@ export class NotificationsComponent implements OnInit {
 
 
   constructor(
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
@@ -85,12 +91,34 @@ export class NotificationsComponent implements OnInit {
     this.notificationsDataSource.paginator = this.notificationPaginator;
   }
 
-  navigateToEvent() {
-
+  navigateToEvent(event) {
+    this.router.navigate([`../event/${event.event_id}`], { relativeTo: this.route });
   }
 
   newCustomNotification() {
     this.customNotificationRef = this.dialog.open(CustomNotificationComponent);
+  }
+
+
+  deleteWarning(trigger) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Trigger',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to delete the "' + trigger.name + '" trigger?',
+          confirmButtonText: 'Delete',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.navigateToEvent(event);
+      }
+    });
   }
 
   // From angular material table sample on material api reference site

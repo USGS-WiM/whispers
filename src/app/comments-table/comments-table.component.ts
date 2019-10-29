@@ -97,6 +97,7 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
 
     setTimeout(() => {
       this.commentsDataSource.sort = this.sort;
+      this. commentsDataSource.sortingDataAccessor = (data, attribute) => data[attribute];
     }, 3000);
   }
 

@@ -554,9 +554,12 @@
                                 {{servicerequest.request_type_string}}&nbsp;&nbsp;
                               </span>
                               <span class="date">{{servicerequest.created_date | date:'mediumDate'}}</span>
+                              <span class="identifier">{{servicerequest.created_by_first_name}}
+                                {{servicerequest.created_by_last_name}} |
+                                {{servicerequest.created_by_organization_string}}</span>
                               <span class="response">Response: {{servicerequest.request_response_string}}</span>
                             </div>
-                            <div class="comment-text">
+                            <div class="comment-text" style="padding-top: 10px;">
                               <!-- Request: {{servicerequest.request_type_string}} <br> -->
 
                               <label>Comments</label><br>

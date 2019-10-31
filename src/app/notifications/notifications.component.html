@@ -61,19 +61,19 @@
                   <div class="results-table-div">
                       <div class="mat-table">
                           <div class="mat-header-row">
-                            <div class="mat-header-cell" style="font-weight: bold;">Trigger</div>
+                            <div class="mat-header-cell" style="font-weight: bold;">Cue</div>
                             <div class="mat-header-cell" style="font-weight: bold;"><mat-icon class="icon">notification_important</mat-icon><span class="headerText">Notify me for qualifying events that are...</span></div>
                             <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;"><mat-icon class="icon">email</mat-icon><span class="headerText"> Send notification to my email address</span></div>
                             <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;"><span class="headerText"></span></div>
                           </div>
-                          <div class="mat-row" *ngFor="let trigger of test_data">
-                              <div class="mat-header-cell">{{trigger.name}}</div>
+                          <div class="mat-row" *ngFor="let cue of test_data">
+                              <div class="mat-header-cell">{{cue.name}}</div>
                               <div class="mat-cell">
                                 <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
                               </div>
                               <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{toggle1 === true ? ' (on) ' :
                                   toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
-                              <div class="mat-cell"><mat-icon class="icon" color="warn" (click)="deleteWarning(trigger)">delete</mat-icon></div>
+                              <div class="mat-cell"><mat-icon class="icon" color="warn" (click)="deleteWarning(cue)">delete</mat-icon></div>
                           </div>
                         </div>
                         
@@ -124,9 +124,9 @@
               </ng-container>
   
               <!-- Message Column -->
-              <ng-container matColumnDef="notification">
+              <ng-container matColumnDef="message">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Message </mat-header-cell>
-                <mat-cell *matCellDef="let notification" [ngStyle]="{'font-weight':notification.state === 0 ? 'bold' : 'normal' }"> {{notification.notification}} </mat-cell>
+                <mat-cell *matCellDef="let notification" [ngStyle]="{'font-weight':notification.state === 0 ? 'bold' : 'normal' }"> {{notification.message}} </mat-cell>
               </ng-container>
   
               <!-- Source -->

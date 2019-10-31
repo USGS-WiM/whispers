@@ -13,6 +13,8 @@ import { CurrentUserService } from '@services/current-user.service';
 import { APP_SETTINGS } from '@app/app.settings';
 import { AuthenticationService } from '@app/services/authentication.service';
 
+import { APP_UTILITIES } from '@app/app.utilities';
+import { Notification } from '@app/interfaces/notification';
 
 // Needed for scroll to top
 import { isPlatformBrowser } from '@angular/common';
@@ -21,11 +23,6 @@ import { isPlatformBrowser } from '@angular/common';
 
 import * as $ from 'jquery';
 import * as search_api from 'usgs-search-api';
-
-export interface Notification {
-  notification: string;
-  event_id: number;
-}
 
 @Component({
   selector: 'app-root',
@@ -43,13 +40,7 @@ export class AppComponent implements OnInit {
   public currentUser;
 
   // dummy data to work with. delete once notifications backend complete
-  dummyNotifications: Notification[] = [
-    {notification: 'Mark Adams has added a species to Event 170666.', event_id: 170666},
-    {notification: 'Barb Smith has added a diagnosis to event 170131.', event_id: 170131},
-    {notification: 'An event with E.coli in Minnesota has been added: Event 170676.', event_id: 170676},
-    {notification: 'Jane Farmington (a member of your organization) has added an Event: Event 170773.', event_id: 170773},
-    {notification: 'An event with White-tailed deer in Minnesota or Wisconsin with the diagnosis Chronic wasting disease has been added: Event 170220.', event_id: 170220},
-  ];
+  dummyNotifications = APP_UTILITIES.dummyData;
 
   aboutDialogRef: MatDialogRef<AboutComponent>;
   authenticationDialogRef: MatDialogRef<AuthenticationComponent>;

@@ -8,20 +8,14 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { CustomNotificationComponent } from '@app/custom-notification/custom-notification.component';
 import { ConfirmComponent } from '@app/confirm/confirm.component';
+import { APP_UTILITIES } from '@app/app.utilities';
+import { Notification } from '@app/interfaces/notification';
 // remove this interface once actual data is being loaded
-export interface Triggers {
+export interface Cue {
   name: string;
   position: number;
   weight: number;
   symbol: string;
-}
-
-export interface Notification {
-  notification: string;
-  event_id: number;
-  created_date: string;
-  source: string;
-  state: number; // 0 is unseen; 1 is seen
 }
 
 @Component({
@@ -40,11 +34,12 @@ export class NotificationsComponent implements OnInit {
   toggle1;
   toggle2;
   toggle3;
+  dummyNotifications = APP_UTILITIES.dummyData;
 
   customNotificationRef: MatDialogRef<CustomNotificationComponent>;
 
   // test data
-  test_data: Triggers[] = [
+  test_data: Cue[] = [
     {position: 1, name: 'Event with Species: Alligator', weight: 1.0079, symbol: 'H'},
     {position: 2, name: 'Event with ID 17044', weight: 4.0026, symbol: 'He'},
     {position: 3, name: '2. Event with State: Wisconsin OR Minnesota', weight: 6.941, symbol: 'Li'},
@@ -57,17 +52,9 @@ export class NotificationsComponent implements OnInit {
     {position: 10, name: 'Event with ID 675465', weight: 20.1797, symbol: 'Ne'},
   ];
 
-  dummyNotifications: Notification[] = [
-    {notification: 'Mark Adams has added a species to Event 170666.', event_id: 170666, created_date: '9/3/2019', source: 'Mark Adams', state: 0},
-    {notification: 'Barb Smith has added a diagnosis to event 170131.', event_id: 170131, created_date: '9/3/2019', source: 'Custom Trigger', state: 0},
-    {notification: 'An event with E.coli in Minnesota has been added: Event 170676.', event_id: 170676, created_date: '9/3/2019', source: 'System', state: 0},
-    {notification: 'Jane Farmington (a member of your organization) has added an Event: Event 170773.', event_id: 170773, created_date: '9/3/2019', source: 'Barb Smith', state: 1},
-    {notification: 'An event with White-tailed deer in Minnesota or Wisconsin with the diagnosis Chronic wasting disease has been added: Event 170220.', event_id: 170220, created_date: '9/3/2019', source: 'Custom Trigger', state: 1},
-  ];
-
   notificationDisplayedColumns = [
     'select',
-    'notification',
+    'message',
     'created_date',
     'source'
   ];
@@ -92,7 +79,7 @@ export class NotificationsComponent implements OnInit {
   }
 
   navigateToEvent(event) {
-    this.router.navigate([`../event/${event.event_id}`], { relativeTo: this.route });
+    this.router.navigate([`../event/${event.event}`], { relativeTo: this.route });
   }
 
   newCustomNotification() {
@@ -104,9 +91,9 @@ export class NotificationsComponent implements OnInit {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
         data: {
-          title: 'Delete Trigger',
+          title: 'Delete Cue',
           // tslint:disable-next-line:max-line-length
-          message: 'Are you sure you want to delete the "' + trigger.name + '" trigger?',
+          message: 'Are you sure you want to delete the "' + trigger.name + '" cue?',
           confirmButtonText: 'Delete',
           messageIcon: '',
           showCancelButton: true

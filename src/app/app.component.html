@@ -80,7 +80,7 @@
             Notifications&nbsp;
           </button>
           <mat-menu #menu="matMenu" [overlapTrigger]="false">
-            <button *ngFor="let notification of dummyNotifications" matTooltip="{{notification.notification}}" (click)="navigateNotificationSelect(notification.event_id)" mat-menu-item>{{notification.notification}}</button>
+            <button *ngFor="let notification of dummyNotifications" matTooltip="{{notification.message}}" (click)="navigateNotificationSelect(notification.event)" mat-menu-item>{{notification.message}}</button>
           </mat-menu>
         </span>
 

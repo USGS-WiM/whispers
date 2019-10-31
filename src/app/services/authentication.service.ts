@@ -26,7 +26,11 @@ export class AuthenticationService {
   }
 
   login(username: string, password: string) {
-    const options = new RequestOptions({ headers: new Headers({ 'Authorization': 'Basic ' + btoa(username + ':' + password) }) });
+    const options = new RequestOptions({
+      headers: new Headers({
+        'Authorization': 'Basic ' + btoa(username + ':' + password)
+      })
+    });
 
     const self = this;
     return this._http.post(APP_SETTINGS.AUTH_URL, null, options)

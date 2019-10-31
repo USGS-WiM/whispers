@@ -1,0 +1,98 @@
+<h1 mat-dialog-title *ngIf="title">
+  <mat-icon *ngIf="titleIcon !== ''">{{titleIcon}}</mat-icon> {{title}}
+</h1>
+
+<mat-dialog-content>
+
+  <form [formGroup]="eventGroupForm">
+
+    <div class="vertical-form-container">
+
+      <div *ngIf="data.action === 'create'" class="text-larger">
+
+        <label class="event-label">Selected Events</label>
+        <mat-form-field class="events-chip-list">
+
+          <mat-chip-list #chipList>
+
+            <mat-chip color="primary" selected *ngFor="let event of selectedEvents" [selectable]="selectable"
+              [removable]="removable" (removed)="removeFromSelected(event)">
+              <!-- <mat-icon>fiber_new</mat-icon> -->
+              {{event}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+
+          </mat-chip-list>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="data.action === 'edit'">
+        <label class="event-label">Events</label>
+        <mat-form-field class="events-chip-list">
+
+          <mat-chip-list #chipList>
+            <mat-chip color="accent" *ngFor="let event of events" [selectable]="selectable" [removable]="removable"
+              (removed)="remove(event)">
+              {{event}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+
+            <mat-chip color="primary" selected *ngFor="let event of selectedEvents" [selectable]="selectable"
+              [removable]="removable" (removed)="removeFromSelected(event)">
+              <mat-icon>fiber_new</mat-icon>{{event}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+
+            <!-- <input placeholder="Events" [matChipInputFor]="chipList" formControlName="new_events"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event)"> -->
+          </mat-chip-list>
+        </mat-form-field>
+
+      </div>
+
+      <mat-form-field class="form-control">
+        <mat-select placeholder="Event Group Category" formControlName="category" required>
+          <mat-option *ngFor="let category of eventGroupCategories" [value]="category.id">{{category.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="this.eventGroupForm.get('category').hasError('required')">
+          Category is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="general-comment-text-area">
+        <textarea matInput maxlength="1000" #comment placeholder="Justification for Event Grouping"
+          formControlName="new_comment" rows="4" required></textarea>
+        <mat-hint align="end">{{comment.value.length}} / 5000</mat-hint>
+        <mat-error *ngIf="this.eventGroupForm.get('new_comment').hasError('required')">
+          Justification is required</mat-error>
+      </mat-form-field>
+
+    </div>
+  </form>
+  <div class="submissionReviewErrors">
+    <mat-error color="warn" *ngIf="duplicateEventsViolation">
+      <mat-icon class="icon">error</mat-icon>
+      <span class="alert-text">Remove duplicate events: {{repeats}}</span>
+    </mat-error>
+
+    <mat-error color="warn" *ngIf="minimumCountViolation">
+        <mat-icon class="icon">error</mat-icon>
+        <span class="alert-text">An Event Group must contain at least 2 events.</span>
+      </mat-error>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="detail-section-buttons">
+    <button mat-button color="warn" (click)="this.eventGroupManagementDialogRef.close('cancel');">
+      <mat-icon>cancel</mat-icon>&nbsp;Cancel
+    </button>
+    <button mat-button color="primary" type="submit" [disabled]="duplicateEventsViolation || minimumCountViolation || eventGroupForm.invalid"
+      (click)="onSubmit(eventGroupForm.value)">
+      <mat-icon>{{actionButtonIcon}}</mat-icon>{{actionButtonText}}
+    </button>
+    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+  </div>
+</mat-dialog-actions>

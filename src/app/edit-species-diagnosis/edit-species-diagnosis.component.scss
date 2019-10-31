@@ -37,12 +37,15 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
+
     &.centered {
         justify-content: center;
     }
+
     button {
         position: relative;
         top: -2px;
+
         &:hover {
             cursor: pointer;
         }
@@ -54,7 +57,8 @@
 }
 
 .event-org-select {
-    width: 40em;
+    // width: 40em;
+    width: 100%;
 }
 
 .suspect-checkbox {
@@ -78,16 +82,19 @@
     margin: 0 auto;
     padding: 25px 0 40px 0;
     width: 40em;
+
     .mat-error {
         display: flex;
         margin: 6px 0;
         width: 40em;
+
         .mat-icon,
         span {
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
+
         span {
             font-size: 16px;
             font-weight: 600;

@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
+
 import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
@@ -26,6 +28,7 @@ export class AddEventDiagnosisComponent implements OnInit {
   addEventDiagnosisForm: FormGroup;
 
   eventID;
+  eventData;
 
   submitLoading = false;
 
@@ -49,6 +52,7 @@ export class AddEventDiagnosisComponent implements OnInit {
   ngOnInit() {
 
     this.eventID = this.data.event_id;
+    this.eventData = this.data.event_data;
     this.diagnoses = this.data.diagnosis_options;
 
     // get diagnoses from the DiagnosisService
@@ -64,10 +68,21 @@ export class AddEventDiagnosisComponent implements OnInit {
 
   }
 
+  editEventDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editEventDiagnosisTooltip; return string; }
+
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {
       duration: duration,
     });
+  }
+
+  checkForDuplicateEventDiagnosis(diagnosisID) {
+
+    for (const eventdiagnosis of this.eventData.eventdiagnoses) {
+      if (eventdiagnosis.diagnosis === diagnosisID) {
+        return true;
+      }
+    }
   }
 
   onSubmit(formValue) {
@@ -81,7 +96,7 @@ export class AddEventDiagnosisComponent implements OnInit {
           this.submitLoading = false;
           this.openSnackBar('Event Diagnosis Added', 'OK', 5000);
           this.addEventDiagnosisDialogRef.close();
-          gtag('event', 'click', {'event_category': 'Event Diagnosis','event_label': 'Event Diagnosis Added, Diagnosis: ' + contact.diagnosis});
+          gtag('event', 'click', { 'event_category': 'Event Diagnosis', 'event_label': 'Event Diagnosis Added, Diagnosis: ' + contact.diagnosis });
         },
         error => {
           this.submitLoading = false;

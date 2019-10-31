@@ -1,0 +1,71 @@
+.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.form-control {
+    width: 320px;
+    margin: 10px;
+}
+
+.alert {
+    width: 100%;
+    background-color: lightcoral;
+}
+
+
+.text-larger {
+    font-size: larger;
+}
+
+.submissionReviewErrors {
+    display: block;
+    margin: 0 auto;
+    padding: 25px 0 40px 0;
+    width: 40em;
+
+    .mat-error {
+        display: flex;
+        margin: 6px 0;
+        width: 40em;
+
+        .mat-icon,
+        span {
+            display: flex;
+            flex-direction: column;
+            justify-content: left;
+        }
+
+        span {
+            font-size: 16px;
+            font-weight: 600;
+            padding-left: 4px;
+            padding-bottom: 1px;
+        }
+    }
+}
+
+
+.full-width {
+    width: 95%;
+}
+
+.text-smaller {
+    font-size: smaller;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+.text-bold {
+    font-style: bold;
+}
+
+

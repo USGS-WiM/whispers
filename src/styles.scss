@@ -167,6 +167,13 @@ body {
         }
     }
 }
+// Max width cant overflow cell and
+// Words break if too long
+.mat-cell * {
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
 .page-loader{
     display: flex;
     flex-direction: column;
@@ -177,6 +184,8 @@ body {
         margin: 0 auto;
     }
 }
+
+
 
 // Remove ugly box shadows from defaults cards
 .mat-card{
@@ -278,7 +287,6 @@ input[type=checkbox]{
 }
 
 
-
 // =====================================================================================================================
 // =====================================================================================================================
 // Misc Tweaks
@@ -326,6 +334,18 @@ input[type=checkbox]{
     font-size: larger;
 }
 
+// Fix loading spinner on multiselect/type dropdown
+// Position absolute at right so it doesn't bump down a line
+// ref: https://github.com/USGS-WiM/whispers/issues/425
+.mat-form-field-wrapper .mat-spinner {
+    position: absolute !important;
+    right: 0;
+}
+
+// Overriding progress bar buffer style so that it is more visible
+mat-progress-bar .mat-progress-bar-buffer {
+    background: #E4E8EB;
+  }
 
 // =====================================================================================================================
 // =====================================================================================================================
@@ -375,7 +395,7 @@ input[type=checkbox]{
 }
 .leaflet-popup-close-button {
     position: absolute;
-    top: -7px !important;
+    top: -12px !important;
     right: -5px !important;
     background-color: white !important;
     padding: 5.5px 0 0 0 !important;
@@ -472,6 +492,18 @@ input[type=checkbox]{
 .signin-button:hover{
     cursor: pointer;
     text-decoration: underline;
+}
+
+// Turn basic white button into a link
+// Blue text with underline
+.link-button {
+	text-decoration: underline !important;
+	color: #334EFF;
+
+	&:hover{
+		color: darken(#334EFF, 15%);
+		cursor: pointer;
+	}
 }
 
 // =====================================================================================================================
@@ -595,6 +627,10 @@ input[type=checkbox]{
     }
 }
 
+// Change spacing between form elements 
+.form-control{
+	margin: 6px 10px !important;
+}
 
 
 // =====================================================================================================================
@@ -618,7 +654,6 @@ input[type=checkbox]{
     padding: 0;
 
     .mat-expansion-panel-body{
-        max-height: 210px !important;
         overflow: auto !important;
     }
 
@@ -652,6 +687,44 @@ input[type=checkbox]{
 // Remove padding around map
 #mapPanel .mat-expansion-panel-body{
     padding: 0 !important;
+}
+//leaflet draw adjustment
+.leaflet-touch .leaflet-draw-toolbar {
+    margin-top: -1px;
+}
+
+.hint-hover-text {
+    position: relative;
+    top: 3px;
+    transform: scale(0.8);
+    transition: 0.125s;
+    opacity: 0.3;
+    font-size: 20px;
+
+    &:hover {
+        cursor: default;
+        opacity: 0.9;
+        transition: 0.125s; 
+    }
+}
+
+.hint-table-hover-text {
+    position: relative;
+    transform: scale(0.8);
+    transition: 0.125s;
+    opacity: 0.3;
+    font-size: 18px;
+
+    &:hover {
+        cursor: default;
+        opacity: 0.9;
+        transition: 0.125s; 
+    }
+}
+
+// this allows multiline text in tooltips
+.tooltip-breakline {
+    white-space: pre-line;
 }
 
 

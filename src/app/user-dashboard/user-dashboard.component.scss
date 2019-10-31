@@ -1,3 +1,61 @@
 .saved-searches-div {
     max-width: 800px;
 }
+
+.results-table-div {
+    flex-grow: 3;
+    width: auto;
+    min-width: 550px;
+    #resultsMapHeader {
+        justify-content: flex-end;
+    } // Table
+    .mat-table {
+        .mat-header-row {
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            .mat-header-cell {
+                box-sizing: border-box;
+                padding: 3px;
+                &:first-child {
+                    padding-left: 15px;
+                }
+                &:last-child {
+                    padding-right: 15px;
+                }
+            }
+        }
+        .mat-row {
+            .mat-cell {
+                font-size: 12px;
+                box-sizing: border-box;
+                padding: 3px;
+                &:first-child {
+                    padding-left: 15px;
+                }
+                &:last-child {
+                    padding-right: 15px;
+                }
+                ul {
+                    padding-left: 15px;
+                    li {
+                        line-height: 12px;
+                        padding: 3px 0;
+                        word-break: break-word;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.table-cell-list {
+    padding: 0;
+    list-style-type: none;
+
+    li{
+        position:relative;
+        line-height: 11px;
+        font-size: 11.5px;
+    }
+
+}

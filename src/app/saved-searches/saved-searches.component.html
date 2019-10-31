@@ -1,4 +1,17 @@
-<div class="suggested-searches">
+<span *ngIf="searchesLoading" class="searches-no-data">
+  <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
+  <span>Loading Saved Searches...</span>
+</span>
+
+<div class="deleteToggle">
+  <mat-slide-toggle color="warn" (click)="deleteMode()"><span class="text-small text-italic">{{deleteModeOn === true ? 'Delete mode (on)' :
+    deleteModeOn === false ? 'Delete mode (off)' : 'Delete mode' }}</span></mat-slide-toggle>
+</div>
+
+<div class="suggested-searches" id="searchList">
+  <div *ngIf="parsedSearches.length === 0 && searchesLoading === false" class="no-searches-indicator">
+    <h3>No saved searches found</h3>
+  </div>
   <div class="button-row" *ngFor="let search of parsedSearches" (click)="implementSearch(search)">
 
     <button mat-button>
@@ -47,7 +60,8 @@
         <div class="value-list">
           <span *ngFor="let diagnosisType of search.diagnosis_type" class="value">
             {{diagnosisType| displayValue:'name':this.diagnosisTypes}}
-            <span *ngIf="(search.diagnosis_type.indexOf(diagnosisType)) < (search.diagnosis_type.length - 1)" class="value-list-or">
+            <span *ngIf="(search.diagnosis_type.indexOf(diagnosisType)) < (search.diagnosis_type.length - 1)"
+              class="value-list-or">
               {{(search.diagnosis_type_includes_all) ? "and" : "or"}}
             </span>
           </span>
@@ -56,7 +70,7 @@
 
       <!-- DIAGNOSIS -->
       <span class="search-param" *ngIf="search.diagnosis">
-        <b>DIAGNOSIS</b>
+        <b>EVENT DIAGNOSIS</b>
         <div class="value-list">
           <span *ngFor="let diagnosis of search.diagnosis" class="value">
             {{diagnosis | displayValue:'name':this.diagnoses}}
@@ -86,7 +100,8 @@
         <div class="value-list">
           <span *ngFor="let adminLevel1 of search.administrative_level_one" class="value">
             {{adminLevel1 | displayValue:'name':this.administrative_level_one}}
-            <span *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)"
+            <span
+              *ngIf="(search.administrative_level_one.indexOf(adminLevel1)) < (search.administrative_level_one.length - 1)"
               class="value-list-or">
               {{(search.administrative_level_one_includes_all) ? "and" : "or"}}
             </span>
@@ -100,16 +115,16 @@
         <div class="value-list">
           <span *ngFor="let adminLevel2 of search.administrative_level_two" class="value">
             {{adminLevel2 | displayValue:'name':this.administrative_level_two}}
-            <span *ngIf="(search.administrative_level_two.indexOf(adminLevel2)) < (search.administrative_level_two.length - 1)"
+            <span
+              *ngIf="(search.administrative_level_two.indexOf(adminLevel2)) < (search.administrative_level_two.length - 1)"
               class="value-list-or">
-              {{(search.administrative_level_two_includes_all) ? "and" : "or"}}\
+              {{(search.administrative_level_two_includes_all) ? "and" : "or"}}
             </span>
           </span>
         </div>
       </span>
 
     </button><!-- END MAT BUTTON -->
-
   </div>
 
 

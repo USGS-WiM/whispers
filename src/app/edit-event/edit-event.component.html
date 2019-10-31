@@ -7,33 +7,44 @@
 
       <!-- Event Reference -->
       <mat-form-field class="form-control">
-        <input matInput placeholder="Event Reference" formControlName="event_reference" [readonly]="editEventForm.get('complete').value">
-        <mat-error *ngIf="editEventForm.get('event_reference').invalid">{{getErrorMessage('event_reference')}}</mat-error>
+        <input matInput placeholder="Event Reference" formControlName="event_reference"
+          [readonly]="editEventForm.get('complete').value">
+          <mat-hint align="start">{{userEventRefTooltip()}}</mat-hint>
+        <mat-error *ngIf="editEventForm.get('event_reference').invalid">{{getErrorMessage('event_reference')}}
+        </mat-error>
       </mat-form-field>
 
       <!-- Event Type -->
       <mat-form-field class="form-control org-select">
-        <mat-select placeholder="Event Type" formControlName="event_type" [disabled]="editEventForm.get('complete').value">
-          <mat-option value="">--</mat-option>
+        <mat-select placeholder="Event Type" formControlName="event_type"
+          [disabled]="editEventForm.get('complete').value">
           <mat-option *ngFor="let event_type of event_types" [value]="event_type.id">{{event_type.name}}</mat-option>
         </mat-select>
+        <mat-icon class="hint-hover-text" matSuffix 
+              matTooltip={{editEventTypeTooltip()}} matTooltipClass="tooltip-breakline">
+              help</mat-icon>
       </mat-form-field>
-
+      <!-- eventTypeTooltip -->
       <div class="horizontal-form-container">
         <mat-form-field class="form-control">
-          <mat-select placeholder="Event Visibility" formControlName="public" required [disabled]="editEventForm.get('complete').value">
+          <mat-select placeholder="Event Visibility" formControlName="public" required
+            [disabled]="editEventForm.get('complete').value">
             <mat-option [value]="true">Visible to Public</mat-option>
             <mat-option [value]="false">Not Visible to Public</mat-option>
           </mat-select>
-          <mat-hint align="start"></mat-hint>
+          <mat-hint align="start">{{editEventVisibilityTooltip()}}</mat-hint>
           <mat-error *ngIf="editEventForm.get('public').invalid">{{getErrorMessage('public')}}</mat-error>
         </mat-form-field>
 
         <mat-form-field class="form-control">
-          <mat-select placeholder="WHISPers Record Status" formControlName="complete" required (ngModelChange)="openCompleteWarning()">
+          <mat-select placeholder="WHISPers Record Status" formControlName="complete" required
+            (ngModelChange)="checkRulesEventComplete($event); openCompleteWarning(); checkLocationSpeciesNumbers($event);">
             <mat-option [value]="true">Complete</mat-option>
             <mat-option [value]="false">Incomplete</mat-option>
           </mat-select>
+          <mat-icon class="hint-hover-text" matSuffix 
+              matTooltip={{editRecordStatusTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
           <mat-hint align="start"></mat-hint>
           <mat-hint align="end" matTooltip="Public field">
             <mat-icon>public</mat-icon>
@@ -43,16 +54,27 @@
 
       </div>
 
-      <!-- Contact Organizations -->
-      <!-- <mat-form-field class="form-control org-select">
-        <mat-select placeholder="Event Organizations" formControlName="new_organizations" multiple [disabled]="editEventForm.get('complete').value">
-          <mat-option value="">--</mat-option>
-          <mat-option *ngFor="let organization of organizations" [value]="organization.id">{{organization.name}}</mat-option>
-        </mat-select>
-      </mat-form-field> -->
+       <div class="submissionReviewErrors">
+        <mat-error color="warn" *ngIf="basisAndCauseViolation">
+          <mat-icon class="icon">error</mat-icon>
+          <span class="alert-text">The event may not be marked complete until all of its location species
+            diagnoses have a basis of diagnosis and significance of diagnosis selected.</span>
+        </mat-error>
 
+        <mat-error color="warn" *ngIf="completeEventLocationSpeciesNumbersViolation">
+          <mat-icon class="icon">error</mat-icon>
+          <span class="alert-text">For morbidity/mortality events marked as Complete, there must be at
+            least
+            one value greater
+            than 0
+            between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for all species
+            in the event.</span>
+        </mat-error>
+      </div>
+
+      <!--Event Organization select removed because it needs to treated as an individual for CRUD -->
       <!----------------------------------------------->
-      <div formArrayName="new_organizations">
+      <!-- <div formArrayName="new_organizations">
         <div *ngFor="let organization of getEventOrganizations(editEventForm); let eventOrgIndex = index">
 
           <div [formGroupName]="eventOrgIndex">
@@ -80,7 +102,7 @@
         <button mat-button color="primary" matTooltip="Add contact organization" (click)="addEventOrganization()">
           <mat-icon>add_circle</mat-icon> Add Contact Organization
         </button>
-      </div>
+      </div> -->
       <!----------------------------------------------->
 
       <!-- NWHC staff only section -->
@@ -95,7 +117,8 @@
               <div class="vertical-form-container">
 
                 <mat-form-field class="form-control">
-                  <mat-select placeholder="Assigned NWHC Epidemiologist" formControlName="staff" [disabled]="editEventForm.get('complete').value">
+                  <mat-select placeholder="Assigned NWHC Epidemiologist" formControlName="staff"
+                    [disabled]="editEventForm.get('complete').value">
                     <mat-option *ngFor="let staffMember of staff" [value]="staffMember.id">{{staffMember.first_name}}
                       {{staffMember.last_name}}</mat-option>
                   </mat-select>
@@ -105,7 +128,8 @@
 
               <div class="horizonal-form-container">
                 <mat-form-field class="form-control">
-                  <mat-select placeholder="Process Status" formControlName="event_status" required [disabled]="editEventForm.get('complete').value">
+                  <mat-select placeholder="Process Status" formControlName="event_status" required
+                    [disabled]="editEventForm.get('complete').value">
                     <mat-option *ngFor="let status of event_statuses" [value]="status.id">{{status.name}}
                     </mat-option>
                   </mat-select>
@@ -113,7 +137,8 @@
                 </mat-form-field>
 
                 <mat-form-field class="form-control">
-                  <input matInput [matDatepicker]="qualityCheck" placeholder="NWHC Quality Check" formControlName="quality_check">
+                  <input matInput [matDatepicker]="qualityCheck" placeholder="NWHC Quality Check"
+                    formControlName="quality_check">
                   <mat-datepicker-toggle matSuffix [for]="qualityCheck"></mat-datepicker-toggle>
                   <mat-datepicker #qualityCheck></mat-datepicker>
                   <mat-hint align="start" *ngIf="editEventForm.get('quality_check').disabled">Disabled if
@@ -123,7 +148,8 @@
 
               <div class="horizontal-form-container">
                 <mat-form-field class="form-control">
-                  <mat-select placeholder="Legal Status" formControlName="legal_status" required (selectionChange)="enforceLegalStatusRules($event.value)"
+                  <mat-select placeholder="Legal Status" formControlName="legal_status" required
+                    (selectionChange)="enforceLegalStatusRules($event.value)"
                     [disabled]="editEventForm.get('complete').value">
                     <mat-option *ngFor="let legalStatus of legalStatuses" [value]="legalStatus.id">{{legalStatus.name}}
                     </mat-option>
@@ -132,7 +158,8 @@
                 </mat-form-field>
 
                 <mat-form-field class="form-control">
-                  <input matInput placeholder="Legal Number" formControlName="legal_number" [readonly]="editEventForm.get('complete').value">
+                  <input matInput placeholder="Legal Number" formControlName="legal_number"
+                    [readonly]="editEventForm.get('complete').value">
                   <mat-hint align="start"> </mat-hint>
                 </mat-form-field>
               </div>
@@ -142,6 +169,20 @@
         </mat-card-content>
       </mat-card>
       <!-- End NWHC staff only section -->
+      <!-- <div class="submissionReviewErrors">
+        <mat-error color="warn" *ngIf="basisAndCauseViolation">
+          <mat-icon class="icon">error</mat-icon>
+          <span class="alert-text">The event may not be marked complete until all of its location species
+            diagnoses have a basis of diagnosis and significance of diagnosis selected.</span>
+        </mat-error>
+
+        <mat-error color="warn" *ngIf="completeEventLocationSpeciesNumbersViolation">
+          <mat-icon class="icon">error</mat-icon>
+          	<span class="alert-text">
+				For morbidity/mortality events marked as Complete, there must be at least one value greater than 0 between Known Dead, Estimated Dead, Known Sick, and Estimated Sick for all species in the event.
+			</span>
+        </mat-error>
+      </div> -->
 
     </div>
 
@@ -153,7 +194,8 @@
     <button mat-button color="warn" (click)="this.editEventDialogRef.close('cancel');">
       <mat-icon>cancel</mat-icon>&nbsp;Cancel
     </button>
-    <button mat-button color="primary" type="submit" (click)="updateEvent(editEventForm.value)">
+    <button mat-button color="primary" type="submit" (click)="updateEvent(editEventForm.value)"
+      [disabled]="basisAndCauseViolation || completeEventLocationSpeciesNumbersViolation">
       <mat-icon>save</mat-icon>&nbsp;Save
     </button>
     <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>

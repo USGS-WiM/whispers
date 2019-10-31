@@ -6,7 +6,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MatRadioModule } from '@angular/material';
-
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 import { User } from '@interfaces/user';
 import { UserService } from '@app/services/user.service';
 import { CurrentUserService } from '@services/current-user.service';
@@ -61,6 +61,9 @@ export class NewLookupRequestComponent implements OnInit {
     });
   }
 
+  itemTypeToRequestTooltip() { const string = FIELD_HELP_TEXT.itemTypeToRequestTooltip; return string; }
+  newRequestDetailsTooltip() { const string = FIELD_HELP_TEXT.newRequestDetailsTooltip; return string; }
+
   onSubmit(formValue) {
     // let request_url;
     switch (formValue.item_type) {
@@ -70,7 +73,7 @@ export class NewLookupRequestComponent implements OnInit {
           .subscribe(
             (response) => {
               this.openSnackBar('Species addition request sent', 'OK', 5000);
-              gtag('event', 'click', {'event_category': 'User Dashboard','event_label': 'Species Addition Request Submitted'});
+              gtag('event', 'click', {'event_category': 'User Dashboard', 'event_label': 'Species Addition Request Submitted'});
             },
             error => {
               this.openSnackBar('Error. Species addition request not sent. Error message: ' + error, 'OK', 8000);

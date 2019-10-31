@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/map';
+import { Subject, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
@@ -20,6 +24,7 @@ import { DataUpdatedService } from '@app/services/data-updated.service';
 import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
 
 import { APP_UTILITIES } from '@app/app.utilities';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 import { DatePipe } from '@angular/common';
 declare let gtag: Function;
 
@@ -46,6 +51,15 @@ export class EditEventLocationComponent implements OnInit {
 
   latitudePattern: RegExp = (/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/);
   longitudePattern: RegExp = (/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/);
+
+  public filteredAdminLevelOnes: ReplaySubject<AdministrativeLevelOne[]> = new ReplaySubject<AdministrativeLevelOne[]>(1);
+  adminLevelOneFilterCtrl: FormControl = new FormControl();
+
+  public filteredAdminLevelTwos: ReplaySubject<AdministrativeLevelTwo[]> = new ReplaySubject<AdministrativeLevelTwo[]>(1);
+  adminLevelTwoFilterCtrl: FormControl = new FormControl();
+
+  /** Subject that emits when the component has been destroyed. */
+  private _onDestroy = new Subject<void>();
 
   endDateBeforeStart(AC: AbstractControl) {
     AC.get('end_date').setErrors(null);
@@ -126,12 +140,16 @@ export class EditEventLocationComponent implements OnInit {
         adminLevelOnes => {
           this.adminLevelOnes = adminLevelOnes;
 
-          // experimental
-          // this.filteredAdminLevelOnes = this.eventSubmissionForm.get('').valueChanges
-          //   .startWith(null)
-          //   .map(val => this.filter(val, this.administrative_level_one, 'name'));
+          // populate the search select options for the adminLevelOne control
+          this.filteredAdminLevelOnes.next(adminLevelOnes);
 
-          // end experimental
+          // listen for search field value changes
+          this.adminLevelOneFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+              this.filterAdminLevelOnes();
+            });
+
         },
         error => {
           this.errorMessage = <any>error;
@@ -147,6 +165,16 @@ export class EditEventLocationComponent implements OnInit {
             if (a.name > b.name) { return 1; }
             return 0;
           });
+
+          // populate the search select options for the adminLevelTwo control
+          this.filteredAdminLevelTwos.next(adminLevelTwos);
+
+          // listen for search field value changes
+          this.adminLevelTwoFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+              this.filterAdminLevelTwos();
+            });
         },
         error => {
           this.errorMessage = <any>error;
@@ -160,8 +188,8 @@ export class EditEventLocationComponent implements OnInit {
       start_date: APP_UTILITIES.timeZoneAdjust(this.data.eventLocationData.start_date),
       end_date: APP_UTILITIES.timeZoneAdjust(this.data.eventLocationData.end_date),
       country: this.data.eventLocationData.country.toString(),
-      administrative_level_one: this.data.eventLocationData.administrative_level_one.toString(),
-      administrative_level_two: this.data.eventLocationData.administrative_level_two.toString(),
+      administrative_level_one: this.data.eventLocationData.administrative_level_one,
+      administrative_level_two: this.data.eventLocationData.administrative_level_two,
       latitude: this.data.eventLocationData.latitude,
       longitude: this.data.eventLocationData.longitude,
       gnis_name: this.data.eventLocationData.gnis_name,
@@ -176,11 +204,59 @@ export class EditEventLocationComponent implements OnInit {
 
   }
 
+  private filterAdminLevelOnes() {
+    if (!this.adminLevelOnes) {
+      return;
+    }
+    // get the search keyword
+    let search = this.adminLevelOneFilterCtrl.value;
+    if (!search) {
+      this.filteredAdminLevelOnes.next(this.adminLevelOnes.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the adminLevelOnes
+    this.filteredAdminLevelOnes.next(
+      this.adminLevelOnes.filter(admin_level_one => admin_level_one.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  private filterAdminLevelTwos() {
+    if (!this.adminLevelOnes) {
+      return;
+    }
+    // get the search keyword
+    let search = this.adminLevelTwoFilterCtrl.value;
+    if (!search) {
+      this.filteredAdminLevelTwos.next(this.adminLevelTwos.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the adminLevelTwos
+    this.filteredAdminLevelTwos.next(
+      this.adminLevelTwos.filter(admin_level_two => admin_level_two.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {
       duration: duration,
     });
   }
+
+  locationStartDateTooltip() { const string = FIELD_HELP_TEXT.locationStartDateTooltip; return string; }
+  locationEndDateTooltip() { const string = FIELD_HELP_TEXT.locationEndDateTooltip; return string; }
+  stateTooltip() { const string = FIELD_HELP_TEXT.stateTooltip; return string; }
+  countryTooltip() { const string = FIELD_HELP_TEXT.countryTooltip; return string; }
+  editCountyTooltip() { const string = FIELD_HELP_TEXT.editCountyTooltip; return string; }
+  editLocationNameTooltip() { const string = FIELD_HELP_TEXT.editLocationNameTooltip; return string; }
+  editLandOwnershipTooltip() { const string = FIELD_HELP_TEXT.editLandOwnershipTooltip; return string; }
+  longitudeTooltip() { const string = FIELD_HELP_TEXT.longitudeTooltip; return string; }
+  latitudeTooltip() { const string = FIELD_HELP_TEXT.latitudeTooltip; return string; }
+  editStandardizedLocationNameTooltip() { const string = FIELD_HELP_TEXT.editStandardizedLocationNameTooltip; return string; }
 
   updateAdminLevelOneOptions(selectedCountryID) {
     const id = Number(selectedCountryID);
@@ -225,6 +301,16 @@ export class EditEventLocationComponent implements OnInit {
             if (a.name > b.name) { return 1; }
             return 0;
           });
+
+          // populate the search select options for the adminLevelTwo control
+          this.filteredAdminLevelTwos.next(adminLevelTwos);
+
+          // listen for search field value changes
+          this.adminLevelTwoFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+              this.filterAdminLevelTwos();
+            });
         },
         error => {
           this.errorMessage = <any>error;
@@ -242,6 +328,18 @@ export class EditEventLocationComponent implements OnInit {
       formValue.longitude = null;
     }
 
+    // empty value from datepicker does not work with datePipe transform. This converts empty dates to null for the datePipe
+    if (formValue.end_date !== null) {
+      if (formValue.end_date.toJSON() === null) {
+        formValue.end_date = null;
+      }
+    }
+    if (formValue.start_date !== null) {
+      if (formValue.start_date.toJSON() === null) {
+        formValue.start_date = null;
+      }
+    }
+
     formValue.start_date = this.datePipe.transform(formValue.start_date, 'yyyy-MM-dd');
     formValue.end_date = this.datePipe.transform(formValue.end_date, 'yyyy-MM-dd');
 
@@ -252,7 +350,7 @@ export class EditEventLocationComponent implements OnInit {
           this.openSnackBar('Event Location Details Updated', 'OK', 5000);
           this.editEventLocationDialogRef.close();
           this.dataUpdatedService.triggerRefresh();
-          gtag('event', 'click', {'event_category': 'Event Location Details','event_label': 'Event Location Details Edited'});
+          gtag('event', 'click', { 'event_category': 'Event Location Details', 'event_label': 'Event Location Details Edited' });
         },
         error => {
           this.submitLoading = false;
@@ -280,6 +378,18 @@ export class EditEventLocationComponent implements OnInit {
   clearGNISEntry() {
     this.editEventLocationForm.get('gnis_id').setValue('');
     this.editEventLocationForm.get('gnis_name').setValue('');
+  }
+
+  truncateDecimalDegrees($event, field) {
+
+    const beforeDecimal = ($event + '').split('.')[0];
+    const afterDecimal = ($event + '').split('.')[1];
+
+    if (afterDecimal.length > 6) {
+      const truncatedValue = beforeDecimal + '.' + afterDecimal.substring(0, 6);
+      this.editEventLocationForm.get(field).setValue(truncatedValue);
+    }
+
   }
 
 

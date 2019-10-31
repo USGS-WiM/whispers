@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -82,6 +83,7 @@ import { EditEventComponent } from './edit-event/edit-event.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { AuthenticationService } from '@app/services/authentication.service';
 import { AuthenticationGuard } from '@authentication/authentication.guard';
+import { CanDeactivateGuard } from './event-submission/pending-changes.guard';
 import { CurrentUserService } from '@app/services/current-user.service';
 import { RoleService } from '@app/services/role.service';
 import { AddEventDiagnosisComponent } from './add-event-diagnosis/add-event-diagnosis.component';
@@ -108,6 +110,19 @@ import { NewLookupRequestComponent } from './new-lookup-request/new-lookup-reque
 import { SaveSearchComponent } from './save-search/save-search.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { ViewContactDetailsComponent } from './view-contact-details/view-contact-details.component';
+import { AddEventOrganizationComponent } from './add-event-organization/add-event-organization.component';
+import { UserEventsComponent } from './user-events/user-events.component';
+import { ResultsCountService } from '@services/results-count.service';
+import { EventsComponent } from '@events/events.component';
+import { EventGroupComponent } from './event-group/event-group.component';
+import { EventGroupManagementComponent } from './event-group-management/event-group-management.component';
+import { CircleManagementComponent } from './circle-management/circle-management.component';
+import { CirclesComponent } from './circles/circles.component';
+import { CircleChooseComponent } from './circle-management/circle-choose/circle-choose.component';
+import { DiagnosticInfoComponent } from './diagnostic-info/diagnostic-info.component';
+import { CommentsTableComponent } from './comments-table/comments-table.component';
+import { ViewCommentDetailsComponent } from './view-comment-details/view-comment-details.component';
+import { BrowserWarningComponent } from './browser-warning/browser-warning.component';
 
 
 
@@ -144,7 +159,19 @@ import { ViewContactDetailsComponent } from './view-contact-details/view-contact
     NewLookupRequestComponent,
     SaveSearchComponent,
     UserRegistrationComponent,
-    ViewContactDetailsComponent
+    ViewContactDetailsComponent,
+    AddEventOrganizationComponent,
+    UserEventsComponent,
+    EventsComponent,
+    EventGroupComponent,
+    EventGroupManagementComponent,
+    CircleManagementComponent,
+    CirclesComponent,
+    CircleChooseComponent,
+    DiagnosticInfoComponent,
+    CommentsTableComponent,
+    ViewCommentDetailsComponent,
+    BrowserWarningComponent,
   ],
   imports: [
     BrowserModule,
@@ -152,6 +179,7 @@ import { ViewContactDetailsComponent } from './view-contact-details/view-contact
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    HttpClientModule,
     ROUTING,
     FlexLayoutModule,
     NgxDatatableModule,
@@ -224,7 +252,10 @@ import { ViewContactDetailsComponent } from './view-contact-details/view-contact
     EventLocationContactService,
     ServiceRequestService,
     DisplayValuePipe,
-    DatePipe
+    DatePipe,
+    ResultsCountService,
+    EventGroupComponent,
+    CanDeactivateGuard
   ],
   bootstrap: [AppComponent],
   entryComponents: [
@@ -236,6 +267,7 @@ import { ViewContactDetailsComponent } from './view-contact-details/view-contact
     AuthenticationComponent,
     EditEventComponent,
     AddEventDiagnosisComponent,
+    AddEventOrganizationComponent,
     EditLocationSpeciesComponent,
     EditSpeciesDiagnosisComponent,
     EditEventLocationComponent,
@@ -249,7 +281,13 @@ import { ViewContactDetailsComponent } from './view-contact-details/view-contact
     NewLookupRequestComponent,
     SaveSearchComponent,
     UserRegistrationComponent,
-    ViewContactDetailsComponent
+    ViewContactDetailsComponent,
+    EventGroupManagementComponent,
+    CircleManagementComponent,
+    CircleChooseComponent,
+    DiagnosticInfoComponent,
+    ViewCommentDetailsComponent,
+    BrowserWarningComponent
   ]
 })
 export class AppModule { }

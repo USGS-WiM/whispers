@@ -2,21 +2,47 @@
     float: left;
 }
 
+.no-searches-indicator {
+    padding: 5px;
+    margin: 5px;
+}
 
+// Message when no data in section
+.searches-no-data {
+    display: block;
+    box-sizing: border-box;
+    padding: 25px 15px 45px 15px;
+    font-size: 18px;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.34);
+}
+
+.deleteModeIndicator {
+    background: #ff020236;
+}
+
+.deleteToggle {
+    text-align: right;
+}
 
 // Suggested Searches
 // Suggested Searches
 // Suggested Searches
-.suggested-searches{
+.suggested-searches {
 
-    .button-row{
+    max-height: 400px;
+    overflow: auto;
+
+    .button-row {
         // border-bottom: 1px solid fade-out($black, 0.85);
 
         // &:first-child{
         //     border-top: 1px solid fade-out($black, 0.85);
         // }
 
-        .mat-button{
+        .mat-button {
             width: 92%;
             padding: 10px 10px;
             border-radius: 4px !important;
@@ -24,7 +50,7 @@
             background-color: white;
             margin: 0 auto 6px 4%;
 
-            .search-param{
+            .search-param {
                 width: 100%;
                 float: none;
                 text-align: left;
@@ -38,11 +64,11 @@
                 padding: 0px 0;
                 white-space: normal;
 
-                &:first-child{
+                &:first-child {
                     padding-left: 0;
                 }
 
-                b{
+                b {
                     font-weight: 800;
                     font-size: 12px;
                     box-sizing: border-box;
@@ -50,7 +76,7 @@
                 }
 
 
-                .value{
+                .value {
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
@@ -58,24 +84,32 @@
                     text-align: right;
                 }
 
-                .value-list{
+                .value-list {
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
 
-                    .value{
+                    .value {
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
                     }
 
-                    .value-list-or{
+                    .value-list-or {
                         font-weight: 700;
                         font-style: italic;
                     }
                 }
             }
-   
+
         }
     }
+}
+
+.text-smaller {
+    font-size: smaller;
+}
+
+.text-italic {
+    font-style: italic;
 }

@@ -1,30 +1,57 @@
 <h1 mat-dialog-title>
   <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}}
+  <mat-icon class="hint-hover-text" matSuffix 
+  matTooltip={{serviceRequestFullTooltip()}} matTooltipClass="tooltip-breakline">
+  help</mat-icon>
 </h1>
 <mat-dialog-content>
+
+  <div *ngIf="data.action == 'respond'">
+    {{data.servicerequest.request_type_string}} <br>
+    {{data.servicerequest.created_date | date:'mediumDate'}}
+  </div>
 
   <form [formGroup]="serviceRequestForm" autocomplete="off">
     <div class="vertical-form-container">
 
-      <mat-radio-group formControlName="request_type">
+      <mat-radio-group formControlName="request_type" *ngIf="data.action == 'add'">
         <mat-radio-button [value]="1">Request diagnostic and consultative services
         </mat-radio-button>
         <p>
           <mat-radio-button [value]="2">Request consultative services ONLY </mat-radio-button>
       </mat-radio-group>
 
-      <div formArrayName="new_comments">
-        <div *ngFor="let comment of getComments(serviceRequestForm); let commentIndex = index" class="add-service-request-form">
+      <mat-form-field class="form-control" *ngIf="data.action == 'respond'">
+        <mat-select placeholder="Response" formControlName="request_response">
+          <mat-option *ngFor="let response of serviceRequestResponses" [value]="response.id">{{response.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-          <span [formGroupName]="commentIndex">
+      <div class="text-bold text-larger diagnostic-info-text"
+        *ngIf="this.serviceRequestForm.get('request_type').value === 1">
+        For diagnostic services, indicate in comment A) species and numbers of FRESH carcasses
+        available to send, B) whether carcasses are chilled or frozen, and C) if
+        euthanized and how. See <span class="link"><a role="button" (click)="openDiagnosticInfoDialog();">Suitable
+            Specimen Criteria</a></span> for
+        details on suitable specimens. Wait for NWHC approval
+        before shipping.
+      </div>
+
+      <div formArrayName="new_comments" *ngIf="data.action == 'add'">
+        <div *ngFor="let comment of getComments(serviceRequestForm); let commentIndex = index"
+          class="add-service-request-form">
+
+          <div [formGroupName]="commentIndex">
             <mat-form-field class="general-comment-text-area">
-              <textarea matInput maxlength="1000" #comment placeholder="Comment" formControlName="comment"></textarea>
-              <mat-hint align="end">{{comment.value.length}} / 1000</mat-hint>
+              <textarea matInput maxlength="5000" #comment placeholder="Comment" formControlName="comment"></textarea>
+              <mat-hint align="end">{{comment.value.length}} / 5000</mat-hint>
             </mat-form-field>
 
             <mat-form-field class="form-control">
-              <mat-select placeholder="Type" formControlName="comment_type">
-                <mat-option *ngFor="let commentType of commentTypes" [value]="commentType.id">{{commentType.name}}</mat-option>
+              <mat-select placeholder="Comment Type" formControlName="comment_type">
+                <mat-option *ngFor="let commentType of commentTypes" [value]="commentType.id">{{commentType.name}}
+                </mat-option>
               </mat-select>
             </mat-form-field>
 
@@ -32,15 +59,16 @@
               matTooltip="Remove this comment">
               <mat-icon>remove_circle</mat-icon>
             </button>
-          </span>
+          </div>
 
         </div>
       </div>
 
-      <div class="detail-section-buttons centered">
-        <button mat-button color="primary" matTooltip="Add comment" (click)="addComment()">
+      <div class="detail-section-buttons centered" *ngIf="data.action == 'add'">
+        <button mat-button color="primary" matTooltip="{{serviceRequestCommentTooltip()}}" (click)="addComment()">
           <mat-icon>add_comment</mat-icon>
-          Add Comment <span style="opacity: 0.5;">(optional)</span>
+          Add Comment 
+          <!-- <span style="opacity: 0.5;">(optional)</span> -->
         </button>
       </div>
 
@@ -55,7 +83,8 @@
     <button mat-button color="warn" (click)="this.addServiceRequestDialogRef.close('cancel');">
       <mat-icon>cancel</mat-icon>&nbsp;Cancel
     </button>
-    <button mat-button color="primary" type="submit" [disabled]="serviceRequestForm.invalid" (click)="onSubmit(serviceRequestForm.value)">
+    <button mat-button color="primary" type="submit" [disabled]="serviceRequestForm.invalid"
+      (click)="onSubmit(serviceRequestForm.value)">
       <mat-icon>{{data.actionButtonIcon}}</mat-icon> {{data.action_button_text}}
     </button>
     <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>

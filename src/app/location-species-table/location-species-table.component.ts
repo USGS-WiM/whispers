@@ -20,6 +20,7 @@ import { DataUpdatedService } from '@app/services/data-updated.service';
 import { AgeBias } from '@interfaces/age-bias';
 import { SexBias } from '@interfaces/sex-bias';
 import { Organization } from '@interfaces/organization';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 @Component({
   selector: 'app-location-species-table',
@@ -166,13 +167,20 @@ export class LocationSpeciesTableComponent implements OnInit {
 
   editSpeciesDiagnosis(speciesdiagnosis, locationspecies) {
 
+    // form the exisiting diagnosis id array
+    const existingDiagnoses = [];
+    for (const item of locationspecies.speciesdiagnoses) {
+      existingDiagnoses.push(item.diagnosis);
+    }
+
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
-      minWidth: '40em',
+      minWidth: '75%',
       disableClose: true,
       data: {
         locationspecies: locationspecies,
         speciesdiagnosis: speciesdiagnosis,
         laboratories: this.laboratories,
+        existing_diagnoses: existingDiagnoses,
         species_diagnosis_action: 'edit',
         title: 'Edit Species Diagnosis',
         titleIcon: 'edit',
@@ -196,12 +204,19 @@ export class LocationSpeciesTableComponent implements OnInit {
 
   addSpeciesDiagnosis(locationspecies) {
 
+    // form the exisiting diagnosis id array
+    const existingDiagnoses = [];
+    for (const item of locationspecies.speciesdiagnoses) {
+      existingDiagnoses.push(item.diagnosis);
+    }
+
     this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
-      minWidth: '40em',
+      minWidth: '75%',
       disableClose: true,
       data: {
         locationspecies: locationspecies,
         laboratories: this.laboratories,
+        existing_diagnoses: existingDiagnoses,
         species_diagnosis_action: 'add',
         title: 'Add diagnosis for this species',
         titleIcon: 'add',
@@ -262,6 +277,17 @@ export class LocationSpeciesTableComponent implements OnInit {
         }
       );
   }
+
+  editSpeciesTooltip() { const string = FIELD_HELP_TEXT.editSpeciesTooltip; return string; }
+  editKnownDeadTooltip() { const string = FIELD_HELP_TEXT.editKnownDeadTooltip; return string; }
+  editEstimatedDeadTooltip() { const string = FIELD_HELP_TEXT.editEstimatedDeadTooltip; return string; }
+  editKnownSickTooltip() { const string = FIELD_HELP_TEXT.editKnownSickTooltip; return string; }
+  editEstimatedSickTooltip() { const string = FIELD_HELP_TEXT.editEstimatedSickTooltip; return string; }
+  populationTooltip() { const string = FIELD_HELP_TEXT.populationTooltip; return string; }
+  editAgeBiasTooltip() { const string = FIELD_HELP_TEXT.editAgeBiasTooltip; return string; }
+  editSexBiasTooltip() { const string = FIELD_HELP_TEXT.editSexBiasTooltip; return string; }
+  editCaptiveTooltip() { const string = FIELD_HELP_TEXT.editCaptiveTooltip; return string; }
+  editSpeciesDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editSpeciesDiagnosisTooltip; return string; }
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {

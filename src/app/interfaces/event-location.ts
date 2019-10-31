@@ -21,4 +21,5 @@ export interface EventLocation extends History {
     administrative_level_two_string?: string;
     administrative_level_one_string?: string;
     country_string?: string;
+    comments: Comment[];
 }

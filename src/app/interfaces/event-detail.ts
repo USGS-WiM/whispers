@@ -2,8 +2,11 @@
 import { Event } from '@interfaces/event';
 import { History } from '@interfaces/history';
 import { EventLocation } from '@interfaces/event-location';
-import { EventDiagnosis } from '@app/interfaces/event-diagnosis';
-import { SuperEvent } from '@app/interfaces/super-event';
+import { EventDiagnosis } from '@interfaces/event-diagnosis';
+import { Organization } from '@interfaces/organization';
+import { EventGroup } from '@interfaces/event-group';
+import { CombinedComments } from '@interfaces/combined-comments';
+import { User } from '@interfaces/user';
 
 export interface EventDetail extends History {
     id: number;
@@ -23,7 +26,11 @@ export interface EventDetail extends History {
     legal_number: string;
     quality_check: string;
     public: boolean;
-    superevents: SuperEvent[];
+    eventgroups: EventGroup[];
     eventdiagnoses: EventDiagnosis[];
     eventlocations: EventLocation[];
+    eventorganizations: Organization[];
+    combined_comments: CombinedComments[];
+    read_collaborators: User[];
+    write_collaborators: User[];
 }

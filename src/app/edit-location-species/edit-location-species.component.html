@@ -20,20 +20,31 @@
             {{species.name}}
           </mat-option>
         </mat-select>
+        <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
+              matTooltip={{speciesTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
       </mat-form-field>
 
       <mat-form-field class="species-number-control">
         <input matInput placeholder="Population" type="number" min="0" formControlName="population_count">
+        <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
+              matTooltip={{populationTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
-        <mat-error *ngIf="this.locationSpeciesForm.get('population_count').hasError('min')">Minimum value is 0</mat-error>
+        <mat-error *ngIf="this.locationSpeciesForm.get('population_count').hasError('min')">Minimum value is 0
+        </mat-error>
         <mat-error *ngIf="this.locationSpeciesForm.get('population_count').hasError('integer')">Must be an integer
           (whole number)</mat-error>
       </mat-form-field>
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count" (ngModelChange)="checkLocationSpeciesNumbers()">
+        <input matInput placeholder="Known Dead" type="number" min="0" formControlName="dead_count"
+          (ngModelChange)="checkLocationSpeciesNumbers()">
+          <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
+              matTooltip={{editKnownDeadTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -45,10 +56,14 @@
       <mat-form-field class="species-number-control">
         <input matInput placeholder="Estimated Dead" type="number" min="0" formControlName="dead_count_estimated"
           (ngModelChange)="checkLocationSpeciesNumbers()">
+          <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
+              matTooltip={{editEstimatedDeadTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
-        <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('min')">Minimum value is 0</mat-error>
+        <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('min')">Minimum value is 0
+        </mat-error>
         <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('integer')">Must be an integer
           (whole number)</mat-error>
         <mat-error *ngIf="this.locationSpeciesForm.get('dead_count_estimated').hasError('estimatedDead')">Must be
@@ -56,8 +71,11 @@
       </mat-form-field>
 
       <mat-form-field class="species-number-control">
-        <input matInput placeholder="Known Sick" type="number" min="0" min="0" formControlName="sick_count"
+        <input matInput placeholder="Known Sick" type="number" min="0" formControlName="sick_count"
           (ngModelChange)="checkLocationSpeciesNumbers()">
+          <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
+              matTooltip={{editKnownSickTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -69,10 +87,14 @@
       <mat-form-field class="species-number-control">
         <input matInput placeholder="Estimated Sick" type="number" min="0" formControlName="sick_count_estimated"
           (ngModelChange)="checkLocationSpeciesNumbers()">
+          <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
+              matTooltip={{editEstimatedSickTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
-        <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('min')">Minimum value is 0</mat-error>
+        <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('min')">Minimum value is 0
+        </mat-error>
         <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('integer')">Must be an integer
           (whole number)</mat-error>
         <mat-error *ngIf="this.locationSpeciesForm.get('sick_count_estimated').hasError('estimatedSick')">Must be
@@ -83,8 +105,12 @@
     <div class="horizontal-form-container">
       <mat-form-field class="species-bias-control">
         <mat-select placeholder="Age Bias" formControlName="age_bias">
+          <mat-option [value]="null">--</mat-option>
           <mat-option *ngFor="let ageBias of ageBiases" value="{{ageBias.id}}">{{ageBias.name}}</mat-option>
         </mat-select>
+        <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
+              matTooltip={{editAgeBiasTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -92,8 +118,12 @@
 
       <mat-form-field class="species-bias-control">
         <mat-select placeholder="Sex Bias" formControlName="sex_bias">
+          <mat-option [value]="null">--</mat-option>
           <mat-option *ngFor="let sexBias of sexBiases" value="{{sexBias.id}}">{{sexBias.name}}</mat-option>
         </mat-select>
+        <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
+              matTooltip={{editSexBiasTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -104,6 +134,9 @@
           <mat-option [value]="true">Captive > 72 hours</mat-option>
           <mat-option [value]="false">Wild and/or free-ranging</mat-option>
         </mat-select>
+        <mat-icon style="font-size: 19px" class="hint-hover-text" matSuffix 
+              matTooltip={{editCaptiveTooltip()}} matTooltipClass="tooltip-breakline">
+        help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
@@ -126,8 +159,12 @@
   <button mat-button color="warn" (click)="this.editLocationSpeciesDialogRef.close('cancel');">
     <mat-icon>cancel</mat-icon>&nbsp;Cancel
   </button>
-  <button mat-button color="primary" type="submit" [disabled]="locationSpeciesForm.invalid" (click)="onSubmit(locationSpeciesForm.value)">
+  <button mat-button color="primary" type="submit" (click)="onSubmit(locationSpeciesForm.value)" [disabled]="locationSpeciesForm.invalid">
     <mat-icon>send</mat-icon> {{action_button_text}}
   </button>
+  <!-- <button mat-button color="primary" type="submit" [disabled]="locationSpeciesForm.invalid"
+  (click)="onSubmit(locationSpeciesForm.value)">
+  <mat-icon>send</mat-icon> {{action_button_text}}
+</button> -->
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

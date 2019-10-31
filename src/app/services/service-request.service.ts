@@ -10,12 +10,36 @@ import { Subject } from 'rxjs/Subject';
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 
+import { ServiceRequestResponse } from '@interfaces/service-request-response';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ServiceRequestService {
 
   constructor(private http: Http) { }
+
+  public getServiceRequestResponses(): Observable<ServiceRequestResponse[]> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.JSON_HEADERS
+    });
+
+    return this.http.get(APP_SETTINGS.SERVICE_REQUEST_RESPONSES_URL + '?no_page', options)
+      .map((response: Response) => <ServiceRequestResponse[]>response.json())
+      .catch(this.handleError);
+  }
+
+  public update(formValue): Observable<any> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this.http.patch(APP_SETTINGS.SERVICE_REQUEST_URL + formValue.id + '/', formValue, options)
+      .map((response: Response) => <any>response.json())
+      .catch(this.handleError);
+  }
 
   public create(formValue): Observable<any> {
 

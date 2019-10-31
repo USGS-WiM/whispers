@@ -1,0 +1,29 @@
+<h1 mat-dialog-title *ngIf="title">
+  <mat-icon *ngIf="titleIcon !== ''">{{titleIcon}}</mat-icon> {{title}}
+</h1>
+
+<mat-dialog-content>
+
+  <span class="text-smaller text-italic">Circles can be created from your User Dashboard.</span>
+
+  <mat-form-field class="form-control full-width">
+    <mat-select placeholder="Circle" [formControl]="circleControl">
+      <mat-option *ngFor="let circle of userCircles" [value]="circle">{{circle.name}} | {{circle.description}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="detail-section-buttons">
+    <button mat-button color="warn" (click)="this.circleChooseDialogRef.close('cancel');">
+      <mat-icon>cancel</mat-icon>&nbsp;Cancel
+    </button>
+    <button mat-button color="primary" type="submit" 
+      (click)="onSubmit(circleControl.value)">
+      <mat-icon>{{actionButtonIcon}}</mat-icon>{{actionButtonText}}
+    </button>
+    <!-- <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar> -->
+  </div>
+</mat-dialog-actions>

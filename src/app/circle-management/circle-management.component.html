@@ -1,0 +1,193 @@
+<h1 mat-dialog-title *ngIf="title">
+  <mat-icon *ngIf="titleIcon !== ''">{{titleIcon}}</mat-icon> {{title}}
+</h1>
+
+<mat-dialog-content>
+
+  <form [formGroup]="circleForm">
+    <div class="vertical-form-container">
+
+      <div class="vertical-form-container">
+
+        <div *ngIf="data.action === 'create' || data.action === 'edit'">
+          <mat-form-field class="form-control">
+            <input matInput placeholder="Name" formControlName="name">
+          </mat-form-field>
+
+          <mat-form-field class="general-comment-text-area">
+            <textarea matInput maxlength="5000" #description placeholder="Description" formControlName="description"
+              rows="3"></textarea>
+            <mat-hint align="end">{{description.value.length}} / 5000</mat-hint>
+          </mat-form-field>
+
+          <div *ngIf="data.action === 'edit'">
+            <label class="text-bold">Remove Users from Circle</label>
+            <mat-list role="list">
+              <mat-list-item *ngFor="let user of data.circle.users" role="listitem"
+                [ngClass]="{'line-through' : user.removed === true, '': user.removed === undefined}">
+                {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
+                <button mat-icon-button aria-label="remove user from circle" color="warn" (click)="removeUser(user.id)">
+                  <mat-icon>remove_circle</mat-icon>
+                </button></mat-list-item>
+            </mat-list>
+          </div>
+
+        </div>
+      </div>
+
+
+
+      <!-- <div *ngIf="data.action === 'edit'">
+        <label class="circle-label">Current Members</label>
+
+        <mat-form-field class="users-chip-list">
+          <mat-chip-list #currentUsersChipList>
+
+            <mat-chip color="accent" *ngFor="let user of currentUserList" [selectable]="selectable"
+              [removable]="removable" (removed)="remove(user)">
+              {{user}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+
+          </mat-chip-list>
+
+          <label>New users</label>
+          <mat-chip-list #newUsersChipList>
+              <mat-chip color="primary" selected *ngFor="let user of newUserList" [selectable]="selectable"
+              [removable]="removable" (removed)="removeFromNewUserList(event)">
+              <mat-icon>fiber_new</mat-icon>{{event}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+            placeholder="Email address..."
+            #userInput
+            [formControl]="userLookupControl"
+            [matChipInputFor]="newUsersChipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+
+        </mat-form-field>
+      </div> -->
+
+      <div *ngIf="data.action === 'addUser' || data.action === 'selectUser'">
+        <p>
+          <span class="text-smaller">Lookup a WHISPers User by email address. You may freely enter an email address or
+            use
+            the Contacts lookup below to populate the lookup using a Contact's email.</span></p>
+
+        <div class="vertical-form-container">
+
+          <div class="horizontal-form-container">
+            <mat-form-field class="form-control">
+              <input matInput type="text" placeholder="Email Address" [formControl]="userLookupControl">
+            </mat-form-field>
+            <div class="button-row">
+              <button mat-flat-button color="primary" (click)="lookupUser();">
+                <mat-icon class="icon">search</mat-icon>Search
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="nonMatch !== null">
+            <div class="submissionReviewErrors">
+              <mat-error color="warn">
+                <mat-icon class="icon">error</mat-icon>
+                <span class="alert-text">No WHISPers User with email address {{nonMatch}}.</span>
+              </mat-error>
+
+            </div>
+          </div>
+
+          <div *ngIf="matchingUser !== null" class="vertical-form-container match-div">
+            <label class="text-larger text-bold">
+              <mat-icon class="icon">check_circle</mat-icon> User Match Found for {{matchingUser.email}}
+            </label><br>
+            <!-- <div class="horizontal-form-container"> -->
+            <span>{{matchingUser.first_name}}&nbsp;{{matchingUser.last_name}}&nbsp;|&nbsp;{{matchingUser.organization_string}}</span><br>
+            <div class="button-row">
+              <button mat-flat-button color="primary" *ngIf="data.action === 'addUser'" (click)="addUserToCircle();">
+                <mat-icon class="icon">person_add</mat-icon>Add to Circle
+              </button>
+              <button mat-flat-button color="primary" *ngIf="data.action === 'selectUser'"
+                (click)="addUserAsCollaborator();">
+                <mat-icon class="icon">person_add</mat-icon>Add as Collaborator
+              </button>
+            </div>
+            <!-- </div> -->
+            <br>
+            <mat-progress-bar mode="indeterminate" *ngIf="userAddSubmitLoading"></mat-progress-bar>
+          </div>
+
+
+          <p>
+
+            <!----------------------------------->
+            <mat-card class="contact-lookup-card">
+              <mat-card-subtitle>
+                Get Email Address from Contacts
+              </mat-card-subtitle>
+
+              <span *ngIf="userContactsLoading" class="event-group-no-data">
+                <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
+                <span>Loading contacts...</span>
+              </span>
+
+              <div class="autocomplete-input" *ngIf="!userContactsLoading">
+                <mat-form-field class="contact-select">
+                  <mat-select [formControl]="contactsSearchControl" placeholder="Contact" #contactSelect
+                    (ngModelChange)="addContactEmail($event)">
+                    <ngx-mat-select-search [formControl]="contactFilterCtrl" [placeholderLabel]="'Find contact...'"
+                      [noEntriesFoundLabel]="'no matching contact found'"></ngx-mat-select-search>
+                    <mat-option *ngFor="let contact of filteredContacts | async" [value]="contact"
+                      [ngClass]="{'' : contact.email !== '', 'no-email': contact.email === ''}">
+                      <span>{{contact.first_name}}
+                        {{contact.last_name}} | {{contact.organization_string}} | <span *ngIf="contact.email === ''"
+                          class="text-bold text-italic">No
+                          Email Associated</span><span *ngIf="contact.email !== ''"
+                          class="text-bold">{{contact.email}}</span> </span>
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+            </mat-card>
+            <!----------------------------------->
+
+
+
+        </div>
+
+
+      </div>
+
+    </div>
+  </form>
+
+  <!-- <div class="submissionReviewErrors">
+    <mat-error color="warn" *ngIf="duplicateEventsViolation">
+      <mat-icon class="icon">error</mat-icon>
+      <span class="alert-text">Remove duplicate events: {{repeats}}</span>
+    </mat-error>
+
+    <mat-error color="warn" *ngIf="minimumCountViolation">
+      <mat-icon class="icon">error</mat-icon>
+      <span class="alert-text">An Event Group must contain at least 2 events.</span>
+    </mat-error>
+  </div> -->
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="detail-section-buttons">
+    <button mat-button color="warn" (click)="this.circleManagementDialogRef.close('cancel');">
+      <mat-icon>cancel</mat-icon>&nbsp;Cancel
+    </button>
+    <button mat-button color="primary" type="submit" [disabled]="circleForm.invalid"
+      (click)="onSubmit(circleForm.value)" *ngIf="data.action !== 'selectUser'">
+      <mat-icon>{{actionButtonIcon}}</mat-icon>{{actionButtonText}}
+    </button>
+    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+  </div>
+</mat-dialog-actions>

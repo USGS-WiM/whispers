@@ -20,6 +20,7 @@ import { Role } from '@interfaces/role';
 
 
 import { APP_SETTINGS } from '@app/app.settings';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 declare let gtag: Function;
 
 @Component({
@@ -36,6 +37,8 @@ export class UserRegistrationComponent implements OnInit {
 
   organizations: Organization[];
   roles: Role[];
+
+  passwordPattern: RegExp = (/^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?\d)(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?\d)(?=.*?[^a-zA-Z0-9])).{12,}$/);
 
   userRegistrationForm: FormGroup;
 
@@ -79,8 +82,14 @@ export class UserRegistrationComponent implements OnInit {
       last_name: '',
       email: ['', [Validators.required, Validators.email]],
       confirmEmail: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      confirmPassword: '',
+      password: ['', Validators.compose([
+        Validators.required, Validators.pattern(this.passwordPattern)
+      ])
+      ],
+      confirmPassword: ['', Validators.compose([
+        Validators.required, Validators.pattern(this.passwordPattern)
+      ])
+      ],
       organization: null,
       role: null,
       message: '',
@@ -113,6 +122,11 @@ export class UserRegistrationComponent implements OnInit {
   ngOnInit() {
 
     console.log('Registration Type: ' + this.data.registration_type);
+
+    // if reg type is General User, set the terms to true to meet validation, since the terms checkbox not appear for General User reg.
+    if (this.data.registration_type === 'public') {
+      this.userRegistrationForm.get('terms').setValue(true);
+    }
 
     // get organizations from the OrganizationService
     this.organizationService.getOrganizations()
@@ -171,6 +185,16 @@ export class UserRegistrationComponent implements OnInit {
       this.organizations.filter(organization => organization.name.toLowerCase().indexOf(search) > -1)
     );
   }
+
+  regUsernameTooltip() { const string = FIELD_HELP_TEXT.regUsernameTooltip; return string; }
+  regFirstNameTooltip() { const string = FIELD_HELP_TEXT.regFirstNameTooltip; return string; }
+  regLastNameTooltip() { const string = FIELD_HELP_TEXT.regLastNameTooltip; return string; }
+  regemailAddressTooltip() { const string = FIELD_HELP_TEXT.regemailAddressTooltip; return string; }
+  regPasswordTooltip() { const string = FIELD_HELP_TEXT.regPasswordTooltip; return string; }
+  regTermsOfUseTooltip() { const string = FIELD_HELP_TEXT.regTermsOfUseTooltip; return string; }
+  regOrganizationTooltip() { const string = FIELD_HELP_TEXT.regOrganizationTooltip; return string; }
+  regRoleTooltip() { const string = FIELD_HELP_TEXT.regRoleTooltip; return string; }
+  regCommentTooltip() { const string = FIELD_HELP_TEXT.regCommentTooltip; return string; }
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, AfterViewChecked } from '@angular/core';
 //declare let L: any;
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -13,14 +13,15 @@ import { MatSnackBar } from '@angular/material';
 import { DisplayValuePipe } from '../pipes/display-value.pipe';
 
 import { SearchDialogComponent } from '@search-dialog/search-dialog.component';
+import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { APP_UTILITIES } from '@app/app.utilities';
-import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 
 import { DisplayQuery } from '@interfaces/display-query';
 import { APP_SETTINGS } from '@app/app.settings';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 import { CurrentUserService } from '@services/current-user.service';
 
@@ -40,9 +41,12 @@ import { SaveSearchComponent } from '@app/save-search/save-search.component';
 
 import { User } from '@interfaces/user';
 
-import * as L from 'leaflet';
+declare let L: any;
+import 'leaflet';
+import 'leaflet-draw';
 import * as esri from 'esri-leaflet';
 import { UserRegistrationComponent } from '@app/user-registration/user-registration.component';
+declare let gtag: Function;
 
 // export class ResultsDataSource extends MatTableDataSource<any> {
 //   constructor(private userService: EventService) {
@@ -80,9 +84,7 @@ export class HomeComponent implements OnInit {
   isloggedIn = APP_SETTINGS.IS_LOGGEDIN;
 
   currentSearchQuery = sessionStorage.getItem('currentSearch') ? JSON.parse(sessionStorage.getItem('currentSearch')) : APP_SETTINGS.DEFAULT_SEARCH_QUERY;
-  //currentSearchQuery;
   currentDisplayQuery: DisplayQuery = sessionStorage.getItem('currentDisplayQuery') ? JSON.parse(sessionStorage.getItem('currentDisplayQuery')) : APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
-  //currentDisplayQuery;
 
   currentResults: EventSummary[];
 
@@ -103,7 +105,7 @@ export class HomeComponent implements OnInit {
   popularSearches = [];
   parsedPopularSearches = [];
 
-  resultsLoading = false;
+  searchResultsLoading = false;
 
   speciesLoading = true;
 
@@ -139,7 +141,6 @@ export class HomeComponent implements OnInit {
     private eventService: EventService,
     private dialog: MatDialog,
     public snackBar: MatSnackBar,
-    private router: Router,
     private searchDialogService: SearchDialogService,
     private displayValuePipe: DisplayValuePipe,
     private adminLevelOneService: AdministrativeLevelOneService,
@@ -150,6 +151,7 @@ export class HomeComponent implements OnInit {
     private speciesService: SpeciesService,
     private currentUserService: CurrentUserService,
     private searchService: SearchService,
+    private router: Router,
     private route: ActivatedRoute
   ) {
 
@@ -162,7 +164,7 @@ export class HomeComponent implements OnInit {
 
         const countLimit = 300;
 
-        this.resultsLoading = true;
+        this.searchResultsLoading = true;
 
         // this is the listener for a new search query
 
@@ -172,7 +174,7 @@ export class HomeComponent implements OnInit {
               if (count.count >= countLimit) {
                 // this.sampleQuerySizeErrorFlag = true;
                 this.openSnackBar('Your Query result is too large. Please narrow your search and try again', 'OK', 8000);
-                this.resultsLoading = false;
+                this.searchResultsLoading = false;
               } else if (count.count < countLimit) {
 
                 if (searchQuery) {
@@ -183,7 +185,7 @@ export class HomeComponent implements OnInit {
                         this.dataSource = new MatTableDataSource(this.currentResults);
                         this.dataSource.paginator = this.paginator;
                         this.dataSource.sort = this.sort;
-                        this.resultsLoading = false;
+                        this.searchResultsLoading = false;
 
                         setTimeout(() => {
                           /*this.map = new L.Map('map', {
@@ -202,7 +204,7 @@ export class HomeComponent implements OnInit {
 
                       },
                       error => {
-                        this.resultsLoading = false;
+                        this.searchResultsLoading = false;
                         this.openSnackBar('Query failed due to web service error. Please try again later.', 'OK', 8000);
                         this.errorMessage = <any>error;
                       }
@@ -276,9 +278,9 @@ export class HomeComponent implements OnInit {
       data: {
         query: this.currentDisplayQuery
       }
-      // height: '75%'
     });
   }
+
 
   ngOnInit() {
 
@@ -286,12 +288,13 @@ export class HomeComponent implements OnInit {
 
     this.speciesLoading = true;
 
+    this.searchResultsLoading = true;
+
     this.currentSearchQuery.and_params = [];
 
-    if (sessionStorage.getItem('currentSearch')) {
-      this.openSnackBar('Current Search has been loaded from your previous visit.', 'OK', 8000);
-
-    }
+    //if (sessionStorage.getItem('currentSearch')) {
+    //   this.openSnackBar('Current Search has been loaded from your previous visit.', 'OK', 8000);
+    // }
 
     if (this.currentSearchQuery.diagnosis_type_includes_all === true) {
       this.currentSearchQuery.and_params.push('diagnosis_type');
@@ -319,6 +322,7 @@ export class HomeComponent implements OnInit {
           this.dataSource = new MatTableDataSource(this.currentResults);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
+          this.searchResultsLoading = false;
 
           setTimeout(() => {
 
@@ -339,7 +343,7 @@ export class HomeComponent implements OnInit {
             this.map = new L.Map('map', {
               center: new L.LatLng(39.8283, -98.5795),
               zoom: 4,
-              layers: [osm]
+              layers: [streets]
             });
             this.locationMarkers = L.featureGroup().addTo(this.map);
 
@@ -354,13 +358,13 @@ export class HomeComponent implements OnInit {
               url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
               style: function (feature) {
                 if (feature.properties.NAME === 'Atlantic Flyway') {
-                  return { color: 'blue', weight: 2 };
+                  return { color: '#28995b', weight: 2 };
                 } else if (feature.properties.NAME === 'Pacific Flyway') {
-                  return { color: 'red', weight: 2 };
+                  return { color: '#ffbd4f', weight: 2 };
                 } else if (feature.properties.NAME === 'Mississippi Flyway') {
-                  return { color: 'green', weight: 2 };
+                  return { color: '#eb5834', weight: 2 };
                 } else if (feature.properties.NAME === 'Central Flyway') {
-                  return { color: 'yellow', weight: 2 };
+                  return { color: '#b43cc7', weight: 2 };
                 }
               }
             });
@@ -374,10 +378,100 @@ export class HomeComponent implements OnInit {
             const overlays = {
               'Flyways': flyways,
               'Watersheds (HUC 2)': watersheds
-            }
+            };
 
-            L.control.layers(baseMaps, overlays, { position: 'topleft' }).addTo(this.map);
-            L.control.scale({ position: 'bottomright' }).addTo(this.map);
+            const drawnItems = L.featureGroup().addTo(this.map);
+
+            L.control.layers(
+              baseMaps,
+              overlays, { position: 'topleft' }, { 'drawlayer': drawnItems} ).addTo(this.map);
+
+              L.control.scale({ position: 'bottomright' }).addTo(this.map);
+
+              const drawControl = new L.Control.Draw({
+                edit: {
+                    featureGroup: drawnItems,
+                    poly : {
+                        allowIntersection : false
+                    }
+                },
+                draw: {
+                    polygon : {
+                        allowIntersection: false,
+                        showArea: true
+                    },
+                    marker: false,
+                    circle: false,
+                    circlemarker: false,
+                    rectangle: false
+                }
+            });
+
+            this.map.addControl(drawControl);
+
+        // Truncate value based on number of decimals
+        const _round = function(num, len) {
+          return Math.round(num * (Math.pow(10, len))) / (Math.pow(10, len));
+      };
+      // Helper method to format LatLng object (x.xxxxxx, y.yyyyyy)
+      const strLatLng = function(latlng) {
+          return '(' + _round(latlng.lat, 6) + ', ' + _round(latlng.lng, 6) + ')';
+      };
+
+      // Generate popup content based on layer type
+      // - Returns HTML string, or null if unknown object
+      const getPopupContent = function(layer) {
+          // Marker - add lat/long
+          if (layer instanceof L.Marker || layer instanceof L.CircleMarker) {
+              return strLatLng(layer.getLatLng());
+          // Circle - lat/long, radius
+          } else if (layer instanceof L.Circle) {
+            const center = layer.getLatLng(),
+                  radius = layer.getRadius();
+              return 'Center: ' + strLatLng(center) + '<br />'
+                    + 'Radius: ' + _round(radius, 2) + ' m';
+          // Rectangle/Polygon - area
+          } else if (layer instanceof L.Polygon) {
+            const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
+                  area = L.GeometryUtil.geodesicArea(latlngs);
+              return 'Area: ' + L.GeometryUtil.readableArea(area, true);
+          // Polyline - distance
+          } else if (layer instanceof L.Polyline) {
+              const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs();
+                 let distance = 0;
+              if (latlngs.length < 2) {
+                  return 'Distance: N/A';
+              } else {
+                  for (let i = 0; i < latlngs.length - 1; i++) {
+                      distance += latlngs[i].distanceTo(latlngs[i + 1]);
+                  }
+                  return 'Distance: ' + _round(distance, 2) + ' m';
+              }
+          }
+          return null;
+      };
+
+      // Object created - bind popup to layer, add to feature group
+      this.map.on(L.Draw.Event.CREATED, function(event) {
+        const layer = event.layer;
+        const content = getPopupContent(layer);
+          if (content !== null) {
+              layer.bindPopup(content);
+          }
+          drawnItems.addLayer(layer);
+      });
+
+      // Object(s) edited - update popups
+      this.map.on(L.Draw.Event.EDITED, function(event) {
+          const layers = event.layers;
+          // const content = null;
+          layers.eachLayer(function(layer) {
+              const content = getPopupContent(layer);
+              if (content !== null) {
+                  layer.setPopupContent(content);
+              }
+          });
+      });
 
             this.mapResults(this.currentResults);
 
@@ -757,6 +851,15 @@ export class HomeComponent implements OnInit {
 
         // if one event represented by marker, do a simple display. If multiple, display in collapsing panels
         if (marker.events.length === 1) {
+
+          // create a string with all the event diagnoses
+          let eventDiagnosesString = '';
+          for (const eventdiagnosis of event.eventdiagnoses) {
+            eventDiagnosesString = eventDiagnosesString + eventdiagnosis['diagnosis_string'] + ',';
+          }
+          // rmeoves the trailing comma
+          eventDiagnosesString = eventDiagnosesString.slice(0, -1);
+
           // tslint:disable-next-line:max-line-length
           popupContent = popupContent + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
             '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Incomplete') + '</span><br/>' +
@@ -765,10 +868,19 @@ export class HomeComponent implements OnInit {
             '<span class="popupLabel">Location:</span> ' + locationContent +
             '<span class="popupLabel">Species:</span> ' + speciesContent +
             '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            // '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            '<span class="popupLabel">Diagnosis:</span> ' + eventDiagnosesString + '<br/>' +
             '<a href="./event/' + this.testForUndefined(event['id']) + '">View Event Details </a>';
 
         } else if (marker.events.length > 1) {
+
+          // create a string with all the event diagnoses
+          let eventDiagnosesString = '';
+          for (const eventdiagnosis of event.eventdiagnoses) {
+            eventDiagnosesString = eventDiagnosesString + eventdiagnosis['diagnosis_string'] + ',';
+          }
+          // removes the trailing comma
+          eventDiagnosesString = eventDiagnosesString.slice(0, -1);
 
           popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
             // '<h4>Event ' + this.testForUndefined(event['id']) + '</h4>' +
@@ -779,20 +891,21 @@ export class HomeComponent implements OnInit {
             '<span class="popupLabel">Location:</span> ' + locationContent +
             '<span class="popupLabel">Species:</span> ' + speciesContent +
             '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-            '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            // '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
+            '<span class="popupLabel">Diagnosis:</span> ' + eventDiagnosesString + '<br/>' +
             '<span class="popupLabel"><a href="./event/' + this.testForUndefined(event['id']) + '">View Event Details </a> </span><p></div>';
         }
       }
 
       // establish leaflet popup var for binding to marker (include check for mapPanel height, to set max popup height)
-      const popup = L.popup({ maxHeight: document.getElementById('mapPanel').offsetHeight - 150 })
+      const popup = L.popup({ maxHeight: document.getElementById('mapPanel').offsetHeight - 50 })
         .setContent(popupContent);
 
       // establish leaflet marker var, passing in icon var from above, including on popupopen logic for accordion style collapsing panels
       L.marker([marker.lat, marker.long],
         { icon: this.icon })
         .addTo(this.locationMarkers)
-        .bindPopup(popup)
+        .bindPopup(popup, {maxHeight: 300, autoPan: true, autoPanPadding: [20, 20], keepInView: true})
         .on('popupopen', function (popup) {
 
           const acc = Array.from(document.querySelectorAll('button.accordion'));
@@ -806,7 +919,7 @@ export class HomeComponent implements OnInit {
               } else {
                 panel.style.maxHeight = panel.scrollHeight + 'px';
               }
-              //let acc = document.getElementsByClassName('accordion');
+              // let acc = document.getElementsByClassName('accordion');
               let j;
               for (j = 0; j < acc.length; j++) {
                 if (i !== j) {
@@ -819,6 +932,9 @@ export class HomeComponent implements OnInit {
               }
             });
           });
+          acc[0].classList.toggle('active');
+          const panel: HTMLElement = acc[0].nextElementSibling as HTMLElement;
+          panel.style.maxHeight = panel.scrollHeight + 'px';
         });
     }
 
@@ -845,6 +961,16 @@ export class HomeComponent implements OnInit {
 
   }
 
+  eventIDTooltip() { const string = FIELD_HELP_TEXT.eventIDTooltip; return string; }
+  editEventTypeTooltip() { const string = FIELD_HELP_TEXT.editEventTypeTooltip; return string; }
+  numberAffectedTooltip() { const string = FIELD_HELP_TEXT.numberAffectedTooltip; return string; }
+  eventStartDateTooltip() { const string = FIELD_HELP_TEXT.eventStartDateTooltip; return string; }
+  eventEndDateTooltip() { const string = FIELD_HELP_TEXT.eventEndDateTooltip; return string; }
+  editSpeciesTooltip() { const string = FIELD_HELP_TEXT.editSpeciesTooltip; return string; }
+  editEventDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editEventDiagnosisTooltip; return string; }
+  locationsTooltip() { const string = FIELD_HELP_TEXT.locationsTooltip; return string; }
+  generalTableSpeciesTooltip() { const string = FIELD_HELP_TEXT.generalTableSpeciesTooltip; return string; }
+
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {
       duration: duration,
@@ -853,10 +979,12 @@ export class HomeComponent implements OnInit {
 
   openMetadataLink() {
     window.open(APP_SETTINGS.WHISPERS_METADATA_URL, '_blank');
+    gtag('event', 'click', { 'event_category': 'Home', 'event_label': 'Metadata Opened' });
   }
 
   exportEventSummaries() {
     this.eventService.getEventSummaryCSV(this.currentSearchQuery);
+    gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'Current Search Query Exported' });
     // .subscribe(
     //   eventSummaries => {
 
@@ -965,7 +1093,7 @@ export class HomeComponent implements OnInit {
 
   register(type) {
     this.userRegistrationDialogRef = this.dialog.open(UserRegistrationComponent, {
-      minWidth: '50em',
+      minWidth: '60em',
       disableClose: true,
       data: {
         title: 'WHISPers Registration',

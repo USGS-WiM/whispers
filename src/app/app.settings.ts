@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers } from '@angular/http';
+import { HttpHeaders } from '@angular/common/http';
 import { environment } from 'environments/environment';
 
 import { DisplayQuery } from '@interfaces/display-query';
@@ -12,7 +13,7 @@ export class APP_SETTINGS {
 
     private static _environment = 'development';
     // tslint:disable-next-line:max-line-length
-    //private static API_ROOT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersbeta.wim.usgs.gov/test/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
+    // private static API_ROOT: string = APP_SETTINGS._environment === 'production' ? 'https://whispersbeta.wim.usgs.gov/test/whispersservices/' : 'https://whispersdev.wim.usgs.gov/whispersservices/';
 
     // default env is development
     public static get API_ROOT() {
@@ -23,7 +24,7 @@ export class APP_SETTINGS {
         return environment.banner_content;
     }
 
-    public static get BANNER_TEXT_COLOR(){
+    public static get BANNER_TEXT_COLOR() {
         return environment.banner_text_color;
     }
 
@@ -35,7 +36,7 @@ export class APP_SETTINGS {
 
     public static get APP_URL(): string { return 'https://test.wim.usgs.gov/whispersdev'; }
 
-    public static get WHISPERS_METADATA_URL(): string { return 'https://www.nwhc.usgs.gov/whispers/site/page?view=faq'; }
+    public static get WHISPERS_METADATA_URL(): string { return 'https://www.usgs.gov/centers/nwhc/science/whispers'; }
 
     public static get DEFAULT_COUNTRY(): string { return 'USA'; }
 
@@ -68,6 +69,35 @@ export class APP_SETTINGS {
             'diagnosis': 104,
             'diagnosis_string': 'Pending',
         }
+    }
+
+    public static get SPECIAL_COMMENT_TYPES() {
+        return [
+            {
+                'id': 1,
+                'name': 'Site Description',
+            },
+            {
+                'id': 2,
+                'name': 'History',
+            },
+            {
+                'id': 3,
+                'name': 'Environmental factors',
+            },
+            {
+                'id': 4,
+                'name': 'Clinical signs',
+            },
+            {
+                'id': 8,
+                'name': 'NWHC',
+            },
+            {
+                'id': 11,
+                'name': 'Event Group',
+            }
+        ];
     }
 
     public static get AUTH_URL(): string { return this.API_ROOT + 'auth/'; }
@@ -111,9 +141,15 @@ export class APP_SETTINGS {
     public static get CONTACT_TYPES_URL(): string { return this.API_ROOT + 'contacttypes/'; }
     public static get COMMENT_TYPES_URL(): string { return this.API_ROOT + 'commenttypes/'; }
     public static get GROUPS_URL(): string { return this.API_ROOT + 'groups/'; }
+    public static get CIRCLES_URL(): string { return this.API_ROOT + 'circles/'; }
     public static get SEARCH_URL(): string { return this.API_ROOT + 'searches/'; }
     public static get SERVICE_REQUEST_URL(): string { return this.API_ROOT + 'servicerequests/'; }
     public static get SERVICE_REQUEST_TYPES_URL(): string { return this.API_ROOT + 'servicerequesttypes/'; }
+    public static get SERVICE_REQUEST_RESPONSES_URL(): string { return this.API_ROOT + 'servicerequestresponses/'; }
+
+    public static get EVENT_GROUPS_URL(): string { return this.API_ROOT + 'eventgroups/'; }
+    public static get EVENT_EVENT_GROUPS_URL(): string { return this.API_ROOT + 'eventeventgroups/'; }
+    public static get EVENT_GROUP_CATEGORIES_URL(): string { return this.API_ROOT + 'eventgroupcategories/'; }
 
     public static get GO_USA_GOV_SHORTEN_URL(): string { return 'https://go.usa.gov/api/shorten.json'; }
     public static get GO_USA_GOV_USER(): string { return 'bdraper'; }
@@ -145,17 +181,32 @@ export class APP_SETTINGS {
         );
     }*/
 
-    public static get AUTH_HEADERS() { return new Headers({ 'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password) }); }
+    public static get AUTH_HEADERS() {
+        return new Headers({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password)
+        });
+    }
+
     public static get MIN_AUTH_JSON_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         });
     }
+
     public static get AUTH_JSON_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
-            'Accept': 'application/json', 'Content-Type': 'application/json'
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        });
+    }
+
+    public static get HTTP_CLIENT_MIN_AUTH_JSON_HEADERS() {
+        return new HttpHeaders({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+            'Accept': 'application/json'
         });
     }
 
@@ -163,6 +214,13 @@ export class APP_SETTINGS {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
             'Content-Type': 'text/plain', 'Accept': 'application/json'
+        });
+    }
+
+    public static get AUTH_REQUEST_HEADERS() {
+        return new Headers({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password)
+            // ,'X-Requested-With': 'XMLHttpRequest'
         });
     }
 

@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { Diagnosis } from '@interfaces/diagnosis';
+import { Species } from '@interfaces/species';
 import { DiagnosisService } from '@services/diagnosis.service';
 import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
 import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
@@ -29,6 +30,7 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 import { DataUpdatedService } from '@app/services/data-updated.service';
 
 import { APP_SETTINGS } from '@app/app.settings';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 declare let gtag: Function;
 
 @Component({
@@ -48,9 +50,11 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
   labSuspectViolation = false;
   diagnosisSuspectViolation = false;
+  duplicateDiagnosisViolation = false;
   labViolation = false;
 
   diagnoses: Diagnosis[];
+  species: Species[];
   diagnosisBases: DiagnosisBasis[];
   diagnosisCauses: DiagnosisCause[];
   laboratories: Organization[] = [];
@@ -78,6 +82,8 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
   action_text;
   action_button_text;
+
+  existingDiagnoses;
 
   buildspeciesDiagnosisForm() {
     this.speciesDiagnosisForm = this.formBuilder.group({
@@ -136,10 +142,8 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       this.speciesdiagnosis = this.data.speciesdiagnosis;
     }
 
-    if (this.data.locationspecies) {
-      this.locationspeciesString = this.data.locationspecies.species_string;
-      this.administrative_level_one = this.data.locationspecies.administrative_level_one_string;
-      this.administrative_level_two = this.data.locationspecies.administrative_level_two_string;
+    if (this.data.existing_diagnoses) {
+      this.existingDiagnoses = this.data.existing_diagnoses;
     }
 
     // add mode
@@ -158,7 +162,8 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
 
       // this.diagnosisBases = this.data.diagnosisBases;
       // this.diagnosisCauses = this.data.diagnosisCauses;
-      // this.diagnoses = this.data.diagnoses;
+      this.diagnoses = this.data.diagnoses;
+      this.species = this.data.species;
 
       // Access the form here and set the value to the objects property/value
       this.speciesDiagnosisForm.patchValue({
@@ -192,6 +197,12 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       this.action_text = 'Edit';
       this.action_button_text = 'Save Changes';
 
+      if (this.data.locationspecies) {
+        this.locationspeciesString = this.data.locationspecies.species_string;
+        this.administrative_level_one = this.data.locationspecies.administrative_level_one_string;
+        this.administrative_level_two = this.data.locationspecies.administrative_level_two_string;
+      }
+
       // Access the form here and set the value to the objects property/value
       this.speciesDiagnosisForm.patchValue({
         id: this.data.speciesdiagnosis.id,
@@ -207,6 +218,10 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
         // pooled: this.data.speciesdiagnosis.pooled,
         // new_species_diagnosis_organizations: this.data.speciesdiagnosis.organizations
       });
+
+      // this line had to be added because the patchValue function above was causing the diagnosis to be an array instead of a simple integer value,
+      // which was breaking the checkSuspectCompliance() function
+      this.speciesDiagnosisForm.get('diagnosis').setValue(this.data.speciesdiagnosis.diagnosis);
 
       if (this.data.speciesdiagnosis.organizations.length > 0) {
         this.removeDiagnosisOrganization(0);
@@ -240,7 +255,11 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
             if (a.name > b.name) { return 1; }
             return 0;
           });
-          // populate the search select options for the species control
+
+          // remove the 'unknown' diagnosis for incomplete events ("Pending")
+          // NWHC requsted this not be available to users as choice.
+          this.diagnoses = this.diagnoses.filter(diagnosis => diagnosis.id !== APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis);
+          // populate the search select options for the diagnosis control
           this.filteredDiagnoses.next(diagnoses);
 
           // listen for search field value changes
@@ -451,12 +470,28 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     this.labSuspectViolation = false;
     this.diagnosisSuspectViolation = false;
     // tslint:disable-next-line:max-line-length
+    // if no diagnosis organization is selected (length = 0) and suspect is not true
     if (this.speciesDiagnosisForm['controls'].new_species_diagnosis_organizations['controls'].length === 0 && !this.speciesDiagnosisForm.get('suspect').value) {
-      this.labSuspectViolation = true;
+      // if the diagnosis selected is NOT one of the unknowns, then show violation
+      // tslint:disable-next-line:max-line-length
+      if (this.speciesDiagnosisForm.get('diagnosis').value !== APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis && this.speciesDiagnosisForm.get('diagnosis').value !== APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
+        this.labSuspectViolation = true;
+      }
     }
     // tslint:disable-next-line:max-line-length
     if ((this.speciesDiagnosisForm.get('diagnosis').value === APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis || this.speciesDiagnosisForm.get('diagnosis').value === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) && this.speciesDiagnosisForm.get('suspect').value) {
       this.diagnosisSuspectViolation = true;
+    }
+  }
+
+  checkForDuplicateDiagnosis() {
+    this.duplicateDiagnosisViolation = false;
+    if (this.data.species_diagnosis_action === 'add' || this.data.species_diagnosis_action === 'addToFormArray') {
+      for (const existingDiagnosis of this.existingDiagnoses) {
+        if (existingDiagnosis === this.speciesDiagnosisForm.get('diagnosis').value) {
+          this.duplicateDiagnosisViolation = true;
+        }
+      }
     }
   }
 
@@ -467,6 +502,31 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       this.labViolation = true;
     }
   }
+
+  // hover text
+  numberAssessedTooltip() { const string = FIELD_HELP_TEXT.numberAssessedTooltip; return string; }
+  speciesDiagnosisTooltip() {
+    let string;
+    if (this.data.species_diagnosis_action === 'edit' || this.data.species_diagnosis_action === 'editToFormArray') {
+      string = FIELD_HELP_TEXT.editSpeciesDiagnosisTooltip;
+    } else {
+      string = FIELD_HELP_TEXT.speciesDiagnosisTooltip;
+    }
+    return string;
+  }
+  basisOfDiagnosisTooltip() { const string = FIELD_HELP_TEXT.basisOfDiagnosisTooltip; return string; }
+  numberWithDiagnosisTooltip() { const string = FIELD_HELP_TEXT.numberWithDiagnosisTooltip; return string; }
+  labTooltip() {
+    let string;
+    if (this.data.species_diagnosis_action === 'edit' || this.data.species_diagnosis_action === 'editToFormArray') {
+      string = FIELD_HELP_TEXT.editLabTooltip;
+    } else {
+      string = FIELD_HELP_TEXT.labTooltip;
+    }
+    return string;
+  }
+  significanceOfDiagnosisForSpeciesTooltip() { const string = FIELD_HELP_TEXT.significanceOfDiagnosisForSpeciesTooltip; return string; }
+  speciesDiagnosisSuspectTooltip() { const string = FIELD_HELP_TEXT.speciesDiagnosisSuspectTooltip; return string; }
 
   onSubmit(formValue) {
 

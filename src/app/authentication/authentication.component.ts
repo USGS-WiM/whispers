@@ -84,14 +84,22 @@ export class AuthenticationComponent implements OnInit {
         (error) => {
           this.submitLoading = false;
           this.authenticationErrorFlag = true;
-          this.openSnackBar('Error. Failed to login. Error message: ' + error, 'OK', 8000);
+          if (error.status === 403) {
+            this.openSnackBar('Invalid username and/or password. Please try again.', 'OK', 8000);
+          } else {
+            this.openSnackBar('Error. Failed to login. Error message: ' + error, 'OK', 8000);
+          }
         }
       );
   }
 
   onLogout() {
     this.authenticationService.logout();
-    this.router.navigate([`../home/`], { relativeTo: this.route });
+    if (this.router.url === '/home') {
+      location.reload();
+    } else {
+      this.router.navigate([`../home/`], { relativeTo: this.route });
+    }
   }
 
 }

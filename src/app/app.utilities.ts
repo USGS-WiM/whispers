@@ -90,6 +90,25 @@ export class APP_UTILITIES {
     // from the search dialog form. an independent lookup of associated names may need to be developed.
     // public static convertSearchQuerytoDisplayQuery(searchQuery): any {}
 
+    public static checkDuplicateInObject(propertyName, inputArray): boolean {
+        let seenDuplicate = false;
+        const testObject = {};
+
+        inputArray.map(function (item) {
+            const itemPropertyName = item[propertyName];
+            if (itemPropertyName in testObject) {
+                testObject[itemPropertyName].duplicate = true;
+                item.duplicate = true;
+                seenDuplicate = true;
+            } else {
+                testObject[itemPropertyName] = item;
+                delete item.duplicate;
+            }
+        });
+
+        return seenDuplicate;
+    }
+
     public static parseSearch(search): any {
 
         const parsedSearch: SearchQuery = {
@@ -111,7 +130,7 @@ export class APP_UTILITIES {
             administrative_level_one_includes_all: false,
             administrative_level_two_includes_all: false,
             and_params: [],
-            complete: false
+            complete: null
         };
 
         parsedSearch.id = search.id;

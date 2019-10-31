@@ -30,6 +30,9 @@
       "@about/*": [
         "app/about/*"
       ],
+      "@events/*": [
+        "app/events/*"
+      ],
       "@authentication/*": [
         "app/authentication/*"
       ],
@@ -38,6 +41,9 @@
       ],
       "@validators/*": [
         "app/validators/*"
+      ],
+      "@browser-warning/*": [
+        "app/browser-warning/*"
       ]
     },
     "target": "es5",

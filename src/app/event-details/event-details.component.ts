@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -26,12 +26,14 @@ import { EventLocation } from '@interfaces/event-location';
 import { LocationSpecies } from '@interfaces/location-species';
 import { EditEventComponent } from '@app/edit-event/edit-event.component';
 import { AddEventDiagnosisComponent } from '@app/add-event-diagnosis/add-event-diagnosis.component';
+import { AddEventOrganizationComponent } from '@app/add-event-organization/add-event-organization.component';
 import { EditEventLocationComponent } from '@app/edit-event-location/edit-event-location.component';
 import { EditLocationSpeciesComponent } from '@app/edit-location-species/edit-location-species.component';
 import { LandOwnershipService } from '@services/land-ownership.service';
 import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { marker } from 'leaflet';
 import { EventLocationService } from '@app/services/event-location.service';
+import { EventOrganizationService } from '@app/services/event-organization.service';
 import { EventDetailsShareComponent } from '@app/event-details/event-details-share/event-details-share.component';
 import { AddEventLocationComponent } from '@app/add-event-location/add-event-location.component';
 import { UserService } from '@app/services/user.service';
@@ -61,14 +63,22 @@ import { CreateContactService } from '@create-contact/create-contact.service';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
+import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
+
 import { OrganizationService } from '@app/services/organization.service';
 import { Organization } from '@interfaces/organization';
 
+import { CircleManagementComponent } from '@app/circle-management/circle-management.component';
+import { CircleChooseComponent } from '@app/circle-management/circle-choose/circle-choose.component';
+import { CircleService } from '@services/circle.service';
+import { Circle } from '@interfaces/circle';
+declare let gtag: Function;
 
 @Component({
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.scss'],
+  // encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('detailExpand', [
       state('void', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
@@ -88,19 +98,28 @@ export class EventDetailsComponent implements OnInit {
   species: Species[] = [];
   speciesLoading = false;
 
+  eventCommentsPanelOpen = false;
+  serviceRequestPanelOpen = false;
+  collaboratorsPanelOpen = false;
+  locationCommentsPanelOpen = false;
+  locationContactsPanelOpen = false;
+
   eventOwner;
+
+  eventNotFound = false;
 
   showAddEventLocation = false;
 
-  //locationSpeciesDataSource: MatTableDataSource<LocationSpecies>;
-
   editEventDialogRef: MatDialogRef<EditEventComponent>;
   addEventDiagnosisDialogRef: MatDialogRef<AddEventDiagnosisComponent>;
+  addEventOrganizationDialogRef: MatDialogRef<AddEventOrganizationComponent>;
   editEventLocationDialogRef: MatDialogRef<EditEventLocationComponent>;
   editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>;
   addEventLocationContactDialogRef: MatDialogRef<AddEventLocationContactComponent>;
   addServiceRequestDialogRef: MatDialogRef<AddServiceRequestComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
+  circleChooseDialogRef: MatDialogRef<CircleChooseComponent>;
+  circleManagementDialogRef: MatDialogRef<CircleManagementComponent>;
 
   addCommentDialogRef: MatDialogRef<AddCommentComponent>;
 
@@ -117,6 +136,7 @@ export class EventDetailsComponent implements OnInit {
 
   laboratories: Organization[] = [];
   organizations: Organization[] = [];
+  userCircles: Circle[] = [];
 
   eventDataLoading = true;
 
@@ -130,9 +150,8 @@ export class EventDetailsComponent implements OnInit {
   commentTypes: CommentType[];
 
   locationMarkers;
-
   unMappables = [];
-
+  eventPolys;
   userContacts;
   userContactsLoading = false;
 
@@ -154,6 +173,9 @@ export class EventDetailsComponent implements OnInit {
     'diagnosis'
   ];
 
+  readCollaboratorArray: User[] = [];
+  writeCollaboratorArray: User[] = [];
+
   @ViewChild(MatPaginator) locationSpeciesPaginator: MatPaginator;
   @ViewChild(MatSort) locationSpeciesSort: MatSort;
 
@@ -172,13 +194,16 @@ export class EventDetailsComponent implements OnInit {
     private eventLocationService: EventLocationService,
     private eventDiagnosisService: EventDiagnosisService,
     private eventLocationContactService: EventLocationContactService,
+    private eventOrganizationService: EventOrganizationService,
     private ageBiasService: AgeBiasService,
     private sexBiasService: SexBiasService,
     private commentTypeService: CommentTypeService,
     private organizationService: OrganizationService,
     private commentService: CommentService,
     private contactService: ContactService,
-    public snackBar: MatSnackBar
+    private circleService: CircleService,
+    public snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.eventLocationSpecies = [];
 
@@ -226,24 +251,59 @@ export class EventDetailsComponent implements OnInit {
                 locationspecies.country_string = event_location.country_string;
                 this.eventLocationSpecies.push(locationspecies);
 
+                this.readCollaboratorArray = eventdetails.read_collaborators;
+                this.writeCollaboratorArray = eventdetails.write_collaborators;
+
+                // for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                //   if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
+                //     this.possibleEventDiagnoses.push(speciesdiagnosis);
+                //   }
+                // }
+
                 for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
                   if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
                     this.possibleEventDiagnoses.push(speciesdiagnosis);
+                  } else {
+                    // it is in there already:
+                    // check if this one's suspect field is false
+                    if (speciesdiagnosis.suspect === false) {
+                      // if it is, then we need to remove the previously added one and add this one which is suspect = false
+                      // loop thru possibleEventDiagnoses, if match, remove
+                      for (let i = 0; i < this.possibleEventDiagnoses.length; i++) {
+                        if (this.possibleEventDiagnoses[i].diagnosis === speciesdiagnosis.diagnosis) {
+                          this.possibleEventDiagnoses.splice(i, 1);
+                        }
+                      }
+                      // then add the non suspect one
+                      this.possibleEventDiagnoses.push(speciesdiagnosis);
+
+                    }
                   }
                 }
+
               }
             }
 
-            if (eventdetails.complete === true) {
+            // add the "Undetermined" diagnosis to possibleDiagnoses, only if not already in the list
+            if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis)) {
               this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
-            } else if (eventdetails.complete === false) {
-              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
             }
+            // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of "Pending".
+            // else if (eventdetails.complete === false) {
+            //   this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+            // }
 
             this.eventDataLoading = false;
           },
           error => {
             this.errorMessage = <any>error;
+            this.eventDataLoading = false;
+            if (error.status !== 200) {
+              this.eventNotFound = true;
+            }
+            // if (JSON.parse(error).detail === 'Not found.') {
+
+            // }
           }
         );
     });
@@ -348,7 +408,6 @@ export class EventDetailsComponent implements OnInit {
       );
 
     // TEMPORARY- will need to use user creds to query user contact list
-    // get contact types from the ContactTypeService
     this.userContactsLoading = true;
     this.contactService.getContacts()
       .subscribe(
@@ -365,6 +424,16 @@ export class EventDetailsComponent implements OnInit {
         error => {
           this.errorMessage = <any>error;
           this.userContactsLoading = false;
+        }
+      );
+
+    this.circleService.getAllUserCircles()
+      .subscribe(
+        circles => {
+          this.userCircles = circles;
+        },
+        error => {
+          this.errorMessage = <any>error;
         }
       );
 
@@ -385,7 +454,7 @@ export class EventDetailsComponent implements OnInit {
       this.map = new L.Map('map', {
         center: new L.LatLng(39.8283, -98.5795),
         zoom: 4,
-        layers: [osm]
+        layers: [streets]
       });
 
       this.locationMarkers = L.featureGroup().addTo(this.map);
@@ -401,13 +470,13 @@ export class EventDetailsComponent implements OnInit {
         url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
         style: function (feature) {
           if (feature.properties.NAME === 'Atlantic Flyway') {
-            return { color: 'blue', weight: 2 };
+            return { color: '#28995b', weight: 2 };
           } else if (feature.properties.NAME === 'Pacific Flyway') {
-            return { color: 'red', weight: 2 };
+            return { color: '#ffbd4f', weight: 2 };
           } else if (feature.properties.NAME === 'Mississippi Flyway') {
-            return { color: 'green', weight: 2 };
+            return { color: '#eb5834', weight: 2 };
           } else if (feature.properties.NAME === 'Central Flyway') {
-            return { color: 'yellow', weight: 2 };
+            return { color: '#b43cc7', weight: 2 };
           }
         }
       });
@@ -419,7 +488,7 @@ export class EventDetailsComponent implements OnInit {
       });
 
       // Land use hosted by USGS
-      var landUse = esri.dynamicMapLayer({
+      const landUse = esri.dynamicMapLayer({
         url: 'https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer',
         opacity: 0.7
       });
@@ -457,7 +526,7 @@ export class EventDetailsComponent implements OnInit {
         }
       });
 
-    }, 2000);
+    }, 3000);
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -476,7 +545,6 @@ export class EventDetailsComponent implements OnInit {
   }
 
   mapEvent(eventData) {
-
     const markers = [];
     let countyPolys = [];
     this.unMappables = [];
@@ -486,14 +554,15 @@ export class EventDetailsComponent implements OnInit {
         countyPolys.push(JSON.parse(eventlocation.administrative_level_two_points.replace('Y', '')));
       }
     }
-
-    let eventPolys;
+    console.log('mapevents ' + this.locationMarkers);
+    // let eventPolys;
     if (countyPolys.length > 0) {
-      eventPolys = L.polygon(countyPolys, { color: 'blue' }).addTo(this.map);
+      if (this.eventPolys) {
+        this.map.removeLayer(this.eventPolys);
+      }
+      this.eventPolys = L.polygon(countyPolys, { color: 'blue' }).addTo(this.map);
     }
-
     for (const marker of markers) {
-
       if (marker.latitude === null || marker.longitude === null || marker.latitude === undefined || marker.longitude === undefined) {
         this.unMappables.push(marker);
       } else if (marker.latitude !== null || marker.longitude !== null || marker.latitude !== undefined || marker.longitude !== undefined) {
@@ -516,18 +585,47 @@ export class EventDetailsComponent implements OnInit {
     let bounds = L.latLngBounds([]);
 
     if (markers.length > this.unMappables.length) {
-      var markerBounds = this.locationMarkers.getBounds()
+      var markerBounds = this.locationMarkers.getBounds();
       bounds.extend(markerBounds);
     }
 
     if (countyPolys.length > 0) {
-      var countyBounds = eventPolys.getBounds();
+      var countyBounds = this.eventPolys.getBounds();
       bounds.extend(countyBounds);
     }
 
     if (markers.length || countyPolys.length) {
       this.map.fitBounds(bounds);
     }
+
+  }
+
+  reloadMap() {
+    setTimeout(() => {
+      this.locationMarkers.clearLayers();
+      this.mapEvent(this.eventData);
+    }, 2500);
+  }
+
+  navigateToHome() {
+    this.router.navigate([`../../home`], { relativeTo: this.route });
+  }
+
+  navigateToEventDetails(eventID) {
+    this.eventLocationSpecies = [];
+    this.router.navigate([`../${eventID}`], { relativeTo: this.route });
+    this.reloadMap();
+    // location.reload();
+    // this.refreshEvent();
+  }
+
+  // panels are closed when tabs are switched, but the panel boolean isn't actually changed. This is setting them all to false.
+  resetExpansionPanels() {
+    this.eventCommentsPanelOpen = false;
+    this.serviceRequestPanelOpen = false;
+    this.collaboratorsPanelOpen = false;
+    this.locationCommentsPanelOpen = false;
+    this.locationContactsPanelOpen = false;
 
   }
 
@@ -559,7 +657,7 @@ export class EventDetailsComponent implements OnInit {
                   }
                 }
 
-                console.log('eventLocationSpecies:', this.eventLocationSpecies);
+                // console.log('eventLocationSpecies:', this.eventLocationSpecies);
                 //  this.speciesTableRows = this.eventLocationSpecies;
                 this.eventDataLoading = false;
               },
@@ -577,15 +675,37 @@ export class EventDetailsComponent implements OnInit {
   addEventDiagnosis(id: string) {
     // Open dialog for adding event diagnosis
     this.addEventDiagnosisDialogRef = this.dialog.open(AddEventDiagnosisComponent, {
+      minWidth: '75%',
       data: {
         event_id: id,
-        diagnosis_options: this.possibleEventDiagnoses
+        diagnosis_options: this.possibleEventDiagnoses,
+        event_data: this.eventData
       }
-      // minWidth: 200
-      // height: '75%'
     });
 
     this.addEventDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
+  addEventOrganization(id: string) {
+    // Open dialog for adding event diagnosis
+    this.addEventOrganizationDialogRef = this.dialog.open(AddEventOrganizationComponent, {
+      minWidth: '75%',
+      data: {
+        event_id: id,
+        organizations: this.organizations,
+        existing_event_orgs: this.eventData.eventorganizations
+      }
+    });
+
+    this.addEventOrganizationDialogRef.afterClosed()
       .subscribe(
         () => {
           this.refreshEvent();
@@ -676,6 +796,34 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
+  addServiceRequestResponse(servicerequest) {
+    // Open add service request dialog for response field update
+    this.addServiceRequestDialogRef = this.dialog.open(AddServiceRequestComponent, {
+      disableClose: true,
+      // minWidth: '60%',
+      data: {
+        event_id: this.eventData.id,
+        servicerequest: servicerequest,
+        comment_types: this.commentTypes,
+        title: 'Respond to service request',
+        titleIcon: 'question_answer',
+        showCancelButton: true,
+        action_button_text: 'Save Response',
+        actionButtonIcon: 'question_answer',
+        action: 'respond'
+      }
+    });
+
+    this.addServiceRequestDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
 
 
   addEventLocationContact(id: string) {
@@ -711,6 +859,7 @@ export class EventDetailsComponent implements OnInit {
     // Open dialog for adding event location contact
     this.addServiceRequestDialogRef = this.dialog.open(AddServiceRequestComponent, {
       disableClose: true,
+      minWidth: '75%',
       data: {
         event_id: id,
         comment_types: this.commentTypes,
@@ -718,7 +867,8 @@ export class EventDetailsComponent implements OnInit {
         titleIcon: 'add_circle',
         showCancelButton: true,
         action_button_text: 'Submit request',
-        actionButtonIcon: 'question_answer'
+        actionButtonIcon: 'question_answer',
+        action: 'add'
       }
     });
 
@@ -734,8 +884,39 @@ export class EventDetailsComponent implements OnInit {
 
   }
 
+  // Tooltip text
+  editLocationNameTooltip() { const string = FIELD_HELP_TEXT.editLocationNameTooltip; return string; }
+  editStandardizedLocationNameTooltip() { const string = FIELD_HELP_TEXT.editStandardizedLocationNameTooltip; return string; }
+  flywayTooltip() { const string = FIELD_HELP_TEXT.flywayTooltip; return string; }
+  editLandOwnershipTooltip() { const string = FIELD_HELP_TEXT.editLandOwnershipTooltip; return string; }
+  longitudeTooltip() { const string = FIELD_HELP_TEXT.longitudeTooltip; return string; }
+  latitudeTooltip() { const string = FIELD_HELP_TEXT.latitudeTooltip; return string; }
+  editEventTypeTooltip() { const string = FIELD_HELP_TEXT.editEventTypeTooltip; return string; }
+  editSpeciesTooltip() { const string = FIELD_HELP_TEXT.editSpeciesTooltip; return string; }
+  editKnownDeadTooltip() { const string = FIELD_HELP_TEXT.editKnownDeadTooltip; return string; }
+  editEstimatedDeadTooltip() { const string = FIELD_HELP_TEXT.editEstimatedDeadTooltip; return string; }
+  editKnownSickTooltip() { const string = FIELD_HELP_TEXT.editKnownSickTooltip; return string; }
+  editEstimatedSickTooltip() { const string = FIELD_HELP_TEXT.editEstimatedSickTooltip; return string; }
+  populationTooltip() { const string = FIELD_HELP_TEXT.populationTooltip; return string; }
+  editAgeBiasTooltip() { const string = FIELD_HELP_TEXT.editAgeBiasTooltip; return string; }
+  editSexBiasTooltip() { const string = FIELD_HELP_TEXT.editSexBiasTooltip; return string; }
+  editCaptiveTooltip() { const string = FIELD_HELP_TEXT.editCaptiveTooltip; return string; }
+  editSpeciesDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editSpeciesDiagnosisTooltip; return string; }
+  locationNameTooltip() { const string = FIELD_HELP_TEXT.locationNameTooltip; return string; }
+  numberAffectedTooltip() { const string = FIELD_HELP_TEXT.numberAffectedTooltip; return string; }
+  editRecordStatusTooltip() { const string = FIELD_HELP_TEXT.editRecordStatusTooltip; return string; }
+  collaboratorsAddIndividualTooltip() { const string = FIELD_HELP_TEXT.collaboratorsAddIndividualTooltip; return string; }
+  collaboratorsAddCircleTooltip() { const string = FIELD_HELP_TEXT.collaboratorsAddCircleTooltip; return string; }
+  editContactOrganizationTooltip() { const string = FIELD_HELP_TEXT.editContactOrganizationTooltip; return string; }
+  eventIDTooltip() { const string = FIELD_HELP_TEXT.eventIDTooltip; return string; }
+  eventStartDateTooltip() { const string = FIELD_HELP_TEXT.eventStartDateTooltip; return string; }
+  eventEndDateTooltip() { const string = FIELD_HELP_TEXT.eventEndDateTooltip; return string; }
+  nwhcCarcassSubApprovalTooltip() { const string = FIELD_HELP_TEXT.nwhcCarcassSubApprovalTooltip; return string; }
+  editEventDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editEventDiagnosisTooltip; return string; }
+  locationsTooltip() { const string = FIELD_HELP_TEXT.locationsTooltip; return string; }
+  contactPersonTooltip() { const string = FIELD_HELP_TEXT.contactPersonTooltip; return string; }
 
-  deleteEventComment(id: number) {
+  deleteComment(id: number) {
     this.commentService.delete(id)
       .subscribe(
         () => {
@@ -750,11 +931,11 @@ export class EventDetailsComponent implements OnInit {
 
   }
 
-  openEventCommentDeleteConfirm(id) {
+  openCommentDeleteConfirm(id) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
         data: {
-          title: 'Delete Event Comment Confirm',
+          title: 'Delete Comment Confirm',
           titleIcon: 'delete_forever',
           // tslint:disable-next-line:max-line-length
           message: 'Are you sure you want to delete this comment?\nThis action cannot be undone.',
@@ -767,7 +948,7 @@ export class EventDetailsComponent implements OnInit {
 
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.deleteEventComment(id);
+        this.deleteComment(id);
       }
     });
   }
@@ -847,7 +1028,7 @@ export class EventDetailsComponent implements OnInit {
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-      minWidth: '50em',
+      minWidth: '75%',
       disableClose: true,
       data: {
         contact_action: 'create'
@@ -950,17 +1131,64 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
+  openEventOrganizationDeleteConfirm(id) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Event Organization Confirm',
+          titleIcon: 'delete_forever',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to delete this event organization? This action cannot be undone.',
+          confirmButtonText: 'Yes, Delete Event Organization',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteEventOrganization(id);
+      }
+    });
+  }
+
+  deleteEventOrganization(id: number) {
+    this.eventOrganizationService.delete(id)
+      .subscribe(
+        () => {
+          this.refreshEvent();
+          this.openSnackBar('Event organization successfully deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Event organzation not deleted. Error message: ' + error, 'OK', 8000);
+        }
+      );
+  }
+
+  addToEventGroup() {
+
+  }
 
   refreshEvent() {
     this.viewPanelStates = new Object();
     this.getViewPanelState(this.viewPanels);
+
+    console.log('Event Location Species list at start of refresh: ', this.eventLocationSpecies);
+
+    this.eventLocationSpecies = [];
+    console.log('Event Location Species list after set to blank array: ', this.eventLocationSpecies);
+
+    this.possibleEventDiagnoses = [];
+
     this._eventService.getEventDetails(this.eventID)
       .subscribe(
         (eventdetails) => {
           this.eventData = eventdetails;
 
-          this.eventLocationSpecies = [];
-          this.possibleEventDiagnoses = [];
+          // this.eventLocationSpecies = [];
+          // this.possibleEventDiagnoses = [];
           for (const event_location of this.eventData.eventlocations) {
             for (const locationspecies of event_location.locationspecies) {
               locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
@@ -971,16 +1199,40 @@ export class EventDetailsComponent implements OnInit {
               for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
                 if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
                   this.possibleEventDiagnoses.push(speciesdiagnosis);
+                } else {
+                  // it is in there already:
+                  // check if this one's suspect field is false
+                  if (speciesdiagnosis.suspect === false) {
+                    // if it is, then we need to remove the previously added one and add this one which is suspect = false
+                    // loop thru possibleEventDiagnoses, if match, remove
+                    for (let i = 0; i < this.possibleEventDiagnoses.length; i++) {
+                      if (this.possibleEventDiagnoses[i].diagnosis === speciesdiagnosis.diagnosis) {
+                        this.possibleEventDiagnoses.splice(i, 1);
+                      }
+                    }
+                    // then add the non suspect one
+                    this.possibleEventDiagnoses.push(speciesdiagnosis);
+
+                  }
                 }
               }
+
             }
           }
 
-          if (eventdetails.complete === true) {
+          console.log('Event Location Species list after populated: ', this.eventLocationSpecies);
+
+          // add the "Undetermined" diagnosis to possibleDiagnoses, only if not already in the list
+          if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis)) {
             this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
-          } else if (eventdetails.complete === false) {
-            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
           }
+          // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of "Pending".
+          // else if (eventdetails.complete === false) {
+          //   this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+          // }
+
+          this.readCollaboratorArray = eventdetails.read_collaborators;
+          this.writeCollaboratorArray = eventdetails.write_collaborators;
 
           this.eventDataLoading = false;
 
@@ -1072,6 +1324,136 @@ export class EventDetailsComponent implements OnInit {
     return comment_type;
   }
 
+  removeCollaborator(userID, list) {
+
+    // WIP below. seems to be good. test a few more times.
+    if (list === 'read') {
+      const readIndex = this.readCollaboratorArray.findIndex(function (o) {
+        return o.id === userID;
+      });
+      if (readIndex !== -1) { this.readCollaboratorArray.splice(readIndex, 1); }
+    } else if (list === 'write') {
+      const writeIndex = this.writeCollaboratorArray.findIndex(function (o) {
+        return o.id === userID;
+      });
+      if (writeIndex !== -1) { this.writeCollaboratorArray.splice(writeIndex, 1); }
+
+    }
+
+    const readCollaboratorIDArray = [];
+    for (const user of this.readCollaboratorArray) {
+      readCollaboratorIDArray.push(user.id);
+    }
+
+    const writeCollaboratorIDArray = [];
+    for (const user of this.writeCollaboratorArray) {
+      writeCollaboratorIDArray.push(user.id);
+    }
+
+    this.updateCollaboratorList(readCollaboratorIDArray, writeCollaboratorIDArray);
+
+  }
+
+  addCollaborator(accessType) {
+    this.circleManagementDialogRef = this.dialog.open(CircleManagementComponent, {
+      disableClose: true,
+      data: {
+        action: 'selectUser',
+      }
+    });
+
+    this.circleManagementDialogRef.afterClosed()
+      .subscribe(
+        (selectedUser) => {
+
+          if (selectedUser !== 'cancel') {
+
+            if (accessType === 'read') {
+              this.readCollaboratorArray.push(selectedUser);
+            } else if (accessType === 'write') {
+              this.writeCollaboratorArray.push(selectedUser);
+            }
+
+            const readCollaboratorIDArray = [];
+            for (const user of this.readCollaboratorArray) {
+              readCollaboratorIDArray.push(user.id);
+            }
+
+            const writeCollaboratorIDArray = [];
+            for (const user of this.writeCollaboratorArray) {
+              writeCollaboratorIDArray.push(user.id);
+            }
+
+            this.updateCollaboratorList(readCollaboratorIDArray, writeCollaboratorIDArray);
+          }
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
+  openCircleChooseDialog(accessType) {
+    this.circleChooseDialogRef = this.dialog.open(CircleChooseComponent, {
+      minWidth: '60em',
+      data: {
+        userCircles: this.userCircles
+      }
+    });
+
+    this.circleChooseDialogRef.afterClosed().subscribe(result => {
+
+      if (result !== 'cancel') {
+
+        if (accessType === 'read') {
+          // add the users array to the new_read_collaborators array
+          this.readCollaboratorArray = this.readCollaboratorArray.concat(result.users);
+          const readCollaboratorIDArray = [];
+          for (const user of this.readCollaboratorArray) {
+            readCollaboratorIDArray.push(user.id);
+          }
+          this.updateCollaboratorList('read', readCollaboratorIDArray);
+
+        } else if (accessType === 'write') {
+          this.writeCollaboratorArray = this.writeCollaboratorArray.concat(result.users);
+          const writeCollaboratorIDArray = [];
+          for (const user of this.writeCollaboratorArray) {
+            writeCollaboratorIDArray.push(user.id);
+          }
+          this.updateCollaboratorList('write', writeCollaboratorIDArray);
+
+        }
+
+      }
+    });
+
+  }
+
+  updateCollaboratorList(readCollaboratorArray, writeCollaboratorArray) {
+
+    // tslint:disable-next-line:max-line-length
+    const update = { 'id': this.eventData.id, 'event_type': this.eventData.event_type, 'new_read_collaborators': readCollaboratorArray, 'new_write_collaborators': writeCollaboratorArray };
+    // if (accessType === 'read') {
+    //   update = { 'id': this.eventData.id, 'event_type': this.eventData.event_type, 'new_read_collaborators': userArray };
+    // } else if (accessType === 'write') {
+    //   update = { 'id': this.eventData.id, 'event_type': this.eventData.event_type, 'new_write_collaborators': userArray };
+    // }
+
+    this._eventService.update(update)
+      .subscribe(
+        (event) => {
+          // this.submitLoading = false;
+          this.openSnackBar('Collaborator list updated.', 'OK', 5000);
+          this.dataUpdatedService.triggerRefresh();
+        },
+        error => {
+          // this.submitLoading = false;
+          this.openSnackBar('Error. Collaborator list not updated. Error message: ' + error, 'OK', 15000);
+        }
+      );
+  }
+
   // From angular material table sample on material api reference site
   /** Whether the number of selected elements matches the total number of rows. */
   // isAllSelected(i: number) {
@@ -1089,6 +1471,7 @@ export class EventDetailsComponent implements OnInit {
 
   exportEventDetails() {
     this._eventService.getEventDetailsCSV(this.eventID);
+    gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Exported Event Details' });
   }
 
 

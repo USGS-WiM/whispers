@@ -1,0 +1,233 @@
+<div class="search-display-div text-smaller">
+  <span class="text-bold text-large">Current Search&nbsp;({{eventCount}}&nbsp;results)&nbsp;</span>
+  <!-- start date-->
+  <span
+    *ngIf="currentDisplayQuery.start_date !== null || currentDisplayQuery.start_date !== ''">{{currentDisplayQuery.start_date | date:'mediumDate'}}</span>
+  <span style="color: lightcoral"
+    *ngIf="currentDisplayQuery.start_date == null || currentDisplayQuery.start_date == ''">[no start date]</span>
+  <!-- date connector ('thru') span -->
+  <span
+    *ngIf="(currentDisplayQuery.start_date !== null) || (currentDisplayQuery.end_date !== null) || (currentDisplayQuery.start_date !== '') || (currentDisplayQuery.end_date !== '')">&nbsp;thru&nbsp;</span>
+  <!-- end date-->
+  <span
+    *ngIf="currentDisplayQuery.end_date !== null || currentDisplayQuery.end_date !== ''">{{currentDisplayQuery.end_date | date:'mediumDate'}}
+    <span class="text-bold">&nbsp;|&nbsp;</span></span>
+  <span style="color: lightcoral" *ngIf="currentDisplayQuery.end_date == null || currentDisplayQuery.end_date == ''">[no
+    end date] <span class="text-bold">&nbsp;|&nbsp;</span></span>
+  <!-- Number Affected -->
+  <span *ngIf="currentDisplayQuery.affected_count !== null">No. Affected <span> {{ currentDisplayQuery.affected_count_operator === '__gte' ? '&ge;' :
+      currentDisplayQuery.affected_count_operator === '__lte' ? '&le;' : '' }}</span>
+    <span> {{currentDisplayQuery.affected_count}}<span class="text-bold">&nbsp;|&nbsp;</span></span></span>
+  <!--WHISPers Record Status -->
+  <span><span> {{ currentDisplayQuery.complete === true ? 'Complete Events Only' :
+      currentDisplayQuery.complete === false ? 'Incomplete Events Only' : 'Complete and incomplete events' }}<span
+        class="text-bold">&nbsp;|&nbsp;</span></span></span>
+  <!--Event Type -->
+  <span *ngIf="currentDisplayQuery.event_type && currentDisplayQuery.event_type.length > 0"> <span
+      *ngFor="let event_type of currentDisplayQuery.event_type">{{event_type}}
+      <span
+        *ngIf="(currentDisplayQuery.event_type.indexOf(event_type)) < (currentDisplayQuery.event_type.length - 1)">or&nbsp;</span>
+    </span>
+    <span class="text-bold">&nbsp;|&nbsp;</span>
+  </span>
+  <!-- Diagnosis Type -->
+  <span *ngIf="currentDisplayQuery.diagnosis_type && currentDisplayQuery.diagnosis_type.length > 0">
+    <span *ngFor="let diagnosis_type of currentDisplayQuery.diagnosis_type">{{diagnosis_type}}
+      <span
+        *ngIf="(currentDisplayQuery.diagnosis_type.indexOf(diagnosis_type)) < (currentDisplayQuery.diagnosis_type.length - 1)">{{(currentDisplayQuery.diagnosis_type_includes_all)
+            ? "and" : "or"}}&nbsp;</span>
+    </span>
+    <span class="text-bold">&nbsp;|&nbsp;</span>
+  </span>
+
+  <!-- Diagnosis -->
+  <span *ngIf="currentDisplayQuery.diagnosis && currentDisplayQuery.diagnosis.length > 0">
+    <span *ngFor="let diagnosis of currentDisplayQuery.diagnosis">{{diagnosis}}
+      <span *ngIf="(currentDisplayQuery.diagnosis.indexOf(diagnosis)) < (currentDisplayQuery.diagnosis.length - 1)">{{(currentDisplayQuery.diagnosis_includes_all)
+              ? "and" : "or"}}&nbsp;</span>
+    </span>
+    <span class="text-bold">&nbsp;|&nbsp;</span>
+  </span>
+  <!-- Species -->
+  <span *ngIf="currentDisplayQuery.species && currentDisplayQuery.species.length > 0">
+    <span *ngFor="let species of currentDisplayQuery.species">{{species}}
+      <span *ngIf="(currentDisplayQuery.species.indexOf(species)) < (currentDisplayQuery.species.length - 1)">{{(currentDisplayQuery.species_includes_all)
+              ? "and" : "or"}}&nbsp;</span>
+    </span>
+    <span class="text-bold">&nbsp;|&nbsp;</span>
+  </span>
+  <!--Admin L1-->
+  <span *ngIf="currentDisplayQuery.administrative_level_one && currentDisplayQuery.administrative_level_one.length > 0">
+
+    <!-- <span *ngFor="let adminLevelTwo of currentDisplayQuery.administrative_level_two">{{adminLevelTwo}} -->
+    <span *ngFor="let adminLevelOne of currentDisplayQuery.administrative_level_one">{{adminLevelOne}}
+      <span
+        *ngIf="(currentDisplayQuery.administrative_level_one.indexOf(adminLevelOne)) < (currentDisplayQuery.administrative_level_one.length - 1)">{{(currentDisplayQuery.administrative_level_one_includes_all)
+                ? "and" : "or"}}&nbsp;</span>
+    </span>
+    <!-- </span> -->
+    <span class="text-bold">&nbsp;|&nbsp;</span>
+  </span>
+  <!-- Admin L2 -->
+  <span *ngIf="currentDisplayQuery.administrative_level_two && currentDisplayQuery.administrative_level_two.length > 0">
+    <span *ngFor="let adminLevelTwo of currentDisplayQuery.administrative_level_two">{{adminLevelTwo}}
+      <span
+        *ngIf="(currentDisplayQuery.administrative_level_two.indexOf(adminLevelTwo)) < (currentDisplayQuery.administrative_level_two.length - 1)">{{(currentDisplayQuery.administrative_level_two_includes_all)
+              ? "and" : "or"}}&nbsp;</span>
+    </span>
+  </span>
+</div>
+
+<div class="selection-display-div" *ngIf="selection.selected.length > 0">
+  <mat-chip-list aria-label="Event Selection">
+    <span class="text-bold text-large">Current Event Selection ({{selection.selected.length}})&nbsp;</span>
+    <mat-chip color="accent" selected *ngFor="let selection of selection.selected" [removable]="removable"
+      (removed)="remove(selection)">{{selection}}</mat-chip>
+  </mat-chip-list>
+</div>
+
+<div>
+  <span class="text-bold text-large" *ngIf="selectedEventGroup !== null">Current Event Group Selection:
+    {{selectedEventGroup.name}}&nbsp;<span
+      class="text-smaller">{{selectedEventGroup.comments[0].comment}}</span>&nbsp;<button mat-icon-button>
+      <mat-icon aria-label="Help" (click)=showEventGroupSelectionInfo()>info</mat-icon>
+    </button></span>
+</div>
+
+
+<div>
+  <span class="results-button-row">
+    <button mat-button color="accent" (click)="openSearchDialog()">
+      <i class="material-icons">
+        search
+      </i> Search</button>
+    <button mat-button color="accent" (click)="openEventGroupManagementDialog('edit')"
+      *ngIf="currentUser.role === 1 || currentUser.role === 2"
+      [disabled]="selection.selected.length === 0 || selectedEventGroup === null">
+      <mat-icon>
+        add
+      </mat-icon>
+      Add Selection to Event Group <span *ngIf="selectedEventGroup !== null">{{selectedEventGroup.name}}</span>
+    </button>
+    <button mat-button color="accent" (click)="openEventGroupManagementDialog('create')"
+      [disabled]="selection.selected.length < 2" *ngIf="currentUser.role === 1 || currentUser.role === 2">
+      <mat-icon>
+        fiber_new
+      </mat-icon> Create New Event Group from Selection
+    </button>
+    <button mat-button color="warn" (click)="selection.clear()" [disabled]="selection.selected.length === 0">
+      <i class="material-icons">
+        clear
+      </i> Clear Selection</button>
+  </span>
+
+</div>
+
+<div class="spinner-container" *ngIf="dataSource.loading$ | async">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="dataSource" class="results-table-div">
+
+  <mat-table class="user-events-table" [dataSource]="dataSource" matSort matSortDisableClear>
+
+    <!-- Checkbox column -->
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null;" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue()  && !isAllSelected()">
+        </mat-checkbox>
+
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="($event ? selection.toggle(row['id']) : null)"
+          [checked]="selection.isSelected(row['id'])">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventIDTooltip()}}" matTooltipClass="tooltip-breakline"> ID </mat-header-cell>
+      <mat-cell *matCellDef="let event"> {{event.id}} </mat-cell>
+    </ng-container>
+
+    <!-- Event Type Column -->
+    <ng-container matColumnDef="event_type">
+      <mat-header-cell *matHeaderCellDef matTooltip="{{editEventTypeTooltip()}}" matTooltipClass="tooltip-breakline"> Type </mat-header-cell>
+      <mat-cell *matCellDef="let event"> {{event.event_type_string}} </mat-cell>
+    </ng-container>
+
+    <!-- Affected Count Column -->
+    <ng-container matColumnDef="affected_count">
+      <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{numberAffectedTooltip()}}" matTooltipClass="tooltip-breakline"> Affected </mat-header-cell>
+      <mat-cell *matCellDef="let event"> {{event.affected_count}} </mat-cell>
+    </ng-container>
+
+    <!-- Start Date Column -->
+    <ng-container matColumnDef="start_date">
+      <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventStartDateTooltip()}}" matTooltipClass="tooltip-breakline"> Start Date </mat-header-cell>
+      <mat-cell *matCellDef="let event"> {{event.start_date | date:'mediumDate'}} </mat-cell>
+    </ng-container>
+
+    <!-- End Date Column -->
+    <ng-container matColumnDef="end_date">
+      <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventEndDateTooltip()}}" matTooltipClass="tooltip-breakline"> End Date </mat-header-cell>
+      <mat-cell *matCellDef="let event"> {{event.end_date | date:'mediumDate'}} </mat-cell>
+    </ng-container>
+
+    <!-- Location Column -->
+    <ng-container matColumnDef="locations">
+      <mat-header-cell *matHeaderCellDef
+      matTooltip="{{locationsTooltip()}}" matTooltipClass="tooltip-breakline">
+        Location</mat-header-cell>
+      <mat-cell *matCellDef="let event">
+        <ul class="table-cell-list">
+          <li *ngFor="let administrativeleveltwo of event.administrativeleveltwos">
+            <span>{{administrativeleveltwo.name}}</span>
+            <span
+              *ngIf="administrativeleveltwo.administrative_level_one_string !== null && administrativeleveltwo.administrative_level_one_string !== ''">,&nbsp;</span>
+            <span>{{administrativeleveltwo.administrative_level_one_string}}</span>
+            <span
+              *ngIf="administrativeleveltwo.country_string !== null && administrativeleveltwo.country_string !== ''">,&nbsp;</span>
+            <span>{{administrativeleveltwo.country_string}}
+            </span>
+
+          </li>
+        </ul>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Species Column -->
+    <ng-container matColumnDef="species">
+      <mat-header-cell *matHeaderCellDef matTooltip="{{generalTableSpeciesTooltip()}}" matTooltipClass="tooltip-breakline"> Species </mat-header-cell>
+      <mat-cell *matCellDef="let event">
+        <ul class="table-cell-list">
+          <li *ngFor="let species of event.species">{{species.name}}</li>
+        </ul>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Event Diagnosis Column -->
+    <ng-container matColumnDef="eventdiagnoses">
+      <mat-header-cell *matHeaderCellDef matTooltip="{{editEventDiagnosisTooltip()}}" matTooltipClass="tooltip-breakline"> Event Diagnosis </mat-header-cell>
+      <mat-cell *matCellDef="let event">
+        <ul *ngIf="event.eventdiagnoses !== null" class="table-cell-list">
+          <li *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}</li>
+        </ul>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Permission Source Column -->
+    <ng-container matColumnDef="permission_source">
+      <mat-header-cell *matHeaderCellDef matTooltipPosition="left" matTooltip="{{permissionSourceTooltip()}}" matTooltipClass="tooltip-breakline"> Permission Source </mat-header-cell>
+      <mat-cell *matCellDef="let event"> {{event.permission_source}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"
+      matTooltip="Click event to see details"></mat-row>
+  </mat-table>
+
+  <mat-paginator [length]="eventCount" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+</div>

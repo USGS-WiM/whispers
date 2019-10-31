@@ -7,6 +7,7 @@ import { AboutComponent } from '@about/about.component';
 
 import { AuthenticationComponent } from '@authentication/authentication.component';
 
+import { BrowserWarningComponent } from '@browser-warning/browser-warning.component';
 import { CurrentUserService } from '@services/current-user.service';
 
 import { APP_SETTINGS } from '@app/app.settings';
@@ -38,6 +39,7 @@ export class AppComponent implements OnInit {
 
   aboutDialogRef: MatDialogRef<AboutComponent>;
   authenticationDialogRef: MatDialogRef<AuthenticationComponent>;
+  browserWarningDialogRef: MatDialogRef<BrowserWarningComponent>;
 
   constructor(
     private router: Router,
@@ -79,6 +81,13 @@ export class AppComponent implements OnInit {
       });
     }
 
+    if (/msie\s|trident\/\//i.test(window.navigator.userAgent)) {
+      //if (/msie\s|trident\/|edge\//i.test(window.navigator.userAgent)) {
+      this.openBrowserWarningDialog();
+    }
+
+
+
     // if ((!!sessionStorage.getItem('username') && !!sessionStorage.getItem('password'))) {
 
     //   this.currentUserService.updateCurrentUser({
@@ -103,9 +112,17 @@ export class AppComponent implements OnInit {
     this.aboutDialogRef = this.dialog.open(AboutComponent, {});
   }
 
+  openBrowserWarningDialog() {
+    this.browserWarningDialogRef = this.dialog.open(BrowserWarningComponent, {});
+  }
+
   logout() {
+    if (this.router.url === '/home') {
+      location.reload();
+    } else {
+      this.router.navigate([`../home/`], { relativeTo: this.route });
+    }
     this.authenticationService.logout();
-    this.router.navigate([`../home/`], { relativeTo: this.route });
   }
 
   openAuthenticationDialog() {

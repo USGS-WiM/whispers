@@ -30,8 +30,9 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   panelOpenState = false;
   selection;
   notificationsLoading = false;
-  /* Toggle hints for 'Owned and Collaborating Events Notifications' */
-  toggle1;
+
+  // toggle hints
+  emailAll;
   toggle2;
   toggle3;
   dummyNotifications = APP_UTILITIES.dummyData;

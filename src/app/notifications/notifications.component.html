@@ -19,8 +19,9 @@
                     <div class="mat-table">
                         <div class="mat-header-row">
                           <div class="mat-header-cell"></div>
-                          <div class="mat-header-cell" style="font-weight: bold;"><mat-icon class="icon">notification_important</mat-icon><span class="headerText">Notify me for qualifying events that are...</span></div>
-                          <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;"><mat-icon class="icon">email</mat-icon><span class="headerText"> Send notification to my email address</span></div>
+                          <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText"></span></div>
+                          <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;"><mat-icon class="icon">email</mat-icon><span class="headerText"> Email me all <mat-slide-toggle><span class="text-small text-italic">{{emailAll === true ? ' (on) ' :
+                              toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></span></div>
                         </div>
                         <div class="mat-row">
                             <div class="mat-header-cell">Your Events</div>
@@ -31,7 +32,7 @@
                                 toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
                         </div>
                         <div class="mat-row">
-                          <div class="mat-header-cell">Your Organization's Events</div>
+                          <div class="mat-header-cell">Your Organization Events</div>
                           <div class="mat-cell">
                               <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
                             </div>
@@ -39,7 +40,15 @@
                               toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
                         </div>
                         <div class="mat-row">
-                          <div class="mat-header-cell">Events for which you are a Collaborator</div>
+                          <div class="mat-header-cell">Your Collaboration Events</div>
+                          <div class="mat-cell">
+                              <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
+                            </div>
+                          <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{toggle3 === true ? ' (on) ' :
+                              toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
+                        </div>
+                        <div class="mat-row">
+                          <div class="mat-header-cell">All Events*</div>
                           <div class="mat-cell">
                               <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
                             </div>
@@ -47,9 +56,15 @@
                               toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
                         </div>
                       </div>
-                </div>
-        
+                      <div class="warning">
+                        <p>* Beware that selecting this option will create notifications for all events that you have permission to view,
+                          regardless of ownership,
+                          diagnosis, species, location, or any other detail. Consider a Custom Notification (below) to specify events
+                          pertaining to your specific interest.</p>
+                      </div>
+                   </div>
               </mat-card-content>
+
             </mat-card>
             <mat-divider style="margin: 25px auto;" [inset]="true"></mat-divider>
             <mat-card>
@@ -62,8 +77,9 @@
                       <div class="mat-table">
                           <div class="mat-header-row">
                             <div class="mat-header-cell" style="font-weight: bold;">Cue</div>
-                            <div class="mat-header-cell" style="font-weight: bold;"><mat-icon class="icon">notification_important</mat-icon><span class="headerText">Notify me for qualifying events that are...</span></div>
-                            <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;"><mat-icon class="icon">email</mat-icon><span class="headerText"> Send notification to my email address</span></div>
+                            <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText"></span></div>
+                            <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;"><mat-icon class="icon">email</mat-icon><span class="headerText"> Email me all <mat-slide-toggle><span class="text-small text-italic">{{toggle3 === true ? ' (on) ' :
+                                toggle1 === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></span></div>
                             <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;"><span class="headerText"></span></div>
                           </div>
                           <div class="mat-row" *ngFor="let cue of test_data">

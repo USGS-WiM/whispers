@@ -41,7 +41,7 @@
         </button>
         
         <!-- User Dashboard -->
-        <button mat-button aria-label="User Dashboard" *ngIf="currentUser.username != ''"(click)="openUserDashboard()">
+        <button mat-button aria-label="User Dashboard" *ngIf="currentUser.username != ''" (click)="openUserDashboard()">
             <i class="material-icons">dashboard</i>
             <span class="header-button-text">User Dashboard</span>
         </button>
@@ -76,11 +76,12 @@
 
          <!-- Notifications -->
          <span *ngIf="currentUser.username != ''" class="login-status signin-button">
-          <button mat-button aria-label="notifications" matBadge="8" matBadgePosition="after" matBadgeColor="warn" [matMenuTriggerFor]="menu">
+          <button mat-button aria-label="notifications" matBadge="{{notificationCount}}" matBadgePosition="after" matBadgeColor="warn" [matMenuTriggerFor]="menu">
             Notifications&nbsp;
           </button>
           <mat-menu #menu="matMenu" [overlapTrigger]="false">
-            <button *ngFor="let notification of dummyNotifications" matTooltip="{{notification.message}}" (click)="navigateNotificationSelect(notification.event)" mat-menu-item>{{notification.message}}</button>
+            <button *ngFor="let notification of notificationsToDisplay" matTooltip="{{notification.message}}" (click)="navigateNotificationSelect(notification.event)" mat-menu-item>{{notification.message}}</button>
+            <button *ngIf="dummyNotifications.length > 10" class="navigateToDashboard" (click)="openUserDashboard()" mat-menu-item>See all notifications<mat-icon>arrow_forward</mat-icon></button>
           </mat-menu>
         </span>
 

@@ -37,10 +37,14 @@ export class AppComponent implements OnInit {
   public bannerTextColor = '';
   // public isLoggedIn;
   notificationCount;
+  firstTenNotifications = [];
+  dummyNotifications = APP_UTILITIES.dummyData;
+  notificationsToDisplay;
+
   public currentUser;
 
   // dummy data to work with. delete once notifications backend complete
-  dummyNotifications = APP_UTILITIES.dummyData;
+
 
   aboutDialogRef: MatDialogRef<AboutComponent>;
   authenticationDialogRef: MatDialogRef<AuthenticationComponent>;
@@ -67,7 +71,7 @@ export class AppComponent implements OnInit {
 
     this.bannerTextColor = APP_SETTINGS.BANNER_TEXT_COLOR;
 
-    //this.isLoggedIn = APP_SETTINGS.IS_LOGGEDIN;
+    // this.isLoggedIn = APP_SETTINGS.IS_LOGGEDIN;
 
     // if (sessionStorage.getItem('username') === '' || sessionStorage.getItem('username') === undefined) {
     //   this.currentUserService.updateCurrentUser({
@@ -107,6 +111,16 @@ export class AppComponent implements OnInit {
     //     'username': ''
     //   });
     // }
+
+    // showing only the first 10 notifications in the mat-menu and adding button to dashboard
+    this.firstTenNotifications = this.dummyNotifications.slice(0, 10);
+
+    this.notificationCount = this.dummyNotifications.length;
+    if (this.notificationCount > 10) {
+      this.notificationsToDisplay = this.firstTenNotifications;
+    } else {
+      this.notificationsToDisplay = this.dummyNotifications;
+    }
   }
 
   openUserDashboard() {
@@ -132,7 +146,7 @@ export class AppComponent implements OnInit {
 
   openAuthenticationDialog() {
     this.authenticationDialogRef = this.dialog.open(AuthenticationComponent, {
-      //minWidth: '60%'
+      // minWidth: '60%'
       // disableClose: true, data: {
       //   query: this.currentDisplayQuery
       // }

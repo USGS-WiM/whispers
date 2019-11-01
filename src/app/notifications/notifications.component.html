@@ -105,7 +105,7 @@
           </mat-card-title>
         <div class="results-table-div">
 
-            <mat-table [dataSource]="notificationsDataSource" matSort matSortActive="created_date" matSortDirection="asc"
+            <mat-table [dataSource]="notificationsDataSource" matSort matSortActive="read" matSortDirection="desc"
               *ngIf="notificationsDataSource.data.length > 0">
   
               <!-- Selection column -->
@@ -124,9 +124,9 @@
               </ng-container>
   
               <!-- Message Column -->
-              <ng-container matColumnDef="message">
+              <ng-container matColumnDef="read">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Message </mat-header-cell>
-                <mat-cell *matCellDef="let notification" [ngStyle]="{'font-weight':notification.state === 0 ? 'bold' : 'normal' }"> {{notification.message}} </mat-cell>
+                <mat-cell *matCellDef="let notification" [ngStyle]="{'font-weight':notification.read === true ? 'bold' : 'normal' }"> {{notification.message}} </mat-cell>
               </ng-container>
   
               <!-- Source -->
@@ -149,7 +149,7 @@
               <h3>No notifications</h3>
             </div>
   
-            <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+            <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
           </div>
     </mat-card>
 </div>

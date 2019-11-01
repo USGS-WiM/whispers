@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Inject } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -23,7 +23,7 @@ export interface Cue {
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.scss']
 })
-export class NotificationsComponent implements OnInit {
+export class NotificationsComponent implements OnInit, AfterViewInit {
 
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
   notificationsDataSource: MatTableDataSource<Notification>;
@@ -54,13 +54,13 @@ export class NotificationsComponent implements OnInit {
 
   notificationDisplayedColumns = [
     'select',
-    'message',
+    'read',
     'created_date',
     'source'
   ];
 
   @ViewChild(MatPaginator) notificationPaginator: MatPaginator;
-
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private dialog: MatDialog,
@@ -76,6 +76,13 @@ export class NotificationsComponent implements OnInit {
     this.notificationsDataSource = new MatTableDataSource(this.dummyNotifications);
     this.notificationsLoading = true;
     this.notificationsDataSource.paginator = this.notificationPaginator;
+  }
+
+  ngAfterViewInit(): void {
+
+    setTimeout(() => {
+      this.notificationsDataSource.sort = this.sort;
+    }, 3000);
   }
 
   navigateToEvent(event) {

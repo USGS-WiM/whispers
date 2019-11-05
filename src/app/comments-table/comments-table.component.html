@@ -34,7 +34,7 @@
 
         <!-- Comment Column -->
         <ng-container matColumnDef="comment" class="comment-column">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="comment-column"> Comment </th>
+          <th mat-header-cell *matHeaderCellDef matSortDisabled class="comment-column"> Comment </th>
           <td td mat-cell *matCellDef="let comment" class="comment-column">{{comment.comment}} </td>
         </ng-container>
 

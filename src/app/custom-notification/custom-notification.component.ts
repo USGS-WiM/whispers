@@ -10,6 +10,7 @@ import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocompleteTrigger
 
 import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
 import { SpeciesService } from '@services/species.service';
+import { SpeciesDiagnosisService } from '@services/species-diagnosis.service';
 
 @Component({
   selector: 'app-custom-notification',
@@ -18,28 +19,35 @@ import { SpeciesService } from '@services/species.service';
 })
 export class CustomNotificationComponent implements OnInit {
 
-  adminLevelOneControl: FormControl;
   errorMessage = '';
-  speciesLoading = true;
-  speciesControl: FormControl;
 
+  adminLevelOneControl: FormControl;
   administrative_level_one = [];
   filteredAdminLevelOnes: Observable<any[]>;
   selectedAdminLevelOnes = []; // chips list
 
+  speciesLoading = true;
+  speciesControl: FormControl;
   species = [];
   filteredSpecies: Observable<any[]>;
   selectedSpecies = []; // chips list
 
+  diagnosisLoading = true;
+  diagnosisControl: FormControl;
+  diagnosis = [];
+  filteredDiagnosis: Observable<any[]>;
+  selectedDiagnosis = []; // chips list
 
   constructor(
     public customNotificationDialogRef: MatDialogRef<CustomNotificationComponent>,
     private adminLevelOneService: AdministrativeLevelOneService,
     private _speciesService: SpeciesService,
+    private _speciesDiagnosisService: SpeciesDiagnosisService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
       this.adminLevelOneControl = new FormControl();
       this.speciesControl = new FormControl({ value: null, disabled: true });
+      this.diagnosisControl = new FormControl({ value: null, disabled: true });
      }
 
   ngOnInit() {
@@ -80,7 +88,7 @@ export class CustomNotificationComponent implements OnInit {
         }
       );
 
-      // get species from the species service
+    // get species from the species service
     this._speciesService.getSpecies()
     .subscribe(
       (species) => {
@@ -122,6 +130,54 @@ export class CustomNotificationComponent implements OnInit {
         }
         this.speciesLoading = false;
         this.speciesControl.enable();
+      },
+      error => {
+        this.errorMessage = <any>error;
+      }
+    );
+
+    // get species diagnosis from the species diagnosis service
+    this._speciesDiagnosisService.getSpeciesDiagnosis()
+    .subscribe(
+      (diagnosis) => {
+        this.diagnosis = diagnosis;
+        // alphabetize the species options list
+        this.diagnosis.sort(function (a, b) {
+          if (a.diagnosis_string < b.diagnosis_string) { return -1; }
+          if (a.diagnosis_string > b.diagnosis_string) { return 1; }
+          return 0;
+        });
+        this.filteredDiagnosis = this.diagnosisControl.valueChanges
+          .startWith(null)
+          .map(val => this.filter(val, this.diagnosis, 'diagnosis_string'));
+
+        if (this.data.query && this.data.query['diagnosis_string'] && this.data.query['diagnosis_string'].length > 0) {
+          /*for (const index in species) {
+            if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
+              this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
+            }
+          }*/
+          for (const index in diagnosis) {
+            if (this.data.query['diagnosis_string'].some(
+              function (el) {
+                let match = false;
+                if (typeof el === 'number') {
+                  if (el === diagnosis[index].id) {
+                    match = true;
+                  }
+                } else {
+                  if (el === diagnosis[index].diagnosis_string) {
+                    match = true;
+                  }
+                }
+                return match;
+              })) {
+              this.dropdownSetup(this.diagnosisControl, this.selectedDiagnosis, diagnosis[index]);
+            }
+          }
+        }
+        this.diagnosisLoading = false;
+        this.diagnosisControl.enable();
       },
       error => {
         this.errorMessage = <any>error;

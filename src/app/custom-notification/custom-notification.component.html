@@ -118,7 +118,7 @@
         <!--- end Species expansion panel -->
 
         <!--- Species Diagnosis panel -->
-      <mat-expansion-panel>
+        <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
               <b>Species Diagnosis</b>
@@ -133,7 +133,7 @@
                         <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                       </mat-chip>
                       <span *ngIf="(selectedDiagnosis.indexOf(species)) < (selectedDiagnosis.length - 1)">{{(searchForm.get('species_includes_all').value)
-                        ? "and" : "or"}}&nbsp;</span>
+                                ? "and" : "or"}}&nbsp;</span>
                     </span>
                   </mat-chip-list>
                 </div>
@@ -143,10 +143,11 @@
           <div>
             <div class="autocomplete-input">
               <mat-form-field class="full-width">
-                <input type="text" matInput placeholder="Add Species Diagnosis" aria-label="Add Species Diagnosis" [matAutocomplete]="speciesDiagnosisAutoComplete"
-                  > <!-- [formControl]="speciesControl" -->
+                <input type="text" matInput placeholder="Add Species Diagnosis" aria-label="Add Species Diagnosis"
+                  [matAutocomplete]="speciesDiagnosisAutoComplete"> <!-- [formControl]="speciesControl" -->
                 <mat-spinner *ngIf="diagnosisLoading" [diameter]="20"></mat-spinner>
-                <mat-autocomplete #speciesDiagnosisAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedDiagnosis, 'diagnosis')">
+                <mat-autocomplete #speciesDiagnosisAutoComplete="matAutocomplete" [displayWith]="displayFn"
+                  (optionSelected)="addChip($event, selectedDiagnosis, 'diagnosis')">
                   <mat-option *ngFor="let diagnosis of filteredDiagnosis | async" [value]="diagnosis">
                     <span>{{ diagnosis.diagnosis_string }}</span>
                   </mat-option>
@@ -155,7 +156,8 @@
             </div>
             <div class="search-type-radios">
               <label>Search type </label>
-              <mat-radio-group> <!-- formControlName="species_includes_all" -->
+              <mat-radio-group>
+                <!-- formControlName="species_includes_all" -->
                 <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>&nbsp;&nbsp;
                 <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
               </mat-radio-group>
@@ -163,13 +165,91 @@
           </div>
         </mat-expansion-panel>
         <!--- end Species Diagnosis expansion panel -->
+
+        <!--- Land Ownership panel -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <b>Land Ownership</b>
+          </mat-panel-title>
+          <mat-panel-description>
+            <span>
+              <div class="chiplist">
+                <mat-chip-list #landOwnershipChipList>
+                  <span *ngFor="let landOwnership of selectedLandOwnership">
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
+                      (removed)="removeChip(landOwnership, selectedLandOwnership, 'landOwnerships')">{{ landOwnerships.name }}
+                      <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
+                    </mat-chip>
+                    <span *ngIf="(selectedLandOwnership.indexOf(landOwnership)) < (selectedLandOwnership.length - 1)">{{(searchForm.get('landOwnerships').value)
+                      ? "and" : "or"}}&nbsp;</span>
+                  </span>
+                </mat-chip-list>
+              </div>
+            </span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <div class="autocomplete-input">
+            <mat-form-field class="full-width">
+              <input type="text" matInput placeholder="Add Land Ownership" aria-label="Add Land Ownership" [matAutocomplete]="landOwnershipAutoComplete"
+                > <!-- [formControl]="speciesControl" -->
+              <mat-spinner *ngIf="landOwnershipLoading" [diameter]="20"></mat-spinner>
+              <mat-autocomplete #landOwnershipAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedLandOwnership, 'landOwnerships')">
+                <mat-option *ngFor="let landOwnership of landOwnerships | async" [value]="landOwnership">
+                  <span>{{ landOwnership.name }}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="search-type-radios">
+            <label>Search type </label>
+            <mat-radio-group> <!-- formControlName="species_includes_all" -->
+              <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>&nbsp;&nbsp;
+              <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <!--- end Land Ownership expansion panel -->
+
+      <!-- Number Affected expansion panel -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <b>Number Affected</b>
+          </mat-panel-title>
+          <mat-panel-description>
+            <span> {{ cueForm.get('affected_count_operator').value === '__gte' && cueForm.get('affected_count').value != null ? '&ge;' :
+              cueForm.get('affected_count_operator').value === '__lte' && cueForm.get('affected_count').value != null ? '&le;' : '' }}
+              {{cueForm.get('affected_count').value}}</span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <div class="affected-count-operator-radios">
+            <mat-radio-group formControlName="affected_count_operator">
+              <mat-radio-button [value]="'__gte'" matTooltip="Greater than or equal to">Greater than or equal to ( &ge;
+                )</mat-radio-button>&nbsp;&nbsp;
+              <mat-radio-button [value]="'__lte'" matTooltip="Less than or equal to">Less than or equal to ( &le; )</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <mat-form-field>
+            <input matInput type="number" min="0"  placeholder="Number Affected" formControlName="affected_count">
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+      <!--- end Number Affected expansion panel -->
+     
   </mat-accordion>
 
 </mat-dialog-content>
 <mat-dialog-actions>
   <div class="form-buttons-flex center">
-    <button mat-button color="primary" (click)="this.customNotificationDialogRef.close();">
-      <mat-icon>close</mat-icon>&nbsp;Close
+    <button mat-button color="warn" (click)="this.customNotificationDialogRef.close();">
+      <mat-icon>close</mat-icon>&nbsp;Cancel
+    </button>
+    <button mat-button color="primary" (click)="onSubmit()">
+      <mat-icon>save</mat-icon>&nbsp;Save
     </button>
   </div>
 </mat-dialog-actions>

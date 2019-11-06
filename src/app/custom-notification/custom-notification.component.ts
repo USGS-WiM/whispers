@@ -8,9 +8,18 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocompleteTrigger } from '@angular/material';
 
+import { ConfirmComponent } from '@confirm/confirm.component';
+
 import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
+
 import { SpeciesService } from '@services/species.service';
+
 import { SpeciesDiagnosisService } from '@services/species-diagnosis.service';
+
+import { LandOwnership } from '@interfaces/land-ownership';
+import { LandOwnershipService } from '@services/land-ownership.service';
+
+import { CueService } from '@services/cue.service';
 
 @Component({
   selector: 'app-custom-notification',
@@ -20,34 +29,65 @@ import { SpeciesDiagnosisService } from '@services/species-diagnosis.service';
 export class CustomNotificationComponent implements OnInit {
 
   errorMessage = '';
+  cueForm: FormGroup;
 
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
   adminLevelOneControl: FormControl;
   administrative_level_one = [];
   filteredAdminLevelOnes: Observable<any[]>;
   selectedAdminLevelOnes = []; // chips list
 
-  speciesLoading = true;
+  speciesLoading = false;
   speciesControl: FormControl;
   species = [];
   filteredSpecies: Observable<any[]>;
   selectedSpecies = []; // chips list
 
-  diagnosisLoading = true;
+  diagnosisLoading = false;
   diagnosisControl: FormControl;
   diagnosis = [];
   filteredDiagnosis: Observable<any[]>;
   selectedDiagnosis = []; // chips list
+
+  landOwnershipLoading = false;
+  landOwnershipControl: FormControl;
+  landOwnerships: LandOwnership[];
+  filteredLandOwnership: Observable<any[]>;
+  selectedLandOwnership = []; // chips list
+
+  buildCueForm() {
+    this.cueForm = this.formBuilder.group({
+      event_id: null,
+      species_diagnosis: null,
+      species: null,
+      administrative_level_one: null,
+      administrative_level_two: null,
+      affected_count: null,
+      affected_count_operator: '__gte',
+      diagnosis_type_includes_all: false,
+      diagnosis_includes_all: false,
+      species_includes_all: false,
+      administrative_level_one_includes_all: false,
+      administrative_level_two_includes_all: false,
+      and_params: [],
+      complete: null
+    });
+  }
 
   constructor(
     public customNotificationDialogRef: MatDialogRef<CustomNotificationComponent>,
     private adminLevelOneService: AdministrativeLevelOneService,
     private _speciesService: SpeciesService,
     private _speciesDiagnosisService: SpeciesDiagnosisService,
+    private landOwnershipService: LandOwnershipService,
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
       this.adminLevelOneControl = new FormControl();
       this.speciesControl = new FormControl({ value: null, disabled: true });
       this.diagnosisControl = new FormControl({ value: null, disabled: true });
+      this.buildCueForm();
      }
 
   ngOnInit() {
@@ -59,7 +99,7 @@ export class CustomNotificationComponent implements OnInit {
           this.filteredAdminLevelOnes = this.adminLevelOneControl.valueChanges
             .startWith(null)
             .map(val => this.filter(val, this.administrative_level_one, 'name'));
-
+            console.log(this.filteredAdminLevelOnes);
           if (this.data.query && this.data.query['administrative_level_one'].length > 0) {
             for (const index in adminLevelOnes) {
               if (this.data.query['administrative_level_one'].some(
@@ -88,6 +128,58 @@ export class CustomNotificationComponent implements OnInit {
         }
       );
 
+    // get landOwnerships from the LandOwnerShipService
+    this.landOwnershipService.getLandOwnerships()
+      .subscribe(
+        landOwnerships => {
+          this.landOwnerships = landOwnerships;
+        // alphabetize the species options list
+        this.landOwnerships.sort(function (a, b) {
+          if (a.name < b.name) { return -1; }
+          if (a.name > b.name) { return 1; }
+          return 0;
+        });
+        this.filteredLandOwnership = this.landOwnershipControl.valueChanges
+          .startWith(null)
+          .map(val => this.filter(val, this.landOwnerships, 'name'));
+
+          console.log(this.filteredLandOwnership);
+
+        if (this.data.query && this.data.query['landOwnerships'] && this.data.query['landOwnerships'].length > 0) {
+          /*for (const index in species) {
+            if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
+              this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
+            }
+          }*/
+          for (const index in landOwnerships) {
+            if (this.data.query['landOwnerships'].some(
+              function (el) {
+                let match = false;
+                if (typeof el === 'number') {
+                  if (el === landOwnerships[index].id) {
+                    match = true;
+                  }
+                } else {
+                  if (el === landOwnerships[index].name) {
+                    match = true;
+                  }
+                }
+                return match;
+              })) {
+              this.dropdownSetup(this.speciesControl, this.selectedLandOwnership, landOwnerships[index]);
+            }
+          }
+        }
+        // this.landOwnershipLoading = false;
+        this.landOwnershipControl.enable();
+      },
+      error => {
+        this.errorMessage = <any>error;
+      }
+    );
+
+
+    // this.speciesLoading = true;
     // get species from the species service
     this._speciesService.getSpecies()
     .subscribe(
@@ -128,7 +220,7 @@ export class CustomNotificationComponent implements OnInit {
             }
           }
         }
-        this.speciesLoading = false;
+        // this.speciesLoading = false;
         this.speciesControl.enable();
       },
       error => {
@@ -136,6 +228,7 @@ export class CustomNotificationComponent implements OnInit {
       }
     );
 
+    // this.diagnosisLoading = true;
     // get species diagnosis from the species diagnosis service
     this._speciesDiagnosisService.getSpeciesDiagnosis()
     .subscribe(
@@ -176,7 +269,7 @@ export class CustomNotificationComponent implements OnInit {
             }
           }
         }
-        this.diagnosisLoading = false;
+        // this.diagnosisLoading = false;
         this.diagnosisControl.enable();
       },
       error => {
@@ -210,5 +303,37 @@ export class CustomNotificationComponent implements OnInit {
       case 'adminLevelOne': this.adminLevelOneControl.reset();
         break;
     }
+  }
+
+  // TODO - set up DELETE Cue
+  deleteCue() {
+
+  }
+
+  openCueDeleteConfirm(eventGroup) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Cue Confirm',
+          titleIcon: 'delete_forever',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to delete this cue?\nThis action cannot be undone.',
+          confirmButtonText: 'Yes, Delete Cue',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deleteCue();
+      }
+    });
+  }
+
+  // TODO - set up POST for notification cue
+  onSubmit() {
+    this.customNotificationDialogRef.close();
   }
 }

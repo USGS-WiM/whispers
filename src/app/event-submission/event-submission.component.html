@@ -88,7 +88,7 @@
                         [placeholderLabel]="'Find organization...'"
                         [noEntriesFoundLabel]="'no matching organization found'"></ngx-mat-select-search>
                       <mat-option *ngFor="let organization of filteredOrganizations[eventOrgIndex] | async"
-                        [value]="organization.id">
+                        [value]="organization.id" matTooltip={{organization.name}}>
                         {{organization.name}}
                       </mat-option>
                     </mat-select>

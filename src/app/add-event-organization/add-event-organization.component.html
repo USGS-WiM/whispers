@@ -15,7 +15,7 @@
         <mat-select formControlName="organization" placeholder="Organization" #organizationSelect>
           <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="'Find organization...'"
             [noEntriesFoundLabel]="'no matching organization found'"></ngx-mat-select-search>
-          <mat-option *ngFor="let organization of filteredOrganizations | async" [value]="organization.id">
+          <mat-option *ngFor="let organization of filteredOrganizations | async" [value]="organization.id" matTooltip={{organization.name}}>
             <span>{{organization.name}}</span>
           </mat-option>
         </mat-select>

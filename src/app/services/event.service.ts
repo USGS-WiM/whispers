@@ -224,6 +224,32 @@ export class EventService {
   // Function for retrieving event details given event id
   public getEventDetails(eventID): Observable<EventDetail> {
 
+    // TODO: update for use of HttpClient standard, and implement http interceptor
+
+    /////////////////////////////////////////////////
+
+    // do conditional for auth headers
+
+    // let headers;
+    // if (sessionStorage.username !== undefined) {
+    //   headers = APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS;
+    // } else {
+    //   headers = APP_SETTINGS.JSON_HEADERS;
+    // }
+
+    // return this.http.get(APP_SETTINGS.EVENT_DETAILS_URL + eventID, {
+    //   headers: headers,
+    //   params: new HttpParams().set('no_page', null)
+    // })
+    //   .map((res: any) => {
+    //     // const response = res.json();
+    //     // return res.results;
+    //     return <EventDetail>res.json();
+    //   })
+    //   .catch(this.handleError);
+
+    ////////////////////////////////////////
+
     let options;
     if (sessionStorage.username !== undefined) {
       options = new RequestOptions({
@@ -237,7 +263,7 @@ export class EventService {
 
     return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL + eventID + '?no_page', options)
       .map((response: Response) => <EventDetail>response.json())
-      .catch(this.handleError);
+      .catch(this.handleEventDetailsError);
   }
 
   public getUserDashboardEventSummaries(): Observable<EventSummary[]> {
@@ -371,6 +397,11 @@ export class EventService {
   private handleError(error: Response) {
     console.error(error);
     return throwError(JSON.stringify(error.json()) || 'Server error');
+  }
+
+  private handleEventDetailsError(error: Response) {
+    console.error(error);
+    return throwError(error);
   }
 
 }

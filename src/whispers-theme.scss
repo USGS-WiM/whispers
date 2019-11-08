@@ -7,7 +7,8 @@
 
 $whispers-app-primary: mat-palette($mat-indigo, A700, A400, A200);
 $whispers-app-accent:  mat-palette($mat-indigo, A700, A400, A200);
-$whispers-app-warn:    mat-palette($mat-red);
+// $whispers-app-surface: mat-palette($mat-indigo, A50, A50, A50);
+$whispers-app-warn: mat-palette($mat-red);
 
 
 $whispers-app-theme: mat-light-theme($whispers-app-primary, $whispers-app-accent, $whispers-app-warn);

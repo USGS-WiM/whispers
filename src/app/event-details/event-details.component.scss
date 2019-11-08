@@ -226,6 +226,10 @@ tr.noBorder td {
     border-radius: 4px;
     cursor: pointer;
     opacity: 0.87;
+
+    @media (max-width: 1500px) {
+        max-height: 30vh;
+    }
 }
 
 .legend-label {
@@ -249,6 +253,10 @@ tr.noBorder td {
 
 .legendIcon {
     display: inline-block;
+}
+
+.legend .mat-expanded {
+   overflow-y: auto;
 }
 
 .legend-label {
@@ -806,6 +814,7 @@ tr.noBorder td {
             color: #313B57;
             padding-left: 4px;
             box-sizing: border-box;
+            padding-top: 15px;
 
             .comment-response {
                 display: block;
@@ -921,3 +930,13 @@ tr.noBorder td {
     }
 }
 
+/* Styles for tab labels */
+.mat-tab-label {
+    background-color: lightgrey;
+    // font-weight: 700;
+}
+
+.tab-bar {
+    // background-color:#9fa8da
+    background-color: lightgrey
+}

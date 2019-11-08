@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -78,6 +78,7 @@ declare let gtag: Function;
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.scss'],
+  // encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('detailExpand', [
       state('void', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
@@ -96,6 +97,12 @@ export class EventDetailsComponent implements OnInit {
   landownerships;
   species: Species[] = [];
   speciesLoading = false;
+
+  eventCommentsPanelOpen = false;
+  serviceRequestPanelOpen = false;
+  collaboratorsPanelOpen = false;
+  locationCommentsPanelOpen = false;
+  locationContactsPanelOpen = false;
 
   eventOwner;
 
@@ -143,9 +150,8 @@ export class EventDetailsComponent implements OnInit {
   commentTypes: CommentType[];
 
   locationMarkers;
-
   unMappables = [];
-
+  eventPolys;
   userContacts;
   userContactsLoading = false;
 
@@ -248,11 +254,33 @@ export class EventDetailsComponent implements OnInit {
                 this.readCollaboratorArray = eventdetails.read_collaborators;
                 this.writeCollaboratorArray = eventdetails.write_collaborators;
 
+                // for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                //   if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
+                //     this.possibleEventDiagnoses.push(speciesdiagnosis);
+                //   }
+                // }
+
                 for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
                   if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
                     this.possibleEventDiagnoses.push(speciesdiagnosis);
+                  } else {
+                    // it is in there already:
+                    // check if this one's suspect field is false
+                    if (speciesdiagnosis.suspect === false) {
+                      // if it is, then we need to remove the previously added one and add this one which is suspect = false
+                      // loop thru possibleEventDiagnoses, if match, remove
+                      for (let i = 0; i < this.possibleEventDiagnoses.length; i++) {
+                        if (this.possibleEventDiagnoses[i].diagnosis === speciesdiagnosis.diagnosis) {
+                          this.possibleEventDiagnoses.splice(i, 1);
+                        }
+                      }
+                      // then add the non suspect one
+                      this.possibleEventDiagnoses.push(speciesdiagnosis);
+
+                    }
                   }
                 }
+
               }
             }
 
@@ -270,9 +298,12 @@ export class EventDetailsComponent implements OnInit {
           error => {
             this.errorMessage = <any>error;
             this.eventDataLoading = false;
-            if (JSON.parse(error).detail === 'Not found.') {
+            if (error.status !== 200) {
               this.eventNotFound = true;
             }
+            // if (JSON.parse(error).detail === 'Not found.') {
+
+            // }
           }
         );
     });
@@ -514,7 +545,6 @@ export class EventDetailsComponent implements OnInit {
   }
 
   mapEvent(eventData) {
-
     const markers = [];
     let countyPolys = [];
     this.unMappables = [];
@@ -524,14 +554,15 @@ export class EventDetailsComponent implements OnInit {
         countyPolys.push(JSON.parse(eventlocation.administrative_level_two_points.replace('Y', '')));
       }
     }
-
-    let eventPolys;
+    console.log('mapevents ' + this.locationMarkers);
+    // let eventPolys;
     if (countyPolys.length > 0) {
-      eventPolys = L.polygon(countyPolys, { color: 'blue' }).addTo(this.map);
+      if (this.eventPolys) {
+        this.map.removeLayer(this.eventPolys);
+      }
+      this.eventPolys = L.polygon(countyPolys, { color: 'blue' }).addTo(this.map);
     }
-
     for (const marker of markers) {
-
       if (marker.latitude === null || marker.longitude === null || marker.latitude === undefined || marker.longitude === undefined) {
         this.unMappables.push(marker);
       } else if (marker.latitude !== null || marker.longitude !== null || marker.latitude !== undefined || marker.longitude !== undefined) {
@@ -554,12 +585,12 @@ export class EventDetailsComponent implements OnInit {
     let bounds = L.latLngBounds([]);
 
     if (markers.length > this.unMappables.length) {
-      var markerBounds = this.locationMarkers.getBounds()
+      var markerBounds = this.locationMarkers.getBounds();
       bounds.extend(markerBounds);
     }
 
     if (countyPolys.length > 0) {
-      var countyBounds = eventPolys.getBounds();
+      var countyBounds = this.eventPolys.getBounds();
       bounds.extend(countyBounds);
     }
 
@@ -569,12 +600,33 @@ export class EventDetailsComponent implements OnInit {
 
   }
 
+  reloadMap() {
+    setTimeout(() => {
+      this.locationMarkers.clearLayers();
+      this.mapEvent(this.eventData);
+    }, 2500);
+  }
+
   navigateToHome() {
     this.router.navigate([`../../home`], { relativeTo: this.route });
   }
 
   navigateToEventDetails(eventID) {
+    this.eventLocationSpecies = [];
     this.router.navigate([`../${eventID}`], { relativeTo: this.route });
+    this.reloadMap();
+    // location.reload();
+    // this.refreshEvent();
+  }
+
+  // panels are closed when tabs are switched, but the panel boolean isn't actually changed. This is setting them all to false.
+  resetExpansionPanels() {
+    this.eventCommentsPanelOpen = false;
+    this.serviceRequestPanelOpen = false;
+    this.collaboratorsPanelOpen = false;
+    this.locationCommentsPanelOpen = false;
+    this.locationContactsPanelOpen = false;
+
   }
 
   editEvent(id: string) {
@@ -605,7 +657,7 @@ export class EventDetailsComponent implements OnInit {
                   }
                 }
 
-                console.log('eventLocationSpecies:', this.eventLocationSpecies);
+                // console.log('eventLocationSpecies:', this.eventLocationSpecies);
                 //  this.speciesTableRows = this.eventLocationSpecies;
                 this.eventDataLoading = false;
               },
@@ -1122,13 +1174,21 @@ export class EventDetailsComponent implements OnInit {
   refreshEvent() {
     this.viewPanelStates = new Object();
     this.getViewPanelState(this.viewPanels);
+
+    console.log('Event Location Species list at start of refresh: ', this.eventLocationSpecies);
+
+    this.eventLocationSpecies = [];
+    console.log('Event Location Species list after set to blank array: ', this.eventLocationSpecies);
+
+    this.possibleEventDiagnoses = [];
+
     this._eventService.getEventDetails(this.eventID)
       .subscribe(
         (eventdetails) => {
           this.eventData = eventdetails;
 
-          this.eventLocationSpecies = [];
-          this.possibleEventDiagnoses = [];
+          // this.eventLocationSpecies = [];
+          // this.possibleEventDiagnoses = [];
           for (const event_location of this.eventData.eventlocations) {
             for (const locationspecies of event_location.locationspecies) {
               locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
@@ -1139,10 +1199,28 @@ export class EventDetailsComponent implements OnInit {
               for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
                 if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
                   this.possibleEventDiagnoses.push(speciesdiagnosis);
+                } else {
+                  // it is in there already:
+                  // check if this one's suspect field is false
+                  if (speciesdiagnosis.suspect === false) {
+                    // if it is, then we need to remove the previously added one and add this one which is suspect = false
+                    // loop thru possibleEventDiagnoses, if match, remove
+                    for (let i = 0; i < this.possibleEventDiagnoses.length; i++) {
+                      if (this.possibleEventDiagnoses[i].diagnosis === speciesdiagnosis.diagnosis) {
+                        this.possibleEventDiagnoses.splice(i, 1);
+                      }
+                    }
+                    // then add the non suspect one
+                    this.possibleEventDiagnoses.push(speciesdiagnosis);
+
+                  }
                 }
               }
+
             }
           }
+
+          console.log('Event Location Species list after populated: ', this.eventLocationSpecies);
 
           // add the "Undetermined" diagnosis to possibleDiagnoses, only if not already in the list
           if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis)) {

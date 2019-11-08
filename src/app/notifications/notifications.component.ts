@@ -31,10 +31,13 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   selection;
   notificationsLoading = false;
 
-  // toggle hints
-  emailAll;
-  toggle2;
-  toggle3;
+  // toggles
+  emailAllOwnedNotificationsToggle;
+  yourEventsToggle;
+  yourOrgEventsToggle;
+  yourCollabEventsToggle;
+  allEventsToggle;
+
   dummyNotifications = APP_UTILITIES.dummyData;
 
   customNotificationRef: MatDialogRef<CustomNotificationComponent>;
@@ -77,6 +80,13 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     this.notificationsDataSource = new MatTableDataSource(this.dummyNotifications);
     this.notificationsLoading = true;
     this.notificationsDataSource.paginator = this.notificationPaginator;
+
+    // TODO - populate with state from service
+    this.emailAllOwnedNotificationsToggle = false;
+    this.yourEventsToggle = false;
+    this.yourOrgEventsToggle = false;
+    this.yourCollabEventsToggle = false;
+    this.allEventsToggle = false;
   }
 
   ngAfterViewInit(): void {
@@ -94,14 +104,18 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     this.customNotificationRef = this.dialog.open(CustomNotificationComponent);
   }
 
+  emailAllOwnedNotifications(state) {
+    this.emailAllOwnedNotificationsToggle = !this.emailAllOwnedNotificationsToggle;
+  }
 
-  deleteWarning(trigger) {
+
+  deleteWarning(cue) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
         data: {
           title: 'Delete Cue',
           // tslint:disable-next-line:max-line-length
-          message: 'Are you sure you want to delete the "' + trigger.name + '" cue?',
+          message: 'Are you sure you want to delete the "' + cue.name + '" cue?',
           confirmButtonText: 'Delete',
           messageIcon: '',
           showCancelButton: true
@@ -111,7 +125,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.navigateToEvent(event);
+        // add delete function
+        this.confirmDialogRef.close();
       }
     });
   }

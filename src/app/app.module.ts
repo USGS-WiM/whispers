@@ -41,7 +41,8 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatBottomSheetModule,
-  MatStepperModule
+  MatStepperModule,
+  MatBadgeModule,
 } from '@angular/material';
 
 
@@ -122,6 +123,9 @@ import { CircleChooseComponent } from './circle-management/circle-choose/circle-
 import { DiagnosticInfoComponent } from './diagnostic-info/diagnostic-info.component';
 import { CommentsTableComponent } from './comments-table/comments-table.component';
 import { ViewCommentDetailsComponent } from './view-comment-details/view-comment-details.component';
+import { AlertCollaboratorsComponent } from './alert-collaborators/alert-collaborators.component';
+import { NotificationsComponent } from './notifications/notifications.component';
+import { CustomNotificationComponent } from './custom-notification/custom-notification.component';
 import { BrowserWarningComponent } from './browser-warning/browser-warning.component';
 
 
@@ -171,6 +175,9 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     DiagnosticInfoComponent,
     CommentsTableComponent,
     ViewCommentDetailsComponent,
+    AlertCollaboratorsComponent,
+    NotificationsComponent,
+    CustomNotificationComponent,
     BrowserWarningComponent,
   ],
   imports: [
@@ -217,6 +224,7 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     MatTooltipModule,
     MatBottomSheetModule,
     MatStepperModule,
+    MatBadgeModule,
     NgxMatSelectSearchModule
   ],
   providers: [
@@ -287,7 +295,9 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     CircleChooseComponent,
     DiagnosticInfoComponent,
     ViewCommentDetailsComponent,
-    BrowserWarningComponent
+    CustomNotificationComponent,
+    BrowserWarningComponent,
+    CustomNotificationComponent
   ]
 })
 export class AppModule { }

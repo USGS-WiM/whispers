@@ -13,6 +13,8 @@ import { CurrentUserService } from '@services/current-user.service';
 import { APP_SETTINGS } from '@app/app.settings';
 import { AuthenticationService } from '@app/services/authentication.service';
 
+import { APP_UTILITIES } from '@app/app.utilities';
+import { Notification } from '@app/interfaces/notification';
 
 // Needed for scroll to top
 import { isPlatformBrowser } from '@angular/common';
@@ -33,9 +35,16 @@ export class AppComponent implements OnInit {
   public whispersVersion = '';
   public bannerWarning = '';
   public bannerTextColor = '';
-  //public isLoggedIn;
+  // public isLoggedIn;
+  notificationCount;
+  firstTenNotifications = [];
+  dummyNotifications = APP_UTILITIES.dummyData;
+  notificationsToDisplay;
 
   public currentUser;
+
+  // dummy data to work with. delete once notifications backend complete
+
 
   aboutDialogRef: MatDialogRef<AboutComponent>;
   authenticationDialogRef: MatDialogRef<AuthenticationComponent>;
@@ -62,7 +71,7 @@ export class AppComponent implements OnInit {
 
     this.bannerTextColor = APP_SETTINGS.BANNER_TEXT_COLOR;
 
-    //this.isLoggedIn = APP_SETTINGS.IS_LOGGEDIN;
+    // this.isLoggedIn = APP_SETTINGS.IS_LOGGEDIN;
 
     // if (sessionStorage.getItem('username') === '' || sessionStorage.getItem('username') === undefined) {
     //   this.currentUserService.updateCurrentUser({
@@ -102,6 +111,16 @@ export class AppComponent implements OnInit {
     //     'username': ''
     //   });
     // }
+
+    // showing only the first 10 notifications in the mat-menu and adding button to dashboard
+    this.firstTenNotifications = this.dummyNotifications.slice(0, 10);
+
+    this.notificationCount = this.dummyNotifications.length;
+    if (this.notificationCount > 10) {
+      this.notificationsToDisplay = this.firstTenNotifications;
+    } else {
+      this.notificationsToDisplay = this.dummyNotifications;
+    }
   }
 
   openUserDashboard() {
@@ -127,7 +146,7 @@ export class AppComponent implements OnInit {
 
   openAuthenticationDialog() {
     this.authenticationDialogRef = this.dialog.open(AuthenticationComponent, {
-      //minWidth: '60%'
+      // minWidth: '60%'
       // disableClose: true, data: {
       //   query: this.currentDisplayQuery
       // }
@@ -144,6 +163,15 @@ export class AppComponent implements OnInit {
     this.router.navigate([`../eventsubmission/`], { relativeTo: this.route });
   }
 
+  navigateNotificationSelect(event) {
+    if (!event) {
+      // For some cases need to redirect to the user dashboard
+      this.router.navigate([`../userdashboard/`], { relativeTo: this.route });
+    } else {
+
+      this.router.navigate([`../event/${event}`], { relativeTo: this.route });
+    }
+  }
 
   // Scroll to top on each route change
   onActivate(event: any) {

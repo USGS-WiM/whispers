@@ -1378,7 +1378,6 @@ export class EventDetailsComponent implements OnInit {
             for (const user of this.readCollaboratorArray) {
               readCollaboratorIDArray.push(user.id);
             }
-
             const writeCollaboratorIDArray = [];
             for (const user of this.writeCollaboratorArray) {
               writeCollaboratorIDArray.push(user.id);

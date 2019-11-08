@@ -195,4 +195,12 @@
   </mat-tab>
   <!-- End Circles Tab -->
 
+  <!-- Notifications Tab -->
+  <mat-tab label="Notifications" *ngIf="currentUser.role !== 7">
+    <div class="notifications-div">
+      <app-notifications></app-notifications>
+    </div>
+  </mat-tab>
+  <!-- Notifications Tab -->
+
 </mat-tab-group>

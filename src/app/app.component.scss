@@ -176,6 +176,50 @@
 
 }
 
+.navigateToDashboard{
+    color: #304ffe;
+    mat-icon {
+        color: #304ffe;
+    }
+}
+
+::ng-deep button.mat-menu-item {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    outline: 0;
+    border: none;
+    -webkit-tap-highlight-color: transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    line-height: 35px;
+    height: auto;
+    padding: 0 16px;
+    text-align: left;
+    text-decoration: none;
+    max-width: 100%;
+    position: relative;
+}
+
+::ng-deep button.mat-menu-item:hover {
+    color: #304ffe;
+}
+
+::ng-deep div.mat-menu-panel {
+    min-width: 112px;
+      /** set width to 500px */
+    max-width: 500px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(100vh - 48px);
+    border-radius: 4px;
+    outline: 0;
+}
+
 
 // App Footer 
 // App Footer 

@@ -20,40 +20,40 @@
                         <div class="mat-header-row">
                           <div class="mat-header-cell"></div>
                           <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText"></span></div>
-                          <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;" (click)="emailAllOwnedNotifications(state)"><mat-icon class="icon">email</mat-icon><span class="headerText"> Email me all <mat-slide-toggle><span class="text-small text-italic">{{emailAllOwnedNotificationsToggle === true ? ' (on) ' :
-                            emailAllOwnedNotificationsToggle === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></span></div>
+                          <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;"><mat-icon class="icon">email</mat-icon><span class="headerText"> Email me all <mat-slide-toggle id="emailAllOwned" (change)="emailAllOwnedNotifications()" [checked]="emailAllOwnedChecked"><span class="text-small text-italic">{{emailAllOwnedChecked === true ? ' (on) ' :
+                            emailAllOwnedChecked === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></span></div>
                         </div>
                         <div class="mat-row">
                             <div class="mat-header-cell">Your Events</div>
                             <div class="mat-cell">
                               <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
                             </div>
-                            <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{yourEventsToggle === true ? ' (on) ' :
-                              yourEventsToggle === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
+                            <div class="mat-cell"><mat-slide-toggle [checked]="yourEventsChecked" (change)="yourEvents()"><span class="text-small text-italic">{{yourEventsChecked === true ? ' (on) ' :
+                              yourEventsChecked === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
                         </div>
                         <div class="mat-row">
                           <div class="mat-header-cell">Your Organization Events</div>
                           <div class="mat-cell">
                               <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
                             </div>
-                          <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{yourOrgEventsToggle === true ? ' (on) ' :
-                            yourOrgEventsToggle === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
+                          <div class="mat-cell"><mat-slide-toggle [checked]="yourOrgEventsChecked" (change)="yourOrgEvents()"><span class="text-small text-italic">{{yourOrgEventsChecked === true ? ' (on) ' :
+                            yourOrgEventsChecked === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
                         </div>
                         <div class="mat-row">
                           <div class="mat-header-cell">Your Collaboration Events</div>
                           <div class="mat-cell">
                               <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
                             </div>
-                          <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{yourCollabEventsToggle === true ? ' (on) ' :
-                            yourCollabEventsToggle === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
+                          <div class="mat-cell"><mat-slide-toggle [checked]="yourCollabEventsChecked" (change)="yourCollabEvents()"><span class="text-small text-italic">{{yourCollabEventsChecked === true ? ' (on) ' :
+                            yourCollabEventsChecked === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
                         </div>
                         <div class="mat-row">
                           <div class="mat-header-cell">All Events*</div>
                           <div class="mat-cell">
                               <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
                             </div>
-                          <div class="mat-cell"><mat-slide-toggle><span class="text-small text-italic">{{allEventsToggle === true ? ' (on) ' :
-                            allEventsToggle === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
+                          <div class="mat-cell"><mat-slide-toggle [checked]="allEventsChecked" (change)="allEvents()"><span class="text-small text-italic">{{allEventsChecked === true ? ' (on) ' :
+                            allEventsChecked === false ? ' (off) ' : ' (off) ' }}</span></mat-slide-toggle></div>
                         </div>
                       </div>
                       <div class="warning">

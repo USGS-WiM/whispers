@@ -32,11 +32,11 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   notificationsLoading = false;
 
   // toggles
-  emailAllOwnedNotificationsToggle;
-  yourEventsToggle;
-  yourOrgEventsToggle;
-  yourCollabEventsToggle;
-  allEventsToggle;
+  emailAllOwnedChecked: boolean;
+  yourEventsChecked: boolean;
+  yourOrgEventsChecked: boolean;
+  yourCollabEventsChecked: boolean;
+  allEventsChecked: boolean;
 
   dummyNotifications = APP_UTILITIES.dummyData;
 
@@ -80,13 +80,6 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     this.notificationsDataSource = new MatTableDataSource(this.dummyNotifications);
     this.notificationsLoading = true;
     this.notificationsDataSource.paginator = this.notificationPaginator;
-
-    // TODO - populate with state from service
-    this.emailAllOwnedNotificationsToggle = false;
-    this.yourEventsToggle = false;
-    this.yourOrgEventsToggle = false;
-    this.yourCollabEventsToggle = false;
-    this.allEventsToggle = false;
   }
 
   ngAfterViewInit(): void {
@@ -94,6 +87,14 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.notificationsDataSource.sort = this.sort;
     }, 3000);
+
+    // TODO - populate with default states or with existing state from service
+    // sidenote: I'm setting them here because they weren't working on the first click if I set them in the ngOnInit function ¯\_(ツ)_/¯
+    this.emailAllOwnedChecked = false;
+    this.yourEventsChecked = false;
+    this.yourOrgEventsChecked = false;
+    this.yourCollabEventsChecked = false;
+    this.allEventsChecked = false;
   }
 
   navigateToEvent(event) {
@@ -104,10 +105,49 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     this.customNotificationRef = this.dialog.open(CustomNotificationComponent);
   }
 
-  emailAllOwnedNotifications(state) {
-    this.emailAllOwnedNotificationsToggle = !this.emailAllOwnedNotificationsToggle;
+  emailAllOwnedNotifications() {
+    this.emailAllOwnedChecked = !this.emailAllOwnedChecked;
+    if (this.emailAllOwnedChecked === true) {
+    this.yourEventsChecked = true;
+    this.yourOrgEventsChecked = true;
+    this.yourCollabEventsChecked = true;
+    this.allEventsChecked = true;
+    } else {
+      this.yourEventsChecked = false;
+      this.yourOrgEventsChecked = false;
+      this.yourCollabEventsChecked = false;
+      this.allEventsChecked = false;
+    }
   }
 
+  yourEvents() {
+    this.yourEventsChecked = !this.yourEventsChecked;
+    this.checkIfAllOwnedTogglesTrue();
+  }
+
+  yourOrgEvents() {
+    this.yourOrgEventsChecked = !this.yourOrgEventsChecked;
+    this.checkIfAllOwnedTogglesTrue();
+  }
+
+  yourCollabEvents() {
+    this.yourCollabEventsChecked = !this.yourCollabEventsChecked;
+    this.checkIfAllOwnedTogglesTrue();
+  }
+
+  allEvents() {
+    this.allEventsChecked = !this.allEventsChecked;
+    this.checkIfAllOwnedTogglesTrue();
+  }
+
+  checkIfAllOwnedTogglesTrue() {
+    if (this.yourEventsChecked && this.yourOrgEventsChecked && this.yourCollabEventsChecked && this.allEventsChecked) {
+     // this.emailAllOwnedNotificationsToggle = true;
+      this.emailAllOwnedChecked = true;
+    } else {
+      this.emailAllOwnedChecked = false;
+    }
+  }
 
   deleteWarning(cue) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,

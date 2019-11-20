@@ -137,8 +137,10 @@
                   <tr *ngFor="let eventGroup of eventData.eventgroups">
                     <td>{{eventGroup.name}}</td>
                     <td>
-                      <button mat-button *ngFor="let eventID of eventGroup.events" class="link-button"
-                        (click)="navigateToEventDetails(eventID);" class="link-button">{{eventID}}</button>
+                      <span *ngFor="let eventID of eventGroup.events">
+                        <button mat-button  class="link-button" *ngIf="eventID !== eventData.id"
+                          (click)="navigateToEventDetails(eventID);" class="link-button">{{eventID}}</button>
+                        </span>
                       <!-- <button mat-button *ngFor="let eventID of eventGroup.events" class="link-button"
                         routerLink="../../event/{{eventID}}" class="link-button">{{eventID}}</button> -->
                     </td>
@@ -476,7 +478,7 @@
                     <div class="event-page-group">
 
                       <mat-expansion-panel (opened)="eventCommentsPanelOpen = true"
-                        (closed)="eventCommentsPanelOpen = false"> 
+                        (closed)="eventCommentsPanelOpen = false">
                         <mat-expansion-panel-header>
                           <mat-panel-title>
                             <mat-icon>comment</mat-icon>

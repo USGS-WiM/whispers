@@ -1187,7 +1187,8 @@ export class EventDetailsComponent implements OnInit {
         (eventdetails) => {
           this.eventData = eventdetails;
 
-          // this.eventLocationSpecies = [];
+          this.eventLocationSpecies = [];
+
           // this.possibleEventDiagnoses = [];
           for (const event_location of this.eventData.eventlocations) {
             for (const locationspecies of event_location.locationspecies) {

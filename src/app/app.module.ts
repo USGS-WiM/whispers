@@ -127,6 +127,7 @@ import { AlertCollaboratorsComponent } from './alert-collaborators/alert-collabo
 import { NotificationsComponent } from './notifications/notifications.component';
 import { CustomNotificationComponent } from './custom-notification/custom-notification.component';
 import { BrowserWarningComponent } from './browser-warning/browser-warning.component';
+import { CollaborationRequestComponent } from './collaboration-request/collaboration-request.component';
 
 
 
@@ -179,6 +180,7 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     NotificationsComponent,
     CustomNotificationComponent,
     BrowserWarningComponent,
+    CollaborationRequestComponent,
   ],
   imports: [
     BrowserModule,
@@ -297,7 +299,8 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     ViewCommentDetailsComponent,
     CustomNotificationComponent,
     BrowserWarningComponent,
-    CustomNotificationComponent
+    CustomNotificationComponent,
+    CollaborationRequestComponent
   ]
 })
 export class AppModule { }

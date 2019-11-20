@@ -287,6 +287,9 @@
               <div class="permission" *ngIf="eventData.permissions.update === true">Update</div>
               <!-- <div class="permission" *ngIf="eventData.permissions.write === true">Create</div> -->
               <div class="permission red" *ngIf="eventData.permissions.destroy === true">Delete</div>
+
+              <button mat-button color="primary" class="event-detail-action-button" (click)="openCollaborationRequestDialog()">
+                <mat-icon>group</mat-icon> Request to Collaborate</button>
             </div>
             <span class="title"
               *ngIf="eventData.complete && (eventData.permissions.update === true || eventData.permissions.destroy === true)">Editing

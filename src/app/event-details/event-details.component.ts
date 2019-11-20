@@ -72,6 +72,7 @@ import { CircleManagementComponent } from '@app/circle-management/circle-managem
 import { CircleChooseComponent } from '@app/circle-management/circle-choose/circle-choose.component';
 import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
+import { CollaborationRequestComponent } from '@app/collaboration-request/collaboration-request.component';
 declare let gtag: Function;
 
 @Component({
@@ -120,6 +121,7 @@ export class EventDetailsComponent implements OnInit {
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   circleChooseDialogRef: MatDialogRef<CircleChooseComponent>;
   circleManagementDialogRef: MatDialogRef<CircleManagementComponent>;
+  collaborationRequestDialogRef: MatDialogRef<CollaborationRequestComponent>;
 
   addCommentDialogRef: MatDialogRef<AddCommentComponent>;
 
@@ -1169,6 +1171,33 @@ export class EventDetailsComponent implements OnInit {
 
   addToEventGroup() {
 
+  }
+
+  openCollaborationRequestDialog(eventID) {
+    // Open dialog for collaboration request
+    this.collaborationRequestDialogRef = this.dialog.open(CollaborationRequestComponent, {
+      disableClose: true,
+      minWidth: '75%',
+      data: {
+        event_id: eventID,
+        comment_types: this.commentTypes,
+        title: 'Request to Collaborate',
+        titleIcon: 'group',
+        showCancelButton: true,
+        action_button_text: 'Submit request',
+        actionButtonIcon: 'submit'
+      }
+    });
+
+    this.collaborationRequestDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
 
   refreshEvent() {

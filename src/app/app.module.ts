@@ -123,6 +123,7 @@ import { DiagnosticInfoComponent } from './diagnostic-info/diagnostic-info.compo
 import { CommentsTableComponent } from './comments-table/comments-table.component';
 import { ViewCommentDetailsComponent } from './view-comment-details/view-comment-details.component';
 import { BrowserWarningComponent } from './browser-warning/browser-warning.component';
+import { EventPublicReportComponent } from './event-public-report/event-public-report.component';
 
 
 
@@ -172,6 +173,7 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     CommentsTableComponent,
     ViewCommentDetailsComponent,
     BrowserWarningComponent,
+    EventPublicReportComponent,
   ],
   imports: [
     BrowserModule,
@@ -283,6 +285,7 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     UserRegistrationComponent,
     ViewContactDetailsComponent,
     EventGroupManagementComponent,
+    EventPublicReportComponent,
     CircleManagementComponent,
     CircleChooseComponent,
     DiagnosticInfoComponent,

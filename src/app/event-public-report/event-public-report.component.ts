@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, Input, Output, EventEmitter, HostListener } from '@angular/core';
 
 import pdfMake from 'pdfmake/build/pdfMake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
@@ -9,6 +9,8 @@ import { APP_UTILITIES } from '@app/app.utilities';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 import { EventDetail } from '@interfaces/event-detail';
+
+import { ReportsService } from '@app/services/reports.service';
 declare let gtag: Function;
 
 @Component({
@@ -17,17 +19,27 @@ declare let gtag: Function;
   styleUrls: ['./event-public-report.component.scss']
 })
 
-export class EventPublicReportComponent implements OnInit {
-  @Input('eventData') eventData: EventDetail;
+export class EventPublicReportComponent implements OnInit, AfterViewInit {
   canvas = document.createElement('canvas');
 
-  constructor() { }
+  // this isn't working????
+  @Input('eventData') eventData: EventDetail;
+  constructor(
+    private reportsServices: ReportsService
+  ) {
+}
 
   ngOnInit() {
   }
 
-  printToPDF() {
-    // google analytics event
+  ngAfterViewInit() {
+
+  }
+
+  print() {
+    console.log('printing');
+
+    // google analytics events
     gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Downloaded Event Report' });
     const whispersLogo = 'src/app/event-details/logo.png'; // TODO: move photo to more appropriate location
 
@@ -40,7 +52,7 @@ export class EventPublicReportComponent implements OnInit {
     // looping thru all organizations incase there are multiple
     const organizations = [];
     for ( const organzation of data.eventorganizations) {
-      organizations.push(organzation.organization.name);
+      organizations.push(organzation.name);
     }
     console.log(organizations);
 

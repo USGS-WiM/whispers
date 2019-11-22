@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -64,6 +64,7 @@ import { ContactService } from '@services/contact.service';
 import { CreateContactComponent } from '@create-contact/create-contact.component';
 import { CreateContactService } from '@create-contact/create-contact.service';
 
+import { ReportsService } from '@app/services/reports.service';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -76,6 +77,7 @@ import { CircleManagementComponent } from '@app/circle-management/circle-managem
 import { CircleChooseComponent } from '@app/circle-management/circle-choose/circle-choose.component';
 import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
+import { Z_DATA_ERROR } from 'zlib';
 declare let gtag: Function;
 
 @Component({
@@ -92,6 +94,7 @@ declare let gtag: Function;
   ],
 })
 export class EventDetailsComponent implements OnInit {
+  @Output() myEvent = new EventEmitter();
 
   // @ViewChild('speciesTable') table: any;
   eventID: string;
@@ -162,6 +165,7 @@ export class EventDetailsComponent implements OnInit {
   errorMessage;
   flywaysVisible = false;
   watershedsVisible = false;
+
   canvas = document.createElement('canvas');
 
   locationSpeciesDisplayedColumns = [
@@ -183,7 +187,7 @@ export class EventDetailsComponent implements OnInit {
 
   @ViewChild(MatPaginator) locationSpeciesPaginator: MatPaginator;
   @ViewChild(MatSort) locationSpeciesSort: MatSort;
-
+  @ViewChild(EventPublicReportComponent) eventReportComponent: EventPublicReportComponent;
   @ViewChildren(MatExpansionPanel) viewPanels: QueryList<MatExpansionPanel>;
 
   constructor(private route: ActivatedRoute,
@@ -207,6 +211,7 @@ export class EventDetailsComponent implements OnInit {
     private commentService: CommentService,
     private contactService: ContactService,
     private circleService: CircleService,
+    private reportsServices: ReportsService,
     public snackBar: MatSnackBar,
     private router: Router
   ) {
@@ -237,7 +242,6 @@ export class EventDetailsComponent implements OnInit {
 
     const initialSelection = [];
     const allowMultiSelect = true;
-
     this.eventLocationSpecies = [];
 
     this.route.paramMap.subscribe(params => {
@@ -1167,7 +1171,7 @@ export class EventDetailsComponent implements OnInit {
         },
         error => {
           this.errorMessage = <any>error;
-          this.openSnackBar('Error. Event organzation not deleted. Error message: ' + error, 'OK', 8000);
+          this.openSnackBar('Error. Event organization not deleted. Error message: ' + error, 'OK', 8000);
         }
       );
   }
@@ -1479,6 +1483,11 @@ export class EventDetailsComponent implements OnInit {
     gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Exported Event Details' });
   }
 
+  /* downloadEventReport = function() {
+
+    this.eventReportComponent.print();
+  }; */
+
   // TODO: MOVE OUTSIDE OF EVENT-DETAILS
   downloadEventReport() {
     // google analytics event
@@ -1493,11 +1502,47 @@ export class EventDetailsComponent implements OnInit {
 
     // looping thru all organizations incase there are multiple
     const organizations = [];
-    for ( const organzation of data.eventorganizations) {
-      organizations.push(organzation.organization.name); // need to figure out workaround with type issue here
+    for ( const organization of data.eventorganizations) {
+      organizations.push(organization.organization.name);
     }
-    console.log(organizations);
 
+    // getting number of locations associated with event
+    let locationCount;
+    locationCount = data.eventlocations.length;
+
+    // looping thru all counties of all locations
+    const counties = [];
+    for ( const eventlocation of data.eventlocations) {
+      let formattedString = '';
+      formattedString = eventlocation.administrative_level_two_string + ', ' + eventlocation.administrative_level_one_string + ', ' + eventlocation.country_string;
+      counties.push(formattedString);
+    }
+
+    // looping thru all event diagsoses incase there are multiple
+    const eventDiagnosises = [];
+    for ( const diagnosis of data.eventdiagnoses) {
+      eventDiagnosises.push(diagnosis.diagnosis_string);
+    }
+
+    // looping thru all counties of all locations
+    const labs = [];
+    data.eventlocations.forEach(el => {
+      el.locationspecies.forEach(ls => {
+        ls.speciesdiagnoses.forEach(sd => {
+          labs.push(sd.organizations_string);
+        });
+      });
+    });
+
+    // getting species affected count
+    let speciesAffectedCount = 0;
+    data.eventlocations.forEach(el => {
+      el.locationspecies.forEach(ls => {
+        speciesAffectedCount = speciesAffectedCount + 1;
+      });
+    });
+
+    console.log(speciesAffectedCount);
     // converting whipsers logo png to a dataURL for use in pdfMake
     // TODO it works, but the image i think is getting hidden by other elements, need to fine tune this (maybe with the pdfmake sizing settings)
     const context = this.canvas.getContext('2d');
@@ -1507,11 +1552,16 @@ export class EventDetailsComponent implements OnInit {
       context.drawImage(base_image, 100, 100);
     };
 
+    const startDate = data.start_date;
+    const endDate = data.end_date;
+    const formattedDate = data.start_date + ' - ' + data.end_date;
+
     const pngURL = this.canvas.toDataURL();
     console.log(pngURL);
 
     // print template
     console.log('print');
+
     const docDefinition = {
       pageOrientation: 'landscape',
       content: [
@@ -1534,10 +1584,10 @@ export class EventDetailsComponent implements OnInit {
               table: {
                 widths: [100, 200],
                 body: [
-                  [{text: 'Contact Organziation(s)', bold: true}, organizations],
+                  [{border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true}, organizations],
                 ]
               },
-              layout: 'noBorders'
+              layout: {defaultBorder: false}
             }
           ]
         },
@@ -1549,10 +1599,10 @@ export class EventDetailsComponent implements OnInit {
               table: {
                 widths: [100, 200],
                 body: [
-                  [{text: 'Record Status', bold: true}, data.event_status_string],
+                  [{border: [false, false, true, false], text: 'Record Status', bold: true}, data.event_status_string],
                 ]
               },
-              layout: 'noBorders'
+              layout: {defaultBorder: false}
             }
           ]
         },
@@ -1564,10 +1614,10 @@ export class EventDetailsComponent implements OnInit {
               table: {
                 widths: [100, 200],
                 body: [
-                  [{text: 'Report Generated On', bold: true}, date],
+                  [{border: [false, false, true, false], text: 'Report Generated On', bold: true}, date],
                 ]
               },
-              layout: 'noBorders'
+              layout: {defaultBorder: false}
             }
           ]
         },
@@ -1582,11 +1632,12 @@ export class EventDetailsComponent implements OnInit {
             {
               style: 'smaller',
               table: {
+                widths: [100, 200],
                 body: [
-                  [{text: '# of Locations', bold: true}, date],
+                  [{border: [false, false, true, false], text: '# of Locations', bold: true}, locationCount],
                 ]
               },
-              layout: 'noBorders'
+              layout: {defaultBorder: false}
             }
           ]
         },
@@ -1596,11 +1647,12 @@ export class EventDetailsComponent implements OnInit {
             {
               style: 'smaller',
               table: {
+                widths: [100, 200],
                 body: [
-                  [{text: 'County', bold: true}, date],
+                  [{border: [false, false, true, false], text: 'County (or Equivalent)', bold: true}, counties],
                 ]
               },
-              layout: 'noBorders'
+              layout: {defaultBorder: false}
             }
           ]
         },
@@ -1610,11 +1662,12 @@ export class EventDetailsComponent implements OnInit {
             {
               style: 'smaller',
               table: {
+                widths: [100, 200],
                 body: [
-                  [{text: 'Event Diagnosis', bold: true}, date],
+                  [{border: [false, false, true, false], text: 'Event Diagnosis', bold: true}, eventDiagnosises],
                 ]
               },
-              layout: 'noBorders'
+              layout: {defaultBorder: false}
             }
           ]
         },
@@ -1624,11 +1677,12 @@ export class EventDetailsComponent implements OnInit {
             {
               style: 'smaller',
               table: {
+                widths: [100, 200],
                 body: [
-                  [{text: 'Diagnostic Laboratory', bold: true}, date],
+                  [{border: [false, false, true, false], text: 'Diagnostic Laboratory', bold: true}, labs],
                 ]
               },
-              layout: 'noBorders'
+              layout: {defaultBorder: false}
             }
           ]
         },
@@ -1638,11 +1692,87 @@ export class EventDetailsComponent implements OnInit {
             {
               style: 'smaller',
               table: {
+                widths: [100, 200],
                 body: [
-                  [{text: '# of Animals Affected', bold: true}, date],
+                  [{border: [false, false, true, false], text: '# of Animals Affected', bold: true}, data.affected_count],
                 ]
               },
-              layout: 'noBorders'
+              layout: {defaultBorder: false}
+            }
+          ]
+        },
+        {
+          alignment: 'justify',
+          columns: [
+            {
+              style: 'smaller',
+              table: {
+                widths: [100, 200],
+                body: [
+                  [{border: [false, false, true, false], text: '# of Species Affected', bold: true}, speciesAffectedCount],
+                ]
+              },
+              layout: {defaultBorder: false}
+            }
+          ]
+        },
+        {
+          alignment: 'justify',
+          columns: [
+            {
+              style: 'smaller',
+              table: {
+                widths: [100, 200],
+                body: [
+                  [{border: [false, false, true, false], text: 'Species Most Affected', bold: true}, 'Need to ask how they want this determined'],
+                ]
+              },
+              layout: {defaultBorder: false}
+            }
+          ]
+        },
+        {
+          alignment: 'justify',
+          columns: [
+            {
+              style: 'smaller',
+              table: {
+                widths: [100, 200],
+                body: [
+                  [{border: [false, false, true, false], text: 'Event Start Date - End Date', bold: true}, formattedDate], // TODO: format according to wireframe & Create function to get count of total days event lasted
+                ]
+              },
+              layout: {defaultBorder: false}
+            }
+          ]
+        },
+        {
+          alignment: 'justify',
+          columns: [
+            {
+              style: 'smaller',
+              table: {
+                widths: [100, 200],
+                body: [
+                  [{border: [false, false, true, false], text: 'Associated Events', bold: true}, speciesAffectedCount],
+                ]
+              },
+              layout: {defaultBorder: false}
+            }
+          ]
+        },
+        {
+          alignment: 'justify',
+          columns: [
+            {
+              style: 'smaller',
+              table: {
+                widths: [100, 200],
+                body: [
+                  [{border: [false, false, true, false], text: 'Event Visibility', bold: true}, speciesAffectedCount],
+                ]
+              },
+              layout: {defaultBorder: false}
             }
           ]
         }

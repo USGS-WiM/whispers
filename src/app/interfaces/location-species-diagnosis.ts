@@ -14,4 +14,5 @@ export interface LocationSpeciesDiagnosis extends History {
     suspect_count: number;
     pooled: boolean;
     diagnosis_organization: OrganizationSummary[];
+    organizations_string: string;
 }

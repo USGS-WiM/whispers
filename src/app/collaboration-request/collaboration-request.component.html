@@ -3,19 +3,24 @@
 </h1>
 <mat-dialog-content>
 
-  <!-- <div *ngIf="data.action == 'respond'">
-    {{data.servicerequest.request_type_string}} <br>
-    {{data.servicerequest.created_date | date:'mediumDate'}}
-  </div> -->
+  <div class="collaborate-text">
+    <p>You are requesting to collaborate on Event {{event_id}}. Your request will be sent to the Event Owner and
+      their organization administrators. They will grant you either Read Only or Read & Write Collaborator permissions.
+      Please submit a brief comment below to explain your request to collaborate and specify the permission level desired.
+    </p>
+  </div>
 
-  <!-- <form [formGroup]="serviceRequestForm" autocomplete="off">
+
+  <form [formGroup]="collaborationRequestForm" autocomplete="off">
     <div class="vertical-form-container">
 
-      
+      <mat-form-field class="general-comment-text-area">
+        <textarea matInput maxlength="5000" #comment placeholder="Comment" formControlName="comment"></textarea>
+        <mat-hint align="end">{{comment.value.length}} / 500</mat-hint>
+      </mat-form-field>
 
     </div>
-  </form> -->
-
+  </form>
 
 </mat-dialog-content>
 <mat-dialog-actions>
@@ -25,7 +30,7 @@
       <mat-icon>cancel</mat-icon>&nbsp;Cancel
     </button>
 
-    <button mat-button color="primary" type="submit" (click)="onSubmit(serviceRequestForm.value)">
+    <button mat-button color="primary" type="submit" (click)="onSubmit(collaborationRequestForm.value)">
       <mat-icon>{{data.actionButtonIcon}}</mat-icon> {{data.action_button_text}}
     </button>
 

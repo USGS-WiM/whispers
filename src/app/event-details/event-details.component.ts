@@ -802,7 +802,6 @@ export class EventDetailsComponent implements OnInit {
     // Open add service request dialog for response field update
     this.addServiceRequestDialogRef = this.dialog.open(AddServiceRequestComponent, {
       disableClose: true,
-      // minWidth: '60%',
       data: {
         event_id: this.eventData.id,
         servicerequest: servicerequest,
@@ -1177,15 +1176,13 @@ export class EventDetailsComponent implements OnInit {
     // Open dialog for collaboration request
     this.collaborationRequestDialogRef = this.dialog.open(CollaborationRequestComponent, {
       disableClose: true,
-      minWidth: '75%',
       data: {
         event_id: eventID,
-        comment_types: this.commentTypes,
         title: 'Request to Collaborate',
         titleIcon: 'group',
         showCancelButton: true,
         action_button_text: 'Submit request',
-        actionButtonIcon: 'submit'
+        actionButtonIcon: 'send'
       }
     });
 

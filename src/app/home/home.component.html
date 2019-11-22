@@ -532,7 +532,7 @@
             <!-- ID Column -->
             <ng-container matColumnDef="id">
               <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventIDTooltip()}}" matTooltipClass="tooltip-breakline">Event ID</mat-header-cell>
-              <mat-cell *matCellDef="let event">{{event.id}}</mat-cell>
+              <mat-cell *matCellDef="let event"><mat-icon *ngIf="!event.public">visibility_off</mat-icon>&nbsp;{{event.id}}</mat-cell>
             </ng-container>
 
             <!-- Event Type Column -->
@@ -631,7 +631,7 @@
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns;"></mat-header-row>
-            <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"></mat-row>
+            <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"  [ngClass]="{'' : event.public == true, 'red-highlight': event.public == false}"></mat-row>
           </mat-table>
 
           <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>

@@ -23,6 +23,9 @@ export class EventService {
   // [x: string]: any;
 
   // _http for deprecated Http
+
+  isloggedIn = APP_SETTINGS.IS_LOGGEDIN;
+
   constructor(private _http: Http,
     private http: HttpClient,
     private resultsCountService: ResultsCountService) { }
@@ -211,13 +214,19 @@ export class EventService {
       queryString = queryString + '&complete=True';
     }
 
-    // const options = new RequestOptions({
-    //   headers: APP_SETTINGS.JSON_HEADERS
-    // });
+    let options;
 
-    const options = new RequestOptions({
-      headers: APP_SETTINGS.AUTH_JSON_HEADERS
-    });
+    if (this.isloggedIn) {
+      options = new RequestOptions({
+        headers: APP_SETTINGS.AUTH_JSON_HEADERS
+      });
+
+    } else {
+      options = new RequestOptions({
+        headers: APP_SETTINGS.JSON_HEADERS
+      });
+
+    }
 
     return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString, options)
       .map((response: Response) => <EventSummary[]>response.json())

@@ -830,8 +830,10 @@ export class HomeComponent implements OnInit {
       // establish an empty string as the variable for the popup HTML markup content
       let popupContent = '';
 
+
       // loop through the events that are part of each single marker
       for (const event of marker.events) {
+
 
         // establish an empty string as the variable for the location list HTML markup content
         let locationContent = '';
@@ -849,10 +851,6 @@ export class HomeComponent implements OnInit {
           speciesContent = speciesContent + species['name'] + '</br>';
         }
 
-        // if event is not public, begin the markup with the not public icon
-        if (event.public === false) {
-          popupContent = '<img src="/assets/icons/visibility_off.png" alt="Not Public">';
-        }
 
         // if one event represented by marker, do a simple display. If multiple, display in collapsing panels
         if (marker.events.length === 1) {
@@ -862,11 +860,23 @@ export class HomeComponent implements OnInit {
           for (const eventdiagnosis of event.eventdiagnoses) {
             eventDiagnosesString = eventDiagnosesString + eventdiagnosis['diagnosis_string'] + ',';
           }
-          // rmeoves the trailing comma
+          // removes the trailing comma
           eventDiagnosesString = eventDiagnosesString.slice(0, -1);
 
+          // if event is not public, begin the markup with the not public icon
+          if (event.public === false) {
+            popupContent = popupContent + '<h3><img src="/assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</h3>';
+          } else {
+            popupContent = popupContent +  '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>';
+          }
+
+          // else if (event.public === true) {
+          //   popupContent = '';
+          // }
+
           // tslint:disable-next-line:max-line-length
-          popupContent = popupContent + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
+          popupContent = popupContent +
+            // '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
             '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Incomplete') + '</span><br/>' +
             '<span class="popupLabel">Type:</span> ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
             '<span class="popupLabel">Dates:</span> ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
@@ -887,7 +897,16 @@ export class HomeComponent implements OnInit {
           // removes the trailing comma
           eventDiagnosesString = eventDiagnosesString.slice(0, -1);
 
-          popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
+
+          // if event is not public, begin the markup with the not public icon
+          if (event.public === false) {
+            popupContent = popupContent + '<button class="accordion accButton"> <img src="/assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</button>';
+          } else {
+            popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>';
+          }
+
+          popupContent = popupContent +
+            //'<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
             // '<h4>Event ' + this.testForUndefined(event['id']) + '</h4>' +
             '<div class="panel">' +
             '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Incomplete') + '</span><br/>' +

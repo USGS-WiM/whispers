@@ -67,9 +67,9 @@ export class AppComponent implements OnInit {
 
     this.whispersVersion = APP_SETTINGS.VERSION;
 
-    this.bannerWarning = APP_SETTINGS.BANNER_WARNING;
+    // this.bannerWarning = APP_SETTINGS.BANNER_WARNING;
 
-    this.bannerTextColor = APP_SETTINGS.BANNER_TEXT_COLOR;
+    // this.bannerTextColor = APP_SETTINGS.BANNER_TEXT_COLOR;
 
     // this.isLoggedIn = APP_SETTINGS.IS_LOGGEDIN;
 

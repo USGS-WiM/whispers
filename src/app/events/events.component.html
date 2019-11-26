@@ -148,38 +148,44 @@
 
     <!-- ID Column -->
     <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventIDTooltip()}}" matTooltipClass="tooltip-breakline"> ID </mat-header-cell>
-      <mat-cell *matCellDef="let event"> {{event.id}} </mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventIDTooltip()}}"
+        matTooltipClass="tooltip-breakline"> ID </mat-header-cell>
+      <mat-cell *matCellDef="let event">
+        <mat-icon *ngIf="event.public == false">visibility_off</mat-icon>&nbsp;{{event.id}}
+      </mat-cell>
     </ng-container>
 
     <!-- Event Type Column -->
     <ng-container matColumnDef="event_type">
-      <mat-header-cell *matHeaderCellDef matTooltip="{{editEventTypeTooltip()}}" matTooltipClass="tooltip-breakline"> Type </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef matTooltip="{{editEventTypeTooltip()}}" matTooltipClass="tooltip-breakline">
+        Type </mat-header-cell>
       <mat-cell *matCellDef="let event"> {{event.event_type_string}} </mat-cell>
     </ng-container>
 
     <!-- Affected Count Column -->
     <ng-container matColumnDef="affected_count">
-      <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{numberAffectedTooltip()}}" matTooltipClass="tooltip-breakline"> Affected </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{numberAffectedTooltip()}}"
+        matTooltipClass="tooltip-breakline"> Affected </mat-header-cell>
       <mat-cell *matCellDef="let event"> {{event.affected_count}} </mat-cell>
     </ng-container>
 
     <!-- Start Date Column -->
     <ng-container matColumnDef="start_date">
-      <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventStartDateTooltip()}}" matTooltipClass="tooltip-breakline"> Start Date </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventStartDateTooltip()}}"
+        matTooltipClass="tooltip-breakline"> Start Date </mat-header-cell>
       <mat-cell *matCellDef="let event"> {{event.start_date | date:'mediumDate'}} </mat-cell>
     </ng-container>
 
     <!-- End Date Column -->
     <ng-container matColumnDef="end_date">
-      <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventEndDateTooltip()}}" matTooltipClass="tooltip-breakline"> End Date </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventEndDateTooltip()}}"
+        matTooltipClass="tooltip-breakline"> End Date </mat-header-cell>
       <mat-cell *matCellDef="let event"> {{event.end_date | date:'mediumDate'}} </mat-cell>
     </ng-container>
 
     <!-- Location Column -->
     <ng-container matColumnDef="locations">
-      <mat-header-cell *matHeaderCellDef
-      matTooltip="{{locationsTooltip()}}" matTooltipClass="tooltip-breakline">
+      <mat-header-cell *matHeaderCellDef matTooltip="{{locationsTooltip()}}" matTooltipClass="tooltip-breakline">
         Location</mat-header-cell>
       <mat-cell *matCellDef="let event">
         <ul class="table-cell-list">
@@ -200,7 +206,8 @@
 
     <!-- Species Column -->
     <ng-container matColumnDef="species">
-      <mat-header-cell *matHeaderCellDef matTooltip="{{generalTableSpeciesTooltip()}}" matTooltipClass="tooltip-breakline"> Species </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef matTooltip="{{generalTableSpeciesTooltip()}}"
+        matTooltipClass="tooltip-breakline"> Species </mat-header-cell>
       <mat-cell *matCellDef="let event">
         <ul class="table-cell-list">
           <li *ngFor="let species of event.species">{{species.name}}</li>
@@ -210,7 +217,8 @@
 
     <!-- Event Diagnosis Column -->
     <ng-container matColumnDef="eventdiagnoses">
-      <mat-header-cell *matHeaderCellDef matTooltip="{{editEventDiagnosisTooltip()}}" matTooltipClass="tooltip-breakline"> Event Diagnosis </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef matTooltip="{{editEventDiagnosisTooltip()}}"
+        matTooltipClass="tooltip-breakline"> Event Diagnosis </mat-header-cell>
       <mat-cell *matCellDef="let event">
         <ul *ngIf="event.eventdiagnoses !== null" class="table-cell-list">
           <li *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}</li>
@@ -220,12 +228,14 @@
 
     <!-- Permission Source Column -->
     <ng-container matColumnDef="permission_source">
-      <mat-header-cell *matHeaderCellDef matTooltipPosition="left" matTooltip="{{permissionSourceTooltip()}}" matTooltipClass="tooltip-breakline"> Permission Source </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef matTooltipPosition="left" matTooltip="{{permissionSourceTooltip()}}"
+        matTooltipClass="tooltip-breakline"> Permission Source </mat-header-cell>
       <mat-cell *matCellDef="let event"> {{event.permission_source}} </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"
+      [ngClass]="{'' : event.public == true, 'red-highlight': event.public == false}"
       matTooltip="Click event to see details"></mat-row>
   </mat-table>
 

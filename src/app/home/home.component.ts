@@ -384,94 +384,94 @@ export class HomeComponent implements OnInit {
 
             L.control.layers(
               baseMaps,
-              overlays, { position: 'topleft' }, { 'drawlayer': drawnItems} ).addTo(this.map);
+              overlays, { position: 'topleft' }, { 'drawlayer': drawnItems }).addTo(this.map);
 
-              L.control.scale({ position: 'bottomright' }).addTo(this.map);
+            L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
-              const drawControl = new L.Control.Draw({
-                edit: {
-                    featureGroup: drawnItems,
-                    poly : {
-                        allowIntersection : false
-                    }
-                },
-                draw: {
-                    polygon : {
-                        allowIntersection: false,
-                        showArea: true
-                    },
-                    marker: false,
-                    circle: false,
-                    circlemarker: false,
-                    rectangle: false
+            const drawControl = new L.Control.Draw({
+              edit: {
+                featureGroup: drawnItems,
+                poly: {
+                  allowIntersection: false
                 }
+              },
+              draw: {
+                polygon: {
+                  allowIntersection: false,
+                  showArea: true
+                },
+                marker: false,
+                circle: false,
+                circlemarker: false,
+                rectangle: false
+              }
             });
 
             this.map.addControl(drawControl);
 
-        // Truncate value based on number of decimals
-        const _round = function(num, len) {
-          return Math.round(num * (Math.pow(10, len))) / (Math.pow(10, len));
-      };
-      // Helper method to format LatLng object (x.xxxxxx, y.yyyyyy)
-      const strLatLng = function(latlng) {
-          return '(' + _round(latlng.lat, 6) + ', ' + _round(latlng.lng, 6) + ')';
-      };
+            // Truncate value based on number of decimals
+            const _round = function (num, len) {
+              return Math.round(num * (Math.pow(10, len))) / (Math.pow(10, len));
+            };
+            // Helper method to format LatLng object (x.xxxxxx, y.yyyyyy)
+            const strLatLng = function (latlng) {
+              return '(' + _round(latlng.lat, 6) + ', ' + _round(latlng.lng, 6) + ')';
+            };
 
-      // Generate popup content based on layer type
-      // - Returns HTML string, or null if unknown object
-      const getPopupContent = function(layer) {
-          // Marker - add lat/long
-          if (layer instanceof L.Marker || layer instanceof L.CircleMarker) {
-              return strLatLng(layer.getLatLng());
-          // Circle - lat/long, radius
-          } else if (layer instanceof L.Circle) {
-            const center = layer.getLatLng(),
+            // Generate popup content based on layer type
+            // - Returns HTML string, or null if unknown object
+            const getPopupContent = function (layer) {
+              // Marker - add lat/long
+              if (layer instanceof L.Marker || layer instanceof L.CircleMarker) {
+                return strLatLng(layer.getLatLng());
+                // Circle - lat/long, radius
+              } else if (layer instanceof L.Circle) {
+                const center = layer.getLatLng(),
                   radius = layer.getRadius();
-              return 'Center: ' + strLatLng(center) + '<br />'
-                    + 'Radius: ' + _round(radius, 2) + ' m';
-          // Rectangle/Polygon - area
-          } else if (layer instanceof L.Polygon) {
-            const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
+                return 'Center: ' + strLatLng(center) + '<br />'
+                  + 'Radius: ' + _round(radius, 2) + ' m';
+                // Rectangle/Polygon - area
+              } else if (layer instanceof L.Polygon) {
+                const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
                   area = L.GeometryUtil.geodesicArea(latlngs);
-              return 'Area: ' + L.GeometryUtil.readableArea(area, true);
-          // Polyline - distance
-          } else if (layer instanceof L.Polyline) {
-              const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs();
-                 let distance = 0;
-              if (latlngs.length < 2) {
+                return 'Area: ' + L.GeometryUtil.readableArea(area, true);
+                // Polyline - distance
+              } else if (layer instanceof L.Polyline) {
+                const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs();
+                let distance = 0;
+                if (latlngs.length < 2) {
                   return 'Distance: N/A';
-              } else {
+                } else {
                   for (let i = 0; i < latlngs.length - 1; i++) {
-                      distance += latlngs[i].distanceTo(latlngs[i + 1]);
+                    distance += latlngs[i].distanceTo(latlngs[i + 1]);
                   }
                   return 'Distance: ' + _round(distance, 2) + ' m';
+                }
               }
-          }
-          return null;
-      };
+              return null;
+            };
 
-      // Object created - bind popup to layer, add to feature group
-      this.map.on(L.Draw.Event.CREATED, function(event) {
-        const layer = event.layer;
-        const content = getPopupContent(layer);
-          if (content !== null) {
-              layer.bindPopup(content);
-          }
-          drawnItems.addLayer(layer);
-      });
-
-      // Object(s) edited - update popups
-      this.map.on(L.Draw.Event.EDITED, function(event) {
-          const layers = event.layers;
-          // const content = null;
-          layers.eachLayer(function(layer) {
+            // Object created - bind popup to layer, add to feature group
+            this.map.on(L.Draw.Event.CREATED, function (event) {
+              const layer = event.layer;
               const content = getPopupContent(layer);
               if (content !== null) {
-                  layer.setPopupContent(content);
+                layer.bindPopup(content);
               }
-          });
-      });
+              drawnItems.addLayer(layer);
+            });
+
+            // Object(s) edited - update popups
+            this.map.on(L.Draw.Event.EDITED, function (event) {
+              const layers = event.layers;
+              // const content = null;
+              layers.eachLayer(function (layer) {
+                const content = getPopupContent(layer);
+                if (content !== null) {
+                  layer.setPopupContent(content);
+                }
+              });
+            });
 
             this.mapResults(this.currentResults);
 
@@ -830,8 +830,10 @@ export class HomeComponent implements OnInit {
       // establish an empty string as the variable for the popup HTML markup content
       let popupContent = '';
 
+
       // loop through the events that are part of each single marker
       for (const event of marker.events) {
+
 
         // establish an empty string as the variable for the location list HTML markup content
         let locationContent = '';
@@ -849,6 +851,7 @@ export class HomeComponent implements OnInit {
           speciesContent = speciesContent + species['name'] + '</br>';
         }
 
+
         // if one event represented by marker, do a simple display. If multiple, display in collapsing panels
         if (marker.events.length === 1) {
 
@@ -857,11 +860,23 @@ export class HomeComponent implements OnInit {
           for (const eventdiagnosis of event.eventdiagnoses) {
             eventDiagnosesString = eventDiagnosesString + eventdiagnosis['diagnosis_string'] + ',';
           }
-          // rmeoves the trailing comma
+          // removes the trailing comma
           eventDiagnosesString = eventDiagnosesString.slice(0, -1);
 
+          // if event is not public, begin the markup with the not public icon
+          if (event.public === false) {
+            popupContent = popupContent + '<h3><img src="/assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</h3>';
+          } else {
+            popupContent = popupContent +  '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>';
+          }
+
+          // else if (event.public === true) {
+          //   popupContent = '';
+          // }
+
           // tslint:disable-next-line:max-line-length
-          popupContent = popupContent + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
+          popupContent = popupContent +
+            // '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
             '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Incomplete') + '</span><br/>' +
             '<span class="popupLabel">Type:</span> ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
             '<span class="popupLabel">Dates:</span> ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
@@ -882,7 +897,16 @@ export class HomeComponent implements OnInit {
           // removes the trailing comma
           eventDiagnosesString = eventDiagnosesString.slice(0, -1);
 
-          popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
+
+          // if event is not public, begin the markup with the not public icon
+          if (event.public === false) {
+            popupContent = popupContent + '<button class="accordion accButton"> <img src="/assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</button>';
+          } else {
+            popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>';
+          }
+
+          popupContent = popupContent +
+            //'<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
             // '<h4>Event ' + this.testForUndefined(event['id']) + '</h4>' +
             '<div class="panel">' +
             '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Incomplete') + '</span><br/>' +
@@ -905,7 +929,7 @@ export class HomeComponent implements OnInit {
       L.marker([marker.lat, marker.long],
         { icon: this.icon })
         .addTo(this.locationMarkers)
-        .bindPopup(popup, {maxHeight: 300, autoPan: true, autoPanPadding: [20, 20], keepInView: true})
+        .bindPopup(popup, { maxHeight: 300, autoPan: true, autoPanPadding: [20, 20], keepInView: true })
         .on('popupopen', function (popup) {
 
           const acc = Array.from(document.querySelectorAll('button.accordion'));

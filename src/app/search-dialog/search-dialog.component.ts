@@ -24,7 +24,6 @@ import { DiagnosisService } from '@services/diagnosis.service';
 import { SpeciesService } from '@services/species.service';
 import { AdministrativeLevelTwoService } from '@services/administrative-level-two.service';
 import { SearchDialogService } from '@search-dialog/search-dialog.service';
-import { id } from '@swimlane/ngx-datatable/release/utils';
 
 import { DisplayQuery } from '@interfaces/display-query';
 import { SearchQuery } from '@interfaces/search-query';

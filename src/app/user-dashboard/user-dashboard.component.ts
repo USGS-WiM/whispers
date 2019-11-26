@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatTabGroup } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { MatSnackBar } from '@angular/material';
@@ -48,6 +48,8 @@ export class UserDashboardComponent implements OnInit {
 
   selection;
   currentUser;
+
+  selectedTab;
 
   username = APP_SETTINGS.API_USERNAME;
 
@@ -132,6 +134,9 @@ export class UserDashboardComponent implements OnInit {
       );
 
     this.contactsDataSource = new MatTableDataSource(this.contacts);
+
+    // set selected tab
+    this.selectedTab = 0;
 
   }
 

@@ -44,7 +44,7 @@
   </mat-card-actions>
 </mat-card>
 
-<mat-tab-group (selectedIndexChange)="_setDataSource($event)">
+<mat-tab-group (selectedIndexChange)="_setDataSource($event)" [selectedIndex]="selectedTab">
 
   <!-- Events tab -->
   <mat-tab label="Events">

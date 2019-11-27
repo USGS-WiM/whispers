@@ -1,7 +1,7 @@
 {
   "name": "whispers",
   "version": "2.9.0",
-  "description": "Wildlife Health Information Sharing Partnership event reporting system",
+  "description": "Wildlife Health Information Sharing Partnership event reporting system (WHISPers)",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -37,9 +37,7 @@
     "leaflet-draw": "^1.0.4",
     "ngx-mat-select-search": "^1.8.0",
     "rxjs": "6.5.3",
-    "rxjs-compat": "6.5.3",
     "search_api": "https://github.com/usgs/search_api.git",
-    "typeface-oswald": "0.0.54",
     "usgs-search-api": "git+https://github.com/usgs/search_api.git",
     "zone.js": "^0.8.29"
   },

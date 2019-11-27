@@ -6,7 +6,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from '@angular/material';
 import { debounceTime, distinctUntilChanged, startWith, tap, delay } from 'rxjs/operators';
-import { merge } from 'rxjs/observable/merge';
+import { merge ,  Subscription } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar } from '@angular/material';
 import { EventService } from '@services/event.service';
@@ -15,7 +15,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { SearchDialogComponent } from '@search-dialog/search-dialog.component';
 import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
-import { Subscription } from 'rxjs/Subscription';
 
 import { DisplayQuery } from '@interfaces/display-query';
 

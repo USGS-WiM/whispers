@@ -1,11 +1,8 @@
+
+import {catchError, map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import { Subject } from 'rxjs/Subject';
-import { throwError } from 'rxjs';
+import { Observable ,  Subject ,  throwError } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 
@@ -23,9 +20,9 @@ export class LandOwnershipService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.LAND_OWNERSHIPS_URL + '?no_page', options)
-      .map((response: Response) => <LandOwnership[]>response.json())
-      .catch(this.handleError);
+    return this._http.get(APP_SETTINGS.LAND_OWNERSHIPS_URL + '?no_page', options).pipe(
+      map((response: Response) => <LandOwnership[]>response.json()),
+      catchError(this.handleError),);
 
   }
 

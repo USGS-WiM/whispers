@@ -4,7 +4,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { merge } from 'rxjs/observable/merge';
+import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { APP_UTILITIES } from '@app/app.utilities';
 import { APP_SETTINGS } from '@app/app.settings';
@@ -104,7 +104,9 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
   eventLocationName(comment) {
     let locationName = '';
     let count;
-    if (comment.content_type_string === 'event') {
+    if (comment.content_type_string === 'servicerequest') {
+      locationName = 'Service Request';
+    } else if (comment.content_type_string === 'event') {
       locationName = 'Event';
     } else if (comment.content_type_string === 'eventlocation') {
       if (comment.object_name !== '') {

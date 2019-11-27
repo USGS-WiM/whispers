@@ -19,7 +19,7 @@ import { MatSnackBar } from '@angular/material';
 import { TooltipPosition } from '@angular/material';
 
 
-import 'rxjs/add/operator/switchMap';
+
 import { EventService } from '@services/event.service';
 import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
 import { CurrentUserService } from '@services/current-user.service';
@@ -1204,7 +1204,8 @@ export class EventDetailsComponent implements OnInit {
         (eventdetails) => {
           this.eventData = eventdetails;
 
-          // this.eventLocationSpecies = [];
+          this.eventLocationSpecies = [];
+
           // this.possibleEventDiagnoses = [];
           for (const event_location of this.eventData.eventlocations) {
             for (const locationspecies of event_location.locationspecies) {

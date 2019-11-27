@@ -6,12 +6,11 @@ import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from '@angular/material';
 import { debounceTime, distinctUntilChanged, startWith, tap, delay } from 'rxjs/operators';
-import { merge } from 'rxjs/observable/merge';
+import { merge ,  Subscription } from 'rxjs';
 import { EventService } from '@services/event.service';
 import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar } from '@angular/material';
-import { Subscription } from 'rxjs/Subscription';
 
 import { Router, ActivatedRoute } from '@angular/router';
 

@@ -1,11 +1,8 @@
+
+import {catchError, map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import { throwError } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { Observable ,  throwError ,  Subject } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -25,10 +22,10 @@ export class SearchService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.SEARCH_URL + '?no_page', options)
-      .map((response: Response) => <any[]>response.json())
+    return this._http.get(APP_SETTINGS.SEARCH_URL + '?no_page', options).pipe(
+      map((response: Response) => <any[]>response.json()),
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
-      .catch(this.handleError);
+      catchError(this.handleError),);
   }
 
   public getPopularSearches(): Observable<Search[]> {
@@ -37,10 +34,10 @@ export class SearchService {
     //   headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     // });
 
-    return this._http.get(APP_SETTINGS.SEARCH_URL  + 'top_ten' + '?no_page')
-      .map((response: Response) => <any[]>response.json())
+    return this._http.get(APP_SETTINGS.SEARCH_URL  + 'top_ten' + '?no_page').pipe(
+      map((response: Response) => <any[]>response.json()),
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
-      .catch(this.handleError);
+      catchError(this.handleError),);
   }
 
   public getUserDashboardSearches(): Observable<Search[]> {
@@ -50,10 +47,10 @@ export class SearchService {
     });
 
 
-    return this._http.get(APP_SETTINGS.SEARCH_URL + 'user_searches' + '?no_page', options)
-      .map((response: Response) => <any[]>response.json())
+    return this._http.get(APP_SETTINGS.SEARCH_URL + 'user_searches' + '?no_page', options).pipe(
+      map((response: Response) => <any[]>response.json()),
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
-      .catch(this.handleError);
+      catchError(this.handleError),);
   }
 
   public create(formValue): Observable<any> {
@@ -62,9 +59,9 @@ export class SearchService {
       headers: APP_SETTINGS.AUTH_JSON_HEADERS
     });
 
-    return this._http.post(APP_SETTINGS.SEARCH_URL, formValue, options)
-      .map((response: Response) => <Search>response.json())
-      .catch(this.handleError);
+    return this._http.post(APP_SETTINGS.SEARCH_URL, formValue, options).pipe(
+      map((response: Response) => <Search>response.json()),
+      catchError(this.handleError),);
 
   }
 
@@ -74,9 +71,9 @@ export class SearchService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.put(APP_SETTINGS.SEARCH_URL + formValue.id + '/', formValue, options)
-      .map((response: Response) => <Search>response.json())
-      .catch(this.handleError);
+    return this._http.put(APP_SETTINGS.SEARCH_URL + formValue.id + '/', formValue, options).pipe(
+      map((response: Response) => <Search>response.json()),
+      catchError(this.handleError),);
   }
 
   public delete(id): Observable<any> {
@@ -85,9 +82,9 @@ export class SearchService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.delete(APP_SETTINGS.SEARCH_URL + id + '/', options)
-      .map((response: Response) => <Search>response.json())
-      .catch(this.handleError);
+    return this._http.delete(APP_SETTINGS.SEARCH_URL + id + '/', options).pipe(
+      map((response: Response) => <Search>response.json()),
+      catchError(this.handleError),);
   }
 
   private handleError(error: Response) {

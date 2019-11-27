@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
-import { Observable } from 'rxjs/Observable';
+import { Observable ,  Subject, ReplaySubject } from 'rxjs';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { Subject, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 import { MatSnackBar } from '@angular/material';

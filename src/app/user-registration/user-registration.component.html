@@ -78,6 +78,18 @@
         </ul>
       </div>
 
+      <div *ngIf="data.registration_type == 'public'">
+        <h3>Disclaimer</h3>
+        <p class="text-smaller">The data on this website are provided for situational awareness of wildlife health
+          events. The USGS National Wildlife Health Center (NWHC) makes every effort to provide accurate and timely
+          information; however, data may not be final or fully accurate, especially if an event is ongoing or data
+          synthesis is not complete. Conclusions drawn from or actions undertaken on the basis of such data and
+          information are the sole responsibility of the user. To ensure that information is accurately interpreted and
+          appropriately credited, dissemination of information from this site (publication, press release, technical
+          report, etc.) should be done in collaboration with the specific agencies and laboratories that have generated
+          the information.
+      </div>
+
     <div class="vertical-form-container" *ngIf="data.registration_type === 'partner'">
 
       <span class="reg-hint">Select the organization you would like to join</span>
@@ -85,7 +97,7 @@
         <mat-select formControlName="organization" placeholder="Organization" #organizationSelect>
           <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="'Find organization...'"
             [noEntriesFoundLabel]="'no matching organization found'"></ngx-mat-select-search>
-          <mat-option *ngFor="let organization of filteredOrganizations | async" [value]="organization.id">
+          <mat-option *ngFor="let organization of filteredOrganizations | async" [value]="organization.id" matTooltip={{organization.name}}>
             {{organization.name}}
           </mat-option>
         </mat-select>
@@ -162,7 +174,7 @@
 
       <mat-divider></mat-divider>
 
-      <p>
+      <p *ngIf="data.registration_type === 'partner'">
         Thank you for your interest in becoming a WHISPers Partner user. Your request will be reviewed and you will
         receive an email reply as soon as possible.
       </p>

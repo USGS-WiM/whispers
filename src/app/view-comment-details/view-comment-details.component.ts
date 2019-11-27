@@ -29,7 +29,9 @@ export class ViewCommentDetailsComponent implements OnInit {
   eventLocationName(id) {
     let locationName = '';
     let count;
-    if (this.data.location === 'event') {
+    if (this.data.location === 'servicerequest') {
+      locationName = 'Service Request';
+    } else if (this.data.location === 'event') {
       locationName = 'Event';
     } else if (this.data.location === 'eventlocation') {
         if (this.data.object_name !== '') {

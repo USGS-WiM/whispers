@@ -36,6 +36,7 @@
     "leaflet": "^1.6.0",
     "leaflet-draw": "^1.0.4",
     "ngx-mat-select-search": "^1.8.0",
+    "pdfmake": "^0.1.62",
     "rxjs": "6.5.3",
     "search_api": "https://github.com/usgs/search_api.git",
     "usgs-search-api": "git+https://github.com/usgs/search_api.git",

@@ -123,7 +123,6 @@ import { CommentsTableComponent } from './comments-table/comments-table.componen
 import { ViewCommentDetailsComponent } from './view-comment-details/view-comment-details.component';
 import { BrowserWarningComponent } from './browser-warning/browser-warning.component';
 import { EventPublicReportComponent } from './event-public-report/event-public-report.component';
-import { ReportsService } from '@services/reports.service';
 
 
 
@@ -256,7 +255,6 @@ import { ReportsService } from '@services/reports.service';
     DatePipe,
     ResultsCountService,
     EventGroupComponent,
-    ReportsService,
     CanDeactivateGuard
   ],
   bootstrap: [AppComponent],

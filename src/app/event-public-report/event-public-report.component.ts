@@ -9,8 +9,6 @@ import { APP_UTILITIES } from '@app/app.utilities';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 import { EventDetail } from '@interfaces/event-detail';
-
-import { ReportsService } from '@app/services/reports.service';
 declare let gtag: Function;
 
 @Component({
@@ -25,7 +23,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   // this isn't working????
   @Input('eventData') eventData: EventDetail;
   constructor(
-    private reportsServices: ReportsService
   ) {
 }
 

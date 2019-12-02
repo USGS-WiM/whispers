@@ -5,7 +5,6 @@ import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
-
 //declare let L: any;
 
 import * as L from 'leaflet';
@@ -75,6 +74,7 @@ import { CircleManagementComponent } from '@app/circle-management/circle-managem
 import { CircleChooseComponent } from '@app/circle-management/circle-choose/circle-choose.component';
 import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
+declare let html2canvas: any;
 declare let gtag: Function;
 
 export interface AssociatedEvents {
@@ -168,6 +168,8 @@ export class EventDetailsComponent implements OnInit {
   watershedsVisible = false;
 
   canvas = document.createElement('canvas');
+  capturedImage;
+  commentTableImage: any;
 
   locationSpeciesDisplayedColumns = [
     'species',
@@ -1505,6 +1507,33 @@ export class EventDetailsComponent implements OnInit {
     gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Downloaded Event Report' });
     const whispersLogo = 'src/app/event-public-report/logo.png'; // TODO: move photo to more appropriate location
 
+    html2canvas(document.querySelector('#speciesList')).then(canvas => {
+
+
+      /// document.body.appendChild(canvas);
+      this.capturedImage = canvas.toDataURL();
+      console.log('canvas.toDataURL() -->' + this.capturedImage);
+      // this will contain something like (note the ellipses for brevity), console.log cuts it off
+      // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAa0AAAB3CAYAAACwhB/KAAAXr0lEQVR4Xu2dCdiNZf7HP/ZQkpQtaUxDjYYoTSYlURMhGlmKa..."
+
+      canvas.toBlob(function (blob) {
+
+        //  just pass blob to something expecting a blob
+        // somfunc(blob);
+
+        // Same as canvas.toDataURL(), just longer way to do it.
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = function () {
+         const base64data = reader.result;
+          console.log('Base64--> ' + base64data);
+        };
+
+      });
+
+
+    });
+    const leafletImage = this.capturedImage;
     // Getting date/time for timestamp
     const date = APP_UTILITIES.getDateTime;
 
@@ -1559,35 +1588,37 @@ export class EventDetailsComponent implements OnInit {
 
 
     // Checking to see if there are event groups
-    const associatedEvents: any = [];
-    const test: any = [];
-    const final: any = [];
-    //const link;
-    /* if (data.eventgroups.length === 0) {
-      associatedEvents = 'none';
-    } else {
-      associatedEvents = data.eventgroups[0].events.join(', ');
-    }
- */
+    const associatedEvents = [];
+    const eventsAndLinks = [];
+    const eventIds = [];
+    const eventLinks = [];
+
     data.eventgroups.forEach(eg => {
       eg.events.forEach(element => {
         associatedEvents.push(element);
       });
     });
 
-    console.log(test);
-
+    // converting to string and adding 'link' field
     for (let i = 0; i < associatedEvents.length; i ++) {
-      test.push({id: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString()});
-      //test.push({link: window.location.origin + '/' + associatedEvents[i].toString()});
+
+      // formatting string so that there is not a ',' at the end of last associated event
+      const addComma = associatedEvents.length - 1;
+      if ( i !== addComma) {
+      eventsAndLinks.push({id: associatedEvents[i].toString() + ', ', link: window.location.origin + '/' + associatedEvents[i].toString()});
+      } else {
+        eventsAndLinks.push({id: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString()});
+      }
     }
 
-    /* test.forEach(ae => {
-
-      test.push({ id: ae, link: window.location.origin + '/' + ae.toString()});
-    }); */
-
-    console.log(test);
+    eventsAndLinks.forEach(el => {
+      eventIds.push(el.id);
+    });
+    eventsAndLinks.forEach(el => {
+      eventLinks.push(el.link);
+    });
+    console.log(eventIds);
+    console.log(eventLinks);
 
     // Event Visibility
     let eventVisibility;
@@ -1599,6 +1630,7 @@ export class EventDetailsComponent implements OnInit {
 
     // whispers logo
     const pngURL = this.canvas.toDataURL();
+    console.log(pngURL);
 
     // printing user's info
     const nameOrgString = this.currentUser.first_name + ' ' + this.currentUser.last_name + ' (' + this.currentUser.organizations_string + ')';
@@ -1608,6 +1640,78 @@ export class EventDetailsComponent implements OnInit {
 
     // print template
     console.log('print');
+
+    const combinedComments = data.combined_comments;
+
+    const eventLocation = data.eventlocations[0].locationspecies;
+    console.log(eventLocation);
+
+    function buildTableBody(tableData, columns) {
+      const body = [];
+
+      body.push(columns);
+
+      tableData.forEach(function(row) {
+        const dataRow = [];
+
+          columns.forEach(function(column) {
+              dataRow.push(row[column]); // to out .toString() because null values were causing the function to fail
+          });
+
+          body.push(dataRow);
+      });
+
+      return body;
+  }
+
+  function table(tableData, columns) {
+      return {
+          table: {
+              headerRows: 1,
+              body: buildTableBody(tableData, columns)
+          }
+      };
+  }
+
+
+    // Below code is exploring dynamically generated tables and making hyperlinks. I haven't found a solution for how to create a link out of data in a dynamically generated table
+    /* const eventGroups = data.eventgroups;
+
+    function buildTableBody(data, columns) {
+      data = eventsAndLinks;
+      const body = [];
+
+      body.push(columns);
+
+      data.forEach(function(row) {
+        const dataRow = [];
+
+          columns.forEach(function(column) {
+              dataRow.push({text: row[column].toString(), link : row.link,  color : '#0000EE'} );
+          });
+
+          body.push(dataRow);
+      });
+
+      return body;
+  }
+
+  function table(data, columns) {
+      return {
+          table: {
+            style: 'smaller',
+              headerRows: 0,
+              body: buildTableBody(data, columns),
+
+          },
+          layout: { defaultBorder: false,
+            paddingLeft: function(i, node) { return 15; },
+            paddingRight: function(i, node) { return 10; },
+            border: [false, false, true, false],
+            widths: [150, 250],
+           }
+      };
+  } */
 
     const docDefinition = {
       pageOrientation: 'landscape',
@@ -1641,7 +1745,8 @@ export class EventDetailsComponent implements OnInit {
             },
             {
               style: 'header',
-              text: 'Summary of ' + data.event_type_string + ' Event ID ' + data.id
+              text: 'Summary of ' + data.event_type_string + ' Event ID ' + data.id,
+              margin: [ 0, 15, 0, 0 ]
             },
           ]
         },
@@ -1848,6 +1953,14 @@ export class EventDetailsComponent implements OnInit {
             }
           ]
         },
+        /* {
+          alignment: 'justify',
+          columns: [
+            { text: 'Associated Events' }, // fixes link issue with dynamic table generation but style is messed up
+            table(
+              eventsAndLinks, ['id'])
+          ]
+        }, */
         {
           alignment: 'justify',
           columns: [
@@ -1856,7 +1969,7 @@ export class EventDetailsComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, {text: associatedEvents , link: 'http://google.com', color: '#0000EE'}],
+                  [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}], // TODO: Figure out what to do regarding links & Display none if there are none
                 ]
               },
               layout: { defaultBorder: false,
@@ -1882,11 +1995,51 @@ export class EventDetailsComponent implements OnInit {
                 paddingRight: function(i, node) { return 10; },
                }
             }
+          ],
+          pageBreak: 'after'
+        },
+        {
+          alignment: 'justify',
+          columns: [
+            {
+              image: pngURL,
+              width: 400,
+              height: 80
+            },
+            {
+              style: 'header',
+              text: 'Details of ' + data.event_type_string + ' Event ID ' + data.id,
+              margin: [ 0, 15, 0, 0 ]
+            }
           ]
-        }
+        },
+        {
+          alignment: 'justify',
+          columns: [
+            /* { text: 'Associated Events' }, */
+            table(
+              eventLocation, ['species_string', 'population_count', 'sick_count', 'dead_count', 'sick_count_estimated', 'dead_count_estimated', 'captive']) // eventLocation[0].speciesdiagnoses[0].diagnosis_string] , eventLocation[0].speciesdiagnoses[0].tested_count, eventLocation[0].speciesdiagnoses[0].positive_count
+          ],
+          pageBreak: 'after'
+        },
+        {
+          alignment: 'justify',
+          columns: [
+            /* { text: 'Associated Events' }, */
+            table(
+              combinedComments, ['comment', 'comment_type', 'created_date' ])
+          ],
+          pageBreak: 'after'
+        },
+        'pdfmake (since it\'s based on pdfkit) supports JPEG and PNG format',
+        'If no width/height/fit is provided, image original size will be used',
+        {
+          image: leafletImage,
+        },
       ],
       images: {
-        logo: pngURL
+        logo: pngURL,
+        leafletMap: leafletImage
       },
       styles: {
         header: {

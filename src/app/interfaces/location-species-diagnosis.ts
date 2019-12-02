@@ -5,6 +5,7 @@ export interface LocationSpeciesDiagnosis extends History {
     id: number;
     locationspecies: number;
     diagnosis: Diagnosis;
+    diagnosis_string: string;
     suspect: boolean;
     major: boolean;
     priority: number;

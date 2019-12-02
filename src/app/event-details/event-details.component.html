@@ -37,6 +37,7 @@
           <div class="title">Event {{eventData.id}}<mat-icon class="hint-hover-text" matSuffix
               matTooltip={{eventIDTooltip()}} matTooltipClass="tooltip-breakline">
               help</mat-icon>
+              <button (click)="getImage()"></button>
           </div>
           <div class="subtitle">{{eventData.event_type_string}}<mat-icon class="hint-hover-text" matSuffix
               matTooltip={{editEventTypeTooltip()}} matTooltipClass="tooltip-breakline">

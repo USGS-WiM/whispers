@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 
@@ -91,7 +91,7 @@ export class AppComponent implements OnInit {
     }
 
     if (/msie\s|trident\/\//i.test(window.navigator.userAgent)) {
-      //if (/msie\s|trident\/|edge\//i.test(window.navigator.userAgent)) {
+      // if (/msie\s|trident\/|edge\//i.test(window.navigator.userAgent)) {
       this.openBrowserWarningDialog();
     }
 
@@ -165,8 +165,14 @@ export class AppComponent implements OnInit {
 
   navigateNotificationSelect(event) {
     if (!event) {
-      // For some cases need to redirect to the user dashboard
-      this.router.navigate([`../userdashboard/`], { relativeTo: this.route });
+      // Some notifications need to take the user to the user dashboard
+      // for now, to the notifications tab (to be later developed to higher sophistication)
+      // 6 is the index number  for the notifications tab
+      const tabSpecification: NavigationExtras = { state: { tab: 6 } };
+      this.router.navigate([`../userdashboard/`], tabSpecification);
+
+      // the old way, sans tab specification
+      // this.router.navigate([`../userdashboard/`], { relativeTo: this.route });
     } else {
 
       this.router.navigate([`../event/${event}`], { relativeTo: this.route });

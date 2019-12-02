@@ -3,7 +3,7 @@ import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef } fr
 import { MatSnackBar } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { merge } from 'rxjs/observable/merge';
+import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { APP_UTILITIES } from '@app/app.utilities';

@@ -49,7 +49,7 @@ export class UserDashboardComponent implements OnInit {
   selection;
   currentUser;
 
-  selectedTab;
+  selectedTab: number;
 
   username = APP_SETTINGS.API_USERNAME;
 
@@ -84,6 +84,12 @@ export class UserDashboardComponent implements OnInit {
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
     });
+
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation.extras.state as { tab: number };
+    if (state !== undefined) {
+      this.selectedTab = state.tab;
+    }
 
   }
 
@@ -136,7 +142,7 @@ export class UserDashboardComponent implements OnInit {
     this.contactsDataSource = new MatTableDataSource(this.contacts);
 
     // set selected tab
-    this.selectedTab = 0;
+    // this.selectedTab = 0;
 
   }
 

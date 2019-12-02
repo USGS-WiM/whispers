@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs';
+
+import { map, startWith } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocompleteTrigger } from '@angular/material';
@@ -84,11 +84,11 @@ export class CustomNotificationComponent implements OnInit {
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
-      this.adminLevelOneControl = new FormControl();
-      this.speciesControl = new FormControl({ value: null, disabled: true });
-      this.diagnosisControl = new FormControl({ value: null, disabled: true });
-      this.buildCueForm();
-     }
+    this.adminLevelOneControl = new FormControl();
+    this.speciesControl = new FormControl({ value: null, disabled: true });
+    this.diagnosisControl = new FormControl({ value: null, disabled: true });
+    this.buildCueForm();
+  }
 
   ngOnInit() {
     // get adminLevelOnes from the adminLevelOne service
@@ -96,10 +96,11 @@ export class CustomNotificationComponent implements OnInit {
       .subscribe(
         (adminLevelOnes) => {
           this.administrative_level_one = adminLevelOnes;
-          this.filteredAdminLevelOnes = this.adminLevelOneControl.valueChanges
-            .startWith(null)
-            .map(val => this.filter(val, this.administrative_level_one, 'name'));
-            console.log(this.filteredAdminLevelOnes);
+          this.filteredAdminLevelOnes = this.adminLevelOneControl.valueChanges.pipe(
+            // startWith(null),
+            map(val => this.filter(val, this.administrative_level_one, 'name')));
+
+          console.log(this.filteredAdminLevelOnes);
           if (this.data.query && this.data.query['administrative_level_one'].length > 0) {
             for (const index in adminLevelOnes) {
               if (this.data.query['administrative_level_one'].some(
@@ -133,149 +134,149 @@ export class CustomNotificationComponent implements OnInit {
       .subscribe(
         landOwnerships => {
           this.landOwnerships = landOwnerships;
-        // alphabetize the species options list
-        this.landOwnerships.sort(function (a, b) {
-          if (a.name < b.name) { return -1; }
-          if (a.name > b.name) { return 1; }
-          return 0;
-        });
-        this.filteredLandOwnership = this.landOwnershipControl.valueChanges
-          .startWith(null)
-          .map(val => this.filter(val, this.landOwnerships, 'name'));
+          // alphabetize the species options list
+          this.landOwnerships.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
+          this.filteredLandOwnership = this.landOwnershipControl.valueChanges.pipe(
+            startWith(null),
+            map(val => this.filter(val, this.landOwnerships, 'name')));
 
           console.log(this.filteredLandOwnership);
 
-        if (this.data.query && this.data.query['landOwnerships'] && this.data.query['landOwnerships'].length > 0) {
-          /*for (const index in species) {
-            if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
-              this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
-            }
-          }*/
-          for (const index in landOwnerships) {
-            if (this.data.query['landOwnerships'].some(
-              function (el) {
-                let match = false;
-                if (typeof el === 'number') {
-                  if (el === landOwnerships[index].id) {
-                    match = true;
+          if (this.data.query && this.data.query['landOwnerships'] && this.data.query['landOwnerships'].length > 0) {
+            /*for (const index in species) {
+              if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
+                this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
+              }
+            }*/
+            for (const index in landOwnerships) {
+              if (this.data.query['landOwnerships'].some(
+                function (el) {
+                  let match = false;
+                  if (typeof el === 'number') {
+                    if (el === landOwnerships[index].id) {
+                      match = true;
+                    }
+                  } else {
+                    if (el === landOwnerships[index].name) {
+                      match = true;
+                    }
                   }
-                } else {
-                  if (el === landOwnerships[index].name) {
-                    match = true;
-                  }
-                }
-                return match;
-              })) {
-              this.dropdownSetup(this.speciesControl, this.selectedLandOwnership, landOwnerships[index]);
+                  return match;
+                })) {
+                this.dropdownSetup(this.speciesControl, this.selectedLandOwnership, landOwnerships[index]);
+              }
             }
           }
+          // this.landOwnershipLoading = false;
+          this.landOwnershipControl.enable();
+        },
+        error => {
+          this.errorMessage = <any>error;
         }
-        // this.landOwnershipLoading = false;
-        this.landOwnershipControl.enable();
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
+      );
 
 
     // this.speciesLoading = true;
     // get species from the species service
     this._speciesService.getSpecies()
-    .subscribe(
-      (species) => {
-        this.species = species;
-        // alphabetize the species options list
-        this.species.sort(function (a, b) {
-          if (a.name < b.name) { return -1; }
-          if (a.name > b.name) { return 1; }
-          return 0;
-        });
-        this.filteredSpecies = this.speciesControl.valueChanges
-          .startWith(null)
-          .map(val => this.filter(val, this.species, 'name'));
+      .subscribe(
+        (species) => {
+          this.species = species;
+          // alphabetize the species options list
+          this.species.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
+          this.filteredSpecies = this.speciesControl.valueChanges.pipe(
+            startWith(null),
+            map(val => this.filter(val, this.species, 'name')));
 
-        if (this.data.query && this.data.query['species'] && this.data.query['species'].length > 0) {
-          /*for (const index in species) {
-            if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
-              this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
-            }
-          }*/
-          for (const index in species) {
-            if (this.data.query['species'].some(
-              function (el) {
-                let match = false;
-                if (typeof el === 'number') {
-                  if (el === species[index].id) {
-                    match = true;
+          if (this.data.query && this.data.query['species'] && this.data.query['species'].length > 0) {
+            /*for (const index in species) {
+              if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
+                this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
+              }
+            }*/
+            for (const index in species) {
+              if (this.data.query['species'].some(
+                function (el) {
+                  let match = false;
+                  if (typeof el === 'number') {
+                    if (el === species[index].id) {
+                      match = true;
+                    }
+                  } else {
+                    if (el === species[index].name) {
+                      match = true;
+                    }
                   }
-                } else {
-                  if (el === species[index].name) {
-                    match = true;
-                  }
-                }
-                return match;
-              })) {
-              this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
+                  return match;
+                })) {
+                this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
+              }
             }
           }
+          // this.speciesLoading = false;
+          this.speciesControl.enable();
+        },
+        error => {
+          this.errorMessage = <any>error;
         }
-        // this.speciesLoading = false;
-        this.speciesControl.enable();
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
+      );
 
     // this.diagnosisLoading = true;
     // get species diagnosis from the species diagnosis service
     this._speciesDiagnosisService.getSpeciesDiagnosis()
-    .subscribe(
-      (diagnosis) => {
-        this.diagnosis = diagnosis;
-        // alphabetize the species options list
-        this.diagnosis.sort(function (a, b) {
-          if (a.diagnosis_string < b.diagnosis_string) { return -1; }
-          if (a.diagnosis_string > b.diagnosis_string) { return 1; }
-          return 0;
-        });
-        this.filteredDiagnosis = this.diagnosisControl.valueChanges
-          .startWith(null)
-          .map(val => this.filter(val, this.diagnosis, 'diagnosis_string'));
+      .subscribe(
+        (diagnosis) => {
+          this.diagnosis = diagnosis;
+          // alphabetize the species options list
+          this.diagnosis.sort(function (a, b) {
+            if (a.diagnosis_string < b.diagnosis_string) { return -1; }
+            if (a.diagnosis_string > b.diagnosis_string) { return 1; }
+            return 0;
+          });
+          this.filteredDiagnosis = this.diagnosisControl.valueChanges.pipe(
+            startWith(null),
+            map(val => this.filter(val, this.diagnosis, 'diagnosis_string')));
 
-        if (this.data.query && this.data.query['diagnosis_string'] && this.data.query['diagnosis_string'].length > 0) {
-          /*for (const index in species) {
-            if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
-              this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
-            }
-          }*/
-          for (const index in diagnosis) {
-            if (this.data.query['diagnosis_string'].some(
-              function (el) {
-                let match = false;
-                if (typeof el === 'number') {
-                  if (el === diagnosis[index].id) {
-                    match = true;
+          if (this.data.query && this.data.query['diagnosis_string'] && this.data.query['diagnosis_string'].length > 0) {
+            /*for (const index in species) {
+              if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
+                this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
+              }
+            }*/
+            for (const index in diagnosis) {
+              if (this.data.query['diagnosis_string'].some(
+                function (el) {
+                  let match = false;
+                  if (typeof el === 'number') {
+                    if (el === diagnosis[index].id) {
+                      match = true;
+                    }
+                  } else {
+                    if (el === diagnosis[index].diagnosis_string) {
+                      match = true;
+                    }
                   }
-                } else {
-                  if (el === diagnosis[index].diagnosis_string) {
-                    match = true;
-                  }
-                }
-                return match;
-              })) {
-              this.dropdownSetup(this.diagnosisControl, this.selectedDiagnosis, diagnosis[index]);
+                  return match;
+                })) {
+                this.dropdownSetup(this.diagnosisControl, this.selectedDiagnosis, diagnosis[index]);
+              }
             }
           }
+          // this.diagnosisLoading = false;
+          this.diagnosisControl.enable();
+        },
+        error => {
+          this.errorMessage = <any>error;
         }
-        // this.diagnosisLoading = false;
-        this.diagnosisControl.enable();
-      },
-      error => {
-        this.errorMessage = <any>error;
-      }
-    );
+      );
   }
 
   dropdownSetup(formControl: FormControl, selectedValues: any, value: any) {

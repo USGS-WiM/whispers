@@ -1,8 +1,6 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable ,  BehaviorSubject ,  of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import { of } from 'rxjs/observable/of';
 
 import { EventGroup } from '@interfaces/event-group';
 import { EventGroupService } from '@services/event-group.service';

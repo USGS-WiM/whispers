@@ -1,11 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/operator/map';
-
-import { Subject, ReplaySubject } from 'rxjs';
+import { Observable ,  Subject, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 import { MatDialog, MatDialogRef } from '@angular/material';

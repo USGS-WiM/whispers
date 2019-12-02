@@ -16,7 +16,7 @@ import { MatSnackBar } from '@angular/material';
 import { TooltipPosition } from '@angular/material';
 
 
-import 'rxjs/add/operator/switchMap';
+
 import { EventService } from '@services/event.service';
 import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
 import { CurrentUserService } from '@services/current-user.service';

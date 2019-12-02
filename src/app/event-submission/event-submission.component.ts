@@ -1,14 +1,10 @@
 import { Component, OnInit, ElementRef, AfterViewInit, ViewChild, OnDestroy, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl, Form } from '@angular/forms/';
-import { Observable } from 'rxjs/Observable';
+import { Observable ,  Subscription ,  ReplaySubject, Subject, observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
-import { Subscription } from 'rxjs/Subscription';
-import { startWith } from 'rxjs-compat/operator/startWith';
-import { map } from 'rxjs/operators';
-import { take, takeUntil } from 'rxjs/operators';
+import { map ,  take, takeUntil } from 'rxjs/operators';
 import { CanDeactivateGuard } from './pending-changes.guard';
 import { HostListener } from '@angular/core';
-import { ReplaySubject, Subject, observable } from 'rxjs';
 
 import { DisplayValuePipe } from '../pipes/display-value.pipe';
 

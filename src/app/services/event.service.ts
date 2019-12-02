@@ -1,13 +1,9 @@
+
+import {catchError,  map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import { throwError } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { Observable ,  throwError ,  Subject } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -157,9 +153,9 @@ export class EventService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'get_count/' + queryString, options)
-      .map((response: Response) => <any>response.json())
-      .catch(this.handleError);
+    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'get_count/' + queryString, options).pipe(
+      map((response: Response) => <any>response.json()),
+      catchError(this.handleError),);
   }
 
   public queryEvents(eventQuery): Observable<EventSummary[]> {
@@ -228,9 +224,9 @@ export class EventService {
 
     }
 
-    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString, options)
-      .map((response: Response) => <EventSummary[]>response.json())
-      .catch(this.handleError);
+    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString, options).pipe(
+      map((response: Response) => <EventSummary[]>response.json()),
+      catchError(this.handleError),);
   }
 
 
@@ -274,9 +270,9 @@ export class EventService {
       });
     }
 
-    return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL + eventID + '?no_page', options)
-      .map((response: Response) => <EventDetail>response.json())
-      .catch(this.handleEventDetailsError);
+    return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL + eventID + '?no_page', options).pipe(
+      map((response: Response) => <EventDetail>response.json()),
+      catchError(this.handleEventDetailsError),);
   }
 
   public getUserDashboardEventSummaries(): Observable<EventSummary[]> {
@@ -285,9 +281,9 @@ export class EventService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'user_events?no_page', options)
-      .map((response: Response) => <EventSummary[]>response.json())
-      .catch(this.handleError);
+    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'user_events?no_page', options).pipe(
+      map((response: Response) => <EventSummary[]>response.json()),
+      catchError(this.handleError),);
 
   }
 
@@ -296,12 +292,12 @@ export class EventService {
     return this.http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'user_events', {
       headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS,
       params: new HttpParams().set('ordering', orderParams).set('page', pageNumber.toString()).set('page_size', pageSize.toString())
-    })
-      .map((res: any) => {
+    }).pipe(
+      map((res: any) => {
         // const response = res.json();
         this.resultsCountService.updateUserEventsResultsCount(res.count);
         return res.results;
-      });
+      }));
     // .pipe(
     //   map(response => {
     //     response['payload'] = response;
@@ -365,12 +361,12 @@ export class EventService {
     }
 
     // tslint:disable-next-line:max-line-length
-    return this.http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString, { headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS, params: new HttpParams().set('ordering', orderParams).set('page', pageNumber.toString()).set('page_size', pageSize.toString()) })
-      .map((res: any) => {
+    return this.http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString, { headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS, params: new HttpParams().set('ordering', orderParams).set('page', pageNumber.toString()).set('page_size', pageSize.toString()) }).pipe(
+      map((res: any) => {
         // const response = res.json();
         this.resultsCountService.updateEventQueryResultsCount(res.count);
         return res.results;
-      });
+      }));
   }
 
   public create(formValue): Observable<Event> {
@@ -379,9 +375,9 @@ export class EventService {
       headers: APP_SETTINGS.AUTH_JSON_HEADERS
     });
 
-    return this._http.post(APP_SETTINGS.EVENTS_URL, formValue, options)
-      .map((response: Response) => <Event>response.json())
-      .catch(this.handleError);
+    return this._http.post(APP_SETTINGS.EVENTS_URL, formValue, options).pipe(
+      map((response: Response) => <Event>response.json()),
+      catchError(this.handleError),);
 
   }
 
@@ -391,9 +387,9 @@ export class EventService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.put(APP_SETTINGS.EVENTS_URL + formValue.id + '/', formValue, options)
-      .map((response: Response) => <Event>response.json())
-      .catch(this.handleError);
+    return this._http.put(APP_SETTINGS.EVENTS_URL + formValue.id + '/', formValue, options).pipe(
+      map((response: Response) => <Event>response.json()),
+      catchError(this.handleError),);
   }
 
   public patchUpdate(formValue): Observable<Event> {
@@ -402,9 +398,9 @@ export class EventService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.patch(APP_SETTINGS.EVENTS_URL + formValue.id + '/', formValue, options)
-      .map((response: Response) => <Event>response.json())
-      .catch(this.handleError);
+    return this._http.patch(APP_SETTINGS.EVENTS_URL + formValue.id + '/', formValue, options).pipe(
+      map((response: Response) => <Event>response.json()),
+      catchError(this.handleError),);
   }
 
   private handleError(error: Response) {

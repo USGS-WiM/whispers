@@ -1,11 +1,8 @@
+
+import {map, catchError} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import { Subject } from 'rxjs/Subject';
-import { throwError } from 'rxjs';
+import { Observable ,  Subject ,  throwError } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -23,9 +20,9 @@ export class SpeciesService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.SPECIES_URL + speciesQuery + '?no_page', options)
-      .map((response: Response) => <Species[]>response.json())
-      .catch(this.handleError);
+    return this._http.get(APP_SETTINGS.SPECIES_URL + speciesQuery + '?no_page', options).pipe(
+      map((response: Response) => <Species[]>response.json()),
+      catchError(this.handleError),);
   }
 
   public getSpecies(): Observable<Species[]> {
@@ -34,9 +31,9 @@ export class SpeciesService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.SPECIES_URL + '?no_page&slim', options)
-      .map((response: Response) => <Species[]>response.json())
-      .catch(this.handleError);
+    return this._http.get(APP_SETTINGS.SPECIES_URL + '?no_page&slim', options).pipe(
+      map((response: Response) => <Species[]>response.json()),
+      catchError(this.handleError),);
   }
 
   public requestNew(formValue): Observable<any> {
@@ -45,9 +42,9 @@ export class SpeciesService {
       headers: APP_SETTINGS.MIN_AUTH_TEXT_HEADERS
     });
 
-    return this._http.post(APP_SETTINGS.SPECIES_URL + 'request_new/', formValue, options)
-      .map((response: Response) => <Species[]>response.json())
-      .catch(this.handleError);
+    return this._http.post(APP_SETTINGS.SPECIES_URL + 'request_new/', formValue, options).pipe(
+      map((response: Response) => <Species[]>response.json()),
+      catchError(this.handleError),);
   }
 
   private handleError(error: Response) {

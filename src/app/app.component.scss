@@ -1,9 +1,9 @@
 @import '~@angular/material/theming';
 /* ngx-datatable material theming imports */
 
-@import '~@swimlane/ngx-datatable/release/index.css';
-@import '~@swimlane/ngx-datatable/release/themes/material.css';
-@import '~@swimlane/ngx-datatable/release/assets/icons.css';
+// @import '~@swimlane/ngx-datatable/release/index.css';
+// @import '~@swimlane/ngx-datatable/release/themes/material.css';
+// @import '~@swimlane/ngx-datatable/release/assets/icons.css';
 
 // Custom Style Variables
 @import "./app.variables.scss";
@@ -20,7 +20,6 @@
     background-color: $blue-black;
 }
 .whispers-header {
-    //font-family: 'Oswald', sans-serif !important;
     position: sticky;
     top: 0;
     max-width: 100vw;

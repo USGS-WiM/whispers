@@ -2,13 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy } 
 import { Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
-import { Observable } from 'rxjs/Observable';
+import { Observable ,  ReplaySubject, Subject } from 'rxjs';
 
 import { MatDialog, MatDialogRef, MatSelect } from '@angular/material';
-
-import { ReplaySubject, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { take, takeUntil } from 'rxjs/operators';
+import { map ,  take, takeUntil } from 'rxjs/operators';
 
 import { MatSnackBar } from '@angular/material';
 // import { MAT_DIALOG_DATA } from '@angular/material';

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 

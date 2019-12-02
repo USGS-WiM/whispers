@@ -1,11 +1,8 @@
+
+import {catchError, map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import { Subject } from 'rxjs/Subject';
-import { throwError } from 'rxjs';
+import { Observable ,  Subject ,  throwError } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 
@@ -24,9 +21,9 @@ export class EventLocationContactService {
       headers: APP_SETTINGS.AUTH_JSON_HEADERS
     });
 
-    return this.http.post(APP_SETTINGS.EVENT_LOCATION_CONTACTS_URL, formValue, options)
-      .map((response: Response) => <LocationContact>response.json())
-      .catch(this.handleError);
+    return this.http.post(APP_SETTINGS.EVENT_LOCATION_CONTACTS_URL, formValue, options).pipe(
+      map((response: Response) => <LocationContact>response.json()),
+      catchError(this.handleError),);
 
   }
 
@@ -36,9 +33,9 @@ export class EventLocationContactService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this.http.delete(APP_SETTINGS.EVENT_LOCATION_CONTACTS_URL + id + '/', options)
-      .map((response: Response) => <any>response.json())
-      .catch(this.handleError);
+    return this.http.delete(APP_SETTINGS.EVENT_LOCATION_CONTACTS_URL + id + '/', options).pipe(
+      map((response: Response) => <any>response.json()),
+      catchError(this.handleError),);
   }
 
   private handleError(error: Response) {

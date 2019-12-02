@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 
 import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from '@angular/material';
 import { debounceTime, distinctUntilChanged, startWith, tap, delay } from 'rxjs/operators';
-import { merge } from 'rxjs/observable/merge';
+import { merge } from 'rxjs';
 import { EventService } from '@services/event.service';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 

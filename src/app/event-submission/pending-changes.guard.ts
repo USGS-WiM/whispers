@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, pipe } from 'rxjs';
-import { Observer } from 'rxjs';
+import { Observable, pipe ,  Observer } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import { CanDeactivate,
          ActivatedRouteSnapshot,

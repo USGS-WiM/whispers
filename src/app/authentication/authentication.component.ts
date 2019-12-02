@@ -5,9 +5,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '@services/authentication.service';
 import { CurrentUserService } from '@services/current-user.service';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs';
+
+
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 

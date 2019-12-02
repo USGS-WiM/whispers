@@ -4,12 +4,11 @@ import { Injectable } from '@angular/core';
 
 import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from '@angular/material';
 import { debounceTime, distinctUntilChanged, startWith, tap, delay } from 'rxjs/operators';
-import { merge } from 'rxjs/observable/merge';
+import { merge ,  Subscription } from 'rxjs';
 
 import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar } from '@angular/material';
-import { Subscription } from 'rxjs/Subscription';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { ResultsCountService } from '@services/results-count.service';

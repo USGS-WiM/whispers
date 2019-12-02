@@ -1,11 +1,8 @@
+
+import {map, catchError} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import { throwError } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { Observable ,  throwError ,  Subject } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -25,9 +22,9 @@ export class ServiceRequestService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this.http.get(APP_SETTINGS.SERVICE_REQUEST_RESPONSES_URL + '?no_page', options)
-      .map((response: Response) => <ServiceRequestResponse[]>response.json())
-      .catch(this.handleError);
+    return this.http.get(APP_SETTINGS.SERVICE_REQUEST_RESPONSES_URL + '?no_page', options).pipe(
+      map((response: Response) => <ServiceRequestResponse[]>response.json()),
+      catchError(this.handleError),);
   }
 
   public update(formValue): Observable<any> {
@@ -36,9 +33,9 @@ export class ServiceRequestService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this.http.patch(APP_SETTINGS.SERVICE_REQUEST_URL + formValue.id + '/', formValue, options)
-      .map((response: Response) => <any>response.json())
-      .catch(this.handleError);
+    return this.http.patch(APP_SETTINGS.SERVICE_REQUEST_URL + formValue.id + '/', formValue, options).pipe(
+      map((response: Response) => <any>response.json()),
+      catchError(this.handleError),);
   }
 
   public create(formValue): Observable<any> {
@@ -47,9 +44,9 @@ export class ServiceRequestService {
       headers: APP_SETTINGS.AUTH_JSON_HEADERS
     });
 
-    return this.http.post(APP_SETTINGS.SERVICE_REQUEST_URL, formValue, options)
-      .map((response: Response) => <any>response.json())
-      .catch(this.handleError);
+    return this.http.post(APP_SETTINGS.SERVICE_REQUEST_URL, formValue, options).pipe(
+      map((response: Response) => <any>response.json()),
+      catchError(this.handleError),);
 
   }
 

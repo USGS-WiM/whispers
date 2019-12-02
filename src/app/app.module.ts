@@ -5,7 +5,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 import {
@@ -182,7 +181,6 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     HttpClientModule,
     ROUTING,
     FlexLayoutModule,
-    NgxDatatableModule,
     MatToolbarModule,
     MatAutocompleteModule,
     MatButtonModule,

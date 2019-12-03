@@ -3,29 +3,31 @@
 </h1>
 
 <mat-dialog-content>
-  <mat-accordion>
-    <!-- Event ID expansion panel -->
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <b>Event ID</b>
-        </mat-panel-title>
-        <mat-panel-description>
-          <span>
-            <!-- {{entered.event_id}} --></span>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <div>
-        <mat-form-field>
-          <input matInput type="number" min="0" placeholder="Event ID">
-        </mat-form-field>
-      </div>
-    </mat-expansion-panel>
-    <!-- Try to implement popdown "Preview" of the event for confirmation purposes -->
-    <!--- end Event ID expansion panel -->
 
-    <!--- Admin Level One (State) expansion panel -->
-    <mat-expansion-panel>
+  <form [formGroup]="cueForm" class="autocomplete-form" autocomplete="off">
+    <mat-accordion>
+      <!-- Event ID expansion panel -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <b>Event ID</b>
+          </mat-panel-title>
+          <mat-panel-description>
+            <span>
+              <!-- {{entered.event_id}} --></span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <mat-form-field>
+            <input matInput type="number" min="0" placeholder="Event ID">
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+      <!-- Try to implement popdown "Preview" of the event for confirmation purposes -->
+      <!--- end Event ID expansion panel -->
+
+      <!--- Admin Level One (State) expansion panel -->
+      <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
             <b>State (or equivalent)</b>
@@ -36,10 +38,11 @@
                 <mat-chip-list #adminLevelOneChipList>
                   <span *ngFor="let adminLevelOne of selectedAdminLevelOnes">
                     <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
-                      (removed)="removeChip(adminLevelOne, selectedAdminLevelOnes, 'adminLevelOne')">{{adminLevelOne.name}}
+                      (removed)="removeChip(adminLevelOne, selectedAdminLevelOnes, 'adminLevelOne')">
+                      {{adminLevelOne.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedAdminLevelOnes.indexOf(adminLevelOne)) < (selectedAdminLevelOnes.length - 1)">{{(searchForm.get('administrative_level_one_includes_all').value)
+                    <span *ngIf="(selectedAdminLevelOnes.indexOf(adminLevelOne)) < (selectedAdminLevelOnes.length - 1)">{{(cueForm.get('administrative_level_one_includes_all').value)
                       ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
@@ -50,9 +53,10 @@
         <div>
           <div class="autocomplete-input">
             <mat-form-field class="full-width">
-              <input type="text" matInput placeholder="Add State" aria-label="Add State" [matAutocomplete]="adminLevelOneAutoComplete"
-                > <!-- [formControl]="adminLevelOneControl" -->
-              <mat-autocomplete #adminLevelOneAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedAdminLevelOnes, 'adminLevelOne')">
+              <input type="text" matInput placeholder="Add State" aria-label="Add State"
+                [matAutocomplete]="adminLevelOneAutoComplete" [formControl]="adminLevelOneControl">
+              <mat-autocomplete #adminLevelOneAutoComplete="matAutocomplete" [displayWith]="displayFn"
+                (optionSelected)="addChip($event, selectedAdminLevelOnes, 'adminLevelOne')">
                 <mat-option *ngFor="let adminLevelOne of filteredAdminLevelOnes | async" [value]="adminLevelOne">
                   <span>{{ adminLevelOne.name }}</span>
                 </mat-option>
@@ -61,8 +65,9 @@
           </div>
           <div class="search-type-radios">
             <label>Search type </label>
-            <mat-radio-group> <!-- formControlName="administrative_level_one_includes_all" -->
-              <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>&nbsp;&nbsp;
+            <mat-radio-group formControlName="administrative_level_one_includes_all">
+              <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
+              &nbsp;&nbsp;
               <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
             </mat-radio-group>
           </div>
@@ -72,101 +77,103 @@
 
       <!--- Species expansion panel -->
       <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <b>Species</b>
-            </mat-panel-title>
-            <mat-panel-description>
-              <span>
-                <div class="chiplist">
-                  <mat-chip-list #speciesChipList>
-                    <span *ngFor="let species of selectedSpecies">
-                      <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
-                        (removed)="removeChip(species, selectedSpecies, 'species')">{{species.name}}
-                        <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
-                      </mat-chip>
-                      <span *ngIf="(selectedSpecies.indexOf(species)) < (selectedSpecies.length - 1)">{{(searchForm.get('species_includes_all').value)
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <b>Species</b>
+          </mat-panel-title>
+          <mat-panel-description>
+            <span>
+              <div class="chiplist">
+                <mat-chip-list #speciesChipList>
+                  <span *ngFor="let species of selectedSpecies">
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
+                      (removed)="removeChip(species, selectedSpecies, 'species')">{{species.name}}
+                      <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
+                    </mat-chip>
+                    <span *ngIf="(selectedSpecies.indexOf(species)) < (selectedSpecies.length - 1)">{{(cueForm.get('species_includes_all').value)
                         ? "and" : "or"}}&nbsp;</span>
-                    </span>
-                  </mat-chip-list>
-                </div>
-              </span>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <div>
-            <div class="autocomplete-input">
-              <mat-form-field class="full-width">
-                <input type="text" matInput placeholder="Add Species" aria-label="Add Species" [matAutocomplete]="speciesAutoComplete"
-                  > <!-- [formControl]="speciesControl" -->
-                <mat-spinner *ngIf="speciesLoading" [diameter]="20"></mat-spinner>
-                <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedSpecies, 'species')">
-                  <mat-option *ngFor="let species of filteredSpecies | async" [value]="species">
-                    <span>{{ species.name }}</span>
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-            </div>
-            <div class="search-type-radios">
-              <label>Search type </label>
-              <mat-radio-group> <!-- formControlName="species_includes_all" -->
-                <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>&nbsp;&nbsp;
-                <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
-              </mat-radio-group>
-            </div>
+                  </span>
+                </mat-chip-list>
+              </div>
+            </span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <div class="autocomplete-input">
+            <mat-form-field class="full-width">
+              <input type="text" matInput placeholder="Add Species" aria-label="Add Species"
+                [matAutocomplete]="speciesAutoComplete" [formControl]="speciesControl">
+              <mat-spinner *ngIf="speciesLoading" [diameter]="20"></mat-spinner>
+              <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn"
+                (optionSelected)="addChip($event, selectedSpecies, 'species')">
+                <mat-option *ngFor="let species of filteredSpecies | async" [value]="species">
+                  <span>{{ species.name }}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
           </div>
-        </mat-expansion-panel>
-        <!--- end Species expansion panel -->
+          <div class="search-type-radios">
+            <label>Search type </label>
+            <mat-radio-group formControlName="species_includes_all">
+              <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
+              &nbsp;&nbsp;
+              <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <!--- end Species expansion panel -->
 
-        <!--- Species Diagnosis panel -->
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <b>Species Diagnosis</b>
-            </mat-panel-title>
-            <mat-panel-description>
-              <span>
-                <div class="chiplist">
-                  <mat-chip-list #speciesDiagnosisChipList>
-                    <span *ngFor="let diagnosis of selectedDiagnosis">
-                      <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
-                        (removed)="removeChip(diagnosis, selectedDiagnosis, 'diagnosis')">{{ diagnosis.diagnosis_string }}
-                        <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
-                      </mat-chip>
-                      <span *ngIf="(selectedDiagnosis.indexOf(species)) < (selectedDiagnosis.length - 1)">{{(searchForm.get('species_includes_all').value)
+      <!--- Species Diagnosis panel -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <b>Species Diagnosis</b>
+          </mat-panel-title>
+          <mat-panel-description>
+            <span>
+              <div class="chiplist">
+                <mat-chip-list #speciesDiagnosisChipList>
+                  <span *ngFor="let diagnosis of selectedDiagnosis">
+                    <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
+                      (removed)="removeChip(diagnosis, selectedDiagnosis, 'diagnosis')">{{ diagnosis.diagnosis_string }}
+                      <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
+                    </mat-chip>
+                    <span *ngIf="(selectedDiagnosis.indexOf(species)) < (selectedDiagnosis.length - 1)">{{(cueForm.get('species_includes_all').value)
                                 ? "and" : "or"}}&nbsp;</span>
-                    </span>
-                  </mat-chip-list>
-                </div>
-              </span>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <div>
-            <div class="autocomplete-input">
-              <mat-form-field class="full-width">
-                <input type="text" matInput placeholder="Add Species Diagnosis" aria-label="Add Species Diagnosis"
-                  [matAutocomplete]="speciesDiagnosisAutoComplete"> <!-- [formControl]="speciesControl" -->
-                <mat-spinner *ngIf="diagnosisLoading" [diameter]="20"></mat-spinner>
-                <mat-autocomplete #speciesDiagnosisAutoComplete="matAutocomplete" [displayWith]="displayFn"
-                  (optionSelected)="addChip($event, selectedDiagnosis, 'diagnosis')">
-                  <mat-option *ngFor="let diagnosis of filteredDiagnosis | async" [value]="diagnosis">
-                    <span>{{ diagnosis.diagnosis_string }}</span>
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-            </div>
-            <div class="search-type-radios">
-              <label>Search type </label>
-              <mat-radio-group>
-                <!-- formControlName="species_includes_all" -->
-                <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>&nbsp;&nbsp;
-                <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
-              </mat-radio-group>
-            </div>
+                  </span>
+                </mat-chip-list>
+              </div>
+            </span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div>
+          <div class="autocomplete-input">
+            <mat-form-field class="full-width">
+              <input type="text" matInput placeholder="Add Species Diagnosis" aria-label="Add Species Diagnosis"
+                [matAutocomplete]="speciesDiagnosisAutoComplete" [formControl]="speciesDiagnosisControl">
+              <mat-spinner *ngIf="diagnosisLoading" [diameter]="20"></mat-spinner>
+              <mat-autocomplete #speciesDiagnosisAutoComplete="matAutocomplete" [displayWith]="displayFn"
+                (optionSelected)="addChip($event, selectedDiagnosis, 'diagnosis')">
+                <mat-option *ngFor="let diagnosis of filteredDiagnosis | async" [value]="diagnosis">
+                  <span>{{ diagnosis.diagnosis_string }}</span>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
           </div>
-        </mat-expansion-panel>
-        <!--- end Species Diagnosis expansion panel -->
+          <div class="search-type-radios">
+            <label>Search type </label>
+            <mat-radio-group formControlName="species_includes_all">
+              <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
+              &nbsp;&nbsp;
+              <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <!--- end Species Diagnosis expansion panel -->
 
-        <!--- Land Ownership panel -->
+      <!--- Land Ownership panel -->
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -178,10 +185,11 @@
                 <mat-chip-list #landOwnershipChipList>
                   <span *ngFor="let landOwnership of selectedLandOwnership">
                     <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
-                      (removed)="removeChip(landOwnership, selectedLandOwnership, 'landOwnerships')">{{ landOwnerships.name }}
+                      (removed)="removeChip(landOwnership, selectedLandOwnership, 'landOwnership')">
+                      {{ landOwnership.name }}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedLandOwnership.indexOf(landOwnership)) < (selectedLandOwnership.length - 1)">{{(searchForm.get('landOwnerships').value)
+                    <span *ngIf="(selectedLandOwnership.indexOf(landOwnership)) < (selectedLandOwnership.length - 1)">{{(cueForm.get('landOwnerships').value)
                       ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
@@ -192,10 +200,11 @@
         <div>
           <div class="autocomplete-input">
             <mat-form-field class="full-width">
-              <input type="text" matInput placeholder="Add Land Ownership" aria-label="Add Land Ownership" [matAutocomplete]="landOwnershipAutoComplete"
-                > <!-- [formControl]="speciesControl" -->
+              <input type="text" matInput placeholder="Add Land Ownership" aria-label="Add Land Ownership"
+                [matAutocomplete]="landOwnershipAutoComplete" [formControl]="speciesControl">
               <mat-spinner *ngIf="landOwnershipLoading" [diameter]="20"></mat-spinner>
-              <mat-autocomplete #landOwnershipAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedLandOwnership, 'landOwnerships')">
+              <mat-autocomplete #landOwnershipAutoComplete="matAutocomplete" [displayWith]="displayFn"
+                (optionSelected)="addChip($event, selectedLandOwnership, 'landOwnerships')">
                 <mat-option *ngFor="let landOwnership of landOwnerships | async" [value]="landOwnership">
                   <span>{{ landOwnership.name }}</span>
                 </mat-option>
@@ -204,8 +213,9 @@
           </div>
           <div class="search-type-radios">
             <label>Search type </label>
-            <mat-radio-group> <!-- formControlName="species_includes_all" -->
-              <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>&nbsp;&nbsp;
+            <mat-radio-group formControlName="species_includes_all">
+              <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
+              &nbsp;&nbsp;
               <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
             </mat-radio-group>
           </div>
@@ -220,7 +230,8 @@
             <b>Number Affected</b>
           </mat-panel-title>
           <mat-panel-description>
-            <span> {{ cueForm.get('affected_count_operator').value === '__gte' && cueForm.get('affected_count').value != null ? '&ge;' :
+            <span>
+              {{ cueForm.get('affected_count_operator').value === '__gte' && cueForm.get('affected_count').value != null ? '&ge;' :
               cueForm.get('affected_count_operator').value === '__lte' && cueForm.get('affected_count').value != null ? '&le;' : '' }}
               {{cueForm.get('affected_count').value}}</span>
           </mat-panel-description>
@@ -230,17 +241,19 @@
             <mat-radio-group formControlName="affected_count_operator">
               <mat-radio-button [value]="'__gte'" matTooltip="Greater than or equal to">Greater than or equal to ( &ge;
                 )</mat-radio-button>&nbsp;&nbsp;
-              <mat-radio-button [value]="'__lte'" matTooltip="Less than or equal to">Less than or equal to ( &le; )</mat-radio-button>
+              <mat-radio-button [value]="'__lte'" matTooltip="Less than or equal to">Less than or equal to ( &le; )
+              </mat-radio-button>
             </mat-radio-group>
           </div>
           <mat-form-field>
-            <input matInput type="number" min="0"  placeholder="Number Affected" formControlName="affected_count">
+            <input matInput type="number" min="0" placeholder="Number Affected" formControlName="affected_count">
           </mat-form-field>
         </div>
       </mat-expansion-panel>
       <!--- end Number Affected expansion panel -->
-     
-  </mat-accordion>
+
+    </mat-accordion>
+  </form>
 
 </mat-dialog-content>
 <mat-dialog-actions>

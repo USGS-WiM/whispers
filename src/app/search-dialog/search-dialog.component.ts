@@ -276,7 +276,7 @@ export class SearchDialogComponent implements OnInit {
             for (const index in adminLevelOnes) {
               if (this.data.query['administrative_level_one'].some(
                 function (el) {
-                  console.log(el);
+                  console.log('variable el: ' + el);
                   let match = false;
                   if (typeof el === 'number') {
                     if (el === adminLevelOnes[index].id) {

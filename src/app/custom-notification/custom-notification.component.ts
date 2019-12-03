@@ -43,8 +43,9 @@ export class CustomNotificationComponent implements OnInit {
   filteredSpecies: Observable<any[]>;
   selectedSpecies = []; // chips list
 
+  // diagnoses or speciesDiagnosis?? -BAD 12/3/19
   diagnosisLoading = false;
-  diagnosisControl: FormControl;
+  speciesDiagnosisControl: FormControl;
   diagnosis = [];
   filteredDiagnosis: Observable<any[]>;
   selectedDiagnosis = []; // chips list
@@ -85,8 +86,9 @@ export class CustomNotificationComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
     this.adminLevelOneControl = new FormControl();
-    this.speciesControl = new FormControl({ value: null, disabled: true });
-    this.diagnosisControl = new FormControl({ value: null, disabled: true });
+    this.speciesControl = new FormControl();
+    this.speciesDiagnosisControl = new FormControl();
+    this.landOwnershipControl = new FormControl();
     this.buildCueForm();
   }
 
@@ -97,10 +99,14 @@ export class CustomNotificationComponent implements OnInit {
         (adminLevelOnes) => {
           this.administrative_level_one = adminLevelOnes;
           this.filteredAdminLevelOnes = this.adminLevelOneControl.valueChanges.pipe(
-            // startWith(null),
+            startWith(null),
             map(val => this.filter(val, this.administrative_level_one, 'name')));
 
-          console.log(this.filteredAdminLevelOnes);
+            // TODO: make this work in this component where there is not a saved query coming in via the data var.
+            // if no editing, refactor w/out this part below that checks and incorporates incoming query
+            // it seems the presumption of a incoming query is structural to this, so need to disassociate that.
+            // note that .some is a native javascript array function
+
           if (this.data.query && this.data.query['administrative_level_one'].length > 0) {
             for (const index in adminLevelOnes) {
               if (this.data.query['administrative_level_one'].some(
@@ -121,7 +127,7 @@ export class CustomNotificationComponent implements OnInit {
                 this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, adminLevelOnes[index]);
               }
             }
-          }
+         }
 
         },
         error => {
@@ -146,32 +152,28 @@ export class CustomNotificationComponent implements OnInit {
 
           console.log(this.filteredLandOwnership);
 
-          if (this.data.query && this.data.query['landOwnerships'] && this.data.query['landOwnerships'].length > 0) {
-            /*for (const index in species) {
-              if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
-                this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
-              }
-            }*/
-            for (const index in landOwnerships) {
-              if (this.data.query['landOwnerships'].some(
-                function (el) {
-                  let match = false;
-                  if (typeof el === 'number') {
-                    if (el === landOwnerships[index].id) {
-                      match = true;
-                    }
-                  } else {
-                    if (el === landOwnerships[index].name) {
-                      match = true;
-                    }
-                  }
-                  return match;
-                })) {
-                this.dropdownSetup(this.speciesControl, this.selectedLandOwnership, landOwnerships[index]);
-              }
-            }
-          }
-          // this.landOwnershipLoading = false;
+          // if (this.data.query && this.data.query['landOwnerships'] && this.data.query['landOwnerships'].length > 0) {
+          //   for (const index in landOwnerships) {
+          //     if (this.data.query['landOwnerships'].some(
+          //       function (el) {
+          //         let match = false;
+          //         if (typeof el === 'number') {
+          //           if (el === landOwnerships[index].id) {
+          //             match = true;
+          //           }
+          //         } else {
+          //           if (el === landOwnerships[index].name) {
+          //             match = true;
+          //           }
+          //         }
+          //         return match;
+          //       })) {
+          //       this.dropdownSetup(this.landOwnershipControl, this.selectedLandOwnership, landOwnerships[index]);
+          //     }
+          //   }
+          // }
+
+          this.landOwnershipLoading = false;
           this.landOwnershipControl.enable();
         },
         error => {
@@ -241,7 +243,7 @@ export class CustomNotificationComponent implements OnInit {
             if (a.diagnosis_string > b.diagnosis_string) { return 1; }
             return 0;
           });
-          this.filteredDiagnosis = this.diagnosisControl.valueChanges.pipe(
+          this.filteredDiagnosis = this.speciesDiagnosisControl.valueChanges.pipe(
             startWith(null),
             map(val => this.filter(val, this.diagnosis, 'diagnosis_string')));
 
@@ -266,12 +268,12 @@ export class CustomNotificationComponent implements OnInit {
                   }
                   return match;
                 })) {
-                this.dropdownSetup(this.diagnosisControl, this.selectedDiagnosis, diagnosis[index]);
+                this.dropdownSetup(this.speciesDiagnosisControl, this.selectedDiagnosis, diagnosis[index]);
               }
             }
           }
           // this.diagnosisLoading = false;
-          this.diagnosisControl.enable();
+          this.speciesDiagnosisControl.enable();
         },
         error => {
           this.errorMessage = <any>error;

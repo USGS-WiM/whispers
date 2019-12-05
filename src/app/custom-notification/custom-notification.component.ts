@@ -7,6 +7,7 @@ import { map, startWith } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocompleteTrigger } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
 
@@ -14,7 +15,8 @@ import { AdministrativeLevelOneService } from '@services/administrative-level-on
 
 import { SpeciesService } from '@services/species.service';
 
-import { SpeciesDiagnosisService } from '@services/species-diagnosis.service';
+import { DiagnosisService } from '@services/diagnosis.service';
+import { Diagnosis } from '@interfaces/diagnosis';
 
 import { LandOwnership } from '@interfaces/land-ownership';
 import { LandOwnershipService } from '@services/land-ownership.service';
@@ -29,6 +31,9 @@ import { CueService } from '@services/cue.service';
 export class CustomNotificationComponent implements OnInit {
 
   errorMessage = '';
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
   cueForm: FormGroup;
 
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
@@ -44,11 +49,11 @@ export class CustomNotificationComponent implements OnInit {
   selectedSpecies = []; // chips list
 
   // diagnoses or speciesDiagnosis?? -BAD 12/3/19
-  diagnosisLoading = false;
+  diagnosesLoading = false;
   speciesDiagnosisControl: FormControl;
-  diagnosis = [];
-  filteredDiagnosis: Observable<any[]>;
-  selectedDiagnosis = []; // chips list
+  diagnoses: Diagnosis[];
+  filteredDiagnoses: Observable<any[]>;
+  selectedDiagnoses = []; // chips list
 
   landOwnershipLoading = false;
   landOwnershipControl: FormControl;
@@ -65,11 +70,10 @@ export class CustomNotificationComponent implements OnInit {
       administrative_level_two: null,
       affected_count: null,
       affected_count_operator: '__gte',
-      diagnosis_type_includes_all: false,
       diagnosis_includes_all: false,
       species_includes_all: false,
       administrative_level_one_includes_all: false,
-      administrative_level_two_includes_all: false,
+      speciesDiagnosis_includes_all: false,
       and_params: [],
       complete: null
     });
@@ -79,9 +83,10 @@ export class CustomNotificationComponent implements OnInit {
     public customNotificationDialogRef: MatDialogRef<CustomNotificationComponent>,
     private adminLevelOneService: AdministrativeLevelOneService,
     private _speciesService: SpeciesService,
-    private _speciesDiagnosisService: SpeciesDiagnosisService,
+    private diagnosisService: DiagnosisService,
     private landOwnershipService: LandOwnershipService,
     private formBuilder: FormBuilder,
+    public snackBar: MatSnackBar,
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
@@ -102,32 +107,30 @@ export class CustomNotificationComponent implements OnInit {
             startWith(null),
             map(val => this.filter(val, this.administrative_level_one, 'name')));
 
-            // TODO: make this work in this component where there is not a saved query coming in via the data var.
-            // if no editing, refactor w/out this part below that checks and incorporates incoming query
-            // it seems the presumption of a incoming query is structural to this, so need to disassociate that.
-            // note that .some is a native javascript array function
+          // below block not needed because no incoming query
 
-          if (this.data.query && this.data.query['administrative_level_one'].length > 0) {
-            for (const index in adminLevelOnes) {
-              if (this.data.query['administrative_level_one'].some(
-                function (el) {
-                  console.log(el);
-                  let match = false;
-                  if (typeof el === 'number') {
-                    if (el === adminLevelOnes[index].id) {
-                      match = true;
-                    }
-                  } else {
-                    if (el === adminLevelOnes[index].name) {
-                      match = true;
-                    }
-                  }
-                  return match;
-                })) {
-                this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, adminLevelOnes[index]);
-              }
-            }
-         }
+          //   if (this.data.query && this.data.query['administrative_level_one'].length > 0) {
+
+          //     for (const index in adminLevelOnes) {
+          //       if (this.data.query['administrative_level_one'].some(
+          //         function (el) {
+          //           console.log(el);
+          //           let match = false;
+          //           if (typeof el === 'number') {
+          //             if (el === adminLevelOnes[index].id) {
+          //               match = true;
+          //             }
+          //           } else {
+          //             if (el === adminLevelOnes[index].name) {
+          //               match = true;
+          //             }
+          //           }
+          //           return match;
+          //         })) {
+          //         this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, adminLevelOnes[index]);
+          //       }
+          //     }
+          //  }
 
         },
         error => {
@@ -150,8 +153,8 @@ export class CustomNotificationComponent implements OnInit {
             startWith(null),
             map(val => this.filter(val, this.landOwnerships, 'name')));
 
-          console.log(this.filteredLandOwnership);
 
+          // below block not needed because no incoming query
           // if (this.data.query && this.data.query['landOwnerships'] && this.data.query['landOwnerships'].length > 0) {
           //   for (const index in landOwnerships) {
           //     if (this.data.query['landOwnerships'].some(
@@ -198,31 +201,6 @@ export class CustomNotificationComponent implements OnInit {
             startWith(null),
             map(val => this.filter(val, this.species, 'name')));
 
-          if (this.data.query && this.data.query['species'] && this.data.query['species'].length > 0) {
-            /*for (const index in species) {
-              if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
-                this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
-              }
-            }*/
-            for (const index in species) {
-              if (this.data.query['species'].some(
-                function (el) {
-                  let match = false;
-                  if (typeof el === 'number') {
-                    if (el === species[index].id) {
-                      match = true;
-                    }
-                  } else {
-                    if (el === species[index].name) {
-                      match = true;
-                    }
-                  }
-                  return match;
-                })) {
-                this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
-              }
-            }
-          }
           // this.speciesLoading = false;
           this.speciesControl.enable();
         },
@@ -231,59 +209,87 @@ export class CustomNotificationComponent implements OnInit {
         }
       );
 
-    // this.diagnosisLoading = true;
-    // get species diagnosis from the species diagnosis service
-    this._speciesDiagnosisService.getSpeciesDiagnosis()
+    // get diagnoses from the diagnoses service
+    // IMPORTANT NOTE: while the form specifies a 'species diagnosis' in this context it means the diagnosis assigned to a species (more specifically a locationspecies)
+    // the form options must be populated from the diagnoses lookup table. the backend will then search speciesdiagnoses records that contain the diagnosis or diagnoses selected.
+    this.diagnosisService.getDiagnoses()
       .subscribe(
-        (diagnosis) => {
-          this.diagnosis = diagnosis;
-          // alphabetize the species options list
-          this.diagnosis.sort(function (a, b) {
-            if (a.diagnosis_string < b.diagnosis_string) { return -1; }
-            if (a.diagnosis_string > b.diagnosis_string) { return 1; }
+        (diagnoses) => {
+          this.diagnoses = diagnoses;
+          // alphabetize the diagnosis options list
+          this.diagnoses.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
             return 0;
           });
-          this.filteredDiagnosis = this.speciesDiagnosisControl.valueChanges.pipe(
+          this.filteredDiagnoses = this.speciesDiagnosisControl.valueChanges.pipe(
             startWith(null),
-            map(val => this.filter(val, this.diagnosis, 'diagnosis_string')));
-
-          if (this.data.query && this.data.query['diagnosis_string'] && this.data.query['diagnosis_string'].length > 0) {
-            /*for (const index in species) {
-              if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
-                this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
-              }
-            }*/
-            for (const index in diagnosis) {
-              if (this.data.query['diagnosis_string'].some(
-                function (el) {
-                  let match = false;
-                  if (typeof el === 'number') {
-                    if (el === diagnosis[index].id) {
-                      match = true;
-                    }
-                  } else {
-                    if (el === diagnosis[index].diagnosis_string) {
-                      match = true;
-                    }
-                  }
-                  return match;
-                })) {
-                this.dropdownSetup(this.speciesDiagnosisControl, this.selectedDiagnosis, diagnosis[index]);
-              }
-            }
-          }
-          // this.diagnosisLoading = false;
-          this.speciesDiagnosisControl.enable();
+            map(val => this.filter(val, this.diagnoses, 'name')));
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
+
   }
 
   dropdownSetup(formControl: FormControl, selectedValues: any, value: any) {
     selectedValues.push(value);
     this.resetFormControl(formControl);
+  }
+
+  displayFn(item): string | undefined {
+    return item ? item.name : undefined;
+  }
+
+  stopPropagation(event) {
+    event.stopPropagation();
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
+
+
+  addChip(event: MatAutocompleteSelectedEvent, selectedValuesArray: any, control: string): void {
+
+    const self = this;
+    // Define selection constant
+    let alreadySelected = false;
+    const selection = event.option.value;
+    if (selectedValuesArray.length > 0) {
+      // check if the selection is already in the selected array
+      for (const item of selectedValuesArray) {
+        if (item.id === selection.id) {
+          alreadySelected = true;
+          this.openSnackBar('Already Selected', 'OK');
+        }
+      }
+      if (alreadySelected === false) {
+        // Add selected item to selected array, which will show as a chip
+        selectedValuesArray.push(selection);
+        // reset the form
+        this.resetFormControl(control);
+      }
+    } else {
+      // Add selected item to selected array, which will show as a chip
+      selectedValuesArray.push(selection);
+      // reset the form
+      this.resetFormControl(control);
+    }
+
+  }
+
+  removeChip(chip: any, selectedValuesArray: any, control: string): void {
+    // Find key of object in selectedValuesArray
+    const index = selectedValuesArray.indexOf(chip);
+    // If key exists
+    if (index >= 0) {
+      // Remove key from selectedValuesArray array
+      selectedValuesArray.splice(index, 1);
+    }
   }
 
   filter(val: any, searchArray: any, searchProperty: string): string[] {
@@ -305,6 +311,11 @@ export class CustomNotificationComponent implements OnInit {
     switch (control) {
       case 'adminLevelOne': this.adminLevelOneControl.reset();
         break;
+      case 'species': this.speciesControl.reset();
+        break;
+      case 'diagnosis': this.speciesDiagnosisControl.reset();
+        break;
+      case 'landOwnership': this.landOwnershipControl.reset();
     }
   }
 

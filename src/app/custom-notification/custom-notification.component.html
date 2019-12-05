@@ -13,17 +13,15 @@
             <b>Event ID</b>
           </mat-panel-title>
           <mat-panel-description>
-            <span>
-              <!-- {{entered.event_id}} --></span>
+            <span>{{cueForm.get('event_id').value}}</span>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div>
           <mat-form-field>
-            <input matInput type="number" min="0" placeholder="Event ID">
+            <input matInput type="number" min="0" placeholder="Event ID" formControlName="event_id">
           </mat-form-field>
         </div>
       </mat-expansion-panel>
-      <!-- Try to implement popdown "Preview" of the event for confirmation purposes -->
       <!--- end Event ID expansion panel -->
 
       <!--- Admin Level One (State) expansion panel -->
@@ -134,12 +132,12 @@
             <span>
               <div class="chiplist">
                 <mat-chip-list #speciesDiagnosisChipList>
-                  <span *ngFor="let diagnosis of selectedDiagnosis">
+                  <span *ngFor="let diagnosis of selectedDiagnoses">
                     <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
-                      (removed)="removeChip(diagnosis, selectedDiagnosis, 'diagnosis')">{{ diagnosis.diagnosis_string }}
+                      (removed)="removeChip(diagnosis, selectedDiagnoses, 'diagnosis')">{{ diagnosis.name }}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedDiagnosis.indexOf(species)) < (selectedDiagnosis.length - 1)">{{(cueForm.get('species_includes_all').value)
+                    <span *ngIf="(selectedDiagnoses.indexOf(diagnosis)) < (selectedDiagnoses.length - 1)">{{(cueForm.get('speciesDiagnosis_includes_all').value)
                                 ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
@@ -152,18 +150,18 @@
             <mat-form-field class="full-width">
               <input type="text" matInput placeholder="Add Species Diagnosis" aria-label="Add Species Diagnosis"
                 [matAutocomplete]="speciesDiagnosisAutoComplete" [formControl]="speciesDiagnosisControl">
-              <mat-spinner *ngIf="diagnosisLoading" [diameter]="20"></mat-spinner>
+              <mat-spinner *ngIf="diagnosesLoading" [diameter]="20"></mat-spinner>
               <mat-autocomplete #speciesDiagnosisAutoComplete="matAutocomplete" [displayWith]="displayFn"
-                (optionSelected)="addChip($event, selectedDiagnosis, 'diagnosis')">
-                <mat-option *ngFor="let diagnosis of filteredDiagnosis | async" [value]="diagnosis">
-                  <span>{{ diagnosis.diagnosis_string }}</span>
+                (optionSelected)="addChip($event, selectedDiagnoses, 'diagnosis')">
+                <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis">
+                  <span>{{ diagnosis.name }}</span>
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
           </div>
           <div class="search-type-radios">
             <label>Search type </label>
-            <mat-radio-group formControlName="species_includes_all">
+            <mat-radio-group formControlName="speciesDiagnosis_includes_all">
               <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
               &nbsp;&nbsp;
               <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
@@ -189,8 +187,8 @@
                       {{ landOwnership.name }}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedLandOwnership.indexOf(landOwnership)) < (selectedLandOwnership.length - 1)">{{(cueForm.get('landOwnerships').value)
-                      ? "and" : "or"}}&nbsp;</span>
+                    <span
+                      *ngIf="(selectedLandOwnership.indexOf(landOwnership)) < (selectedLandOwnership.length - 1)">&nbsp;or&nbsp;</span>
                   </span>
                 </mat-chip-list>
               </div>
@@ -201,24 +199,17 @@
           <div class="autocomplete-input">
             <mat-form-field class="full-width">
               <input type="text" matInput placeholder="Add Land Ownership" aria-label="Add Land Ownership"
-                [matAutocomplete]="landOwnershipAutoComplete" [formControl]="speciesControl">
+                [matAutocomplete]="landOwnershipAutoComplete" [formControl]="landOwnershipControl">
               <mat-spinner *ngIf="landOwnershipLoading" [diameter]="20"></mat-spinner>
               <mat-autocomplete #landOwnershipAutoComplete="matAutocomplete" [displayWith]="displayFn"
-                (optionSelected)="addChip($event, selectedLandOwnership, 'landOwnerships')">
-                <mat-option *ngFor="let landOwnership of landOwnerships | async" [value]="landOwnership">
+                (optionSelected)="addChip($event, selectedLandOwnership, 'landOwnership')">
+                <mat-option *ngFor="let landOwnership of filteredLandOwnership | async" [value]="landOwnership">
                   <span>{{ landOwnership.name }}</span>
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
           </div>
-          <div class="search-type-radios">
-            <label>Search type </label>
-            <mat-radio-group formControlName="species_includes_all">
-              <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
-              &nbsp;&nbsp;
-              <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
-            </mat-radio-group>
-          </div>
+          <!-- No search type radio selectors because land ownership can only be one value -->
         </div>
       </mat-expansion-panel>
       <!--- end Land Ownership expansion panel -->

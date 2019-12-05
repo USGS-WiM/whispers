@@ -83,7 +83,7 @@
           </button>
           <mat-menu #menu="matMenu" [overlapTrigger]="false">
             <button *ngFor="let notification of notificationsToDisplay" matTooltip="{{notification.message}}" (click)="navigateNotificationSelect(notification.event)" mat-menu-item>{{notification.message}}</button>
-            <button *ngIf="dummyNotifications.length > 10" class="navigateToDashboard" (click)="openUserDashboard()" mat-menu-item>See all notifications<mat-icon>arrow_forward</mat-icon></button>
+            <button *ngIf="dummyNotifications.length > 10" class="navigateToDashboard" (click)="navigateNotificationSelect()" mat-menu-item>See all notifications<mat-icon>arrow_forward</mat-icon></button>
           </mat-menu>
         </span>
 

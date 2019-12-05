@@ -38,6 +38,10 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   yourCollabEventsChecked: boolean;
   allEventsChecked: boolean;
 
+  emailAllOwnedandCollab: boolean;
+  emailCustom: boolean;
+  emailAllCustom: boolean;
+
   dummyNotifications = APP_UTILITIES.dummyData;
 
   customNotificationRef: MatDialogRef<CustomNotificationComponent>;
@@ -156,11 +160,11 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
         data: {
-          title: 'Delete Cue',
+          title: 'Delete Custom Notification',
           // tslint:disable-next-line:max-line-length
-          message: 'Are you sure you want to delete the "' + cue.name + '" cue?',
+          message: 'Are you sure you want to delete the custom notification " ' + cue.name + ' "?',
           confirmButtonText: 'Delete',
-          messageIcon: '',
+          messageIcon: 'delete_forever',
           showCancelButton: true
         }
       }

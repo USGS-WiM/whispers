@@ -22,6 +22,7 @@ declare let gtag: Function;
 
 export class EventPublicReportComponent implements OnInit, AfterViewInit {
   canvas = document.createElement('canvas');
+  loadingData = false;
 
   // this isn't working????
   // @Input('eventData') eventData: EventDetail;
@@ -32,6 +33,21 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 }
 
   ngOnInit() {
+    this.loadingData = true;
+
+     // converting whipsers logo png to a dataURL for use in pdfMake
+     const whispersLogo = 'src/app/event-public-report/logo.png'; // TODO: move photo to more appropriate location
+     const context = this.canvas.getContext('2d');
+       const base_image = new Image();
+       base_image.src = whispersLogo;
+       base_image.onload = function () {
+         context.drawImage(base_image, 5, 5, 300, 80);
+       };
+
+       setTimeout(() => {
+         this.loadingData = false;
+       }, 1000);
+
   }
 
   ngAfterViewInit() {
@@ -141,7 +157,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     console.log(pngURL);
 
     // printing user's info
-    const nameOrgString = this.data.user.first_name + ' ' + this.data.user.last_name + ' (' + this.data.user.organizations_string + ')';
+    const nameOrgString = this.data.user.first_name + ' ' + this.data.user.last_name + ' (' + this.data.user.organization_string + ')';
 
     // formatting full URL for footer
     const url = window.location.href;
@@ -149,7 +165,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     // print template
     console.log('print');
 
-    const combinedComments = data.combined_comments;
+    let combinedComments = data.combined_comments;
+    combinedComments = combinedComments.sort((a, b) => a.date_sort - b.date_sort);
 
     const eventLocation = data.eventlocations[0].locationspecies;
     console.log(eventLocation);

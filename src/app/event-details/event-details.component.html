@@ -24,7 +24,7 @@
             <i class="material-icons">print</i> Print Event Details</button> -->
           <button mat-raised-button color="primary" class="event-detail-action-button" (click)="exportEventDetails()">
             <i class="material-icons">unarchive</i> Export Event Data</button>
-          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadEventReport()">
+          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadEventReport()" *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
             <i class="material-icons">archive</i> Generate Event Report</button>
             <!-- <app-event-public-report></app-event-public-report> (click)="eventReportComponent.print()" -->
         </div>

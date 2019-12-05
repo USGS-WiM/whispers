@@ -1,19 +1,26 @@
-    <h1 mat-dialog-title>
-        <i class="material-icons">archive</i> Download Event Report
-      </h1>
-      <mat-dialog-content>
-        <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadEventReport()">
-            <i class="material-icons">archive</i> Download Event Report</button>
-      </mat-dialog-content>
-      <mat-dialog-actions>
-      
-        <div class="detail-section-buttons">
-      
-          <button mat-button color="warn" (click)="this.eventPublicReportDialogRef.close('cancel');">
+<h1 mat-dialog-title>
+    <i class="material-icons">archive</i> Generate Event Report
+</h1>
+<mat-dialog-content>
+    <span *ngIf="loadingData">
+        <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
+        <span>Generating report...</span>
+    </span>
+    <br>
+    <br>
+    <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadEventReport()"
+        [disabled]="loadingData">
+        <i class="material-icons">archive</i> Download Event Report</button>
+</mat-dialog-content>
+<mat-dialog-actions>
+
+    <div class="detail-section-buttons">
+
+        <button mat-button color="warn" (click)="this.eventPublicReportDialogRef.close('cancel');">
             <mat-icon>cancel</mat-icon>&nbsp;Cancel
-          </button>
-      
-        </div>
-        
-        <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
-      </mat-dialog-actions>
+        </button>
+
+    </div>
+
+    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+</mat-dialog-actions>

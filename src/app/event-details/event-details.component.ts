@@ -243,15 +243,6 @@ export class EventDetailsComponent implements OnInit {
 
   ngOnInit() {
 
-    // converting whipsers logo png to a dataURL for use in pdfMake
-    const whispersLogo = 'src/app/event-public-report/logo.png'; // TODO: move photo to more appropriate location
-    const context = this.canvas.getContext('2d');
-      const base_image = new Image();
-      base_image.src = whispersLogo;
-      base_image.onload = function () {
-        context.drawImage(base_image, 5, 5, 300, 80);
-      };
-
     const initialSelection = [];
     const allowMultiSelect = true;
     this.eventLocationSpecies = [];
@@ -718,7 +709,6 @@ export class EventDetailsComponent implements OnInit {
   downloadEventReport(id: string) {
     // Open dialog for adding event diagnosis
     this.eventPublicReportDialogRef = this.dialog.open(EventPublicReportComponent, {
-      minWidth: '75%',
       data: {
         user: this.currentUser,
         event_data: this.eventData
@@ -728,7 +718,7 @@ export class EventDetailsComponent implements OnInit {
     this.eventPublicReportDialogRef.afterClosed()
       .subscribe(
         () => {
-          this.refreshEvent();
+          // this.refreshEvent();
         },
         error => {
           this.errorMessage = <any>error;

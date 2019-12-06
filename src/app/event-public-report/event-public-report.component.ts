@@ -23,6 +23,7 @@ declare let gtag: Function;
 export class EventPublicReportComponent implements OnInit, AfterViewInit {
   canvas = document.createElement('canvas');
   loadingData = false;
+  labs;
 
   // this isn't working????
   // @Input('eventData') eventData: EventDetail;
@@ -88,15 +89,29 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       eventDiagnosises.push(diagnosis.diagnosis_string);
     }
 
-    // looping thru all counties of all locations
-    const labs = [];
+    // looping thru event locations to get labs
+    const hasLabs = [];
+    const noLabs = 'N/A';
+
     data.eventlocations.forEach(el => {
       el.locationspecies.forEach(ls => {
         ls.speciesdiagnoses.forEach(sd => {
-          labs.push(sd.organizations_string);
+          if (sd.organizations_string.length === 0) {
+            return;
+          } else {
+            hasLabs.push(sd.organizations_string);
+        }
         });
       });
     });
+
+    // display 'N/A' if there are no labs
+    if (hasLabs.length === 0) {
+      this.labs = noLabs;
+    } else {
+      this.labs = hasLabs;
+    }
+
 
     // getting species affected count
     let speciesAffectedCount = 0;
@@ -111,38 +126,47 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     const formattedDate = data.start_date + ' - ' + data.end_date;
 
 
-    // Checking to see if there are event groups
-    const associatedEvents = [];
+    // Associated Events
+    let associatedEvents;
     const eventsAndLinks = [];
     const eventIds = [];
     const eventLinks = [];
 
-    data.eventgroups.forEach(eg => {
-      eg.events.forEach(element => {
-        associatedEvents.push(element);
+    // Checking to see if there are event groups
+    if (data.eventgroups.length === 0) {
+      associatedEvents = 'N/A';
+    } else {
+      associatedEvents = [];
+      data.eventgroups.forEach(eg => {
+        if (eg.category === 1) {
+          eg.events.forEach(element => {
+            associatedEvents.push(element);
+          });
+        }
       });
-    });
 
-    // converting to string and adding 'link' field
-    for (let i = 0; i < associatedEvents.length; i ++) {
+      associatedEvents = associatedEvents.join(', ');
+      // converting to string and adding 'link' field
+      /* for (let i = 0; i < associatedEvents.length; i++) {
 
-      // formatting string so that there is not a ',' at the end of last associated event
-      const addComma = associatedEvents.length - 1;
-      if ( i !== addComma) {
-      eventsAndLinks.push({id: associatedEvents[i].toString() + ', ', link: window.location.origin + '/' + associatedEvents[i].toString()});
-      } else {
-        eventsAndLinks.push({id: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString()});
-      }
+        // formatting string so that there is not a ',' at the end of last associated event
+        const addComma = associatedEvents.length - 1;
+        if (i !== addComma) {
+          eventsAndLinks.push({ id: associatedEvents[i].toString() + ', ', link: window.location.origin + '/' + associatedEvents[i].toString() });
+        } else {
+          eventsAndLinks.push({ id: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString() });
+        }
+      } */
+
+      eventsAndLinks.forEach(el => {
+        eventIds.push(el.id);
+      });
+      eventsAndLinks.forEach(el => {
+        eventLinks.push(el.link);
+      });
+      console.log(eventIds);
+      console.log(eventLinks);
     }
-
-    eventsAndLinks.forEach(el => {
-      eventIds.push(el.id);
-    });
-    eventsAndLinks.forEach(el => {
-      eventLinks.push(el.link);
-    });
-    console.log(eventIds);
-    console.log(eventLinks);
 
     // Event Visibility
     let eventVisibility;
@@ -397,7 +421,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Diagnostic Laboratory', bold: true, alignment: 'right' }, labs],
+                  [{ border: [false, false, true, false], text: 'Diagnostic Laboratory', bold: true, alignment: 'right' }, this.labs],
                 ]
               },
               layout: { defaultBorder: false,
@@ -495,7 +519,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}], // TODO: Figure out what to do regarding links & Display none if there are none
+                  [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, {text: associatedEvents }], // TODO: Figure out what to do regarding links & Display none if there are none {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}
                 ]
               },
               layout: { defaultBorder: false,

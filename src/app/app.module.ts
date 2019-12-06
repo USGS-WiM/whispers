@@ -123,6 +123,7 @@ import { CommentsTableComponent } from './comments-table/comments-table.componen
 import { ViewCommentDetailsComponent } from './view-comment-details/view-comment-details.component';
 import { BrowserWarningComponent } from './browser-warning/browser-warning.component';
 import { EventPublicReportComponent } from './event-public-report/event-public-report.component';
+import { EventSummaryReportComponent } from './event-summary-report/event-summary-report.component';
 
 
 
@@ -173,6 +174,7 @@ import { EventPublicReportComponent } from './event-public-report/event-public-r
     ViewCommentDetailsComponent,
     BrowserWarningComponent,
     EventPublicReportComponent,
+    EventSummaryReportComponent,
   ],
   imports: [
     BrowserModule,

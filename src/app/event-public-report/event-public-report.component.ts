@@ -165,6 +165,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     // print template
     console.log('print');
 
+    // using date_sort parameter to sort comments old to vew
     let combinedComments = data.combined_comments;
     combinedComments = combinedComments.sort((a, b) => a.date_sort - b.date_sort);
 

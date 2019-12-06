@@ -508,15 +508,15 @@
           <span class="spacer"></span>
 
           <span class="results-button-row">
+            <button mat-button color="accent" (click)="generateResultsSummaryReport()">
+              <mat-icon>
+                archive
+              </mat-icon> Generate Results Summary Report
+            </button>
             <button mat-button color="accent" (click)="exportEventSummaries()">
               <mat-icon>
                 unarchive
               </mat-icon> Export Data
-            </button>
-            <button mat-button color="accent" (click)="exportEventSummaries()">
-              <mat-icon>
-                archive
-              </mat-icon> Generate Event Summary Report
             </button>
             <button mat-button color="accent" (click)="openMetadataLink()">
               <mat-icon>list</mat-icon> Metadata

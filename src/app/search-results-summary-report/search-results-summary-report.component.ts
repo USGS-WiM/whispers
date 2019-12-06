@@ -69,6 +69,46 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     // formatting full URL for footer
     const url = window.location.href;
 
+
+
+
+    // Section with SEARCH CRITERIA for page 1
+    // TODO: calculation of record status for page 1
+    /*var record_status;
+    result_data.forEach(element => {
+      console.log(element);
+    });*/
+
+    /************
+     * 
+     * Check with Lauren's code to see if she has any functions reformatting dates from YYYY-MM-DD format
+     *
+     * Coordinate with her to use a common function to get it into the format NHWC requests
+     * 
+     */
+
+    // Section with SEARCH RESULTS SUMMARY
+    var number_events = result_data.length.toString();
+
+    var number_animals_affected = 0;
+    var number_species_affected = 0;
+
+    result_data.forEach(element => {
+      //console.log(element);
+      //console.log(element.affected_count);
+      number_animals_affected += element.affected_count;
+      //console.log(element.species.length);
+      number_species_affected += element.species.length;
+    });
+
+
+    //placeholder for affected count
+    //Aaron notes:
+    // affected_count
+    // If EventType = Morbidity/Mortality
+    // then Sum(Max(estimated_dead, dead) + Max(estimated_sick, sick)) from location_species table
+    // If Event Type = Surveillance then Sum(number_positive) from species_diagnosis table
+
     const docDefinition = {
       pageOrientation: 'landscape',
       pageMargins: [20, 20, 20, 35],
@@ -214,7 +254,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: '# of Events', bold: true, alignment: 'right' }, 'xxxxx'],
+                  [{ border: [false, false, true, false], text: '# of Events', bold: true, alignment: 'right' }, number_events.toString() ],
                 ]
               },
               layout: { defaultBorder: false,
@@ -250,7 +290,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, 'xxxxx'],
+                  [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, number_animals_affected],
                 ]
               },
               layout: { defaultBorder: false,
@@ -268,7 +308,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, 'xxxxx'],
+                  [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, number_species_affected],
                 ]
               },
               layout: { defaultBorder: false,

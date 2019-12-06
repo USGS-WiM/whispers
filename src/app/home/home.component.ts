@@ -1013,6 +1013,16 @@ export class HomeComponent implements OnInit {
 
   //Function for creating a dialog to download results summary report pdf
   generateResultsSummaryReport(id: string) {
+
+    /**********
+     * 
+     * TODO: Do a check for summaries equal to 0 (ZERO) to send notification to user to try again
+     *
+     * OR DISABLE BUTTON UNTIL AT LEAST ONE EVENT SUMMARY
+     * 
+     * 
+     */
+    
     this.resultsSummaryReportDialogRef = this.dialog.open(SearchResultsSummaryReportComponent, {
       data: {
         user: this.currentUser,

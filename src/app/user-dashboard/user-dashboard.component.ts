@@ -24,6 +24,7 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 import { EditUserComponent } from '@app/edit-user/edit-user.component';
 import { NewLookupRequestComponent } from '@app/new-lookup-request/new-lookup-request.component';
 import { JsonPipe } from '@angular/common';
+import { BulkUploadComponent } from '@app/bulk-upload/bulk-upload.component';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -39,6 +40,7 @@ export class UserDashboardComponent implements OnInit {
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
   editUserDialogRef: MatDialogRef<EditUserComponent>;
   newLookupRequestDialogRef: MatDialogRef<NewLookupRequestComponent>;
+  bulkUploadDialogRef: MatDialogRef<BulkUploadComponent>;
 
   errorMessage;
   events;
@@ -266,7 +268,7 @@ export class UserDashboardComponent implements OnInit {
 
   openNewLookupRequestDialog() {
 
-    // Open dialog for adding event diagnosis
+    // Open dialog for requesting new lookup value
     this.newLookupRequestDialogRef = this.dialog.open(NewLookupRequestComponent, {
       data: {
         title: 'Request New Item',
@@ -287,6 +289,30 @@ export class UserDashboardComponent implements OnInit {
         }
       );
 
+  }
+
+
+  openBulkUploadDialog() {
+
+    // open dialog for bulk upload
+    this.bulkUploadDialogRef = this.dialog.open(BulkUploadComponent, {
+      // minWidth: '50%',
+      data: {
+        title: 'Bulk Data Upload',
+        titleIcon: 'cloud_upload',
+        showCancelButton: true
+      }
+    });
+
+    this.bulkUploadDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          // do something after close
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
 
   removeContact() {

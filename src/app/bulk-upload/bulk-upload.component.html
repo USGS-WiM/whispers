@@ -1,0 +1,45 @@
+<h1 mat-dialog-title>
+  <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}}
+</h1>
+<mat-dialog-content>
+
+  <p>This tool allows you to upload WHISPers event data in bulk, using a spreadhseet template in comma seperated
+    (.csv) format. The data must conform to this structure and must refer to WHISPers ID numbers for all 'lookup' values
+    (diagnosis, species, organization, etc.). There is a guidance document available below for looking up these values.
+  </p>
+
+  <p>For any questions regarding data or help with this bulk upload tool, contact WHISPers staff at <span
+      class="text-bold">whispers@usgs.gov</span></p>
+
+  <p>
+    <button mat-raised-button color="primary" (click)="downloadGuidance()">
+      <mat-icon>cloud_download</mat-icon> Download Guidance
+    </button>
+<span>&nbsp;</span>
+    <button mat-raised-button color="primary" (click)="downloadTemplate()">
+      <mat-icon>cloud_download</mat-icon> Download Data Template
+    </button>
+  </p>
+
+  <!-- <p>
+    <button mat-raised-button color="primary" (click)="downloadTemplate()">
+      <mat-icon>cloud_download</mat-icon> Download Data Template
+    </button>
+  </p> -->
+
+  <p>
+    <button type="button" mat-raised-button color="primary" (click)="fileInput.click()"><mat-icon>insert_drive_file</mat-icon> Choose File</button>
+    <input hidden (change)="onFileSelected()" #fileInput type="file" id="file">
+  </p>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button color="warn" (click)="this.bulkUploadDialogRef.close('cancel');">
+    <mat-icon>cancel</mat-icon>&nbsp;Cancel
+  </button>
+  <!-- <button mat-button color="primary" type="submit">
+    <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{data.action_button_text}}
+  </button> -->
+  <!-- <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar> -->
+</mat-dialog-actions>

@@ -24,9 +24,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   canvas = document.createElement('canvas');
   loadingData = false;
   labs;
+  eventLocsPlusDiagnoses = [];
 
-  // this isn't working????
-  // @Input('eventData') eventData: EventDetail;
   constructor(
     public eventPublicReportDialogRef: MatDialogRef<EventPublicReportComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -172,11 +171,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     // Species Most Affected
     let numberOfSpecies = 0;
     const eventType = data.event_type;
+    let speciesArray;
     let speciesAffected;
     let affectedCount = 0;
     let positiveCount = 0;
 
-    if (eventType === 1) { speciesAffected = []; } // making speciesAffected an array only if the event is type 1)
+    if (eventType === 1) { speciesArray = []; } // making speciesAffected an array only if the event is type 1)
 
     data.eventlocations.forEach(el => {
       el.locationspecies.forEach(ls => {
@@ -192,7 +192,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
           affectedCount = deads + sicks;
 
-          speciesAffected.push({ name: ls.species_string, affected_count: affectedCount });
+          speciesArray.push({ name: ls.species_string, affected_count: affectedCount });
 
         } else if (eventType === 2) { // if event is Surveillance
           ls.speciesdiagnoses.forEach(sd => {
@@ -202,11 +202,11 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           speciesAffected = affectedCount;
         }
 
-        // sorting most to least so that species most affected is first in the array
+        // sorting highest to lowest so that species most affected is first in the array
         if (eventType === 1) {
-          speciesAffected = speciesAffected.sort((a, b) => b.affected_count - a.affected_count);
+          speciesArray = speciesArray.sort((a, b) => b.affected_count - a.affected_count);
+          speciesAffected = speciesArray[0].name;
         }
-        console.log('species affected: ' + speciesAffected);
       });
     });
 
@@ -237,6 +237,47 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     const eventLocation = data.eventlocations[0].locationspecies;
     console.log(eventLocation);
+
+    for (const event_location of this.data.event_data.eventlocations) {
+      for (const locationspecies of event_location.locationspecies) {
+        // speciesAffected.push({ name: ls.species_string, affected_count: affectedCount });
+
+        for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+
+            const numAssess = speciesdiagnosis.tested_count + '/' + speciesdiagnosis.diagnosis_count;
+            let captive = locationspecies.captive;
+
+            // pdfmake does not like 'undefined' values so setting them to empty string
+            const pop = locationspecies.population_count || ' ';
+            const ksick = locationspecies.known_sick || ' ';
+            const kdead = locationspecies.known_dead || ' ';
+            const esick = locationspecies.sick_count_estimated || ' ';
+            const edead = locationspecies.dead_count_estimated || ' ';
+            captive = 'Yes' || 'No';
+            const s_diag = speciesdiagnosis.diagnosis_string || ' ';
+            const lab = speciesdiagnosis.organizations_string || ' ';
+
+            this.eventLocsPlusDiagnoses.push({species: locationspecies.species_string, population: pop, known_sick: ksick, known_dead: kdead, est_sick: esick, est_dead: edead, captive: captive, species_dia: s_diag, count: numAssess, lab: lab });
+        }
+
+      }
+    }
+    console.log('eventLocs' + this.eventLocsPlusDiagnoses);
+
+    const headers = {
+      eventLocationHeaders: {
+        col_1: { text: 'Species', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_2: { text: 'Population', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_3: { text: 'Known Sick', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_4: { text: 'Known Dead', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_5: { text: 'Est. Sick', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_6: { text: 'Est. Dead', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_7: { text: 'Captive', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_8: { text: 'Species Diagnosis', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_9: { text: '# Assessed/ # diagnosis', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_10: { text: 'Diagnostic Lab', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+      }
+    };
 
     function buildTableBody(tableData, columns) {
       const body = [];
@@ -304,6 +345,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
            }
       };
   } */
+
+  // PDF Definition. This is where you structure/style the pdf
 
     const docDefinition = {
       pageOrientation: 'landscape',
@@ -526,7 +569,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, speciesAffected[0].name ],
+                  [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, speciesAffected ]
                 ]
               },
               layout: {
@@ -623,7 +666,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           columns: [
             /* { text: 'Associated Events' }, */
             table(
-              eventLocation, ['species_string', 'population_count', 'sick_count', 'dead_count', 'sick_count_estimated', 'dead_count_estimated', 'captive']) // eventLocation[0].speciesdiagnoses[0].diagnosis_string] , eventLocation[0].speciesdiagnoses[0].tested_count, eventLocation[0].speciesdiagnoses[0].positive_count
+              this.eventLocsPlusDiagnoses, ['species', 'population', 'known_sick', 'known_dead', 'est_sick', 'est_dead', 'captive', 'species_dia', 'count', 'lab']) // eventLocation[0].speciesdiagnoses[0].diagnosis_string] , eventLocation[0].speciesdiagnoses[0].tested_count, eventLocation[0].speciesdiagnoses[0].positive_count
           ],
           pageBreak: 'after'
         },

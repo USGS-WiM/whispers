@@ -244,25 +244,27 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
         for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
 
-            const numAssess = speciesdiagnosis.tested_count + '/' + speciesdiagnosis.diagnosis_count;
-            let captive = locationspecies.captive;
+          const numAssess = speciesdiagnosis.tested_count + '/' + speciesdiagnosis.diagnosis_count;
+          let captive = locationspecies.captive;
 
-            // pdfmake does not like 'undefined' values so setting them to empty string
-            const pop = locationspecies.population_count || ' ';
-            const ksick = locationspecies.known_sick || ' ';
-            const kdead = locationspecies.known_dead || ' ';
-            const esick = locationspecies.sick_count_estimated || ' ';
-            const edead = locationspecies.dead_count_estimated || ' ';
-            captive = 'Yes' || 'No';
-            const s_diag = speciesdiagnosis.diagnosis_string || ' ';
-            const lab = speciesdiagnosis.organizations_string || ' ';
+          // pdfmake does not like 'undefined' values so setting them to empty string
+          const pop = locationspecies.population_count || ' ';
+          const ksick = locationspecies.known_sick || ' ';
+          const kdead = locationspecies.known_dead || ' ';
+          const esick = locationspecies.sick_count_estimated || ' ';
+          const edead = locationspecies.dead_count_estimated || ' ';
+          captive = 'Yes' || 'No';
+          const s_diag = speciesdiagnosis.diagnosis_string || ' ';
+          const lab = speciesdiagnosis.organizations_string[0] || ' '; // TODO make this display all the labs if there are more than one
 
-            this.eventLocsPlusDiagnoses.push({species: locationspecies.species_string, population: pop, known_sick: ksick, known_dead: kdead, est_sick: esick, est_dead: edead, captive: captive, species_dia: s_diag, count: numAssess, lab: lab });
+          this.eventLocsPlusDiagnoses.push({ species: locationspecies.species_string, population: pop, known_sick: ksick, known_dead: kdead, est_sick: esick, est_dead: edead, captive: captive, species_dia: s_diag, count: numAssess, lab: lab });
         }
 
       }
     }
     console.log('eventLocs' + this.eventLocsPlusDiagnoses);
+
+    // defining event location table
 
     const headers = {
       eventLocationHeaders: {
@@ -275,14 +277,73 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         col_7: { text: 'Captive', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
         col_8: { text: 'Species Diagnosis', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
         col_9: { text: '# Assessed/ # diagnosis', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_10: { text: 'Diagnostic Lab', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_10: { text: 'Diagnostic Lab', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] }
+      }
+    };
+
+    const locationBody = [];
+
+    // pushing header row into the table
+    for (const key in headers) {
+      if (headers.hasOwnProperty(key)) {
+        const header = headers[key];
+        const row = new Array();
+        row.push(header.col_1);
+        row.push(header.col_2);
+        row.push(header.col_3);
+        row.push(header.col_4);
+        row.push(header.col_5);
+        row.push(header.col_6);
+        row.push(header.col_7);
+        row.push(header.col_8);
+        row.push(header.col_9);
+        row.push(header.col_10);
+        locationBody.push(row);
+      }
+    }
+
+    const rows = this.eventLocsPlusDiagnoses;
+
+    // pushing data into the rows
+    for (const key in rows) {
+      if (rows.hasOwnProperty(key)) {
+        const elData = rows[key];
+        const row = new Array();
+        row.push(elData.species);
+        row.push(elData.population);
+        row.push(elData.known_sick);
+        row.push(elData.known_dead);
+        row.push(elData.est_sick);
+        row.push(elData.est_dead);
+        row.push(elData.captive);
+        row.push(elData.species_dia);
+        row.push(elData.count);
+        row.push(elData.lab);
+        locationBody.push(row);
+      }
+    }
+
+    // end defining event location table
+
+    const headersWL = {
+      eventLocationHeaders: {
+        col_1: { text: 'Species', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_2: { text: 'Population', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_3: { text: 'Known Sick', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_4: { text: 'Known Dead', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_5: { text: 'Est. Sick', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_6: { text: 'Est. Dead', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_7: { text: 'Captive', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_8: { text: 'Species Diagnosis', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_9: { text: '# Assessed/ # diagnosis', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_10: { text: 'Diagnostic Lab', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] }
       }
     };
 
     function buildTableBody(tableData, columns) {
       const body = [];
 
-      body.push(columns);
+      body.push(headers);
 
       tableData.forEach(function (row) {
         const dataRow = [];
@@ -346,7 +407,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       };
   } */
 
-  // PDF Definition. This is where you structure/style the pdf
+    // PDF Definition. This is where you structure/style the pdf
 
     const docDefinition = {
       pageOrientation: 'landscape',
@@ -569,7 +630,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, speciesAffected ]
+                  [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, speciesAffected]
                 ]
               },
               layout: {
@@ -676,6 +737,14 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             table(
               combinedComments, ['comment', 'comment_type', 'created_date', 'created_by_string', 'created_by_organization_string', 'content_type_string'])
           ],
+          pageBreak: 'after'
+        },
+        {
+          alignment: 'justify',
+          table: {
+            headerRows: 2,
+            body: locationBody
+        },
           pageBreak: 'after'
         },
         {
@@ -808,6 +877,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         columnGap: 20
       }
     };
+
     pdfMake.createPdf(docDefinition).download();
   }
 

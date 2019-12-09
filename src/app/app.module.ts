@@ -123,7 +123,7 @@ import { CommentsTableComponent } from './comments-table/comments-table.componen
 import { ViewCommentDetailsComponent } from './view-comment-details/view-comment-details.component';
 import { BrowserWarningComponent } from './browser-warning/browser-warning.component';
 import { EventPublicReportComponent } from './event-public-report/event-public-report.component';
-import { EventSummaryReportComponent } from './event-summary-report/event-summary-report.component';
+import { SearchResultsSummaryReportComponent } from './search-results-summary-report/search-results-summary-report.component';
 
 
 
@@ -174,7 +174,7 @@ import { EventSummaryReportComponent } from './event-summary-report/event-summar
     ViewCommentDetailsComponent,
     BrowserWarningComponent,
     EventPublicReportComponent,
-    EventSummaryReportComponent,
+    SearchResultsSummaryReportComponent,
   ],
   imports: [
     BrowserModule,
@@ -286,6 +286,7 @@ import { EventSummaryReportComponent } from './event-summary-report/event-summar
     ViewContactDetailsComponent,
     EventGroupManagementComponent,
     EventPublicReportComponent,
+    SearchResultsSummaryReportComponent,
     CircleManagementComponent,
     CircleChooseComponent,
     DiagnosticInfoComponent,

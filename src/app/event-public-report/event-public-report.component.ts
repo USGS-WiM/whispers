@@ -24,7 +24,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   canvas = document.createElement('canvas');
   loadingData = false;
   labs;
-  eventLocsPlusDiagnoses = [];
+  eventLocsPlusDiagnoses;
 
   constructor(
     public eventPublicReportDialogRef: MatDialogRef<EventPublicReportComponent>,
@@ -237,7 +237,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     const eventLocation = data.eventlocations[0].locationspecies;
     console.log(eventLocation);
-
+    this.eventLocsPlusDiagnoses = [];
     for (const event_location of this.data.event_data.eventlocations) {
       for (const locationspecies of event_location.locationspecies) {
         // speciesAffected.push({ name: ls.species_string, affected_count: affectedCount });
@@ -262,31 +262,30 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
       }
     }
-    console.log('eventLocs' + this.eventLocsPlusDiagnoses);
 
-    // defining event location table
+    // START defining event location table
 
-    const headers = {
+    const locationHeaders = {
       eventLocationHeaders: {
-        col_1: { text: 'Species', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_2: { text: 'Population', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_3: { text: 'Known Sick', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_4: { text: 'Known Dead', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_5: { text: 'Est. Sick', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_6: { text: 'Est. Dead', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_7: { text: 'Captive', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_8: { text: 'Species Diagnosis', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_9: { text: '# Assessed/ # diagnosis', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_10: { text: 'Diagnostic Lab', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] }
+        col_1: { text: 'Species', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_2: { text: 'Population', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_3: { text: 'Known Sick', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_4: { text: 'Known Dead', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_5: { text: 'Est. Sick', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_6: { text: 'Est. Dead', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_7: { text: 'Captive', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_8: { text: 'Species Diagnosis', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_9: { text: '# Assessed/ # diagnosis', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_10: { text: 'Diagnostic Lab', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] }
       }
     };
 
     const locationBody = [];
 
     // pushing header row into the table
-    for (const key in headers) {
-      if (headers.hasOwnProperty(key)) {
-        const header = headers[key];
+    for (const key in locationHeaders) {
+      if (locationHeaders.hasOwnProperty(key)) {
+        const header = locationHeaders[key];
         const row = new Array();
         row.push(header.col_1);
         row.push(header.col_2);
@@ -322,28 +321,59 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         locationBody.push(row);
       }
     }
+    // END defining event location table
 
-    // end defining event location table
-
-    const headersWL = {
-      eventLocationHeaders: {
-        col_1: { text: 'Species', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_2: { text: 'Population', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_3: { text: 'Known Sick', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_4: { text: 'Known Dead', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_5: { text: 'Est. Sick', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_6: { text: 'Est. Dead', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_7: { text: 'Captive', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_8: { text: 'Species Diagnosis', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_9: { text: '# Assessed/ # diagnosis', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_10: { text: 'Diagnostic Lab', style: 'tableHeader', rowSpan: 2, alignment: 'center', margin: [0, 8, 0, 0] }
+    // START defining comment table
+    const commentHeaders = {
+      commentHeaders: {
+        col_1: { text: 'Comments', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_2: { text: 'Comment Type', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_3: { text: 'Created Date', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_4: { text: 'User', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_5: { text: 'Organization', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_6: { text: 'Comment Source', style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
       }
     };
+
+    const commentBody = [];
+
+    // pushing header row into the table
+    for (const key in commentHeaders) {
+      if (commentHeaders.hasOwnProperty(key)) {
+        const header = commentHeaders[key];
+        const row = new Array();
+        row.push(header.col_1);
+        row.push(header.col_2);
+        row.push(header.col_3);
+        row.push(header.col_4);
+        row.push(header.col_5);
+        row.push(header.col_6);
+        commentBody.push(row);
+      }
+    }
+
+    const commentRows = combinedComments;
+
+    // pushing data into the rows
+    for (const key in commentRows) {
+      if (commentRows.hasOwnProperty(key)) {
+        const elData = commentRows[key];
+        const row = new Array();
+        row.push(elData.comment);
+        row.push(elData.comment_type);
+        row.push(elData.created_date);
+        row.push(elData.created_by_string);
+        row.push(elData.created_by_organization_string);
+        row.push(elData.content_type_string);
+        commentBody.push(row);
+      }
+    }
+    // END defining comment table
 
     function buildTableBody(tableData, columns) {
       const body = [];
 
-      body.push(headers);
+      body.push(columns);
 
       tableData.forEach(function (row) {
         const dataRow = [];
@@ -722,10 +752,9 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             }
           ]
         },
-        {
+        /* {
           alignment: 'justify',
           columns: [
-            /* { text: 'Associated Events' }, */
             table(
               this.eventLocsPlusDiagnoses, ['species', 'population', 'known_sick', 'known_dead', 'est_sick', 'est_dead', 'captive', 'species_dia', 'count', 'lab']) // eventLocation[0].speciesdiagnoses[0].diagnosis_string] , eventLocation[0].speciesdiagnoses[0].tested_count, eventLocation[0].speciesdiagnoses[0].positive_count
           ],
@@ -737,6 +766,14 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             table(
               combinedComments, ['comment', 'comment_type', 'created_date', 'created_by_string', 'created_by_organization_string', 'content_type_string'])
           ],
+          pageBreak: 'after'
+        }, */
+        {
+          alignment: 'justify',
+          table: {
+            headerRows: 2,
+            body: commentBody
+        },
           pageBreak: 'after'
         },
         {

@@ -222,6 +222,8 @@ export class BulkUploadComponent implements OnInit {
           this.newEventsArray[currentEventIndex].new_event_locations.push(newEventLocation);
           // update the currentLocationOrdinal to the location_ordinal of the item just processed
           currentLocationOrdinal = item.location_ordinal;
+          // update the currentLocationSpeciesOrdinal back to 1(starting position) since this is a new eventLocation
+          currentLocationSpeciesOrdinal = 1;
         } else {
           // since the item's location_ordinal is not larger than the currentLocationOrdinal
           // the eventLocation record already exists.
@@ -258,7 +260,7 @@ export class BulkUploadComponent implements OnInit {
             currentEventIndex = currentEventOrdinal - 1;
             // add the new location species to the currnent eventLocation record
             this.newEventsArray[currentEventIndex].new_event_locations[currentLocationIndex].new_location_species.push(newLocationSpecies);
-            // update the currentLocationOrdinal to the location_ordinal of the item just processed
+            // update the currentLocationSpeciesOrdinal to the location_species_ordinal of the item just processed
             currentLocationSpeciesOrdinal = item.location_species_ordinal;
           } else {
             // since the item's location_species_ordinal is not larger than the currentLocationSpeciesOrdinal
@@ -278,6 +280,10 @@ export class BulkUploadComponent implements OnInit {
                 new_species_diagnosis_organizations: item.organizations
               }
             );
+            // get the array index for the current event record
+            currentEventIndex = currentEventOrdinal - 1;
+            // get the array index for the current location species
+            currentLocationIndex = currentLocationOrdinal - 1;
             // get the array index for the current location species
             currentLocationSpeciesIndex = currentLocationSpeciesOrdinal - 1;
             // add the new event location to the current event record
@@ -287,12 +293,8 @@ export class BulkUploadComponent implements OnInit {
           }
         }
       }
-      console.log(this.newEventsArray);
-
-    }
-
-
-
+    } // end of parsing loop
+    console.log(this.newEventsArray);
   }
 
   openSnackBar(message: string, action: string, duration: number) {

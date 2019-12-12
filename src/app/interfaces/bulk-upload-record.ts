@@ -11,7 +11,7 @@ export interface BulkUploadRecord {
     land_ownership: number;
     country: string;
     administrative_level_one: string;
-    administrative_level_two: string;
+    administrative_level_two: number;
     name: string;
     latitude: string;
     longitude: string;

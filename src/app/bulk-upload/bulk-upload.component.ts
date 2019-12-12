@@ -11,7 +11,12 @@ import { EventSubmission } from '@interfaces/event-submission';
 import { EventDiagnosisSubmission } from '@interfaces/event-submission';
 import { NewEventLocation } from '@interfaces/event-submission';
 import { NewLocationSpecies } from '@interfaces/event-submission';
-import { NewSpeciesDiagnosis } from '@interfaces/event-submission'; 0
+import { NewSpeciesDiagnosis } from '@interfaces/event-submission';
+
+import { CountryService } from '@services/country.service';
+import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
+import { AdministrativeLevelTwoService } from '@services/administrative-level-two.service';
+import { EventService } from '@services/event.service';
 
 @Component({
   selector: 'app-bulk-upload',
@@ -28,14 +33,49 @@ export class BulkUploadComponent implements OnInit {
   speciesDiagnosisArray;
   newEventsArray: EventSubmission[];
 
+  countries;
+  adminLevelOnes;
+
   constructor(
     public bulkUploadDialogRef: MatDialogRef<BulkUploadComponent>,
     public snackBar: MatSnackBar,
+    private countryService: CountryService,
+    private adminLevelOneService: AdministrativeLevelOneService,
+    private adminLevelTwoService: AdministrativeLevelTwoService,
+    private eventService: EventService,
     private papa: Papa,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
   ngOnInit() {
+
+    // get countries from the countryService
+    this.countryService.getCountries()
+      .subscribe(
+        countries => {
+          this.countries = countries;
+          this.countries.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    // get adminLevelOnes from the adminLevelOne service
+    this.adminLevelOneService.getAdminLevelOnes()
+      .subscribe(
+        (administrative_level_one) => {
+          this.adminLevelOnes = administrative_level_one;
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
   }
 
   onFileSelected() {
@@ -79,15 +119,17 @@ export class BulkUploadComponent implements OnInit {
   }
 
   lookupCountryID(countryAbbreviation) {
-    return 0;
+    const result = this.countries.filter(function (country) {
+      return country.abbreviation === countryAbbreviation;
+    });
+    return result[0].id;
   }
 
   lookupAdminLevelOneID(adminLevelOneAbbreviation) {
-    return 0;
-  }
-
-  lookupAdminLevelTwoID(AdminLevelTwoAbbreviation) {
-    return 0;
+    const result = this.adminLevelOnes.filter(function (adminLevelOne) {
+      return adminLevelOne.abbreviation === adminLevelOneAbbreviation;
+    });
+    return result[0].id;
   }
 
   buildDiagnosisLabArray(orgIDArray) {
@@ -138,7 +180,7 @@ export class BulkUploadComponent implements OnInit {
               end_date: item.end_date,
               country: this.lookupCountryID(item.country),
               administrative_level_one: this.lookupAdminLevelOneID(item.administrative_level_one),
-              administrative_level_two: this.lookupAdminLevelTwoID(item.administrative_level_two),
+              administrative_level_two: item.administrative_level_two,
               latitude: item.latitude,
               longitude: item.longitude,
               land_ownership: item.land_ownership,
@@ -188,7 +230,7 @@ export class BulkUploadComponent implements OnInit {
             end_date: item.end_date,
             country: this.lookupCountryID(item.country),
             administrative_level_one: this.lookupAdminLevelOneID(item.administrative_level_one),
-            administrative_level_two: this.lookupAdminLevelTwoID(item.administrative_level_two),
+            administrative_level_two: item.administrative_level_two,
             latitude: item.latitude,
             longitude: item.longitude,
             land_ownership: item.land_ownership,
@@ -295,6 +337,40 @@ export class BulkUploadComponent implements OnInit {
       }
     } // end of parsing loop
     console.log(this.newEventsArray);
+    // send this.newEventsArray to the submitData function that sends it to the server
+    this.submitData(this.newEventsArray);
+  }
+
+  submitData(newEventsArray) {
+
+    for (const eventSubmission of newEventsArray) {
+
+      this.eventService.create(eventSubmission)
+        .subscribe(
+          (event) => {
+            this.submitLoading = false;
+
+            // this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+            //   {
+            //     disableClose: true,
+            //     data: {
+            //       title: 'Event Saved',
+            //       titleIcon: 'check',
+            //       message: 'Your event was successfully saved. The Event ID is ' + event.id,
+            //       confirmButtonText: 'OK',
+            //       showCancelButton: false
+            //     }
+            //   }
+            // );
+
+          },
+          error => {
+            // this.submitLoading = false;
+            // this.openSnackBar('Error. Event not Submitted. Error message: ' + error, 'OK', 8000);
+          }
+        );
+
+    }
   }
 
   openSnackBar(message: string, action: string, duration: number) {

@@ -1035,7 +1035,7 @@
     <mat-card>
       <div id="map">
 
-        <mat-card class="unmappable-warning"
+        <mat-card class="unmappable-warning" data-html2canvas-ignore
           *ngIf="unMappables.length > 0 && currentUser.username != '' && currentUser.role !== 7"
           matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
           [matTooltipPosition]="'above'">
@@ -1051,14 +1051,14 @@
         </mat-card>
 
 
-        <mat-expansion-panel id="legend" class="legend">
+        <mat-expansion-panel id="legend" class="legend" data-html2canvas-ignore>
           <mat-expansion-panel-header>
             <mat-panel-title>
               Legend
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <div class="legend-panel-content">
+          <div class="legend-panel-content" data-html2canvas-ignore>
 
             <div class='legend-icon'>
               <div class='wmm-pin wmm-white wmm-icon-circle wmm-icon-black wmm-size-25'></div>

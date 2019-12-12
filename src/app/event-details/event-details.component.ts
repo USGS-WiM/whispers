@@ -12,6 +12,7 @@ import * as esri from 'esri-leaflet';
 import pdfMake from 'pdfmake/build/pdfMake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import html2canvas from 'html2canvas';
 // import * as esrilegend from 'esri-leaflet-legend';
 
 import { MatSnackBar } from '@angular/material';
@@ -537,7 +538,6 @@ export class EventDetailsComponent implements OnInit {
           this.watershedsVisible = false;
         }
       });
-
     }, 3000);
   }
 
@@ -609,7 +609,6 @@ export class EventDetailsComponent implements OnInit {
     if (markers.length || countyPolys.length) {
       this.map.fitBounds(bounds);
     }
-
   }
 
   reloadMap() {
@@ -707,23 +706,129 @@ export class EventDetailsComponent implements OnInit {
   }
 
   downloadEventReport(id: string) {
-    // Open dialog for adding event diagnosis
-    this.eventPublicReportDialogRef = this.dialog.open(EventPublicReportComponent, {
-      data: {
-        user: this.currentUser,
-        event_data: this.eventData
-      }
+
+    let url;
+
+    const mapPane = $('.leaflet-map-pane')[0];
+    const mapTransform = mapPane.style.transform.replace('translate3d(', '').split(',');
+    const mapX = parseFloat(mapTransform[0].replace('px', ''));
+    const mapY = parseFloat(mapTransform[1].replace('px', ''));
+    mapPane.style.transform = 'translate3d(0px,0px,0px)';
+
+    const myTiles = $('img.leaflet-tile');
+    const tilesLeft = [];
+    const tilesRight = [];
+    const tilesTop = [];
+    const tileMethod = [];
+    for (let i = 0; i < myTiles.length; i++) {
+        if (myTiles[i].style.left !== '') {
+            tilesLeft.push(parseFloat(myTiles[i].style.left.replace('px', '')));
+            tilesTop.push(parseFloat(myTiles[i].style.top.replace('px', '')));
+            tileMethod[i] = 'left';
+        } else if (myTiles[i].style.transform !== '') {
+          const tileTransform = myTiles[i].style.transform.split(',');
+            tilesLeft[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
+            tilesTop[i] = parseFloat(tileTransform[1].replace('px', ''));
+            myTiles[i].style.transform = '';
+            tileMethod[i] = 'transform';
+        } else {
+            tilesLeft[i] = 0;
+            tilesRight[i] = 0;
+            tileMethod[i] = 'neither';
+        }
+        myTiles[i].style.left = (tilesLeft[i]) + 'px';
+        myTiles[i].style.top = (tilesTop[i]) + 'px';
+    }
+    console.log(myTiles);
+
+    const myDivicons = $('.leaflet-marker-icon');
+    const dx = [];
+    const dy = [];
+    const mLeft = [];
+    const mTop = [];
+    for (let i = 0; i < myDivicons.length; i++) {
+        mLeft.push(parseFloat(myDivicons[i].style.marginLeft.replace('px', '')));
+        mTop.push(parseFloat(myDivicons[i].style.marginTop.replace('px', '')));
+        const curTransform = myDivicons[i].style.transform;
+        const splitTransform = curTransform.replace('translate3d(', '').split(',');
+        dx.push(parseFloat(splitTransform[0].replace('px', '')));
+        dy.push(parseFloat(splitTransform[1].replace('px', '')));
+        myDivicons[i].style.transform = 'translate3d(' + (dx[i] + mLeft[i] + mapX) + 'px, ' + (dy[i] + mTop[i] + mapY) + 'px, 0px)';
+        myDivicons[i].style.marginLeft = '0px';
+        myDivicons[i].style.marginTop = '0px';
+    }
+
+    const linesLayer = $('svg.leaflet-zoom-animated')[0];
+    const linesTransform = linesLayer.style.transform.replace('translate3d(', '').split(',');
+    const linesX = parseFloat(linesTransform[0].replace('px', ''));
+    const linesY = parseFloat(linesTransform[1].replace('px', ''));
+    // linesLayer.style.transform = 'translate3d(' + ((linesX + mapX) / 2) + 'px,' + ((linesY + mapY) / 2) + 'px, 0px)';
+    linesLayer.style.transform = 'translate3d(0px,0px,0px)';
+    linesLayer.style.left = (linesX + mapX) + 'px';
+    linesLayer.style.top = (linesY + mapY) + 'px';
+
+    const options = {
+      useCORS: true,
+      ignoreElements: (leafletControls) => false,
+     };
+
+    html2canvas(document.getElementById('map'), options).then(function (canvas) {
+      url = canvas.toDataURL('image/png');
     });
 
-    this.eventPublicReportDialogRef.afterClosed()
-      .subscribe(
-        () => {
-          // this.refreshEvent();
-        },
-        error => {
-          this.errorMessage = <any>error;
+    for (let i = 0; i < myTiles.length; i++) {
+        myTiles[i].style.left = (tilesLeft[i]) + 'px';
+        myTiles[i].style.top = (tilesTop[i]) + 'px';
+    }
+    for (let i = 0; i < myDivicons.length; i++) {
+        myDivicons[i].style.transform = 'translate3d(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
+        myDivicons[i].style.marginLeft = mLeft[i] + 'px';
+        myDivicons[i].style.marginTop = mTop[i] + 'px';
+    }
+    linesLayer.style.left = '0px';
+    linesLayer.style.top = '0px';
+    linesLayer.style.transform = 'translate3d(' + (linesX) + 'px,' + (linesY) + 'px, 0px)';
+    mapPane.style.transform = 'translate3d(' + (mapX) + 'px,' + (mapY) + 'px, 0px)';
+    // Open dialog for adding event diagnosis
+
+    /* leafletEasyPrint({
+      export: event
+    }); */
+
+    // leafletEasyPrint.printMap('');
+    /* (L as any).easyPrint({
+      title: 'My awesome print button',
+      position: 'bottomleft',
+      sizeModes: ['A4Portrait', 'A4Landscape'],
+      outputMode: event,
+      exportOnly: true
+  }).addTo(this.map); */
+
+    // this doesn't work.
+    /* this.map.on('easyPrint-finished', e => {
+      console.log(e.event);
+    }), */
+
+    setTimeout(() => {
+      this.eventPublicReportDialogRef = this.dialog.open(EventPublicReportComponent, {
+        data: {
+          user: this.currentUser,
+          event_data: this.eventData,
+          map: url
         }
-      );
+      });
+  console.log(this.mapURL);
+      this.eventPublicReportDialogRef.afterClosed()
+        .subscribe(
+          () => {
+            // this.refreshEvent();
+          },
+          error => {
+            this.errorMessage = <any>error;
+          }
+        );
+
+    }, 3000);
   }
 
   addEventOrganization(id: string) {

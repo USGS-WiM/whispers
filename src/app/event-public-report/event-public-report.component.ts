@@ -304,6 +304,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     // whispers logo
     const pngURL = this.canvas.toDataURL();
     console.log(pngURL);
+    console.log(this.data.map);
 
     // printing user's info
     const nameOrgString = this.data.user.first_name + ' ' + this.data.user.last_name + ' (' + this.data.user.organization_string + ')';
@@ -597,6 +598,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               }
             }
           ]
+        },
+        {
+          alignment: 'right',
+          image: this.data.map,
+          width: 200,
+          height: 200,
         },
         {
           alignment: 'justify',
@@ -973,7 +980,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         },
       ],
       images: {
-        logo: pngURL
+        logo: pngURL,
+        map: this.data.map
       },
       styles: {
         header: {
@@ -1377,7 +1385,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         }
       ],
       images: {
-        logo: pngURL
+        logo: pngURL,
+        map: this.data.map
       },
       styles: {
         header: {

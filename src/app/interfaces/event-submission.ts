@@ -19,7 +19,7 @@ export interface NewEventLocation {
     latitude: string;
     longitude: string;
     land_ownership: number;
-    comment: string;
+    history: string;
     new_location_species: NewLocationSpecies[];
 }
 

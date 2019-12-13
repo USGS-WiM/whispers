@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
+import { DatePipe } from '@angular/common';
+
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
@@ -17,6 +19,7 @@ import { CountryService } from '@services/country.service';
 import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
 import { AdministrativeLevelTwoService } from '@services/administrative-level-two.service';
 import { EventService } from '@services/event.service';
+import { ConfirmComponent } from '@confirm/confirm.component';
 
 @Component({
   selector: 'app-bulk-upload',
@@ -35,6 +38,7 @@ export class BulkUploadComponent implements OnInit {
 
   countries;
   adminLevelOnes;
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
 
   constructor(
     public bulkUploadDialogRef: MatDialogRef<BulkUploadComponent>,
@@ -43,7 +47,9 @@ export class BulkUploadComponent implements OnInit {
     private adminLevelOneService: AdministrativeLevelOneService,
     private adminLevelTwoService: AdministrativeLevelTwoService,
     private eventService: EventService,
+    private datePipe: DatePipe,
     private papa: Papa,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
@@ -145,6 +151,19 @@ export class BulkUploadComponent implements OnInit {
 
   addSpeciesDiagnosis(speciesDiagnosis: NewSpeciesDiagnosis) { return speciesDiagnosis; }
 
+  addDiagnosisOrganizations(organizationsInput) {
+    if (organizationsInput === null) {
+      return [];
+    } else {
+      if (typeof organizationsInput === 'number') {
+        return [organizationsInput];
+      } else if (typeof organizationsInput === 'string') {
+        const array = JSON.parse('[' + organizationsInput + ']');
+        return array;
+      }
+    }
+  }
+
   parseSpeciesDiagnosisArray(dataArray) {
 
     this.newEventsArray = [];
@@ -176,15 +195,15 @@ export class BulkUploadComponent implements OnInit {
           new_event_locations: [
             {
               name: item.name,
-              start_date: item.start_date,
-              end_date: item.end_date,
+              start_date: this.datePipe.transform(item.start_date, 'yyyy-MM-dd'),
+              end_date: this.datePipe.transform(item.end_date, 'yyyy-MM-dd'),
               country: this.lookupCountryID(item.country),
               administrative_level_one: this.lookupAdminLevelOneID(item.administrative_level_one),
               administrative_level_two: item.administrative_level_two,
               latitude: item.latitude,
               longitude: item.longitude,
               land_ownership: item.land_ownership,
-              comment: 'This event location was added using the bulk upload process.',
+              history: 'This event location was added using the bulk upload process.',
               new_location_species: [
                 {
                   species: item.species,
@@ -202,7 +221,7 @@ export class BulkUploadComponent implements OnInit {
                       suspect: item.suspect,
                       tested_count: item.tested_count,
                       diagnosis_count: item.diagnosis_count,
-                      new_species_diagnosis_organizations: item.organizations
+                      new_species_diagnosis_organizations: this.addDiagnosisOrganizations(item.organizations)
                     }
                   ]
                 }
@@ -226,15 +245,15 @@ export class BulkUploadComponent implements OnInit {
           let newEventLocation: NewEventLocation;
           newEventLocation = this.addeventLocation({
             name: item.name,
-            start_date: item.start_date,
-            end_date: item.end_date,
+            start_date: this.datePipe.transform(item.start_date, 'yyyy-MM-dd'),
+            end_date: this.datePipe.transform(item.end_date, 'yyyy-MM-dd'),
             country: this.lookupCountryID(item.country),
             administrative_level_one: this.lookupAdminLevelOneID(item.administrative_level_one),
             administrative_level_two: item.administrative_level_two,
             latitude: item.latitude,
             longitude: item.longitude,
             land_ownership: item.land_ownership,
-            comment: 'This event location was added using the bulk upload process.',
+            history: 'This event location was added using the bulk upload process.',
             new_location_species: [
               {
                 species: item.species,
@@ -252,7 +271,7 @@ export class BulkUploadComponent implements OnInit {
                     suspect: item.suspect,
                     tested_count: item.tested_count,
                     diagnosis_count: item.diagnosis_count,
-                    new_species_diagnosis_organizations: item.organizations
+                    new_species_diagnosis_organizations: this.addDiagnosisOrganizations(item.organizations)
                   }
                 ]
               }
@@ -292,7 +311,7 @@ export class BulkUploadComponent implements OnInit {
                   suspect: item.suspect,
                   tested_count: item.tested_count,
                   diagnosis_count: item.diagnosis_count,
-                  new_species_diagnosis_organizations: item.organizations
+                  new_species_diagnosis_organizations: this.addDiagnosisOrganizations(item.organizations)
                 }
               ]
             });
@@ -319,7 +338,7 @@ export class BulkUploadComponent implements OnInit {
                 suspect: item.suspect,
                 tested_count: item.tested_count,
                 diagnosis_count: item.diagnosis_count,
-                new_species_diagnosis_organizations: item.organizations
+                new_species_diagnosis_organizations: this.addDiagnosisOrganizations(item.organizations)
               }
             );
             // get the array index for the current event record
@@ -341,35 +360,52 @@ export class BulkUploadComponent implements OnInit {
     this.submitData(this.newEventsArray);
   }
 
+  submitEvent(eventSubmission) {
+    this.eventService.create(eventSubmission)
+      .subscribe(
+        (event) => {
+          this.submitLoading = false;
+
+          this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+            {
+              disableClose: true,
+              data: {
+                title: 'Event Saved',
+                titleIcon: 'check',
+                message: 'The event with the event reference "' + event.event_reference + '" was successfully saved. The Event ID is ' + event.id,
+                confirmButtonText: 'OK',
+                showCancelButton: false
+              }
+            }
+          );
+          return { success: true, event: event, error: null };
+
+        },
+        error => {
+          // this.submitLoading = false;
+          // this.openSnackBar('Error. Event not Submitted. Error message: ' + error, 'OK', 8000);
+          this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+            {
+              disableClose: true,
+              data: {
+                title: 'Event Save Failed',
+                titleIcon: 'warning',
+                message: 'The event with the event reference "' + eventSubmission.event_reference + '" failed to save. The error is: ' + error,
+                confirmButtonText: 'OK',
+                showCancelButton: false
+              }
+            }
+          );
+          return { success: false, event: null, error: error };
+        }
+      );
+  }
+
+
   submitData(newEventsArray) {
-
+    const responseArray = [];
     for (const eventSubmission of newEventsArray) {
-
-      this.eventService.create(eventSubmission)
-        .subscribe(
-          (event) => {
-            this.submitLoading = false;
-
-            // this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-            //   {
-            //     disableClose: true,
-            //     data: {
-            //       title: 'Event Saved',
-            //       titleIcon: 'check',
-            //       message: 'Your event was successfully saved. The Event ID is ' + event.id,
-            //       confirmButtonText: 'OK',
-            //       showCancelButton: false
-            //     }
-            //   }
-            // );
-
-          },
-          error => {
-            // this.submitLoading = false;
-            // this.openSnackBar('Error. Event not Submitted. Error message: ' + error, 'OK', 8000);
-          }
-        );
-
+      responseArray.push(this.submitEvent(eventSubmission));
     }
   }
 
@@ -380,6 +416,12 @@ export class BulkUploadComponent implements OnInit {
   }
 
 }
+
+// export interface Response {
+//   success: boolean;
+//   event: Object;
+// }
+
 
 
 

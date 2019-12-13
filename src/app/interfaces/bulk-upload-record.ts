@@ -30,5 +30,5 @@ export interface BulkUploadRecord {
     diagnosis_count: number;
     basis: number;
     cause: number;
-    organizations: number[];
+    organizations: number;
 }

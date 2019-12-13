@@ -1,11 +1,8 @@
+
+import {catchError, map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import { Subject } from 'rxjs/Subject';
-import { throwError } from 'rxjs';
+import { Observable ,  Subject ,  throwError } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -23,10 +20,10 @@ export class AdministrativeLevelOneService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_ONES_URL + '?no_page&slim&country=' + countryID, options)
-      .map((response: Response) => <AdministrativeLevelOne[]>response.json())
+    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_ONES_URL + '?no_page&slim&country=' + countryID, options).pipe(
+      map((response: Response) => <AdministrativeLevelOne[]>response.json()),
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
-      .catch(this.handleError);
+      catchError(this.handleError),);
   }
 
   public getAdminLevelOnes(): Observable<AdministrativeLevelOne[]> {
@@ -35,10 +32,10 @@ export class AdministrativeLevelOneService {
       headers: APP_SETTINGS.JSON_HEADERS
     });
 
-    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_ONES_URL + '?no_page', options)
-      .map((response: Response) => <AdministrativeLevelOne[]>response.json())
+    return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_ONES_URL + '?no_page', options).pipe(
+      map((response: Response) => <AdministrativeLevelOne[]>response.json()),
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
-      .catch(this.handleError);
+      catchError(this.handleError),);
   }
 
   private handleError(error: Response) {

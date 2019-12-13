@@ -1,11 +1,8 @@
+
+import {map, catchError} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/catch';
-import { Subject } from 'rxjs/Subject';
-import { throwError } from 'rxjs';
+import { Observable ,  Subject ,  throwError } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -23,9 +20,9 @@ export class EventLocationService {
       headers: APP_SETTINGS.AUTH_JSON_HEADERS
     });
 
-    return this._http.post(APP_SETTINGS.EVENT_LOCATIONS_URL, formValue, options)
-      .map((response: Response) => <Event>response.json())
-      .catch(this.handleError);
+    return this._http.post(APP_SETTINGS.EVENT_LOCATIONS_URL, formValue, options).pipe(
+      map((response: Response) => <Event>response.json()),
+      catchError(this.handleError),);
 
   }
 
@@ -35,9 +32,9 @@ export class EventLocationService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.patch(APP_SETTINGS.EVENT_LOCATIONS_URL + formValue.id + '/', formValue, options)
-      .map((response: Response) => <Event>response.json())
-      .catch(this.handleError);
+    return this._http.patch(APP_SETTINGS.EVENT_LOCATIONS_URL + formValue.id + '/', formValue, options).pipe(
+      map((response: Response) => <Event>response.json()),
+      catchError(this.handleError),);
   }
 
   public delete(id): Observable<any> {
@@ -46,9 +43,9 @@ export class EventLocationService {
       headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
     });
 
-    return this._http.delete(APP_SETTINGS.EVENT_LOCATIONS_URL + id + '/', options)
-      .map((response: Response) => <any>response.json())
-      .catch(this.handleError);
+    return this._http.delete(APP_SETTINGS.EVENT_LOCATIONS_URL + id + '/', options).pipe(
+      map((response: Response) => <any>response.json()),
+      catchError(this.handleError),);
   }
 
 

@@ -1,14 +1,13 @@
+
+import {map} from 'rxjs/operators';
 import { Injectable, Output } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
-import 'rxjs/add/operator/map';
-import 'rxjs/observable/of';
+import { Observable ,  BehaviorSubject, of } from 'rxjs';
+
 import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import { Router } from '@angular/router';
 import { APP_SETTINGS } from '../app.settings';
 import { User } from '@interfaces/user';
 import { EventEmitter } from 'events';
-
-import { BehaviorSubject } from 'rxjs';
 import { CurrentUserService } from '@services/current-user.service';
 
 @Injectable()
@@ -33,8 +32,8 @@ export class AuthenticationService {
     });
 
     const self = this;
-    return this._http.post(APP_SETTINGS.AUTH_URL, null, options)
-      .map((res: any) => {
+    return this._http.post(APP_SETTINGS.AUTH_URL, null, options).pipe(
+      map((res: any) => {
         self.user = res.json();
         // if (self.user.is_staff || self.user.username == 'testuser') {
         sessionStorage.setItem('username', username);
@@ -60,7 +59,7 @@ export class AuthenticationService {
 
         //   alert('This user is not authorized!');
         // }
-      });
+      }));
 
   }
 
@@ -86,7 +85,7 @@ export class AuthenticationService {
 
     sessionStorage.removeItem('currentUser');
 
-    return Observable.of(true);
+    return of(true);
 
   }
 

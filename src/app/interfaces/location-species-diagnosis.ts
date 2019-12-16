@@ -8,7 +8,7 @@ export interface LocationSpeciesDiagnosis extends History {
     suspect: boolean;
     major: boolean;
     priority: number;
-    causal: boolean;
+    cause: boolean;
     tested_count: number;
     positive_count: number;
     suspect_count: number;

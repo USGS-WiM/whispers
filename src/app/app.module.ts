@@ -122,9 +122,8 @@ import { DiagnosticInfoComponent } from './diagnostic-info/diagnostic-info.compo
 import { CommentsTableComponent } from './comments-table/comments-table.component';
 import { ViewCommentDetailsComponent } from './view-comment-details/view-comment-details.component';
 import { BrowserWarningComponent } from './browser-warning/browser-warning.component';
-
-
-
+import { BulkUploadComponent } from './bulk-upload/bulk-upload.component';
+import { PapaParseModule } from 'ngx-papaparse';
 
 @NgModule({
   declarations: [
@@ -171,6 +170,7 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     CommentsTableComponent,
     ViewCommentDetailsComponent,
     BrowserWarningComponent,
+    BulkUploadComponent,
   ],
   imports: [
     BrowserModule,
@@ -215,7 +215,8 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     MatTooltipModule,
     MatBottomSheetModule,
     MatStepperModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    PapaParseModule
   ],
   providers: [
     AuthenticationService,
@@ -285,7 +286,8 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     CircleChooseComponent,
     DiagnosticInfoComponent,
     ViewCommentDetailsComponent,
-    BrowserWarningComponent
+    BrowserWarningComponent,
+    BulkUploadComponent
   ]
 })
 export class AppModule { }

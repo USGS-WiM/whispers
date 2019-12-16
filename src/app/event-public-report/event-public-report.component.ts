@@ -90,7 +90,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           this.commentTypes = commentTypes;
         },
       );
-    
+
     this.loadingData = true;
     // creating variables for field definitions
     this.eventTypeDefinition = FIELD_HELP_TEXT.editEventTypeTooltip;
@@ -138,11 +138,11 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       this.loadingData = false;
       this.combinedComments = this.data.event_data.combined_comments;
       for (const comment of this.combinedComments) {
-      // set the comment type string for each comment
-      comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
-      // set the source string for each comment
-      comment.source = this.eventLocationName(comment);
-    }
+        // set the comment type string for each comment
+        comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
+        // set the source string for each comment
+        comment.source = this.eventLocationName(comment);
+      }
     }, 1000);
 
   }
@@ -193,7 +193,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   }
 
   // START defining event location table
-  makeTable(data) {
+  makeLocationTable(data) {
     let table;
 
     const locationHeaders = {
@@ -276,7 +276,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
   // create header
   makeHeader() {
-   const header = {
+    const header = {
       alignment: 'justify',
       columns: [
         {
@@ -306,7 +306,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     const title = {
       style: 'tableExample',
       table: {
-        widths: [150, 100, 'auto', 120, 100, 50, 'auto'],
+        widths: [150, 100, 'auto', 120, 80, 80, 80],
         body: [
           [{ text: 'County (or equivalent):', bold: true, alignment: 'right' }, county, { text: name, bold: true }, '', '', '', ''],
           [{ text: 'State (or equivalent):', bold: true, alignment: 'right' }, state, '', '', '', '', ''],
@@ -316,6 +316,225 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       layout: 'noBorders'
     };
     return title;
+  }
+
+  makeHorizontalLine() {
+    let line;
+    line = {
+      canvas: [{ type: 'line', x1: 0, y1: 5, x2: 785 - 2 * 10, y2: 5, lineWidth: 1 }]
+    };
+    return line;
+  }
+
+  makeCommentsTable() {
+    let commentTable;
+    this.combinedComments = this.combinedComments.sort((a, b) => a.date_sort - b.date_sort);
+
+    // START defining comment table
+    const commentHeaders = {
+      commentHeaders: {
+        col_1: { text: 'Comments', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_2: { text: 'Comment Type', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_3: { text: 'Created Date', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_4: { text: 'User', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_5: { text: 'Organization', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_6: { text: 'Comment Source', border: [false, false, false, false], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+      }
+    };
+
+    const commentBody = [];
+
+    // pushing header row into the table
+    for (const key in commentHeaders) {
+      if (commentHeaders.hasOwnProperty(key)) {
+        const header = commentHeaders[key];
+        const row = new Array();
+        row.push(header.col_1);
+        row.push(header.col_2);
+        row.push(header.col_3);
+        row.push(header.col_4);
+        row.push(header.col_5);
+        row.push(header.col_6);
+        commentBody.push(row);
+      }
+    }
+
+    const commentRows = this.combinedComments;
+
+    // pushing data into the rows
+    for (const key in commentRows) {
+      if (commentRows.hasOwnProperty(key)) {
+        const elData = commentRows[key];
+        const row = new Array();
+        row.push(elData.comment);
+        row.push(elData.comment_type_string);
+        row.push(elData.created_date);
+        row.push(elData.created_by_string);
+        row.push(elData.created_by_organization_string);
+        row.push(elData.source);
+        commentBody.push(row);
+      }
+    }
+    // END defining comment table
+
+
+    // Forming Location Table to push into doc defintion
+    commentTable = {
+      alignment: 'justify',
+      table: {
+        heights: 40,
+        headerRows: 2,
+        body: commentBody,
+      },
+      layout: {
+        hLineColor: function (i, node) {
+          return (i === 0 || i === node.table.body.length) ? 'lightgray' : 'lightgray';
+        },
+        vLineColor: function (i, node) {
+          return (i === 0 || i === node.table.widths.length) ? 'lightgray' : 'lightgray';
+        },
+      },
+      pageBreak: 'after'
+    };
+    return commentTable;
+  }
+
+  makeExplanationDescription() {
+    let explanationDescription;
+    explanationDescription = {
+      alignment: 'justify',
+      text: ['WHISPers stands for Wildlife Health Information Sharing Partnership - event reporting system. It is a partner-driven, web-based repository for sharing basic information about historic and ongoing wildlife mortality (death) and/or morbidity (illness) events. The information, such as county-level locations, onset and ending dates, species affected, and diagnosis has generously been shared with the USGS National Wildlife Health Center over time by hundreds of natural resource managers and stakeholders across the U.S. and beyond. The primary goal of the system is to provide natural resource management partners and the public with timely, accurate information on where wildlife disease events are occurring or have occurred for better preparation and decision making. The information is opportunistically collected and does not reflect all the mortality events that occur in North America. \n', { text: 'Disclaimer', fontSize: 11, bold: true }, '\n The data on this website are provided for situational awareness of wildlife health events. The USGS National Wildlife Health Center (NWHC) makes every effort to provide accurate and timely information; however, data may not be final or fully accurate, especially if an event is ongoing or data synthesis is not complete. Conclusions drawn from or actions undertaken on the basis of such data and information are the sole responsibility of the user. To ensure that information is accurately interpreted and appropriately credited, dissemination of information from this site (publication, press release, technical report, etc.) should be done in collaboration with the specific agencies and laboratories that have generated the information. \n\n Note: WHISPers data fields and business rules for reporting of surveillance events are under development and thus display of surveillance information may be inconsistent.\n\n'],
+      style: 'smaller',
+    };
+    return explanationDescription;
+  }
+
+  explanationPageHeader() {
+    // Forming Explanation info to push into doc defintion
+    let explanationPageHeader;
+    explanationPageHeader = {
+      alignment: 'justify',
+      columns: [
+        {
+          image: this.pngURL,
+          width: 400,
+          height: 80
+        },
+        {
+          style: 'header',
+          text: 'Explanation of Terms',
+          margin: [0, 15, 0, 0]
+        }
+      ]
+    };
+    return explanationPageHeader;
+  }
+
+  explanationPartOne() {
+    let explanationPartOne;
+    explanationPartOne = {
+      style: 'definitionsTable',
+      table: {
+        body: [
+          [{ text: 'Event Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventTypeDefinition, border: [false, false, false, false] }],
+          [{ text: 'Event ID', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventIdDefinition, border: [false, false, false, false] }],
+          [{ text: 'Contact Organization', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.contactOrgDefinition, border: [false, false, false, false] }],
+          [{ text: 'Record Status', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.recordStatusDefinition, border: [false, false, false, false] }],
+          [{ text: '# of Locations', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numberOfLocationsDefinition, border: [false, false, false, false] }],
+          [{ text: 'County (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.countyDefinition, border: [false, false, false, false] }],
+          [{ text: 'Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventDiagDefinition, border: [false, false, false, false] }],
+          [{ text: 'Diagnostic Laboratory', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.labDefinition, border: [false, false, false, false] }],
+          [{ text: '# of Animals Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numAnimalsAffectedDefinition, border: [false, false, false, false] }],
+          [{ text: '# of Species Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numSpeciesAffectedDefinition, border: [false, false, false, false] }],
+          [{ text: 'Species Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speceisMostAffectedDefinition, border: [false, false, false, false] }],
+          [{ text: 'Event Start Date - End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.startEndDatesDefinition, border: [false, false, false, false] }],
+          [{ text: 'Associated Events', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.associatedEventsDefinition, border: [false, false, false, false] }],
+          [{ text: 'Event Visibility', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventVisibilityDefinition, border: [false, false, false, false] }],
+        ]
+      },
+      layout: {
+        defaultBorder: false,
+        paddingLeft: function (i, node) { return 15; },
+        paddingRight: function (i, node) { return 10; },
+        // paddingTop: function(i, node) { return 10; }
+      }
+    };
+    return explanationPartOne;
+  }
+
+  explanationOneForMoreDetails() {
+    let explanationOneForMoreDetails;
+    explanationOneForMoreDetails = {
+      alignment: 'justify',
+      text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
+      style: 'smallest',
+      pageBreak: 'after'
+    };
+    return explanationOneForMoreDetails;
+  }
+
+  explanationPartTwoHeader() {
+    let explanationPartTwoHeader;
+    explanationPartTwoHeader = {
+      alignment: 'justify',
+      columns: [
+        {
+          image: this.pngURL,
+          width: 400,
+          height: 80
+        },
+        {
+          style: 'header',
+          text: 'Explanation of Terms cont...',
+          margin: [0, 15, 0, 0]
+        }
+      ]
+    };
+    return explanationPartTwoHeader;
+  }
+  explanationPartTwo() {
+    let explanationPartTwo;
+    explanationPartTwo = {
+      style: 'definitionsTable',
+      table: {
+        body: [
+          [{ text: 'State (or Equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.stateDefinition, border: [false, false, false, false] }],
+          [{ text: 'Country', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.countryDefinition, border: [false, false, false, false] }],
+          [{ text: 'Start Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.startDateDefinition, border: [false, false, false, false] }],
+          [{ text: 'End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.endDateDefinition, border: [false, false, false, false] }],
+          [{ text: 'Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
+          [{ text: 'Population', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
+          [{ text: 'Known Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownSickDefinition, border: [false, false, false, false] }],
+          [{ text: 'Known Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownDeadDefinition, border: [false, false, false, false] }],
+          [{ text: 'Estimated Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estSickDefinition, border: [false, false, false, false] }],
+          [{ text: 'Estimate Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estDeadDefinition, border: [false, false, false, false] }],
+          [{ text: 'Captive', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.captiveDefinition, border: [false, false, false, false] }],
+          [{ text: 'Species Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDiagDefinition, border: [false, false, false, false] }],
+          [{ text: 'Number Assessed', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numAssessedDefinition, border: [false, false, false, false] }],
+          [{ text: 'Number with this Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numWithDiagDefinition, border: [false, false, false, false] }],
+          [{ text: 'Diagnostic Laboratory', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.labDefinition, border: [false, false, false, false] }],
+          [{ text: 'Comment Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Flags comment as belonging to a certain category. See metadata for details on options.', border: [false, false, false, false] }],
+          [{ text: 'Comment Source', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.commentSourceDefinition, border: [false, false, false, false] }],
+        ]
+      },
+      layout: {
+        defaultBorder: false,
+        paddingLeft: function (i, node) { return 15; },
+        paddingRight: function (i, node) { return 10; },
+        // paddingTop: function(i, node) { return 10; }
+      }
+    };
+    return explanationPartTwo;
+  }
+
+  explanationTwoForMoreDetails() {
+    let explanationTwoForMoreDetails;
+    explanationTwoForMoreDetails = {
+      alignment: 'justify',
+      text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
+      style: 'smallest',
+    };
+    return explanationTwoForMoreDetails;
   }
 
   eventLocationName(comment) {
@@ -523,12 +742,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     const eventLocation = data.eventlocations[0].locationspecies;
     this.eventLocsPlusDiagnoses = [];
-    const group = [];
-    const locations = [];
     let speciesDiag = [];
+    let eventLocNum = 0;
     for (const event_location of this.data.event_data.eventlocations) {
+      eventLocNum = eventLocNum + 1;
+      speciesDiag = [];
       for (const locationspecies of event_location.locationspecies) {
-        speciesDiag = [];
         for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
           const numAssess = speciesdiagnosis.tested_count + '/' + speciesdiagnosis.diagnosis_count;
           let captive = locationspecies.captive;
@@ -539,8 +758,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           const kdead = locationspecies.known_dead || ' ';
           const esick = locationspecies.sick_count_estimated || ' ';
           const edead = locationspecies.dead_count_estimated || ' ';
-          const sdate = event_location.start_date || ' ';
-          const edate = event_location.end_date || ' ';
+          const sdate = event_location.start_date || 'N/A';
+          const edate = event_location.end_date || 'N/A';
           captive = 'Yes' || 'No';
           const s_diag = speciesdiagnosis.diagnosis_string || ' ';
           const county = locationspecies.administrative_level_two_string || ' ';
@@ -549,11 +768,10 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           let locationName;
 
           if (event_location.name === '' || event_location.name === undefined) {
-            locationName = 'Location ' + this.locationNumber;
+            locationName = 'Location ' + eventLocNum;
           } else {
-            locationName = 'Location ' + this.locationNumber + ' - ' + event_location.name;
+            locationName = 'Location ' + eventLocNum + ' - ' + event_location.name;
           }
-
 
           speciesDiag.push({
             species: locationspecies.species_string,
@@ -571,202 +789,23 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             country: locationspecies.country_string,
             sdate: sdate,
             edate: edate,
-            name: locationName
+            name: locationName,
           });
         }
 
         // checking to see if there is a species diagnosis for this location
-        if (speciesDiag.length > 0) {
-          this.eventLocsPlusDiagnoses.push(speciesDiag);
-      } else {
+
+        // locationSpecies.push(speciesDiag);locationSpecies.push(speciesDiag);
 
       }
-      }
+     /*  if (speciesDiag.length > 0) {
+        
+      } */
+      this.eventLocsPlusDiagnoses.push(speciesDiag);
     }
 
     // check for user role so that we show them the right report
     if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
-
-      // using date_sort parameter to sort comments old to vew
-
-      this.combinedComments = this.combinedComments.sort((a, b) => a.date_sort - b.date_sort);
-
-      // START defining comment table
-      const commentHeaders = {
-        commentHeaders: {
-          col_1: { text: 'Comments', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
-          col_2: { text: 'Comment Type', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
-          col_3: { text: 'Created Date', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
-          col_4: { text: 'User', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
-          col_5: { text: 'Organization', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
-          col_6: { text: 'Comment Source', border: [false, false, false, false], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
-        }
-      };
-
-      const commentBody = [];
-
-      // pushing header row into the table
-      for (const key in commentHeaders) {
-        if (commentHeaders.hasOwnProperty(key)) {
-          const header = commentHeaders[key];
-          const row = new Array();
-          row.push(header.col_1);
-          row.push(header.col_2);
-          row.push(header.col_3);
-          row.push(header.col_4);
-          row.push(header.col_5);
-          row.push(header.col_6);
-          commentBody.push(row);
-        }
-      }
-
-      const commentRows = this.combinedComments;
-
-      // pushing data into the rows
-      for (const key in commentRows) {
-        if (commentRows.hasOwnProperty(key)) {
-          const elData = commentRows[key];
-          const row = new Array();
-          row.push(elData.comment);
-          row.push(elData.comment_type_string);
-          row.push(elData.created_date);
-          row.push(elData.created_by_string);
-          row.push(elData.created_by_organization_string);
-          row.push(elData.source);
-          commentBody.push(row);
-        }
-      }
-      // END defining comment table
-
-
-      // Forming Location Table to push into doc defintion
-      const commentTable = {
-        alignment: 'justify',
-        table: {
-          headerRows: 2,
-          body: commentBody,
-        },
-        layout: {
-          hLineColor: function (i, node) {
-            return (i === 0 || i === node.table.body.length) ? 'lightgray' : 'lightgray';
-          },
-          vLineColor: function (i, node) {
-            return (i === 0 || i === node.table.widths.length) ? 'lightgray' : 'lightgray';
-          },
-        },
-        pageBreak: 'after'
-      };
-
-      // Forming Explanation info to push into doc defintion
-      const explanationPageHeader = {
-        alignment: 'justify',
-            columns: [
-              {
-                image: this.pngURL,
-                width: 400,
-                height: 80
-              },
-              {
-                style: 'header',
-                text: 'Explanation of Terms',
-                margin: [0, 15, 0, 0]
-              }
-            ]
-      };
-
-      const explanationDescription = {
-        alignment: 'justify',
-            text: ['WHISPers stands for Wildlife Health Information Sharing Partnership - event reporting system. It is a partner-driven, web-based repository for sharing basic information about historic and ongoing wildlife mortality (death) and/or morbidity (illness) events. The information, such as county-level locations, onset and ending dates, species affected, and diagnosis has generously been shared with the USGS National Wildlife Health Center over time by hundreds of natural resource managers and stakeholders across the U.S. and beyond. The primary goal of the system is to provide natural resource management partners and the public with timely, accurate information on where wildlife disease events are occurring or have occurred for better preparation and decision making. The information is opportunistically collected and does not reflect all the mortality events that occur in North America. \n', { text: 'Disclaimer', fontSize: 11, bold: true }, '\n The data on this website are provided for situational awareness of wildlife health events. The USGS National Wildlife Health Center (NWHC) makes every effort to provide accurate and timely information; however, data may not be final or fully accurate, especially if an event is ongoing or data synthesis is not complete. Conclusions drawn from or actions undertaken on the basis of such data and information are the sole responsibility of the user. To ensure that information is accurately interpreted and appropriately credited, dissemination of information from this site (publication, press release, technical report, etc.) should be done in collaboration with the specific agencies and laboratories that have generated the information. \n\n Note: WHISPers data fields and business rules for reporting of surveillance events are under development and thus display of surveillance information may be inconsistent.\n\n'],
-            style: 'smaller',
-      };
-
-      const explanationPartOne = {
-        style: 'definitionsTable',
-        table: {
-          body: [
-            [{ text: 'Event Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventTypeDefinition, border: [false, false, false, false] }],
-            [{ text: 'Event ID', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventIdDefinition, border: [false, false, false, false] }],
-            [{ text: 'Contact Organization', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.contactOrgDefinition, border: [false, false, false, false] }],
-            [{ text: 'Record Status', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.recordStatusDefinition, border: [false, false, false, false] }],
-            [{ text: '# of Locations', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numberOfLocationsDefinition, border: [false, false, false, false] }],
-            [{ text: 'County (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.countyDefinition, border: [false, false, false, false] }],
-            [{ text: 'Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventDiagDefinition, border: [false, false, false, false] }],
-            [{ text: 'Diagnostic Laboratory', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.labDefinition, border: [false, false, false, false] }],
-            [{ text: '# of Animals Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numAnimalsAffectedDefinition, border: [false, false, false, false] }],
-            [{ text: '# of Species Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numSpeciesAffectedDefinition, border: [false, false, false, false] }],
-            [{ text: 'Species Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speceisMostAffectedDefinition, border: [false, false, false, false] }],
-            [{ text: 'Event Start Date - End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.startEndDatesDefinition, border: [false, false, false, false] }],
-            [{ text: 'Associated Events', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.associatedEventsDefinition, border: [false, false, false, false] }],
-            [{ text: 'Event Visibility', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventVisibilityDefinition, border: [false, false, false, false] }],
-          ]
-        },
-        layout: {
-          defaultBorder: false,
-          paddingLeft: function (i, node) { return 15; },
-          paddingRight: function (i, node) { return 10; },
-          // paddingTop: function(i, node) { return 10; }
-        }
-      };
-
-      const explanationOneForMoreDetails =  {
-        alignment: 'justify',
-        text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
-        style: 'smallest',
-        pageBreak: 'after'
-      };
-
-      const explanationPartTwoHeader = {
-        alignment: 'justify',
-        columns: [
-          {
-            image: this.pngURL,
-            width: 400,
-            height: 80
-          },
-          {
-            style: 'header',
-            text: 'Explanation of Terms cont...',
-            margin: [0, 15, 0, 0]
-          }
-        ]
-      };
-
-      const explanationPartTwo = {
-        style: 'definitionsTable',
-        table: {
-          body: [
-            [{ text: 'State (or Equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.stateDefinition, border: [false, false, false, false] }],
-            [{ text: 'Country', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.countryDefinition, border: [false, false, false, false] }],
-            [{ text: 'Start Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.startDateDefinition, border: [false, false, false, false] }],
-            [{ text: 'End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.endDateDefinition, border: [false, false, false, false] }],
-            [{ text: 'Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
-            [{ text: 'Population', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
-            [{ text: 'Known Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownSickDefinition, border: [false, false, false, false] }],
-            [{ text: 'Known Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownDeadDefinition, border: [false, false, false, false] }],
-            [{ text: 'Estimated Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estSickDefinition, border: [false, false, false, false] }],
-            [{ text: 'Estimate Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estDeadDefinition, border: [false, false, false, false] }],
-            [{ text: 'Captive', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.captiveDefinition, border: [false, false, false, false] }],
-            [{ text: 'Species Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDiagDefinition, border: [false, false, false, false] }],
-            [{ text: 'Number Assessed', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numAssessedDefinition, border: [false, false, false, false] }],
-            [{ text: 'Number with this Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numWithDiagDefinition, border: [false, false, false, false] }],
-            [{ text: 'Diagnostic Laboratory', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.labDefinition, border: [false, false, false, false] }],
-            [{ text: 'Comment Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Flags comment as belonging to a certain category. See metadata for details on options.', border: [false, false, false, false] }],
-            [{ text: 'Comment Source', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.commentSourceDefinition, border: [false, false, false, false] }],
-          ]
-        },
-        layout: {
-          defaultBorder: false,
-          paddingLeft: function (i, node) { return 15; },
-          paddingRight: function (i, node) { return 10; },
-          // paddingTop: function(i, node) { return 10; }
-        }
-      };
-
-      const explanationTwoForMoreDetails =  {
-        alignment: 'justify',
-        text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
-        style: 'smallest',
-      };
 
       const docDefinition = {
         pageOrientation: 'landscape',
@@ -806,9 +845,9 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             ]
           },
           {
-            style: 'tableExample',
+            // style: 'tableExample',
             table: {
-              width: [400, 'auto'],
+              // width: [400, 'auto'],
               body: [
                 [
                   {
@@ -816,7 +855,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                     table: {
                       widths: [180, 250],
                       body: [
-                        [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, {text: orgString}],
+                        [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, { text: orgString }],
                         [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, data.event_status_string],
                         [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
                         [{ border: [false, false, false, false], text: 'Summary Info', bold: true, fontSize: 13, margin: [30, 10] }, ' '],
@@ -861,14 +900,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             },
             layout: 'noBorders'
           },
-          /* {
-            alignment: 'justify',
-            columns: [
-              { text: 'Associated Events' }, // fixes link issue with dynamic table generation but style is messed up
-              table(
-                eventsAndLinks, ['id'])
-            ]
-          }, */
         ],
         images: {
           logo: this.pngURL,
@@ -897,23 +928,23 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           columnGap: 20
         }
       };
-      /* makeTables() {
-      } */
-      // works
+
+      // pushing pre-made tables and other elements into doc definition
       for (const loc of this.eventLocsPlusDiagnoses) {
         docDefinition.content.push(this.makeHeader());
         docDefinition.content.push(this.makeTitle(loc[0]));
-        docDefinition.content.push(this.makeTable(loc));
+        docDefinition.content.push(this.makeHorizontalLine());
+        docDefinition.content.push(this.makeLocationTable(loc));
       }
-      // docDefinition.content.push(locationTable);
-      docDefinition.content.push(commentTable);
-      docDefinition.content.push(explanationPageHeader);
-      docDefinition.content.push(explanationDescription);
-      docDefinition.content.push(explanationPartOne);
-      docDefinition.content.push(explanationOneForMoreDetails);
-      docDefinition.content.push(explanationPartTwoHeader);
-      docDefinition.content.push(explanationPartTwo);
-      docDefinition.content.push(explanationTwoForMoreDetails);
+
+      docDefinition.content.push(this.makeCommentsTable());
+      docDefinition.content.push(this.explanationPageHeader());
+      docDefinition.content.push(this.makeExplanationDescription());
+      docDefinition.content.push(this.explanationPartOne());
+      docDefinition.content.push(this.explanationOneForMoreDetails());
+      docDefinition.content.push(this.explanationPartTwoHeader());
+      docDefinition.content.push(this.explanationPartTwo());
+      docDefinition.content.push(this.explanationTwoForMoreDetails());
 
       pdfMake.createPdf(docDefinition).download();
     } else {
@@ -956,341 +987,61 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             ]
           },
           {
-            alignment: 'justify',
-            columns: [
-              {
-                style: 'smaller',
-                table: {
-                  widths: [150, 250],
-                  body: [
-                    [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, '' + organizations], // add new line between contacts
-                  ]
-                },
-                layout: {
-                  defaultBorder: false,
-                  paddingLeft: function (i, node) { return 15; },
-                  paddingRight: function (i, node) { return 10; },
-                }
-              }
-            ]
-          },
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                style: 'smaller',
-                table: {
-                  widths: [150, 250],
-                  body: [
-                    [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, data.event_status_string],
-                  ]
-                },
-                layout: {
-                  defaultBorder: false,
-                  paddingLeft: function (i, node) { return 15; },
-                  paddingRight: function (i, node) { return 10; },
-                }
-              }
-            ]
-          },
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                style: 'smaller',
-                table: {
-                  widths: [150, 250],
-                  body: [
-                    [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
-                  ]
-                },
-                layout: {
-                  defaultBorder: false,
-                  paddingLeft: function (i, node) { return 15; },
-                  paddingRight: function (i, node) { return 10; },
-                }
-              }
-            ]
-          },
-          {
-            text: 'Summary Information',
-            style: 'bigger',
-            margin: [30, 10]
-          },
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                style: 'smaller',
-                table: {
-                  widths: [150, 250],
-                  body: [
-                    [{ border: [false, false, true, false], text: '# of Locations', bold: true, alignment: 'right' }, locationCount],
-                  ]
-                },
-                layout: {
-                  defaultBorder: false,
-                  paddingLeft: function (i, node) { return 15; },
-                  paddingRight: function (i, node) { return 10; },
-                }
-              }
-            ]
-          },
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                style: 'smaller',
-                table: {
-                  widths: [150, 250],
-                  body: [
-                    [{ border: [false, false, true, false], text: 'County (or Equivalent)', bold: true, alignment: 'right' }, counties],
-                  ]
-                },
-                layout: {
-                  defaultBorder: false,
-                  paddingLeft: function (i, node) { return 15; },
-                  paddingRight: function (i, node) { return 10; },
-                }
-              }
-            ]
-          },
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                style: 'smaller',
-                table: {
-                  widths: [150, 250],
-                  body: [
-                    [{ border: [false, false, true, false], text: 'Event Diagnosis', bold: true, alignment: 'right' }, eventDiagnosises],
-                  ]
-                },
-                layout: {
-                  defaultBorder: false,
-                  paddingLeft: function (i, node) { return 15; },
-                  paddingRight: function (i, node) { return 10; },
-                }
-              }
-            ]
-          },
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                style: 'smaller',
-                table: {
-                  widths: [150, 250],
-                  body: [
-                    [{ border: [false, false, true, false], text: 'Diagnostic Laboratory', bold: true, alignment: 'right' }, this.labs],
-                  ]
-                },
-                layout: {
-                  defaultBorder: false,
-                  paddingLeft: function (i, node) { return 15; },
-                  paddingRight: function (i, node) { return 10; },
-                }
-              }
-            ]
-          },
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                style: 'smaller',
-                table: {
-                  widths: [150, 250],
-                  body: [
-                    [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, data.affected_count],
-                  ]
-                },
-                layout: {
-                  defaultBorder: false,
-                  paddingLeft: function (i, node) { return 15; },
-                  paddingRight: function (i, node) { return 10; },
-                }
-              }
-            ]
-          },
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                style: 'smaller',
-                table: {
-                  widths: [150, 250],
-                  body: [
-                    [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, speciesAffectedCount],
-                  ]
-                },
-                layout: {
-                  defaultBorder: false,
-                  paddingLeft: function (i, node) { return 15; },
-                  paddingRight: function (i, node) { return 10; },
-                }
-              }
-            ]
-          },
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                style: 'smaller',
-                table: {
-                  widths: [150, 250],
-                  body: [
-                    [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, speciesAffected]
-                  ]
-                },
-                layout: {
-                  defaultBorder: false,
-                  paddingLeft: function (i, node) { return 15; },
-                  paddingRight: function (i, node) { return 10; },
-                }
-              }
-            ]
-          },
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                style: 'smaller',
-                table: {
-                  widths: [150, 250],
-                  body: [
-                    [{ border: [false, false, true, false], text: 'Event Start Date - End Date', bold: true, alignment: 'right' }, formattedDate], // TODO: format according to wireframe & Create function to get count of total days event lasted
-                  ]
-                },
-                layout: {
-                  defaultBorder: false,
-                  paddingLeft: function (i, node) { return 15; },
-                  paddingRight: function (i, node) { return 10; },
-                }
-              }
-            ]
-          },
-          /* {
-            alignment: 'justify',
-            columns: [
-              { text: 'Associated Events' }, // fixes link issue with dynamic table generation but style is messed up
-              table(
-                eventsAndLinks, ['id'])
-            ]
-          }, */
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                style: 'smaller',
-                table: {
-                  widths: [150, 250],
-                  body: [
-                    [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, { text: associatedEvents }], // TODO: Figure out what to do regarding links & Display none if there are none {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}
-                  ]
-                },
-                layout: {
-                  defaultBorder: false,
-                  paddingLeft: function (i, node) { return 15; },
-                  paddingRight: function (i, node) { return 10; },
-                }
-              }
-            ]
-          },
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                style: 'smaller',
-                table: {
-                  widths: [150, 250],
-                  body: [
-                    [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, eventVisibility],
-                  ]
-                },
-                layout: {
-                  defaultBorder: false,
-                  paddingLeft: function (i, node) { return 15; },
-                  paddingRight: function (i, node) { return 10; },
-                }
-              }
-            ],
-            pageBreak: 'after'
-          },
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                image: this.pngURL,
-                width: 400,
-                height: 80
-              },
-              {
-                style: 'header',
-                text: 'Details of ' + data.event_type_string + ' Event ID ' + data.id,
-                margin: [0, 15, 0, 0]
-              }
-            ]
-          },
-          {
-            alignment: 'justify',
+            // style: 'tableExample',
             table: {
-              headerRows: 2,
-              body: locationBody
-            },
-            pageBreak: 'after'
-          },
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                image: this.pngURL,
-                width: 400,
-                height: 80
-              },
-              {
-                style: 'header',
-                text: 'Explanation of Terms',
-                margin: [0, 15, 0, 0]
-              }
-            ]
-          },
-          {
-            alignment: 'justify',
-            text: ['WHISPers stands for Wildlife Health Information Sharing Partnership - event reporting system. It is a partner-driven, web-based repository for sharing basic information about historic and ongoing wildlife mortality (death) and/or morbidity (illness) events. The information, such as county-level locations, onset and ending dates, species affected, and diagnosis has generously been shared with the USGS National Wildlife Health Center over time by hundreds of natural resource managers and stakeholders across the U.S. and beyond. The primary goal of the system is to provide natural resource management partners and the public with timely, accurate information on where wildlife disease events are occurring or have occurred for better preparation and decision making. The information is opportunistically collected and does not reflect all the mortality events that occur in North America. \n', { text: 'Disclaimer', fontSize: 11, bold: true }, '\n\n The data on this website are provided for situational awareness of wildlife health events. The USGS National Wildlife Health Center (NWHC) makes every effort to provide accurate and timely information; however, data may not be final or fully accurate, especially if an event is ongoing or data synthesis is not complete. Conclusions drawn from or actions undertaken on the basis of such data and information are the sole responsibility of the user. To ensure that information is accurately interpreted and appropriately credited, dissemination of information from this site (publication, press release, technical report, etc.) should be done in collaboration with the specific agencies and laboratories that have generated the information. \n\n Note: WHISPers data fields and business rules for reporting of surveillance events are under development and thus display of surveillance information may be inconsistent.\n\n'],
-            style: 'smaller',
-          },
-          {
-            style: 'definitionsTable',
-            table: {
+              // width: [400, 'auto'],
               body: [
-                [{ text: 'Event Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventTypeDefinition, border: [false, false, false, false] }],
-                [{ text: 'Event ID', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventIdDefinition, border: [false, false, false, false] }],
-                [{ text: 'Contact Organization', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.contactOrgDefinition, border: [false, false, false, false] }],
-                [{ text: 'Record Status', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.recordStatusDefinition, border: [false, false, false, false] }],
-                [{ text: '# of Locations', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numberOfLocationsDefinition, border: [false, false, false, false] }],
-                [{ text: 'County (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.countyDefinition, border: [false, false, false, false] }],
-                [{ text: 'Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventDiagDefinition, border: [false, false, false, false] }],
-                [{ text: 'Diagnostic Laboratory', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.labDefinition, border: [false, false, false, false] }],
-                [{ text: '# of Animals Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numAnimalsAffectedDefinition, border: [false, false, false, false] }],
-                [{ text: '# of Species Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numSpeciesAffectedDefinition, border: [false, false, false, false] }],
-                [{ text: 'Species Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speceisMostAffectedDefinition, border: [false, false, false, false] }],
-                [{ text: 'Event Start Date - End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.startEndDatesDefinition, border: [false, false, false, false] }],
-                [{ text: 'Associated Events', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.associatedEventsDefinition, border: [false, false, false, false] }],
-                [{ text: 'Event Visibility', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventVisibilityDefinition, border: [false, false, false, false] }],
-              ]
+                [
+                  {
+                    style: 'smaller',
+                    table: {
+                      widths: [180, 250],
+                      body: [
+                        [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, { text: orgString }],
+                        [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, data.event_status_string],
+                        [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
+                        [{ border: [false, false, false, false], text: 'Summary Info', bold: true, fontSize: 13, margin: [30, 10] }, ' '],
+                        [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
+                        [{ border: [false, false, true, false], text: '# of Locations', bold: true, alignment: 'right' }, locationCount],
+                        [{ border: [false, false, true, false], text: 'County (or Equivalent)', bold: true, alignment: 'right' }, counties],
+                        [{ border: [false, false, true, false], text: 'Event Diagnosis', bold: true, alignment: 'right' }, eventDiagnosises],
+                        [{ border: [false, false, true, false], text: 'Diagnostic Laboratory', bold: true, alignment: 'right' }, this.labs],
+                        [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, data.affected_count],
+                        [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, speciesAffectedCount],
+                        [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, speciesAffected],
+                        [{ border: [false, false, true, false], text: 'Event Start Date - End Date', bold: true, alignment: 'right' }, formattedDate], // TODO: format according to wireframe & Create function to get count of total days event lasted
+                        [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, { text: associatedEvents }], // TODO: Figure out what to do regarding links & Display none if there are none {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}
+                        [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, eventVisibility]
+                      ],
+                    },
+                    layout: {
+                      defaultBorder: false,
+                      paddingLeft: function (i, node) { return 15; },
+                      paddingRight: function (i, node) { return 10; },
+                    },
+                  },
+                  [
+                    {
+                      alignment: 'right',
+                      image: this.data.map,
+                      width: 200,
+                      height: 200,
+                    },
+                    {
+                      text: ' \n\n'
+                    },
+                    {
+                      alignment: 'right',
+                      image: this.data.map,
+                      width: 200,
+                      height: 200,
+                    },
+                  ],
+                ],
+              ],
             },
-            layout: {
-              defaultBorder: false,
-              paddingLeft: function (i, node) { return 15; },
-              paddingRight: function (i, node) { return 10; },
-              // paddingTop: function(i, node) { return 10; }
-            }
+            layout: 'noBorders'
           },
-          {
-            alignment: 'justify',
-            text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
-            style: 'smallest',
-          }
         ],
         images: {
           logo: this.pngURL,
@@ -1319,6 +1070,17 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           columnGap: 20
         }
       };
+      for (const loc of this.eventLocsPlusDiagnoses) {
+        publicDocDefinition.content.push(this.makeHeader());
+        publicDocDefinition.content.push(this.makeTitle(loc[0]));
+        publicDocDefinition.content.push(this.makeHorizontalLine());
+        publicDocDefinition.content.push(this.makeLocationTable(loc));
+      }
+      publicDocDefinition.content.push(this.explanationPageHeader());
+      publicDocDefinition.content.push(this.makeExplanationDescription());
+      publicDocDefinition.content.push(this.explanationPartOne());
+      publicDocDefinition.content.push(this.explanationOneForMoreDetails());
+
       pdfMake.createPdf(publicDocDefinition).download();
     }
   }

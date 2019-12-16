@@ -817,7 +817,7 @@ export class EventDetailsComponent implements OnInit {
           map: url
         }
       });
-  console.log(this.mapURL);
+
       this.eventPublicReportDialogRef.afterClosed()
         .subscribe(
           () => {

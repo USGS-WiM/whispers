@@ -40,6 +40,11 @@ export class BulkUploadComponent implements OnInit {
   adminLevelOnes;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
 
+  eventCount;
+  responseCount;
+
+  bulkUploadProcessing = false;
+
   constructor(
     public bulkUploadDialogRef: MatDialogRef<BulkUploadComponent>,
     public snackBar: MatSnackBar,
@@ -378,6 +383,7 @@ export class BulkUploadComponent implements OnInit {
               }
             }
           );
+          this.iterateEventCount();
           return { success: true, event: event, error: null };
 
         },
@@ -396,6 +402,7 @@ export class BulkUploadComponent implements OnInit {
               }
             }
           );
+          this.iterateEventCount();
           return { success: false, event: null, error: error };
         }
       );
@@ -403,9 +410,19 @@ export class BulkUploadComponent implements OnInit {
 
 
   submitData(newEventsArray) {
+    this.bulkUploadProcessing = true;
+    this.responseCount = 0;
+    this.eventCount = newEventsArray.length;
     const responseArray = [];
     for (const eventSubmission of newEventsArray) {
       responseArray.push(this.submitEvent(eventSubmission));
+    }
+  }
+
+  iterateEventCount() {
+    this.responseCount++;
+    if (this.responseCount === this.eventCount) {
+      this.bulkUploadProcessing = false;
     }
   }
 

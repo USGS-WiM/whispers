@@ -282,6 +282,10 @@ Apache License
    See the License for the specific language governing permissions and
    limitations under the License.
 
+ngx-papaparse@3.0.4
+MIT
+MIT
+
 esri-leaflet@2.3.2
 Apache-2.0
 Apache License

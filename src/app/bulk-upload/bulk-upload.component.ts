@@ -427,6 +427,13 @@ export class BulkUploadComponent implements OnInit {
     }
   }
 
+  downloadGuidance() {
+  }
+
+  downloadTemplate() {
+
+  }
+
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {
       duration: duration,

@@ -34,6 +34,9 @@ public static get nwhcCarcassSubApprovalTooltip(): string { return 'For USGS Nat
 
 public static get permissionSourceTooltip(): string { return 'Your connection to this event. \n\n Options are: "user" - you created this event; "organization" - someone in your organization created this event; "collaborator" - you were invited to be a read or write collaborator on this event. If blank, then someone outside of your organization created this event and you have not been invited to be a collaborator.'; }
 
+public static get associatedEventsTooltip(): string { return 'Events that are biologically equivalent and were grouped together by wildlife disease specialists at the USGS National Wildlife Health Center.'; }
+public static get commentSourceTooltip(): string { return 'Comment timeline is a compilation of comments entered in various sections of the event record; the source identifies from where the comment originated.'; }
+
 // WIM wrote locationsTooltip (not in hover text spreadsheet)
 public static get locationsTooltip(): string { return 'Displayed as County (or equivalent), State (or equivalent), Country - where values are available'; }
 // END EVENT INFO

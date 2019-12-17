@@ -128,7 +128,7 @@
               <!-- Event groups -->
               <!-- Event groups -->
               <div class="event-page-split-half" *ngIf="eventData.eventgroups && eventData.eventgroups.length > 0">
-                <div class="event-table-header">Associated Events</div>
+                <div class="event-table-header" matTooltip={{associatedEventsTooltip()}}>Associated Events</div>
                 <table>
                   <tr>
                     <th>Event Group</th>

@@ -1,0 +1,34 @@
+export interface BulkUploadRecord {
+    event_ordinal: number;
+    event_reference: string;
+    event_type: number;
+    event_status: number;
+    public: boolean;
+    eventdiagnoses: number[];
+    location_ordinal: number;
+    start_date: string;
+    end_date: string;
+    land_ownership: number;
+    country: string;
+    administrative_level_one: string;
+    administrative_level_two: number;
+    name: string;
+    latitude: string;
+    longitude: string;
+    location_species_ordinal: number;
+    species: number;
+    captive: boolean;
+    population_count: number;
+    sick_count: number;
+    dead_count: number;
+    sick_count_estimated: number;
+    dead_count_estimated: number;
+    species_diagnosis_ordinal: number;
+    diagnosis: number;
+    suspect: boolean;
+    tested_count: number;
+    diagnosis_count: number;
+    basis: number;
+    cause: number;
+    organizations: number;
+}

@@ -41,6 +41,11 @@
     <button mat-button (click)="openNewLookupRequestDialog()" *ngIf="currentUser.role !== 7">
       <mat-icon>add</mat-icon> Request New Species, Organization, or Diagnosis
     </button>
+    <br>
+
+    <button mat-button (click)="openBulkUploadDialog()" *ngIf="currentUser.role !== 7">
+      <mat-icon>cloud_upload</mat-icon> Bulk Upload Data
+    </button>
   </mat-card-actions>
 </mat-card>
 

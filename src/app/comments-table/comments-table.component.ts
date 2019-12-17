@@ -101,6 +101,8 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
     }, 3000);
   }
 
+  commentSourceTooltip() { const string = FIELD_HELP_TEXT.commentSourceTooltip; return string; }
+
   eventLocationName(comment) {
     let locationName = '';
     let count;

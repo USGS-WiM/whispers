@@ -915,6 +915,7 @@ export class EventDetailsComponent implements OnInit {
   editEventDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editEventDiagnosisTooltip; return string; }
   locationsTooltip() { const string = FIELD_HELP_TEXT.locationsTooltip; return string; }
   contactPersonTooltip() { const string = FIELD_HELP_TEXT.contactPersonTooltip; return string; }
+  associatedEventsTooltip() { const string = FIELD_HELP_TEXT.associatedEventsTooltip; return string; }
 
   deleteComment(id: number) {
     this.commentService.delete(id)

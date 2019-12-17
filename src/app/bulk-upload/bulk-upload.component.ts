@@ -423,6 +423,7 @@ export class BulkUploadComponent implements OnInit {
     this.responseCount++;
     if (this.responseCount === this.eventCount) {
       this.bulkUploadProcessing = false;
+      this.bulkUploadDialogRef.close();
     }
   }
 

@@ -47,6 +47,117 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     }, 1000);
   }
 
+  // START defining event location table
+  makeResultsSummaryTable(data) {
+    let table;
+
+    const locationHeaders = {
+      eventLocationHeaders: {
+        col_1: { text: 'Event ID', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_2: { text: 'Start Date-End Date', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_3: { text: 'County (or equivalent)', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_4: { text: 'Event Diagnosis', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_5: { text: '# of Animals Affected', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_6: { text: 'Species', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_7: { text: 'Record Status', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_8: { text: 'Contact Organization', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_9: { text: 'Event Visibility', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] }
+      }
+    };
+    // [{image: writeRotatedText('I am rotated'), fit:[7,53], alignment: 'center'}]
+    const locationBody = [];
+
+    // pushing header row into the table
+    for (const key in locationHeaders) {
+      if (locationHeaders.hasOwnProperty(key)) {
+        const header = locationHeaders[key];
+        const row = new Array();
+        row.push(header.col_1);
+        row.push(header.col_2);
+        row.push(header.col_3);
+        row.push(header.col_4);
+        row.push(header.col_5);
+        row.push(header.col_6);
+        row.push(header.col_7);
+        row.push(header.col_8);
+        row.push(header.col_9);
+        locationBody.push(row);
+      }
+    }
+
+    //const rows = data;
+
+    let locationCells = ['cell', 'cell', 'cell', 'cell', 'cell', 'cell', 'cell', 'cell', 'cell'];
+
+    // pushing data into the rows
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        const elData = data[key];
+        const row = new Array();
+        row.push(elData.id);
+        row.push(elData.start_date + " to " + elData.end_date);
+        let adminLevelTwoCell = new Array();
+        for (let key in elData.administrativeleveltwos) {
+          adminLevelTwoCell.push(elData.administrativeleveltwos[key].name + ", " + this.getAdminLevelOneAbbrev(elData, elData.administrativeleveltwos[key].administrative_level_one) + ", " + elData.administrativeleveltwos[key].country_string + ";\n");
+        }
+        row.push(adminLevelTwoCell);
+        row.push(elData.eventdiagnoses[0].diagnosis_string);
+        row.push(elData.affected_count);
+        let speciesCell = new Array();
+        for (let key in elData.species) {
+          speciesCell.push(elData.species[key].name + ",\n");
+        }
+        row.push(speciesCell);
+        row.push(elData.event_status_string);
+        //TODO: need to come back and fix this. it's a number. Maybe need to have organization_string added to event? Or maybe just use organization service
+        if (elData.organizations) {
+          row.push(elData.organizations[0].toString());
+        } else {
+          row.push('');
+        }
+        if (elData.public) {
+          row.push(elData.public.toString());
+        } else {
+          row.push('');
+        }
+        locationBody.push(row);
+      }
+    }
+
+    // table object to be placed in doc definition
+    table = { 
+      alignment: 'justify',
+      table: {
+        headerRows: 2,
+        body: locationBody,
+      },
+      layout: {
+        hLineColor: function (i, node) {
+          return (i === 0 || i === node.table.body.length) ? 'lightgray' : 'lightgray';
+        },
+        vLineColor: function (i, node) {
+          return (i === 0 || i === node.table.widths.length) ? 'lightgray' : 'lightgray';
+        },
+      },
+      pageBreak: 'after'
+    };
+
+    return table; 
+  }
+  // END defining event location table
+
+  getAdminLevelOneAbbrev(data, state) {
+    let abbrev;
+
+    for (let key in data.administrativelevelones) {
+      if (data.administrativelevelones[key].id == state) {
+        abbrev = data.administrativelevelones[key].abbreviation;
+      }
+    }
+
+    return abbrev;
+  }
+
   downloadResultsSummaryReport() {
     // placeholder for google analytics event
     // gtag('event', 'click', { 'event_category': 'Search Results', 'event_label': 'Downloaded Search Results Summary Report' });
@@ -68,9 +179,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
     // formatting full URL for footer
     const url = window.location.href;
-
-
-
 
     // Section with SEARCH CRITERIA for page 1
     // TODO: calculation of record status for page 1
@@ -408,6 +516,33 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             }
           ],
           pageBreak: 'after'
+        },
+        {
+          alignment: 'justify',
+          columns: [
+            {
+              image: pngURL,
+              width: 400,
+              height: 80
+            },
+            {
+              style: 'header',
+              text: 'Summary of Search Results',
+              margin: [ 0, 15, 0, 0 ]
+            },
+          ]
+        },
+        {
+          text: 'Morbidity/Mortality Events',
+          alignment: 'center',
+          style: 'bigger',
+          margin: [30, 10]
+        },
+        {
+          alignment: 'justify',
+          columns: [
+            this.makeResultsSummaryTable(this.data.current_results)
+          ],
         },
         {
           alignment: 'justify',

@@ -1,16 +1,19 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
-
 //declare let L: any;
 
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
-//import * as esrilegend from 'esri-leaflet-legend';
+import pdfMake from 'pdfmake/build/pdfMake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import html2canvas from 'html2canvas';
+// import * as esrilegend from 'esri-leaflet-legend';
 
 import { MatSnackBar } from '@angular/material';
 import { TooltipPosition } from '@angular/material';
@@ -52,6 +55,7 @@ import { CommentType } from '@interfaces/comment-type';
 import { AddCommentComponent } from '@app/add-comment/add-comment.component';
 import { AddEventLocationContactComponent } from '@app/add-event-location-contact/add-event-location-contact.component';
 import { AddServiceRequestComponent } from '@app/add-service-request/add-service-request.component';
+import { EventPublicReportComponent } from '@app/event-public-report/event-public-report.component';
 
 import { EventLocationContactService } from '@services/event-location-contact.service';
 
@@ -59,7 +63,6 @@ import { ContactService } from '@services/contact.service';
 
 import { CreateContactComponent } from '@create-contact/create-contact.component';
 import { CreateContactService } from '@create-contact/create-contact.service';
-
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -73,6 +76,11 @@ import { CircleChooseComponent } from '@app/circle-management/circle-choose/circ
 import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
 declare let gtag: Function;
+
+export interface AssociatedEvents {
+  id: any;
+  link: string;
+}
 
 @Component({
   selector: 'app-event-details',
@@ -88,6 +96,7 @@ declare let gtag: Function;
   ],
 })
 export class EventDetailsComponent implements OnInit {
+  @Output() myEvent = new EventEmitter();
 
   // @ViewChild('speciesTable') table: any;
   eventID: string;
@@ -97,13 +106,12 @@ export class EventDetailsComponent implements OnInit {
   landownerships;
   species: Species[] = [];
   speciesLoading = false;
-
+  associatedEvents: Array<AssociatedEvents> = [];
   eventCommentsPanelOpen = false;
   serviceRequestPanelOpen = false;
   collaboratorsPanelOpen = false;
   locationCommentsPanelOpen = false;
   locationContactsPanelOpen = false;
-
   eventOwner;
 
   eventNotFound = false;
@@ -120,6 +128,7 @@ export class EventDetailsComponent implements OnInit {
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   circleChooseDialogRef: MatDialogRef<CircleChooseComponent>;
   circleManagementDialogRef: MatDialogRef<CircleManagementComponent>;
+  eventPublicReportDialogRef: MatDialogRef<EventPublicReportComponent>;
 
   addCommentDialogRef: MatDialogRef<AddCommentComponent>;
 
@@ -159,6 +168,10 @@ export class EventDetailsComponent implements OnInit {
   flywaysVisible = false;
   watershedsVisible = false;
 
+  canvas = document.createElement('canvas');
+  capturedImage;
+  commentTableImage: any;
+
   locationSpeciesDisplayedColumns = [
     'species',
     'location',
@@ -178,7 +191,7 @@ export class EventDetailsComponent implements OnInit {
 
   @ViewChild(MatPaginator) locationSpeciesPaginator: MatPaginator;
   @ViewChild(MatSort) locationSpeciesSort: MatSort;
-
+  @ViewChild(EventPublicReportComponent) eventReportComponent: EventPublicReportComponent;
   @ViewChildren(MatExpansionPanel) viewPanels: QueryList<MatExpansionPanel>;
 
   constructor(private route: ActivatedRoute,
@@ -202,6 +215,7 @@ export class EventDetailsComponent implements OnInit {
     private commentService: CommentService,
     private contactService: ContactService,
     private circleService: CircleService,
+
     public snackBar: MatSnackBar,
     private router: Router
   ) {
@@ -232,7 +246,6 @@ export class EventDetailsComponent implements OnInit {
 
     const initialSelection = [];
     const allowMultiSelect = true;
-
     this.eventLocationSpecies = [];
 
     this.route.paramMap.subscribe(params => {
@@ -499,12 +512,12 @@ export class EventDetailsComponent implements OnInit {
         'Land Use': landUse
       }
 
-      //const x = { position: 'topleft'};
+      // const x = { position: 'topleft'};
 
       L.control.layers(baseMaps, overlays, { position: 'topleft' }).addTo(this.map);
       L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
-      //L.control.layers(baseMaps).addTo(this.map);
+      // L.control.layers(baseMaps).addTo(this.map);
 
       this.mapEvent(this.eventData);
 
@@ -525,7 +538,11 @@ export class EventDetailsComponent implements OnInit {
           this.watershedsVisible = false;
         }
       });
-
+      /* this.natMap = new L.Map('hiddenNatMap', {
+        center: new L.LatLng(39.8283, -98.5795),
+        zoom: 4,
+        layers: [streets]
+      }); */
     }, 3000);
   }
 
@@ -597,7 +614,6 @@ export class EventDetailsComponent implements OnInit {
     if (markers.length || countyPolys.length) {
       this.map.fitBounds(bounds);
     }
-
   }
 
   reloadMap() {
@@ -692,6 +708,113 @@ export class EventDetailsComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
+  }
+
+  downloadEventReport(id: string) {
+
+    let url;
+
+    const mapPane = $('.leaflet-map-pane')[0];
+    const mapTransform = mapPane.style.transform.replace('translate3d(', '').split(',');
+    const mapX = parseFloat(mapTransform[0].replace('px', ''));
+    const mapY = parseFloat(mapTransform[1].replace('px', ''));
+    mapPane.style.transform = 'translate3d(0px,0px,0px)';
+
+    const myTiles = $('img.leaflet-tile');
+    const tilesLeft = [];
+    const tilesRight = [];
+    const tilesTop = [];
+    const tileMethod = [];
+    for (let i = 0; i < myTiles.length; i++) {
+        if (myTiles[i].style.left !== '') {
+            tilesLeft.push(parseFloat(myTiles[i].style.left.replace('px', '')));
+            tilesTop.push(parseFloat(myTiles[i].style.top.replace('px', '')));
+            tileMethod[i] = 'left';
+        } else if (myTiles[i].style.transform !== '') {
+          const tileTransform = myTiles[i].style.transform.split(',');
+            tilesLeft[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
+            tilesTop[i] = parseFloat(tileTransform[1].replace('px', ''));
+            myTiles[i].style.transform = '';
+            tileMethod[i] = 'transform';
+        } else {
+            tilesLeft[i] = 0;
+            tilesRight[i] = 0;
+            tileMethod[i] = 'neither';
+        }
+        myTiles[i].style.left = (tilesLeft[i]) + 'px';
+        myTiles[i].style.top = (tilesTop[i]) + 'px';
+    }
+    console.log(myTiles);
+
+    const myDivicons = $('.leaflet-marker-icon');
+    const dx = [];
+    const dy = [];
+    const mLeft = [];
+    const mTop = [];
+    for (let i = 0; i < myDivicons.length; i++) {
+        mLeft.push(parseFloat(myDivicons[i].style.marginLeft.replace('px', '')));
+        mTop.push(parseFloat(myDivicons[i].style.marginTop.replace('px', '')));
+        const curTransform = myDivicons[i].style.transform;
+        const splitTransform = curTransform.replace('translate3d(', '').split(',');
+        dx.push(parseFloat(splitTransform[0].replace('px', '')));
+        dy.push(parseFloat(splitTransform[1].replace('px', '')));
+        myDivicons[i].style.transform = 'translate3d(' + (dx[i] + mLeft[i] + mapX) + 'px, ' + (dy[i] + mTop[i] + mapY) + 'px, 0px)';
+        myDivicons[i].style.marginLeft = '0px';
+        myDivicons[i].style.marginTop = '0px';
+    }
+
+    const linesLayer = $('svg.leaflet-zoom-animated')[0];
+    const linesTransform = linesLayer.style.transform.replace('translate3d(', '').split(',');
+    const linesX = parseFloat(linesTransform[0].replace('px', ''));
+    const linesY = parseFloat(linesTransform[1].replace('px', ''));
+    // linesLayer.style.transform = 'translate3d(' + ((linesX + mapX) / 2) + 'px,' + ((linesY + mapY) / 2) + 'px, 0px)';
+    linesLayer.style.transform = 'translate3d(0px,0px,0px)';
+    linesLayer.style.left = (linesX + mapX) + 'px';
+    linesLayer.style.top = (linesY + mapY) + 'px';
+
+    const options = {
+      useCORS: true,
+     };
+
+    html2canvas(document.getElementById('map'), options).then(function (canvas) {
+      url = canvas.toDataURL('image/png');
+    });
+
+    for (let i = 0; i < myTiles.length; i++) {
+        myTiles[i].style.left = (tilesLeft[i]) + 'px';
+        myTiles[i].style.top = (tilesTop[i]) + 'px';
+    }
+    for (let i = 0; i < myDivicons.length; i++) {
+        myDivicons[i].style.transform = 'translate3d(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
+        myDivicons[i].style.marginLeft = mLeft[i] + 'px';
+        myDivicons[i].style.marginTop = mTop[i] + 'px';
+    }
+    linesLayer.style.left = '0px';
+    linesLayer.style.top = '0px';
+    linesLayer.style.transform = 'translate3d(' + (linesX) + 'px,' + (linesY) + 'px, 0px)';
+    mapPane.style.transform = 'translate3d(' + (mapX) + 'px,' + (mapY) + 'px, 0px)';
+
+    setTimeout(() => {
+      this.eventPublicReportDialogRef = this.dialog.open(EventPublicReportComponent, {
+        minWidth: '40%',
+        data: {
+          event_data: this.eventData,
+          user: this.currentUser,
+          map: url,
+        }
+      });
+
+      this.eventPublicReportDialogRef.afterClosed()
+        .subscribe(
+          () => {
+            // this.refreshEvent();
+          },
+          error => {
+            this.errorMessage = <any>error;
+          }
+        );
+
+    }, 1000);
   }
 
   addEventOrganization(id: string) {
@@ -1163,7 +1286,7 @@ export class EventDetailsComponent implements OnInit {
         },
         error => {
           this.errorMessage = <any>error;
-          this.openSnackBar('Error. Event organzation not deleted. Error message: ' + error, 'OK', 8000);
+          this.openSnackBar('Error. Event organization not deleted. Error message: ' + error, 'OK', 8000);
         }
       );
   }
@@ -1475,6 +1598,4 @@ export class EventDetailsComponent implements OnInit {
     this._eventService.getEventDetailsCSV(this.eventID);
     gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Exported Event Details' });
   }
-
-
 }

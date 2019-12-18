@@ -37,6 +37,8 @@ import { SpeciesService } from '@app/services/species.service';
 import { ConfirmComponent } from '@confirm/confirm.component';
 
 import { SaveSearchComponent } from '@app/save-search/save-search.component';
+import { SearchResultsSummaryReportComponent } from '@app/search-results-summary-report/search-results-summary-report.component';
+
 
 import { User } from '@interfaces/user';
 
@@ -79,6 +81,7 @@ export class HomeComponent implements OnInit {
   private searchQuerySubscription: Subscription;
 
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
+  resultsSummaryReportDialogRef: MatDialogRef<SearchResultsSummaryReportComponent>;
 
   isloggedIn = APP_SETTINGS.IS_LOGGEDIN;
 
@@ -135,6 +138,8 @@ export class HomeComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(SearchResultsSummaryReportComponent) eventReresultsSummaryReportDialogRefportComponent: SearchResultsSummaryReportComponent;
+  
 
   constructor(
     private eventService: EventService,
@@ -1003,6 +1008,38 @@ export class HomeComponent implements OnInit {
   openMetadataLink() {
     window.open(APP_SETTINGS.WHISPERS_METADATA_URL, '_blank');
     gtag('event', 'click', { 'event_category': 'Home', 'event_label': 'Metadata Opened' });
+  }
+  
+
+  //Function for creating a dialog to download results summary report pdf
+  generateResultsSummaryReport(id: string) {
+
+    /**********
+     * 
+     * TODO: Do a check for summaries equal to 0 (ZERO) to send notification to user to try again
+     *
+     * OR DISABLE BUTTON UNTIL AT LEAST ONE EVENT SUMMARY
+     * 
+     * 
+     */
+    
+    this.resultsSummaryReportDialogRef = this.dialog.open(SearchResultsSummaryReportComponent, {
+      data: {
+        user: this.currentUser,
+        current_results: this.currentResults,
+        current_search_query: this.currentSearchQuery
+      }
+    });
+
+    this.resultsSummaryReportDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          // this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
 
   exportEventSummaries() {

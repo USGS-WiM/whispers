@@ -24,6 +24,9 @@
             <i class="material-icons">print</i> Print Event Details</button> -->
           <button mat-raised-button color="primary" class="event-detail-action-button" (click)="exportEventDetails()">
             <i class="material-icons">unarchive</i> Export Event Data</button>
+          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadEventReport()">
+            <i class="material-icons">archive</i> Generate Event Report</button>
+            <!-- <app-event-public-report></app-event-public-report> (click)="eventReportComponent.print()" -->
         </div>
       </div>
 
@@ -1032,7 +1035,7 @@
     <mat-card>
       <div id="map">
 
-        <mat-card class="unmappable-warning"
+        <mat-card class="unmappable-warning" data-html2canvas-ignore
           *ngIf="unMappables.length > 0 && currentUser.username != '' && currentUser.role !== 7"
           matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
           [matTooltipPosition]="'above'">
@@ -1048,7 +1051,7 @@
         </mat-card>
 
 
-        <mat-expansion-panel id="legend" class="legend">
+        <mat-expansion-panel id="legend" class="legend" data-html2canvas-ignore>
           <mat-expansion-panel-header>
             <mat-panel-title>
               Legend

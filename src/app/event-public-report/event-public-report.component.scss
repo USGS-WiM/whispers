@@ -1,0 +1,25 @@
+.natMap {
+    width: 400px;
+    height: 300px;
+}
+
+.detail-section-buttons{
+    display: flex !important;
+    width: 100% !important;
+    justify-content: center;
+
+    button{
+        position: relative;
+        top: -2px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+.mapContainer {
+    display: flex !important;
+    width: 100% !important;
+    justify-content: center;
+}

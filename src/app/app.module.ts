@@ -124,6 +124,11 @@ import { ViewCommentDetailsComponent } from './view-comment-details/view-comment
 import { BrowserWarningComponent } from './browser-warning/browser-warning.component';
 import { BulkUploadComponent } from './bulk-upload/bulk-upload.component';
 import { PapaParseModule } from 'ngx-papaparse';
+import { EventPublicReportComponent } from './event-public-report/event-public-report.component';
+import { SearchResultsSummaryReportComponent } from './search-results-summary-report/search-results-summary-report.component';
+
+
+
 
 @NgModule({
   declarations: [
@@ -171,6 +176,8 @@ import { PapaParseModule } from 'ngx-papaparse';
     ViewCommentDetailsComponent,
     BrowserWarningComponent,
     BulkUploadComponent,
+    EventPublicReportComponent,
+    SearchResultsSummaryReportComponent,
   ],
   imports: [
     BrowserModule,
@@ -282,6 +289,8 @@ import { PapaParseModule } from 'ngx-papaparse';
     UserRegistrationComponent,
     ViewContactDetailsComponent,
     EventGroupManagementComponent,
+    EventPublicReportComponent,
+    SearchResultsSummaryReportComponent,
     CircleManagementComponent,
     CircleChooseComponent,
     DiagnosticInfoComponent,

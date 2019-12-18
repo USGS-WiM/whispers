@@ -2,11 +2,14 @@ import { Component, OnInit, AfterViewInit, ViewChild, Input, Output, EventEmitte
 import { Inject } from '@angular/core';
 import pdfMake from 'pdfmake/build/pdfMake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import * as L from 'leaflet';
+import * as esri from 'esri-leaflet';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { DisplayValuePipe } from '../pipes/display-value.pipe';
+import html2canvas from 'html2canvas';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -31,7 +34,11 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   loadingData = false;
   labs;
   eventLocsPlusDiagnoses;
+  test = [];
   combinedComments;
+  eventLocationSpecies = [];
+  natMap;
+  downloadingReport = false;
 
   // creating variables for field definitions
   eventTypeDefinition = '';
@@ -81,8 +88,30 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-    this.getlocations();
+    const Attr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        // tslint:disable-next-line:max-line-length
+        Url = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+      const streets = L.tileLayer(Url, { id: 'mapbox.streets', attribution: Attr });
+      this.natMap = new L.Map('hiddenNatMap', {
+        center: new L.LatLng(39.8283, -98.5795),
+        zoomControl: false,
+        zoom: 3,
+        layers: [streets]
+      });
 
+      this.natMap.dragging.disable();
+      this.natMap.touchZoom.disable();
+      this.natMap.doubleClickZoom.disable();
+      this.natMap.scrollWheelZoom.disable();
+
+    // Displays county image if needed
+    /* const countyPreview = this.data.map;
+    document.getElementById('countyPreview').src = countyPreview; */
+    if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
+      this.getlocations();
+    }
     // get comment types from the commentTypes service
     this.commentTypeService.getCommentTypes()
       .subscribe(
@@ -134,21 +163,24 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       context.drawImage(base_image, 5, 5, 300, 80);
     };
     this.pngURL = this.canvas.toDataURL();
-    setTimeout(() => {
-      this.loadingData = false;
-      this.combinedComments = this.data.event_data.combined_comments;
-      for (const comment of this.combinedComments) {
-        // set the comment type string for each comment
-        comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
-        // set the source string for each comment
-        comment.source = this.eventLocationName(comment);
-      }
-    }, 1000);
 
+    if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
+      setTimeout(() => {
+        this.combinedComments = this.data.event_data.combined_comments;
+        for (const comment of this.combinedComments) {
+          // set the comment type string for each comment
+          comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
+          // set the source string for each comment
+          comment.source = this.eventLocationName(comment);
+        }
+      }, 1000);
+    }
   }
 
   ngAfterViewInit() {
-
+    setTimeout(() => {
+      this.loadingData = false;
+    }, 1001);
   }
 
   getlocations() {
@@ -563,10 +595,93 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
 
   downloadEventReport() {
+    this.downloadingReport = true;
+
     // google analytics event
     gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Downloaded Event Report' });
-    const whispersLogo = 'src/app/event-public-report/logo.png'; // TODO: move photo to more appropriate location
+      let natMapUrl;
+      const mapPane = $('.leaflet-map-pane')[0];
+      const mapTransform = mapPane.style.transform.replace('translate3d(', '').split(',');
+      const mapX = parseFloat(mapTransform[0].replace('px', ''));
+      const mapY = parseFloat(mapTransform[1].replace('px', ''));
+      mapPane.style.transform = 'translate3d(0px,0px,0px)';
 
+      const myTiles = $('img.leaflet-tile');
+      const tilesLeft = [];
+      const tilesRight = [];
+      const tilesTop = [];
+      const tileMethod = [];
+      for (let i = 0; i < myTiles.length; i++) {
+        if (myTiles[i].style.left !== '') {
+          tilesLeft.push(parseFloat(myTiles[i].style.left.replace('px', '')));
+          tilesTop.push(parseFloat(myTiles[i].style.top.replace('px', '')));
+          tileMethod[i] = 'left';
+        } else if (myTiles[i].style.transform !== '') {
+          const tileTransform = myTiles[i].style.transform.split(',');
+          tilesLeft[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
+          tilesTop[i] = parseFloat(tileTransform[1].replace('px', ''));
+          myTiles[i].style.transform = '';
+          tileMethod[i] = 'transform';
+        } else {
+          tilesLeft[i] = 0;
+          tilesRight[i] = 0;
+          tileMethod[i] = 'neither';
+        }
+        myTiles[i].style.left = (tilesLeft[i]) + 'px';
+        myTiles[i].style.top = (tilesTop[i]) + 'px';
+      }
+      console.log(myTiles);
+
+      const myDivicons = $('.leaflet-marker-icon');
+      const dx = [];
+      const dy = [];
+      const mLeft = [];
+      const mTop = [];
+      for (let i = 0; i < myDivicons.length; i++) {
+        mLeft.push(parseFloat(myDivicons[i].style.marginLeft.replace('px', '')));
+        mTop.push(parseFloat(myDivicons[i].style.marginTop.replace('px', '')));
+        const curTransform = myDivicons[i].style.transform;
+        const splitTransform = curTransform.replace('translate3d(', '').split(',');
+        dx.push(parseFloat(splitTransform[0].replace('px', '')));
+        dy.push(parseFloat(splitTransform[1].replace('px', '')));
+        myDivicons[i].style.transform = 'translate3d(' + (dx[i] + mLeft[i] + mapX) + 'px, ' + (dy[i] + mTop[i] + mapY) + 'px, 0px)';
+        myDivicons[i].style.marginLeft = '0px';
+        myDivicons[i].style.marginTop = '0px';
+      }
+
+      const linesLayer = $('svg.leaflet-zoom-animated')[0];
+      const linesTransform = linesLayer.style.transform.replace('translate3d(', '').split(',');
+      const linesX = parseFloat(linesTransform[0].replace('px', ''));
+      const linesY = parseFloat(linesTransform[1].replace('px', ''));
+      // linesLayer.style.transform = 'translate3d(' + ((linesX + mapX) / 2) + 'px,' + ((linesY + mapY) / 2) + 'px, 0px)';
+      linesLayer.style.transform = 'translate3d(0px,0px,0px)';
+      linesLayer.style.left = (linesX + mapX) + 'px';
+      linesLayer.style.top = (linesY + mapY) + 'px';
+
+      const options = {
+        useCORS: true,
+      };
+
+      html2canvas(document.getElementById('hiddenNatMap'), options).then(function (canvas) {
+        natMapUrl = canvas.toDataURL('image/png');
+      });
+
+      for (let i = 0; i < myTiles.length; i++) {
+        myTiles[i].style.left = (tilesLeft[i]) + 'px';
+        myTiles[i].style.top = (tilesTop[i]) + 'px';
+      }
+      for (let i = 0; i < myDivicons.length; i++) {
+        myDivicons[i].style.transform = 'translate3d(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
+        myDivicons[i].style.marginLeft = mLeft[i] + 'px';
+        myDivicons[i].style.marginTop = mTop[i] + 'px';
+      }
+      linesLayer.style.left = '0px';
+      linesLayer.style.top = '0px';
+      linesLayer.style.transform = 'translate3d(' + (linesX) + 'px,' + (linesY) + 'px, 0px)';
+      mapPane.style.transform = 'translate3d(' + (mapX) + 'px,' + (mapY) + 'px, 0px)';
+
+    // need to give some time for html2canvas to finish rendering
+    setTimeout(() => {
     // Getting date/time for timestamp
     const date = APP_UTILITIES.getDateTime;
 
@@ -733,6 +848,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.pngURL = this.canvas.toDataURL();
     console.log(this.pngURL);
     console.log(this.data.map);
+    console.log(natMapUrl);
 
     // printing user's info
     const nameOrgString = this.data.user.first_name + ' ' + this.data.user.last_name + ' (' + this.data.user.organization_string + ')';
@@ -748,14 +864,56 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       eventLocNum = eventLocNum + 1;
       speciesDiag = [];
       for (const locationspecies of event_location.locationspecies) {
+        if (locationspecies.speciesdiagnoses.length === 0) {
+          let captive = locationspecies.captive;
+          // pdfmake does not like 'undefined' values so setting them to empty string
+          const pop = locationspecies.population_count || ' ';
+          const ksick = locationspecies.sick_count || ' ';
+          const kdead = locationspecies.dead_count || ' ';
+          const esick = locationspecies.sick_count_estimated || ' ';
+          const edead = locationspecies.dead_count_estimated || ' ';
+          const sdate = event_location.start_date || 'N/A';
+          const edate = event_location.end_date || 'N/A';
+          captive = 'Yes' || 'No';
+          const s_diag =  ' ';
+          const county = ' ';
+          const lab = ' '; // TODO make this display all the labs if there are more than one
+
+          let locationName;
+
+          if (event_location.name === '' || event_location.name === undefined) {
+            locationName = 'Location ' + eventLocNum;
+          } else {
+            locationName = 'Location ' + eventLocNum + ' - ' + event_location.name;
+          }
+
+          speciesDiag.push({
+            species: locationspecies.species_string,
+            population: pop,
+            known_sick: ksick,
+            known_dead: kdead,
+            est_sick: esick,
+            est_dead: edead,
+            captive: captive,
+            species_dia: 'Not Assessed',
+            count: ' ',
+            lab: lab,
+            county: county,
+            state: locationspecies.administrative_level_one_string,
+            country: locationspecies.country_string,
+            sdate: sdate,
+            edate: edate,
+            name: locationName,
+          });
+        }
         for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
           const numAssess = speciesdiagnosis.tested_count + '/' + speciesdiagnosis.diagnosis_count;
           let captive = locationspecies.captive;
 
           // pdfmake does not like 'undefined' values so setting them to empty string
           const pop = locationspecies.population_count || ' ';
-          const ksick = locationspecies.known_sick || ' ';
-          const kdead = locationspecies.known_dead || ' ';
+          const ksick = locationspecies.sick_count || ' ';
+          const kdead = locationspecies.dead_count || ' ';
           const esick = locationspecies.sick_count_estimated || ' ';
           const edead = locationspecies.dead_count_estimated || ' ';
           const sdate = event_location.start_date || 'N/A';
@@ -772,7 +930,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           } else {
             locationName = 'Location ' + eventLocNum + ' - ' + event_location.name;
           }
-
           speciesDiag.push({
             species: locationspecies.species_string,
             population: pop,
@@ -798,15 +955,27 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         // locationSpecies.push(speciesDiag);locationSpecies.push(speciesDiag);
 
       }
-     /*  if (speciesDiag.length > 0) {
-        
-      } */
+      /*  if (speciesDiag.length > 0) {
+       } */
       this.eventLocsPlusDiagnoses.push(speciesDiag);
     }
 
-    // check for user role so that we show them the right report
-    if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
+    /* for (const event_location of this.data.event_data.eventlocations) {
+      for (const locationspecies of event_location.locationspecies) {
+        locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
+        locationspecies.administrative_level_one_string = event_location.administrative_level_one_string;
+        locationspecies.country_string = event_location.country_string;
+        this.eventLocationSpecies.push(locationspecies);
 
+        for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+          this.test.push(speciesdiagnosis);
+          }
+        }
+    } */
+
+    console.log(this.test);
+
+    // check for user role so that we show them the right report
       const docDefinition = {
         pageOrientation: 'landscape',
         pageMargins: [20, 20, 20, 35],
@@ -881,8 +1050,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                   [
                     {
                       alignment: 'right',
-                      image: this.data.map,
-                      width: 200,
+                      image: natMapUrl,
+                      width: 300,
                       height: 200,
                     },
                     {
@@ -903,7 +1072,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         ],
         images: {
           logo: this.pngURL,
-          map: this.data.map
+          map: this.data.map,
+          nationalMap: natMapUrl
         },
         styles: {
           header: {
@@ -937,152 +1107,25 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         docDefinition.content.push(this.makeLocationTable(loc));
       }
 
-      docDefinition.content.push(this.makeCommentsTable());
+      if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
+        docDefinition.content.push(this.makeCommentsTable());
+      }
+
       docDefinition.content.push(this.explanationPageHeader());
       docDefinition.content.push(this.makeExplanationDescription());
       docDefinition.content.push(this.explanationPartOne());
       docDefinition.content.push(this.explanationOneForMoreDetails());
-      docDefinition.content.push(this.explanationPartTwoHeader());
-      docDefinition.content.push(this.explanationPartTwo());
-      docDefinition.content.push(this.explanationTwoForMoreDetails());
+
+      if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
+        docDefinition.content.push(this.explanationPartTwoHeader());
+        docDefinition.content.push(this.explanationPartTwo());
+        docDefinition.content.push(this.explanationTwoForMoreDetails());
+      }
 
       pdfMake.createPdf(docDefinition).download();
-    } else {
-
-      const publicDocDefinition = {
-        pageOrientation: 'landscape',
-        pageMargins: [20, 20, 20, 35],
-        footer: function (currentPage, pageCount) {
-          return {
-            margin: [20, 0, 20, 0],
-            style: 'smallest',
-            columns: [
-              {
-                width: 700,
-                text: ['Report generated by +' + nameOrgString + ' from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about this event, connect with the Contact Organization.\n For more information about WHISPers, see “About” at https://whispers.usgs.gov.'
-                ]
-              },
-              {
-                width: 50,
-                alignment: 'right',
-                text: 'Page ' + currentPage.toString() + ' of ' + pageCount
-              }
-            ]
-          };
-        },
-        content: [
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                image: this.pngURL,
-                width: 400,
-                height: 80
-              },
-              {
-                style: 'header',
-                text: 'Summary of ' + data.event_type_string + ' Event ID ' + data.id,
-                margin: [0, 15, 0, 0]
-              },
-            ]
-          },
-          {
-            // style: 'tableExample',
-            table: {
-              // width: [400, 'auto'],
-              body: [
-                [
-                  {
-                    style: 'smaller',
-                    table: {
-                      widths: [180, 250],
-                      body: [
-                        [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, { text: orgString }],
-                        [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, data.event_status_string],
-                        [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
-                        [{ border: [false, false, false, false], text: 'Summary Info', bold: true, fontSize: 13, margin: [30, 10] }, ' '],
-                        [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
-                        [{ border: [false, false, true, false], text: '# of Locations', bold: true, alignment: 'right' }, locationCount],
-                        [{ border: [false, false, true, false], text: 'County (or Equivalent)', bold: true, alignment: 'right' }, counties],
-                        [{ border: [false, false, true, false], text: 'Event Diagnosis', bold: true, alignment: 'right' }, eventDiagnosises],
-                        [{ border: [false, false, true, false], text: 'Diagnostic Laboratory', bold: true, alignment: 'right' }, this.labs],
-                        [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, data.affected_count],
-                        [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, speciesAffectedCount],
-                        [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, speciesAffected],
-                        [{ border: [false, false, true, false], text: 'Event Start Date - End Date', bold: true, alignment: 'right' }, formattedDate], // TODO: format according to wireframe & Create function to get count of total days event lasted
-                        [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, { text: associatedEvents }], // TODO: Figure out what to do regarding links & Display none if there are none {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}
-                        [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, eventVisibility]
-                      ],
-                    },
-                    layout: {
-                      defaultBorder: false,
-                      paddingLeft: function (i, node) { return 15; },
-                      paddingRight: function (i, node) { return 10; },
-                    },
-                  },
-                  [
-                    {
-                      alignment: 'right',
-                      image: this.data.map,
-                      width: 200,
-                      height: 200,
-                    },
-                    {
-                      text: ' \n\n'
-                    },
-                    {
-                      alignment: 'right',
-                      image: this.data.map,
-                      width: 200,
-                      height: 200,
-                    },
-                  ],
-                ],
-              ],
-            },
-            layout: 'noBorders'
-          },
-        ],
-        images: {
-          logo: this.pngURL,
-          map: this.data.map
-        },
-        styles: {
-          header: {
-            fontSize: 16,
-            bold: true
-          },
-          bigger: {
-            fontSize: 18,
-            bold: true
-          },
-          smaller: {
-            fontSize: 10
-          },
-          smallest: {
-            fontSize: 8
-          },
-          definitionsTable: {
-            fontSize: 9
-          }
-        },
-        defaultStyle: {
-          columnGap: 20
-        }
-      };
-      for (const loc of this.eventLocsPlusDiagnoses) {
-        publicDocDefinition.content.push(this.makeHeader());
-        publicDocDefinition.content.push(this.makeTitle(loc[0]));
-        publicDocDefinition.content.push(this.makeHorizontalLine());
-        publicDocDefinition.content.push(this.makeLocationTable(loc));
-      }
-      publicDocDefinition.content.push(this.explanationPageHeader());
-      publicDocDefinition.content.push(this.makeExplanationDescription());
-      publicDocDefinition.content.push(this.explanationPartOne());
-      publicDocDefinition.content.push(this.explanationOneForMoreDetails());
-
-      pdfMake.createPdf(publicDocDefinition).download();
-    }
+      this.downloadingReport = false;
+      this.eventPublicReportDialogRef.close();
+  }, 4000);
   }
 
 }

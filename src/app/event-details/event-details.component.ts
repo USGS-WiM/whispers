@@ -512,12 +512,12 @@ export class EventDetailsComponent implements OnInit {
         'Land Use': landUse
       }
 
-      //const x = { position: 'topleft'};
+      // const x = { position: 'topleft'};
 
       L.control.layers(baseMaps, overlays, { position: 'topleft' }).addTo(this.map);
       L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
-      //L.control.layers(baseMaps).addTo(this.map);
+      // L.control.layers(baseMaps).addTo(this.map);
 
       this.mapEvent(this.eventData);
 
@@ -538,6 +538,11 @@ export class EventDetailsComponent implements OnInit {
           this.watershedsVisible = false;
         }
       });
+      /* this.natMap = new L.Map('hiddenNatMap', {
+        center: new L.LatLng(39.8283, -98.5795),
+        zoom: 4,
+        layers: [streets]
+      }); */
     }, 3000);
   }
 
@@ -769,7 +774,6 @@ export class EventDetailsComponent implements OnInit {
 
     const options = {
       useCORS: true,
-      ignoreElements: (leafletControls) => false,
      };
 
     html2canvas(document.getElementById('map'), options).then(function (canvas) {
@@ -789,32 +793,14 @@ export class EventDetailsComponent implements OnInit {
     linesLayer.style.top = '0px';
     linesLayer.style.transform = 'translate3d(' + (linesX) + 'px,' + (linesY) + 'px, 0px)';
     mapPane.style.transform = 'translate3d(' + (mapX) + 'px,' + (mapY) + 'px, 0px)';
-    // Open dialog for adding event diagnosis
-
-    /* leafletEasyPrint({
-      export: event
-    }); */
-
-    // leafletEasyPrint.printMap('');
-    /* (L as any).easyPrint({
-      title: 'My awesome print button',
-      position: 'bottomleft',
-      sizeModes: ['A4Portrait', 'A4Landscape'],
-      outputMode: event,
-      exportOnly: true
-  }).addTo(this.map); */
-
-    // this doesn't work.
-    /* this.map.on('easyPrint-finished', e => {
-      console.log(e.event);
-    }), */
 
     setTimeout(() => {
       this.eventPublicReportDialogRef = this.dialog.open(EventPublicReportComponent, {
+        minWidth: '40%',
         data: {
-          user: this.currentUser,
           event_data: this.eventData,
-          map: url
+          user: this.currentUser,
+          map: url,
         }
       });
 
@@ -828,7 +814,7 @@ export class EventDetailsComponent implements OnInit {
           }
         );
 
-    }, 3000);
+    }, 1000);
   }
 
   addEventOrganization(id: string) {

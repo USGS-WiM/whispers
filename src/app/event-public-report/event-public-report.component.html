@@ -2,10 +2,6 @@
     <i class="material-icons">archive</i> Generate Event Report
 </h1>
 <mat-dialog-content>
-    <span *ngIf="loadingData">
-        <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
-        <span>Generating report...</span>
-    </span>
     <div>
         <h4>Geographic context:</h4>
         <div class="mapContainer">
@@ -31,5 +27,5 @@
 
     </div>
 
-    <mat-progress-bar mode="indeterminate" *ngIf="downloadingReport"></mat-progress-bar>
+    <mat-progress-bar mode="indeterminate" *ngIf="downloadingReport || loadingData"></mat-progress-bar>
 </mat-dialog-actions>

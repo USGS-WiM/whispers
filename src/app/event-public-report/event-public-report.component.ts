@@ -17,6 +17,7 @@ import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 import { Comment } from '@interfaces/comment';
 import { CommentService } from '@services/comment.service';
 import { CommentTypeService } from '@app/services/comment-type.service';
+import { EventService } from '@app/services/event.service';
 import { CommentType } from '@interfaces/comment-type';
 import { EventDetail } from '@interfaces/event-detail';
 import { Title } from '@angular/platform-browser';
@@ -39,6 +40,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   eventLocationSpecies = [];
   natMap;
   downloadingReport = false;
+  natMapPoints;
+  icon;
 
   // creating variables for field definitions
   eventTypeDefinition = '';
@@ -82,11 +85,19 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     public eventPublicReportDialogRef: MatDialogRef<EventPublicReportComponent>,
     private displayValuePipe: DisplayValuePipe,
     private commentTypeService: CommentTypeService,
+    public eventService: EventService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
   }
 
   ngOnInit() {
+
+    this.eventService.getEventSummary(this.data.event_data.id)
+    .subscribe(
+      (eventsummary) => {
+        this.natMapPoints = eventsummary;
+      }
+    );
 
     const Attr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
         '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -105,6 +116,11 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       this.natMap.touchZoom.disable();
       this.natMap.doubleClickZoom.disable();
       this.natMap.scrollWheelZoom.disable();
+
+      // Actual request to event details service, using id
+      setTimeout(() => {
+        this.MapResults(this.natMapPoints);
+      }, 550);
 
     // Displays county image if needed
     /* const countyPreview = this.data.map;
@@ -195,6 +211,24 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.locationIdArray = this.locationIdArray.filter((v, i, a) => a.findIndex(t => (t.object_id === v.object_id)) === i);
   }
 
+  MapResults(natMapPoints) {
+    setTimeout(() => {
+      const currentResultsMarkers = [];
+
+    currentResultsMarkers.push({
+      lat: Number(natMapPoints['administrativeleveltwos'][0]['centroid_latitude']),
+      long: Number(natMapPoints['administrativeleveltwos'][0]['centroid_longitude'])
+    });
+    this.icon = L.divIcon({
+      className: 'wmm-circle wmm-blue wmm-icon-circle wmm-icon-blue wmm-size-20'
+    });
+
+    L.marker([currentResultsMarkers[0].lat, currentResultsMarkers[0].long], {icon: this.icon}).addTo(this.natMap);
+    }, 600);
+
+  }
+
+  // code for workaround for slanted text in pdfmake table. Not being used currently
   writeRotatedText = function (text) {
     let ctx;
     const canvas = document.createElement('canvas');
@@ -288,7 +322,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     table = { /// item 4 in docDef
       alignment: 'justify',
       table: {
-        headerRows: 2,
+        headerRows: 1,
+        dontBreakRows: true,
         body: locationBody,
       },
       layout: {
@@ -297,7 +332,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         },
         vLineColor: function (i, node) {
           return (i === 0 || i === node.table.widths.length) ? 'lightgray' : 'lightgray';
-        },
+        }
       },
       pageBreak: 'after'
     };
@@ -353,7 +388,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   makeHorizontalLine() {
     let line;
     line = {
-      canvas: [{ type: 'line', x1: 0, y1: 5, x2: 785 - 2 * 10, y2: 5, lineWidth: 1 }]
+      canvas: [{ type: 'line', x1: 0, y1: 5, x2: 790 - 2 * 10, y2: 5, lineWidth: 1 }]
     };
     return line;
   }
@@ -365,12 +400,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     // START defining comment table
     const commentHeaders = {
       commentHeaders: {
-        col_1: { text: 'Comments', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
-        col_2: { text: 'Comment Type', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
-        col_3: { text: 'Created Date', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
-        col_4: { text: 'User', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
-        col_5: { text: 'Organization', border: [false, false, true, true], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
-        col_6: { text: 'Comment Source', border: [false, false, false, false], style: 'tableHeader', alignment: 'center', margin: [0, 8, 0, 0] },
+        col_1: { text: 'Comments', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_2: { text: 'Comment Type', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_3: { text: 'Created Date', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_4: { text: 'User', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_5: { text: 'Organization', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_6: { text: 'Comment Source', border: [false, false, false, false], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
       }
     };
 
@@ -415,7 +450,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       alignment: 'justify',
       table: {
         heights: 40,
-        headerRows: 2,
+        headerRows: 1,
+        dontBreakRows: true,
         body: commentBody,
       },
       layout: {
@@ -949,31 +985,10 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             name: locationName,
           });
         }
-
-        // checking to see if there is a species diagnosis for this location
-
-        // locationSpecies.push(speciesDiag);locationSpecies.push(speciesDiag);
-
       }
-      /*  if (speciesDiag.length > 0) {
-       } */
       this.eventLocsPlusDiagnoses.push(speciesDiag);
     }
 
-    /* for (const event_location of this.data.event_data.eventlocations) {
-      for (const locationspecies of event_location.locationspecies) {
-        locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
-        locationspecies.administrative_level_one_string = event_location.administrative_level_one_string;
-        locationspecies.country_string = event_location.country_string;
-        this.eventLocationSpecies.push(locationspecies);
-
-        for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
-          this.test.push(speciesdiagnosis);
-          }
-        }
-    } */
-
-    console.log(this.test);
 
     // check for user role so that we show them the right report
       const docDefinition = {
@@ -1027,7 +1042,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                         [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, { text: orgString }],
                         [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, data.event_status_string],
                         [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
-                        [{ border: [false, false, false, false], text: 'Summary Info', bold: true, fontSize: 13, margin: [30, 10] }, ' '],
+                        [{ border: [false, false, false, false], text: 'Summary Info', bold: true, fontSize: 14, margin: [30, 10] }, ' '],
                         [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
                         [{ border: [false, false, true, false], text: '# of Locations', bold: true, alignment: 'right' }, locationCount],
                         [{ border: [false, false, true, false], text: 'County (or Equivalent)', bold: true, alignment: 'right' }, counties],
@@ -1049,16 +1064,16 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                   },
                   [
                     {
-                      alignment: 'right',
+                      alignment: 'center',
                       image: natMapUrl,
                       width: 300,
-                      height: 200,
+                      height: 200
                     },
                     {
                       text: ' \n\n'
                     },
                     {
-                      alignment: 'right',
+                      alignment: 'center',
                       image: this.data.map,
                       width: 200,
                       height: 200,

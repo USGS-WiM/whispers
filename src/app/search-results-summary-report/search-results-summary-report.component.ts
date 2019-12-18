@@ -11,6 +11,9 @@ import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
+import { CountryService } from '@app/services/country.service';
+import { OrganizationService } from '@app/services/organization.service';
+
 import { EventDetail } from '@interfaces/event-detail';
 declare let gtag: Function;
 
@@ -21,12 +24,19 @@ declare let gtag: Function;
 })
 
 export class SearchResultsSummaryReportComponent implements OnInit {
-  
+
+  errorMessage: string;
+
   canvas = document.createElement('canvas');
   loadingData = false;
 
+  countries = [];
+  orgs = [];
+
   constructor(
     public resultsSummaryReportCompenent: MatDialogRef<SearchResultsSummaryReportComponent>,
+    private countryService: CountryService,
+    private organizationService: OrganizationService,
     @Inject(MAT_DIALOG_DATA) public data: any) { 
   }
 
@@ -41,6 +51,28 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     base_image.onload = function () {
       context.drawImage(base_image, 5, 5, 300, 80);
     };
+
+    this.countryService.getCountries()
+      .subscribe(
+        (countries) => {
+          this.countries = countries
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    this.organizationService.getOrganizations()
+      .subscribe(
+        (organizations) => {
+          this.orgs = organizations
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
     setTimeout(() => {
       this.loadingData = false;
@@ -85,40 +117,68 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       }
     }
 
-    //const rows = data;
-
-    let locationCells = ['cell', 'cell', 'cell', 'cell', 'cell', 'cell', 'cell', 'cell', 'cell'];
-
     // pushing data into the rows
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
         const elData = data[key];
         const row = new Array();
+        console.log(elData.id);
         row.push(elData.id);
         row.push(elData.start_date + " to " + elData.end_date);
         let adminLevelTwoCell = new Array();
         for (let key in elData.administrativeleveltwos) {
-          adminLevelTwoCell.push(elData.administrativeleveltwos[key].name + ", " + this.getAdminLevelOneAbbrev(elData, elData.administrativeleveltwos[key].administrative_level_one) + ", " + elData.administrativeleveltwos[key].country_string + ";\n");
+          let countryAbbrev;
+          for (let countryKey in this.countries) {
+            if (this.countries[countryKey].id == elData.administrativeleveltwos[key].country) {
+              countryAbbrev = this.countries[countryKey].abbreviation;
+            }
+          }
+          adminLevelTwoCell.push({text: elData.administrativeleveltwos[key].name + ", " + this.getAdminLevelOneAbbrev(elData, elData.administrativeleveltwos[key].administrative_level_one) + ", " + countryAbbrev + ";\n", 
+                                  alignment: 'left'});
         }
         row.push(adminLevelTwoCell);
-        row.push(elData.eventdiagnoses[0].diagnosis_string);
+        let eventDiagnosesCell = new Array();
+        if (elData.eventdiagnoses) {
+          for (let key in elData.eventdiagnoses) {
+            eventDiagnosesCell.push(elData.eventdiagnoses[key].diagnosis_string + "\n");
+          }
+        } else {
+          eventDiagnosesCell.push("");
+        }
+        row.push(eventDiagnosesCell);
         row.push(elData.affected_count);
         let speciesCell = new Array();
         for (let key in elData.species) {
-          speciesCell.push(elData.species[key].name + ",\n");
+          if (Number(key) == elData.species.length - 1) {
+            speciesCell.push(elData.species[key].name);
+          } else {
+            speciesCell.push(elData.species[key].name + ",\n");
+          }
         }
         row.push(speciesCell);
         row.push(elData.event_status_string);
         //TODO: need to come back and fix this. it's a number. Maybe need to have organization_string added to event? Or maybe just use organization service
         if (elData.organizations) {
-          row.push(elData.organizations[0].toString());
+          
+          //row.push(elData.organizations[0].toString());
         } else {
-          row.push('');
+          //row.push('');
         }
+        let orgCell = new Array();
+        for (let key in elData.organizations) {
+          let organization;
+          for (let orgKey in this.orgs) {
+            if (this.orgs[orgKey].id == elData.organizations[key]) {
+              organization = this.orgs[orgKey].name;
+            }
+          }
+          orgCell.push({text: organization + "\n", alignment: 'left'});
+        }
+        row.push(orgCell);
         if (elData.public) {
-          row.push(elData.public.toString());
+          row.push("Visible to the public");
         } else {
-          row.push('');
+          row.push("NOT VISIBLE TO THE PUBLIC");
         }
         locationBody.push(row);
       }
@@ -128,7 +188,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     table = { 
       alignment: 'justify',
       table: {
-        headerRows: 2,
+        headerRows: 1,
         body: locationBody,
       },
       layout: {

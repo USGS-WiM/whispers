@@ -93,34 +93,43 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
     this.eventService.getEventSummary(this.data.event_data.id)
-    .subscribe(
-      (eventsummary) => {
-        this.natMapPoints = eventsummary;
-      }
-    );
+      .subscribe(
+        (eventsummary) => {
+          this.natMapPoints = eventsummary;
+        }
+      );
 
     const Attr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        // tslint:disable-next-line:max-line-length
-        Url = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
-      const streets = L.tileLayer(Url, { id: 'mapbox.streets', attribution: Attr });
-      this.natMap = new L.Map('hiddenNatMap', {
-        center: new L.LatLng(39.8283, -98.5795),
-        zoomControl: false,
-        zoom: 3,
-        layers: [streets]
+      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      // tslint:disable-next-line:max-line-length
+      Url = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+    const streets = L.tileLayer(Url, { id: 'mapbox.streets', attribution: Attr });
+    this.natMap = new L.Map('hiddenNatMap', {
+      center: new L.LatLng(39.8283, -98.5795),
+      zoomControl: false,
+      zoom: 3,
+      layers: [streets]
+    });
+
+    setTimeout(() => {
+      const view = [];
+      view.push({
+        lat: Number(this.natMapPoints['administrativeleveltwos'][0]['centroid_latitude']),
+        long: Number(this.natMapPoints['administrativeleveltwos'][0]['centroid_longitude'])
       });
+      this.natMap.setView([view[0].lat, view[0].long]);
+    }, 200);
 
-      this.natMap.dragging.disable();
-      this.natMap.touchZoom.disable();
-      this.natMap.doubleClickZoom.disable();
-      this.natMap.scrollWheelZoom.disable();
+    this.natMap.dragging.disable();
+    this.natMap.touchZoom.disable();
+    this.natMap.doubleClickZoom.disable();
+    this.natMap.scrollWheelZoom.disable();
 
-      // Actual request to event details service, using id
-      setTimeout(() => {
-        this.MapResults(this.natMapPoints);
-      }, 550);
+    // mapping the event centroid for the national map
+    setTimeout(() => {
+      this.MapResults(this.natMapPoints);
+    }, 550);
 
     // Displays county image if needed
     /* const countyPreview = this.data.map;
@@ -215,17 +224,16 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       const currentResultsMarkers = [];
 
-    currentResultsMarkers.push({
-      lat: Number(natMapPoints['administrativeleveltwos'][0]['centroid_latitude']),
-      long: Number(natMapPoints['administrativeleveltwos'][0]['centroid_longitude'])
-    });
-    this.icon = L.divIcon({
-      className: 'wmm-circle wmm-blue wmm-icon-circle wmm-icon-blue wmm-size-20'
-    });
+      currentResultsMarkers.push({
+        lat: Number(natMapPoints['administrativeleveltwos'][0]['centroid_latitude']),
+        long: Number(natMapPoints['administrativeleveltwos'][0]['centroid_longitude'])
+      });
+      this.icon = L.divIcon({
+        className: 'wmm-circle wmm-blue wmm-icon-circle wmm-icon-blue wmm-size-20'
+      });
 
-    L.marker([currentResultsMarkers[0].lat, currentResultsMarkers[0].long], {icon: this.icon}).addTo(this.natMap);
+      L.marker([currentResultsMarkers[0].lat, currentResultsMarkers[0].long], { icon: this.icon }).addTo(this.natMap);
     }, 600);
-
   }
 
   // code for workaround for slanted text in pdfmake table. Not being used currently
@@ -638,353 +646,382 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     // using html2Canvas to capture leaflet map for reports
     // solution found here: https://github.com/niklasvh/html2canvas/issues/567
-      let natMapUrl;
-      const mapPane = $('.leaflet-map-pane')[0];
-      const mapTransform = mapPane.style.transform.replace('translate3d(', '').split(',');
-      const mapX = parseFloat(mapTransform[0].replace('px', ''));
-      const mapY = parseFloat(mapTransform[1].replace('px', ''));
-      mapPane.style.transform = 'translate3d(0px,0px,0px)';
+    let natMapUrl;
+    const mapPane = $('.leaflet-map-pane')[0];
+    const mapTransform = mapPane.style.transform.split(',');
+    const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
+    const mapY = parseFloat(mapTransform[1].replace('px', ''));
+    mapPane.style.transform = '';
+    mapPane.style.left = mapX + 'px';
+    mapPane.style.top = mapY + 'px';
 
-      const myTiles = $('img.leaflet-tile');
-      const tilesLeft = [];
-      const tilesRight = [];
-      const tilesTop = [];
-      const tileMethod = [];
-      for (let i = 0; i < myTiles.length; i++) {
-        if (myTiles[i].style.left !== '') {
-          tilesLeft.push(parseFloat(myTiles[i].style.left.replace('px', '')));
-          tilesTop.push(parseFloat(myTiles[i].style.top.replace('px', '')));
-          tileMethod[i] = 'left';
-        } else if (myTiles[i].style.transform !== '') {
-          const tileTransform = myTiles[i].style.transform.split(',');
-          tilesLeft[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
-          tilesTop[i] = parseFloat(tileTransform[1].replace('px', ''));
-          myTiles[i].style.transform = '';
-          tileMethod[i] = 'transform';
-        } else {
-          tilesLeft[i] = 0;
-          tilesRight[i] = 0;
-          tileMethod[i] = 'neither';
-        }
-        myTiles[i].style.left = (tilesLeft[i]) + 'px';
-        myTiles[i].style.top = (tilesTop[i]) + 'px';
+    const myTiles = $('img.leaflet-tile');
+    const tilesLeft = [];
+    const tilesTop = [];
+    const tileMethod = [];
+    for (let i = 0; i < myTiles.length; i++) {
+      if (myTiles[i].style.left !== '') {
+        tilesLeft.push(parseFloat(myTiles[i].style.left.replace('px', '')));
+        tilesTop.push(parseFloat(myTiles[i].style.top.replace('px', '')));
+        tileMethod[i] = 'left';
+      } else if (myTiles[i].style.transform !== '') {
+        const tileTransform = myTiles[i].style.transform.split(',');
+        tilesLeft[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
+        tilesTop[i] = parseFloat(tileTransform[1].replace('px', ''));
+        myTiles[i].style.transform = '';
+        tileMethod[i] = 'transform';
+      } else {
+        tilesLeft[i] = 0;
+        // tilesRight[i] = 0;
+        tileMethod[i] = 'neither';
       }
-      console.log(myTiles);
-
-      const myDivicons = $('.leaflet-marker-icon');
-      const dx = [];
-      const dy = [];
-      const mLeft = [];
-      const mTop = [];
-      for (let i = 0; i < myDivicons.length; i++) {
-        const curTransform = myDivicons[i].style.transform;
-        const splitTransform = curTransform.split(',');
-        dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
-        dy.push(parseFloat(splitTransform[1].replace('px', '')));
-        myDivicons[i].style.transform = '';
-        myDivicons[i].style.left = dx[i] + 'px';
-        myDivicons[i].style.top = dy[i] + 'px';
+      myTiles[i].style.left = (tilesLeft[i]) + 'px';
+      myTiles[i].style.top = (tilesTop[i]) + 'px';
     }
 
-      const options = {
-        useCORS: true,
-      };
+    const myDivicons = $('.leaflet-marker-icon');
+    const dx = [];
+    const dy = [];
+    const mLeft = [];
+    const mTop = [];
+    for (let i = 0; i < myDivicons.length; i++) {
+      const curTransform = myDivicons[i].style.transform;
+      const splitTransform = curTransform.split(',');
+      dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
+      dy.push(parseFloat(splitTransform[1].replace('px', '')));
+      myDivicons[i].style.transform = '';
+      myDivicons[i].style.left = dx[i] + 'px';
+      myDivicons[i].style.top = dy[i] + 'px';
+    }
 
-      html2canvas(document.getElementById('hiddenNatMap'), options).then(function (canvas) {
-        natMapUrl = canvas.toDataURL('image/png');
-      });
+    const mapWidth = parseFloat($('#map').css('width').replace('px', ''));
+    const mapHeight = parseFloat($('#map').css('height').replace('px', ''));
 
-      for (let i = 0; i < myTiles.length; i++) {
+    const linesLayer = $('svg.leaflet-zoom-animated')[0];
+    const oldLinesWidth = linesLayer.getAttribute('width');
+    const oldLinesHeight = linesLayer.getAttribute('height');
+    const oldViewbox = linesLayer.getAttribute('viewBox');
+    linesLayer.setAttribute('width', mapWidth.toString());
+    linesLayer.setAttribute('height', mapHeight.toString());
+    linesLayer.setAttribute('viewBox', '0 0 ' + mapWidth + ' ' + mapHeight);
+    const linesTransform = linesLayer.style.transform.split(',');
+    const linesX = parseFloat(linesTransform[0].split('(')[1].replace('px', ''));
+    const linesY = parseFloat(linesTransform[1].replace('px', ''));
+    linesLayer.style.transform = '';
+    linesLayer.style.left = '';
+    linesLayer.style.top = '';
+
+    const options = {
+      useCORS: true,
+    };
+
+    html2canvas(document.getElementById('hiddenNatMap'), options).then(function (canvas) {
+      natMapUrl = canvas.toDataURL('image/png');
+    });
+
+    for (let i = 0; i < myTiles.length; i++) {
+      if (tileMethod[i] === 'left') {
         myTiles[i].style.left = (tilesLeft[i]) + 'px';
         myTiles[i].style.top = (tilesTop[i]) + 'px';
+      } else if (tileMethod[i] === 'transform') {
+        myTiles[i].style.left = '';
+        myTiles[i].style.top = '';
+        myTiles[i].style.transform = 'translate(' + tilesLeft[i] + 'px, ' + tilesTop[i] + 'px)';
+      } else {
+        myTiles[i].style.left = '0px';
+        myTiles[i].style.top = '0px';
+        myTiles[i].style.transform = 'translate(0px, 0px)';
       }
-      for (let i = 0; i < myDivicons.length; i++) {
-        myDivicons[i].style.transform = 'translate(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
-        myDivicons[i].style.marginLeft = mLeft[i] + 'px';
-        myDivicons[i].style.marginTop = mTop[i] + 'px';
-      }
-
-      /* linesLayer.style.left = '0px';
-      linesLayer.style.top = '0px';
-      linesLayer.style.transform = 'translate3d(' + (linesX) + 'px,' + (linesY) + 'px, 0px)';
-      mapPane.style.transform = 'translate3d(' + (mapX) + 'px,' + (mapY) + 'px, 0px)'; */
-      console.log(myDivicons);
+    }
+    for (let i = 0; i < myDivicons.length; i++) {
+      myDivicons[i].style.transform = 'translate(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
+      myDivicons[i].style.marginLeft = mLeft[i] + 'px';
+      myDivicons[i].style.marginTop = mTop[i] + 'px';
+    }
+    linesLayer.style.transform = 'translate(' + (linesX) + 'px,' + (linesY) + 'px)';
+    linesLayer.setAttribute('viewBox', oldViewbox);
+    linesLayer.setAttribute('width', oldLinesWidth);
+    linesLayer.setAttribute('height', oldLinesHeight);
+    mapPane.style.transform = 'translate(' + (mapX) + 'px,' + (mapY) + 'px)';
+    mapPane.style.left = '';
+    mapPane.style.top = '';
+    // END national map
 
     // need to give some time for html2canvas to finish rendering
     setTimeout(() => {
-    // Getting date/time for timestamp
-    const date = APP_UTILITIES.getDateTime;
+      // Getting date/time for timestamp
+      const date = APP_UTILITIES.getDateTime;
 
-    // event details
-    const data = this.data.event_data;
+      // event details
+      const data = this.data.event_data;
 
-    // looping thru all organizations incase there are multiple
-    const organizations = [];
-    let orgString;
-    for (const organization of data.eventorganizations) {
-      organizations.push(organization.organization.name);
-    }
-    orgString = organizations.join(', ');
+      // looping thru all organizations incase there are multiple
+      const organizations = [];
+      let orgString;
+      for (const organization of data.eventorganizations) {
+        organizations.push(organization.organization.name);
+      }
+      orgString = organizations.join(', ');
 
-    // getting number of locations associated with event
-    let locationCount;
-    locationCount = data.eventlocations.length;
+      // getting number of locations associated with event
+      let locationCount;
+      locationCount = data.eventlocations.length;
 
-    // looping thru all counties of all locations
-    const counties = [];
-    for (const eventlocation of data.eventlocations) {
-      let formattedString = '';
-      formattedString = eventlocation.administrative_level_two_string + ', ' + eventlocation.administrative_level_one_string + ', ' + eventlocation.country_string;
-      counties.push(formattedString);
-    }
+      // looping thru all counties of all locations
+      const counties = [];
+      for (const eventlocation of data.eventlocations) {
+        let formattedString = '';
+        formattedString = eventlocation.administrative_level_two_string + ', ' + eventlocation.administrative_level_one_string + ', ' + eventlocation.country_string;
+        counties.push(formattedString);
+      }
 
-    // looping thru all event diagsoses incase there are multiple
-    const eventDiagnosises = [];
-    for (const diagnosis of data.eventdiagnoses) {
-      eventDiagnosises.push(diagnosis.diagnosis_string);
-    }
+      // looping thru all event diagsoses incase there are multiple
+      const eventDiagnosises = [];
+      for (const diagnosis of data.eventdiagnoses) {
+        eventDiagnosises.push(diagnosis.diagnosis_string);
+      }
 
-    // looping thru event locations to get labs
-    const hasLabs = [];
-    const noLabs = 'N/A';
+      // looping thru event locations to get labs
+      const hasLabs = [];
+      const noLabs = 'N/A';
 
-    data.eventlocations.forEach(el => {
-      el.locationspecies.forEach(ls => {
-        ls.speciesdiagnoses.forEach(sd => {
-          if (sd.organizations_string.length === 0) {
-            return;
+      data.eventlocations.forEach(el => {
+        el.locationspecies.forEach(ls => {
+          ls.speciesdiagnoses.forEach(sd => {
+            if (sd.organizations_string.length === 0) {
+              return;
+            } else {
+              hasLabs.push(sd.organizations_string);
+            }
+          });
+        });
+      });
+
+      // display 'N/A' if there are no labs
+      if (hasLabs.length === 0) {
+        this.labs = noLabs;
+      } else {
+        this.labs = hasLabs;
+      }
+
+
+      // getting species affected count
+      let speciesAffectedCount = 0;
+      data.eventlocations.forEach(el => {
+        el.locationspecies.forEach(ls => {
+          speciesAffectedCount = speciesAffectedCount + 1;
+        });
+      });
+
+      const startDate = data.start_date;
+      const endDate = data.end_date;
+      const formattedDate = data.start_date + ' - ' + data.end_date;
+
+
+      // Associated Events
+      let associatedEvents;
+      const eventsAndLinks = [];
+      const eventIds = [];
+      const eventLinks = [];
+
+      // Checking to see if there are event groups
+      if (data.eventgroups.length === 0) {
+        associatedEvents = 'N/A';
+      } else {
+        associatedEvents = [];
+        data.eventgroups.forEach(eg => {
+          // only showing the event groups that are category 1
+          if (eg.category === 1) {
+            eg.events.forEach(element => {
+              associatedEvents.push(element);
+            });
+          }
+        });
+
+        associatedEvents = associatedEvents.join(', ');
+        // converting to string and adding 'link' field
+        /* for (let i = 0; i < associatedEvents.length; i++) {
+  
+          // formatting string so that there is not a ',' at the end of last associated event
+          const addComma = associatedEvents.length - 1;
+          if (i !== addComma) {
+            eventsAndLinks.push({ id: associatedEvents[i].toString() + ', ', link: window.location.origin + '/' + associatedEvents[i].toString() });
           } else {
-            hasLabs.push(sd.organizations_string);
+            eventsAndLinks.push({ id: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString() });
+          }
+        } */
+
+        eventsAndLinks.forEach(el => {
+          eventIds.push(el.id);
+        });
+        eventsAndLinks.forEach(el => {
+          eventLinks.push(el.link);
+        });
+        console.log(eventIds);
+        console.log(eventLinks);
+      }
+
+      // Species Most Affected
+      let numberOfSpecies = 0;
+      const eventType = data.event_type;
+      let speciesArray;
+      let speciesAffected;
+      let affectedCount = 0;
+      let positiveCount = 0;
+
+      if (eventType === 1) { speciesArray = []; } // making speciesAffected an array only if the event is type 1)
+
+      data.eventlocations.forEach(el => {
+        el.locationspecies.forEach(ls => {
+          numberOfSpecies = numberOfSpecies + 1;
+          if (eventType === 1) { // if event is Morbidity/Mortality
+
+            let deads;
+            let sicks;
+
+            // summing the dead and sick counts and estimations
+            deads = ls.dead_count_estimated + ls.dead_count;
+            sicks = ls.sick_count_estimated + ls.sick_count;
+
+            affectedCount = deads + sicks;
+
+            speciesArray.push({ name: ls.species_string, affected_count: affectedCount });
+
+          } else if (eventType === 2) { // if event is Surveillance
+            ls.speciesdiagnoses.forEach(sd => {
+              positiveCount = positiveCount + sd.positive_count;
+            });
+            affectedCount = positiveCount;
+            speciesAffected = affectedCount;
+          }
+
+          // sorting highest to lowest so that species most affected is first in the array
+          if (eventType === 1) {
+            speciesArray = speciesArray.sort((a, b) => b.affected_count - a.affected_count);
+            speciesAffected = speciesArray[0].name;
           }
         });
       });
-    });
 
-    // display 'N/A' if there are no labs
-    if (hasLabs.length === 0) {
-      this.labs = noLabs;
-    } else {
-      this.labs = hasLabs;
-    }
-
-
-    // getting species affected count
-    let speciesAffectedCount = 0;
-    data.eventlocations.forEach(el => {
-      el.locationspecies.forEach(ls => {
-        speciesAffectedCount = speciesAffectedCount + 1;
-      });
-    });
-
-    const startDate = data.start_date;
-    const endDate = data.end_date;
-    const formattedDate = data.start_date + ' - ' + data.end_date;
-
-
-    // Associated Events
-    let associatedEvents;
-    const eventsAndLinks = [];
-    const eventIds = [];
-    const eventLinks = [];
-
-    // Checking to see if there are event groups
-    if (data.eventgroups.length === 0) {
-      associatedEvents = 'N/A';
-    } else {
-      associatedEvents = [];
-      data.eventgroups.forEach(eg => {
-        // only showing the event groups that are category 1
-        if (eg.category === 1) {
-          eg.events.forEach(element => {
-            associatedEvents.push(element);
-          });
-        }
-      });
-
-      associatedEvents = associatedEvents.join(', ');
-      // converting to string and adding 'link' field
-      /* for (let i = 0; i < associatedEvents.length; i++) {
-
-        // formatting string so that there is not a ',' at the end of last associated event
-        const addComma = associatedEvents.length - 1;
-        if (i !== addComma) {
-          eventsAndLinks.push({ id: associatedEvents[i].toString() + ', ', link: window.location.origin + '/' + associatedEvents[i].toString() });
-        } else {
-          eventsAndLinks.push({ id: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString() });
-        }
-      } */
-
-      eventsAndLinks.forEach(el => {
-        eventIds.push(el.id);
-      });
-      eventsAndLinks.forEach(el => {
-        eventLinks.push(el.link);
-      });
-      console.log(eventIds);
-      console.log(eventLinks);
-    }
-
-    // Species Most Affected
-    let numberOfSpecies = 0;
-    const eventType = data.event_type;
-    let speciesArray;
-    let speciesAffected;
-    let affectedCount = 0;
-    let positiveCount = 0;
-
-    if (eventType === 1) { speciesArray = []; } // making speciesAffected an array only if the event is type 1)
-
-    data.eventlocations.forEach(el => {
-      el.locationspecies.forEach(ls => {
-        numberOfSpecies = numberOfSpecies + 1;
-        if (eventType === 1) { // if event is Morbidity/Mortality
-
-          let deads;
-          let sicks;
-
-          // summing the dead and sick counts and estimations
-          deads = ls.dead_count_estimated + ls.dead_count;
-          sicks = ls.sick_count_estimated + ls.sick_count;
-
-          affectedCount = deads + sicks;
-
-          speciesArray.push({ name: ls.species_string, affected_count: affectedCount });
-
-        } else if (eventType === 2) { // if event is Surveillance
-          ls.speciesdiagnoses.forEach(sd => {
-            positiveCount = positiveCount + sd.positive_count;
-          });
-          affectedCount = positiveCount;
-          speciesAffected = affectedCount;
-        }
-
-        // sorting highest to lowest so that species most affected is first in the array
-        if (eventType === 1) {
-          speciesArray = speciesArray.sort((a, b) => b.affected_count - a.affected_count);
-          speciesAffected = speciesArray[0].name;
-        }
-      });
-    });
-
-    // Event Visibility
-    let eventVisibility;
-    if (data.public) {
-      eventVisibility = 'VISIBLE TO THE PUBLIC';
-    } else {
-      eventVisibility = 'NOT VISIBLE TO THE PUBLIC';
-    }
-
-    // whispers logo
-    this.pngURL = this.canvas.toDataURL();
-    console.log(this.pngURL);
-    console.log(this.data.map);
-    console.log(natMapUrl);
-
-    // printing user's info
-    const nameOrgString = this.data.user.first_name + ' ' + this.data.user.last_name + ' (' + this.data.user.organization_string + ')';
-
-    // formatting full URL for footer
-    const url = window.location.href;
-
-    const eventLocation = data.eventlocations[0].locationspecies;
-    this.eventLocsPlusDiagnoses = [];
-    let speciesDiag = [];
-    let eventLocNum = 0;
-    for (const event_location of this.data.event_data.eventlocations) {
-      eventLocNum = eventLocNum + 1;
-      speciesDiag = [];
-      for (const locationspecies of event_location.locationspecies) {
-        if (locationspecies.speciesdiagnoses.length === 0) {
-          let captive = locationspecies.captive;
-          // pdfmake does not like 'undefined' values so setting them to empty string
-          const pop = locationspecies.population_count || ' ';
-          const ksick = locationspecies.sick_count || ' ';
-          const kdead = locationspecies.dead_count || ' ';
-          const esick = locationspecies.sick_count_estimated || ' ';
-          const edead = locationspecies.dead_count_estimated || ' ';
-          const sdate = event_location.start_date || 'N/A';
-          const edate = event_location.end_date || 'N/A';
-          captive = 'Yes' || 'No';
-          const s_diag =  ' ';
-          const county = ' ';
-          const lab = ' '; // TODO make this display all the labs if there are more than one
-
-          let locationName;
-
-          if (event_location.name === '' || event_location.name === undefined) {
-            locationName = 'Location ' + eventLocNum;
-          } else {
-            locationName = 'Location ' + eventLocNum + ' - ' + event_location.name;
-          }
-
-          speciesDiag.push({
-            species: locationspecies.species_string,
-            population: pop,
-            known_sick: ksick,
-            known_dead: kdead,
-            est_sick: esick,
-            est_dead: edead,
-            captive: captive,
-            species_dia: 'Not Assessed',
-            count: ' ',
-            lab: lab,
-            county: county,
-            state: locationspecies.administrative_level_one_string,
-            country: locationspecies.country_string,
-            sdate: sdate,
-            edate: edate,
-            name: locationName,
-          });
-        }
-        for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
-          const numAssess = speciesdiagnosis.tested_count + '/' + speciesdiagnosis.diagnosis_count;
-          let captive = locationspecies.captive;
-
-          // pdfmake does not like 'undefined' values so setting them to empty string
-          const pop = locationspecies.population_count || ' ';
-          const ksick = locationspecies.sick_count || ' ';
-          const kdead = locationspecies.dead_count || ' ';
-          const esick = locationspecies.sick_count_estimated || ' ';
-          const edead = locationspecies.dead_count_estimated || ' ';
-          const sdate = event_location.start_date || 'N/A';
-          const edate = event_location.end_date || 'N/A';
-          captive = 'Yes' || 'No';
-          const s_diag = speciesdiagnosis.diagnosis_string || ' ';
-          const county = locationspecies.administrative_level_two_string || ' ';
-          const lab = speciesdiagnosis.organizations_string[0] || ' '; // TODO make this display all the labs if there are more than one
-
-          let locationName;
-
-          if (event_location.name === '' || event_location.name === undefined) {
-            locationName = 'Location ' + eventLocNum;
-          } else {
-            locationName = 'Location ' + eventLocNum + ' - ' + event_location.name;
-          }
-          speciesDiag.push({
-            species: locationspecies.species_string,
-            population: pop,
-            known_sick: ksick,
-            known_dead: kdead,
-            est_sick: esick,
-            est_dead: edead,
-            captive: captive,
-            species_dia: s_diag,
-            count: numAssess,
-            lab: lab,
-            county: county,
-            state: locationspecies.administrative_level_one_string,
-            country: locationspecies.country_string,
-            sdate: sdate,
-            edate: edate,
-            name: locationName,
-          });
-        }
+      // Event Visibility
+      let eventVisibility;
+      if (data.public) {
+        eventVisibility = 'VISIBLE TO THE PUBLIC';
+      } else {
+        eventVisibility = 'NOT VISIBLE TO THE PUBLIC';
       }
-      this.eventLocsPlusDiagnoses.push(speciesDiag);
-    }
+
+      // whispers logo
+      this.pngURL = this.canvas.toDataURL();
+      console.log(this.pngURL);
+      console.log(this.data.map);
+      console.log(natMapUrl);
+
+      // printing user's info
+      const nameOrgString = this.data.user.first_name + ' ' + this.data.user.last_name + ' (' + this.data.user.organization_string + ')';
+
+      // formatting full URL for footer
+      const url = window.location.href;
+
+      const eventLocation = data.eventlocations[0].locationspecies;
+      this.eventLocsPlusDiagnoses = [];
+      let speciesDiag = [];
+      let eventLocNum = 0;
+      for (const event_location of this.data.event_data.eventlocations) {
+        eventLocNum = eventLocNum + 1;
+        speciesDiag = [];
+        for (const locationspecies of event_location.locationspecies) {
+          if (locationspecies.speciesdiagnoses.length === 0) {
+            let captive = locationspecies.captive;
+            // pdfmake does not like 'undefined' values so setting them to empty string
+            const pop = locationspecies.population_count || ' ';
+            const ksick = locationspecies.sick_count || ' ';
+            const kdead = locationspecies.dead_count || ' ';
+            const esick = locationspecies.sick_count_estimated || ' ';
+            const edead = locationspecies.dead_count_estimated || ' ';
+            const sdate = event_location.start_date || 'N/A';
+            const edate = event_location.end_date || 'N/A';
+            captive = 'Yes' || 'No';
+            const s_diag = ' ';
+            const county = ' ';
+            const lab = ' '; // TODO make this display all the labs if there are more than one
+
+            let locationName;
+
+            if (event_location.name === '' || event_location.name === undefined) {
+              locationName = 'Location ' + eventLocNum;
+            } else {
+              locationName = 'Location ' + eventLocNum + ' - ' + event_location.name;
+            }
+
+            speciesDiag.push({
+              species: locationspecies.species_string,
+              population: pop,
+              known_sick: ksick,
+              known_dead: kdead,
+              est_sick: esick,
+              est_dead: edead,
+              captive: captive,
+              species_dia: 'Not Assessed',
+              count: ' ',
+              lab: lab,
+              county: county,
+              state: locationspecies.administrative_level_one_string,
+              country: locationspecies.country_string,
+              sdate: sdate,
+              edate: edate,
+              name: locationName,
+            });
+          }
+          for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+            const numAssess = speciesdiagnosis.tested_count + '/' + speciesdiagnosis.diagnosis_count;
+            let captive = locationspecies.captive;
+
+            // pdfmake does not like 'undefined' values so setting them to empty string
+            const pop = locationspecies.population_count || ' ';
+            const ksick = locationspecies.sick_count || ' ';
+            const kdead = locationspecies.dead_count || ' ';
+            const esick = locationspecies.sick_count_estimated || ' ';
+            const edead = locationspecies.dead_count_estimated || ' ';
+            const sdate = event_location.start_date || 'N/A';
+            const edate = event_location.end_date || 'N/A';
+            captive = 'Yes' || 'No';
+            const s_diag = speciesdiagnosis.diagnosis_string || ' ';
+            const county = locationspecies.administrative_level_two_string || ' ';
+            const lab = speciesdiagnosis.organizations_string[0] || ' '; // TODO make this display all the labs if there are more than one
+
+            let locationName;
+
+            if (event_location.name === '' || event_location.name === undefined) {
+              locationName = 'Location ' + eventLocNum;
+            } else {
+              locationName = 'Location ' + eventLocNum + ' - ' + event_location.name;
+            }
+            speciesDiag.push({
+              species: locationspecies.species_string,
+              population: pop,
+              known_sick: ksick,
+              known_dead: kdead,
+              est_sick: esick,
+              est_dead: edead,
+              captive: captive,
+              species_dia: s_diag,
+              count: numAssess,
+              lab: lab,
+              county: county,
+              state: locationspecies.administrative_level_one_string,
+              country: locationspecies.country_string,
+              sdate: sdate,
+              edate: edate,
+              name: locationName,
+            });
+          }
+        }
+        this.eventLocsPlusDiagnoses.push(speciesDiag);
+      }
 
 
-    // check for user role so that we show them the right report
+      // check for user role so that we show them the right report
       const docDefinition = {
         pageOrientation: 'landscape',
         pageMargins: [20, 20, 20, 35],
@@ -1134,7 +1171,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       pdfMake.createPdf(docDefinition).download();
       this.downloadingReport = false;
       this.eventPublicReportDialogRef.close();
-  }, 4000);
+    }, 4000);
   }
 
 }

@@ -637,6 +637,9 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     return locationName;
   }
 
+  getEventDetails() {
+
+  }
 
   downloadEventReport() {
     this.downloadingReport = true;
@@ -841,7 +844,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         associatedEvents = associatedEvents.join(', ');
         // converting to string and adding 'link' field
         /* for (let i = 0; i < associatedEvents.length; i++) {
-  
+
           // formatting string so that there is not a ',' at the end of last associated event
           const addComma = associatedEvents.length - 1;
           if (i !== addComma) {

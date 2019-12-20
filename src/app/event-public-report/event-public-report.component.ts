@@ -917,8 +917,21 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
           // sorting highest to lowest so that species most affected is first in the array
           if (eventType === 1) {
+            const speciesMostAffectedArray = []; // incase there are two or more with the same amount affected
             speciesArray = speciesArray.sort((a, b) => b.affected_count - a.affected_count);
+            const speciesWithMostAffectedCount = speciesArray[0].affected_count;
+            for (const species of speciesArray) {
+              if (species.affected_count === speciesWithMostAffectedCount ) {
+                speciesMostAffectedArray.push(species.name);
+              }
+            }
+            if (speciesMostAffectedArray.length > 0) {
+
+              speciesAffected = speciesMostAffectedArray.join(', ');
+    
+            } else {
             speciesAffected = speciesArray[0].name;
+            }
           }
         });
       });

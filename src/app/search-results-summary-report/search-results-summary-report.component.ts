@@ -200,7 +200,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           row.push({text: "NOT VISIBLE TO THE PUBLIC", bold: true, alignment: 'left'});
         }
         locationBody.push(row);
-        console.log('row: ', row.length, ', key:', key);
       }
     }
 
@@ -318,6 +317,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     let longest_running_event_count = 0;
 
     let event_visibility;
+    let public_count = 0;
+    let not_public_count = 0;
 
     result_data.forEach(element => {
       //initial calc Most Frequent Diagnosis
@@ -391,7 +392,12 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         longest_running_event_count = num_days;
       }
 
-      //calc for Event Visibility
+      //initial calc for Event Visibility
+      if (public_count == 0 && element.public == true) {
+        public_count = 1;
+      } else if (not_public_count == 0 && element.public == false) {
+        not_public_count = 1;
+      }
 
     });
 
@@ -419,6 +425,17 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
     //final determination of Average Event Time Span
     average_event_time_span = total_days_all_events/Number(number_events);
+
+    //final determination of Event Visibility
+    if (public_count == 1 && not_public_count == 1) {
+      event_visibility = { text: 'See details', bold: true };
+    } else if (public_count == 1) {
+      event_visibility = 'Visible to the public';
+    } else if (not_public_count == 1) {
+      event_visibility = { text: 'NOT VISIBLE TO THE PUBLIC', bold: true };
+    } else {
+      event_visibility = { text: 'See details', bold: true };
+    }
 
     const docDefinition = {
       pageOrientation: 'landscape',
@@ -673,7 +690,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, { text: event_with_most_affected + " (" + event_with_most_affected_count + " affected)", link: window.location.href.split('/home')[0]+"/event/"+event_with_most_affected, color: 'blue'}],
+                  [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [ { text: [ {text: event_with_most_affected, link: window.location.href.split('/home')[0]+"/event/"+event_with_most_affected, color: 'blue'}, " (" + event_with_most_affected_count + " affected)"  ] } ] ],
                 ]
               },
               layout: { defaultBorder: false,
@@ -691,7 +708,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, { text: longest_running_event + " (" + longest_running_event_count.toFixed(0) + " days)", link: window.location.href.split('/home')[0]+"/event/"+longest_running_event, color: 'blue'}],
+                  [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [ { text: [ { text: longest_running_event, link: window.location.href.split('/home')[0]+"/event/"+longest_running_event, color: 'blue'}, " (" + longest_running_event_count.toFixed(0) + " days)" ] } ] ],
                 ]
               },
               layout: { defaultBorder: false,
@@ -709,7 +726,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, 'xxxxx'],
+                  [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, event_visibility ],
                 ]
               },
               layout: { defaultBorder: false,

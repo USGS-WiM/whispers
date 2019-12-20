@@ -11,10 +11,12 @@ import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
+import { AdministrativeLevelOneService } from '@app/services/administrative-level-one.service';
 import { CountryService } from '@app/services/country.service';
 import { OrganizationService } from '@app/services/organization.service';
 
 import { EventDetail } from '@interfaces/event-detail';
+import { forEach } from '@angular/router/src/utils/collection';
 declare let gtag: Function;
 
 @Component({
@@ -30,11 +32,14 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   canvas = document.createElement('canvas');
   loadingData = false;
 
+  adminLevelOnes = [];
+  adminLevelTwos = [];
   countries = [];
   orgs = [];
 
   constructor(
     public resultsSummaryReportCompenent: MatDialogRef<SearchResultsSummaryReportComponent>,
+    private administrativeLevelOneService: AdministrativeLevelOneService,
     private countryService: CountryService,
     private organizationService: OrganizationService,
     @Inject(MAT_DIALOG_DATA) public data: any) { 
@@ -51,6 +56,17 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     base_image.onload = function () {
       context.drawImage(base_image, 5, 5, 300, 80);
     };
+
+    this.administrativeLevelOneService.getAdminLevelOnes()
+      .subscribe(
+        (adminLevelOnes) => {
+          this.adminLevelOnes = adminLevelOnes;
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
 
     this.countryService.getCountries()
       .subscribe(
@@ -122,9 +138,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       if (data.hasOwnProperty(key)) {
         const elData = data[key];
         const row = new Array();
-        console.log(elData.id);
         row.push(elData.id);
-        row.push(elData.start_date + " to " + elData.end_date);
+        row.push({text: elData.start_date + " to " + ((elData.end_date == null) ? "open" : elData.end_date), alignment: 'left'});
         let adminLevelTwoCell = new Array();
         for (let key in elData.administrativeleveltwos) {
           let countryAbbrev;
@@ -155,8 +170,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             speciesCell.push(elData.species[key].name + ",\n");
           }
         }
-        row.push(speciesCell);
-        row.push(elData.event_status_string);
+        row.push({ text: speciesCell, alignment: 'left'});
+        row.push({text: elData.event_status_string, alignment: 'left'});
         //TODO: need to come back and fix this. it's a number. Maybe need to have organization_string added to event? Or maybe just use organization service
         if (elData.organizations) {
           
@@ -172,15 +187,20 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               organization = this.orgs[orgKey].name;
             }
           }
-          orgCell.push({text: organization + "\n", alignment: 'left'});
+          if (Number(key)%2 == 0) {
+            orgCell.push({text: organization + "\n", alignment: 'left', color: 'black'});
+          } else {
+            orgCell.push({text: organization + "\n", alignment: 'left', color: 'gray'});
+          }
         }
         row.push(orgCell);
         if (elData.public) {
-          row.push("Visible to the public");
+          row.push({text: "Visible to the public", alignment: 'left'});
         } else {
-          row.push("NOT VISIBLE TO THE PUBLIC");
+          row.push({text: "NOT VISIBLE TO THE PUBLIC", bold: true, alignment: 'left'});
         }
         locationBody.push(row);
+        console.log('row: ', row.length, ', key:', key);
       }
     }
 
@@ -242,10 +262,31 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
     // Section with SEARCH CRITERIA for page 1
     // TODO: calculation of record status for page 1
-    /*var record_status;
-    result_data.forEach(element => {
-      console.log(element);
-    });*/
+    let record_status;
+
+    if (search_query.complete == true) {
+      record_status = "Complete events only";
+    } else if (search_query.complete == false) {
+      record_status = "Incomplete events only";
+    } else {
+      record_status = "Complete and incomplete events";
+    }
+
+    // get string for admin level ones in search criteria
+    let search_admin_level_one;
+
+    search_query.administrative_level_one.forEach(search_level_one => {
+      this.adminLevelOnes.forEach(level_one => {
+        if (search_level_one == Number(level_one.id)) {
+          if (search_admin_level_one == null) {
+            search_admin_level_one = level_one.name;
+          } else {
+            search_admin_level_one += ", " + level_one.name;
+          }
+        }
+      });
+    });
+
 
     /************
      * 
@@ -256,26 +297,128 @@ export class SearchResultsSummaryReportComponent implements OnInit {
      */
 
     // Section with SEARCH RESULTS SUMMARY
-    var number_events = result_data.length.toString();
+    let number_events = result_data.length.toString();
+    
+    let most_frequent_diagnosis;
+    let diagnosisArray = [];
 
-    var number_animals_affected = 0;
-    var number_species_affected = 0;
+    let number_animals_affected = 0;
+    let number_species_affected = 0;
+
+    let species_most_affected;
+    let speciesArray = [];
+    
+    let average_event_time_span;
+    let total_days_all_events = 0;
+
+    let event_with_most_affected;
+    let event_with_most_affected_count = 0;
+
+    let longest_running_event;
+    let longest_running_event_count = 0;
+
+    let event_visibility;
 
     result_data.forEach(element => {
-      //console.log(element);
-      //console.log(element.affected_count);
+      //initial calc Most Frequent Diagnosis
+      if (diagnosisArray.length == 0) {
+        element.eventdiagnoses.forEach(diagnosis => {
+          diagnosisArray.push({name: diagnosis.diagnosis_string, count: 1})
+        });
+      }
+      element.eventdiagnoses.forEach(diagnosis => {
+        if (diagnosisArray.find(function(item) {
+          return diagnosis.diagnosis_string == item.name;
+        })) {
+          diagnosisArray.forEach(diagnosisItem => {
+            if (diagnosis.diagnosis_string == diagnosisItem.name) {
+              diagnosisItem.count += 1;
+            }
+          });
+        } else {
+          diagnosisArray.push({name: diagnosis.diagnosis_string, count: 1})
+        };
+      });
+
+      //calc for Number of Animals Affected
       number_animals_affected += element.affected_count;
-      //console.log(element.species.length);
+      //calc for Number Species Affected
       number_species_affected += element.species.length;
+
+      //initial calc for Species Most Affected
+      if (speciesArray.length == 0) {
+        element.species.forEach(species => {
+          speciesArray.push({name: species.name, count: 1})
+        });
+      }
+      element.species.forEach(species => {
+        if (speciesArray.find(function(item) {
+          return species.name == item.name;
+        })) {
+          speciesArray.forEach(speciesItem => {
+            if (species.name == speciesItem.name) {
+              speciesItem.count += 1;
+            }
+          });
+        } else {
+          speciesArray.push({name: species.name, count: 1})
+        };
+      });
+
+      //inital calc for Average Event Time Span
+      let start_date;
+      start_date = new Date(element.start_date);
+      let end_date;
+      let num_days;
+      if (element.end_date == null) {
+        end_date = new Date();
+      } else {
+        end_date = new Date(element.end_date);
+      }
+      // num_days also used to test for longest running event below
+      num_days = (end_date-start_date)/(1000*3600*24);
+      total_days_all_events += num_days;
+
+      //calc for Event with Most Affected
+      if (element.affected_count > event_with_most_affected_count) {
+        event_with_most_affected = element.id;
+        event_with_most_affected_count = element.affected_count;
+      }
+
+      //calc for Longest Running Event
+      if (num_days > longest_running_event_count) {
+        longest_running_event = element.id;
+        longest_running_event_count = num_days;
+      }
+
+      //calc for Event Visibility
+
     });
 
+    //final determination of Most Frequent Diagnosis
+    let diagnosis_count_test = 0;
+    diagnosisArray.forEach(diagnosisItem => {
+      if (diagnosisItem.count > diagnosis_count_test) {
+        diagnosis_count_test = diagnosisItem.count;
+        most_frequent_diagnosis = diagnosisItem.name;
+      } else if (diagnosisItem.count == diagnosis_count_test) {
+        most_frequent_diagnosis += ", " + diagnosisItem.name;
+      }
+    })
 
-    //placeholder for affected count
-    //Aaron notes:
-    // affected_count
-    // If EventType = Morbidity/Mortality
-    // then Sum(Max(estimated_dead, dead) + Max(estimated_sick, sick)) from location_species table
-    // If Event Type = Surveillance then Sum(number_positive) from species_diagnosis table
+    //final determination of Speciest Most Affected
+    let species_count_test = 0;
+    speciesArray.forEach(speciesItem => {
+      if (speciesItem.count > species_count_test) {
+        species_count_test = speciesItem.count;
+        species_most_affected = speciesItem.name;
+      } else if (speciesItem.count == species_count_test) {
+        species_most_affected += ", " + speciesItem.name;
+      }
+    })
+
+    //final determination of Average Event Time Span
+    average_event_time_span = total_days_all_events/Number(number_events);
 
     const docDefinition = {
       pageOrientation: 'landscape',
@@ -327,7 +470,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Start Date', bold: true, alignment: 'right' }, search_query.start_date],
+                  [{ border: [false, false, true, false], text: 'Start Date', bold: true, alignment: 'right' }, (search_query.start_date) ? search_query.start_date : 'n/a'],
                 ]
               },
               layout: { defaultBorder: false,
@@ -345,7 +488,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'End Date', bold: true, alignment: 'right' }, search_query.end_date],
+                  [{ border: [false, false, true, false], text: 'End Date', bold: true, alignment: 'right' }, (search_query.end_date) ? search_query.end_date : 'n/a'],
                 ]
               },
               layout: { defaultBorder: false,
@@ -363,7 +506,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, 'xxxxx'],
+                  [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, record_status],
                 ]
               },
               layout: { defaultBorder: false,
@@ -381,7 +524,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'State (or equivalent)', bold: true, alignment: 'right' }, 'xxxxx'],
+                  [{ border: [false, false, true, false], text: 'State (or equivalent)', bold: true, alignment: 'right' }, (search_admin_level_one) ? search_admin_level_one : 'n/a'],
                 ]
               },
               layout: { defaultBorder: false,
@@ -440,7 +583,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Most Frequent Event Diagnosis', bold: true, alignment: 'right' }, 'xxxxx'],
+                  [{ border: [false, false, true, false], text: 'Most Frequent Event Diagnosis', bold: true, alignment: 'right' }, { text: most_frequent_diagnosis, alignment: 'left' }],
                 ]
               },
               layout: { defaultBorder: false,
@@ -494,7 +637,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, 'xxxxx'],
+                  [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, { text: species_most_affected, alignment: 'left' }],
                 ]
               },
               layout: { defaultBorder: false,
@@ -512,7 +655,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Average Event Time Span', bold: true, alignment: 'right' }, 'xxxxx'],
+                  [{ border: [false, false, true, false], text: 'Average Event Time Span', bold: true, alignment: 'right' }, average_event_time_span.toFixed(0).toString() + " days"],
                 ]
               },
               layout: { defaultBorder: false,
@@ -530,7 +673,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, 'xxxxx'],
+                  [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, { text: event_with_most_affected + " (" + event_with_most_affected_count + " affected)", link: window.location.href.split('/home')[0]+"/event/"+event_with_most_affected, color: 'blue'}],
                 ]
               },
               layout: { defaultBorder: false,
@@ -548,7 +691,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, 'xxxxx'],
+                  [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, { text: longest_running_event + " (" + longest_running_event_count.toFixed(0) + " days)", link: window.location.href.split('/home')[0]+"/event/"+longest_running_event, color: 'blue'}],
                 ]
               },
               layout: { defaultBorder: false,

@@ -91,7 +91,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
+    this.loadingData = true;
     this.eventService.getEventSummary(this.data.event_data.id)
       .subscribe(
         (eventsummary) => {
@@ -129,6 +129,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     // mapping the event centroid for the national map
     setTimeout(() => {
       this.MapResults(this.natMapPoints);
+      this.loadingData = true;
     }, 550);
 
     // Displays county image if needed
@@ -145,7 +146,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         },
       );
 
-    this.loadingData = true;
     // creating variables for field definitions
     this.eventTypeDefinition = FIELD_HELP_TEXT.editEventTypeTooltip;
     this.eventIdDefinition = FIELD_HELP_TEXT.eventIDTooltip;
@@ -180,12 +180,14 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.commentSourceDefinition = FIELD_HELP_TEXT.commentSourceDefinition;
 
     // converting whipsers logo png to a dataURL for use in pdfMake
-    const whispersLogo = 'src/app/event-public-report/logo.png';
+    const whispersLogo = 'src/assets/logo-transparent.png';
     const context = this.canvas.getContext('2d');
     const base_image = new Image();
+    this.canvas.width = 796;
+    this.canvas.height = 90;
     base_image.src = whispersLogo;
     base_image.onload = function () {
-      context.drawImage(base_image, 5, 5, 300, 80);
+      context.drawImage(base_image, 0, 0, 796, 90);
     };
     this.pngURL = this.canvas.toDataURL();
 
@@ -351,18 +353,19 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
   // create header
   makeHeader() {
-    const header = {
+    let header;
+    header = {
       alignment: 'justify',
       columns: [
         {
           image: this.pngURL,
-          width: 400,
-          height: 80
+          width: 450,
+          height: 65
         },
         {
           style: 'header',
           text: 'Details of ' + this.data.event_data.event_type_string + ' Event ID ' + this.data.event_data.id,
-          margin: [0, 15, 0, 0]
+          margin: [0, 10, 0, 0]
         }
       ]
     };
@@ -493,8 +496,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       columns: [
         {
           image: this.pngURL,
-          width: 400,
-          height: 80
+          width: 450,
+          height: 65
         },
         {
           style: 'header',
@@ -556,8 +559,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       columns: [
         {
           image: this.pngURL,
-          width: 400,
-          height: 80
+          width: 450,
+          height: 65
         },
         {
           style: 'header',
@@ -611,6 +614,20 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       style: 'smallest',
     };
     return explanationTwoForMoreDetails;
+  }
+
+  getEventVisibility() {
+    let text;
+    if (this.data.event_data.public) {
+      text = {
+        text: 'VISIBLE TO THE PUBLIC'
+      };
+    } else {
+      text = {
+        text: 'NOT VISIBLE TO THE PUBLIC', bold: true
+      };
+    }
+    return text;
   }
 
   eventLocationName(comment) {
@@ -1052,8 +1069,9 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             columns: [
               {
                 image: this.pngURL,
-                width: 400,
-                height: 80
+                width: 450,
+                height: 65,
+                margin: [0, 0, 0, 30]
               },
               {
                 style: 'header',
@@ -1087,7 +1105,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                         [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, speciesAffected],
                         [{ border: [false, false, true, false], text: 'Event Start Date - End Date', bold: true, alignment: 'right' }, formattedDate], // TODO: format according to wireframe & Create function to get count of total days event lasted
                         [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, { text: associatedEvents }], // TODO: Figure out what to do regarding links & Display none if there are none {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}
-                        [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, eventVisibility]
+                        [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, this.getEventVisibility()]
                       ],
                     },
                     layout: {

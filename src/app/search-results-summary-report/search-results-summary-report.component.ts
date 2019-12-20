@@ -321,6 +321,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     let not_public_count = 0;
 
     result_data.forEach(element => {
+      if (!element.hasOwnProperty('public')) {
+        element["public"] = true;
+      }
       //initial calc Most Frequent Diagnosis
       if (diagnosisArray.length == 0) {
         element.eventdiagnoses.forEach(diagnosis => {

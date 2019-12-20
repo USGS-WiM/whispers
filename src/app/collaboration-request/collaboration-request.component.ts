@@ -18,6 +18,8 @@ import { ServiceRequestResponse } from '@app/interfaces/service-request-response
 import { CurrentUserService } from '@app/services/current-user.service';
 import { APP_SETTINGS } from '@app/app.settings';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
+import { EventService } from '@services/event.service';
+import { EventDiagnosisService } from '@app/services/event-diagnosis.service';
 
 @Component({
   selector: 'app-collaboration-request',
@@ -51,6 +53,7 @@ export class CollaborationRequestComponent implements OnInit {
     private serviceRequestService: ServiceRequestService,
     private dataUpdatedService: DataUpdatedService,
     public snackBar: MatSnackBar,
+    private eventService: EventService
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
 
@@ -77,21 +80,22 @@ export class CollaborationRequestComponent implements OnInit {
   onSubmit(formValue) {
     this.submitLoading = true;
 
-    // TODO: insert a call to the service endpoint for requesting collaboration
-    // template included below
+    const eventID;
+    const message;
 
-    // this.____Service.doThing(formValue)
-    //   .subscribe(
-    //     (response) => {
-    //       this.submitLoading = false;
+    this.eventService.requestCollaboration(eventID, message)
+      .subscribe(
+        (response) => {
+          this.submitLoading = false;
 
-    //       this.collaborationRequestDialogRef.close();
-    //     },
-    //     error => {
-    //       this.errorMessage = <any>error;
-    //       this.openSnackBar('Error. Service request response not submitted. Error message: ' + error, 'OK', 8000);
-    //     }
-    //   );
+          this.collaborationRequestDialogRef.close();
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Collaboration request response not submitted. Error message: ' + error, 'OK', 8000);
+        }
+      );
+
   }
 
 }

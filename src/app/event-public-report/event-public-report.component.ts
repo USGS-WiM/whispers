@@ -18,6 +18,8 @@ import { Comment } from '@interfaces/comment';
 import { CommentService } from '@services/comment.service';
 import { CommentTypeService } from '@app/services/comment-type.service';
 import { EventService } from '@app/services/event.service';
+import { AdministrativeLevelOneService } from '@app/services/administrative-level-one.service';
+import { CountryService } from '@app/services/country.service';
 import { CommentType } from '@interfaces/comment-type';
 import { EventDetail } from '@interfaces/event-detail';
 import { Title } from '@angular/platform-browser';
@@ -42,6 +44,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   downloadingReport = false;
   natMapPoints;
   icon;
+  adminLevelOnes;
+  country;
 
   // creating variables for field definitions
   eventTypeDefinition = '';
@@ -75,6 +79,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   diagLabDefinition = '';
   commentTypeDefinition = '';
   commentSourceDefinition = '';
+  errorMessage;
 
   locationNumber = 1;
   pngURL;
@@ -86,6 +91,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     private displayValuePipe: DisplayValuePipe,
     private commentTypeService: CommentTypeService,
     public eventService: EventService,
+    private administrativeLevelOneService: AdministrativeLevelOneService,
+    private countryService: CountryService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
   }
@@ -96,6 +103,28 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       .subscribe(
         (eventsummary) => {
           this.natMapPoints = eventsummary;
+        }
+      );
+
+      this.administrativeLevelOneService.getAdminLevelOnes()
+      .subscribe(
+        (adminLevelOnes) => {
+          this.adminLevelOnes = adminLevelOnes;
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+      this.countryService.getCountries()
+      .subscribe(
+        (countries) => {
+          this.country = countries;
+
+        },
+        error => {
+          this.errorMessage = <any>error;
         }
       );
 
@@ -654,10 +683,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     return locationName;
   }
 
-  getEventDetails() {
-
-  }
-
   downloadEventReport() {
     this.downloadingReport = true;
 
@@ -791,7 +816,13 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       const counties = [];
       for (const eventlocation of data.eventlocations) {
         let formattedString = '';
-        formattedString = eventlocation.administrative_level_two_string + ', ' + eventlocation.administrative_level_one_string + ', ' + eventlocation.country_string;
+        let stateAbbrev;
+        let countryAbbrev;
+
+        stateAbbrev = this.adminLevelOnes.find(item => item.name === eventlocation.administrative_level_one_string);
+        countryAbbrev = this.country.find(item => item.name === eventlocation.country_string);
+
+        formattedString = eventlocation.administrative_level_two_string + ', ' + stateAbbrev.abbreviation + ', ' + countryAbbrev.abbreviation;
         counties.push(formattedString);
       }
 
@@ -926,9 +957,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               }
             }
             if (speciesMostAffectedArray.length > 0) {
-
               speciesAffected = speciesMostAffectedArray.join(', ');
-    
             } else {
             speciesAffected = speciesArray[0].name;
             }

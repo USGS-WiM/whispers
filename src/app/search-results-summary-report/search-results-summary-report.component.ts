@@ -49,7 +49,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     this.loadingData = true;
 
     // converting whipsers logo png to a dataURL for use in pdfMake
-    const whispersLogo = 'src/app/event-public-report/logo.png'; // TODO: move photo to more appropriate location
+    const whispersLogo = 'src/assets/logo-transparent.png'; // TODO: move photo to more appropriate location
     const context = this.canvas.getContext('2d');
     const base_image = new Image();
     base_image.src = whispersLogo;
@@ -238,6 +238,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   }
 
   downloadResultsSummaryReport() {
+
     // placeholder for google analytics event
     // gtag('event', 'click', { 'event_category': 'Search Results', 'event_label': 'Downloaded Search Results Summary Report' });
 
@@ -251,7 +252,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
     // whispers logo
     const pngURL = this.canvas.toDataURL();
-    console.log(pngURL);
 
     // printing user's info
     const nameOrgString = this.data.user.first_name + ' ' + this.data.user.last_name + ' (' + this.data.user.organization_string + ')';
@@ -491,77 +491,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                 widths: [150, 250],
                 body: [
                   [{ border: [false, false, true, false], text: 'Start Date', bold: true, alignment: 'right' }, (search_query.start_date) ? search_query.start_date : 'n/a'],
-                ]
-              },
-              layout: { defaultBorder: false,
-                paddingLeft: function(i, node) { return 15; },
-                paddingRight: function(i, node) { return 10; },
-               }
-            }
-          ]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              style: 'smaller',
-              table: {
-                widths: [150, 250],
-                body: [
                   [{ border: [false, false, true, false], text: 'End Date', bold: true, alignment: 'right' }, (search_query.end_date) ? search_query.end_date : 'n/a'],
-                ]
-              },
-              layout: { defaultBorder: false,
-                paddingLeft: function(i, node) { return 15; },
-                paddingRight: function(i, node) { return 10; },
-               }
-            }
-          ]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              style: 'smaller',
-              table: {
-                widths: [150, 250],
-                body: [
                   [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, record_status],
-                ]
-              },
-              layout: { defaultBorder: false,
-                paddingLeft: function(i, node) { return 15; },
-                paddingRight: function(i, node) { return 10; },
-               }
-            }
-          ]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              style: 'smaller',
-              table: {
-                widths: [150, 250],
-                body: [
                   [{ border: [false, false, true, false], text: 'State (or equivalent)', bold: true, alignment: 'right' }, (search_admin_level_one) ? search_admin_level_one : 'n/a'],
-                ]
-              },
-              layout: { defaultBorder: false,
-                paddingLeft: function(i, node) { return 15; },
-                paddingRight: function(i, node) { return 10; },
-               }
-            }
-          ]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              style: 'smaller',
-              table: {
-                widths: [150, 250],
-                body: [
                   [{ border: [false, false, true, false], text: 'Country (or equivalent)', bold: true, alignment: 'right' }, 'xxxxx'],
                 ]
               },
@@ -586,149 +518,13 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                 widths: [150, 250],
                 body: [
                   [{ border: [false, false, true, false], text: '# of Events', bold: true, alignment: 'right' }, number_events.toString() ],
-                ]
-              },
-              layout: { defaultBorder: false,
-                paddingLeft: function(i, node) { return 15; },
-                paddingRight: function(i, node) { return 10; },
-               }
-            }
-          ]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              style: 'smaller',
-              table: {
-                widths: [150, 250],
-                body: [
                   [{ border: [false, false, true, false], text: 'Most Frequent Event Diagnosis', bold: true, alignment: 'right' }, { text: most_frequent_diagnosis, alignment: 'left' }],
-                ]
-              },
-              layout: { defaultBorder: false,
-                paddingLeft: function(i, node) { return 15; },
-                paddingRight: function(i, node) { return 10; },
-               }
-            }
-          ]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              style: 'smaller',
-              table: {
-                widths: [150, 250],
-                body: [
                   [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, number_animals_affected],
-                ]
-              },
-              layout: { defaultBorder: false,
-                paddingLeft: function(i, node) { return 15; },
-                paddingRight: function(i, node) { return 10; },
-               }
-            }
-          ]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              style: 'smaller',
-              table: {
-                widths: [150, 250],
-                body: [
                   [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, number_species_affected],
-                ]
-              },
-              layout: { defaultBorder: false,
-                paddingLeft: function(i, node) { return 15; },
-                paddingRight: function(i, node) { return 10; },
-               }
-            }
-          ]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              style: 'smaller',
-              table: {
-                widths: [150, 250],
-                body: [
                   [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, { text: species_most_affected, alignment: 'left' }],
-                ]
-              },
-              layout: { defaultBorder: false,
-                paddingLeft: function(i, node) { return 15; },
-                paddingRight: function(i, node) { return 10; },
-               }
-            }
-          ]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              style: 'smaller',
-              table: {
-                widths: [150, 250],
-                body: [
                   [{ border: [false, false, true, false], text: 'Average Event Time Span', bold: true, alignment: 'right' }, average_event_time_span.toFixed(0).toString() + " days"],
-                ]
-              },
-              layout: { defaultBorder: false,
-                paddingLeft: function(i, node) { return 15; },
-                paddingRight: function(i, node) { return 10; },
-               }
-            }
-          ]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              style: 'smaller',
-              table: {
-                widths: [150, 250],
-                body: [
                   [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [ { text: [ {text: event_with_most_affected, link: window.location.href.split('/home')[0]+"/event/"+event_with_most_affected, color: 'blue'}, " (" + event_with_most_affected_count + " affected)"  ] } ] ],
-                ]
-              },
-              layout: { defaultBorder: false,
-                paddingLeft: function(i, node) { return 15; },
-                paddingRight: function(i, node) { return 10; },
-               }
-            }
-          ]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              style: 'smaller',
-              table: {
-                widths: [150, 250],
-                body: [
                   [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [ { text: [ { text: longest_running_event, link: window.location.href.split('/home')[0]+"/event/"+longest_running_event, color: 'blue'}, " (" + longest_running_event_count.toFixed(0) + " days)" ] } ] ],
-                ]
-              },
-              layout: { defaultBorder: false,
-                paddingLeft: function(i, node) { return 15; },
-                paddingRight: function(i, node) { return 10; },
-               }
-            }
-          ]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              style: 'smaller',
-              table: {
-                widths: [150, 250],
-                body: [
                   [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, event_visibility ],
                 ]
               },
@@ -736,6 +532,12 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                 paddingLeft: function(i, node) { return 15; },
                 paddingRight: function(i, node) { return 10; },
                }
+            },
+            {
+              alignment: 'justify',
+              image: this.data.mapUrl,
+              width: 300,
+              height: 200
             }
           ],
           pageBreak: 'after'

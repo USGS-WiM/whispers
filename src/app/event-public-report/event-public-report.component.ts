@@ -891,7 +891,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
         associatedEvents = associatedEvents.join(', ');
         // converting to string and adding 'link' field
-        /* for (let i = 0; i < associatedEvents.length; i++) {
+        for (let i = 0; i < associatedEvents.length; i++) {
 
           // formatting string so that there is not a ',' at the end of last associated event
           const addComma = associatedEvents.length - 1;
@@ -900,7 +900,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           } else {
             eventsAndLinks.push({ id: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString() });
           }
-        } */
+        }
 
         eventsAndLinks.forEach(el => {
           eventIds.push(el.id);
@@ -1139,7 +1139,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                         [{ border: [false, false, false, false], text: 'Summary Info', bold: true, fontSize: 14, margin: [30, 10] }, ' '],
                         [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
                         [{ border: [false, false, true, false], text: '# of Locations', bold: true, alignment: 'right' }, locationCount],
-                        [{ border: [false, false, true, false], text: 'County (or Equivalent)', bold: true, alignment: 'right' }, counties],
+                        [{ border: [false, false, true, false], text: 'County (or Equivalent)', bold: true, alignment: 'right' }, counties.toString()],
                         [{ border: [false, false, true, false], text: 'Event Diagnosis', bold: true, alignment: 'right' }, eventDiagnosises],
                         [{ border: [false, false, true, false], text: 'Diagnostic Laboratory', bold: true, alignment: 'right' }, this.labs],
                         [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, data.affected_count],

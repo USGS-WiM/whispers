@@ -561,6 +561,37 @@ export class EventDetailsComponent implements OnInit {
     }
   }
 
+  mapEventRemoveMarkers(eventData) {
+    this.map.removeLayer(this.locationMarkers);
+    // const markers = [];
+    let countyPolys = [];
+    this.unMappables = [];
+    for (const eventlocation of eventData.eventlocations) {
+      if (eventlocation.administrative_level_two_points !== null) {
+        countyPolys.push(JSON.parse(eventlocation.administrative_level_two_points.replace('Y', '')));
+      }
+    }
+    console.log('mapevents ' + this.locationMarkers);
+    // let eventPolys;
+    if (countyPolys.length > 0) {
+      if (this.eventPolys) {
+        this.map.removeLayer(this.eventPolys);
+      }
+      this.eventPolys = L.polygon(countyPolys, { color: 'blue' }).addTo(this.map);
+    }
+
+    if (this.unMappables.length > 0) {
+
+    }
+
+    let bounds = L.latLngBounds([]);
+
+    if (countyPolys.length > 0) {
+      var countyBounds = this.eventPolys.getBounds();
+      bounds.extend(countyBounds);
+    }
+  }
+
   mapEvent(eventData) {
     const markers = [];
     let countyPolys = [];
@@ -711,7 +742,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   downloadEventReport(id: string) {
-    this.mapEvent(this.eventData);
+    this.mapEventRemoveMarkers(this.eventData);
 
     let url;
     setTimeout(() => {
@@ -816,7 +847,7 @@ export class EventDetailsComponent implements OnInit {
     mapPane.style.left = '';
     mapPane.style.top = '';
     // END national map
-    }, 300);
+    }, 350);
 
     setTimeout(() => {
       this.eventPublicReportDialogRef = this.dialog.open(EventPublicReportComponent, {
@@ -837,6 +868,8 @@ export class EventDetailsComponent implements OnInit {
             this.errorMessage = <any>error;
           }
         );
+        this.locationMarkers = L.featureGroup().addTo(this.map);
+        this.mapEvent(this.eventData);
 
     }, 1000);
   }

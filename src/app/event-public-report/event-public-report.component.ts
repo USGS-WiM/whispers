@@ -148,7 +148,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         long: Number(this.natMapPoints['administrativeleveltwos'][0]['centroid_longitude'])
       });
       this.natMap.setView([view[0].lat, view[0].long]);
-    }, 200);
+    }, 300);
 
     this.natMap.dragging.disable();
     this.natMap.touchZoom.disable();
@@ -358,6 +358,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         locationBody.push(row);
       }
     }
+
     table = { /// item 4 in docDef
       alignment: 'justify',
       table: {
@@ -375,6 +376,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       },
       pageBreak: 'after'
     };
+
+    // attempted aligning rows
+    /* const rowCount = locationBody.length;
+    for (let i = 1; i < rowCount; i++) {
+      locationBody[i][8].alignment = 'center';
+    } */
 
     return table;
   }
@@ -493,6 +500,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         headerRows: 1,
         dontBreakRows: true,
         body: commentBody,
+        fontSize: 10
       },
       layout: {
         hLineColor: function (i, node) {
@@ -655,6 +663,50 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       text = {
         text: 'NOT VISIBLE TO THE PUBLIC', bold: true
       };
+    }
+    return text;
+  }
+
+  getAssociatedEvents() {
+    // Associated Events
+    let associatedEvents;
+    const eventsAndLinks = [];
+    const eventIds = [];
+    const eventLinks = [];
+    let text;
+
+    // Checking to see if there are event groups
+    if (this.data.event_data.eventgroups.length === 0) {
+      text = 'N/A';
+    } else {
+      associatedEvents = [];
+      this.data.event_data.eventgroups.forEach(eg => {
+        // only showing the event groups that are category 1
+        if (eg.category === 1) {
+          eg.events.forEach(element => {
+            associatedEvents.push(element);
+          });
+        }
+        text = associatedEvents.join(', ');
+      });
+
+      // associatedEvents = associatedEvents.join(', ');
+      // converting to string and adding 'link' field
+      for (let i = 0; i < associatedEvents.length; i++) {
+
+        // formatting string so that there is not a ',' at the end of last associated event
+        const addComma = associatedEvents.length - 1;
+        if (i !== addComma) {
+          eventsAndLinks.push({ text: associatedEvents[i].toString() + ', ', link: window.location.origin + '/' + associatedEvents[i].toString() });
+        } else {
+          eventsAndLinks.push({ text: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString() });
+        }
+      }
+
+      eventsAndLinks.forEach(el => {
+        eventIds.push(el.text);
+        eventLinks.push(el.link);
+      });
     }
     return text;
   }
@@ -867,50 +919,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       const startDate = data.start_date;
       const endDate = data.end_date;
       const formattedDate = data.start_date + ' - ' + data.end_date;
-
-
-      // Associated Events
-      let associatedEvents;
-      const eventsAndLinks = [];
-      const eventIds = [];
-      const eventLinks = [];
-
-      // Checking to see if there are event groups
-      if (data.eventgroups.length === 0) {
-        associatedEvents = 'N/A';
-      } else {
-        associatedEvents = [];
-        data.eventgroups.forEach(eg => {
-          // only showing the event groups that are category 1
-          if (eg.category === 1) {
-            eg.events.forEach(element => {
-              associatedEvents.push(element);
-            });
-          }
-        });
-
-        associatedEvents = associatedEvents.join(', ');
-        // converting to string and adding 'link' field
-        for (let i = 0; i < associatedEvents.length; i++) {
-
-          // formatting string so that there is not a ',' at the end of last associated event
-          const addComma = associatedEvents.length - 1;
-          if (i !== addComma) {
-            eventsAndLinks.push({ id: associatedEvents[i].toString() + ', ', link: window.location.origin + '/' + associatedEvents[i].toString() });
-          } else {
-            eventsAndLinks.push({ id: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString() });
-          }
-        }
-
-        eventsAndLinks.forEach(el => {
-          eventIds.push(el.id);
-        });
-        eventsAndLinks.forEach(el => {
-          eventLinks.push(el.link);
-        });
-        console.log(eventIds);
-        console.log(eventLinks);
-      }
 
       // Species Most Affected
       let numberOfSpecies = 0;
@@ -1136,7 +1144,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                         [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, { text: orgString }],
                         [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, data.event_status_string],
                         [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
-                        [{ border: [false, false, false, false], text: 'Summary Info', bold: true, fontSize: 14, margin: [30, 10] }, ' '],
+                        [{ border: [false, false, false, false], text: 'Summary Info', bold: true, fontSize: 16, margin: [30, 10] }, ' '],
                         [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
                         [{ border: [false, false, true, false], text: '# of Locations', bold: true, alignment: 'right' }, locationCount],
                         [{ border: [false, false, true, false], text: 'County (or Equivalent)', bold: true, alignment: 'right' }, counties.toString()],
@@ -1146,7 +1154,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                         [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, speciesAffectedCount],
                         [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, speciesAffected],
                         [{ border: [false, false, true, false], text: 'Event Start Date - End Date', bold: true, alignment: 'right' }, formattedDate], // TODO: format according to wireframe & Create function to get count of total days event lasted
-                        [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, { text: associatedEvents }], // TODO: Figure out what to do regarding links & Display none if there are none {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}
+                        [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, this.getAssociatedEvents() ], // TODO: Figure out what to do regarding links & Display none if there are none {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}
                         [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, this.getEventVisibility()]
                       ],
                     },

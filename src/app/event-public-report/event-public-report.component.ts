@@ -348,12 +348,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         row.push(elData.species);
         row.push(elData.population);
         row.push(elData.known_sick);
-        row.push(elData.known_dead);
-        row.push(elData.est_sick);
-        row.push(elData.est_dead);
-        row.push(elData.captive);
+        row.push({text: elData.known_dead, alignment: 'center'});
+        row.push({text: elData.est_sick, alignment: 'center'});
+        row.push({text: elData.est_dead, alignment: 'center'});
+        row.push({text: elData.captive, alignment: 'center'});
         row.push(elData.species_dia);
-        row.push(elData.count);
+        row.push({text: elData.count, alignment: 'center'});
         row.push(elData.lab);
         locationBody.push(row);
       }
@@ -995,9 +995,11 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       const eventLocation = data.eventlocations[0].locationspecies;
       this.eventLocsPlusDiagnoses = [];
       let speciesDiag = [];
+      let labs = [];
       let eventLocNum = 0;
       for (const event_location of this.data.event_data.eventlocations) {
         eventLocNum = eventLocNum + 1;
+        labs = [];
         speciesDiag = [];
         for (const locationspecies of event_location.locationspecies) {
           if (locationspecies.speciesdiagnoses.length === 0) {
@@ -1057,7 +1059,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             captive = 'Yes' || 'No';
             const s_diag = speciesdiagnosis.diagnosis_string || ' ';
             const county = locationspecies.administrative_level_two_string || ' ';
-            const lab = speciesdiagnosis.organizations_string[0] || ' '; // TODO make this display all the labs if there are more than one
+            let lab = speciesdiagnosis.organizations_string[0] || ' '; // TODO make this display all the labs if there are more than one
 
             let locationName;
 
@@ -1066,6 +1068,14 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             } else {
               locationName = 'Location ' + eventLocNum + ' - ' + event_location.name;
             }
+
+            if (speciesdiagnosis.organizations_string.length > 0) {
+              for (const l of speciesdiagnosis.organizations_string) {
+                labs.push(speciesdiagnosis.organizations_string[0]);
+              }
+              lab = labs.join(', ');
+            }
+
             speciesDiag.push({
               species: locationspecies.species_string,
               population: pop,

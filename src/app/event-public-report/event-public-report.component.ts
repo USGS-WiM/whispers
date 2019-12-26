@@ -480,12 +480,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       if (commentRows.hasOwnProperty(key)) {
         const elData = commentRows[key];
         const row = new Array();
-        row.push(elData.comment);
-        row.push(elData.comment_type_string);
-        row.push(elData.created_date);
-        row.push(elData.created_by_string);
-        row.push(elData.created_by_organization_string);
-        row.push(elData.source);
+        row.push({text: elData.comment, fontSize: 9});
+        row.push({text: elData.comment_type_string, fontSize: 9});
+        row.push({text: elData.created_date, fontSize: 9});
+        row.push({text: elData.created_by_string, fontSize: 9});
+        row.push({text: elData.created_by_organization_string, fontSize: 9});
+        row.push({text: elData.source, fontSize: 9});
         commentBody.push(row);
       }
     }
@@ -496,11 +496,10 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     commentTable = {
       alignment: 'justify',
       table: {
-        heights: 40,
+        // heights: 40,
         headerRows: 1,
-        dontBreakRows: true,
+        dontBreakRows: true, // Some info on breaking table rows across pages: https://github.com/bpampuch/pdfmake/issues/1159
         body: commentBody,
-        fontSize: 10
       },
       layout: {
         hLineColor: function (i, node) {

@@ -562,7 +562,12 @@ export class EventDetailsComponent implements OnInit {
   }
 
   mapEventRemoveMarkers(eventData) {
+
+    // hiding leaflet layer and controls so that they are not present in the html2Canvas conversion and later pdf
     this.map.removeLayer(this.locationMarkers);
+    $('.leaflet-control-zoom').css('visibility', 'hidden');
+    $('.leaflet-control-layers').css('visibility', 'hidden');
+    $('.leaflet-control-attribution').css('visibility', 'hidden');
     // const markers = [];
     let countyPolys = [];
     this.unMappables = [];
@@ -868,8 +873,13 @@ export class EventDetailsComponent implements OnInit {
             this.errorMessage = <any>error;
           }
         );
+
+        // adding back leaflet layers and controls
         this.locationMarkers = L.featureGroup().addTo(this.map);
         this.mapEvent(this.eventData);
+        $('.leaflet-control-zoom').css('visibility', 'visible');
+        $('.leaflet-control-layers').css('visibility', 'visible');
+        $('.leaflet-control-attribution').css('visibility', 'visible');
 
     }, 1000);
   }

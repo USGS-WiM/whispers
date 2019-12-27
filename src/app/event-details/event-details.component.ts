@@ -97,6 +97,8 @@ export class EventDetailsComponent implements OnInit {
   landownerships;
   species: Species[] = [];
   speciesLoading = false;
+  currentlyOpenedItemIndex = -1;
+  currentlyOpenedItemIndexContacts = -1;
 
   eventCommentsPanelOpen = false;
   serviceRequestPanelOpen = false;
@@ -627,6 +629,16 @@ export class EventDetailsComponent implements OnInit {
     this.locationCommentsPanelOpen = false;
     this.locationContactsPanelOpen = false;
 
+  }
+
+  setOpened(itemIndex) {
+    this.currentlyOpenedItemIndex = itemIndex;
+  }
+
+  setClosed(itemIndex) {
+    if (this.currentlyOpenedItemIndex === itemIndex) {
+      this.currentlyOpenedItemIndex = -1;
+    }
   }
 
   editEvent(id: string) {

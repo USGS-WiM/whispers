@@ -808,11 +808,11 @@
 
 
                         <!-- Begin Event Location Comments section -->
-                        <mat-expansion-panel (opened)="locationCommentsPanelOpen = true"
-                          (closed)="locationCommentsPanelOpen = false">
+                        <mat-expansion-panel (opened)="setOpened(i)"
+                          (closed)="setClosed(i)">
                           <mat-expansion-panel-header>
                             <mat-panel-title>
-                              {{locationCommentsPanelOpen ? 'Hide Location Comments' : 'View Location Comments'}}
+                                {{ currentlyOpenedItemIndex === i ? 'Hide Location Comments' : 'View Location Comments' }}
                             </mat-panel-title>
                           </mat-expansion-panel-header>
 

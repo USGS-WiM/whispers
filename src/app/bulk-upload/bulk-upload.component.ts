@@ -195,7 +195,7 @@ export class BulkUploadComponent implements OnInit {
           event_reference: item.event_reference,
           event_type: item.event_type,
           public: item.public,
-          event_status: item.event_status,
+          complete: item.complete,
           new_event_diagnoses: this.buildEventDiagnosisArray(item.eventdiagnoses),
           new_event_locations: [
             {

@@ -2,7 +2,7 @@ export interface BulkUploadRecord {
     event_ordinal: number;
     event_reference: string;
     event_type: number;
-    event_status: number;
+    complete: boolean;
     public: boolean;
     eventdiagnoses: number[];
     location_ordinal: number;

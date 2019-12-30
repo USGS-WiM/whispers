@@ -885,7 +885,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     // need to give some time for html2canvas to finish rendering
     setTimeout(() => {
       // Getting date/time for timestamp
-      const date = APP_UTILITIES.getDateTime;
+      const date = APP_UTILITIES.getReportDateTime;
 
       // event details
       const data = this.data.event_data;
@@ -912,7 +912,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         stateAbbrev = this.adminLevelOnes.find(item => item.name === eventlocation.administrative_level_one_string);
         countryAbbrev = this.country.find(item => item.name === eventlocation.country_string);
 
-        formattedString = eventlocation.administrative_level_two_string + ', ' + stateAbbrev.abbreviation + ', ' + countryAbbrev.abbreviation;
+        formattedString = eventlocation.administrative_level_two_string + ', ' + stateAbbrev.abbreviation + ', ' + countryAbbrev.abbreviation + '; ';
         counties.push(formattedString);
       }
 
@@ -1200,10 +1200,9 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                         [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, organizations],
                         [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, data.event_status_string],
                         [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
-                        [{ border: [false, false, false, false], text: 'Summary Info', bold: true, fontSize: 16, margin: [30, 10] }, ' '],
-                        [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
+                        [{ border: [false, false, false, false], text: 'Summary Information', bold: true, fontSize: 22, margin: [30, 10], colSpan: 2}, ' '],
                         [{ border: [false, false, true, false], text: '# of Locations', bold: true, alignment: 'right' }, locationCount],
-                        [{ border: [false, false, true, false], text: 'County (or Equivalent)', bold: true, alignment: 'right' }, counties.toString()],
+                        [{ border: [false, false, true, false], text: 'County (or Equivalent)', bold: true, alignment: 'right' }, [{text: counties}]],
                         [{ border: [false, false, true, false], text: 'Event Diagnosis', bold: true, alignment: 'right' }, eventDiagnosises],
                         [{ border: [false, false, true, false], text: 'Diagnostic Laboratory', bold: true, alignment: 'right' }, this.labs],
                         [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, data.affected_count],

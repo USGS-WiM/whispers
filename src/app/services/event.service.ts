@@ -369,7 +369,7 @@ export class EventService {
       }));
   }
 
-  public requestCollaboration(eventID, message): Observable<any> {
+  public requestCollaboration(formValue): Observable<any> {
 
     // const options = new RequestOptions({
     //   headers: APP_SETTINGS.AUTH_JSON_HEADERS
@@ -380,9 +380,9 @@ export class EventService {
     //   catchError(this.handleError));
 
     // below is newer HttpClient method
-    return this.http.post(APP_SETTINGS.EVENTS_URL + eventID + '/request_collaboration', {
+    return this.http.post(APP_SETTINGS.EVENTS_URL + formValue.event + '/request_collaboration', {
       headers: APP_SETTINGS.MIN_AUTH_TEXT_HEADERS,
-      body: message
+      body: formValue.comment
       // params: new HttpParams().set('ordering', orderParams).set('page', pageNumber.toString()).set('page_size', pageSize.toString())
     }).pipe(
       map((res: any) => {

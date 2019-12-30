@@ -53,7 +53,7 @@ export class CollaborationRequestComponent implements OnInit {
     private serviceRequestService: ServiceRequestService,
     private dataUpdatedService: DataUpdatedService,
     public snackBar: MatSnackBar,
-    private eventService: EventService
+    private eventService: EventService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
 
@@ -80,10 +80,7 @@ export class CollaborationRequestComponent implements OnInit {
   onSubmit(formValue) {
     this.submitLoading = true;
 
-    const eventID;
-    const message;
-
-    this.eventService.requestCollaboration(eventID, message)
+    this.eventService.requestCollaboration(formValue)
       .subscribe(
         (response) => {
           this.submitLoading = false;

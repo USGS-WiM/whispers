@@ -98,7 +98,6 @@ export class EventDetailsComponent implements OnInit {
   species: Species[] = [];
   speciesLoading = false;
   currentlyOpenedItemIndex = -1;
-  currentlyOpenedItemIndexContacts = -1;
 
   eventCommentsPanelOpen = false;
   serviceRequestPanelOpen = false;

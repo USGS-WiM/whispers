@@ -86,6 +86,9 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   locationIdArray = [];
   commentTypes: CommentType[];
 
+  monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'];
+
   constructor(
     public eventPublicReportDialogRef: MatDialogRef<EventPublicReportComponent>,
     private displayValuePipe: DisplayValuePipe,
@@ -148,7 +151,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         long: Number(this.natMapPoints['administrativeleveltwos'][0]['centroid_longitude'])
       });
       this.natMap.setView([view[0].lat, view[0].long]);
-    }, 300);
+    }, 400);
 
     this.natMap.dragging.disable();
     this.natMap.touchZoom.disable();
@@ -710,6 +713,36 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     return text;
   }
 
+  getEventDates() {
+    let startDate = this.data.event_data.start_date;
+    let endDate = this.data.event_data.end_date;
+    let text;
+
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+
+    // getting date elements
+    const sd = startDate.substr(8, 2);
+    const sm = startDate.substr(5, 2);
+    const sy = startDate.substr(0, 4);
+    startDate = new Date(sy, sm, sd);
+
+    if (endDate === null) {
+      text = this.monthNames[startDate.getMonth()] + ' ' + sd + ', ' + sy + ' - ' + ' N/A';
+      return text;
+    } else if (endDate !== null) {
+      const ed = endDate.substr(8, 2);
+      const em = endDate.substr(5, 2);
+      const ey = endDate.substr(0, 4);
+      endDate = new Date(ey, em, ed);
+      let dayCount;
+
+      dayCount = Math.round(Math.abs((startDate - endDate) / oneDay));
+
+      text = this.monthNames[startDate.getMonth()] + ' ' + sd + ', ' + sy + ' - ' + this.monthNames[endDate.getMonth()] + ' ' + ed + ', ' + ey + ' (' + dayCount + ' days)';
+      return text;
+    }
+  }
+
   eventLocationName(comment) {
     let locationName = '';
     let count;
@@ -1162,7 +1195,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                         [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, data.affected_count],
                         [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, speciesAffectedCount],
                         [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, speciesAffected],
-                        [{ border: [false, false, true, false], text: 'Event Start Date - End Date', bold: true, alignment: 'right' }, formattedDate], // TODO: format according to wireframe & Create function to get count of total days event lasted
+                        [{ border: [false, false, true, false], text: 'Event Start Date - End Date', bold: true, alignment: 'right' }, this.getEventDates()], // TODO: format according to wireframe & Create function to get count of total days event lasted
                         [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, this.getAssociatedEvents() ], // TODO: Figure out what to do regarding links & Display none if there are none {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}
                         [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, this.getEventVisibility()]
                       ],

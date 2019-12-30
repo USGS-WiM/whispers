@@ -19,7 +19,7 @@ import { OrganizationService } from '@app/services/organization.service';
 import { EventDetail } from '@interfaces/event-detail';
 import { forEach } from '@angular/router/src/utils/collection';
 import { DiagnosisTypeService } from '@app/services/diagnosis-type.service';
-import { EventDiagnosisService } from '@app/services/event-diagnosis.service';
+import { DiagnosisService } from '@app/services/diagnosis.service';
 declare let gtag: Function;
 
 @Component({
@@ -47,7 +47,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     private administrativeLevelOneService: AdministrativeLevelOneService,
     private administrativeLevelTwoService: AdministrativeLevelTwoService,
     private diagnosisTypeService: DiagnosisTypeService,
-    private eventDiagnosisService: EventDiagnosisService,
+    private DiagnosisService: DiagnosisService,
     private countryService: CountryService,
     private organizationService: OrganizationService,
     @Inject(MAT_DIALOG_DATA) public data: any) { 
@@ -98,7 +98,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
       );
 
-    this.eventDiagnosisService.getEventDiagnoses()
+    this.DiagnosisService.getDiagnoses()
       .subscribe(
         (diagnoses) => {
           this.eventDiagnoses = diagnoses;
@@ -362,11 +362,11 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
     search_query.diagnosis.forEach(search_event_diag => {
       this.eventDiagnoses.forEach(event_diag => {
-        if (search_event_diag == Number(event_diag.diagnosis)) {
+        if (search_event_diag == event_diag.id) {
           if (search_event_diagnosis == null) {
-            search_event_diagnosis = event_diag.diagnosis_string;
+            search_event_diagnosis = event_diag.name;
           } else {
-            search_event_diagnosis += ", " + event_diag.diagnosis_string;
+            search_event_diagnosis += ", " + event_diag.name;
           }
         }
       });

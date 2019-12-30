@@ -12,11 +12,14 @@ import { APP_UTILITIES } from '@app/app.utilities';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 import { AdministrativeLevelOneService } from '@app/services/administrative-level-one.service';
+import { AdministrativeLevelTwoService } from '@app/services/administrative-level-two.service';
 import { CountryService } from '@app/services/country.service';
 import { OrganizationService } from '@app/services/organization.service';
 
 import { EventDetail } from '@interfaces/event-detail';
 import { forEach } from '@angular/router/src/utils/collection';
+import { DiagnosisTypeService } from '@app/services/diagnosis-type.service';
+import { DiagnosisService } from '@app/services/diagnosis.service';
 declare let gtag: Function;
 
 @Component({
@@ -34,12 +37,17 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
   adminLevelOnes = [];
   adminLevelTwos = [];
+  diagnosisTypes = [];
+  eventDiagnoses = [];
   countries = [];
   orgs = [];
 
   constructor(
     public resultsSummaryReportCompenent: MatDialogRef<SearchResultsSummaryReportComponent>,
     private administrativeLevelOneService: AdministrativeLevelOneService,
+    private administrativeLevelTwoService: AdministrativeLevelTwoService,
+    private diagnosisTypeService: DiagnosisTypeService,
+    private DiagnosisService: DiagnosisService,
     private countryService: CountryService,
     private organizationService: OrganizationService,
     @Inject(MAT_DIALOG_DATA) public data: any) { 
@@ -61,6 +69,39 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       .subscribe(
         (adminLevelOnes) => {
           this.adminLevelOnes = adminLevelOnes;
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    this.administrativeLevelTwoService.getAdminLevelTwos()
+      .subscribe(
+        (adminLevelTwos) => {
+          this.adminLevelTwos = adminLevelTwos;
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    this.diagnosisTypeService.getDiagnosisTypes()
+      .subscribe(
+        (diagnosisTypes) => {
+          this.diagnosisTypes = diagnosisTypes;
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+    this.DiagnosisService.getDiagnoses()
+      .subscribe(
+        (diagnoses) => {
+          this.eventDiagnoses = diagnoses;
 
         },
         error => {
@@ -286,6 +327,51 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       });
     });
 
+    // get string for admin level twos in search criteria
+    let search_admin_level_two;
+
+    search_query.administrative_level_two.forEach(search_level_two => {
+      this.adminLevelTwos.forEach(level_two => {
+        if (search_level_two == Number(level_two.id)) {
+          if (search_admin_level_two == null) {
+            search_admin_level_two = level_two.name;
+          } else {
+            search_admin_level_two += ", " + level_two.name;
+          }
+        }
+      });
+    });
+
+    // get string for diagnosis types in search criteria
+    let search_diagnosis_type;
+
+    search_query.diagnosis_type.forEach(search_diag_type => {
+      this.diagnosisTypes.forEach(diag_type => {
+        if (search_diag_type == Number(diag_type.id)) {
+          if (search_diagnosis_type == null) {
+            search_diagnosis_type = diag_type.name;
+          } else {
+            search_diagnosis_type += ", " + diag_type.name;
+          }
+        }
+      });
+    });
+
+    // get string for event diagnosis in search criteria
+    let search_event_diagnosis;
+
+    search_query.diagnosis.forEach(search_event_diag => {
+      this.eventDiagnoses.forEach(event_diag => {
+        if (search_event_diag == event_diag.id) {
+          if (search_event_diagnosis == null) {
+            search_event_diagnosis = event_diag.name;
+          } else {
+            search_event_diagnosis += ", " + event_diag.name;
+          }
+        }
+      });
+    });
+
 
     /************
      * 
@@ -440,6 +526,26 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       event_visibility = { text: 'See details', bold: true };
     }
 
+    let affected_count;
+
+    if (search_query.affected_count != undefined) {
+      affected_count = 'Affected Count ' + search_query.affected_count_operator + ' ' + search_query.affected_count.toString();
+    } else {
+      affected_count = '';
+    }
+
+    let event_type = '';
+
+    search_query.event_type.forEach(eventTypeItem => {
+      if (eventTypeItem == 1) {
+        event_type += "Mortality/Morbidity";
+      } else if (eventTypeItem == 2 && event_type != '') {
+        event_type += ", Surveillance";
+      } else if (eventTypeItem == 2) {
+        event_type = "Surveillance";
+      }
+    })
+
     const docDefinition = {
       pageOrientation: 'landscape',
       pageMargins: [20, 20, 20, 35],
@@ -483,6 +589,18 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           margin: [30, 10]
         },
         {
+          text: ((search_query.start_date) ? 'Start Date: ' + search_query.start_date + ' | '  : 'No Start Date | ') // start date
+            + ((search_query.end_date) ? 'End Date: ' + search_query.end_date + ' | ' : 'No End Date | ') // end date
+            + record_status + ' | ' // record status
+            + ((search_admin_level_one && search_admin_level_one.length > 0) ? search_admin_level_one + ' | ' : '') // admin level ones
+            + ((search_admin_level_two && search_admin_level_two.length > 0) ? search_admin_level_two + ' | ' : '')
+            + ((affected_count != '') ? affected_count + ' | ' : '')
+            + ((event_type != '') ? event_type + ' | ' : '')
+            + ((search_diagnosis_type && search_diagnosis_type.length > 0) ? search_diagnosis_type + ' | ' : '')
+            + ((search_event_diagnosis && search_event_diagnosis.length > 0) ? search_event_diagnosis + ' | ' : ''),
+          margin: [30, 10]
+        },/*
+        {
           alignment: 'justify',
           columns: [
             {
@@ -503,7 +621,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                }
             }
           ]
-        },
+        },*/
         {
           text: 'Search Results Summary',
           style: 'bigger',

@@ -733,7 +733,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     startDate = new Date(sy, sm, sd);
 
     if (endDate === null) {
-      text = this.monthNames[startDate.getMonth()] + ' ' + sd + ', ' + sy + ' - ' + ' N/A';
+      text = this.monthNames[startDate.getMonth() - 1] + ' ' + sd + ', ' + sy + ' - ' + ' N/A';
       return text;
     } else if (endDate !== null) {
       const ed = endDate.substr(8, 2);
@@ -1040,8 +1040,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         eventLocNum = eventLocNum + 1;
         labs = [];
         speciesDiag = [];
+
+        // checking to see if this eventlocation has a species. If not, then we don't want to inlcude it in the array used to make the tables
         if (event_location.locationspecies.length !== 0) {
           for (const locationspecies of event_location.locationspecies) {
+
+            // checking to see if this location species has a species diagnosis. If not, then we add it to the array with 'Not Assesed' in diagnoses field.
             if (locationspecies.speciesdiagnoses.length === 0) {
               let captive = locationspecies.captive;
               // pdfmake does not like 'undefined' values so setting them to empty string
@@ -1056,7 +1060,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               const s_diag = ' ';
               const county = ' ';
               const country = locationspecies.country_string || ' ';
-              const lab = ' '; // TODO make this display all the labs if there are more than one
+              const lab = ' ';
 
               let locationName;
 
@@ -1085,6 +1089,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                 name: locationName,
               });
             }
+
+            // Loop through each species diagnoses for a location species
             for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
               const numAssess = speciesdiagnosis.tested_count + '/' + speciesdiagnosis.diagnosis_count;
               let captive = locationspecies.captive;
@@ -1100,7 +1106,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               captive = 'Yes' || 'No';
               const s_diag = speciesdiagnosis.diagnosis_string || ' ';
               const county = locationspecies.administrative_level_two_string || ' ';
-              let lab = speciesdiagnosis.organizations_string[0] || ' '; // TODO make this display all the labs if there are more than one
+              let lab = speciesdiagnosis.organizations_string[0] || ' ';
 
               let locationName;
 

@@ -48,7 +48,7 @@ export interface EventSubmission {
     event_reference: string;
     event_type: number;
     public: boolean;
-    event_status: number;
+    complete: boolean;
     new_event_diagnoses: EventDiagnosisSubmission[];
     new_event_locations: NewEventLocation[];
 }

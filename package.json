@@ -1,6 +1,6 @@
 {
   "name": "whispers",
-  "version": "2.10.1",
+  "version": "2.11.0",
   "description": "Wildlife Health Information Sharing Partnership event reporting system (WHISPers)",
   "scripts": {
     "ng": "ng",
@@ -46,7 +46,7 @@
     "zone.js": "^0.8.29"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.7.0",
+    "@angular-devkit/build-angular": "^0.10.3",
     "@angular/cli": "^7.3.9",
     "@angular/compiler": "^7.2.15",
     "@angular/compiler-cli": "^7.2.15",

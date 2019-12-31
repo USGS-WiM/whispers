@@ -1,0 +1,40 @@
+.natMap {
+    width: 400px;
+    height: 300px;
+    background-color: white;
+}
+
+.detail-section-buttons{
+    display: flex !important;
+    width: 100% !important;
+    justify-content: center;
+
+    button{
+        position: relative;
+        top: -2px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+.mapContainer {
+    display: flex !important;
+    width: 100% !important;
+    justify-content: center;
+}
+
+.wrapper {
+    overflow: hidden;
+}
+
+.firstMap {
+    float: left;
+    padding-right: 10px;
+}
+
+.secondMap {
+    overflow: hidden;
+    padding-left: 10px;
+}

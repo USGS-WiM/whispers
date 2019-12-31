@@ -169,6 +169,16 @@ public static get eventGroupIDTooltip(): string { return 'Unique identifier for 
 public static get circleNameTooltip(): string { return 'Short name for the user circle.'; }
 public static get circleDiscriptionTooltip(): string { return 'Description of the user circle.'; }
 // END DASHBOARD
+
+// PDF Defnitions
+public static get numberOfLocationsDefinition(): string { return 'Number of locations (e.g., town or lake) that each represents a distinct spatial cluster of animal observations within a county.'; }
+public static get numberOfSpeciesDefinition(): string { return 'Total number of species affected.'; }
+public static get speciesMostAffectedDefinition(): string { return 'Top species affected based on sick and dead numbers reported.'; }
+public static get startEndDatesDefinition(): string { return 'Beginning date of the event (considering all locations). Ending date of the event (considering all locations).'; }
+public static get associatedEventDefinition(): string { return 'Events that are biologically equivalent and were grouped together by wildlife disease specialists at the USGS National Wildlife Health Center.'; }
+public static get commentSourceDefinition(): string { return 'Comment timeline is a compilation of comments entered in various sections of the event record; the source identifies from where the comment originated.'; }
+// PDF Defnition
+
 }
 
 // Tooltip config template:

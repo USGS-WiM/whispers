@@ -171,7 +171,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         long: Number(this.natMapPoints['administrativeleveltwos'][0]['centroid_longitude'])
       });
       this.natMap.setView([view[0].lat, view[0].long]);
-    }, 500);
+    }, 1000);
 
     this.natMap.dragging.disable();
     this.natMap.touchZoom.disable();

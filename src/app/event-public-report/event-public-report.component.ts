@@ -807,23 +807,33 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     // getting date elements
     const sd = startDate.substr(8, 2);
-    const sm = startDate.substr(5, 2);
+    let sm = startDate.substr(5, 2);
     const sy = startDate.substr(0, 4);
+
+    sm = Number(sm);
+    sm = sm - 1;
+
     startDate = new Date(sy, sm, sd);
 
     if (endDate === null) {
-      text = this.monthNames[startDate.getMonth() - 1] + ' ' + sd + ', ' + sy + ' - ' + ' N/A';
+      text = this.monthNames[sm] + ' ' + sd + ', ' + sy + ' - ' + ' N/A';
       return text;
     } else if (endDate !== null) {
       const ed = endDate.substr(8, 2);
-      const em = endDate.substr(5, 2);
+      let em = endDate.substr(5, 2);
       const ey = endDate.substr(0, 4);
+
+      em = Number(em);
+      em = em - 1;
+
       endDate = new Date(ey, em, ed);
       let dayCount;
 
       dayCount = Math.round(Math.abs((startDate - endDate) / oneDay));
 
-      text = this.monthNames[startDate.getMonth()] + ' ' + sd + ', ' + sy + ' - ' + this.monthNames[endDate.getMonth()] + ' ' + ed + ', ' + ey + ' (' + dayCount + ' days)';
+      /* const startMonth = startDate.getMonth() < 12 ? startDate.getMonth() + 1 : 1; */
+
+      text = this.monthNames[sm] + ' ' + sd + ', ' + sy + ' - ' + this.monthNames[em] + ' ' + ed + ', ' + ey + ' (' + dayCount + ' days)';
       return text;
     }
   }

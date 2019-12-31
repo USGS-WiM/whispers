@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, AfterViewChecked } from '@
 //declare let L: any;
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { Observable ,  Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { Event } from '@interfaces/event';
 import { EventSummary } from '@interfaces/event-summary';
@@ -142,7 +142,7 @@ export class HomeComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(SearchResultsSummaryReportComponent) eventReresultsSummaryReportDialogRefportComponent: SearchResultsSummaryReportComponent;
-  
+
 
   constructor(
     private eventService: EventService,
@@ -875,7 +875,7 @@ export class HomeComponent implements OnInit {
           if (event.public === false) {
             popupContent = popupContent + '<h3><img src="/assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</h3>';
           } else {
-            popupContent = popupContent +  '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>';
+            popupContent = popupContent + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>';
           }
 
           // else if (event.public === true) {
@@ -1119,9 +1119,9 @@ export class HomeComponent implements OnInit {
     window.open(APP_SETTINGS.WHISPERS_METADATA_URL, '_blank');
     gtag('event', 'click', { 'event_category': 'Home', 'event_label': 'Metadata Opened' });
   }
-  
 
-  //Function for creating a dialog to download results summary report pdf
+
+  // Function for creating a dialog to download results summary report pdf
   generateResultsSummaryReport(id: string) {
 
     /**********
@@ -1132,7 +1132,7 @@ export class HomeComponent implements OnInit {
      * 
      * 
      */
-    
+
     this.resultsSummaryReportDialogRef = this.dialog.open(SearchResultsSummaryReportComponent, {
       data: {
         user: this.currentUser,

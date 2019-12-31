@@ -43,15 +43,14 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   orgs = [];
 
   constructor(
-    public resultsSummaryReportCompenent: MatDialogRef<SearchResultsSummaryReportComponent>,
+    public resultsSummaryReportDialogRef: MatDialogRef<SearchResultsSummaryReportComponent>,
     private administrativeLevelOneService: AdministrativeLevelOneService,
     private administrativeLevelTwoService: AdministrativeLevelTwoService,
     private diagnosisTypeService: DiagnosisTypeService,
-    private DiagnosisService: DiagnosisService,
+    private diagnosisService: DiagnosisService,
     private countryService: CountryService,
     private organizationService: OrganizationService,
-    @Inject(MAT_DIALOG_DATA) public data: any) { 
-  }
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
     this.loadingData = true;
@@ -98,7 +97,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
       );
 
-    this.DiagnosisService.getDiagnoses()
+    this.diagnosisService.getDiagnoses()
       .subscribe(
         (diagnoses) => {
           this.eventDiagnoses = diagnoses;
@@ -112,7 +111,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     this.countryService.getCountries()
       .subscribe(
         (countries) => {
-          this.countries = countries
+          this.countries = countries;
 
         },
         error => {
@@ -123,8 +122,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     this.organizationService.getOrganizations()
       .subscribe(
         (organizations) => {
-          this.orgs = organizations
-
+          this.orgs = organizations;
         },
         error => {
           this.errorMessage = <any>error;
@@ -180,7 +178,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         const elData = data[key];
         const row = new Array();
         row.push(elData.id);
-        row.push({text: elData.start_date + " to " + ((elData.end_date == null) ? "open" : elData.end_date), alignment: 'left'});
+        row.push({ text: elData.start_date + " to " + ((elData.end_date == null) ? "open" : elData.end_date), alignment: 'left' });
         let adminLevelTwoCell = new Array();
         for (let key in elData.administrativeleveltwos) {
           let countryAbbrev;
@@ -189,8 +187,10 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               countryAbbrev = this.countries[countryKey].abbreviation;
             }
           }
-          adminLevelTwoCell.push({text: elData.administrativeleveltwos[key].name + ", " + this.getAdminLevelOneAbbrev(elData, elData.administrativeleveltwos[key].administrative_level_one) + ", " + countryAbbrev + ";\n", 
-                                  alignment: 'left'});
+          adminLevelTwoCell.push({
+            text: elData.administrativeleveltwos[key].name + ", " + this.getAdminLevelOneAbbrev(elData, elData.administrativeleveltwos[key].administrative_level_one) + ", " + countryAbbrev + ";\n",
+            alignment: 'left'
+          });
         }
         row.push(adminLevelTwoCell);
         let eventDiagnosesCell = new Array();
@@ -211,11 +211,11 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             speciesCell.push(elData.species[key].name + ",\n");
           }
         }
-        row.push({ text: speciesCell, alignment: 'left'});
-        row.push({text: elData.event_status_string, alignment: 'left'});
+        row.push({ text: speciesCell, alignment: 'left' });
+        row.push({ text: elData.event_status_string, alignment: 'left' });
         //TODO: need to come back and fix this. it's a number. Maybe need to have organization_string added to event? Or maybe just use organization service
         if (elData.organizations) {
-          
+
           //row.push(elData.organizations[0].toString());
         } else {
           //row.push('');
@@ -228,24 +228,24 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               organization = this.orgs[orgKey].name;
             }
           }
-          if (Number(key)%2 == 0) {
-            orgCell.push({text: organization + "\n", alignment: 'left', color: 'black'});
+          if (Number(key) % 2 == 0) {
+            orgCell.push({ text: organization + "\n", alignment: 'left', color: 'black' });
           } else {
-            orgCell.push({text: organization + "\n", alignment: 'left', color: 'gray'});
+            orgCell.push({ text: organization + "\n", alignment: 'left', color: 'gray' });
           }
         }
         row.push(orgCell);
         if (elData.public) {
-          row.push({text: "Visible to the public", alignment: 'left'});
+          row.push({ text: "Visible to the public", alignment: 'left' });
         } else {
-          row.push({text: "NOT VISIBLE TO THE PUBLIC", bold: true, alignment: 'left'});
+          row.push({ text: "NOT VISIBLE TO THE PUBLIC", bold: true, alignment: 'left' });
         }
         locationBody.push(row);
       }
     }
 
     // table object to be placed in doc definition
-    table = { 
+    table = {
       alignment: 'justify',
       table: {
         headerRows: 1,
@@ -262,7 +262,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       pageBreak: 'after'
     };
 
-    return table; 
+    return table;
   }
   // END defining event location table
 
@@ -383,7 +383,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
     // Section with SEARCH RESULTS SUMMARY
     let number_events = result_data.length.toString();
-    
+
     let most_frequent_diagnosis;
     let diagnosisArray = [];
 
@@ -392,7 +392,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
     let species_most_affected;
     let speciesArray = [];
-    
+
     let average_event_time_span;
     let total_days_all_events = 0;
 
@@ -413,11 +413,11 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       //initial calc Most Frequent Diagnosis
       if (diagnosisArray.length == 0) {
         element.eventdiagnoses.forEach(diagnosis => {
-          diagnosisArray.push({name: diagnosis.diagnosis_string, count: 1})
+          diagnosisArray.push({ name: diagnosis.diagnosis_string, count: 1 })
         });
       }
       element.eventdiagnoses.forEach(diagnosis => {
-        if (diagnosisArray.find(function(item) {
+        if (diagnosisArray.find(function (item) {
           return diagnosis.diagnosis_string == item.name;
         })) {
           diagnosisArray.forEach(diagnosisItem => {
@@ -426,7 +426,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             }
           });
         } else {
-          diagnosisArray.push({name: diagnosis.diagnosis_string, count: 1})
+          diagnosisArray.push({ name: diagnosis.diagnosis_string, count: 1 })
         };
       });
 
@@ -438,11 +438,11 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       //initial calc for Species Most Affected
       if (speciesArray.length == 0) {
         element.species.forEach(species => {
-          speciesArray.push({name: species.name, count: 1})
+          speciesArray.push({ name: species.name, count: 1 })
         });
       }
       element.species.forEach(species => {
-        if (speciesArray.find(function(item) {
+        if (speciesArray.find(function (item) {
           return species.name == item.name;
         })) {
           speciesArray.forEach(speciesItem => {
@@ -451,7 +451,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             }
           });
         } else {
-          speciesArray.push({name: species.name, count: 1})
+          speciesArray.push({ name: species.name, count: 1 })
         };
       });
 
@@ -466,7 +466,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         end_date = new Date(element.end_date);
       }
       // num_days also used to test for longest running event below
-      num_days = (end_date-start_date)/(1000*3600*24);
+      num_days = (end_date - start_date) / (1000 * 3600 * 24);
       total_days_all_events += num_days;
 
       //calc for Event with Most Affected
@@ -513,7 +513,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     })
 
     //final determination of Average Event Time Span
-    average_event_time_span = total_days_all_events/Number(number_events);
+    average_event_time_span = total_days_all_events / Number(number_events);
 
     //final determination of Event Visibility
     if (public_count == 1 && not_public_count == 1) {
@@ -556,9 +556,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           columns: [
             {
               width: 700,
-              text: ['Report generated by +' + nameOrgString + ' from ', {text: url, link: url, color: '#0000EE'}, ' on ' + date + '. \n For more information about this event, connect with the Contact Organization.\n For more information about WHISPers, see “About” at https://whispers.usgs.gov.'
-            ]
-          },
+              text: ['Report generated by +' + nameOrgString + ' from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about this event, connect with the Contact Organization.\n For more information about WHISPers, see “About” at https://whispers.usgs.gov.'
+              ]
+            },
             {
               width: 50,
               alignment: 'right',
@@ -579,7 +579,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             {
               style: 'header',
               text: 'Summary of Search Results',
-              margin: [ 0, 15, 0, 0 ]
+              margin: [0, 15, 0, 0]
             },
           ]
         },
@@ -589,7 +589,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           margin: [30, 10]
         },
         {
-          text: ((search_query.start_date) ? 'Start Date: ' + search_query.start_date + ' | '  : 'No Start Date | ') // start date
+          text: ((search_query.start_date) ? 'Start Date: ' + search_query.start_date + ' | ' : 'No Start Date | ') // start date
             + ((search_query.end_date) ? 'End Date: ' + search_query.end_date + ' | ' : 'No End Date | ') // end date
             + record_status + ' | ' // record status
             + ((search_admin_level_one && search_admin_level_one.length > 0) ? search_admin_level_one + ' | ' : '') // admin level ones
@@ -635,21 +635,22 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               table: {
                 widths: [150, 250],
                 body: [
-                  [{ border: [false, false, true, false], text: '# of Events', bold: true, alignment: 'right' }, number_events.toString() ],
+                  [{ border: [false, false, true, false], text: '# of Events', bold: true, alignment: 'right' }, number_events.toString()],
                   [{ border: [false, false, true, false], text: 'Most Frequent Event Diagnosis', bold: true, alignment: 'right' }, { text: most_frequent_diagnosis, alignment: 'left' }],
                   [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, number_animals_affected],
                   [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, number_species_affected],
                   [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, { text: species_most_affected, alignment: 'left' }],
                   [{ border: [false, false, true, false], text: 'Average Event Time Span', bold: true, alignment: 'right' }, average_event_time_span.toFixed(0).toString() + " days"],
-                  [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [ { text: [ {text: event_with_most_affected, link: window.location.href.split('/home')[0]+"/event/"+event_with_most_affected, color: 'blue'}, " (" + event_with_most_affected_count + " affected)"  ] } ] ],
-                  [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [ { text: [ { text: longest_running_event, link: window.location.href.split('/home')[0]+"/event/"+longest_running_event, color: 'blue'}, " (" + longest_running_event_count.toFixed(0) + " days)" ] } ] ],
-                  [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, event_visibility ],
+                  [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [{ text: [{ text: event_with_most_affected, link: window.location.href.split('/home')[0] + "/event/" + event_with_most_affected, color: 'blue' }, " (" + event_with_most_affected_count + " affected)"] }]],
+                  [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [{ text: [{ text: longest_running_event, link: window.location.href.split('/home')[0] + "/event/" + longest_running_event, color: 'blue' }, " (" + longest_running_event_count.toFixed(0) + " days)"] }]],
+                  [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, event_visibility],
                 ]
               },
-              layout: { defaultBorder: false,
-                paddingLeft: function(i, node) { return 15; },
-                paddingRight: function(i, node) { return 10; },
-               }
+              layout: {
+                defaultBorder: false,
+                paddingLeft: function (i, node) { return 15; },
+                paddingRight: function (i, node) { return 10; },
+              }
             },
             {
               alignment: 'justify',
@@ -671,7 +672,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             {
               style: 'header',
               text: 'Summary of Search Results',
-              margin: [ 0, 15, 0, 0 ]
+              margin: [0, 15, 0, 0]
             },
           ]
         },
@@ -698,44 +699,45 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             {
               style: 'header',
               text: 'Explanation of Terms',
-              margin: [ 0, 15, 0, 0 ]
+              margin: [0, 15, 0, 0]
             }
           ]
         },
         {
           alignment: 'justify',
-          text: ['WHISPers stands for Wildlife Health Information Sharing Partnership - event reporting system. It is a partner-driven, web-based repository for sharing basic information about historic and ongoing wildlife mortality (death) and/or morbidity (illness) events. The information, such as county-level locations, onset and ending dates, species affected, and diagnosis has generously been shared with the USGS National Wildlife Health Center over time by hundreds of natural resource managers and stakeholders across the U.S. and beyond. The primary goal of the system is to provide natural resource management partners and the public with timely, accurate information on where wildlife disease events are occurring or have occurred for better preparation and decision making. The information is opportunistically collected and does not reflect all the mortality events that occur in North America. \n', {text: 'Disclaimer', fontSize: 11, bold: true, paddingTop: 20, paddingBottom: 0}, '\n\n The data on this website are provided for situational awareness of wildlife health events. The USGS National Wildlife Health Center (NWHC) makes every effort to provide accurate and timely information; however, data may not be final or fully accurate, especially if an event is ongoing or data synthesis is not complete. Conclusions drawn from or actions undertaken on the basis of such data and information are the sole responsibility of the user. To ensure that information is accurately interpreted and appropriately credited, dissemination of information from this site (publication, press release, technical report, etc.) should be done in collaboration with the specific agencies and laboratories that have generated the information. \n\n Note: WHISPers data fields and business rules for reporting of surveillance events are under development and thus display of surveillance information may be inconsistent.\n\n'],
+          text: ['WHISPers stands for Wildlife Health Information Sharing Partnership - event reporting system. It is a partner-driven, web-based repository for sharing basic information about historic and ongoing wildlife mortality (death) and/or morbidity (illness) events. The information, such as county-level locations, onset and ending dates, species affected, and diagnosis has generously been shared with the USGS National Wildlife Health Center over time by hundreds of natural resource managers and stakeholders across the U.S. and beyond. The primary goal of the system is to provide natural resource management partners and the public with timely, accurate information on where wildlife disease events are occurring or have occurred for better preparation and decision making. The information is opportunistically collected and does not reflect all the mortality events that occur in North America. \n', { text: 'Disclaimer', fontSize: 11, bold: true, paddingTop: 20, paddingBottom: 0 }, '\n\n The data on this website are provided for situational awareness of wildlife health events. The USGS National Wildlife Health Center (NWHC) makes every effort to provide accurate and timely information; however, data may not be final or fully accurate, especially if an event is ongoing or data synthesis is not complete. Conclusions drawn from or actions undertaken on the basis of such data and information are the sole responsibility of the user. To ensure that information is accurately interpreted and appropriately credited, dissemination of information from this site (publication, press release, technical report, etc.) should be done in collaboration with the specific agencies and laboratories that have generated the information. \n\n Note: WHISPers data fields and business rules for reporting of surveillance events are under development and thus display of surveillance information may be inconsistent.\n\n'],
           style: 'smaller',
         },
         {
           style: 'definitionsTable',
           table: {
             body: [
-              [{text: '# of Events', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'Number of WHISPers events.', border: [false, false, false, false]}],
-              [{text: 'Most Frequent Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'Top event diagnosis or diagnoses based on the number of events with that diagnosis reported.', border: [false, false, false, false]}],
-              [{text: '# of Animals Affected', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'Total number affected. A count of sick plus dead animals for a morbidity/mortality event.', border: [false, false, false, false]}],
-              [{text: '# of Species Affected', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'Total number of species affected.', border: [false, false, false, false]}],
-              [{text: 'Species Most Affected', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'Top species affected based on sick and dead numbers reported.', border: [false, false, false, false]}],
-              [{text: 'Average Event Time Span', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'Mean number of days between start and end dates across all events. If no end date provided for an event, date of report generation was used.', border: [false, false, false, false]}],
-              [{text: 'Event with Most Affected', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'WHISPers event with the highest number of animals affected.', border: [false, false, false, false]}],
-              [{text: 'Longest Running Event', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'WHISPers event with the longest time span in days. If no end date provided for an event, date of report generation was used.', border: [false, false, false, false]}],
-              [{text: 'Event Visibility', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'Indicates whether event is visible to the public or not.', border: [false, false, false, false]}],
-              [{text: 'Event Type', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'Mortality/Morbidity: Noteworthy occurrence of one or more sick or dead animals clustered in space and time. Surveillance: Positive detections of a pathogen during active surveillance of healthy live animals.', border: [false, false, false, false]}],
-              [{text: 'Event ID', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'System-generated unique identifier for an event.', border: [false, false, false, false]}],
-              [{text: 'Start Date - End Date', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'Beginning date of the event (considering all locations). Ending date of the event (considering all locations).', border: [false, false, false, false]}],
-              [{text: 'County (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'County of location (or equivalent, such as parish or borough in the United States).', border: [false, false, false, false]}],
-              [{text: 'Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'The overall main reason(s) for illness and/or death across all locations and species and thus the major cause(s) of the event, or a diagnosis deemed significant enough to list at the event level for situational awareness.', border: [false, false, false, false]}],
+              [{ text: '# of Events', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Number of WHISPers events.', border: [false, false, false, false] }],
+              [{ text: 'Most Frequent Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Top event diagnosis or diagnoses based on the number of events with that diagnosis reported.', border: [false, false, false, false] }],
+              [{ text: '# of Animals Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Total number affected. A count of sick plus dead animals for a morbidity/mortality event.', border: [false, false, false, false] }],
+              [{ text: '# of Species Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Total number of species affected.', border: [false, false, false, false] }],
+              [{ text: 'Species Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Top species affected based on sick and dead numbers reported.', border: [false, false, false, false] }],
+              [{ text: 'Average Event Time Span', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Mean number of days between start and end dates across all events. If no end date provided for an event, date of report generation was used.', border: [false, false, false, false] }],
+              [{ text: 'Event with Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'WHISPers event with the highest number of animals affected.', border: [false, false, false, false] }],
+              [{ text: 'Longest Running Event', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'WHISPers event with the longest time span in days. If no end date provided for an event, date of report generation was used.', border: [false, false, false, false] }],
+              [{ text: 'Event Visibility', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Indicates whether event is visible to the public or not.', border: [false, false, false, false] }],
+              [{ text: 'Event Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Mortality/Morbidity: Noteworthy occurrence of one or more sick or dead animals clustered in space and time. Surveillance: Positive detections of a pathogen during active surveillance of healthy live animals.', border: [false, false, false, false] }],
+              [{ text: 'Event ID', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'System-generated unique identifier for an event.', border: [false, false, false, false] }],
+              [{ text: 'Start Date - End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Beginning date of the event (considering all locations). Ending date of the event (considering all locations).', border: [false, false, false, false] }],
+              [{ text: 'County (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'County of location (or equivalent, such as parish or borough in the United States).', border: [false, false, false, false] }],
+              [{ text: 'Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'The overall main reason(s) for illness and/or death across all locations and species and thus the major cause(s) of the event, or a diagnosis deemed significant enough to list at the event level for situational awareness.', border: [false, false, false, false] }],
             ]
           },
-          layout: { defaultBorder: false,
-            paddingLeft: function(i, node) { return 15; },
-            paddingRight: function(i, node) { return 10; },
+          layout: {
+            defaultBorder: false,
+            paddingLeft: function (i, node) { return 15; },
+            paddingRight: function (i, node) { return 10; },
             // paddingTop: function(i, node) { return 10; }
-           }
+          }
         },
         {
           alignment: 'justify',
-          text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE'}, '.'],
+          text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
           style: 'smallest',
           pageBreak: 'after'
         },
@@ -750,7 +752,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             {
               style: 'header',
               text: 'Explanation of Terms cont...',
-              margin: [ 0, 15, 0, 0 ]
+              margin: [0, 15, 0, 0]
             }
           ]
         },
@@ -758,20 +760,21 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           style: 'definitionsTable',
           table: {
             body: [
-              [{text: 'Species', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'Species affected at this location.', border: [false, false, false, false]}],
-              [{text: 'Record Status', border: [false, false, true, false], alignment: 'right', bold: true}, {text: '"Complete" if 1.) the event has ended, 2.) diagnostic tests are finalized, and 3.) all information is updated in WHISPers. Otherwise, "Incomplete".', border: [false, false, false, false]}],
-              [{text: 'Contact Organization', border: [false, false, true, false], alignment: 'right', bold: true}, {text: 'Organization(s) to contact regarding general inquiries about the event.', border: [false, false, false, false]}],
+              [{ text: 'Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Species affected at this location.', border: [false, false, false, false] }],
+              [{ text: 'Record Status', border: [false, false, true, false], alignment: 'right', bold: true }, { text: '"Complete" if 1.) the event has ended, 2.) diagnostic tests are finalized, and 3.) all information is updated in WHISPers. Otherwise, "Incomplete".', border: [false, false, false, false] }],
+              [{ text: 'Contact Organization', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Organization(s) to contact regarding general inquiries about the event.', border: [false, false, false, false] }],
             ]
           },
-          layout: { defaultBorder: false,
-            paddingLeft: function(i, node) { return 15; },
-            paddingRight: function(i, node) { return 10; },
+          layout: {
+            defaultBorder: false,
+            paddingLeft: function (i, node) { return 15; },
+            paddingRight: function (i, node) { return 10; },
             // paddingTop: function(i, node) { return 10; }
-           }
+          }
         },
         {
           alignment: 'justify',
-          text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE'}, '.'],
+          text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
           style: 'smallest'
         },
       ],

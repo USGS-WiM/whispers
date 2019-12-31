@@ -15,8 +15,6 @@ import * as esri from 'esri-leaflet';
 import { MatSnackBar } from '@angular/material';
 import { TooltipPosition } from '@angular/material';
 
-
-
 import { EventService } from '@services/event.service';
 import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
 import { CurrentUserService } from '@services/current-user.service';
@@ -97,6 +95,7 @@ export class EventDetailsComponent implements OnInit {
   landownerships;
   species: Species[] = [];
   speciesLoading = false;
+  currentlyOpenedItemIndex = -1;
 
   eventCommentsPanelOpen = false;
   serviceRequestPanelOpen = false;
@@ -140,7 +139,8 @@ export class EventDetailsComponent implements OnInit {
 
   eventDataLoading = true;
 
-  viewPanelStates: Object;
+  // see comment on line 182
+  // viewPanelStates: Object;
 
   currentUser;
 
@@ -179,7 +179,12 @@ export class EventDetailsComponent implements OnInit {
   @ViewChild(MatPaginator) locationSpeciesPaginator: MatPaginator;
   @ViewChild(MatSort) locationSpeciesSort: MatSort;
 
-  @ViewChildren(MatExpansionPanel) viewPanels: QueryList<MatExpansionPanel>;
+  // this use of the viewPanels variable and associated functions is assumed (but not confirmed) deprecated.
+  // the original purpose may have been superceded by later development. it was removed 12/30/19 to fix a bug
+  // that involved breaking of location comments and location contacts collapse panels after a new item was added.
+  // associated functions(commented out below): getViewPanelState, setViewPanelState
+  // all left in for now in case issues are uncovered. - B.Draper 12/31/19
+  // @ViewChildren(MatExpansionPanel) viewPanels: QueryList<MatExpansionPanel>;
 
   constructor(private route: ActivatedRoute,
     private _eventService: EventService,
@@ -627,6 +632,16 @@ export class EventDetailsComponent implements OnInit {
     this.locationCommentsPanelOpen = false;
     this.locationContactsPanelOpen = false;
 
+  }
+
+  setOpened(itemIndex) {
+    this.currentlyOpenedItemIndex = itemIndex;
+  }
+
+  setClosed(itemIndex) {
+    if (this.currentlyOpenedItemIndex === itemIndex) {
+      this.currentlyOpenedItemIndex = -1;
+    }
   }
 
   editEvent(id: string) {
@@ -1173,8 +1188,9 @@ export class EventDetailsComponent implements OnInit {
   }
 
   refreshEvent() {
-    this.viewPanelStates = new Object();
-    this.getViewPanelState(this.viewPanels);
+    // see comment on line 182
+    // this.viewPanelStates = new Object();
+    // this.getViewPanelState(this.viewPanels);
 
     console.log('Event Location Species list at start of refresh: ', this.eventLocationSpecies);
 
@@ -1238,9 +1254,10 @@ export class EventDetailsComponent implements OnInit {
 
           this.eventDataLoading = false;
 
-          setTimeout(() => {
-            this.setViewPanelState(this.viewPanels);
-          });
+          // see comment on line 182
+          // setTimeout(() => {
+          //   this.setViewPanelState(this.viewPanels);
+          // });
         },
         error => {
           this.errorMessage = <any>error;
@@ -1248,19 +1265,20 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
-  getViewPanelState(viewPanels: QueryList<MatExpansionPanel>) {
-    viewPanels.forEach((element, index) => {
-      this.viewPanelStates[index] = element.expanded;
-    });
-  }
+  // below deprecated. see comment on line 182
+  // getViewPanelState(viewPanels: QueryList<MatExpansionPanel>) {
+  //   viewPanels.forEach((element, index) => {
+  //     this.viewPanelStates[index] = element.expanded;
+  //   });
+  // }
 
-  setViewPanelState(viewPanels: QueryList<MatExpansionPanel>) {
-    viewPanels.forEach((element, index) => {
-      if (this.viewPanelStates[index]) {
-        element.open();
-      }
-    });
-  }
+  // setViewPanelState(viewPanels: QueryList<MatExpansionPanel>) {
+  //   viewPanels.forEach((element, index) => {
+  //     if (this.viewPanelStates[index]) {
+  //       element.open();
+  //     }
+  //   });
+  // }
 
   addLocationSpecies(eventlocation) {
     // Open dialog for adding location species

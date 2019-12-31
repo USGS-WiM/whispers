@@ -138,9 +138,9 @@
                     <td>{{eventGroup.name}}</td>
                     <td>
                       <span *ngFor="let eventID of eventGroup.events">
-                        <button mat-button  class="link-button" *ngIf="eventID !== eventData.id"
+                        <button mat-button class="link-button" *ngIf="eventID !== eventData.id"
                           (click)="navigateToEventDetails(eventID);" class="link-button">{{eventID}}</button>
-                        </span>
+                      </span>
                       <!-- <button mat-button *ngFor="let eventID of eventGroup.events" class="link-button"
                         routerLink="../../event/{{eventID}}" class="link-button">{{eventID}}</button> -->
                     </td>
@@ -748,7 +748,8 @@
                       <div class="event-table-header">Event Location Details</div>
 
                       <mat-expansion-panel *ngFor="let eventLocation of eventData.eventlocations; let i = index"
-                        [attr.data-index]="i" (change)="panelDataChange()" class="event-location-detail-wrapper">
+                        [attr.data-index]="i" class="event-location-detail-wrapper">
+                        <!-- [attr.data-index]="i" (change)="panelDataChange()" class="event-location-detail-wrapper"> -->
                         <mat-expansion-panel-header>
                           <mat-panel-title>
                             <mat-icon>location_on</mat-icon> {{determineLocationName(eventLocation.name,i+1)}}
@@ -791,7 +792,8 @@
                               <div class="label" matTooltip={{flywayTooltip()}}>Flyways
                               </div>
                               <div class="value"><span
-                                  *ngFor="let flyway of eventLocation.flyways">{{flyway.name}}</span></div>
+                                  *ngFor="let flyway of eventLocation.flyways">{{flyway.name}}</span>
+                              </div>
                             </div>
                             <div class="item">
                               <div class="label">Latitude</div>
@@ -808,11 +810,16 @@
 
 
                         <!-- Begin Event Location Comments section -->
-                        <mat-expansion-panel (opened)="locationCommentsPanelOpen = true"
-                          (closed)="locationCommentsPanelOpen = false">
+                        <mat-expansion-panel (opened)="eventLocation.commentsOpen = true"
+                          (closed)="eventLocation.commentsOpen = false" style="margin: 18px 0;">
+                          <!-- <mat-expansion-panel (opened)="setOpened(i)" (closed)="setClosed(i)"> -->
+                          <!-- <mat-expansion-panel (opened)="setOpened(i)" (closed)="setClosed(i)" *ngFor="let locationComment of"> -->
                           <mat-expansion-panel-header>
+                            <!-- <mat-panel-title>
+                              {{ currentlyOpenedItemIndex === i ? 'Hide Location Comments' : 'View Location Comments' }}
+                            </mat-panel-title> -->
                             <mat-panel-title>
-                              {{locationCommentsPanelOpen ? 'Hide Location Comments' : 'View Location Comments'}}
+                              {{ eventLocation.commentsOpen ? 'Hide Location Comments' : 'View Location Comments' }}
                             </mat-panel-title>
                           </mat-expansion-panel-header>
 
@@ -858,11 +865,11 @@
 
 
                         <!-- Begin Event Location Contacts section -->
-                        <mat-expansion-panel (opened)="locationContactsPanelOpen = true"
-                          (closed)="locationContactsPanelOpen = false" style="margin: 18px 0;">
+                        <mat-expansion-panel (opened)="eventLocation.contactsOpen = true"
+                          (closed)="eventLocation.contactsOpen  = false" style="margin: 18px 0;">
                           <mat-expansion-panel-header>
                             <mat-panel-title>
-                              {{locationContactsPanelOpen ? 'Hide Location Contacts' : 'View Location Contacts'}}
+                              {{eventLocation.contactsOpen  ? 'Hide Location Contacts' : 'View Location Contacts'}}
                             </mat-panel-title>
                           </mat-expansion-panel-header>
 
@@ -982,7 +989,6 @@
                       </mat-expansion-panel>
                     </div>
                   </div>
-
 
                   <!-- 
                               Add new event location

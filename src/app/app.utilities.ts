@@ -146,7 +146,7 @@ export class APP_UTILITIES {
         }
 
         // formatting the date
-        today_string = monthNames[today.getMonth() - 1] + ' ' + dd_string + ', ' + yyyy + ' ' + hr_string + ':' + min_string + ' ' + ampm;
+        today_string = monthNames[today.getMonth()] + ' ' + dd_string + ', ' + yyyy + ' ' + hr_string + ':' + min_string + ' ' + ampm;
 
         return today_string;
     }

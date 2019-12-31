@@ -41,8 +41,13 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   combinedComments;
   eventLocationSpecies = [];
   natMap;
+  detailMap;
+  detailMapUrl;
   downloadingReport = false;
   natMapPoints;
+  locationMarkers;
+  unMappables = [];
+  eventPolys;
   icon;
   adminLevelOnes;
   country;
@@ -138,12 +143,26 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       // tslint:disable-next-line:max-line-length
       Url = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
     const streets = L.tileLayer(Url, { id: 'mapbox.streets', attribution: Attr });
+    const streets2 = L.tileLayer(Url, { id: 'mapbox.streets', attribution: Attr, noWrap: true });
+
     this.natMap = new L.Map('hiddenNatMap', {
       center: new L.LatLng(39.8283, -98.5795),
       zoomControl: false,
       zoom: 3,
       layers: [streets]
     });
+
+    this.detailMap = new L.Map('detailMap', {
+      center: new L.LatLng(39.8283, -98.5795),
+      zoom: 4,
+      zoomControl: false,
+      layers: [streets2]
+    });
+
+    // Currently not displaying location markers because of display issue
+    /* this.locationMarkers = L.featureGroup().addTo(this.detailMap); */
+
+    this.mapEvent(this.data.event_data);
 
     setTimeout(() => {
       const view = [];
@@ -159,11 +178,16 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.natMap.doubleClickZoom.disable();
     this.natMap.scrollWheelZoom.disable();
 
+    this.detailMap.dragging.disable();
+    this.detailMap.touchZoom.disable();
+    this.detailMap.doubleClickZoom.disable();
+    this.detailMap.scrollWheelZoom.disable();
+
     // mapping the event centroid for the national map
     setTimeout(() => {
       this.MapResults(this.natMapPoints);
       this.loadingData = true;
-    }, 550);
+    }, 600);
 
     // Displays county image if needed
     /* const countyPreview = this.data.map;
@@ -241,6 +265,61 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.loadingData = false;
     }, 1001);
+  }
+
+  mapEvent(eventData) {
+    const markers = [];
+    const countyPolys = [];
+    this.unMappables = [];
+    for (const eventlocation of eventData.eventlocations) {
+      // markers.push(eventlocation);
+      if (eventlocation.administrative_level_two_points !== null) {
+        countyPolys.push(JSON.parse(eventlocation.administrative_level_two_points.replace('Y', '')));
+      }
+    }
+    /* console.log('mapevents ' + this.locationMarkers); */
+    // let eventPolys;
+    if (countyPolys.length > 0) {
+      if (this.eventPolys) {
+        this.detailMap.removeLayer(this.eventPolys);
+      }
+      this.eventPolys = L.polygon(countyPolys, { color: 'blue' }).addTo(this.detailMap);
+    }
+    /* for (const marker of markers) {
+      if (marker.latitude === null || marker.longitude === null || marker.latitude === undefined || marker.longitude === undefined) {
+        this.unMappables.push(marker);
+      } else if (marker.latitude !== null || marker.longitude !== null || marker.latitude !== undefined || marker.longitude !== undefined) {
+
+        this.icon = L.divIcon({
+          className: 'wmm-pin wmm-white wmm-icon-circle wmm-icon-black wmm-size-25'
+        });
+
+        L.marker([Number(marker.latitude), Number(marker.longitude)],
+          { icon: this.icon })
+          .addTo(this.locationMarkers);
+      }
+
+    } */
+
+    if (this.unMappables.length > 0) {
+
+    }
+
+    const bounds = L.latLngBounds([]);
+
+    if (markers.length > this.unMappables.length) {
+      const markerBounds = this.locationMarkers.getBounds();
+      bounds.extend(markerBounds);
+    }
+
+    if (countyPolys.length > 0) {
+      const countyBounds = this.eventPolys.getBounds();
+      bounds.extend(countyBounds);
+    }
+
+    if (markers.length || countyPolys.length) {
+      this.detailMap.fitBounds(bounds, {padding: [10, 10]});
+    }
   }
 
   getlocations() {
@@ -685,7 +764,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     // Checking to see if there are event groups
     if (this.data.event_data.eventgroups.length === 0) {
-      text = 'N/A';
+      this.eventsAndLinks.push({ text: 'N/A' });
     } else {
       associatedEvents = [];
       this.data.event_data.eventgroups.forEach(eg => {
@@ -712,10 +791,10 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         }
       }
 
-      this.eventsAndLinks.forEach(el => {
+      /* this.eventsAndLinks.forEach(el => {
         eventIds.push(el.text);
         eventLinks.push(el.link);
-      });
+      }); */
     }
   }
 
@@ -728,23 +807,33 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     // getting date elements
     const sd = startDate.substr(8, 2);
-    const sm = startDate.substr(5, 2);
+    let sm = startDate.substr(5, 2);
     const sy = startDate.substr(0, 4);
+
+    sm = Number(sm);
+    sm = sm - 1;
+
     startDate = new Date(sy, sm, sd);
 
     if (endDate === null) {
-      text = this.monthNames[startDate.getMonth() - 1] + ' ' + sd + ', ' + sy + ' - ' + ' N/A';
+      text = this.monthNames[sm] + ' ' + sd + ', ' + sy + ' - ' + ' N/A';
       return text;
     } else if (endDate !== null) {
       const ed = endDate.substr(8, 2);
-      const em = endDate.substr(5, 2);
+      let em = endDate.substr(5, 2);
       const ey = endDate.substr(0, 4);
+
+      em = Number(em);
+      em = em - 1;
+
       endDate = new Date(ey, em, ed);
       let dayCount;
 
       dayCount = Math.round(Math.abs((startDate - endDate) / oneDay));
 
-      text = this.monthNames[startDate.getMonth()] + ' ' + sd + ', ' + sy + ' - ' + this.monthNames[endDate.getMonth()] + ' ' + ed + ', ' + ey + ' (' + dayCount + ' days)';
+      /* const startMonth = startDate.getMonth() < 12 ? startDate.getMonth() + 1 : 1; */
+
+      text = this.monthNames[sm] + ' ' + sd + ', ' + sy + ' - ' + this.monthNames[em] + ' ' + ed + ', ' + ey + ' (' + dayCount + ' days)';
       return text;
     }
   }
@@ -773,15 +862,22 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     return locationName;
   }
 
+  getDetailMap() {
+    // START detail map
+  }
+
   downloadEventReport() {
     this.downloadingReport = true;
+    const detailMap = true;
     this.getAssociatedEvents();
     // google analytics event
     gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Downloaded Event Report' });
 
+    // START national map
     // using html2Canvas to capture leaflet map for reports
     // solution found here: https://github.com/niklasvh/html2canvas/issues/567
     let natMapUrl;
+    let detailMapUrl;
     const mapPane = $('.leaflet-map-pane')[0];
     const mapTransform = mapPane.style.transform.split(',');
     const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
@@ -881,6 +977,107 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     mapPane.style.left = '';
     mapPane.style.top = '';
     // END national map
+
+    // START detail map
+    const mapPane2 = $('.leaflet-map-pane')[0];
+    const mapTransform2 = mapPane2.style.transform.split(',');
+    const mapX2 = parseFloat(mapTransform2[0].split('(')[1].replace('px', ''));
+    const mapY2 = parseFloat(mapTransform2[1].replace('px', ''));
+    mapPane2.style.transform = '';
+    mapPane2.style.left = mapX2 + 'px';
+    mapPane2.style.top = mapY2 + 'px';
+
+    const myTiles2 = $('img.leaflet-tile');
+    const tilesLeft2 = [];
+    const tilesTop2 = [];
+    const tileMethod2 = [];
+    for (let i = 0; i < myTiles2.length; i++) {
+      if (myTiles2[i].style.left !== '') {
+        tilesLeft2.push(parseFloat(myTiles2[i].style.left.replace('px', '')));
+        tilesTop2.push(parseFloat(myTiles2[i].style.top.replace('px', '')));
+        tileMethod2[i] = 'left';
+      } else if (myTiles2[i].style.transform !== '') {
+        const tileTransform = myTiles2[i].style.transform.split(',');
+        tilesLeft2[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
+        tilesTop2[i] = parseFloat(tileTransform[1].replace('px', ''));
+        myTiles2[i].style.transform = '';
+        tileMethod2[i] = 'transform';
+      } else {
+        tilesLeft2[i] = 0;
+        // tilesRight[i] = 0;
+        tileMethod2[i] = 'neither';
+      }
+      myTiles2[i].style.left = (tilesLeft2[i]) + 'px';
+      myTiles2[i].style.top = (tilesTop2[i]) + 'px';
+    }
+
+    /* const myDivicons = $('.leaflet-marker-icon');
+    const dx = [];
+    const dy = [];
+    const mLeft = [];
+    const mTop = [];
+    for (let i = 0; i < myDivicons.length; i++) {
+      const curTransform = myDivicons[i].style.transform;
+      const splitTransform = curTransform.split(',');
+      dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
+      dy.push(parseFloat(splitTransform[1].replace('px', '')));
+      myDivicons[i].style.transform = '';
+      myDivicons[i].style.left = dx[i] + 'px';
+      myDivicons[i].style.top = dy[i] + 'px';
+    } */
+
+    const mapWidth2 = parseFloat($('#map').css('width').replace('px', ''));
+    const mapHeight2 = parseFloat($('#map').css('height').replace('px', ''));
+
+    const linesLayer2 = $('svg.leaflet-zoom-animated')[0];
+    const oldLinesWidth2 = linesLayer2.getAttribute('width');
+    const oldLinesHeight2 = linesLayer2.getAttribute('height');
+    const oldViewbox2 = linesLayer2.getAttribute('viewBox');
+    linesLayer2.setAttribute('width', mapWidth2.toString());
+    linesLayer2.setAttribute('height', mapHeight2.toString());
+    linesLayer2.setAttribute('viewBox', '0 0 ' + mapWidth2 + ' ' + mapHeight2);
+    const linesTransform2 = linesLayer2.style.transform.split(',');
+    const linesX2 = parseFloat(linesTransform2[0].split('(')[1].replace('px', ''));
+    const linesY2 = parseFloat(linesTransform2[1].replace('px', ''));
+    linesLayer2.style.transform = '';
+    linesLayer2.style.left = '';
+    linesLayer2.style.top = '';
+
+    const options2 = {
+      useCORS: true,
+    };
+
+    html2canvas(document.getElementById('detailMap'), options2).then(function (canvas) {
+      detailMapUrl = canvas.toDataURL('image/png');
+    });
+
+    for (let i = 0; i < myTiles2.length; i++) {
+      if (tileMethod2[i] === 'left') {
+        myTiles2[i].style.left = (tilesLeft2[i]) + 'px';
+        myTiles2[i].style.top = (tilesTop2[i]) + 'px';
+      } else if (tileMethod2[i] === 'transform') {
+        myTiles2[i].style.left = '';
+        myTiles2[i].style.top = '';
+        myTiles2[i].style.transform = 'translate(' + tilesLeft2[i] + 'px, ' + tilesTop2[i] + 'px)';
+      } else {
+        myTiles2[i].style.left = '0px';
+        myTiles2[i].style.top = '0px';
+        myTiles2[i].style.transform = 'translate(0px, 0px)';
+      }
+    }
+    /* for (let i = 0; i < myDivicons.length; i++) {
+      myDivicons[i].style.transform = 'translate(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
+      myDivicons[i].style.marginLeft = mLeft[i] + 'px';
+      myDivicons[i].style.marginTop = mTop[i] + 'px';
+    } */
+    linesLayer2.style.transform = 'translate(' + (linesX2) + 'px,' + (linesY2) + 'px)';
+    linesLayer2.setAttribute('viewBox', oldViewbox2);
+    linesLayer2.setAttribute('width', oldLinesWidth2);
+    linesLayer2.setAttribute('height', oldLinesHeight2);
+    mapPane2.style.transform = 'translate(' + (mapX2) + 'px,' + (mapY2) + 'px)';
+    mapPane2.style.left = '';
+    mapPane2.style.top = '';
+    // END detail map
 
     // need to give some time for html2canvas to finish rendering
     setTimeout(() => {
@@ -1231,8 +1428,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                     },
                     {
                       alignment: 'center',
-                      image: this.data.map,
-                      width: 200,
+                      image: detailMapUrl,
+                      width: 300,
                       height: 200,
                     },
                   ],
@@ -1244,7 +1441,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         ],
         images: {
           logo: this.pngURL,
-          map: this.data.map,
+          detailMap: detailMapUrl,
           nationalMap: natMapUrl
         },
         styles: {

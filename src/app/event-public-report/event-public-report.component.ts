@@ -41,8 +41,13 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   combinedComments;
   eventLocationSpecies = [];
   natMap;
+  detailMap;
+  detailMapUrl;
   downloadingReport = false;
   natMapPoints;
+  locationMarkers;
+  unMappables = [];
+  eventPolys;
   icon;
   adminLevelOnes;
   country;
@@ -138,12 +143,26 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       // tslint:disable-next-line:max-line-length
       Url = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
     const streets = L.tileLayer(Url, { id: 'mapbox.streets', attribution: Attr });
+    const streets2 = L.tileLayer(Url, { id: 'mapbox.streets', attribution: Attr, noWrap: true });
+
     this.natMap = new L.Map('hiddenNatMap', {
       center: new L.LatLng(39.8283, -98.5795),
       zoomControl: false,
       zoom: 3,
       layers: [streets]
     });
+
+    this.detailMap = new L.Map('detailMap', {
+      center: new L.LatLng(39.8283, -98.5795),
+      zoom: 4,
+      zoomControl: false,
+      layers: [streets2]
+    });
+
+    // Currently not displaying location markers because of display issue
+    /* this.locationMarkers = L.featureGroup().addTo(this.detailMap); */
+
+    this.mapEvent(this.data.event_data);
 
     setTimeout(() => {
       const view = [];
@@ -159,11 +178,16 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.natMap.doubleClickZoom.disable();
     this.natMap.scrollWheelZoom.disable();
 
+    this.detailMap.dragging.disable();
+    this.detailMap.touchZoom.disable();
+    this.detailMap.doubleClickZoom.disable();
+    this.detailMap.scrollWheelZoom.disable();
+
     // mapping the event centroid for the national map
     setTimeout(() => {
       this.MapResults(this.natMapPoints);
       this.loadingData = true;
-    }, 550);
+    }, 600);
 
     // Displays county image if needed
     /* const countyPreview = this.data.map;
@@ -241,6 +265,61 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.loadingData = false;
     }, 1001);
+  }
+
+  mapEvent(eventData) {
+    const markers = [];
+    const countyPolys = [];
+    this.unMappables = [];
+    for (const eventlocation of eventData.eventlocations) {
+      // markers.push(eventlocation);
+      if (eventlocation.administrative_level_two_points !== null) {
+        countyPolys.push(JSON.parse(eventlocation.administrative_level_two_points.replace('Y', '')));
+      }
+    }
+    /* console.log('mapevents ' + this.locationMarkers); */
+    // let eventPolys;
+    if (countyPolys.length > 0) {
+      if (this.eventPolys) {
+        this.detailMap.removeLayer(this.eventPolys);
+      }
+      this.eventPolys = L.polygon(countyPolys, { color: 'blue' }).addTo(this.detailMap);
+    }
+    /* for (const marker of markers) {
+      if (marker.latitude === null || marker.longitude === null || marker.latitude === undefined || marker.longitude === undefined) {
+        this.unMappables.push(marker);
+      } else if (marker.latitude !== null || marker.longitude !== null || marker.latitude !== undefined || marker.longitude !== undefined) {
+
+        this.icon = L.divIcon({
+          className: 'wmm-pin wmm-white wmm-icon-circle wmm-icon-black wmm-size-25'
+        });
+
+        L.marker([Number(marker.latitude), Number(marker.longitude)],
+          { icon: this.icon })
+          .addTo(this.locationMarkers);
+      }
+
+    } */
+
+    if (this.unMappables.length > 0) {
+
+    }
+
+    const bounds = L.latLngBounds([]);
+
+    if (markers.length > this.unMappables.length) {
+      const markerBounds = this.locationMarkers.getBounds();
+      bounds.extend(markerBounds);
+    }
+
+    if (countyPolys.length > 0) {
+      const countyBounds = this.eventPolys.getBounds();
+      bounds.extend(countyBounds);
+    }
+
+    if (markers.length || countyPolys.length) {
+      this.detailMap.fitBounds(bounds, {padding: [10, 10]});
+    }
   }
 
   getlocations() {
@@ -773,15 +852,22 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     return locationName;
   }
 
+  getDetailMap() {
+    // START detail map
+  }
+
   downloadEventReport() {
     this.downloadingReport = true;
+    const detailMap = true;
     this.getAssociatedEvents();
     // google analytics event
     gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Downloaded Event Report' });
 
+    // START national map
     // using html2Canvas to capture leaflet map for reports
     // solution found here: https://github.com/niklasvh/html2canvas/issues/567
     let natMapUrl;
+    let detailMapUrl;
     const mapPane = $('.leaflet-map-pane')[0];
     const mapTransform = mapPane.style.transform.split(',');
     const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
@@ -881,6 +967,109 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     mapPane.style.left = '';
     mapPane.style.top = '';
     // END national map
+    // const detailMapUrl = this.getDetailMap();
+
+    if (detailMap) {
+    const mapPane = $('.leaflet-map-pane')[0];
+    const mapTransform = mapPane.style.transform.split(',');
+    const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
+    const mapY = parseFloat(mapTransform[1].replace('px', ''));
+    mapPane.style.transform = '';
+    mapPane.style.left = mapX + 'px';
+    mapPane.style.top = mapY + 'px';
+
+    const myTiles = $('img.leaflet-tile');
+    const tilesLeft = [];
+    const tilesTop = [];
+    const tileMethod = [];
+    for (let i = 0; i < myTiles.length; i++) {
+      if (myTiles[i].style.left !== '') {
+        tilesLeft.push(parseFloat(myTiles[i].style.left.replace('px', '')));
+        tilesTop.push(parseFloat(myTiles[i].style.top.replace('px', '')));
+        tileMethod[i] = 'left';
+      } else if (myTiles[i].style.transform !== '') {
+        const tileTransform = myTiles[i].style.transform.split(',');
+        tilesLeft[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
+        tilesTop[i] = parseFloat(tileTransform[1].replace('px', ''));
+        myTiles[i].style.transform = '';
+        tileMethod[i] = 'transform';
+      } else {
+        tilesLeft[i] = 0;
+        // tilesRight[i] = 0;
+        tileMethod[i] = 'neither';
+      }
+      myTiles[i].style.left = (tilesLeft[i]) + 'px';
+      myTiles[i].style.top = (tilesTop[i]) + 'px';
+    }
+
+    /* const myDivicons = $('.leaflet-marker-icon');
+    const dx = [];
+    const dy = [];
+    const mLeft = [];
+    const mTop = [];
+    for (let i = 0; i < myDivicons.length; i++) {
+      const curTransform = myDivicons[i].style.transform;
+      const splitTransform = curTransform.split(',');
+      dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
+      dy.push(parseFloat(splitTransform[1].replace('px', '')));
+      myDivicons[i].style.transform = '';
+      myDivicons[i].style.left = dx[i] + 'px';
+      myDivicons[i].style.top = dy[i] + 'px';
+    } */
+
+    const mapWidth = parseFloat($('#map').css('width').replace('px', ''));
+    const mapHeight = parseFloat($('#map').css('height').replace('px', ''));
+
+    const linesLayer = $('svg.leaflet-zoom-animated')[0];
+    const oldLinesWidth = linesLayer.getAttribute('width');
+    const oldLinesHeight = linesLayer.getAttribute('height');
+    const oldViewbox = linesLayer.getAttribute('viewBox');
+    linesLayer.setAttribute('width', mapWidth.toString());
+    linesLayer.setAttribute('height', mapHeight.toString());
+    linesLayer.setAttribute('viewBox', '0 0 ' + mapWidth + ' ' + mapHeight);
+    const linesTransform = linesLayer.style.transform.split(',');
+    const linesX = parseFloat(linesTransform[0].split('(')[1].replace('px', ''));
+    const linesY = parseFloat(linesTransform[1].replace('px', ''));
+    linesLayer.style.transform = '';
+    linesLayer.style.left = '';
+    linesLayer.style.top = '';
+
+    const options = {
+      useCORS: true,
+    };
+
+    html2canvas(document.getElementById('detailMap'), options).then(function (canvas) {
+      detailMapUrl = canvas.toDataURL('image/png');
+    });
+
+    for (let i = 0; i < myTiles.length; i++) {
+      if (tileMethod[i] === 'left') {
+        myTiles[i].style.left = (tilesLeft[i]) + 'px';
+        myTiles[i].style.top = (tilesTop[i]) + 'px';
+      } else if (tileMethod[i] === 'transform') {
+        myTiles[i].style.left = '';
+        myTiles[i].style.top = '';
+        myTiles[i].style.transform = 'translate(' + tilesLeft[i] + 'px, ' + tilesTop[i] + 'px)';
+      } else {
+        myTiles[i].style.left = '0px';
+        myTiles[i].style.top = '0px';
+        myTiles[i].style.transform = 'translate(0px, 0px)';
+      }
+    }
+    /* for (let i = 0; i < myDivicons.length; i++) {
+      myDivicons[i].style.transform = 'translate(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
+      myDivicons[i].style.marginLeft = mLeft[i] + 'px';
+      myDivicons[i].style.marginTop = mTop[i] + 'px';
+    } */
+    linesLayer.style.transform = 'translate(' + (linesX) + 'px,' + (linesY) + 'px)';
+    linesLayer.setAttribute('viewBox', oldViewbox);
+    linesLayer.setAttribute('width', oldLinesWidth);
+    linesLayer.setAttribute('height', oldLinesHeight);
+    mapPane.style.transform = 'translate(' + (mapX) + 'px,' + (mapY) + 'px)';
+    mapPane.style.left = '';
+    mapPane.style.top = '';
+    // END detail map
+  }
 
     // need to give some time for html2canvas to finish rendering
     setTimeout(() => {
@@ -1231,8 +1420,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                     },
                     {
                       alignment: 'center',
-                      image: this.data.map,
-                      width: 200,
+                      image: detailMapUrl,
+                      width: 300,
                       height: 200,
                     },
                   ],
@@ -1244,7 +1433,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         ],
         images: {
           logo: this.pngURL,
-          map: this.data.map,
+          detailMap: detailMapUrl,
           nationalMap: natMapUrl
         },
         styles: {

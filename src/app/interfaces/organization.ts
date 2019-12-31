@@ -12,5 +12,6 @@ export interface Organization extends History {
     phone: number;
     parent_organization: number;
     do_not_publish: boolean;
+    organization?;
 }
 

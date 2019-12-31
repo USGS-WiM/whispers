@@ -48,6 +48,109 @@ export class APP_UTILITIES {
         return today_string;
     }
 
+    public static get getDateTime(): any {
+        let today_string = '';
+        const today = new Date();
+        const dd = today.getDate();
+        let dd_string = '';
+        const mm = today.getMonth() + 1; // January is 0!
+        let mm_string = '';
+        const yyyy = today.getFullYear();
+        let hr = today.getHours();
+        let hr_string = '';
+        const min = today.getMinutes();
+        let min_string = '';
+
+        const ampm = hr >= 12 ? 'PM' : 'AM';
+
+        // the hour '0' should be '12'
+        if (hr === 0) {
+            hr_string = '12';
+        } else {
+            hr = hr % 12; // using mod 12 to calculate time for 12hr clock
+            hr_string = hr.toString();
+        }
+
+        // adding zero if necessary
+        if (min < 10) {
+            min_string = '0' + min;
+        } else {
+            min_string = min.toString();
+        }
+
+        // adding zero if necessary
+        if (dd < 10) {
+            dd_string = '0' + dd;
+        } else {
+            dd_string = dd.toString();
+        }
+
+        // adding zero if necessary
+        if (mm < 10) {
+            mm_string = '0' + mm;
+        } else {
+            mm_string = mm.toString();
+        }
+
+        // formatting the date
+        today_string = mm_string + '/' + dd_string + '/' + yyyy + ' ' + hr_string + ':' + min_string + ' ' + ampm;
+
+        return today_string;
+    }
+
+    public static get getReportDateTime(): any {
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+
+        let today_string = '';
+        const today = new Date();
+        const dd = today.getDate();
+        let dd_string = '';
+        const mm = today.getMonth() + 1; // January is 0!
+        let mm_string = '';
+        const yyyy = today.getFullYear();
+        let hr = today.getHours();
+        let hr_string = '';
+        const min = today.getMinutes();
+        let min_string = '';
+
+        const ampm = hr >= 12 ? 'PM' : 'AM';
+
+        // the hour '0' should be '12'
+        if (hr === 0) {
+            hr_string = '12';
+        } else {
+            hr = hr % 12; // using mod 12 to calculate time for 12hr clock
+            hr_string = hr.toString();
+        }
+
+        // adding zero if necessary
+        if (min < 10) {
+            min_string = '0' + min;
+        } else {
+            min_string = min.toString();
+        }
+
+        // adding zero if necessary
+        if (dd < 10) {
+            dd_string = '0' + dd;
+        } else {
+            dd_string = dd.toString();
+        }
+
+        // adding zero if necessary
+        if (mm < 10) {
+            mm_string = '0' + mm;
+        } else {
+            mm_string = mm.toString();
+        }
+
+        // formatting the date
+        today_string = monthNames[today.getMonth()] + ' ' + dd_string + ', ' + yyyy + ' ' + hr_string + ':' + min_string + ' ' + ampm;
+
+        return today_string;
+    }
+
     public static get getDaysPreviousDate(): any {
         const daysPrevious = 28;
         let previousDate_string = '';
@@ -55,7 +158,7 @@ export class APP_UTILITIES {
         previousDate.setDate(previousDate.getDate() - daysPrevious);
         const dd = previousDate.getDate();
         let dd_string = '';
-        const mm = previousDate.getMonth() + 1; //January is 0!
+        const mm = previousDate.getMonth() + 1; // January is 0!
         let mm_string = '';
         const yyyy = previousDate.getFullYear();
 

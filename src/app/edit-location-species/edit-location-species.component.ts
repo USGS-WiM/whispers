@@ -348,11 +348,12 @@ export class EditLocationSpeciesComponent implements OnInit {
     if (this.data.location_species_action === 'add') {
 
       formValue.event_location = this.data.eventlocation.id;
-
+      console.log('gtag accessed');
       this.locationSpeciesService.create(formValue)
         .subscribe(
           (event) => {
             this.submitLoading = false;
+            console.log('gtag accessed');
             this.openSnackBar('Species successfully added to this location', 'OK', 5000);
             this.dataUpdatedService.triggerRefresh();
             this.editLocationSpeciesDialogRef.close();

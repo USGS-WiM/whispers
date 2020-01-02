@@ -99,8 +99,8 @@ export class APP_UTILITIES {
     }
 
     public static get getReportDateTime(): any {
-        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'];
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
         let today_string = '';
         const today = new Date();
@@ -149,6 +149,28 @@ export class APP_UTILITIES {
         today_string = monthNames[today.getMonth()] + ' ' + dd_string + ', ' + yyyy + ' ' + hr_string + ':' + min_string + ' ' + ampm;
 
         return today_string;
+    }
+
+    public static formatEventDates(date): any {
+
+        let date_string;
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        let input_date = date;
+
+        // getting date elements
+        const d = input_date.substr(8, 2);
+        let m = input_date.substr(5, 2);
+        const y = input_date.substr(0, 4);
+
+        m = Number(m);
+        m = m - 1;
+
+        input_date = new Date(y, m, d);
+
+        date_string = monthNames[m] + ' ' + d + ', ' + y;
+        return date_string;
     }
 
     public static get getDaysPreviousDate(): any {

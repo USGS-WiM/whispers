@@ -1081,7 +1081,7 @@ export class HomeComponent implements OnInit {
       mapPane.style.left = '';
       mapPane.style.top = '';
       // END national map
-    }, 5000);
+    }, 2000); // reduced this from 5000 to 2000; if you make it too quick it doesn't get the basemap tiles
   }
 
   testForUndefined(value: any, property?: any) {

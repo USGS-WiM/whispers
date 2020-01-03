@@ -95,7 +95,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   printReady = false;
 
   monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   constructor(
     public eventPublicReportDialogRef: MatDialogRef<EventPublicReportComponent>,
@@ -328,7 +328,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     }
 
     if (markers.length || countyPolys.length) {
-      this.detailMap.fitBounds(bounds, {padding: [10, 10]});
+      this.detailMap.fitBounds(bounds, { padding: [10, 10] });
     }
   }
 
@@ -1118,17 +1118,34 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
       // looping thru all counties of all locations
       const counties = [];
-      for (const eventlocation of data.eventlocations) {
+      for (let i = 0; i < data.eventlocations.length; i++) {
         let formattedString = '';
         let stateAbbrev;
         let countryAbbrev;
+        const semiColon = data.eventlocations.length - 1;
 
-        stateAbbrev = this.adminLevelOnes.find(item => item.name === eventlocation.administrative_level_one_string);
-        countryAbbrev = this.country.find(item => item.name === eventlocation.country_string);
-
-        formattedString = eventlocation.administrative_level_two_string + ', ' + stateAbbrev.abbreviation + ', ' + countryAbbrev.abbreviation + '; ';
-        counties.push(formattedString);
+        stateAbbrev = this.adminLevelOnes.find(item => item.name === data.eventlocations[i].administrative_level_one_string);
+        countryAbbrev = this.country.find(item => item.name === data.eventlocations[i].country_string);
+        if (i !== semiColon) {
+          formattedString = data.eventlocations[i].administrative_level_two_string + ', ' + stateAbbrev.abbreviation + ', ' + countryAbbrev.abbreviation + '; ';
+          counties.push(formattedString);
+        } else {
+          formattedString = data.eventlocations[i].administrative_level_two_string + ', ' + stateAbbrev.abbreviation + ', ' + countryAbbrev.abbreviation;
+          counties.push(formattedString);
+        }
       }
+
+      /* for (let i = 0; i < associatedEvents.length; i++) {
+
+        // formatting string so that there is not a ',' at the end of last associated event
+        const addComma = associatedEvents.length - 1;
+        if (i !== addComma) {
+          this.eventsAndLinks.push({ text: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString(), color: 'blue' });
+          this.eventsAndLinks.push({ text: ', ' });
+        } else {
+          this.eventsAndLinks.push({ text: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString(), color: 'blue' });
+        }
+      } */
 
       // looping thru all event diagsoses incase there are multiple
       const eventDiagnosises = [];
@@ -1420,16 +1437,16 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                         [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, organizations],
                         [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, recordStatus],
                         [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
-                        [{ border: [false, false, false, false], text: 'Summary Information', bold: true, fontSize: 22, margin: [30, 10], colSpan: 2}, ' '],
+                        [{ border: [false, false, false, false], text: 'Summary Information', bold: true, fontSize: 22, margin: [30, 10], colSpan: 2 }, ' '],
                         [{ border: [false, false, true, false], text: '# of Locations', bold: true, alignment: 'right' }, locationCount],
-                        [{ border: [false, false, true, false], text: 'County (or Equivalent)', bold: true, alignment: 'right' }, [{text: counties}]],
+                        [{ border: [false, false, true, false], text: 'County (or Equivalent)', bold: true, alignment: 'right' }, [{ text: counties }]],
                         [{ border: [false, false, true, false], text: 'Event Diagnosis', bold: true, alignment: 'right' }, eventDiagnosises],
                         [{ border: [false, false, true, false], text: 'Diagnostic Laboratory', bold: true, alignment: 'right' }, this.labs],
                         [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, data.affected_count],
                         [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, speciesAffectedCount],
                         [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, speciesAffected],
                         [{ border: [false, false, true, false], text: 'Event Start Date - End Date', bold: true, alignment: 'right' }, this.getEventDates()], // TODO: format according to wireframe & Create function to get count of total days event lasted
-                        [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, [{text: this.eventsAndLinks}]], // TODO: Figure out what to do regarding links & Display none if there are none {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}
+                        [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, [{ text: this.eventsAndLinks }]], // TODO: Figure out what to do regarding links & Display none if there are none {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}
                         [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, this.getEventVisibility()]
                       ],
                     },

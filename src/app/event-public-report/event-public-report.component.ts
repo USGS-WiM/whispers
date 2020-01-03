@@ -271,7 +271,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   }
 
   loadProgressBar() {
-    const source = timer(12, 12);
+    const source = timer(11, 11);
     const subscribe = source.subscribe(val => {
       this.value = val;
     });
@@ -494,7 +494,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         {
           style: 'header',
           text: 'Details of ' + this.data.event_data.event_type_string + ' Event ID ' + this.data.event_data.id,
-          margin: [0, 10, 0, 0]
+          margin: [0, 20, 0, 0]
         }
       ]
     };
@@ -637,7 +637,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         {
           style: 'header',
           text: 'Explanation of Terms',
-          margin: [0, 15, 0, 0]
+          margin: [0, 20, 0, 0]
         }
       ]
     };
@@ -1360,6 +1360,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         }
       }
 
+      let recordStatus;
+      if (this.data.event_data.complete) {
+        recordStatus = 'Complete';
+      } else {
+        recordStatus = 'Incomplete';
+      }
 
       // check for user role so that we show them the right report
       const docDefinition = {
@@ -1396,7 +1402,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               {
                 style: 'header',
                 text: 'Summary of ' + data.event_type_string + ' Event ID ' + data.id,
-                margin: [0, 15, 0, 0]
+                margin: [0, 20, 0, 0]
               },
             ]
           },
@@ -1412,7 +1418,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                       widths: [180, 250],
                       body: [
                         [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, organizations],
-                        [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, data.event_status_string],
+                        [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, recordStatus],
                         [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
                         [{ border: [false, false, false, false], text: 'Summary Information', bold: true, fontSize: 22, margin: [30, 10], colSpan: 2}, ' '],
                         [{ border: [false, false, true, false], text: '# of Locations', bold: true, alignment: 'right' }, locationCount],
@@ -1447,7 +1453,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                       alignment: 'center',
                       image: detailMapUrl,
                       width: 300,
-                      height: 200,
+                      height: 200
                     },
                   ],
                 ],
@@ -1463,7 +1469,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         },
         styles: {
           header: {
-            fontSize: 16,
+            fontSize: 14,
             bold: true
           },
           bigger: {
@@ -1508,7 +1514,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         docDefinition.content.push(this.explanationTwoForMoreDetails());
       }
 
-      pdfMake.createPdf(docDefinition).download('Event ' + this.data.event_data.id + ' ' + APP_UTILITIES.getFileNameDate + '.pdf');
+      pdfMake.createPdf(docDefinition).download('Event_' + this.data.event_data.id + '_' + APP_UTILITIES.getFileNameDate + '.pdf');
       this.downloadingReport = false;
       this.eventPublicReportDialogRef.close();
     }, 2000);

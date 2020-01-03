@@ -1508,7 +1508,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         docDefinition.content.push(this.explanationTwoForMoreDetails());
       }
 
-      pdfMake.createPdf(docDefinition).download('NWHC_Event_Report.pdf');
+      pdfMake.createPdf(docDefinition).download('Event ' + this.data.event_data.id + ' ' + APP_UTILITIES.getFileNameDate + '.pdf');
       this.downloadingReport = false;
       this.eventPublicReportDialogRef.close();
     }, 2000);

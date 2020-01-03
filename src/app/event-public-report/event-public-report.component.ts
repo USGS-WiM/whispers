@@ -149,6 +149,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       center: new L.LatLng(39.8283, -98.5795),
       zoomControl: false,
       zoom: 3,
+      attributionControl: false,
       layers: [streets]
     });
 
@@ -156,6 +157,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       center: new L.LatLng(39.8283, -98.5795),
       zoom: 4,
       zoomControl: false,
+      attributionControl: false,
       layers: [streets2]
     });
 

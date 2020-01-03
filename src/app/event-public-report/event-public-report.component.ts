@@ -92,8 +92,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   commentTypes: CommentType[];
   eventsAndLinks = [];
 
-  monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'];
+  monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   constructor(
     public eventPublicReportDialogRef: MatDialogRef<EventPublicReportComponent>,
@@ -237,7 +237,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.commentSourceDefinition = FIELD_HELP_TEXT.commentSourceDefinition;
 
     // converting whipsers logo png to a dataURL for use in pdfMake
-    const whispersLogo = 'src/assets/logo-transparent.png';
+    const whispersLogo = '/assets/logo-transparent.png';
     const context = this.canvas.getContext('2d');
     const base_image = new Image();
     this.canvas.width = 796;
@@ -1491,10 +1491,10 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         docDefinition.content.push(this.explanationTwoForMoreDetails());
       }
 
-      pdfMake.createPdf(docDefinition).download();
+      pdfMake.createPdf(docDefinition).download('NWHC_Event_Report.pdf');
       this.downloadingReport = false;
       this.eventPublicReportDialogRef.close();
-    }, 4000);
+    }, 2000);
   }
 
 }

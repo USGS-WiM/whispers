@@ -34,6 +34,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
   canvas = document.createElement('canvas');
   loadingData = false;
+  loadingReport = false;
 
   adminLevelOnes = [];
   adminLevelTwos = [];
@@ -41,6 +42,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   eventDiagnoses = [];
   countries = [];
   orgs = [];
+
+  pngURL;
 
   constructor(
     public resultsSummaryReportDialogRef: MatDialogRef<SearchResultsSummaryReportComponent>,
@@ -53,16 +56,18 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
-    this.loadingData = true;
 
     // converting whipsers logo png to a dataURL for use in pdfMake
-    const whispersLogo = 'src/assets/logo-transparent.png'; // TODO: move photo to more appropriate location
+    const whispersLogo = '/assets/logo-transparent.png';
     const context = this.canvas.getContext('2d');
     const base_image = new Image();
+    this.canvas.width = 796;
+    this.canvas.height = 90;
     base_image.src = whispersLogo;
     base_image.onload = function () {
-      context.drawImage(base_image, 5, 5, 300, 80);
+      context.drawImage(base_image, 0, 0, 796, 90);
     };
+    this.pngURL = this.canvas.toDataURL();
 
     this.administrativeLevelOneService.getAdminLevelOnes()
       .subscribe(
@@ -279,20 +284,20 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   }
 
   downloadResultsSummaryReport() {
-
+    this.loadingReport = true;
     // placeholder for google analytics event
     // gtag('event', 'click', { 'event_category': 'Search Results', 'event_label': 'Downloaded Search Results Summary Report' });
 
     // Getting date/time for timestamp
     const date = APP_UTILITIES.getDateTime;
 
+    // whispers logo
+    this.pngURL = this.canvas.toDataURL();
+
     // search query
     const search_query = this.data.current_search_query;
     // results summary details
     const result_data = this.data.current_results;
-
-    // whispers logo
-    const pngURL = this.canvas.toDataURL();
 
     // printing user's info
     const nameOrgString = this.data.user.first_name + ' ' + this.data.user.last_name + ' (' + this.data.user.organization_string + ')';
@@ -303,7 +308,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     // Section with SEARCH CRITERIA for page 1
     // TODO: calculation of record status for page 1
     let record_status;
-
     if (search_query.complete == true) {
       record_status = "Complete events only";
     } else if (search_query.complete == false) {
@@ -314,7 +318,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
     // get string for admin level ones in search criteria
     let search_admin_level_one;
-
+    if (search_query.administrative_level_one === null) {
+    } else {
     search_query.administrative_level_one.forEach(search_level_one => {
       this.adminLevelOnes.forEach(level_one => {
         if (search_level_one == Number(level_one.id)) {
@@ -326,10 +331,12 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
       });
     });
+  }
 
     // get string for admin level twos in search criteria
     let search_admin_level_two;
-
+    if (search_query.administrative_level_two === null) {
+    } else {
     search_query.administrative_level_two.forEach(search_level_two => {
       this.adminLevelTwos.forEach(level_two => {
         if (search_level_two == Number(level_two.id)) {
@@ -341,10 +348,12 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
       });
     });
+  }
 
     // get string for diagnosis types in search criteria
     let search_diagnosis_type;
-
+    if (search_query.administrative_level_two === null) {
+    } else {
     search_query.diagnosis_type.forEach(search_diag_type => {
       this.diagnosisTypes.forEach(diag_type => {
         if (search_diag_type == Number(diag_type.id)) {
@@ -356,10 +365,12 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
       });
     });
+  }
 
     // get string for event diagnosis in search criteria
     let search_event_diagnosis;
-
+    if (search_query.diagnosis === null) {
+    } else {
     search_query.diagnosis.forEach(search_event_diag => {
       this.eventDiagnoses.forEach(event_diag => {
         if (search_event_diag == event_diag.id) {
@@ -371,14 +382,15 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
       });
     });
-
+  }
 
     /************
-     * 
+     *
      * Check with Lauren's code to see if she has any functions reformatting dates from YYYY-MM-DD format
+     * Lauren: Hi, yes I have a couple ways for formatting todays date in the app.utilities.ts file, function name: getReportDateTime or formatEventDates
      *
      * Coordinate with her to use a common function to get it into the format NHWC requests
-     * 
+     * Lauren: We put common functions like that in the app.utilites.ts file. There may be an existing one that will work, if not feel free to add one
      */
 
     // Section with SEARCH RESULTS SUMMARY
@@ -536,15 +548,18 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
     let event_type = '';
 
-    search_query.event_type.forEach(eventTypeItem => {
-      if (eventTypeItem == 1) {
-        event_type += "Mortality/Morbidity";
-      } else if (eventTypeItem == 2 && event_type != '') {
-        event_type += ", Surveillance";
-      } else if (eventTypeItem == 2) {
-        event_type = "Surveillance";
-      }
-    })
+    if (search_query.event_type === null) {
+    } else {
+      search_query.event_type.forEach(eventTypeItem => {
+        if (eventTypeItem == 1) {
+          event_type += "Mortality/Morbidity";
+        } else if (eventTypeItem == 2 && event_type != '') {
+          event_type += ", Surveillance";
+        } else if (eventTypeItem == 2) {
+          event_type = "Surveillance";
+        }
+      });
+    }
 
     const docDefinition = {
       pageOrientation: 'landscape',
@@ -572,9 +587,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           alignment: 'justify',
           columns: [
             {
-              image: pngURL,
-              width: 400,
-              height: 80
+              image: this.pngURL,
+              width: 450,
+              height: 65
             },
             {
               style: 'header',
@@ -589,13 +604,13 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           margin: [30, 10]
         },
         {
-          text: ((search_query.start_date) ? 'Start Date: ' + search_query.start_date + ' | ' : 'No Start Date | ') // start date
-            + ((search_query.end_date) ? 'End Date: ' + search_query.end_date + ' | ' : 'No End Date | ') // end date
+          text: ((search_query.start_date) ? 'Start Date: ' + APP_UTILITIES.formatEventDates(search_query.start_date) + ' | ' : 'No Start Date | ') // start date
+            + ((search_query.end_date) ? 'End Date: ' + APP_UTILITIES.formatEventDates(search_query.end_date) + ' | ' : 'No End Date | ') // end date
             + record_status + ' | ' // record status
             + ((search_admin_level_one && search_admin_level_one.length > 0) ? search_admin_level_one + ' | ' : '') // admin level ones
             + ((search_admin_level_two && search_admin_level_two.length > 0) ? search_admin_level_two + ' | ' : '')
-            + ((affected_count != '') ? affected_count + ' | ' : '')
-            + ((event_type != '') ? event_type + ' | ' : '')
+            + ((affected_count !== '') ? affected_count + ' | ' : '')
+            + ((event_type !== '') ? event_type + ' | ' : '')
             + ((search_diagnosis_type && search_diagnosis_type.length > 0) ? search_diagnosis_type + ' | ' : '')
             + ((search_event_diagnosis && search_event_diagnosis.length > 0) ? search_event_diagnosis + ' | ' : ''),
           margin: [30, 10]
@@ -665,9 +680,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           alignment: 'justify',
           columns: [
             {
-              image: pngURL,
-              width: 400,
-              height: 80
+              image: this.pngURL,
+              width: 450,
+              height: 65
             },
             {
               style: 'header',
@@ -692,9 +707,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           alignment: 'justify',
           columns: [
             {
-              image: pngURL,
-              width: 400,
-              height: 80
+              image: this.pngURL,
+              width: 450,
+              height: 65
             },
             {
               style: 'header',
@@ -745,9 +760,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           alignment: 'justify',
           columns: [
             {
-              image: pngURL,
-              width: 400,
-              height: 80
+              image: this.pngURL,
+              width: 450,
+              height: 65
             },
             {
               style: 'header',
@@ -779,7 +794,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         },
       ],
       images: {
-        logo: pngURL
+        logo: this.pngURL
       },
       styles: {
         header: {
@@ -804,8 +819,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         columnGap: 20
       }
     };
-    pdfMake.createPdf(docDefinition).download();
-
+    pdfMake.createPdf(docDefinition).download('NWHC_Search_Results_Summary_Report.pdf');
+    this.loadingReport = false;
+    this.resultsSummaryReportDialogRef.close();
   }
-
 }

@@ -163,7 +163,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       attributionControl: false,
       layers: [streets2]
     });
-    
+
     // adding scale bars
     L.control.scale({ position: 'bottomright' }).addTo(this.natMap);
     L.control.scale({ position: 'bottomright' }).addTo(this.detailMap);
@@ -793,7 +793,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           eg.events.forEach(element => {
             associatedEvents.push(element);
           });
+        } else if (eg.category === undefined) { // public endpoint doesn't have the 'category' property on it but does post eventgroups
+          eg.events.forEach(element => {
+            associatedEvents.push(element);
+          });
         }
+
         text = associatedEvents.join(', ');
       });
 
@@ -804,7 +809,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         // formatting string so that there is not a ',' at the end of last associated event
         const addComma = associatedEvents.length - 1;
         if (i !== addComma) {
-          this.eventsAndLinks.push({ text: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString(), color: 'blue' });
+          this.eventsAndLinks.push({ text: associatedEvents[i].toString(), link: window.location.origin + '/event/' + associatedEvents[i].toString(), color: 'blue' });
           this.eventsAndLinks.push({ text: ', ' });
         } else {
           this.eventsAndLinks.push({ text: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString(), color: 'blue' });

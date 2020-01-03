@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { DisplayValuePipe } from '../pipes/display-value.pipe';
 import html2canvas from 'html2canvas';
-
+import { timer } from 'rxjs';
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
@@ -91,6 +91,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   locationIdArray = [];
   commentTypes: CommentType[];
   eventsAndLinks = [];
+  value = 0;
+  printReady = false;
 
   monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -173,6 +175,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         long: Number(this.natMapPoints['administrativeleveltwos'][0]['centroid_longitude'])
       });
       this.natMap.setView([view[0].lat, view[0].long]);
+      this.loadProgressBar();
+      this.loadingData = false;
     }, 1000);
 
     this.natMap.dragging.disable();
@@ -264,9 +268,16 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.loadingData = false;
-    }, 1001);
+    /* setTimeout(() => {
+      
+    }, 1001); */
+  }
+
+  loadProgressBar() {
+    const source = timer(12, 12);
+    const subscribe = source.subscribe(val => {
+      this.value = val;
+    });
   }
 
   mapEvent(eventData) {

@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>
-    <span *ngIf="value < 100"> Preparing images for event report. . .</span>
-    <span *ngIf="value > 99"> Ready to download!</span>
+    <span class="centeredHeader" *ngIf="value < 100"> Preparing images for event report. . .</span>
+    <span class="centeredHeader" *ngIf="value > 99"> Ready to download!</span>
 </h1>
 <mat-dialog-content>
     <div class="wrapper">
@@ -31,7 +31,7 @@
 <mat-dialog-actions>
     <div class="detail-section-buttons">
         <button mat-raised-button color="primary" (click)="downloadEventReport()"
-            [disabled]="downloadingReport || loadingData">
+            [disabled]="value < 99">
             <i class="material-icons">archive</i> Download Event Report</button>
         <button mat-button color="warn" (click)="this.eventPublicReportDialogRef.close('cancel');">
             <mat-icon>cancel</mat-icon>&nbsp;Cancel

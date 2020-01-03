@@ -268,9 +268,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    /* setTimeout(() => {
-      
-    }, 1001); */
   }
 
   loadProgressBar() {
@@ -995,7 +992,14 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     const mapPane2 = $('.leaflet-map-pane')[0];
     const mapTransform2 = mapPane2.style.transform.split(',');
     const mapX2 = parseFloat(mapTransform2[0].split('(')[1].replace('px', ''));
-    const mapY2 = parseFloat(mapTransform2[1].replace('px', ''));
+    let mapY2;
+
+    // fix for firefox
+    if (mapTransform2[1] === undefined) {
+      mapY2 = '';
+    } else {
+      mapY2 = parseFloat(mapTransform2[1].replace('px', ''));
+    }
     mapPane2.style.transform = '';
     mapPane2.style.left = mapX2 + 'px';
     mapPane2.style.top = mapY2 + 'px';

@@ -449,8 +449,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         const elData = rows[key];
         const row = new Array();
         row.push(elData.species);
-        row.push(elData.population);
-        row.push(elData.known_sick);
+        row.push({text: elData.population, alignment: 'center'});
+        row.push({text: elData.known_sick, alignment: 'center'});
         row.push({ text: elData.known_dead, alignment: 'center' });
         row.push({ text: elData.est_sick, alignment: 'center' });
         row.push({ text: elData.est_dead, alignment: 'center' });
@@ -522,7 +522,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     const state = data.state;
     const county = data.county;
-    const start_date = data.sdate;
+    const start_date =  APP_UTILITIES.formatEventDates(data.sdate);
     const end_date = data.edate;
     const name = data.name;
 
@@ -815,11 +815,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           this.eventsAndLinks.push({ text: associatedEvents[i].toString(), link: window.location.origin + '/' + associatedEvents[i].toString(), color: 'blue' });
         }
       }
-
-      /* this.eventsAndLinks.forEach(el => {
-        eventIds.push(el.text);
-        eventLinks.push(el.link);
-      }); */
     }
   }
 
@@ -905,7 +900,15 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     let detailMapUrl;
     const mapPane = $('.leaflet-map-pane')[0];
     const mapTransform = mapPane.style.transform.split(',');
-    const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
+    // const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
+    let mapX;
+
+    // fix for firefox
+    if (mapTransform[0] === undefined) {
+      mapX = '';
+    } else {
+      mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
+    }
     const mapY = parseFloat(mapTransform[1].replace('px', ''));
     mapPane.style.transform = '';
     mapPane.style.left = mapX + 'px';
@@ -1244,6 +1247,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           }
         });
       });
+
+      if (speciesAffected === undefined) { speciesAffected = 'N/A'; }
 
       // Event Visibility
       let eventVisibility;

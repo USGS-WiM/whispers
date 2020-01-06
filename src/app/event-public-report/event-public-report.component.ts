@@ -415,7 +415,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         col_6: { text: 'Est. Dead', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
         col_7: { text: 'Captive', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
         col_8: { text: 'Species Diagnosis', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_9: { text: '# Assessed/ # diagnosis', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_9: { text: '# Assessed/ # with diagnosis', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
         col_10: { text: 'Diagnostic Lab', border: [true, false, true, false], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] }
       }
     };
@@ -455,7 +455,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         row.push({ text: elData.est_sick, alignment: 'center' });
         row.push({ text: elData.est_dead, alignment: 'center' });
         row.push({ text: elData.captive, alignment: 'center' });
-        row.push(elData.species_dia);
+        row.push({text: elData.species_dia, alignment: 'left'});
         row.push({ text: elData.count, alignment: 'center' });
         row.push(elData.lab);
         locationBody.push(row);
@@ -522,7 +522,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     const state = data.state;
     const county = data.county;
-    const start_date =  APP_UTILITIES.formatEventDates(data.sdate);
+    const start_date =  data.sdate;
     const end_date = data.edate;
     const name = data.name;
 
@@ -1298,8 +1298,18 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               const kdead = locationspecies.dead_count || ' ';
               const esick = locationspecies.sick_count_estimated || ' ';
               const edead = locationspecies.dead_count_estimated || ' ';
-              const sdate = event_location.start_date || 'N/A';
-              const edate = event_location.end_date || 'N/A';
+              let sdate;
+              if ((event_location.start_date === null) || (event_location.start_date === undefined)) {
+                sdate = 'N/A';
+              } else {
+                sdate = APP_UTILITIES.formatEventDates(event_location.start_date);
+              }
+              let edate;
+              if ((event_location.end_date === null) || (event_location.end_date === undefined)) {
+                edate = 'N/A';
+              } else {
+                edate = APP_UTILITIES.formatEventDates(event_location.end_date);
+              }
               captive = 'Yes' || 'No';
               const s_diag = ' ';
               const county = ' ';
@@ -1336,7 +1346,15 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
             // Loop through each species diagnoses for a location species
             for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
-              const numAssess = speciesdiagnosis.tested_count + '/' + speciesdiagnosis.diagnosis_count;
+              let numAssess;
+              if ((speciesdiagnosis.tested_count === null) && (speciesdiagnosis.diagnosis_count === null)) {
+                numAssess = '';
+              } else {
+                const testedCount = speciesdiagnosis.tested_count || 0;
+                const diagnosisCount = speciesdiagnosis.diagnosis_count || 0;
+                numAssess = testedCount + '/' + diagnosisCount;
+              }
+
               let captive = locationspecies.captive;
 
               // pdfmake does not like 'undefined' values so setting them to empty string
@@ -1345,8 +1363,18 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               const kdead = locationspecies.dead_count || ' ';
               const esick = locationspecies.sick_count_estimated || ' ';
               const edead = locationspecies.dead_count_estimated || ' ';
-              const sdate = event_location.start_date || 'N/A';
-              const edate = event_location.end_date || 'N/A';
+              let sdate;
+              if ((event_location.start_date === null) || (event_location.start_date === undefined)) {
+                sdate = 'N/A';
+              } else {
+                sdate = APP_UTILITIES.formatEventDates(event_location.start_date);
+              }
+              let edate;
+              if ((event_location.end_date === null) || (event_location.end_date === undefined)) {
+                edate = 'N/A';
+              } else {
+                edate = APP_UTILITIES.formatEventDates(event_location.end_date);
+              }
               captive = 'Yes' || 'No';
               const s_diag = speciesdiagnosis.diagnosis_string || ' ';
               const county = locationspecies.administrative_level_two_string || ' ';

@@ -113,7 +113,7 @@ export class EventDetailsComponent implements OnInit {
   locationCommentsPanelOpen = false;
   locationContactsPanelOpen = false;
   eventOwner;
-
+  natMapPoints;
   eventNotFound = false;
 
   showAddEventLocation = false;
@@ -409,6 +409,14 @@ export class EventDetailsComponent implements OnInit {
       );
 
     this.speciesLoading = true;
+
+    // get event summary for reports
+    this._eventService.getEventSummary(this.eventID)
+      .subscribe(
+        (eventsummary) => {
+          this.natMapPoints = eventsummary;
+        }
+      );
     // get species from the species service
     this.speciesService.getSpecies()
       .subscribe(
@@ -735,7 +743,8 @@ export class EventDetailsComponent implements OnInit {
         minWidth: '40%',
         data: {
           event_data: this.eventData,
-          user: this.currentUser
+          user: this.currentUser,
+          event_summary: this.natMapPoints
         }
       });
 

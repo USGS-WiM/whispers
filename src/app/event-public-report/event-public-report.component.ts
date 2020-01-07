@@ -44,7 +44,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   detailMap;
   detailMapUrl;
   downloadingReport = false;
-  natMapPoints;
   locationMarkers;
   unMappables = [];
   eventPolys;
@@ -111,12 +110,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.loadingData = true;
-    this.eventService.getEventSummary(this.data.event_data.id)
-      .subscribe(
-        (eventsummary) => {
-          this.natMapPoints = eventsummary;
-        }
-      );
 
     this.administrativeLevelOneService.getAdminLevelOnes()
       .subscribe(
@@ -175,13 +168,13 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     setTimeout(() => {
       const view = [];
-      view.push({
-        lat: Number(this.natMapPoints['administrativeleveltwos'][0]['centroid_latitude']),
-        long: Number(this.natMapPoints['administrativeleveltwos'][0]['centroid_longitude'])
-      });
-      this.natMap.setView([view[0].lat, view[0].long]);
-      this.loadProgressBar();
-      this.loadingData = false;
+        view.push({
+          lat: Number(this.data.event_summary['administrativeleveltwos'][0]['centroid_latitude']),
+          long: Number(this.data.event_summary['administrativeleveltwos'][0]['centroid_longitude'])
+        });
+        this.natMap.setView([view[0].lat, view[0].long]);
+        this.loadProgressBar();
+        this.loadingData = false;
     }, 1000);
 
     this.natMap.dragging.disable();
@@ -196,7 +189,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     // mapping the event centroid for the national map
     setTimeout(() => {
-      this.MapResults(this.natMapPoints);
+      this.MapResults();
       this.loadingData = true;
     }, 600);
 
@@ -281,7 +274,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   }
 
   loadProgressBar() {
-    const source = timer(11, 11);
+    const source = timer(5, 5);
     const subscribe = source.subscribe(val => {
       this.value = val;
     });
@@ -354,24 +347,23 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.locationIdArray = this.locationIdArray.filter((v, i, a) => a.findIndex(t => (t.object_id === v.object_id)) === i);
   }
 
-  MapResults(natMapPoints) {
-    setTimeout(() => {
+  MapResults() {
+
       const currentResultsMarkers = [];
 
       currentResultsMarkers.push({
-        lat: Number(natMapPoints['administrativeleveltwos'][0]['centroid_latitude']),
-        long: Number(natMapPoints['administrativeleveltwos'][0]['centroid_longitude'])
+        lat: Number(this.data.event_summary['administrativeleveltwos'][0]['centroid_latitude']),
+        long: Number(this.data.event_summary['administrativeleveltwos'][0]['centroid_longitude'])
       });
       this.icon = L.divIcon({
         className: 'wmm-circle wmm-blue wmm-icon-circle wmm-icon-blue wmm-size-20'
       });
-
       L.marker([currentResultsMarkers[0].lat, currentResultsMarkers[0].long], { icon: this.icon }).addTo(this.natMap);
-    }, 600);
+
   }
 
   // code for workaround for slanted text in pdfmake table. Not being used currently
-  writeRotatedText = function (text) {
+  /* writeRotatedText = function (text) {
     let ctx;
     const canvas = document.createElement('canvas');
     // I am using predefined dimensions so either make this part of the arguments or change at will
@@ -386,7 +378,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     ctx.fillText(text, 0, 0);
     ctx.restore();
     return canvas.toDataURL();
-  };
+  }; */
 
   determineLocationName(name) {
     let locationName;
@@ -549,6 +541,27 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     return line;
   }
 
+  makeCommentsTitle() {
+    let title;
+    title = {
+      alignment: 'justify',
+      columns: [
+        {
+          image: this.pngURL,
+          width: 450,
+          height: 65,
+          margin: [0, 0, 0, 30]
+        },
+        {
+          style: 'header',
+          text: 'Comments Timeline for Event ID ' + this.data.event_data.id,
+          margin: [0, 20, 0, 0]
+        },
+      ]
+    };
+    return title;
+  }
+
   makeCommentsTable() {
     let commentTable;
     this.combinedComments = this.combinedComments.sort((a, b) => a.date_sort - b.date_sort);
@@ -606,6 +619,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       alignment: 'justify',
       table: {
         // heights: 40,
+        widths: [400, '*', '*', '*', '*', '*'],
         headerRows: 1,
         dontBreakRows: true, // Some info on breaking table rows across pages: https://github.com/bpampuch/pdfmake/issues/1159
         body: commentBody,
@@ -1559,6 +1573,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       }
 
       if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
+        docDefinition.content.push(this.makeCommentsTitle());
         docDefinition.content.push(this.makeCommentsTable());
       }
 

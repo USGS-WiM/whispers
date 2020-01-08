@@ -84,7 +84,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   commentTypeDefinition = '';
   commentSourceDefinition = '';
   errorMessage;
-
+  secondToLastPageNoFooter;
   locationNumber = 1;
   pngURL;
   locationIdArray = [];
@@ -168,13 +168,13 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     setTimeout(() => {
       const view = [];
-        view.push({
-          lat: Number(this.data.event_summary['administrativeleveltwos'][0]['centroid_latitude']),
-          long: Number(this.data.event_summary['administrativeleveltwos'][0]['centroid_longitude'])
-        });
-        this.natMap.setView([view[0].lat, view[0].long]);
-        this.loadProgressBar();
-        this.loadingData = false;
+      view.push({
+        lat: Number(this.data.event_summary['administrativeleveltwos'][0]['centroid_latitude']),
+        long: Number(this.data.event_summary['administrativeleveltwos'][0]['centroid_longitude'])
+      });
+      this.natMap.setView([view[0].lat, view[0].long]);
+      this.loadProgressBar();
+      this.loadingData = false;
     }, 1000);
 
     this.natMap.dragging.disable();
@@ -198,6 +198,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     document.getElementById('countyPreview').src = countyPreview; */
     if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
       this.getlocations();
+    }
+
+    if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
+      this.secondToLastPageNoFooter = true;
+    } else {
+      this.secondToLastPageNoFooter = false;
     }
     // get comment types from the commentTypes service
     this.commentTypeService.getCommentTypes()
@@ -349,16 +355,16 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
   MapResults() {
 
-      const currentResultsMarkers = [];
+    const currentResultsMarkers = [];
 
-      currentResultsMarkers.push({
-        lat: Number(this.data.event_summary['administrativeleveltwos'][0]['centroid_latitude']),
-        long: Number(this.data.event_summary['administrativeleveltwos'][0]['centroid_longitude'])
-      });
-      this.icon = L.divIcon({
-        className: 'wmm-circle wmm-blue wmm-icon-circle wmm-icon-blue wmm-size-20'
-      });
-      L.marker([currentResultsMarkers[0].lat, currentResultsMarkers[0].long], { icon: this.icon }).addTo(this.natMap);
+    currentResultsMarkers.push({
+      lat: Number(this.data.event_summary['administrativeleveltwos'][0]['centroid_latitude']),
+      long: Number(this.data.event_summary['administrativeleveltwos'][0]['centroid_longitude'])
+    });
+    this.icon = L.divIcon({
+      className: 'wmm-circle wmm-blue wmm-icon-circle wmm-icon-blue wmm-size-20'
+    });
+    L.marker([currentResultsMarkers[0].lat, currentResultsMarkers[0].long], { icon: this.icon }).addTo(this.natMap);
 
   }
 
@@ -408,7 +414,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         col_7: { text: 'Captive', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
         col_8: { text: 'Species Diagnosis', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
         col_9: { text: '# Assessed/ # with diagnosis', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_10: { text: 'Diagnostic Lab', border: [true, false, true, false], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] }
+        col_10: { text: 'Diagnostic Lab', border: [true, false, false, false], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] }
       }
     };
     // [{image: writeRotatedText('I am rotated'), fit:[7,53], alignment: 'center'}]
@@ -441,13 +447,13 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         const elData = rows[key];
         const row = new Array();
         row.push(elData.species);
-        row.push({text: elData.population, alignment: 'center'});
-        row.push({text: elData.known_sick, alignment: 'center'});
+        row.push({ text: elData.population, alignment: 'center' });
+        row.push({ text: elData.known_sick, alignment: 'center' });
         row.push({ text: elData.known_dead, alignment: 'center' });
         row.push({ text: elData.est_sick, alignment: 'center' });
         row.push({ text: elData.est_dead, alignment: 'center' });
         row.push({ text: elData.captive, alignment: 'center' });
-        row.push({text: elData.species_dia, alignment: 'left'});
+        row.push({ text: elData.species_dia, alignment: 'left' });
         row.push({ text: elData.count, alignment: 'center' });
         row.push(elData.lab);
         locationBody.push(row);
@@ -503,6 +509,15 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     return header;
   }
 
+  // create space
+  makeSpace() {
+    let space;
+    space = {
+          text: ' \n'
+    };
+    return space;
+  }
+
   // create location title
   makeTitle(data) {
     let country;
@@ -514,7 +529,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     const state = data.state;
     const county = data.county;
-    const start_date =  data.sdate;
+    const start_date = data.sdate;
     const end_date = data.edate;
     const name = data.name;
 
@@ -619,7 +634,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       alignment: 'justify',
       table: {
         // heights: 40,
-        widths: [400, '*', '*', '*', '*', '*'],
+        widths: [400, '*', '*', '*', 100, '*'],
         headerRows: 1,
         dontBreakRows: true, // Some info on breaking table rows across pages: https://github.com/bpampuch/pdfmake/issues/1159
         body: commentBody,
@@ -670,7 +685,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   explanationPartOne() {
     let explanationPartOne;
     explanationPartOne = {
-      style: 'smallest',
+      style: 'smaller',
       table: {
         body: [
           [{ text: 'Event Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventTypeDefinition, border: [false, false, false, false] }],
@@ -701,13 +716,22 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
   explanationOneForMoreDetails() {
     let explanationOneForMoreDetails;
-    explanationOneForMoreDetails = {
-      alignment: 'justify',
-      text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
-      style: 'footer',
-      pageBreak: 'after'
-    };
-    return explanationOneForMoreDetails;
+    if (this.secondToLastPageNoFooter === false) {
+      explanationOneForMoreDetails = {
+        alignment: 'justify',
+        text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
+        style: 'footer',
+      };
+      return explanationOneForMoreDetails;
+    } else if (this.secondToLastPageNoFooter === true) {
+      explanationOneForMoreDetails = {
+        alignment: 'justify',
+        text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
+        style: 'footer',
+        pageBreak: 'after'
+      };
+      return explanationOneForMoreDetails;
+    }
   }
 
   explanationPartTwoHeader() {
@@ -733,9 +757,10 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     let explanationPartTwo;
     explanationPartTwo = {
       style: 'definitionsTable',
+      id: 'explanationPartTwo',
       table: {
         body: [
-          [{ text: 'State (or Equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.stateDefinition, border: [false, false, false, false] }],
+          [{ text: 'State (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.stateDefinition, border: [false, false, false, false] }],
           [{ text: 'Country', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.countryDefinition, border: [false, false, false, false] }],
           [{ text: 'Start Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.startDateDefinition, border: [false, false, false, false] }],
           [{ text: 'End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.endDateDefinition, border: [false, false, false, false] }],
@@ -744,7 +769,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           [{ text: 'Known Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownSickDefinition, border: [false, false, false, false] }],
           [{ text: 'Known Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownDeadDefinition, border: [false, false, false, false] }],
           [{ text: 'Estimated Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estSickDefinition, border: [false, false, false, false] }],
-          [{ text: 'Estimate Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estDeadDefinition, border: [false, false, false, false] }],
+          [{ text: 'Estimated Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estDeadDefinition, border: [false, false, false, false] }],
           [{ text: 'Captive', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.captiveDefinition, border: [false, false, false, false] }],
           [{ text: 'Species Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDiagDefinition, border: [false, false, false, false] }],
           [{ text: 'Number Assessed', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numAssessedDefinition, border: [false, false, false, false] }],
@@ -1439,27 +1464,55 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         recordStatus = 'Incomplete';
       }
 
+      const showFooter = this.secondToLastPageNoFooter;
+
       // check for user role so that we show them the right report
       const docDefinition = {
         pageOrientation: 'landscape',
         pageMargins: [20, 20, 20, 35],
         footer: function (currentPage, pageCount) {
-          return {
-            margin: [20, 0, 20, 0],
-            style: 'footer',
-            columns: [
-              {
-                width: 700,
-                text: ['Report generated ' + nameOrgString + 'from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about this event, connect with the Contact Organization.\n For more information about WHISPers, see “About” at ', { text: 'https://whispers.usgs.gov', link: 'https://whispers.usgs.gov', color: '#0000EE' }, '.'
+          const SecondToLastPage = pageCount - 1;
+          if (showFooter === true) {
+            if (currentPage === SecondToLastPage) { return; }
+            if (currentPage !== pageCount) {
+              return {
+                margin: [20, 0, 20, 0],
+                style: 'footer',
+                columns: [
+                  {
+                    width: 700,
+                    text: ['Report generated ' + nameOrgString + 'from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about this event, connect with the Contact Organization.\n For more information about WHISPers, see “About” at ', { text: 'https://whispers.usgs.gov', link: 'https://whispers.usgs.gov', color: '#0000EE' }, '.'
+                    ]
+                  },
+                  {
+                    width: 50,
+                    alignment: 'right',
+                    text: 'Page ' + currentPage.toString()
+                  }
                 ]
-              },
-              {
-                width: 50,
-                alignment: 'right',
-                text: 'Page ' + currentPage.toString()
+              };
+            }
+            if (showFooter === false) {
+              if (currentPage !== pageCount) {
+                return {
+                  margin: [20, 0, 20, 0],
+                  style: 'footer',
+                  columns: [
+                    {
+                      width: 700,
+                      text: ['Report generated ' + nameOrgString + 'from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about this event, connect with the Contact Organization.\n For more information about WHISPers, see “About” at ', { text: 'https://whispers.usgs.gov', link: 'https://whispers.usgs.gov', color: '#0000EE' }, '.'
+                      ]
+                    },
+                    {
+                      width: 50,
+                      alignment: 'right',
+                      text: 'Page ' + currentPage.toString()
+                    }
+                  ]
+                };
               }
-            ]
-          };
+            }
+          }
         },
         content: [
           {
@@ -1571,6 +1624,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         docDefinition.content.push(this.makeHeader());
         docDefinition.content.push(this.makeTitle(loc[0]));
         docDefinition.content.push(this.makeHorizontalLine());
+        docDefinition.content.push(this.makeSpace());
         docDefinition.content.push(this.makeLocationTable(loc));
       }
 

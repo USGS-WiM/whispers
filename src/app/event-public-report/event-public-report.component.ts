@@ -210,11 +210,11 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     // creating variables for field definitions
     this.eventTypeDefinition = FIELD_HELP_TEXT.editEventTypeTooltip;
     this.eventIdDefinition = FIELD_HELP_TEXT.eventIDTooltip;
-    this.contactOrgDefinition = FIELD_HELP_TEXT.contactOrganizationTooltip;
-    this.recordStatusDefinition = FIELD_HELP_TEXT.recordStatusTooltip;
+    this.contactOrgDefinition = FIELD_HELP_TEXT.editContactOrganizationTooltip;
+    this.recordStatusDefinition = FIELD_HELP_TEXT.editRecordStatusTooltip;
     this.numberOfLocationsDefinition = FIELD_HELP_TEXT.numberOfLocationsDefinition;
-    this.countyDefinition = FIELD_HELP_TEXT.countyTooltip;
-    this.eventDiagDefinition = FIELD_HELP_TEXT.eventDiagnosisTooltip;
+    this.countyDefinition = FIELD_HELP_TEXT.editCountyTooltip;
+    this.eventDiagDefinition = FIELD_HELP_TEXT.editEventDiagnosisTooltip;
     this.labDefinition = FIELD_HELP_TEXT.editLabTooltip;
     this.numAnimalsAffectedDefinition = FIELD_HELP_TEXT.numberAffectedTooltip;
     this.numSpeciesAffectedDefinition = FIELD_HELP_TEXT.numberOfSpeciesDefinition;
@@ -228,12 +228,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.endDateDefinition = FIELD_HELP_TEXT.eventEndDateTooltip;
     this.speciesDefinition = FIELD_HELP_TEXT.editSpeciesTooltip;
     this.speciesDefinition = FIELD_HELP_TEXT.populationTooltip;
-    this.knownSickDefinition = FIELD_HELP_TEXT.knownSickTooltip;
-    this.knownDeadDefinition = FIELD_HELP_TEXT.knownDeadTooltip;
-    this.estSickDefinition = FIELD_HELP_TEXT.estimatedSickTooltip;
-    this.estDeadDefinition = FIELD_HELP_TEXT.estimatedDeadTooltip;
-    this.captiveDefinition = FIELD_HELP_TEXT.captiveTooltip;
-    this.speciesDiagDefinition = FIELD_HELP_TEXT.speciesDiagnosisTooltip;
+    this.knownSickDefinition = FIELD_HELP_TEXT.editKnownSickTooltip;
+    this.knownDeadDefinition = FIELD_HELP_TEXT.editKnownDeadTooltip;
+    this.estSickDefinition = FIELD_HELP_TEXT.editEstimatedSickTooltip;
+    this.estDeadDefinition = FIELD_HELP_TEXT.editEstimatedDeadTooltip;
+    this.captiveDefinition = FIELD_HELP_TEXT.editCaptiveTooltip;
+    this.speciesDiagDefinition = FIELD_HELP_TEXT.editSpeciesDiagnosisTooltip;
     this.numAssessedDefinition = FIELD_HELP_TEXT.numberAssessedTooltip;
     this.numWithDiagDefinition = FIELD_HELP_TEXT.numberWithDiagnosisTooltip;
     this.diagLabDefinition = FIELD_HELP_TEXT.editLabTooltip;

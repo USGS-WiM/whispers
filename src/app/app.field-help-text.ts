@@ -5,6 +5,9 @@ import { environment } from 'environments/environment';
 
 @Injectable()
 export class FIELD_HELP_TEXT {
+    
+// Tooltip config template:
+// public static get Tooltip(): string { return ''; }
 // The characters \n\n can be used to add a breakline to the tooltip
 
 // EVENT DETAILS & OTHER INFO
@@ -180,6 +183,3 @@ public static get commentSourceDefinition(): string { return 'Comment timeline i
 // PDF Defnition
 
 }
-
-// Tooltip config template:
-// public static get Tooltip(): string { return ''; }

@@ -716,22 +716,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
   explanationOneForMoreDetails() {
     let explanationOneForMoreDetails;
-    if (this.secondToLastPageNoFooter === false) {
       explanationOneForMoreDetails = {
         alignment: 'justify',
         text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
         style: 'footer',
       };
       return explanationOneForMoreDetails;
-    } else if (this.secondToLastPageNoFooter === true) {
-      explanationOneForMoreDetails = {
-        alignment: 'justify',
-        text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
-        style: 'footer',
-        pageBreak: 'after'
-      };
-      return explanationOneForMoreDetails;
-    }
   }
 
   explanationPartTwoHeader() {
@@ -755,38 +745,71 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   }
   explanationPartTwo() {
     let explanationPartTwo;
-    explanationPartTwo = {
-      style: 'definitionsTable',
-      id: 'explanationPartTwo',
-      table: {
-        body: [
-          [{ text: 'State (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.stateDefinition, border: [false, false, false, false] }],
-          [{ text: 'Country', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.countryDefinition, border: [false, false, false, false] }],
-          [{ text: 'Start Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.startDateDefinition, border: [false, false, false, false] }],
-          [{ text: 'End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.endDateDefinition, border: [false, false, false, false] }],
-          [{ text: 'Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
-          [{ text: 'Population', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
-          [{ text: 'Known Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownSickDefinition, border: [false, false, false, false] }],
-          [{ text: 'Known Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownDeadDefinition, border: [false, false, false, false] }],
-          [{ text: 'Estimated Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estSickDefinition, border: [false, false, false, false] }],
-          [{ text: 'Estimated Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estDeadDefinition, border: [false, false, false, false] }],
-          [{ text: 'Captive', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.captiveDefinition, border: [false, false, false, false] }],
-          [{ text: 'Species Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDiagDefinition, border: [false, false, false, false] }],
-          [{ text: 'Number Assessed', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numAssessedDefinition, border: [false, false, false, false] }],
-          [{ text: 'Number with this Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numWithDiagDefinition, border: [false, false, false, false] }],
-          [{ text: 'Diagnostic Laboratory', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.labDefinition, border: [false, false, false, false] }],
-          [{ text: 'Comment Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Flags comment as belonging to a certain category. See metadata for details on options.', border: [false, false, false, false] }],
-          [{ text: 'Comment Source', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.commentSourceDefinition, border: [false, false, false, false] }],
-        ]
-      },
-      layout: {
-        defaultBorder: false,
-        paddingLeft: function (i, node) { return 15; },
-        paddingRight: function (i, node) { return 10; },
-        // paddingTop: function(i, node) { return 10; }
-      }
-    };
-    return explanationPartTwo;
+    if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
+      explanationPartTwo = {
+        style: 'definitionsTable',
+        id: 'explanationPartTwo',
+        table: {
+          body: [
+            [{ text: 'State (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.stateDefinition, border: [false, false, false, false] }],
+            [{ text: 'Country', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.countryDefinition, border: [false, false, false, false] }],
+            [{ text: 'Start Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.startDateDefinition, border: [false, false, false, false] }],
+            [{ text: 'End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.endDateDefinition, border: [false, false, false, false] }],
+            [{ text: 'Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
+            [{ text: 'Population', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
+            [{ text: 'Known Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownSickDefinition, border: [false, false, false, false] }],
+            [{ text: 'Known Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownDeadDefinition, border: [false, false, false, false] }],
+            [{ text: 'Estimated Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estSickDefinition, border: [false, false, false, false] }],
+            [{ text: 'Estimated Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estDeadDefinition, border: [false, false, false, false] }],
+            [{ text: 'Captive', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.captiveDefinition, border: [false, false, false, false] }],
+            [{ text: 'Species Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDiagDefinition, border: [false, false, false, false] }],
+            [{ text: 'Number Assessed', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numAssessedDefinition, border: [false, false, false, false] }],
+            [{ text: 'Number with this Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numWithDiagDefinition, border: [false, false, false, false] }],
+            [{ text: 'Diagnostic Laboratory', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.labDefinition, border: [false, false, false, false] }],
+            [{ text: 'Comment Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Flags comment as belonging to a certain category. See metadata for details on options.', border: [false, false, false, false] }],
+            [{ text: 'Comment Source', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.commentSourceDefinition, border: [false, false, false, false] }],
+          ]
+        },
+        layout: {
+          defaultBorder: false,
+          paddingLeft: function (i, node) { return 15; },
+          paddingRight: function (i, node) { return 10; },
+          // paddingTop: function(i, node) { return 10; }
+        }
+      };
+      return explanationPartTwo;
+    } else {
+      explanationPartTwo = {
+        style: 'definitionsTable',
+        id: 'explanationPartTwo',
+        table: {
+          body: [
+            [{ text: 'State (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.stateDefinition, border: [false, false, false, false] }],
+            [{ text: 'Country', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.countryDefinition, border: [false, false, false, false] }],
+            [{ text: 'Start Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.startDateDefinition, border: [false, false, false, false] }],
+            [{ text: 'End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.endDateDefinition, border: [false, false, false, false] }],
+            [{ text: 'Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
+            [{ text: 'Population', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
+            [{ text: 'Known Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownSickDefinition, border: [false, false, false, false] }],
+            [{ text: 'Known Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownDeadDefinition, border: [false, false, false, false] }],
+            [{ text: 'Estimated Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estSickDefinition, border: [false, false, false, false] }],
+            [{ text: 'Estimated Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estDeadDefinition, border: [false, false, false, false] }],
+            [{ text: 'Captive', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.captiveDefinition, border: [false, false, false, false] }],
+            [{ text: 'Species Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDiagDefinition, border: [false, false, false, false] }],
+            [{ text: 'Number Assessed', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numAssessedDefinition, border: [false, false, false, false] }],
+            [{ text: 'Number with this Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numWithDiagDefinition, border: [false, false, false, false] }],
+            [{ text: 'Diagnostic Laboratory', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.labDefinition, border: [false, false, false, false] }]
+          ]
+        },
+        layout: {
+          defaultBorder: false,
+          paddingLeft: function (i, node) { return 15; },
+          paddingRight: function (i, node) { return 10; },
+          // paddingTop: function(i, node) { return 10; }
+        }
+      };
+      return explanationPartTwo;
+    }
   }
 
   explanationTwoForMoreDetails() {
@@ -1464,15 +1487,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         recordStatus = 'Incomplete';
       }
 
-      const showFooter = this.secondToLastPageNoFooter;
-
       // check for user role so that we show them the right report
       const docDefinition = {
         pageOrientation: 'landscape',
         pageMargins: [20, 20, 20, 35],
         footer: function (currentPage, pageCount) {
           const SecondToLastPage = pageCount - 1;
-          if (showFooter === true) {
             if (currentPage === SecondToLastPage) { return; }
             if (currentPage !== pageCount) {
               return {
@@ -1492,27 +1512,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                 ]
               };
             }
-            if (showFooter === false) {
-              if (currentPage !== pageCount) {
-                return {
-                  margin: [20, 0, 20, 0],
-                  style: 'footer',
-                  columns: [
-                    {
-                      width: 700,
-                      text: ['Report generated ' + nameOrgString + 'from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about this event, connect with the Contact Organization.\n For more information about WHISPers, see “About” at ', { text: 'https://whispers.usgs.gov', link: 'https://whispers.usgs.gov', color: '#0000EE' }, '.'
-                      ]
-                    },
-                    {
-                      width: 50,
-                      alignment: 'right',
-                      text: 'Page ' + currentPage.toString()
-                    }
-                  ]
-                };
-              }
-            }
-          }
         },
         content: [
           {
@@ -1637,12 +1636,10 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       docDefinition.content.push(this.makeExplanationDescription());
       docDefinition.content.push(this.explanationPartOne());
       docDefinition.content.push(this.explanationOneForMoreDetails());
+      docDefinition.content.push(this.explanationPartTwoHeader());
+      docDefinition.content.push(this.explanationPartTwo());
+      docDefinition.content.push(this.explanationTwoForMoreDetails());
 
-      if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
-        docDefinition.content.push(this.explanationPartTwoHeader());
-        docDefinition.content.push(this.explanationPartTwo());
-        docDefinition.content.push(this.explanationTwoForMoreDetails());
-      }
 
       pdfMake.createPdf(docDefinition).download('Event_' + this.data.event_data.id + '_' + APP_UTILITIES.getFileNameDate + '.pdf');
       this.downloadingReport = false;

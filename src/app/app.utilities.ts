@@ -22,12 +22,13 @@ export class APP_UTILITIES {
         return convertedDate;
     }
 
+    // e.g. 2020-01-01
     public static get getTodayDate(): any {
         let today_string = '';
         const today = new Date();
         const dd = today.getDate();
         let dd_string = '';
-        const mm = today.getMonth() + 1; //January is 0!
+        const mm = today.getMonth() + 1; // January is 0!
         let mm_string = '';
         const yyyy = today.getFullYear();
 
@@ -48,6 +49,7 @@ export class APP_UTILITIES {
         return today_string;
     }
 
+    // e.g. 01/01/2020 12:00 AM
     public static get getDateTime(): any {
         let today_string = '';
         const today = new Date();
@@ -98,6 +100,7 @@ export class APP_UTILITIES {
         return today_string;
     }
 
+    // e.g. Jan 01, 2020 12:00 AM
     public static get getReportDateTime(): any {
         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -147,6 +150,33 @@ export class APP_UTILITIES {
 
         // formatting the date
         today_string = monthNames[today.getMonth()] + ' ' + dd_string + ', ' + yyyy + ' ' + hr_string + ':' + min_string + ' ' + ampm;
+
+        return today_string;
+    }
+
+    // e.g. 20200101
+    public static get getFileNameDate() {
+        let today_string = '';
+        const today = new Date();
+        const dd = today.getDate();
+        let dd_string = '';
+        const mm = today.getMonth() + 1; // January is 0!
+        let mm_string = '';
+        const yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd_string = '0' + dd;
+        } else {
+            dd_string = dd.toString();
+        }
+
+        if (mm < 10) {
+            mm_string = '0' + mm;
+        } else {
+            mm_string = mm.toString();
+        }
+
+        today_string = yyyy + mm_string  + dd_string;
 
         return today_string;
     }
@@ -205,7 +235,7 @@ export class APP_UTILITIES {
 
     public static get DEFAULT_COUNTRY_ID(): string {
 
-        // TODO: improve this function to actually lookup the default country id 
+        // TODO: improve this function to actually lookup the default country id
         // using the default country abbreviation string from APP_SETTINGS.
         // doing this quick and dirty to make quick progress now.
         return '30';

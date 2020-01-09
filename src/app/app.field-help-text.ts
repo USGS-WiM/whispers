@@ -5,6 +5,9 @@ import { environment } from 'environments/environment';
 
 @Injectable()
 export class FIELD_HELP_TEXT {
+    
+// Tooltip config template:
+// public static get Tooltip(): string { return ''; }
 // The characters \n\n can be used to add a breakline to the tooltip
 
 // EVENT DETAILS & OTHER INFO
@@ -19,7 +22,7 @@ public static get editContactOrganizationTooltip(): string { return 'Organizatio
 public static get eventTypeTooltip(): string { return 'Mortality/Morbidity: Noteworthy occurrence of one or more sick or dead animals clustered in space and time. \n\n  Surveillance: Positive detections of a pathogen during active surveillance of healthy live animals. \n\n If both (e.g., went to cave to swab live bats and also found dead bats), create two separate events. \n\n See metadata for details.'; }
 public static get editEventTypeTooltip(): string { return 'Mortality/Morbidity: Noteworthy occurrence of one or more sick or dead animals clustered in space and time. \n\n  Surveillance: Positive detections of a pathogen during active surveillance of healthy live animals.'; }
 
-public static get recordStatusTooltip(): string { return '"Complete" if 1.) the event has ended,  2.) diagnostic tests are finalized, and  3.) all information is updated in WHISPers. Otherwise, "Incomplete". \n\n  See metadata for details.'; }
+public static get recordStatusTooltip(): string { return '"Complete" if 1.) the event has ended,  2.) diagnostic tests are finalized, and  3.) all information is updated in WHISPers. Otherwise, "Incomplete". \n  See metadata for details.'; }
 public static get editRecordStatusTooltip(): string { return '"Complete" if 1.) the event has ended,  2.) diagnostic tests are finalized, and  3.) all information is updated in WHISPers. Otherwise, "Incomplete".'; }
 
 public static get eventIDTooltip(): string { return 'System-generated unique identifier for an event.'; }
@@ -180,6 +183,3 @@ public static get commentSourceDefinition(): string { return 'Comment timeline i
 // PDF Defnition
 
 }
-
-// Tooltip config template:
-// public static get Tooltip(): string { return ''; }

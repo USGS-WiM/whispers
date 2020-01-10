@@ -95,6 +95,7 @@ export interface AssociatedEvents {
 })
 export class EventDetailsComponent implements OnInit {
   @Output() myEvent = new EventEmitter();
+  @Input() selectedTab: number;
 
   // @ViewChild('speciesTable') table: any;
   eventID: string;
@@ -172,6 +173,8 @@ export class EventDetailsComponent implements OnInit {
   canvas = document.createElement('canvas');
   capturedImage;
   commentTableImage: any;
+
+  // selectedTab: number;
 
   locationSpeciesDisplayedColumns = [
     'species',
@@ -251,6 +254,8 @@ export class EventDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    // this.selectedTab = 0;
 
     const initialSelection = [];
     const allowMultiSelect = true;
@@ -636,7 +641,9 @@ export class EventDetailsComponent implements OnInit {
     setTimeout(() => {
       this.locationMarkers.clearLayers();
       this.mapEvent(this.eventData);
+      this.selectedTab = 0;
     }, 2500);
+ 
   }
 
   navigateToHome() {
@@ -647,6 +654,7 @@ export class EventDetailsComponent implements OnInit {
     this.eventLocationSpecies = [];
     this.router.navigate([`../${eventID}`], { relativeTo: this.route });
     this.reloadMap();
+    // this.selectedTab = 0;
     // location.reload();
     // this.refreshEvent();
   }
@@ -758,12 +766,12 @@ export class EventDetailsComponent implements OnInit {
           }
         );
 
-        // adding back leaflet layers and controls
-        this.locationMarkers = L.featureGroup().addTo(this.map);
-        this.mapEvent(this.eventData);
-        $('.leaflet-control-zoom').css('visibility', 'visible');
-        $('.leaflet-control-layers').css('visibility', 'visible');
-        $('.leaflet-control-attribution').css('visibility', 'visible');
+      // adding back leaflet layers and controls
+      this.locationMarkers = L.featureGroup().addTo(this.map);
+      this.mapEvent(this.eventData);
+      $('.leaflet-control-zoom').css('visibility', 'visible');
+      $('.leaflet-control-layers').css('visibility', 'visible');
+      $('.leaflet-control-attribution').css('visibility', 'visible');
 
     }, 1000);
   }
@@ -1250,6 +1258,7 @@ export class EventDetailsComponent implements OnInit {
     // see comment on line 182
     // this.viewPanelStates = new Object();
     // this.getViewPanelState(this.viewPanels);
+    this.selectedTab = 0;
 
     console.log('Event Location Species list at start of refresh: ', this.eventLocationSpecies);
 

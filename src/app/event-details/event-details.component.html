@@ -364,8 +364,8 @@
           </div>
         </div>
 
-        <mat-tab-group class="tab-bar" (selectedTabChange)="resetExpansionPanels()"
-          *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+        <mat-tab-group class="tab-bar" [selectedIndex]="selectedTab" (selectedTabChange)="resetExpansionPanels()"
+          *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined" >
           <!-- (selectedIndexChange)="_setDataSource($event)" -->
           <!-- Events tab -->
 

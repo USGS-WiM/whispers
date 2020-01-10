@@ -746,6 +746,8 @@ export class EventDetailsComponent implements OnInit {
 
   downloadEventReport(id: string) {
 
+    this.selectedTab = 0;
+
     setTimeout(() => {
       this.eventPublicReportDialogRef = this.dialog.open(EventPublicReportComponent, {
         minWidth: '40%',

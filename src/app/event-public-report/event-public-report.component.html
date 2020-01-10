@@ -1,19 +1,22 @@
 <h1 mat-dialog-title>
-    <i class="material-icons">archive</i> Generate Event Report
+    <span class="centeredHeader" *ngIf="value < 100"> Preparing images for event report. . .</span>
+    <span class="centeredHeader" *ngIf="value > 99"> Ready to download!</span>
 </h1>
 <mat-dialog-content>
     <div class="wrapper">
         <div class="firstMap">
-            <h4>Geographic context:</h4>
+            <h4>Geographic Context:</h4>
             <div class="mapContainer">
                 <div id="hiddenNatMap" class="natMap"></div><!-- <div><img id="countyPreview"></div> -->
             </div>
+            <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
         </div>
         <div class="secondMap">
-            <h4>Event details map:</h4>
+            <h4>Counties (or equivalent) Affected:</h4>
             <div class="mapContainerDetail">
                 <div id="detailMap" class="natMap"></div><!-- <div><img id="countyPreview"></div> -->
             </div>
+            <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
         </div>
         <br>
         <br>
@@ -28,7 +31,7 @@
 <mat-dialog-actions>
     <div class="detail-section-buttons">
         <button mat-raised-button color="primary" (click)="downloadEventReport()"
-            [disabled]="downloadingReport || loadingData">
+            [disabled]="value < 99">
             <i class="material-icons">archive</i> Download Event Report</button>
         <button mat-button color="warn" (click)="this.eventPublicReportDialogRef.close('cancel');">
             <mat-icon>cancel</mat-icon>&nbsp;Cancel

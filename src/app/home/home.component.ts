@@ -1122,7 +1122,7 @@ export class HomeComponent implements OnInit {
 
 
   // Function for creating a dialog to download results summary report pdf
-  generateResultsSummaryReport(id: string) {
+  generateResultsSummaryReport() {
 
     /**********
      * 

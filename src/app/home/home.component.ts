@@ -1138,7 +1138,13 @@ export class HomeComponent implements OnInit {
         user: this.currentUser,
         current_results: this.currentResults,
         current_search_query: this.currentSearchQuery,
-        mapUrl: this.resultsMapUrl.__zone_symbol__value
+        mapUrl: this.resultsMapUrl.__zone_symbol__value,
+        adminLevelOnes: this.adminLevelOnes,
+        adminLevelTwos: this.administrative_level_two,
+        diagnosisTypes: this.diagnosisTypes,
+        diagnoses: this.diagnoses,
+        species: this.allSpecies
+        //locations: 
       }
     });
 

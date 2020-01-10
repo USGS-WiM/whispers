@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
+import { MatDialog, MatDialogRef, MatExpansionPanel, MatTabGroup } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -197,6 +197,7 @@ export class EventDetailsComponent implements OnInit {
   @ViewChild(MatSort) locationSpeciesSort: MatSort;
   @ViewChild(EventPublicReportComponent) eventReportComponent: EventPublicReportComponent;
   @ViewChildren(MatExpansionPanel) viewPanels: QueryList<MatExpansionPanel>;
+  @ViewChild(MatTabGroup) eventDetailsTabs: MatTabGroup;
 
   // this use of the viewPanels variable and associated functions is assumed (but not confirmed) deprecated.
   // the original purpose may have been superceded by later development. it was removed 12/30/19 to fix a bug
@@ -641,7 +642,6 @@ export class EventDetailsComponent implements OnInit {
     setTimeout(() => {
       this.locationMarkers.clearLayers();
       this.mapEvent(this.eventData);
-      this.selectedTab = 0;
     }, 2500);
  
   }
@@ -654,7 +654,7 @@ export class EventDetailsComponent implements OnInit {
     this.eventLocationSpecies = [];
     this.router.navigate([`../${eventID}`], { relativeTo: this.route });
     this.reloadMap();
-    // this.selectedTab = 0;
+    this.eventDetailsTabs.selectedIndex = 0;
     // location.reload();
     // this.refreshEvent();
   }

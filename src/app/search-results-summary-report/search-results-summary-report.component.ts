@@ -5,7 +5,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef, MatChipRemove } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import html2canvas from 'html2canvas';
@@ -90,6 +90,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       center: new L.LatLng(39.8283, -98.5795),
       zoom: 4,
       zoomControl: false,
+      attributionControl: false,
       layers: [streets]
     });
 
@@ -107,7 +108,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     this.adminLevelTwos = this.data.adminLevelTwos;
     this.diagnosisTypes = this.data.diagnosisTypes;
     this.eventDiagnoses = this.data.diagnoses;
-    
+
     this.countryService.getCountries()
       .subscribe(
         (countries) => {
@@ -134,116 +135,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       );
 
     setTimeout(() => {
-      //this.loadingData = false;
-    }, 1000);
-
-    setTimeout(() => {
-      let url;
-      // using html2Canvas to capture leaflet map for reports
-      // solution found here: https://github.com/niklasvh/html2canvas/issues/567
-      const mapPane = $('#resultsMap .leaflet-map-pane')[0];
-      const mapTransform = mapPane.style.transform.split(',');
-      const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
-      const mapY = parseFloat(mapTransform[1].replace('px', ''));
-      mapPane.style.transform = '';
-      mapPane.style.left = mapX + 'px';
-      mapPane.style.top = mapY + 'px';
-
-      const myTiles = $('img.leaflet-tile');
-      const tilesLeft = [];
-      const tilesTop = [];
-      const tileMethod = [];
-      for (let i = 0; i < myTiles.length; i++) {
-        if (myTiles[i].style.left !== '') {
-          tilesLeft.push(parseFloat(myTiles[i].style.left.replace('px', '')));
-          tilesTop.push(parseFloat(myTiles[i].style.top.replace('px', '')));
-          tileMethod[i] = 'left';
-        } else if (myTiles[i].style.transform !== '') {
-          const tileTransform = myTiles[i].style.transform.split(',');
-          tilesLeft[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
-          tilesTop[i] = parseFloat(tileTransform[1].replace('px', ''));
-          myTiles[i].style.transform = '';
-          tileMethod[i] = 'transform';
-        } else {
-          tilesLeft[i] = 0;
-          // tilesRight[i] = 0;
-          tileMethod[i] = 'neither';
-        }
-        myTiles[i].style.left = (tilesLeft[i]) + 'px';
-        myTiles[i].style.top = (tilesTop[i]) + 'px';
-      }
-
-      const myDivicons = $('.leaflet-marker-icon');
-      const dx = [];
-      const dy = [];
-      const mLeft = [];
-      const mTop = [];
-      /*for (let i = 0; i < myDivicons.length; i++) {
-        const curTransform = myDivicons[i].style.transform;
-        const splitTransform = curTransform.split(',');
-        dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
-        dy.push(parseFloat(splitTransform[1].replace('px', '')));
-        myDivicons[i].style.transform = '';
-        myDivicons[i].style.left = dx[i] + 'px';
-        myDivicons[i].style.top = dy[i] + 'px';
-      }*/
-
-      const mapWidth = parseFloat($('#map').css('width').replace('px', ''));
-      const mapHeight = parseFloat($('#map').css('height').replace('px', ''));
-
-      /*const linesLayer = $('svg.leaflet-zoom-animated')[0];
-      const oldLinesWidth = linesLayer.getAttribute('width');
-      const oldLinesHeight = linesLayer.getAttribute('height');
-      const oldViewbox = linesLayer.getAttribute('viewBox');
-      linesLayer.setAttribute('width', mapWidth.toString());
-      linesLayer.setAttribute('height', mapHeight.toString());
-      linesLayer.setAttribute('viewBox', '0 0 ' + mapWidth + ' ' + mapHeight);
-      const linesTransform = linesLayer.style.transform.split(',');
-      const linesX = parseFloat(linesTransform[0].split('(')[1].replace('px', ''));
-      const linesY = parseFloat(linesTransform[1].replace('px', ''));
-      linesLayer.style.transform = '';
-      linesLayer.style.left = '';
-      linesLayer.style.top = '';*/
-
-      const options = {
-        useCORS: true,
-      };
-
-      this.resultsMapUrl = html2canvas(document.getElementById('resultsMap'), options).then((canvas) => {
-        url = canvas.toDataURL('image/png');
-        console.log('results map url returned');
-        this.mapImageProcessed = true;
-        return url;
-      });
-
-      for (let i = 0; i < myTiles.length; i++) {
-        if (tileMethod[i] === 'left') {
-          myTiles[i].style.left = (tilesLeft[i]) + 'px';
-          myTiles[i].style.top = (tilesTop[i]) + 'px';
-        } else if (tileMethod[i] === 'transform') {
-          myTiles[i].style.left = '';
-          myTiles[i].style.top = '';
-          myTiles[i].style.transform = 'translate(' + tilesLeft[i] + 'px, ' + tilesTop[i] + 'px)';
-        } else {
-          myTiles[i].style.left = '0px';
-          myTiles[i].style.top = '0px';
-          myTiles[i].style.transform = 'translate(0px, 0px)';
-        }
-      }
-      for (let i = 0; i < myDivicons.length; i++) {
-        myDivicons[i].style.transform = 'translate(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
-        myDivicons[i].style.marginLeft = mLeft[i] + 'px';
-        myDivicons[i].style.marginTop = mTop[i] + 'px';
-      }
-      /*linesLayer.style.transform = 'translate(' + (linesX) + 'px,' + (linesY) + 'px)';
-      linesLayer.setAttribute('viewBox', oldViewbox);
-      linesLayer.setAttribute('width', oldLinesWidth);
-      linesLayer.setAttribute('height', oldLinesHeight);*/
-      mapPane.style.transform = 'translate(' + (mapX) + 'px,' + (mapY) + 'px)';
-      mapPane.style.left = '';
-      mapPane.style.top = '';
-      // END national map
-    }, 2000); // if you make it too quick it doesn't get the basemap tiles
+      this.mapImageProcessed = true;
+    }, 2001);
 
   }
 
@@ -549,12 +442,150 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   }
 
   downloadResultsSummaryReport() {
-    
+    let mapurl;
+      // using html2Canvas to capture leaflet map for reports
+      // solution found here: https://github.com/niklasvh/html2canvas/issues/567
+      const mapPane = $('.leaflet-map-pane')[0];
+    const mapTransform = mapPane.style.transform.split(',');
+    // const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
+    let mapX;
+
+    // fix for firefox
+    if ((mapTransform[0] === undefined) || (mapTransform[0] === '')) {
+      mapX = '';
+    } else {
+      mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
+    }
+    let mapY;
+    // fix for firefox
+    if ((mapTransform[1] === undefined) || (mapTransform[1] === '')) {
+      mapY = '';
+    } else {
+      mapY = parseFloat(mapTransform[1].replace('px', ''));
+    }
+    mapPane.style.transform = '';
+    mapPane.style.left = mapX + 'px';
+    mapPane.style.top = mapY + 'px';
+
+    const myTiles = $('img.leaflet-tile');
+    const tilesLeft = [];
+    const tilesTop = [];
+    const tileMethod = [];
+    for (let i = 0; i < myTiles.length; i++) {
+      if (myTiles[i].style.left !== '') {
+        tilesLeft.push(parseFloat(myTiles[i].style.left.replace('px', '')));
+        tilesTop.push(parseFloat(myTiles[i].style.top.replace('px', '')));
+        tileMethod[i] = 'left';
+      } else if (myTiles[i].style.transform !== '') {
+        const tileTransform = myTiles[i].style.transform.split(',');
+        tilesLeft[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
+        tilesTop[i] = parseFloat(tileTransform[1].replace('px', ''));
+        myTiles[i].style.transform = '';
+        tileMethod[i] = 'transform';
+      } else {
+        tilesLeft[i] = 0;
+        // tilesRight[i] = 0;
+        tileMethod[i] = 'neither';
+      }
+      myTiles[i].style.left = (tilesLeft[i]) + 'px';
+      myTiles[i].style.top = (tilesTop[i]) + 'px';
+    }
+
+    const myDivicons = $('.leaflet-marker-icon');
+    const dx = [];
+    const dy = [];
+    const mLeft = [];
+    const mTop = [];
+    for (let i = 0; i < myDivicons.length; i++) {
+      const curTransform = myDivicons[i].style.transform;
+      const splitTransform = curTransform.split(',');
+      if (splitTransform[0] === '') {
+
+      } else {
+        dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
+      }
+      if (splitTransform[0] === '') {
+
+      } else {
+        dy.push(parseFloat(splitTransform[1].replace('px', '')));
+      }
+      // dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
+      // dy.push(parseFloat(splitTransform[1].replace('px', '')));
+      myDivicons[i].style.transform = '';
+      myDivicons[i].style.left = dx[i] + 'px';
+      myDivicons[i].style.top = dy[i] + 'px';
+    }
+
+    const mapWidth = parseFloat($('#map').css('width').replace('px', ''));
+    const mapHeight = parseFloat($('#map').css('height').replace('px', ''));
+
+    /* const linesLayer = $('svg.leaflet-zoom-animated')[0];
+    let oldLinesWidth;
+    if (oldLinesWidth === undefined) {
+      oldLinesWidth = '';
+    } else {
+      oldLinesWidth = linesLayer.getAttribute('width');
+    }
+    const oldLinesHeight = linesLayer.getAttribute('height');
+    const oldViewbox = linesLayer.getAttribute('viewBox');
+    linesLayer.setAttribute('width', mapWidth.toString());
+    linesLayer.setAttribute('height', mapHeight.toString());
+    linesLayer.setAttribute('viewBox', '0 0 ' + mapWidth + ' ' + mapHeight);
+    const linesTransform = linesLayer.style.transform.split(',');
+    const linesX = parseFloat(linesTransform[0].split('(')[1].replace('px', ''));
+    const linesY = parseFloat(linesTransform[1].replace('px', ''));
+    linesLayer.style.transform = '';
+    linesLayer.style.left = '';
+    linesLayer.style.top = ''; */
+
+    const options = {
+      useCORS: true,
+    };
+
+    /* this.resultsMapUrl = html2canvas(document.getElementById('resultsMap'), options).then((canvas) => {
+      url = canvas.toDataURL('image/png');
+      console.log('results map url returned');
+      this.mapImageProcessed = true;
+      return url;
+    }); */
+    html2canvas(document.getElementById('resultsMap'), options).then(function (canvas) {
+      mapurl = canvas.toDataURL('image/png');
+    });
+
+    this.mapImageProcessed = true;
+    for (let i = 0; i < myTiles.length; i++) {
+      if (tileMethod[i] === 'left') {
+        myTiles[i].style.left = (tilesLeft[i]) + 'px';
+        myTiles[i].style.top = (tilesTop[i]) + 'px';
+      } else if (tileMethod[i] === 'transform') {
+        myTiles[i].style.left = '';
+        myTiles[i].style.top = '';
+        myTiles[i].style.transform = 'translate(' + tilesLeft[i] + 'px, ' + tilesTop[i] + 'px)';
+      } else {
+        myTiles[i].style.left = '0px';
+        myTiles[i].style.top = '0px';
+        myTiles[i].style.transform = 'translate(0px, 0px)';
+      }
+    }
+    for (let i = 0; i < myDivicons.length; i++) {
+      myDivicons[i].style.transform = 'translate(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
+      myDivicons[i].style.marginLeft = mLeft[i] + 'px';
+      myDivicons[i].style.marginTop = mTop[i] + 'px';
+    }
+    /* linesLayer.style.transform = 'translate(' + (linesX) + 'px,' + (linesY) + 'px)';
+    linesLayer.setAttribute('viewBox', oldViewbox);
+    linesLayer.setAttribute('width', oldLinesWidth);
+    linesLayer.setAttribute('height', oldLinesHeight); */
+    mapPane.style.transform = 'translate(' + (mapX) + 'px,' + (mapY) + 'px)';
+    mapPane.style.left = '';
+    mapPane.style.top = '';
     this.loadingReport = true;
     // placeholder for google analytics event
     // gtag('event', 'click', { 'event_category': 'Search Results', 'event_label': 'Downloaded Search Results Summary Report' });
 
     // Getting date/time for timestamp
+    // need to give some time for html2canvas to finish rendering
+    setTimeout(() => {
     const date = APP_UTILITIES.getDateTime;
 
     // whispers logo
@@ -570,7 +601,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
     // formatting full URL for footer
     const url = window.location.href;
-
+    this.mapImageProcessed = true;
     // Section with SEARCH CRITERIA for page 1
     // TODO: calculation of record status for page 1
     let record_status;
@@ -935,8 +966,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             },
             {
               alignment: 'justify',
-              //image: this.data.mapUrl,
-              image: this.resultsMapUrl.__zone_symbol__value,
+              image: mapurl,
               width: 400,
               height: 350
             }
@@ -1061,7 +1091,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         },
       ],
       images: {
-        logo: this.pngURL
+        logo: this.pngURL,
+        nationalMap: mapurl
       },
       styles: {
         header: {
@@ -1089,5 +1120,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     pdfMake.createPdf(docDefinition).download('NWHC_Search_Results_Summary_Report.pdf');
     this.loadingReport = false;
     this.resultsSummaryReportDialogRef.close();
+  }, 2000);
   }
 }

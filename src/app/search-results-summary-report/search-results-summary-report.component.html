@@ -8,7 +8,7 @@
       <span>Generating report...</span>
   </span>
   <br>
-  <button mat-raised-button color="primary" [disabled]="!this.mapImageProcessed" class="event-detail-action-button" (click)="downloadResultsSummaryReport()"
+  <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadResultsSummaryReport()" [disabled]="!this.mapImageProcessed" 
       [disabled]="loadingData">
       <i class="material-icons">archive</i> Download Results Summary Report</button>
 </mat-dialog-content>

@@ -953,7 +953,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.getAssociatedEvents();
     // google analytics event
     gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Downloaded Event Report' });
-
     // START national map
     // using html2Canvas to capture leaflet map for reports
     // solution found here: https://github.com/niklasvh/html2canvas/issues/567
@@ -1644,7 +1643,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       pdfMake.createPdf(docDefinition).download('Event_' + this.data.event_data.id + '_' + APP_UTILITIES.getFileNameDate + '.pdf');
       this.downloadingReport = false;
       this.eventPublicReportDialogRef.close();
-    }, 2000);
+    }, 2500);
+
   }
 
 }

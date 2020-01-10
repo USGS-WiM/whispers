@@ -977,7 +977,7 @@ export class HomeComponent implements OnInit {
 
     }
 
-    setTimeout(() => {
+    /* setTimeout(() => {
       let url;
       // using html2Canvas to capture leaflet map for reports
       // solution found here: https://github.com/niklasvh/html2canvas/issues/567
@@ -1031,19 +1031,19 @@ export class HomeComponent implements OnInit {
       const mapWidth = parseFloat($('#map').css('width').replace('px', ''));
       const mapHeight = parseFloat($('#map').css('height').replace('px', ''));
 
-      /*const linesLayer = $('svg.leaflet-zoom-animated')[0];
-      const oldLinesWidth = linesLayer.getAttribute('width');
-      const oldLinesHeight = linesLayer.getAttribute('height');
-      const oldViewbox = linesLayer.getAttribute('viewBox');
-      linesLayer.setAttribute('width', mapWidth.toString());
-      linesLayer.setAttribute('height', mapHeight.toString());
-      linesLayer.setAttribute('viewBox', '0 0 ' + mapWidth + ' ' + mapHeight);
-      const linesTransform = linesLayer.style.transform.split(',');
-      const linesX = parseFloat(linesTransform[0].split('(')[1].replace('px', ''));
-      const linesY = parseFloat(linesTransform[1].replace('px', ''));
-      linesLayer.style.transform = '';
-      linesLayer.style.left = '';
-      linesLayer.style.top = '';*/
+      //const linesLayer = $('svg.leaflet-zoom-animated')[0];
+      //const oldLinesWidth = linesLayer.getAttribute('width');
+      //const oldLinesHeight = linesLayer.getAttribute('height');
+      //const oldViewbox = linesLayer.getAttribute('viewBox');
+      //linesLayer.setAttribute('width', mapWidth.toString());
+      //linesLayer.setAttribute('height', mapHeight.toString());
+      //linesLayer.setAttribute('viewBox', '0 0 ' + mapWidth + ' ' + mapHeight);
+      //const linesTransform = linesLayer.style.transform.split(',');
+      //const linesX = parseFloat(linesTransform[0].split('(')[1].replace('px', ''));
+      //const linesY = parseFloat(linesTransform[1].replace('px', ''));
+      //linesLayer.style.transform = '';
+      //linesLayer.style.left = '';
+      //linesLayer.style.top = '';
 
       const options = {
         useCORS: true,
@@ -1073,15 +1073,15 @@ export class HomeComponent implements OnInit {
         myDivicons[i].style.marginLeft = mLeft[i] + 'px';
         myDivicons[i].style.marginTop = mTop[i] + 'px';
       }
-      /*linesLayer.style.transform = 'translate(' + (linesX) + 'px,' + (linesY) + 'px)';
-      linesLayer.setAttribute('viewBox', oldViewbox);
-      linesLayer.setAttribute('width', oldLinesWidth);
-      linesLayer.setAttribute('height', oldLinesHeight);*/
+      //linesLayer.style.transform = 'translate(' + (linesX) + 'px,' + (linesY) + 'px)';
+      //linesLayer.setAttribute('viewBox', oldViewbox);
+      //linesLayer.setAttribute('width', oldLinesWidth);
+      //linesLayer.setAttribute('height', oldLinesHeight);
       mapPane.style.transform = 'translate(' + (mapX) + 'px,' + (mapY) + 'px)';
       mapPane.style.left = '';
       mapPane.style.top = '';
       // END national map
-    }, 5000);
+    }, 2000); // reduced this from 5000 to 2000; if you make it too quick it doesn't get the basemap tiles */
   }
 
   testForUndefined(value: any, property?: any) {
@@ -1122,7 +1122,7 @@ export class HomeComponent implements OnInit {
 
 
   // Function for creating a dialog to download results summary report pdf
-  generateResultsSummaryReport(id: string) {
+  generateResultsSummaryReport() {
 
     /**********
      * 
@@ -1138,7 +1138,13 @@ export class HomeComponent implements OnInit {
         user: this.currentUser,
         current_results: this.currentResults,
         current_search_query: this.currentSearchQuery,
-        mapUrl: this.resultsMapUrl.__zone_symbol__value
+        //mapUrl: this.resultsMapUrl.__zone_symbol__value,
+        adminLevelOnes: this.adminLevelOnes,
+        adminLevelTwos: this.administrative_level_two,
+        diagnosisTypes: this.diagnosisTypes,
+        diagnoses: this.diagnoses,
+        species: this.allSpecies
+        //locations: 
       }
     });
 

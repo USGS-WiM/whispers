@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
+import { MatDialog, MatDialogRef, MatExpansionPanel, MatTabGroup } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -95,6 +95,7 @@ export interface AssociatedEvents {
 })
 export class EventDetailsComponent implements OnInit {
   @Output() myEvent = new EventEmitter();
+  @Input() selectedTab: number;
 
   // @ViewChild('speciesTable') table: any;
   eventID: string;
@@ -113,7 +114,7 @@ export class EventDetailsComponent implements OnInit {
   locationCommentsPanelOpen = false;
   locationContactsPanelOpen = false;
   eventOwner;
-
+  natMapPoints;
   eventNotFound = false;
 
   showAddEventLocation = false;
@@ -173,6 +174,8 @@ export class EventDetailsComponent implements OnInit {
   capturedImage;
   commentTableImage: any;
 
+  // selectedTab: number;
+
   locationSpeciesDisplayedColumns = [
     'species',
     'location',
@@ -194,6 +197,7 @@ export class EventDetailsComponent implements OnInit {
   @ViewChild(MatSort) locationSpeciesSort: MatSort;
   @ViewChild(EventPublicReportComponent) eventReportComponent: EventPublicReportComponent;
   @ViewChildren(MatExpansionPanel) viewPanels: QueryList<MatExpansionPanel>;
+  @ViewChild(MatTabGroup) eventDetailsTabs: MatTabGroup;
 
   // this use of the viewPanels variable and associated functions is assumed (but not confirmed) deprecated.
   // the original purpose may have been superceded by later development. it was removed 12/30/19 to fix a bug
@@ -251,6 +255,8 @@ export class EventDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    // this.selectedTab = 0;
 
     const initialSelection = [];
     const allowMultiSelect = true;
@@ -409,6 +415,14 @@ export class EventDetailsComponent implements OnInit {
       );
 
     this.speciesLoading = true;
+
+    // get event summary for reports
+    this._eventService.getEventSummary(this.eventID)
+      .subscribe(
+        (eventsummary) => {
+          this.natMapPoints = eventsummary;
+        }
+      );
     // get species from the species service
     this.speciesService.getSpecies()
       .subscribe(
@@ -629,6 +643,7 @@ export class EventDetailsComponent implements OnInit {
       this.locationMarkers.clearLayers();
       this.mapEvent(this.eventData);
     }, 2500);
+ 
   }
 
   navigateToHome() {
@@ -639,6 +654,7 @@ export class EventDetailsComponent implements OnInit {
     this.eventLocationSpecies = [];
     this.router.navigate([`../${eventID}`], { relativeTo: this.route });
     this.reloadMap();
+    this.eventDetailsTabs.selectedIndex = 0;
     // location.reload();
     // this.refreshEvent();
   }
@@ -730,12 +746,15 @@ export class EventDetailsComponent implements OnInit {
 
   downloadEventReport(id: string) {
 
+    this.selectedTab = 0;
+
     setTimeout(() => {
       this.eventPublicReportDialogRef = this.dialog.open(EventPublicReportComponent, {
         minWidth: '40%',
         data: {
           event_data: this.eventData,
-          user: this.currentUser
+          user: this.currentUser,
+          event_summary: this.natMapPoints
         }
       });
 
@@ -749,12 +768,12 @@ export class EventDetailsComponent implements OnInit {
           }
         );
 
-        // adding back leaflet layers and controls
-        this.locationMarkers = L.featureGroup().addTo(this.map);
-        this.mapEvent(this.eventData);
-        $('.leaflet-control-zoom').css('visibility', 'visible');
-        $('.leaflet-control-layers').css('visibility', 'visible');
-        $('.leaflet-control-attribution').css('visibility', 'visible');
+      // adding back leaflet layers and controls
+      this.locationMarkers = L.featureGroup().addTo(this.map);
+      this.mapEvent(this.eventData);
+      $('.leaflet-control-zoom').css('visibility', 'visible');
+      $('.leaflet-control-layers').css('visibility', 'visible');
+      $('.leaflet-control-attribution').css('visibility', 'visible');
 
     }, 1000);
   }
@@ -1241,6 +1260,7 @@ export class EventDetailsComponent implements OnInit {
     // see comment on line 182
     // this.viewPanelStates = new Object();
     // this.getViewPanelState(this.viewPanels);
+    this.selectedTab = 0;
 
     console.log('Event Location Species list at start of refresh: ', this.eventLocationSpecies);
 

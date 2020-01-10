@@ -2,10 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 import pdfMake from 'pdfmake/build/pdfMake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import * as L from 'leaflet';
+import * as esri from 'esri-leaflet';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef, MatChipRemove } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
+import html2canvas from 'html2canvas';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -34,6 +37,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
   canvas = document.createElement('canvas');
   loadingData = false;
+  loadingReport = false;
 
   adminLevelOnes = [];
   adminLevelTwos = [];
@@ -42,71 +46,68 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   countries = [];
   orgs = [];
 
+  pngURL;
+
+  resultsMap;
+  resultsMapUrl;
+
+  icon;
+  locationMarkers;
+
+  readyToGenerate = false;
+  mapImageProcessed = false;
+  orgsLoaded = false;
+
   constructor(
     public resultsSummaryReportDialogRef: MatDialogRef<SearchResultsSummaryReportComponent>,
-    private administrativeLevelOneService: AdministrativeLevelOneService,
-    private administrativeLevelTwoService: AdministrativeLevelTwoService,
-    private diagnosisTypeService: DiagnosisTypeService,
-    private diagnosisService: DiagnosisService,
     private countryService: CountryService,
     private organizationService: OrganizationService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
-    this.loadingData = true;
 
     // converting whipsers logo png to a dataURL for use in pdfMake
-    const whispersLogo = 'src/assets/logo-transparent.png'; // TODO: move photo to more appropriate location
+    const whispersLogo = '/assets/logo-transparent.png';
     const context = this.canvas.getContext('2d');
     const base_image = new Image();
+    this.canvas.width = 796;
+    this.canvas.height = 90;
     base_image.src = whispersLogo;
     base_image.onload = function () {
-      context.drawImage(base_image, 5, 5, 300, 80);
+      context.drawImage(base_image, 0, 0, 796, 90);
     };
+    this.pngURL = this.canvas.toDataURL();
 
-    this.administrativeLevelOneService.getAdminLevelOnes()
-      .subscribe(
-        (adminLevelOnes) => {
-          this.adminLevelOnes = adminLevelOnes;
+    // Code for map with results to produce map image for report
+    let Attr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      // tslint:disable-next-line:max-line-length
+      Url = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+    const streets = L.tileLayer(Url, { id: 'mapbox.streets', attribution: Attr });
 
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.resultsMap = new L.Map('resultsMap', {
+      center: new L.LatLng(39.8283, -98.5795),
+      zoom: 4,
+      zoomControl: false,
+      attributionControl: false,
+      layers: [streets]
+    });
 
-    this.administrativeLevelTwoService.getAdminLevelTwos()
-      .subscribe(
-        (adminLevelTwos) => {
-          this.adminLevelTwos = adminLevelTwos;
+    this.locationMarkers = L.featureGroup().addTo(this.resultsMap);
 
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.mapResults(this.data.current_results);
 
-    this.diagnosisTypeService.getDiagnosisTypes()
-      .subscribe(
-        (diagnosisTypes) => {
-          this.diagnosisTypes = diagnosisTypes;
+    this.resultsMap.dragging.disable();
+    this.resultsMap.touchZoom.disable();
+    this.resultsMap.doubleClickZoom.disable();
+    this.resultsMap.scrollWheelZoom.disable();
+    // End code for map with results to produce map image for report
 
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-
-    this.diagnosisService.getDiagnoses()
-      .subscribe(
-        (diagnoses) => {
-          this.eventDiagnoses = diagnoses;
-
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.adminLevelOnes = this.data.adminLevelOnes;
+    this.adminLevelTwos = this.data.adminLevelTwos;
+    this.diagnosisTypes = this.data.diagnosisTypes;
+    this.eventDiagnoses = this.data.diagnoses;
 
     this.countryService.getCountries()
       .subscribe(
@@ -123,6 +124,10 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       .subscribe(
         (organizations) => {
           this.orgs = organizations;
+          this.orgsLoaded = true;
+          if (this.mapImageProcessed == true) {
+            this.readyToGenerate = true;
+          }
         },
         error => {
           this.errorMessage = <any>error;
@@ -130,8 +135,166 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       );
 
     setTimeout(() => {
-      this.loadingData = false;
-    }, 1000);
+      this.mapImageProcessed = true;
+    }, 2001);
+
+  }
+
+  searchInArray(array, field: string, value) {
+    for (const item of array) {
+      if (item[field] === value) {
+        // console.log('Duplicate detected. Already existing ID: ' + value);
+        return true;
+      }
+    }
+  }
+
+  mapResults(currentResults: any) {
+
+    // set/reset currentResultsMarker var to an empty array
+    const currentResultsMarkers = [];
+    // tslint:disable-next-line:forin
+    // loop through currentResults repsonse from a search query
+    for (const event in currentResults) {
+
+      // if event has any administrativeleveltwos (counties), add them to the currentResultsMarkers array
+      if (currentResults[event]['administrativeleveltwos'].length > 0) {
+
+        // tslint:disable-next-line:forin
+        for (const adminleveltwo in currentResults[event]['administrativeleveltwos']) {
+
+          // check if the administrativeleveltwo (county) of the event has already been placed into the currentResultsMarkers array.
+          // If it has, push its events array into the existing marker for that administrativeleveltwo. This is to ensure one
+          // marker per administrativeleveltwo, with events nested
+          // tslint:disable-next-line:max-line-length
+          if (this.searchInArray(currentResultsMarkers, 'adminleveltwo', currentResults[event]['administrativeleveltwos'][adminleveltwo]['id'])) {
+            for (const marker of currentResultsMarkers) {
+              if (marker.adminleveltwo === currentResults[event]['administrativeleveltwos'][adminleveltwo]['id']) {
+                marker.events.push(currentResults[event]);
+              }
+            }
+          } else {
+
+            currentResultsMarkers.push({
+              lat: Number(currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']),
+              long: Number(currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude']),
+              eventdiagnoses: currentResults[event]['eventdiagnoses'],
+              adminleveltwo: currentResults[event]['administrativeleveltwos'][adminleveltwo]['id'],
+              events: [currentResults[event]],
+              complete: currentResults[event]['complete']
+            });
+
+          }
+
+        }
+      }
+    }
+
+    // loop through currentResultsMarkers
+    for (const marker of currentResultsMarkers) {
+
+      // set vars for classes that will define the marker icons, per WIM markermaker CSS
+      let colorClass;
+      let shapeClass = 'wmm-circle ';
+      let iconClasses = ' wmm-icon-circle wmm-icon-white ';
+      let sizeClass = 'wmm-size-25';
+      if (marker['eventdiagnoses'][0] !== undefined) {
+        // set color of marker based on diagnosis type
+        switch (marker['eventdiagnoses'][0].diagnosis_type) {
+          case 1: {
+            colorClass = 'wmm-green';
+            break;
+          }
+          case 2: {
+            colorClass = 'wmm-blue';
+            break;
+          }
+          case 3: {
+            colorClass = 'wmm-red';
+            break;
+          }
+          case 4: {
+            colorClass = 'wmm-orange';
+            break;
+          }
+          case 5: {
+            colorClass = 'wmm-yellow';
+            break;
+          }
+          case 6: {
+            colorClass = 'wmm-purple';
+            break;
+          }
+          case 7: {
+            colorClass = 'wmm-sky';
+            break;
+          }
+          case 8: {
+            colorClass = 'wmm-mutedpink';
+            break;
+          }
+        }
+      }
+
+
+      if (marker.events.length === 1) {
+        // if event is complete, remove the white center to indicate closed/complete
+        if (marker['complete'] === true) {
+          iconClasses = ' wmm-icon-noicon wmm-icon-white ';
+        }
+
+      } else if (marker.events.length > 1) {
+        // set a variable for alllEventsComplete, default to true
+        let allEventsComplete = true;
+        // loop through the events within the marker and check their 'complete' value
+        for (const event of marker.events) {
+          // if any of the events are not complete, set allEventsComplete to false
+          if (event.complete === false) {
+            allEventsComplete = false;
+          }
+        }
+        // if all the events are complete, remove the white center to indicate closed/complete
+        if (allEventsComplete) {
+          iconClasses = ' wmm-icon-noicon wmm-icon-white ';
+        }
+      }
+
+
+      // eventCount var keeps track of number of events at the location. Do not show if less than 2.
+      let eventCount;
+      if (marker.events.length > 1) {
+        // for location with multiple events, show event count on symbol, make larger and gray
+        eventCount = marker.events.length;
+        // iconClasses = ' wmm-icon-circle wmm-icon-white ';
+        colorClass = 'wmm-mutedblue';
+        sizeClass = 'wmm-size-35';
+
+      } else {
+        // eventCount set to empty string if just one event at location
+        eventCount = '';
+        // set icon shape to a diamond if event_type = 2 (surveillance)
+        if (marker.events[0].event_type === 2) {
+          shapeClass = 'wmm-diamond ';
+          iconClasses = ' wmm-icon-diamond wmm-icon-white ';
+          sizeClass = 'wmm-size-20';
+        }
+      }
+      // set icon to the proper combination of classnames set above (from WIM markermaker and some custom css)
+      this.icon = L.divIcon({
+        className: shapeClass + colorClass + iconClasses + sizeClass,
+        html: eventCount
+      });
+
+      // establish leaflet marker var, passing in icon var from above
+      L.marker([marker.lat, marker.long],
+        { icon: this.icon })
+        .addTo(this.locationMarkers);
+    }
+
+    if (this.locationMarkers.getBounds().isValid() === true) {
+      this.resultsMap.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50], maxZoom: 10 });
+    }
+
   }
 
   // START defining event location table
@@ -196,7 +359,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         let eventDiagnosesCell = new Array();
         if (elData.eventdiagnoses) {
           for (let key in elData.eventdiagnoses) {
-            eventDiagnosesCell.push(elData.eventdiagnoses[key].diagnosis_string + "\n");
+            eventDiagnosesCell.push({ text: elData.eventdiagnoses[key].diagnosis_string + "\n", alignment: 'left' });
           }
         } else {
           eventDiagnosesCell.push("");
@@ -279,31 +442,169 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   }
 
   downloadResultsSummaryReport() {
+    let mapurl;
+      // using html2Canvas to capture leaflet map for reports
+      // solution found here: https://github.com/niklasvh/html2canvas/issues/567
+      const mapPane = $('.leaflet-map-pane')[0];
+    const mapTransform = mapPane.style.transform.split(',');
+    // const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
+    let mapX;
 
+    // fix for firefox
+    if ((mapTransform[0] === undefined) || (mapTransform[0] === '')) {
+      mapX = '';
+    } else {
+      mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
+    }
+    let mapY;
+    // fix for firefox
+    if ((mapTransform[1] === undefined) || (mapTransform[1] === '')) {
+      mapY = '';
+    } else {
+      mapY = parseFloat(mapTransform[1].replace('px', ''));
+    }
+    mapPane.style.transform = '';
+    mapPane.style.left = mapX + 'px';
+    mapPane.style.top = mapY + 'px';
+
+    const myTiles = $('img.leaflet-tile');
+    const tilesLeft = [];
+    const tilesTop = [];
+    const tileMethod = [];
+    for (let i = 0; i < myTiles.length; i++) {
+      if (myTiles[i].style.left !== '') {
+        tilesLeft.push(parseFloat(myTiles[i].style.left.replace('px', '')));
+        tilesTop.push(parseFloat(myTiles[i].style.top.replace('px', '')));
+        tileMethod[i] = 'left';
+      } else if (myTiles[i].style.transform !== '') {
+        const tileTransform = myTiles[i].style.transform.split(',');
+        tilesLeft[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
+        tilesTop[i] = parseFloat(tileTransform[1].replace('px', ''));
+        myTiles[i].style.transform = '';
+        tileMethod[i] = 'transform';
+      } else {
+        tilesLeft[i] = 0;
+        // tilesRight[i] = 0;
+        tileMethod[i] = 'neither';
+      }
+      myTiles[i].style.left = (tilesLeft[i]) + 'px';
+      myTiles[i].style.top = (tilesTop[i]) + 'px';
+    }
+
+    const myDivicons = $('.leaflet-marker-icon');
+    const dx = [];
+    const dy = [];
+    const mLeft = [];
+    const mTop = [];
+    for (let i = 0; i < myDivicons.length; i++) {
+      const curTransform = myDivicons[i].style.transform;
+      const splitTransform = curTransform.split(',');
+      if (splitTransform[0] === '') {
+
+      } else {
+        dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
+      }
+      if (splitTransform[0] === '') {
+
+      } else {
+        dy.push(parseFloat(splitTransform[1].replace('px', '')));
+      }
+      // dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
+      // dy.push(parseFloat(splitTransform[1].replace('px', '')));
+      myDivicons[i].style.transform = '';
+      myDivicons[i].style.left = dx[i] + 'px';
+      myDivicons[i].style.top = dy[i] + 'px';
+    }
+
+    const mapWidth = parseFloat($('#map').css('width').replace('px', ''));
+    const mapHeight = parseFloat($('#map').css('height').replace('px', ''));
+
+    /* const linesLayer = $('svg.leaflet-zoom-animated')[0];
+    let oldLinesWidth;
+    if (oldLinesWidth === undefined) {
+      oldLinesWidth = '';
+    } else {
+      oldLinesWidth = linesLayer.getAttribute('width');
+    }
+    const oldLinesHeight = linesLayer.getAttribute('height');
+    const oldViewbox = linesLayer.getAttribute('viewBox');
+    linesLayer.setAttribute('width', mapWidth.toString());
+    linesLayer.setAttribute('height', mapHeight.toString());
+    linesLayer.setAttribute('viewBox', '0 0 ' + mapWidth + ' ' + mapHeight);
+    const linesTransform = linesLayer.style.transform.split(',');
+    const linesX = parseFloat(linesTransform[0].split('(')[1].replace('px', ''));
+    const linesY = parseFloat(linesTransform[1].replace('px', ''));
+    linesLayer.style.transform = '';
+    linesLayer.style.left = '';
+    linesLayer.style.top = ''; */
+
+    const options = {
+      useCORS: true,
+    };
+
+    /* this.resultsMapUrl = html2canvas(document.getElementById('resultsMap'), options).then((canvas) => {
+      url = canvas.toDataURL('image/png');
+      console.log('results map url returned');
+      this.mapImageProcessed = true;
+      return url;
+    }); */
+    html2canvas(document.getElementById('resultsMap'), options).then(function (canvas) {
+      mapurl = canvas.toDataURL('image/png');
+    });
+
+    this.mapImageProcessed = true;
+    for (let i = 0; i < myTiles.length; i++) {
+      if (tileMethod[i] === 'left') {
+        myTiles[i].style.left = (tilesLeft[i]) + 'px';
+        myTiles[i].style.top = (tilesTop[i]) + 'px';
+      } else if (tileMethod[i] === 'transform') {
+        myTiles[i].style.left = '';
+        myTiles[i].style.top = '';
+        myTiles[i].style.transform = 'translate(' + tilesLeft[i] + 'px, ' + tilesTop[i] + 'px)';
+      } else {
+        myTiles[i].style.left = '0px';
+        myTiles[i].style.top = '0px';
+        myTiles[i].style.transform = 'translate(0px, 0px)';
+      }
+    }
+    for (let i = 0; i < myDivicons.length; i++) {
+      myDivicons[i].style.transform = 'translate(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
+      myDivicons[i].style.marginLeft = mLeft[i] + 'px';
+      myDivicons[i].style.marginTop = mTop[i] + 'px';
+    }
+    /* linesLayer.style.transform = 'translate(' + (linesX) + 'px,' + (linesY) + 'px)';
+    linesLayer.setAttribute('viewBox', oldViewbox);
+    linesLayer.setAttribute('width', oldLinesWidth);
+    linesLayer.setAttribute('height', oldLinesHeight); */
+    mapPane.style.transform = 'translate(' + (mapX) + 'px,' + (mapY) + 'px)';
+    mapPane.style.left = '';
+    mapPane.style.top = '';
+    this.loadingReport = true;
     // placeholder for google analytics event
     // gtag('event', 'click', { 'event_category': 'Search Results', 'event_label': 'Downloaded Search Results Summary Report' });
 
     // Getting date/time for timestamp
+    // need to give some time for html2canvas to finish rendering
+    setTimeout(() => {
     const date = APP_UTILITIES.getDateTime;
+
+    // whispers logo
+    this.pngURL = this.canvas.toDataURL();
 
     // search query
     const search_query = this.data.current_search_query;
     // results summary details
     const result_data = this.data.current_results;
 
-    // whispers logo
-    const pngURL = this.canvas.toDataURL();
-
     // printing user's info
     const nameOrgString = this.data.user.first_name + ' ' + this.data.user.last_name + ' (' + this.data.user.organization_string + ')';
 
     // formatting full URL for footer
     const url = window.location.href;
-
+    this.mapImageProcessed = true;
     // Section with SEARCH CRITERIA for page 1
     // TODO: calculation of record status for page 1
     let record_status;
-
     if (search_query.complete == true) {
       record_status = "Complete events only";
     } else if (search_query.complete == false) {
@@ -314,7 +615,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
     // get string for admin level ones in search criteria
     let search_admin_level_one;
-
+    if (search_query.administrative_level_one === null) {
+    } else {
     search_query.administrative_level_one.forEach(search_level_one => {
       this.adminLevelOnes.forEach(level_one => {
         if (search_level_one == Number(level_one.id)) {
@@ -326,10 +628,12 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
       });
     });
+  }
 
     // get string for admin level twos in search criteria
     let search_admin_level_two;
-
+    if (search_query.administrative_level_two === null) {
+    } else {
     search_query.administrative_level_two.forEach(search_level_two => {
       this.adminLevelTwos.forEach(level_two => {
         if (search_level_two == Number(level_two.id)) {
@@ -341,10 +645,12 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
       });
     });
+  }
 
     // get string for diagnosis types in search criteria
     let search_diagnosis_type;
-
+    if (search_query.administrative_level_two === null) {
+    } else {
     search_query.diagnosis_type.forEach(search_diag_type => {
       this.diagnosisTypes.forEach(diag_type => {
         if (search_diag_type == Number(diag_type.id)) {
@@ -356,10 +662,12 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
       });
     });
+  }
 
     // get string for event diagnosis in search criteria
     let search_event_diagnosis;
-
+    if (search_query.diagnosis === null) {
+    } else {
     search_query.diagnosis.forEach(search_event_diag => {
       this.eventDiagnoses.forEach(event_diag => {
         if (search_event_diag == event_diag.id) {
@@ -371,14 +679,15 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
       });
     });
-
+  }
 
     /************
-     * 
+     *
      * Check with Lauren's code to see if she has any functions reformatting dates from YYYY-MM-DD format
+     * Lauren: Hi, yes I have a couple ways for formatting todays date in the app.utilities.ts file, function name: getReportDateTime or formatEventDates
      *
      * Coordinate with her to use a common function to get it into the format NHWC requests
-     * 
+     * Lauren: We put common functions like that in the app.utilites.ts file. There may be an existing one that will work, if not feel free to add one
      */
 
     // Section with SEARCH RESULTS SUMMARY
@@ -536,15 +845,18 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
     let event_type = '';
 
-    search_query.event_type.forEach(eventTypeItem => {
-      if (eventTypeItem == 1) {
-        event_type += "Mortality/Morbidity";
-      } else if (eventTypeItem == 2 && event_type != '') {
-        event_type += ", Surveillance";
-      } else if (eventTypeItem == 2) {
-        event_type = "Surveillance";
-      }
-    })
+    if (search_query.event_type === null) {
+    } else {
+      search_query.event_type.forEach(eventTypeItem => {
+        if (eventTypeItem == 1) {
+          event_type += "Mortality/Morbidity";
+        } else if (eventTypeItem == 2 && event_type != '') {
+          event_type += ", Surveillance";
+        } else if (eventTypeItem == 2) {
+          event_type = "Surveillance";
+        }
+      });
+    }
 
     const docDefinition = {
       pageOrientation: 'landscape',
@@ -572,9 +884,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           alignment: 'justify',
           columns: [
             {
-              image: pngURL,
-              width: 400,
-              height: 80
+              image: this.pngURL,
+              width: 450,
+              height: 65
             },
             {
               style: 'header',
@@ -589,13 +901,13 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           margin: [30, 10]
         },
         {
-          text: ((search_query.start_date) ? 'Start Date: ' + search_query.start_date + ' | ' : 'No Start Date | ') // start date
-            + ((search_query.end_date) ? 'End Date: ' + search_query.end_date + ' | ' : 'No End Date | ') // end date
+          text: ((search_query.start_date) ? 'Start Date: ' + APP_UTILITIES.formatEventDates(search_query.start_date) + ' | ' : 'No Start Date | ') // start date
+            + ((search_query.end_date) ? 'End Date: ' + APP_UTILITIES.formatEventDates(search_query.end_date) + ' | ' : 'No End Date | ') // end date
             + record_status + ' | ' // record status
             + ((search_admin_level_one && search_admin_level_one.length > 0) ? search_admin_level_one + ' | ' : '') // admin level ones
             + ((search_admin_level_two && search_admin_level_two.length > 0) ? search_admin_level_two + ' | ' : '')
-            + ((affected_count != '') ? affected_count + ' | ' : '')
-            + ((event_type != '') ? event_type + ' | ' : '')
+            + ((affected_count !== '') ? affected_count + ' | ' : '')
+            + ((event_type !== '') ? event_type + ' | ' : '')
             + ((search_diagnosis_type && search_diagnosis_type.length > 0) ? search_diagnosis_type + ' | ' : '')
             + ((search_event_diagnosis && search_event_diagnosis.length > 0) ? search_event_diagnosis + ' | ' : ''),
           margin: [30, 10]
@@ -633,7 +945,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             {
               style: 'smaller',
               table: {
-                widths: [150, 250],
+                widths: [150, 150],
                 body: [
                   [{ border: [false, false, true, false], text: '# of Events', bold: true, alignment: 'right' }, number_events.toString()],
                   [{ border: [false, false, true, false], text: 'Most Frequent Event Diagnosis', bold: true, alignment: 'right' }, { text: most_frequent_diagnosis, alignment: 'left' }],
@@ -654,9 +966,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             },
             {
               alignment: 'justify',
-              image: this.data.mapUrl,
-              width: 300,
-              height: 200
+              image: mapurl,
+              width: 400,
+              height: 350
             }
           ],
           pageBreak: 'after'
@@ -665,9 +977,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           alignment: 'justify',
           columns: [
             {
-              image: pngURL,
-              width: 400,
-              height: 80
+              image: this.pngURL,
+              width: 450,
+              height: 65
             },
             {
               style: 'header',
@@ -692,9 +1004,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           alignment: 'justify',
           columns: [
             {
-              image: pngURL,
-              width: 400,
-              height: 80
+              image: this.pngURL,
+              width: 450,
+              height: 65
             },
             {
               style: 'header',
@@ -745,9 +1057,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           alignment: 'justify',
           columns: [
             {
-              image: pngURL,
-              width: 400,
-              height: 80
+              image: this.pngURL,
+              width: 450,
+              height: 65
             },
             {
               style: 'header',
@@ -779,7 +1091,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         },
       ],
       images: {
-        logo: pngURL
+        logo: this.pngURL,
+        nationalMap: mapurl
       },
       styles: {
         header: {
@@ -804,8 +1117,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         columnGap: 20
       }
     };
-    pdfMake.createPdf(docDefinition).download();
-
+    pdfMake.createPdf(docDefinition).download('NWHC_Search_Results_Summary_Report.pdf');
+    this.loadingReport = false;
+    this.resultsSummaryReportDialogRef.close();
+  }, 2000);
   }
-
 }

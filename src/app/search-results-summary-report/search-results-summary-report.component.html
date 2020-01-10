@@ -2,12 +2,13 @@
   <i class="material-icons">archive</i> Generate Results Summary Report
 </h1>
 <mat-dialog-content>
+  <div id="resultsMap"></div>
   <span *ngIf="loadingData">
       <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
       <span>Generating report...</span>
   </span>
   <br>
-  <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadResultsSummaryReport()"
+  <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadResultsSummaryReport()" [disabled]="!this.mapImageProcessed" 
       [disabled]="loadingData">
       <i class="material-icons">archive</i> Download Results Summary Report</button>
 </mat-dialog-content>
@@ -21,5 +22,5 @@
 
   </div>
 
-  <mat-progress-bar mode="indeterminate" *ngIf="loadingData"></mat-progress-bar>
+  <mat-progress-bar mode="indeterminate" *ngIf="loadingReport"></mat-progress-bar>
 </mat-dialog-actions>

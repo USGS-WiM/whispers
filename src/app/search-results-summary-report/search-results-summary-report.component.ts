@@ -54,9 +54,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   icon;
   locationMarkers;
 
-  //readyToGenerate = false;
+  readyToGenerate = false;
   mapImageProcessed = false;
-  //orgsLoaded = false;
+  orgsLoaded = false;
 
   constructor(
     public resultsSummaryReportDialogRef: MatDialogRef<SearchResultsSummaryReportComponent>,

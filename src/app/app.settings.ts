@@ -213,9 +213,19 @@ export class APP_SETTINGS {
     public static get MIN_AUTH_TEXT_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
-            'Content-Type': 'text/plain', 'Accept': 'application/json'
+            'Content-Type': 'text/plain',
+            'Accept': 'application/json'
         });
     }
+
+    public static get HTTP_CLIENT_MIN_AUTH_TEXT_HEADERS() {
+        return new HttpHeaders({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+            'Content-Type': 'text/plain',
+            'Accept': 'application/json'
+        });
+    }
+
 
     public static get AUTH_REQUEST_HEADERS() {
         return new Headers({

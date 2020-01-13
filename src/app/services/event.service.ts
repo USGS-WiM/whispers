@@ -13,6 +13,7 @@ import { EventSummary } from '@interfaces/event-summary';
 import { EventDetail } from '@interfaces/event-detail';
 import { PageData } from '@interfaces/page-data';
 import { ResultsCountService } from '@services/results-count.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class EventService {
@@ -371,24 +372,29 @@ export class EventService {
 
   public requestCollaboration(formValue): Observable<any> {
 
-    // const options = new RequestOptions({
-    //   headers: APP_SETTINGS.AUTH_JSON_HEADERS
-    // });
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_TEXT_HEADERS
+    });
 
-    // return this._http.post(APP_SETTINGS.EVENTS_URL + eventID + '/request_collaboration', message, options).pipe(
-    //   map((response: Response) => <Event>response.json()),
-    //   catchError(this.handleError));
+    return this._http.post(APP_SETTINGS.EVENTS_URL + formValue.event + '/request_collaboration/', formValue.comment, options).pipe(
+      map((response: Response) => <Event>response.json()),
+      catchError(this.handleError));
 
-    // below is newer HttpClient method
-    return this.http.post(APP_SETTINGS.EVENTS_URL + formValue.event + '/request_collaboration', {
-      headers: APP_SETTINGS.MIN_AUTH_TEXT_HEADERS,
-      body: formValue.comment
-      // params: new HttpParams().set('ordering', orderParams).set('page', pageNumber.toString()).set('page_size', pageSize.toString())
-    }).pipe(
-      map((res: any) => {
-        // const response = res.json();
-        return res.results;
-      }));
+
+    // const httpOptions = {
+    //   headers: new HttpHeaders({
+    //     'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+    //     'Content-Type': 'text/plain',
+    //     'Accept': 'application/json'
+    //   }),
+    //   body: formValue.comment
+    // };
+    // // below is newer HttpClient method
+    // return this.http.post(APP_SETTINGS.EVENTS_URL + formValue.event + '/request_collaboration/', httpOptions).pipe(
+    //   map((res: any) => {
+    //     // const response = res.json();
+    //     return res.results;
+    //   }));
 
   }
 

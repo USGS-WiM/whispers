@@ -675,7 +675,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         },
         {
           text: 'Explanation of Terms',
-          margin: [0, 20, 0, 0]
+          margin: [0, 20, 0, 0],
+          style: 'header'
         }
       ]
     };
@@ -735,9 +736,9 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           height: 65
         },
         {
-          style: 'header',
           text: 'Explanation of Terms cont...',
-          margin: [0, 15, 0, 0]
+          style: 'header',
+          margin: [0, 40, 0, 0],
         }
       ]
     };
@@ -979,7 +980,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     } else {
       mapY = parseFloat(mapTransform[1].replace('px', ''));
     }
-    //mapY = parseFloat(mapTransform[1].replace('px', ''));
+
     mapPane.style.transform = '';
     mapPane.style.left = mapX + 'px';
     mapPane.style.top = mapY + 'px';

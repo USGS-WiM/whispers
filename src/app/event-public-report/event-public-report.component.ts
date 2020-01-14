@@ -1372,7 +1372,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               }
               captive = 'Yes' || 'No';
               const s_diag = ' ';
-              const county = ' ';
+              const county = locationspecies.administrative_level_two_string || ' ';
               const country = locationspecies.country_string || ' ';
               const lab = ' ';
 

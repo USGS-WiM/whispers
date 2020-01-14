@@ -1668,7 +1668,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       docDefinition.content.push(this.explanationTwoForMoreDetails());
 
 
-      pdfMake.createPdf(docDefinition).download('Event_' + this.data.event_data.id + '_' + APP_UTILITIES.getFileNameDate + '.pdf');
+      pdfMake.createPdf(docDefinition).download('WHISPers_Event_' + this.data.event_data.id + '_' + APP_UTILITIES.getFileNameDate + '.pdf');
       this.downloadingReport = false;
       this.eventPublicReportDialogRef.close();
     }, 2500);

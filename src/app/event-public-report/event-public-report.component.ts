@@ -958,7 +958,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     // solution found here: https://github.com/niklasvh/html2canvas/issues/567
     let natMapUrl;
     let detailMapUrl;
-    const mapPane = $('.leaflet-map-pane')[0];
+    let mapPane;
+    mapPane = $('.leaflet-map-pane')[0];
     const mapTransform = mapPane.style.transform.split(',');
     // const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
     let mapX;
@@ -966,10 +967,19 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     // fix for firefox
     if (mapTransform[0] === undefined) {
       mapX = '';
+    } if (mapTransform[0].split('(')[1] === undefined) {
+      mapX = '';
     } else {
       mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
     }
-    const mapY = parseFloat(mapTransform[1].replace('px', ''));
+
+    let mapY;
+    if (mapTransform[1] === undefined) {
+      mapY = '';
+    } else {
+      mapY = parseFloat(mapTransform[1].replace('px', ''));
+    }
+    //mapY = parseFloat(mapTransform[1].replace('px', ''));
     mapPane.style.transform = '';
     mapPane.style.left = mapX + 'px';
     mapPane.style.top = mapY + 'px';
@@ -1006,8 +1016,18 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     for (let i = 0; i < myDivicons.length; i++) {
       const curTransform = myDivicons[i].style.transform;
       const splitTransform = curTransform.split(',');
-      dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
-      dy.push(parseFloat(splitTransform[1].replace('px', '')));
+      if (splitTransform[0] === '') {
+
+      } else {
+        dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
+      }
+      if (splitTransform[0] === '') {
+
+      } else {
+        dy.push(parseFloat(splitTransform[1].replace('px', '')));
+      }
+      // dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
+      // dy.push(parseFloat(splitTransform[1].replace('px', '')));
       myDivicons[i].style.transform = '';
       myDivicons[i].style.left = dx[i] + 'px';
       myDivicons[i].style.top = dy[i] + 'px';
@@ -1069,10 +1089,18 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     // START detail map
     const mapPane2 = $('.leaflet-map-pane')[0];
     const mapTransform2 = mapPane2.style.transform.split(',');
-    const mapX2 = parseFloat(mapTransform2[0].split('(')[1].replace('px', ''));
-    let mapY2;
+    let mapX2;
+    // fix for firefox
+    if (mapTransform[0] === undefined) {
+      mapX2 = '';
+    } if (mapTransform[0].split('(')[1] === undefined) {
+      mapX2 = '';
+    } else {
+      mapX2 = parseFloat(mapTransform2[0].split('(')[1].replace('px', ''));
+    }
 
     // fix for firefox
+    let mapY2;
     if (mapTransform2[1] === undefined) {
       mapY2 = '';
     } else {

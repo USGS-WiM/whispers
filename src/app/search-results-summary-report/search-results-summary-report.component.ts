@@ -67,7 +67,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   ngOnInit() {
 
     // converting whipsers logo png to a dataURL for use in pdfMake
-    const whispersLogo = '/assets/logo-transparent.png';
+    const whispersLogo = './assets/logo-transparent.png';
     const context = this.canvas.getContext('2d');
     const base_image = new Image();
     this.canvas.width = 796;

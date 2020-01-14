@@ -873,7 +873,7 @@ export class HomeComponent implements OnInit {
 
           // if event is not public, begin the markup with the not public icon
           if (event.public === false) {
-            popupContent = popupContent + '<h3><img src="/assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</h3>';
+            popupContent = popupContent + '<h3><img src="./assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</h3>';
           } else {
             popupContent = popupContent + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>';
           }
@@ -908,7 +908,7 @@ export class HomeComponent implements OnInit {
 
           // if event is not public, begin the markup with the not public icon
           if (event.public === false) {
-            popupContent = popupContent + '<button class="accordion accButton"> <img src="/assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</button>';
+            popupContent = popupContent + '<button class="accordion accButton"> <img src="./assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</button>';
           } else {
             popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>';
           }

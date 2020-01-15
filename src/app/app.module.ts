@@ -126,16 +126,11 @@ import { AlertCollaboratorsComponent } from './alert-collaborators/alert-collabo
 import { NotificationsComponent } from './notifications/notifications.component';
 import { CustomNotificationComponent } from './custom-notification/custom-notification.component';
 import { BrowserWarningComponent } from './browser-warning/browser-warning.component';
-<<<<<<< HEAD
 import { CollaborationRequestComponent } from './collaboration-request/collaboration-request.component';
-=======
 import { BulkUploadComponent } from './bulk-upload/bulk-upload.component';
 import { PapaParseModule } from 'ngx-papaparse';
 import { EventPublicReportComponent } from './event-public-report/event-public-report.component';
 import { SearchResultsSummaryReportComponent } from './search-results-summary-report/search-results-summary-report.component';
->>>>>>> 8cf1a3121704cc137081c4f03a09a85216f1b979
-
-
 
 
 @NgModule({
@@ -186,13 +181,10 @@ import { SearchResultsSummaryReportComponent } from './search-results-summary-re
     NotificationsComponent,
     CustomNotificationComponent,
     BrowserWarningComponent,
-<<<<<<< HEAD
     CollaborationRequestComponent,
-=======
     BulkUploadComponent,
     EventPublicReportComponent,
     SearchResultsSummaryReportComponent,
->>>>>>> 8cf1a3121704cc137081c4f03a09a85216f1b979
   ],
   imports: [
     BrowserModule,
@@ -237,13 +229,10 @@ import { SearchResultsSummaryReportComponent } from './search-results-summary-re
     MatTooltipModule,
     MatBottomSheetModule,
     MatStepperModule,
-<<<<<<< HEAD
     MatBadgeModule,
-    NgxMatSelectSearchModule
-=======
+    NgxMatSelectSearchModule,
     NgxMatSelectSearchModule,
     PapaParseModule
->>>>>>> 8cf1a3121704cc137081c4f03a09a85216f1b979
   ],
   providers: [
     AuthenticationService,
@@ -315,15 +304,12 @@ import { SearchResultsSummaryReportComponent } from './search-results-summary-re
     CircleChooseComponent,
     DiagnosticInfoComponent,
     ViewCommentDetailsComponent,
-<<<<<<< HEAD
     CustomNotificationComponent,
     BrowserWarningComponent,
     CustomNotificationComponent,
-    CollaborationRequestComponent
-=======
+    CollaborationRequestComponent,
     BrowserWarningComponent,
     BulkUploadComponent
->>>>>>> 8cf1a3121704cc137081c4f03a09a85216f1b979
   ]
 })
 export class AppModule { }

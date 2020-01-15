@@ -3,6 +3,8 @@ import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef } fr
 import { MatSnackBar } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
+
 import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -21,6 +23,7 @@ import { EventDetail } from '@interfaces/event-detail';
   styleUrls: ['./alert-collaborators.component.scss']
 })
 export class AlertCollaboratorsComponent implements OnInit {
+  errorMessage = '';
   eventID: string;
   resultsLoading = false;
   tableLoading = false;
@@ -32,6 +35,8 @@ export class AlertCollaboratorsComponent implements OnInit {
   allowMultiSelect = true;
   selection = new SelectionModel<Number>(this.allowMultiSelect, this.initialSelection);
 
+  submitLoading = false;
+
   displayedColumns = [
     'select',
     'user'
@@ -40,11 +45,26 @@ export class AlertCollaboratorsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  alertCollaboratorForm: FormGroup;
+
+  buildAlertCollaboratorForm() {
+    this.alertCollaboratorForm = this.formBuilder.group({
+      event: null,
+      recipients: [],
+      comment: ''
+    });
+  }
+
   constructor(
+    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private eventService: EventService,
+    public snackBar: MatSnackBar,
     private dialog: MatDialog
-  ) { }
+  ) {
+
+    this.buildAlertCollaboratorForm();
+  }
 
   ngOnInit() {
     this.tableLoading = true;
@@ -83,6 +103,51 @@ export class AlertCollaboratorsComponent implements OnInit {
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+
+  onSubmit(formValue) {
+
+    this.submitLoading = true;
+
+    formValue.event = this.eventID;
+
+    // formValue.receipients needs to be initialized as an array
+    formValue.recipients = [];
+
+    // Note: the type of selection.selected is set to Number (despite being an object in this case)
+    // so this extra dumy array (selectionArray) is needed to create a clean typed array that allows
+    // for the Object property access in the next for loop.
+    const selectionArray = [];
+    for (const item of this.selection.selected) {
+      selectionArray.push(item);
+    }
+    for (const user of selectionArray) {
+      formValue.recipients.push(user.id);
+    }
+
+    this.eventService.alertCollaborators(formValue)
+      .subscribe(
+        (response) => {
+          this.submitLoading = false;
+          this.openSnackBar('Alert successfully sent to event collaborators.', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Error. Collaboration request response not submitted. Error message: ' + error, 'OK', 8000);
+        }
+      );
+
+
+    // update the formValue.recipients array with the selected table values. 
+
+
   }
 
 }

@@ -1,70 +1,74 @@
 <div class="alertsTab">
-    <mat-card-title>
-  
-      <div class="results-card-title-row">
-        <span class="results-button-row">
-        </span>
-      </div>
-    </mat-card-title>
-    <mat-card-content>
-      <div class="spinner-container" *ngIf="tableLoading">
-        <mat-spinner></mat-spinner>
-      </div>
-      <br>
-      
-      <!-- Start Table -->
-      <div class="results-table-div" *ngIf="dataSource?.filteredData.length > 0">
-        <table mat-table [dataSource]="dataSource" matSort
-          matSortActive="user" matSortDirection="desc" ><!-- *ngIf="dataSource.length " -->
+  <mat-card-title>
 
-          <!-- Selection column -->
-          <ng-container matColumnDef="select">
-              <mat-header-cell *matHeaderCellDef>
-                <mat-checkbox (change)="$event ? masterToggle() : null"
-                  [checked]="selection.hasValue() && isAllSelected()"
-                  [indeterminate]="selection.hasValue() && !isAllSelected()">
-                </mat-checkbox>
-              </mat-header-cell>
-              <mat-cell *matCellDef="let row">
-                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                  [checked]="selection.isSelected(row)">
-                </mat-checkbox>
-              </mat-cell>
-            </ng-container>
-            
-          <!-- User Column -->
-          <ng-container matColumnDef="user" class="user-column">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="user-column"> Collaborators </th>
-            <td td mat-cell *matCellDef="let dataSource" class="user-column"> {{dataSource.username}} | {{dataSource.organization_string}} </td>
-          </ng-container>
-  
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let event; columns: displayedColumns;"></mat-row>
-          <!-- <mat-row *matRowDef="let comment; columns: displayedColumns;" (click)="selectEvent(comment)"
+    <div class="results-card-title-row">
+      <span class="results-button-row">
+      </span>
+    </div>
+  </mat-card-title>
+  <mat-card-content>
+    <div class="spinner-container" *ngIf="tableLoading">
+      <mat-spinner></mat-spinner>
+    </div>
+    <br>
+
+    <!-- Start Table -->
+    <div class="results-table-div" *ngIf="dataSource?.filteredData.length > 0">
+      <table mat-table [dataSource]="dataSource" matSort matSortActive="user" matSortDirection="desc">
+        <!-- *ngIf="dataSource.length " -->
+
+        <!-- Selection column -->
+        <ng-container matColumnDef="select">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
+        <!-- User Column -->
+        <ng-container matColumnDef="user" class="user-column">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="user-column"> Collaborators </th>
+          <td td mat-cell *matCellDef="let dataSource" class="user-column"> {{dataSource.username}} |
+            {{dataSource.organization_string}} </td>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let event; columns: displayedColumns;"></mat-row>
+        <!-- <mat-row *matRowDef="let comment; columns: displayedColumns;" (click)="selectEvent(comment)"
             matTooltip="Click comment to see details"></mat-row> -->
-        </table>
-        <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
-      </div>
-      <div *ngIf="dataSource?.filteredData.length === 0 && tableLoading === false" class="noCollaborators">
-        <h3>There are no collaborators associated with this event.</h3>
-      </div>
-      <!-- End table -->
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+    </div>
+    <div *ngIf="dataSource?.filteredData.length === 0 && tableLoading === false" class="noCollaborators">
+      <h3>There are no collaborators associated with this event.</h3>
+    </div>
+    <!-- End table -->
 
-      <!-- Alert Comment -->
-      <div class="alertForm" *ngIf="dataSource?.filteredData.length > 0">
-        <form autocomplete="off">
-          <div class="vertical-form-container">
-            <mat-form-field class="general-comment-text-area">
-              <textarea matInput maxlength="5000" #comment placeholder="Alert comment (optional)" rows="4"></textarea>
-              <mat-icon class="hint-table-hover-text" matSuffix>
-                help</mat-icon>
-              <mat-hint align="end">{{comment.value.length}} / 5000 <br><br> Enter a comment to be saved to the event record. This comment will also be sent to the selected collaborators as part of the Alert Notification.</mat-hint>
-            </mat-form-field>
-          </div>
-        </form>
-        <button mat-button color="primary" type="submit">
-          <mat-icon>send</mat-icon> Issue Alert
-        </button>
-      </div>
-    </mat-card-content>
-  </div>
+    <!-- Alert Comment -->
+    <div class="alertForm" *ngIf="dataSource?.filteredData.length > 0">
+      <form [formGroup]="alertCollaboratorForm" autocomplete="off">
+        <div class="vertical-form-container">
+          <mat-form-field class="general-comment-text-area">
+            <textarea matInput maxlength="5000" #comment placeholder="Alert comment (optional)" rows="4" formControlName="comment"></textarea>
+            <mat-icon class="hint-table-hover-text" matSuffix>
+              help</mat-icon>
+            <mat-hint align="end">{{comment.value.length}} / 5000 <br><br> Enter a comment to be saved to the event
+              record. This comment will also be sent to the selected collaborators as part of the Alert Notification.
+            </mat-hint>
+          </mat-form-field>
+        </div>
+      </form>
+      <button mat-button color="primary" type="submit" (click)="onSubmit(alertCollaboratorForm.value)">
+        <mat-icon>send</mat-icon> Issue Alert
+      </button>
+
+      <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+    </div>
+  </mat-card-content>
+</div>

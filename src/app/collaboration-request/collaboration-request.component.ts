@@ -84,8 +84,8 @@ export class CollaborationRequestComponent implements OnInit {
       .subscribe(
         (response) => {
           this.submitLoading = false;
-
           this.collaborationRequestDialogRef.close();
+          this.openSnackBar('Collaboration Request successfully sent to event owner.', 'OK', 5000);
         },
         error => {
           this.errorMessage = <any>error;

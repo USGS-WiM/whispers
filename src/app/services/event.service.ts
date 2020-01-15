@@ -398,6 +398,18 @@ export class EventService {
 
   }
 
+  public alertCollaborators(formValue): Observable<any> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.post(APP_SETTINGS.EVENTS_URL + formValue.event + '/alert_collaborator/', formValue, options).pipe(
+      map((response: Response) => <Event>response.json()),
+      catchError(this.handleError));
+
+  }
+
   public create(formValue): Observable<Event> {
 
     const options = new RequestOptions({

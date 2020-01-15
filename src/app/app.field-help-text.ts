@@ -5,6 +5,9 @@ import { environment } from 'environments/environment';
 
 @Injectable()
 export class FIELD_HELP_TEXT {
+    
+// Tooltip config template:
+// public static get Tooltip(): string { return ''; }
 // The characters \n\n can be used to add a breakline to the tooltip
 
 // EVENT DETAILS & OTHER INFO
@@ -19,7 +22,7 @@ public static get editContactOrganizationTooltip(): string { return 'Organizatio
 public static get eventTypeTooltip(): string { return 'Mortality/Morbidity: Noteworthy occurrence of one or more sick or dead animals clustered in space and time. \n\n  Surveillance: Positive detections of a pathogen during active surveillance of healthy live animals. \n\n If both (e.g., went to cave to swab live bats and also found dead bats), create two separate events. \n\n See metadata for details.'; }
 public static get editEventTypeTooltip(): string { return 'Mortality/Morbidity: Noteworthy occurrence of one or more sick or dead animals clustered in space and time. \n\n  Surveillance: Positive detections of a pathogen during active surveillance of healthy live animals.'; }
 
-public static get recordStatusTooltip(): string { return '"Complete" if 1.) the event has ended,  2.) diagnostic tests are finalized, and  3.) all information is updated in WHISPers. Otherwise, "Incomplete". \n\n  See metadata for details.'; }
+public static get recordStatusTooltip(): string { return '"Complete" if 1.) the event has ended,  2.) diagnostic tests are finalized, and  3.) all information is updated in WHISPers. Otherwise, "Incomplete". \n  See metadata for details.'; }
 public static get editRecordStatusTooltip(): string { return '"Complete" if 1.) the event has ended,  2.) diagnostic tests are finalized, and  3.) all information is updated in WHISPers. Otherwise, "Incomplete".'; }
 
 public static get eventIDTooltip(): string { return 'System-generated unique identifier for an event.'; }
@@ -33,6 +36,9 @@ public static get flywayTooltip(): string { return 'United States Fish and Wildl
 public static get nwhcCarcassSubApprovalTooltip(): string { return 'For USGS National Wildlife Health Center (NWHC) to fill out after a diagnostic service request has been received. \n\nOptions are: "Yes" - service request has been approved; "No" - service request has not been approved; "Maybe" - service request might be approved but NWHC needs more information via comments.'; }
 
 public static get permissionSourceTooltip(): string { return 'Your connection to this event. \n\n Options are: "user" - you created this event; "organization" - someone in your organization created this event; "collaborator" - you were invited to be a read or write collaborator on this event. If blank, then someone outside of your organization created this event and you have not been invited to be a collaborator.'; }
+
+public static get associatedEventsTooltip(): string { return 'Events that are biologically equivalent and were grouped together by wildlife disease specialists at the USGS National Wildlife Health Center.'; }
+public static get commentSourceTooltip(): string { return 'Comment timeline is a compilation of comments entered in various sections of the event record; the source identifies from where the comment originated.'; }
 
 // WIM wrote locationsTooltip (not in hover text spreadsheet)
 public static get locationsTooltip(): string { return 'Displayed as County (or equivalent), State (or equivalent), Country - where values are available'; }
@@ -166,7 +172,14 @@ public static get eventGroupIDTooltip(): string { return 'Unique identifier for 
 public static get circleNameTooltip(): string { return 'Short name for the user circle.'; }
 public static get circleDiscriptionTooltip(): string { return 'Description of the user circle.'; }
 // END DASHBOARD
-}
 
-// Tooltip config template:
-// public static get Tooltip(): string { return ''; }
+// PDF Defnitions
+public static get numberOfLocationsDefinition(): string { return 'Number of locations (e.g., town or lake) that each represents a distinct spatial cluster of animal observations within a county.'; }
+public static get numberOfSpeciesDefinition(): string { return 'Total number of species affected.'; }
+public static get speciesMostAffectedDefinition(): string { return 'Top species affected based on sick and dead numbers reported.'; }
+public static get startEndDatesDefinition(): string { return 'Beginning date of the event (considering all locations). Ending date of the event (considering all locations).'; }
+public static get associatedEventDefinition(): string { return 'Events that are biologically equivalent and were grouped together by wildlife disease specialists at the USGS National Wildlife Health Center.'; }
+public static get commentSourceDefinition(): string { return 'Comment timeline is a compilation of comments entered in various sections of the event record; the source identifies from where the comment originated.'; }
+// PDF Defnition
+
+}

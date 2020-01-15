@@ -880,7 +880,7 @@ export class AddEventLocationComponent implements OnInit {
             return 0;
           });
 
-          // load the initial bank list
+          // load the initial list
           this.filteredAdminLevelTwos.next(this.adminLevelTwos);
 
           // listen for search field value changes

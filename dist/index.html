@@ -1,67 +1,92 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>WHISPers</title>
+<<<<<<< HEAD
   <base href="/notifications/">
+=======
+  <base href="/whispers/">
+>>>>>>> 8cf1a3121704cc137081c4f03a09a85216f1b979
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- configuration ID string left intentionally blank (line 19) to prevent logging on the test and dev configurations. -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-61219868-40"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-     gtag('config', 'UA-61219868-40');
+    gtag('config', '');
   </script>
-<link rel="stylesheet" href="styles.1bd3941a4839fb15eb62.css"></head>
+
+<link rel="stylesheet" href="styles.96dc79cefe1e886e2cd3.css"></head>
+
 <body class="whispers-root mat-app-background">
   <app-root>
     <div id="initialLoading">
       <div id="wAnimated">
-          <img src="./assets/w-logo.png"/>
+        <img src="./assets/w-logo.png" />
       </div>
       <span>Loading...</span>
     </div>
     <style>
-        #initialLoading{
-          display: flex; 
-          flex-direction: column; 
-          justify-content: center; 
-          text-align: center; 
-          height: 100vh;
-          width: 100vw;
-          background-color: #03040C;
-          position: fixed;
-          top: 0;
-          left: 0;
-          color: white;
-          font-weight: 500;
-          font-size: 18px;
-          font-family: 'Lato', sans-serif;
-          font-weight: 700;
-          letter-spacing: 0.3px;
+      #initialLoading {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        height: 100vh;
+        width: 100vw;
+        background-color: #03040C;
+        position: fixed;
+        top: 0;
+        left: 0;
+        color: white;
+        font-weight: 500;
+        font-size: 18px;
+        font-family: 'Lato', sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+      }
+
+      #initialLoading img {
+        display: block;
+        margin: 0 auto;
+        width: 80px;
+        height: auto;
+        margin-bottom: 8px;
+        animation: yourAnimation 1.5s infinite 0s ease-in-out;
+      }
+
+      #initialLoading span {
+        display: block;
+        margin-top: 12px;
+      }
+
+      @keyframes yourAnimation {
+        0% {
+          transform: scale(0.8);
         }
-        #initialLoading img{
-          display: block;
-          margin: 0 auto;
-          width: 80px;
-          height: auto;
-          margin-bottom: 8px;
-          animation: yourAnimation 1.5s infinite 0s ease-in-out;
+
+        50% {
+          transform: scale(1.1);
         }
-        #initialLoading span{
-          display: block;
-          margin-top: 12px;
+
+        100% {
+          transform: scale(0.8);
         }
-        @keyframes yourAnimation{
-            0%{transform: scale(0.8);}
-            50%{transform: scale(1.1);}
-            100%{transform: scale(0.8);}
-        }
-      </style>
+      }
+    </style>
   </app-root>
+<<<<<<< HEAD
 <script type="text/javascript" src="runtime.a66f828dca56eeb90e02.js"></script><script type="text/javascript" src="polyfills.9b1b4a237263f6d7e97e.js"></script><script type="text/javascript" src="scripts.c7033f5da8062c6a581d.js"></script><script type="text/javascript" src="main.992f51441c68cd879814.js"></script></body>
 </html>
+=======
+<script type="text/javascript" src="runtime.ec2944dd8b20ec099bf3.js"></script><script type="text/javascript" src="polyfills.2a6602321d0cee80e8de.js"></script><script type="text/javascript" src="scripts.c7033f5da8062c6a581d.js"></script><script type="text/javascript" src="main.a4d2916d800ebe92e9e0.js"></script></body>
+
+</html>
+>>>>>>> 8cf1a3121704cc137081c4f03a09a85216f1b979

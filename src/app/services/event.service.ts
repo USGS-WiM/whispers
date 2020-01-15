@@ -276,6 +276,25 @@ export class EventService {
       catchError(this.handleEventDetailsError));
   }
 
+  // Function for retrieving event summary given event id
+  public getEventSummary(eventID): Observable<EventSummary> {
+
+    let options;
+    if (sessionStorage.username !== undefined) {
+      options = new RequestOptions({
+        headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      });
+    } else {
+      options = new RequestOptions({
+        headers: APP_SETTINGS.JSON_HEADERS
+      });
+    }
+
+    return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + eventID + '?no_page', options).pipe(
+      map((response: Response) => <EventSummary>response.json()),
+      catchError(this.handleEventDetailsError),);
+  }
+
   public getUserDashboardEventSummaries(): Observable<EventSummary[]> {
 
     const options = new RequestOptions({

@@ -230,10 +230,10 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.eventVisibilityDefinition = FIELD_HELP_TEXT.eventVisibility;
     this.stateDefinition = FIELD_HELP_TEXT.stateTooltip;
     this.countryDefinition = FIELD_HELP_TEXT.countryTooltip;
-    this.startDateDefinition = FIELD_HELP_TEXT.eventStartDateTooltip;
-    this.endDateDefinition = FIELD_HELP_TEXT.eventEndDateTooltip;
+    this.startDateDefinition = FIELD_HELP_TEXT.locationStartDateTooltip;
+    this.endDateDefinition = FIELD_HELP_TEXT.locationEndDateTooltip;
     this.speciesDefinition = FIELD_HELP_TEXT.editSpeciesTooltip;
-    this.speciesDefinition = FIELD_HELP_TEXT.populationTooltip;
+    this.populationDefinition = FIELD_HELP_TEXT.populationTooltip;
     this.knownSickDefinition = FIELD_HELP_TEXT.editKnownSickTooltip;
     this.knownDeadDefinition = FIELD_HELP_TEXT.editKnownDeadTooltip;
     this.estSickDefinition = FIELD_HELP_TEXT.editEstimatedSickTooltip;
@@ -757,7 +757,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             [{ text: 'Start Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.startDateDefinition, border: [false, false, false, false] }],
             [{ text: 'End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.endDateDefinition, border: [false, false, false, false] }],
             [{ text: 'Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
-            [{ text: 'Population', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
+            [{ text: 'Population', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.populationDefinition, border: [false, false, false, false] }],
             [{ text: 'Known Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownSickDefinition, border: [false, false, false, false] }],
             [{ text: 'Known Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownDeadDefinition, border: [false, false, false, false] }],
             [{ text: 'Estimated Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estSickDefinition, border: [false, false, false, false] }],
@@ -818,7 +818,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     explanationTwoForMoreDetails = {
       alignment: 'justify',
       text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
-      style: 'smallest',
+      style: 'footer',
     };
     return explanationTwoForMoreDetails;
   }

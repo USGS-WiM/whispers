@@ -222,12 +222,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.countyDefinition = FIELD_HELP_TEXT.editCountyTooltip;
     this.eventDiagDefinition = FIELD_HELP_TEXT.editEventDiagnosisTooltip;
     this.labDefinition = FIELD_HELP_TEXT.editLabTooltip;
-    this.numAnimalsAffectedDefinition = FIELD_HELP_TEXT.numberAffectedTooltip;
+    this.numAnimalsAffectedDefinition = FIELD_HELP_TEXT.numAnimalsAffected;
     this.numSpeciesAffectedDefinition = FIELD_HELP_TEXT.numberOfSpeciesDefinition;
     this.speceisMostAffectedDefinition = FIELD_HELP_TEXT.speciesMostAffectedDefinition;
     this.startEndDatesDefinition = FIELD_HELP_TEXT.startEndDatesDefinition;
-    this.associatedEventsDefinition = FIELD_HELP_TEXT.eventGroupIDTooltip;
-    this.eventVisibilityDefinition = FIELD_HELP_TEXT.associatedEventDefinition;
+    this.associatedEventsDefinition = FIELD_HELP_TEXT.associatedEventDefinition;
+    this.eventVisibilityDefinition = FIELD_HELP_TEXT.eventVisibility;
     this.stateDefinition = FIELD_HELP_TEXT.stateTooltip;
     this.countryDefinition = FIELD_HELP_TEXT.countryTooltip;
     this.startDateDefinition = FIELD_HELP_TEXT.eventStartDateTooltip;
@@ -413,8 +413,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         col_6: { text: 'Est. Dead', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
         col_7: { text: 'Captive', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
         col_8: { text: 'Species Diagnosis', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_9: { text: '# Assessed/ # with diagnosis', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_10: { text: 'Diagnostic Lab', border: [true, false, false, false], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] }
+        col_9: { text: '# Assessed/# with Diagnosis', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_10: { text: 'Diagnostic Lab', border: [true, false, false, false], style: 'tableHeader', bold: true, alignment: 'left', margin: [0, 8, 0, 0] }
       }
     };
     // [{image: writeRotatedText('I am rotated'), fit:[7,53], alignment: 'center'}]
@@ -455,7 +455,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         row.push({ text: elData.captive, alignment: 'center' });
         row.push({ text: elData.species_dia, alignment: 'left' });
         row.push({ text: elData.count, alignment: 'center' });
-        row.push(elData.lab);
+        row.push({text: elData.lab, alignment: 'left'});
         locationBody.push(row);
       }
     }
@@ -536,7 +536,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     const title = {
       style: 'tableExample',
       table: {
-        widths: [150, 100, 'auto', 120, 80, 80, 80],
+        widths: [150, 100, 200, 80, 80, 80, 80],
         body: [
           [{ text: 'County (or equivalent):', bold: true, alignment: 'right' }, county, { text: name, bold: true }, '', '', '', ''],
           [{ text: 'State (or equivalent):', bold: true, alignment: 'right' }, state, '', '', '', '', ''],
@@ -621,8 +621,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         row.push({ text: elData.comment_type_string, fontSize: 9 });
         row.push({ text: elData.created_date, fontSize: 9 });
         row.push({ text: elData.created_by_string, fontSize: 9 });
-        row.push({ text: elData.created_by_organization_string, fontSize: 9 });
-        row.push({ text: elData.source, fontSize: 9 });
+        row.push({ text: elData.created_by_organization_string, alignment: 'left', fontSize: 9 });
+        row.push({ text: elData.source, alignment: 'left', fontSize: 9 });
         commentBody.push(row);
       }
     }
@@ -1401,7 +1401,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               }
               captive = 'Yes' || 'No';
               const s_diag = ' ';
-              const county = ' ';
+              const county = locationspecies.administrative_level_two_string || ' ';
               const country = locationspecies.country_string || ' ';
               const lab = ' ';
 

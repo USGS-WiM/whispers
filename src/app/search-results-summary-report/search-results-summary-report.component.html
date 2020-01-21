@@ -1,27 +1,147 @@
 <h1 mat-dialog-title>
-    <span class="centeredHeader" *ngIf="value < 100"> Preparing image and content for summary report. . .</span>
-    <span class="centeredHeader" *ngIf="value > 99"> Ready to download!</span>
+  <span class="centeredHeader" *ngIf="value < 100"> Preparing image and content for summary report. . .</span>
+  <span class="centeredHeader" *ngIf="value > 99"> Ready to download!</span>
 </h1>
 <mat-dialog-content>
-    <h4>Geographic Context:</h4>
-  <div id="resultsMap"></div>
-  <mat-progress-bar mode="determinate" [value]="value" id="bar"></mat-progress-bar>
-  <span *ngIf="loadingData">
-      <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
-      <span>Generating report...</span>
-  </span>
-  <br>
-  <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadResultsSummaryReport()"
-    [disabled]="value < 99">
-      <i class="material-icons">archive</i> Download Results Summary Report</button>
+  <div class="wrapper">
+    <div class="map">
+      <h4>Geographic Context:</h4>
+      <div id="resultsMap"></div>
+      <mat-progress-bar mode="determinate" [value]="value" id="bar"></mat-progress-bar>
+      <span *ngIf="loadingData">
+        <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
+        <span>Generating report...</span>
+      </span>
+    </div>
+    <!-- <br> -->
+
+
+    <div class="legend">
+      <div class="legend-panel-content">
+
+
+        <label class="legend-label" style="margin-top: 0 !important; padding-top: 0 !important;">Event Type</label>
+        <label class="legend-hint">Indicated by shape</label>
+
+        <div class='legend-icon'>
+          <div class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+          <label>Mortality/Morbidity</label>
+        </div>
+        <div class='legend-icon'>
+          <div class='wmm-diamond wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
+          <label>Surveillance</label>
+        </div>
+
+        <label class="legend-label">Diagnosis Type</label>
+        <label class="legend-hint">Indicated by color</label>
+
+        <div class='legend-icon'>
+          <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+          <label>Bacteria</label>
+        </div>
+
+        <div class='legend-icon'>
+          <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+          <label>Fungus</label>
+        </div>
+
+        <div class='legend-icon'>
+          <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+          <label>Nut/Met/Dev</label>
+        </div>
+
+        <div class='legend-icon'>
+          <div class='wmm-square wmm-orange wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+          <label>Other</label>
+        </div>
+
+        <div class='legend-icon'>
+          <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+          <label>Parasite</label>
+        </div>
+
+        <div class='legend-icon'>
+          <div class='wmm-square wmm-purple wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+          <label>Toxin</label>
+        </div>
+
+        <div class='legend-icon'>
+          <div class='wmm-square wmm-mutedpink wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+          <label>Trauma</label>
+        </div>
+
+        <div class='legend-icon'>
+          <div class='wmm-square wmm-sky wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+          <label>Virus</label>
+        </div>
+
+        <label class="legend-hint">White center indicates incomplete event</label>
+
+        <!-- <div class='legend-icon'>
+              <div class='wmm-square wmm-mutedblue wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+              <label style="font-style: italic;">Multiple</label>
+            </div> -->
+
+
+        <!-- <label class="legend-hint">Number indicates event count</label>
+            <label class="legend-hint">White center indicates incomplete event</label> -->
+
+        <label class="legend-label">Multiple Events in One County (or equivalent)</label>
+        <div class='legend-icon' style="padding-bottom: 5px;">
+          <div class='wmm-square wmm-mutedblue wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+          <label style="font-size: 13px">Multiple Diagnosis Types</label>
+        </div>
+        <label class="legend-hint">Number indicates event count</label>
+
+
+
+        <div id="flywaysLegend" *ngIf="flywaysVisible">
+          <label class="legend-label">Flyways</label>
+
+          <div class='legend-icon'>
+            <div class='wmm-square wmm-28995b wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            <label>Atlantic Flyways</label>
+          </div>
+
+          <div class='legend-icon'>
+            <div class='wmm-square wmm-b43cc7 wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            <label>Central Flyway</label>
+          </div>
+
+          <div class='legend-icon'>
+            <div class='wmm-square wmm-eb5834 wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            <label>Mississippi Flyway</label>
+          </div>
+
+          <div class='legend-icon'>
+            <div class='wmm-square wmm-ffbd4f wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            <label>Pacific Flyway</label>
+          </div>
+        </div>
+
+        <div id="watershedsLegend" *ngIf="watershedsVisible">
+          <label class="legend-label">Watersheds</label>
+
+          <div class='legend-icon'>
+            <div class='wmm-square wmm-white wmm-icon-circle wmm-icon-white wmm-size-20 huc-icon'></div>
+            <label>HUC 2</label>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
 
   <div class="detail-section-buttons">
-
-      <button mat-button color="warn" (click)="this.resultsSummaryReportDialogRef.close('cancel');">
-          <mat-icon>cancel</mat-icon>&nbsp;Cancel
-      </button>
+    <button mat-raised-button color="primary" class="event-detail-action-button"
+      (click)="downloadResultsSummaryReport()" [disabled]="value < 99">
+      <i class="material-icons">archive</i> Download Results Summary Report</button>
+    <button mat-button color="warn" (click)="this.resultsSummaryReportDialogRef.close('cancel');">
+      <mat-icon>cancel</mat-icon>&nbsp;Cancel
+    </button>
 
   </div>
 

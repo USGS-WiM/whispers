@@ -102,7 +102,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     });
 
     this.locationMarkers = L.featureGroup().addTo(this.resultsMap);
-
+    L.control.scale({ position: 'bottomright' }).addTo(this.resultsMap);
     this.mapResults(this.data.current_results);
 
     this.resultsMap.dragging.disable();

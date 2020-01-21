@@ -7,3 +7,93 @@
     height: 50%;
     width: 50%;
 }
+
+.centeredHeader {
+    margin: 0 auto;
+}
+
+.wrapper {
+    overflow: hidden;
+}
+
+.map {
+    float: left;
+    padding-right: 10px;
+}
+
+.legend {
+    margin-left: 20px;
+    overflow: hidden;
+    padding-left: 10px;
+}
+
+.legend-panel-content{
+    box-sizing: border-box;
+    padding-left: 15px;
+    padding-top: 10px;
+
+    .wmm-circle,
+    .wmm-diamond{
+        position: relative;
+        top: 2px;
+        left: 6px;
+    }
+    .wmm-diamond{
+        top: 5px;
+    }
+
+}
+
+.legend {
+    padding: 4px;
+    // bottom: 60px !important;
+    top: 10px;
+    //left: 15px;
+    right: 10px;
+    width:200px;
+    /*height:320px;*/
+    z-index: 799;
+    color: black;
+    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.8);
+    //box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.87;
+}
+
+.legendIcon {
+    display: inline-block;
+}
+
+.flyway-blue:after {
+    background-color: rgba(0,0,255,0.3);
+    border: 3px solid blue;
+}
+
+.flyway-yellow:after {
+    background-color: rgba(255,255,0,0.3);
+    border: 3px solid yellow;
+}
+
+.flyway-green:after {
+    background-color: rgba(0,255,0,0.3);
+    border: 3px solid green;
+}
+
+.flyway-red:after {
+    background-color: rgba(255, 238, 0, 0.3);
+    border: 3px solid red;
+}
+
+.huc-icon:after {
+    border: 3px solid #b57dcf;
+}
+
+.legend-label {
+    padding-top: 1em;
+}
+
+.legend-icon{
+    box-sizing: border-box;
+}

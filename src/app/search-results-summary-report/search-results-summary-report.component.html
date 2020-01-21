@@ -1,15 +1,18 @@
 <h1 mat-dialog-title>
-  <i class="material-icons">archive</i> Generate Results Summary Report
+    <span class="centeredHeader" *ngIf="value < 100"> Preparing image and content for summary report. . .</span>
+    <span class="centeredHeader" *ngIf="value > 99"> Ready to download!</span>
 </h1>
 <mat-dialog-content>
+    <h4>Geographic Context:</h4>
   <div id="resultsMap"></div>
+  <mat-progress-bar mode="determinate" [value]="value" id="bar"></mat-progress-bar>
   <span *ngIf="loadingData">
       <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
       <span>Generating report...</span>
   </span>
   <br>
-  <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadResultsSummaryReport()" [disabled]="!this.mapImageProcessed" 
-      [disabled]="loadingData">
+  <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadResultsSummaryReport()"
+    [disabled]="value < 99">
       <i class="material-icons">archive</i> Download Results Summary Report</button>
 </mat-dialog-content>
 <mat-dialog-actions>

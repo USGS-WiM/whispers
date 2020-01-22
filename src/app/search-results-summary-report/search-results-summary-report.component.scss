@@ -18,7 +18,7 @@
 
 .map {
     float: left;
-    padding-right: 10px;
+    padding-right: 30px;
 }
 
 .legend {
@@ -45,14 +45,10 @@
 }
 
 .legend {
-    padding: 4px;
-    // bottom: 60px !important;
-    top: 10px;
-    //left: 15px;
+
     right: 10px;
     width:200px;
     /*height:320px;*/
-    z-index: 799;
     color: black;
     background-color: rgb(255, 255, 255);
     background-color: rgba(255, 255, 255, 0.8);
@@ -64,6 +60,10 @@
 
 .legendIcon {
     display: inline-block;
+}
+
+#legendImage {
+    margin: 10px;
 }
 
 .flyway-blue:after {
@@ -97,3 +97,87 @@
 .legend-icon{
     box-sizing: border-box;
 }
+
+.wmm-size-14 {
+    height: 13px !important;
+    width: 8px !important;
+    margin-left: -7px !important; }
+    .wmm-size-14:after {
+      height: 10px !important;
+      width: 10px !important; }
+    .wmm-size-14.wmm-pin {
+      margin-top: -8px !important; }
+    .wmm-size-14.wmm-triangle {
+      height: 0 !important;
+      width: 0 !important;
+      overflow: visible !important;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-bottom: 16px solid white;
+      top: -2px;
+      left: -2px; }
+      .wmm-size-14.wmm-triangle:after {
+        content: '\25b2';
+        background-color: transparent;
+        font-size: 14px;
+        font-family: sans-serif;
+        position: relative;
+        left: -7px;
+        top: -1px; }
+    .wmm-size-14.wmm-icon-circle:before {
+      height: 5px;
+      width: 5px;
+      margin: 5px 0 0 5px; }
+    .wmm-size-14.wmm-icon-square:before, .wmm-size-14.wmm-icon-diamond:before {
+      height: 5px;
+      width: 5px;
+      margin: 5px 0 0 5px; }
+    .wmm-size-14.wmm-icon-triangle:before {
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-bottom: 7px solid white;
+      margin-top: 3px;
+      margin-left: 4px; }
+  
+
+// customizing size of diamond because it was getting cut off in the print out
+/* .wmm-size-14 {
+    height: 16px !important;
+    width: 12px !important;
+    margin-left: -7px !important; }
+    .wmm-size-14:after {
+      height: 15px !important;
+      width: 15px !important; }
+    .wmm-size-14.wmm-pin {
+      margin-top: -8px !important; }
+    .wmm-size-14.wmm-triangle {
+      height: 0 !important;
+      width: 0 !important;
+      overflow: visible !important;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-bottom: 16px solid white;
+      top: -2px;
+      left: -2px; }
+      .wmm-size-14.wmm-triangle:after {
+        content: '\25b2';
+        background-color: transparent;
+        font-size: 14px;
+        font-family: sans-serif;
+        position: relative;
+        left: -7px;
+        top: -1px; }
+    .wmm-size-14.wmm-icon-circle:before {
+      height: 5px;
+      width: 5px;
+      margin: 5px 0 0 5px; }
+    .wmm-size-14.wmm-icon-square:before, .wmm-size-14.wmm-icon-diamond:before {
+      height: 5px;
+      width: 5px;
+      margin: 5px 0 0 5px; }
+    .wmm-size-14.wmm-icon-triangle:before {
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-bottom: 7px solid white;
+      margin-top: 3px;
+      margin-left: 4px; } */

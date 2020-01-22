@@ -51,7 +51,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
   resultsMap;
   resultsMapUrl;
-
+  clicked = false;
   icon;
   locationMarkers;
 
@@ -64,14 +64,11 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     private countryService: CountryService,
     private organizationService: OrganizationService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
-     }
+  }
 
   ngOnInit() {
 
     this.loadProgressBar();
-    setTimeout(() => {
-
-    }, 2000);
 
     // converting whipsers logo png to a dataURL for use in pdfMake
     const whispersLogo = './assets/logo-transparent.png';
@@ -454,9 +451,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   downloadResultsSummaryReport() {
     this.loadingReport = true;
     let mapurl;
-      // using html2Canvas to capture leaflet map for reports
-      // solution found here: https://github.com/niklasvh/html2canvas/issues/567
-      const mapPane = $('.leaflet-map-pane')[0];
+    // using html2Canvas to capture leaflet map for reports
+    // solution found here: https://github.com/niklasvh/html2canvas/issues/567
+    const mapPane = $('.leaflet-map-pane')[0];
     const mapTransform = mapPane.style.transform.split(',');
     // const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
     let mapX;
@@ -594,285 +591,291 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     // gtag('event', 'click', { 'event_category': 'Search Results', 'event_label': 'Downloaded Search Results Summary Report' });
 
     // Getting date/time for timestamp
+
+    let legendURL;
+
+    html2canvas(document.getElementById('legendImage'), options).then(function (canvas) {
+      legendURL = canvas.toDataURL('image/png');
+    });
     // need to give some time for html2canvas to finish rendering
     setTimeout(() => {
-    const date = APP_UTILITIES.getDateTime;
+      const date = APP_UTILITIES.getDateTime;
 
-    // whispers logo
-    this.pngURL = this.canvas.toDataURL();
+      // whispers logo
+      this.pngURL = this.canvas.toDataURL();
 
-    // search query
-    const search_query = this.data.current_search_query;
-    // results summary details
-    const result_data = this.data.current_results;
+      // search query
+      const search_query = this.data.current_search_query;
+      // results summary details
+      const result_data = this.data.current_results;
 
-    // printing user's info
-    const nameOrgString = this.data.user.first_name + ' ' + this.data.user.last_name + ' (' + this.data.user.organization_string + ')';
+      // printing user's info
+      const nameOrgString = this.data.user.first_name + ' ' + this.data.user.last_name + ' (' + this.data.user.organization_string + ')';
 
-    // formatting full URL for footer
-    const url = window.location.href;
-    this.mapImageProcessed = true;
-    // Section with SEARCH CRITERIA for page 1
-    // TODO: calculation of record status for page 1
-    let record_status;
-    if (search_query.complete == true) {
-      record_status = "Complete events only";
-    } else if (search_query.complete == false) {
-      record_status = "Incomplete events only";
-    } else {
-      record_status = "Complete and incomplete events";
-    }
-
-    // get string for admin level ones in search criteria
-    let search_admin_level_one;
-    if (search_query.administrative_level_one === null) {
-    } else {
-    search_query.administrative_level_one.forEach(search_level_one => {
-      this.adminLevelOnes.forEach(level_one => {
-        if (search_level_one == Number(level_one.id)) {
-          if (search_admin_level_one == null) {
-            search_admin_level_one = level_one.name;
-          } else {
-            search_admin_level_one += ", " + level_one.name;
-          }
-        }
-      });
-    });
-  }
-
-    // get string for admin level twos in search criteria
-    let search_admin_level_two;
-    if (search_query.administrative_level_two === null) {
-    } else {
-    search_query.administrative_level_two.forEach(search_level_two => {
-      this.adminLevelTwos.forEach(level_two => {
-        if (search_level_two == Number(level_two.id)) {
-          if (search_admin_level_two == null) {
-            search_admin_level_two = level_two.name;
-          } else {
-            search_admin_level_two += ", " + level_two.name;
-          }
-        }
-      });
-    });
-  }
-
-    // get string for diagnosis types in search criteria
-    let search_diagnosis_type;
-    if (search_query.administrative_level_two === null) {
-    } else {
-    search_query.diagnosis_type.forEach(search_diag_type => {
-      this.diagnosisTypes.forEach(diag_type => {
-        if (search_diag_type == Number(diag_type.id)) {
-          if (search_diagnosis_type == null) {
-            search_diagnosis_type = diag_type.name;
-          } else {
-            search_diagnosis_type += ", " + diag_type.name;
-          }
-        }
-      });
-    });
-  }
-
-    // get string for event diagnosis in search criteria
-    let search_event_diagnosis;
-    if (search_query.diagnosis === null) {
-    } else {
-    search_query.diagnosis.forEach(search_event_diag => {
-      this.eventDiagnoses.forEach(event_diag => {
-        if (search_event_diag == event_diag.id) {
-          if (search_event_diagnosis == null) {
-            search_event_diagnosis = event_diag.name;
-          } else {
-            search_event_diagnosis += ", " + event_diag.name;
-          }
-        }
-      });
-    });
-  }
-
-    /************
-     *
-     * Check with Lauren's code to see if she has any functions reformatting dates from YYYY-MM-DD format
-     * Lauren: Hi, yes I have a couple ways for formatting todays date in the app.utilities.ts file, function name: getReportDateTime or formatEventDates
-     *
-     * Coordinate with her to use a common function to get it into the format NHWC requests
-     * Lauren: We put common functions like that in the app.utilites.ts file. There may be an existing one that will work, if not feel free to add one
-     */
-
-    // Section with SEARCH RESULTS SUMMARY
-    let number_events = result_data.length.toString();
-
-    let most_frequent_diagnosis;
-    let diagnosisArray = [];
-
-    let number_animals_affected = 0;
-    let number_species_affected = 0;
-
-    let species_most_affected;
-    let speciesArray = [];
-
-    let average_event_time_span;
-    let total_days_all_events = 0;
-
-    let event_with_most_affected;
-    let event_with_most_affected_count = 0;
-
-    let longest_running_event;
-    let longest_running_event_count = 0;
-
-    let event_visibility;
-    let public_count = 0;
-    let not_public_count = 0;
-
-    result_data.forEach(element => {
-      if (!element.hasOwnProperty('public')) {
-        element["public"] = true;
-      }
-      //initial calc Most Frequent Diagnosis
-      if (diagnosisArray.length == 0) {
-        element.eventdiagnoses.forEach(diagnosis => {
-          diagnosisArray.push({ name: diagnosis.diagnosis_string, count: 1 })
-        });
-      }
-      element.eventdiagnoses.forEach(diagnosis => {
-        if (diagnosisArray.find(function (item) {
-          return diagnosis.diagnosis_string == item.name;
-        })) {
-          diagnosisArray.forEach(diagnosisItem => {
-            if (diagnosis.diagnosis_string == diagnosisItem.name) {
-              diagnosisItem.count += 1;
-            }
-          });
-        } else {
-          diagnosisArray.push({ name: diagnosis.diagnosis_string, count: 1 })
-        };
-      });
-
-      //calc for Number of Animals Affected
-      number_animals_affected += element.affected_count;
-      //calc for Number Species Affected
-      number_species_affected += element.species.length;
-
-      //initial calc for Species Most Affected
-      if (speciesArray.length == 0) {
-        element.species.forEach(species => {
-          speciesArray.push({ name: species.name, count: 1 })
-        });
-      }
-      element.species.forEach(species => {
-        if (speciesArray.find(function (item) {
-          return species.name == item.name;
-        })) {
-          speciesArray.forEach(speciesItem => {
-            if (species.name == speciesItem.name) {
-              speciesItem.count += 1;
-            }
-          });
-        } else {
-          speciesArray.push({ name: species.name, count: 1 })
-        };
-      });
-
-      //inital calc for Average Event Time Span
-      let start_date;
-      start_date = new Date(element.start_date);
-      let end_date;
-      let num_days;
-      if (element.end_date == null) {
-        end_date = new Date();
+      // formatting full URL for footer
+      const url = window.location.href;
+      this.mapImageProcessed = true;
+      // Section with SEARCH CRITERIA for page 1
+      // TODO: calculation of record status for page 1
+      let record_status;
+      if (search_query.complete == true) {
+        record_status = "Complete events only";
+      } else if (search_query.complete == false) {
+        record_status = "Incomplete events only";
       } else {
-        end_date = new Date(element.end_date);
-      }
-      // num_days also used to test for longest running event below
-      num_days = (end_date - start_date) / (1000 * 3600 * 24);
-      total_days_all_events += num_days;
-
-      //calc for Event with Most Affected
-      if (element.affected_count > event_with_most_affected_count) {
-        event_with_most_affected = element.id;
-        event_with_most_affected_count = element.affected_count;
+        record_status = "Complete and incomplete events";
       }
 
-      //calc for Longest Running Event
-      if (num_days > longest_running_event_count) {
-        longest_running_event = element.id;
-        longest_running_event_count = num_days;
+      // get string for admin level ones in search criteria
+      let search_admin_level_one;
+      if (search_query.administrative_level_one === null) {
+      } else {
+        search_query.administrative_level_one.forEach(search_level_one => {
+          this.adminLevelOnes.forEach(level_one => {
+            if (search_level_one == Number(level_one.id)) {
+              if (search_admin_level_one == null) {
+                search_admin_level_one = level_one.name;
+              } else {
+                search_admin_level_one += ", " + level_one.name;
+              }
+            }
+          });
+        });
       }
 
-      //initial calc for Event Visibility
-      if (public_count == 0 && element.public == true) {
-        public_count = 1;
-      } else if (not_public_count == 0 && element.public == false) {
-        not_public_count = 1;
+      // get string for admin level twos in search criteria
+      let search_admin_level_two;
+      if (search_query.administrative_level_two === null) {
+      } else {
+        search_query.administrative_level_two.forEach(search_level_two => {
+          this.adminLevelTwos.forEach(level_two => {
+            if (search_level_two == Number(level_two.id)) {
+              if (search_admin_level_two == null) {
+                search_admin_level_two = level_two.name;
+              } else {
+                search_admin_level_two += ", " + level_two.name;
+              }
+            }
+          });
+        });
       }
 
-    });
-
-    //final determination of Most Frequent Diagnosis
-    let diagnosis_count_test = 0;
-    diagnosisArray.forEach(diagnosisItem => {
-      if (diagnosisItem.count > diagnosis_count_test) {
-        diagnosis_count_test = diagnosisItem.count;
-        most_frequent_diagnosis = diagnosisItem.name;
-      } else if (diagnosisItem.count == diagnosis_count_test) {
-        most_frequent_diagnosis += ", " + diagnosisItem.name;
+      // get string for diagnosis types in search criteria
+      let search_diagnosis_type;
+      if (search_query.administrative_level_two === null) {
+      } else {
+        search_query.diagnosis_type.forEach(search_diag_type => {
+          this.diagnosisTypes.forEach(diag_type => {
+            if (search_diag_type == Number(diag_type.id)) {
+              if (search_diagnosis_type == null) {
+                search_diagnosis_type = diag_type.name;
+              } else {
+                search_diagnosis_type += ", " + diag_type.name;
+              }
+            }
+          });
+        });
       }
-    })
 
-    //final determination of Speciest Most Affected
-    let species_count_test = 0;
-    speciesArray.forEach(speciesItem => {
-      if (speciesItem.count > species_count_test) {
-        species_count_test = speciesItem.count;
-        species_most_affected = speciesItem.name;
-      } else if (speciesItem.count == species_count_test) {
-        species_most_affected += ", " + speciesItem.name;
+      // get string for event diagnosis in search criteria
+      let search_event_diagnosis;
+      if (search_query.diagnosis === null) {
+      } else {
+        search_query.diagnosis.forEach(search_event_diag => {
+          this.eventDiagnoses.forEach(event_diag => {
+            if (search_event_diag == event_diag.id) {
+              if (search_event_diagnosis == null) {
+                search_event_diagnosis = event_diag.name;
+              } else {
+                search_event_diagnosis += ", " + event_diag.name;
+              }
+            }
+          });
+        });
       }
-    })
 
-    //final determination of Average Event Time Span
-    average_event_time_span = total_days_all_events / Number(number_events);
+      /************
+       *
+       * Check with Lauren's code to see if she has any functions reformatting dates from YYYY-MM-DD format
+       * Lauren: Hi, yes I have a couple ways for formatting todays date in the app.utilities.ts file, function name: getReportDateTime or formatEventDates
+       *
+       * Coordinate with her to use a common function to get it into the format NHWC requests
+       * Lauren: We put common functions like that in the app.utilites.ts file. There may be an existing one that will work, if not feel free to add one
+       */
 
-    //final determination of Event Visibility
-    if (public_count == 1 && not_public_count == 1) {
-      event_visibility = { text: 'See details', bold: true };
-    } else if (public_count == 1) {
-      event_visibility = 'Visible to the public';
-    } else if (not_public_count == 1) {
-      event_visibility = { text: 'NOT VISIBLE TO THE PUBLIC', bold: true };
-    } else {
-      event_visibility = { text: 'See details', bold: true };
-    }
+      // Section with SEARCH RESULTS SUMMARY
+      let number_events = result_data.length.toString();
 
-    let affected_count;
+      let most_frequent_diagnosis;
+      let diagnosisArray = [];
 
-    if (search_query.affected_count != undefined) {
-      affected_count = 'Affected Count ' + search_query.affected_count_operator + ' ' + search_query.affected_count.toString();
-    } else {
-      affected_count = '';
-    }
+      let number_animals_affected = 0;
+      let number_species_affected = 0;
 
-    let event_type = '';
+      let species_most_affected;
+      let speciesArray = [];
 
-    if (search_query.event_type === null) {
-    } else {
-      search_query.event_type.forEach(eventTypeItem => {
-        if (eventTypeItem == 1) {
-          event_type += "Mortality/Morbidity";
-        } else if (eventTypeItem == 2 && event_type != '') {
-          event_type += ", Surveillance";
-        } else if (eventTypeItem == 2) {
-          event_type = "Surveillance";
+      let average_event_time_span;
+      let total_days_all_events = 0;
+
+      let event_with_most_affected;
+      let event_with_most_affected_count = 0;
+
+      let longest_running_event;
+      let longest_running_event_count = 0;
+
+      let event_visibility;
+      let public_count = 0;
+      let not_public_count = 0;
+
+      result_data.forEach(element => {
+        if (!element.hasOwnProperty('public')) {
+          element["public"] = true;
         }
-      });
-    }
+        //initial calc Most Frequent Diagnosis
+        if (diagnosisArray.length == 0) {
+          element.eventdiagnoses.forEach(diagnosis => {
+            diagnosisArray.push({ name: diagnosis.diagnosis_string, count: 1 })
+          });
+        }
+        element.eventdiagnoses.forEach(diagnosis => {
+          if (diagnosisArray.find(function (item) {
+            return diagnosis.diagnosis_string == item.name;
+          })) {
+            diagnosisArray.forEach(diagnosisItem => {
+              if (diagnosis.diagnosis_string == diagnosisItem.name) {
+                diagnosisItem.count += 1;
+              }
+            });
+          } else {
+            diagnosisArray.push({ name: diagnosis.diagnosis_string, count: 1 })
+          };
+        });
 
-    const docDefinition = {
-      pageOrientation: 'landscape',
-      pageMargins: [20, 20, 20, 35],
-      footer: function (currentPage, pageCount) {
-        const SecondToLastPage = pageCount - 1;
+        //calc for Number of Animals Affected
+        number_animals_affected += element.affected_count;
+        //calc for Number Species Affected
+        number_species_affected += element.species.length;
+
+        //initial calc for Species Most Affected
+        if (speciesArray.length == 0) {
+          element.species.forEach(species => {
+            speciesArray.push({ name: species.name, count: 1 })
+          });
+        }
+        element.species.forEach(species => {
+          if (speciesArray.find(function (item) {
+            return species.name == item.name;
+          })) {
+            speciesArray.forEach(speciesItem => {
+              if (species.name == speciesItem.name) {
+                speciesItem.count += 1;
+              }
+            });
+          } else {
+            speciesArray.push({ name: species.name, count: 1 })
+          };
+        });
+
+        //inital calc for Average Event Time Span
+        let start_date;
+        start_date = new Date(element.start_date);
+        let end_date;
+        let num_days;
+        if (element.end_date == null) {
+          end_date = new Date();
+        } else {
+          end_date = new Date(element.end_date);
+        }
+        // num_days also used to test for longest running event below
+        num_days = (end_date - start_date) / (1000 * 3600 * 24);
+        total_days_all_events += num_days;
+
+        //calc for Event with Most Affected
+        if (element.affected_count > event_with_most_affected_count) {
+          event_with_most_affected = element.id;
+          event_with_most_affected_count = element.affected_count;
+        }
+
+        //calc for Longest Running Event
+        if (num_days > longest_running_event_count) {
+          longest_running_event = element.id;
+          longest_running_event_count = num_days;
+        }
+
+        //initial calc for Event Visibility
+        if (public_count == 0 && element.public == true) {
+          public_count = 1;
+        } else if (not_public_count == 0 && element.public == false) {
+          not_public_count = 1;
+        }
+
+      });
+
+      //final determination of Most Frequent Diagnosis
+      let diagnosis_count_test = 0;
+      diagnosisArray.forEach(diagnosisItem => {
+        if (diagnosisItem.count > diagnosis_count_test) {
+          diagnosis_count_test = diagnosisItem.count;
+          most_frequent_diagnosis = diagnosisItem.name;
+        } else if (diagnosisItem.count == diagnosis_count_test) {
+          most_frequent_diagnosis += ", " + diagnosisItem.name;
+        }
+      })
+
+      //final determination of Speciest Most Affected
+      let species_count_test = 0;
+      speciesArray.forEach(speciesItem => {
+        if (speciesItem.count > species_count_test) {
+          species_count_test = speciesItem.count;
+          species_most_affected = speciesItem.name;
+        } else if (speciesItem.count == species_count_test) {
+          species_most_affected += ", " + speciesItem.name;
+        }
+      })
+
+      //final determination of Average Event Time Span
+      average_event_time_span = total_days_all_events / Number(number_events);
+
+      //final determination of Event Visibility
+      if (public_count == 1 && not_public_count == 1) {
+        event_visibility = { text: 'See details', bold: true };
+      } else if (public_count == 1) {
+        event_visibility = 'Visible to the public';
+      } else if (not_public_count == 1) {
+        event_visibility = { text: 'NOT VISIBLE TO THE PUBLIC', bold: true };
+      } else {
+        event_visibility = { text: 'See details', bold: true };
+      }
+
+      let affected_count;
+
+      if (search_query.affected_count != undefined) {
+        affected_count = 'Affected Count ' + search_query.affected_count_operator + ' ' + search_query.affected_count.toString();
+      } else {
+        affected_count = '';
+      }
+
+      let event_type = '';
+
+      if (search_query.event_type === null) {
+      } else {
+        search_query.event_type.forEach(eventTypeItem => {
+          if (eventTypeItem == 1) {
+            event_type += "Mortality/Morbidity";
+          } else if (eventTypeItem == 2 && event_type != '') {
+            event_type += ", Surveillance";
+          } else if (eventTypeItem == 2) {
+            event_type = "Surveillance";
+          }
+        });
+      }
+
+      const docDefinition = {
+        pageOrientation: 'landscape',
+        pageMargins: [20, 20, 20, 35],
+        footer: function (currentPage, pageCount) {
+          const SecondToLastPage = pageCount - 1;
           if (currentPage === SecondToLastPage) { return; }
           if (currentPage !== pageCount) {
             return {
@@ -892,40 +895,40 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               ]
             };
           }
-      },
-      content: [
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              image: this.pngURL,
-              width: 450,
-              height: 65
-            },
-            {
-              style: 'header',
-              text: 'Summary of Search Results',
-              margin: [0, 15, 0, 0]
-            },
-          ]
         },
-        {
-          text: 'Search Criteria',
-          style: 'bigger',
-          margin: [30, 10]
-        },
-        {
-          text: ((search_query.start_date) ? 'Start Date: ' + APP_UTILITIES.formatEventDates(search_query.start_date) + ' | ' : 'No Start Date | ') // start date
-            + ((search_query.end_date) ? 'End Date: ' + APP_UTILITIES.formatEventDates(search_query.end_date) + ' | ' : 'No End Date | ') // end date
-            + record_status + ' | ' // record status
-            + ((search_admin_level_one && search_admin_level_one.length > 0) ? search_admin_level_one + ' | ' : '') // admin level ones
-            + ((search_admin_level_two && search_admin_level_two.length > 0) ? search_admin_level_two + ' | ' : '')
-            + ((affected_count !== '') ? affected_count + ' | ' : '')
-            + ((event_type !== '') ? event_type + ' | ' : '')
-            + ((search_diagnosis_type && search_diagnosis_type.length > 0) ? search_diagnosis_type + ' | ' : '')
-            + ((search_event_diagnosis && search_event_diagnosis.length > 0) ? search_event_diagnosis + ' | ' : ''),
-          margin: [30, 10]
-        },/*
+        content: [
+          {
+            alignment: 'justify',
+            columns: [
+              {
+                image: this.pngURL,
+                width: 450,
+                height: 65
+              },
+              {
+                style: 'header',
+                text: 'Summary of Search Results',
+                margin: [0, 15, 0, 0]
+              },
+            ]
+          },
+          {
+            text: 'Search Criteria',
+            style: 'bigger',
+            margin: [30, 10]
+          },
+          {
+            text: ((search_query.start_date) ? 'Start Date: ' + APP_UTILITIES.formatEventDates(search_query.start_date) + ' | ' : 'No Start Date | ') // start date
+              + ((search_query.end_date) ? 'End Date: ' + APP_UTILITIES.formatEventDates(search_query.end_date) + ' | ' : 'No End Date | ') // end date
+              + record_status + ' | ' // record status
+              + ((search_admin_level_one && search_admin_level_one.length > 0) ? search_admin_level_one + ' | ' : '') // admin level ones
+              + ((search_admin_level_two && search_admin_level_two.length > 0) ? search_admin_level_two + ' | ' : '')
+              + ((affected_count !== '') ? affected_count + ' | ' : '')
+              + ((event_type !== '') ? event_type + ' | ' : '')
+              + ((search_diagnosis_type && search_diagnosis_type.length > 0) ? search_diagnosis_type + ' | ' : '')
+              + ((search_event_diagnosis && search_event_diagnosis.length > 0) ? search_event_diagnosis + ' | ' : ''),
+            margin: [30, 10]
+          },/*
         {
           alignment: 'justify',
           columns: [
@@ -948,194 +951,201 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             }
           ]
         },*/
-        {
-          text: 'Search Results Summary',
-          style: 'bigger',
-          margin: [30, 10]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              style: 'smaller',
-              table: {
-                widths: [150, 150],
-                body: [
-                  [{ border: [false, false, true, false], text: '# of Events', bold: true, alignment: 'right' }, number_events.toString()],
-                  [{ border: [false, false, true, false], text: 'Most Frequent Event Diagnosis', bold: true, alignment: 'right' }, { text: most_frequent_diagnosis, alignment: 'left' }],
-                  [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, number_animals_affected],
-                  [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, number_species_affected],
-                  [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, { text: species_most_affected, alignment: 'left' }],
-                  [{ border: [false, false, true, false], text: 'Average Event Time Span', bold: true, alignment: 'right' }, average_event_time_span.toFixed(0).toString() + " days"],
-                  [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [{ text: [{ text: event_with_most_affected, link: window.location.href.split('/home')[0] + "/event/" + event_with_most_affected, color: 'blue' }, " (" + event_with_most_affected_count + " affected)"] }]],
-                  [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [{ text: [{ text: longest_running_event, link: window.location.href.split('/home')[0] + "/event/" + longest_running_event, color: 'blue' }, " (" + longest_running_event_count.toFixed(0) + " days)"] }]],
-                  [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, event_visibility],
-                ]
+          {
+            text: 'Search Results Summary',
+            style: 'bigger',
+            margin: [30, 10]
+          },
+          {
+            alignment: 'justify',
+            columns: [
+              {
+                style: 'smaller',
+                table: {
+                  widths: [150, 125],
+                  body: [
+                    [{ border: [false, false, true, false], text: '# of Events', bold: true, alignment: 'right' }, number_events.toString()],
+                    [{ border: [false, false, true, false], text: 'Most Frequent Event Diagnosis', bold: true, alignment: 'right' }, { text: most_frequent_diagnosis, alignment: 'left' }],
+                    [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, number_animals_affected],
+                    [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, number_species_affected],
+                    [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, { text: species_most_affected, alignment: 'left' }],
+                    [{ border: [false, false, true, false], text: 'Average Event Time Span', bold: true, alignment: 'right' }, average_event_time_span.toFixed(0).toString() + " days"],
+                    [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [{ text: [{ text: event_with_most_affected, link: window.location.href.split('/home')[0] + "/event/" + event_with_most_affected, color: 'blue' }, " (" + event_with_most_affected_count + " affected)"] }]],
+                    [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [{ text: [{ text: longest_running_event, link: window.location.href.split('/home')[0] + "/event/" + longest_running_event, color: 'blue' }, " (" + longest_running_event_count.toFixed(0) + " days)"] }]],
+                    [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, event_visibility],
+                  ]
+                },
+                layout: {
+                  defaultBorder: false,
+                  paddingLeft: function (i, node) { return 15; },
+                  paddingRight: function (i, node) { return 10; },
+                }
               },
-              layout: {
-                defaultBorder: false,
-                paddingLeft: function (i, node) { return 15; },
-                paddingRight: function (i, node) { return 10; },
+              {
+                alignment: 'justify',
+                image: mapurl,
+                width: 320,
+                height: 270
+              },
+              {
+                alignment: 'justify',
+                image: legendURL,
+                width: 110,
+                height: 240
               }
-            },
-            {
-              alignment: 'justify',
-              image: mapurl,
-              width: 400,
-              height: 350
-            }
-          ],
-          pageBreak: 'after'
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              image: this.pngURL,
-              width: 450,
-              height: 65
-            },
-            {
-              style: 'header',
-              text: 'Summary of Search Results',
-              margin: [0, 15, 0, 0]
-            },
-          ]
-        },
-        {
-          text: 'Morbidity/Mortality Events',
-          alignment: 'center',
-          style: 'bigger',
-          margin: [30, 10]
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            this.makeResultsSummaryTable(this.data.current_results)
-          ],
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              image: this.pngURL,
-              width: 450,
-              height: 65
-            },
-            {
-              style: 'header',
-              text: 'Explanation of Terms',
-              margin: [0, 15, 0, 0]
-            }
-          ]
-        },
-        {
-          alignment: 'justify',
-          text: ['WHISPers stands for Wildlife Health Information Sharing Partnership - event reporting system. It is a partner-driven, web-based repository for sharing basic information about historic and ongoing wildlife mortality (death) and/or morbidity (illness) events. The information, such as county-level locations, onset and ending dates, species affected, and diagnosis has generously been shared with the USGS National Wildlife Health Center over time by hundreds of natural resource managers and stakeholders across the U.S. and beyond. The primary goal of the system is to provide natural resource management partners and the public with timely, accurate information on where wildlife disease events are occurring or have occurred for better preparation and decision making. The information is opportunistically collected and does not reflect all the mortality events that occur in North America. \n', { text: 'Disclaimer', fontSize: 11, bold: true, paddingTop: 20, paddingBottom: 0 }, '\n\n The data on this website are provided for situational awareness of wildlife health events. The USGS National Wildlife Health Center (NWHC) makes every effort to provide accurate and timely information; however, data may not be final or fully accurate, especially if an event is ongoing or data synthesis is not complete. Conclusions drawn from or actions undertaken on the basis of such data and information are the sole responsibility of the user. To ensure that information is accurately interpreted and appropriately credited, dissemination of information from this site (publication, press release, technical report, etc.) should be done in collaboration with the specific agencies and laboratories that have generated the information. \n\n Note: WHISPers data fields and business rules for reporting of surveillance events are under development and thus display of surveillance information may be inconsistent.\n\n'],
-          style: 'smaller',
-        },
-        {
-          style: 'definitionsTable',
-          table: {
-            body: [
-              [{ text: '# of Events', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Number of WHISPers events.', border: [false, false, false, false] }],
-              [{ text: 'Most Frequent Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Top event diagnosis or diagnoses based on the number of events with that diagnosis reported.', border: [false, false, false, false] }],
-              [{ text: '# of Animals Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Total number affected. A count of sick plus dead animals for a morbidity/mortality event.', border: [false, false, false, false] }],
-              [{ text: '# of Species Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Total number of species affected.', border: [false, false, false, false] }],
-              [{ text: 'Species Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Top species affected based on sick and dead numbers reported.', border: [false, false, false, false] }],
-              [{ text: 'Average Event Time Span', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Mean number of days between start and end dates across all events. If no end date provided for an event, date of report generation was used.', border: [false, false, false, false] }],
-              [{ text: 'Event with Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'WHISPers event with the highest number of animals affected.', border: [false, false, false, false] }],
-              [{ text: 'Longest Running Event', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'WHISPers event with the longest time span in days. If no end date provided for an event, date of report generation was used.', border: [false, false, false, false] }],
-              [{ text: 'Event Visibility', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Indicates whether event is visible to the public or not.', border: [false, false, false, false] }]
+            ],
+            pageBreak: 'after'
+          },
+          {
+            alignment: 'justify',
+            columns: [
+              {
+                image: this.pngURL,
+                width: 450,
+                height: 65
+              },
+              {
+                style: 'header',
+                text: 'Summary of Search Results',
+                margin: [0, 15, 0, 0]
+              },
             ]
           },
-          layout: {
-            defaultBorder: false,
-            paddingLeft: function (i, node) { return 15; },
-            paddingRight: function (i, node) { return 10; },
-            // paddingTop: function(i, node) { return 10; }
-          }
-        },
-        {
-          alignment: 'justify',
-          margin: [0, 115, 0, 0 ],
-          text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
-          style: 'smallest',
-          pageBreak: 'after'
-        },
-        {
-          alignment: 'justify',
-          columns: [
-            {
-              image: this.pngURL,
-              width: 450,
-              height: 65
-            },
-            {
-              style: 'header',
-              text: 'Explanation of Terms cont...',
-              margin: [0, 15, 0, 0]
-            }
-          ]
-        },
-        {
-          style: 'definitionsTable',
-          table: {
-            body: [
-              [{ text: 'Event Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Mortality/Morbidity: Noteworthy occurrence of one or more sick or dead animals clustered in space and time. Surveillance: Positive detections of a pathogen during active surveillance of healthy live animals.', border: [false, false, false, false] }],
-              [{ text: 'Event ID', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'System-generated unique identifier for an event.', border: [false, false, false, false] }],
-              [{ text: 'Start Date - End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Beginning date of the event (considering all locations). Ending date of the event (considering all locations).', border: [false, false, false, false] }],
-              [{ text: 'County (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'County of location (or equivalent, such as parish or borough in the United States).', border: [false, false, false, false] }],
-              [{ text: 'Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'The overall main reason(s) for illness and/or death across all locations and species and thus the major cause(s) of the event, or a diagnosis deemed significant enough to list at the event level for situational awareness.', border: [false, false, false, false] }],
-              [{ text: 'Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Species affected at this location.', border: [false, false, false, false] }],
-              [{ text: 'Record Status', border: [false, false, true, false], alignment: 'right', bold: true }, { text: '"Complete" if 1.) the event has ended, 2.) diagnostic tests are finalized, and 3.) all information is updated in WHISPers. Otherwise, "Incomplete".', border: [false, false, false, false] }],
-              [{ text: 'Contact Organization', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Organization(s) to contact regarding general inquiries about the event.', border: [false, false, false, false] }],
+          {
+            text: 'Morbidity/Mortality Events',
+            alignment: 'center',
+            style: 'bigger',
+            margin: [30, 10]
+          },
+          {
+            alignment: 'justify',
+            columns: [
+              this.makeResultsSummaryTable(this.data.current_results)
+            ],
+          },
+          {
+            alignment: 'justify',
+            columns: [
+              {
+                image: this.pngURL,
+                width: 450,
+                height: 65
+              },
+              {
+                style: 'header',
+                text: 'Explanation of Terms',
+                margin: [0, 15, 0, 0]
+              }
             ]
           },
-          layout: {
-            defaultBorder: false,
-            paddingLeft: function (i, node) { return 15; },
-            paddingRight: function (i, node) { return 10; },
-            // paddingTop: function(i, node) { return 10; }
+          {
+            alignment: 'justify',
+            text: ['WHISPers stands for Wildlife Health Information Sharing Partnership - event reporting system. It is a partner-driven, web-based repository for sharing basic information about historic and ongoing wildlife mortality (death) and/or morbidity (illness) events. The information, such as county-level locations, onset and ending dates, species affected, and diagnosis has generously been shared with the USGS National Wildlife Health Center over time by hundreds of natural resource managers and stakeholders across the U.S. and beyond. The primary goal of the system is to provide natural resource management partners and the public with timely, accurate information on where wildlife disease events are occurring or have occurred for better preparation and decision making. The information is opportunistically collected and does not reflect all the mortality events that occur in North America. \n', { text: 'Disclaimer', fontSize: 11, bold: true, paddingTop: 20, paddingBottom: 0 }, '\n\n The data on this website are provided for situational awareness of wildlife health events. The USGS National Wildlife Health Center (NWHC) makes every effort to provide accurate and timely information; however, data may not be final or fully accurate, especially if an event is ongoing or data synthesis is not complete. Conclusions drawn from or actions undertaken on the basis of such data and information are the sole responsibility of the user. To ensure that information is accurately interpreted and appropriately credited, dissemination of information from this site (publication, press release, technical report, etc.) should be done in collaboration with the specific agencies and laboratories that have generated the information. \n\n Note: WHISPers data fields and business rules for reporting of surveillance events are under development and thus display of surveillance information may be inconsistent.\n\n'],
+            style: 'smaller',
+          },
+          {
+            style: 'definitionsTable',
+            table: {
+              body: [
+                [{ text: '# of Events', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Number of WHISPers events.', border: [false, false, false, false] }],
+                [{ text: 'Most Frequent Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Top event diagnosis or diagnoses based on the number of events with that diagnosis reported.', border: [false, false, false, false] }],
+                [{ text: '# of Animals Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Total number affected. A count of sick plus dead animals for a morbidity/mortality event.', border: [false, false, false, false] }],
+                [{ text: '# of Species Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Total number of species affected.', border: [false, false, false, false] }],
+                [{ text: 'Species Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Top species affected based on sick and dead numbers reported.', border: [false, false, false, false] }],
+                [{ text: 'Average Event Time Span', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Mean number of days between start and end dates across all events. If no end date provided for an event, date of report generation was used.', border: [false, false, false, false] }],
+                [{ text: 'Event with Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'WHISPers event with the highest number of animals affected.', border: [false, false, false, false] }],
+                [{ text: 'Longest Running Event', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'WHISPers event with the longest time span in days. If no end date provided for an event, date of report generation was used.', border: [false, false, false, false] }],
+                [{ text: 'Event Visibility', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Indicates whether event is visible to the public or not.', border: [false, false, false, false] }]
+              ]
+            },
+            layout: {
+              defaultBorder: false,
+              paddingLeft: function (i, node) { return 15; },
+              paddingRight: function (i, node) { return 10; },
+              // paddingTop: function(i, node) { return 10; }
+            }
+          },
+          {
+            alignment: 'justify',
+            margin: [0, 115, 0, 0],
+            text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
+            style: 'smallest',
+            pageBreak: 'after'
+          },
+          {
+            alignment: 'justify',
+            columns: [
+              {
+                image: this.pngURL,
+                width: 450,
+                height: 65
+              },
+              {
+                style: 'header',
+                text: 'Explanation of Terms cont...',
+                margin: [0, 15, 0, 0]
+              }
+            ]
+          },
+          {
+            style: 'definitionsTable',
+            table: {
+              body: [
+                [{ text: 'Event Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Mortality/Morbidity: Noteworthy occurrence of one or more sick or dead animals clustered in space and time. Surveillance: Positive detections of a pathogen during active surveillance of healthy live animals.', border: [false, false, false, false] }],
+                [{ text: 'Event ID', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'System-generated unique identifier for an event.', border: [false, false, false, false] }],
+                [{ text: 'Start Date - End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Beginning date of the event (considering all locations). Ending date of the event (considering all locations).', border: [false, false, false, false] }],
+                [{ text: 'County (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'County of location (or equivalent, such as parish or borough in the United States).', border: [false, false, false, false] }],
+                [{ text: 'Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'The overall main reason(s) for illness and/or death across all locations and species and thus the major cause(s) of the event, or a diagnosis deemed significant enough to list at the event level for situational awareness.', border: [false, false, false, false] }],
+                [{ text: 'Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Species affected at this location.', border: [false, false, false, false] }],
+                [{ text: 'Record Status', border: [false, false, true, false], alignment: 'right', bold: true }, { text: '"Complete" if 1.) the event has ended, 2.) diagnostic tests are finalized, and 3.) all information is updated in WHISPers. Otherwise, "Incomplete".', border: [false, false, false, false] }],
+                [{ text: 'Contact Organization', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Organization(s) to contact regarding general inquiries about the event.', border: [false, false, false, false] }],
+              ]
+            },
+            layout: {
+              defaultBorder: false,
+              paddingLeft: function (i, node) { return 15; },
+              paddingRight: function (i, node) { return 10; },
+              // paddingTop: function(i, node) { return 10; }
+            }
+          },
+          {
+            alignment: 'justify',
+            margin: [0, 260, 0, 0],
+            text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
+            style: 'smallest'
+          },
+        ],
+        images: {
+          logo: this.pngURL,
+          nationalMap: mapurl,
+          legend: legendURL
+        },
+        styles: {
+          header: {
+            fontSize: 16,
+            bold: true
+          },
+          bigger: {
+            fontSize: 18,
+            bold: true
+          },
+          smaller: {
+            fontSize: 10
+          },
+          smallest: {
+            fontSize: 8
+          },
+          definitionsTable: {
+            fontSize: 9
           }
         },
-        {
-          alignment: 'justify',
-          margin: [0, 260, 0, 0 ],
-          text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
-          style: 'smallest'
-        },
-      ],
-      images: {
-        logo: this.pngURL,
-        nationalMap: mapurl
-      },
-      styles: {
-        header: {
-          fontSize: 16,
-          bold: true
-        },
-        bigger: {
-          fontSize: 18,
-          bold: true
-        },
-        smaller: {
-          fontSize: 10
-        },
-        smallest: {
-          fontSize: 8
-        },
-        definitionsTable: {
-          fontSize: 9
+        defaultStyle: {
+          columnGap: 20
         }
-      },
-      defaultStyle: {
-        columnGap: 20
-      }
-    };
-    pdfMake.createPdf(docDefinition).download('WHISPers_Search_Results_' + APP_UTILITIES.getFileNameDate + '.pdf');
-    this.loadingReport = false;
-    this.resultsSummaryReportDialogRef.close();
-  }, 3000);
+      };
+      pdfMake.createPdf(docDefinition).download('WHISPers_Search_Results_' + APP_UTILITIES.getFileNameDate + '.pdf');
+      this.loadingReport = false;
+      this.resultsSummaryReportDialogRef.close();
+    }, 5500); // I know I know, I hate that I'm using timeouts too. This is here because if the pdfmake functions run before the images are are ready then they end up undefined which causes the whole thing to fail
   }
 }

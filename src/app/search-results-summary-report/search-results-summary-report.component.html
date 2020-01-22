@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>
-  <span class="centeredHeader" *ngIf="value < 100"> Preparing image and content for summary report. . .</span>
+  <span class="centeredHeader" *ngIf="value < 100"> Preparing images and content for summary report. . .</span>
   <span class="centeredHeader" *ngIf="value > 99"> Ready to download!</span>
 </h1>
 <mat-dialog-content>
@@ -16,19 +16,18 @@
     <!-- <br> -->
 
 
-    <div class="legend">
-      <div class="legend-panel-content">
-
-
+    <div class="legend" id="legendImage">
+      <div>
+          <h4>Legend:</h4>
         <label class="legend-label" style="margin-top: 0 !important; padding-top: 0 !important;">Event Type</label>
         <label class="legend-hint">Indicated by shape</label>
 
         <div class='legend-icon'>
-          <div class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+            <div style='margin-left: -3px !important;' class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
           <label>Mortality/Morbidity</label>
         </div>
-        <div class='legend-icon'>
-          <div class='wmm-diamond wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
+        <div class='legend-icon' style="padding-top: 3px; padding-bottom: 3px;">
+            <div style='margin-left: 0px !important;' class='wmm-diamond wmm-black wmm-icon-noicon wmm-icon-white wmm-size-14'></div>
           <label>Surveillance</label>
         </div>
 
@@ -93,42 +92,6 @@
         </div>
         <label class="legend-hint">Number indicates event count</label>
 
-
-
-        <div id="flywaysLegend" *ngIf="flywaysVisible">
-          <label class="legend-label">Flyways</label>
-
-          <div class='legend-icon'>
-            <div class='wmm-square wmm-28995b wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            <label>Atlantic Flyways</label>
-          </div>
-
-          <div class='legend-icon'>
-            <div class='wmm-square wmm-b43cc7 wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            <label>Central Flyway</label>
-          </div>
-
-          <div class='legend-icon'>
-            <div class='wmm-square wmm-eb5834 wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            <label>Mississippi Flyway</label>
-          </div>
-
-          <div class='legend-icon'>
-            <div class='wmm-square wmm-ffbd4f wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-            <label>Pacific Flyway</label>
-          </div>
-        </div>
-
-        <div id="watershedsLegend" *ngIf="watershedsVisible">
-          <label class="legend-label">Watersheds</label>
-
-          <div class='legend-icon'>
-            <div class='wmm-square wmm-white wmm-icon-circle wmm-icon-white wmm-size-20 huc-icon'></div>
-            <label>HUC 2</label>
-          </div>
-
-        </div>
-
       </div>
     </div>
   </div>
@@ -137,7 +100,7 @@
 
   <div class="detail-section-buttons">
     <button mat-raised-button color="primary" class="event-detail-action-button"
-      (click)="downloadResultsSummaryReport()" [disabled]="value < 99">
+      (click)="downloadResultsSummaryReport(); clicked = true" [disabled]="value < 99 || clicked">
       <i class="material-icons">archive</i> Download Results Summary Report</button>
     <button mat-button color="warn" (click)="this.resultsSummaryReportDialogRef.close('cancel');">
       <mat-icon>cancel</mat-icon>&nbsp;Cancel

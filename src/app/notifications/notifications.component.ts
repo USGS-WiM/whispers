@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Inject } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -10,6 +11,7 @@ import { CustomNotificationComponent } from '@app/custom-notification/custom-not
 import { ConfirmComponent } from '@app/confirm/confirm.component';
 import { APP_UTILITIES } from '@app/app.utilities';
 import { Notification } from '@app/interfaces/notification';
+import { CurrentUserService } from '@app/services/current-user.service';
 // remove this interface once actual data is being loaded
 export interface Cue {
   name: string;
@@ -31,20 +33,44 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   selection;
   notificationsLoading = false;
 
+  currentUser;
+
   // toggles
-  emailAllOwnedChecked: boolean;
+  emailAllStandardChecked: boolean;
   yourEventsChecked: boolean;
   yourOrgEventsChecked: boolean;
   yourCollabEventsChecked: boolean;
   allEventsChecked: boolean;
 
-  emailAllOwnedandCollab: boolean;
+  // emailAllOwnedandCollab: boolean;
   emailCustom: boolean;
   emailAllCustom: boolean;
 
   dummyNotifications = APP_UTILITIES.dummyData;
 
   customNotificationRef: MatDialogRef<CustomNotificationComponent>;
+
+  standardNotificationSettingsForm: FormGroup;
+
+
+  // this.allEventsChecked = false;
+
+  buildStandardNotificationSettingsForm() {
+    this.standardNotificationSettingsForm = this.formBuilder.group({
+      yourEvents_new: false,
+      yourEvents_updated: false,
+      yourEvents_email: false,
+      orgEvents_new: false,
+      orgEvents_updated: false,
+      orgEvents_email: false,
+      collabEvents_new: false,
+      collabEvents_updated: false,
+      collabEvents_email: false,
+      allEvents_new: false,
+      allEvents_updated: false,
+      allEvents_email: false
+    });
+  }
 
   // test data
   test_data: Cue[] = [
@@ -71,10 +97,18 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
+    private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
-  ) { }
+    private currentUserService: CurrentUserService,
+  ) {
+
+    currentUserService.currentUser.subscribe(user => {
+      this.currentUser = user;
+    });
+
+  }
 
   ngOnInit() {
     const initialSelection = [];
@@ -94,7 +128,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
     // TODO - populate with default states or with existing state from service
     // sidenote: I'm setting them here because they weren't working on the first click if I set them in the ngOnInit function ¯\_(ツ)_/¯
-    this.emailAllOwnedChecked = false;
+    this.emailAllStandardChecked = false;
     this.yourEventsChecked = false;
     this.yourOrgEventsChecked = false;
     this.yourCollabEventsChecked = false;
@@ -112,9 +146,9 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  emailAllOwnedNotifications() {
-    this.emailAllOwnedChecked = !this.emailAllOwnedChecked;
-    if (this.emailAllOwnedChecked === true) {
+  emailAllStandardNotifications() {
+    this.emailAllStandardChecked = !this.emailAllStandardChecked;
+    if (this.emailAllStandardChecked === true) {
       this.yourEventsChecked = true;
       this.yourOrgEventsChecked = true;
       this.yourCollabEventsChecked = true;
@@ -129,30 +163,30 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   yourEvents() {
     this.yourEventsChecked = !this.yourEventsChecked;
-    this.checkIfAllOwnedTogglesTrue();
+    this.checkIfAllStandardTogglesTrue();
   }
 
   yourOrgEvents() {
     this.yourOrgEventsChecked = !this.yourOrgEventsChecked;
-    this.checkIfAllOwnedTogglesTrue();
+    this.checkIfAllStandardTogglesTrue();
   }
 
   yourCollabEvents() {
     this.yourCollabEventsChecked = !this.yourCollabEventsChecked;
-    this.checkIfAllOwnedTogglesTrue();
+    this.checkIfAllStandardTogglesTrue();
   }
 
   allEvents() {
     this.allEventsChecked = !this.allEventsChecked;
-    this.checkIfAllOwnedTogglesTrue();
+    this.checkIfAllStandardTogglesTrue();
   }
 
-  checkIfAllOwnedTogglesTrue() {
+  checkIfAllStandardTogglesTrue() {
     if (this.yourEventsChecked && this.yourOrgEventsChecked && this.yourCollabEventsChecked && this.allEventsChecked) {
-      // this.emailAllOwnedNotificationsToggle = true;
-      this.emailAllOwnedChecked = true;
+      // this.emailAllStandardNotificationsToggle = true;
+      this.emailAllStandardChecked = true;
     } else {
-      this.emailAllOwnedChecked = false;
+      this.emailAllStandardChecked = false;
     }
   }
 

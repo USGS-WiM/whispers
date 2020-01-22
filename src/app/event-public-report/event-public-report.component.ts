@@ -222,18 +222,18 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.countyDefinition = FIELD_HELP_TEXT.editCountyTooltip;
     this.eventDiagDefinition = FIELD_HELP_TEXT.editEventDiagnosisTooltip;
     this.labDefinition = FIELD_HELP_TEXT.editLabTooltip;
-    this.numAnimalsAffectedDefinition = FIELD_HELP_TEXT.numberAffectedTooltip;
+    this.numAnimalsAffectedDefinition = FIELD_HELP_TEXT.numAnimalsAffected;
     this.numSpeciesAffectedDefinition = FIELD_HELP_TEXT.numberOfSpeciesDefinition;
     this.speceisMostAffectedDefinition = FIELD_HELP_TEXT.speciesMostAffectedDefinition;
     this.startEndDatesDefinition = FIELD_HELP_TEXT.startEndDatesDefinition;
-    this.associatedEventsDefinition = FIELD_HELP_TEXT.eventGroupIDTooltip;
-    this.eventVisibilityDefinition = FIELD_HELP_TEXT.associatedEventDefinition;
+    this.associatedEventsDefinition = FIELD_HELP_TEXT.associatedEventDefinition;
+    this.eventVisibilityDefinition = FIELD_HELP_TEXT.eventVisibility;
     this.stateDefinition = FIELD_HELP_TEXT.stateTooltip;
     this.countryDefinition = FIELD_HELP_TEXT.countryTooltip;
-    this.startDateDefinition = FIELD_HELP_TEXT.eventStartDateTooltip;
-    this.endDateDefinition = FIELD_HELP_TEXT.eventEndDateTooltip;
+    this.startDateDefinition = FIELD_HELP_TEXT.locationStartDateTooltip;
+    this.endDateDefinition = FIELD_HELP_TEXT.locationEndDateTooltip;
     this.speciesDefinition = FIELD_HELP_TEXT.editSpeciesTooltip;
-    this.speciesDefinition = FIELD_HELP_TEXT.populationTooltip;
+    this.populationDefinition = FIELD_HELP_TEXT.populationTooltip;
     this.knownSickDefinition = FIELD_HELP_TEXT.editKnownSickTooltip;
     this.knownDeadDefinition = FIELD_HELP_TEXT.editKnownDeadTooltip;
     this.estSickDefinition = FIELD_HELP_TEXT.editEstimatedSickTooltip;
@@ -413,8 +413,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         col_6: { text: 'Est. Dead', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
         col_7: { text: 'Captive', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
         col_8: { text: 'Species Diagnosis', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_9: { text: '# Assessed/ # with diagnosis', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_10: { text: 'Diagnostic Lab', border: [true, false, false, false], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] }
+        col_9: { text: '# Assessed/# with Diagnosis', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
+        col_10: { text: 'Diagnostic Lab', border: [true, false, false, false], style: 'tableHeader', bold: true, alignment: 'left', margin: [0, 8, 0, 0] }
       }
     };
     // [{image: writeRotatedText('I am rotated'), fit:[7,53], alignment: 'center'}]
@@ -455,7 +455,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         row.push({ text: elData.captive, alignment: 'center' });
         row.push({ text: elData.species_dia, alignment: 'left' });
         row.push({ text: elData.count, alignment: 'center' });
-        row.push(elData.lab);
+        row.push({text: elData.lab, alignment: 'left'});
         locationBody.push(row);
       }
     }
@@ -536,7 +536,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     const title = {
       style: 'tableExample',
       table: {
-        widths: [150, 100, 'auto', 120, 80, 80, 80],
+        widths: [150, 100, 200, 80, 80, 80, 80],
         body: [
           [{ text: 'County (or equivalent):', bold: true, alignment: 'right' }, county, { text: name, bold: true }, '', '', '', ''],
           [{ text: 'State (or equivalent):', bold: true, alignment: 'right' }, state, '', '', '', '', ''],
@@ -621,8 +621,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         row.push({ text: elData.comment_type_string, fontSize: 9 });
         row.push({ text: elData.created_date, fontSize: 9 });
         row.push({ text: elData.created_by_string, fontSize: 9 });
-        row.push({ text: elData.created_by_organization_string, fontSize: 9 });
-        row.push({ text: elData.source, fontSize: 9 });
+        row.push({ text: elData.created_by_organization_string, alignment: 'left', fontSize: 9 });
+        row.push({ text: elData.source, alignment: 'left', fontSize: 9 });
         commentBody.push(row);
       }
     }
@@ -675,7 +675,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         },
         {
           text: 'Explanation of Terms',
-          margin: [0, 20, 0, 0]
+          margin: [0, 20, 0, 0],
+          style: 'header'
         }
       ]
     };
@@ -735,9 +736,9 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           height: 65
         },
         {
-          style: 'header',
           text: 'Explanation of Terms cont...',
-          margin: [0, 15, 0, 0]
+          style: 'header',
+          margin: [0, 40, 0, 0],
         }
       ]
     };
@@ -756,7 +757,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             [{ text: 'Start Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.startDateDefinition, border: [false, false, false, false] }],
             [{ text: 'End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.endDateDefinition, border: [false, false, false, false] }],
             [{ text: 'Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
-            [{ text: 'Population', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
+            [{ text: 'Population', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.populationDefinition, border: [false, false, false, false] }],
             [{ text: 'Known Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownSickDefinition, border: [false, false, false, false] }],
             [{ text: 'Known Dead', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.knownDeadDefinition, border: [false, false, false, false] }],
             [{ text: 'Estimated Sick', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.estSickDefinition, border: [false, false, false, false] }],
@@ -817,7 +818,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     explanationTwoForMoreDetails = {
       alignment: 'justify',
       text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
-      style: 'smallest',
+      style: 'footer',
     };
     return explanationTwoForMoreDetails;
   }
@@ -979,7 +980,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     } else {
       mapY = parseFloat(mapTransform[1].replace('px', ''));
     }
-    //mapY = parseFloat(mapTransform[1].replace('px', ''));
+
     mapPane.style.transform = '';
     mapPane.style.left = mapX + 'px';
     mapPane.style.top = mapY + 'px';
@@ -1400,7 +1401,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               }
               captive = 'Yes' || 'No';
               const s_diag = ' ';
-              const county = ' ';
+              const county = locationspecies.administrative_level_two_string || ' ';
               const country = locationspecies.country_string || ' ';
               const lab = ' ';
 
@@ -1668,7 +1669,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       docDefinition.content.push(this.explanationTwoForMoreDetails());
 
 
-      pdfMake.createPdf(docDefinition).download('Event_' + this.data.event_data.id + '_' + APP_UTILITIES.getFileNameDate + '.pdf');
+      pdfMake.createPdf(docDefinition).download('WHISPers_Event_' + this.data.event_data.id + '_' + APP_UTILITIES.getFileNameDate + '.pdf');
       this.downloadingReport = false;
       this.eventPublicReportDialogRef.close();
     }, 2500);

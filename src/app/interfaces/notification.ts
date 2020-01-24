@@ -1,13 +1,12 @@
-export interface Notification {
-    id: number;
-    user: string;
-    source: string;
-    event: number;
-    read: boolean;
-    link: string;
-    message: string;
-    created_date: string;
-    created_by: string;
-    modified_date: string;
-    modified_by: string;
-  }
+import { History } from '@interfaces/history';
+
+export interface Notification extends History {
+  id: number;
+  recipient?: number;
+  source?: string;
+  event?: number;
+  read?: boolean;
+  client_page?: string;
+  subject?: string;
+  body?: string;
+}

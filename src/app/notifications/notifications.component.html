@@ -1,7 +1,7 @@
 <div>
 
 
-  <!-- <mat-accordion>
+  <mat-accordion>
     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -109,7 +109,7 @@
                 <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;"><span
                     class="headerText"></span></div>
               </div>
-              <div class="mat-row" *ngFor="let cue of test_data">
+              <div class="mat-row" *ngFor="let cue of dummy_custom_cues">
                 <div class="mat-header-cell">{{cue.name}}</div>
                 <div class="mat-cell">
                   <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
@@ -129,7 +129,7 @@
       </mat-card>
 
     </mat-expansion-panel>
-  </mat-accordion> -->
+  </mat-accordion>
 
   <mat-card>
     <mat-card-title>
@@ -170,11 +170,19 @@
           </mat-cell>
         </ng-container>
 
+         <!-- Go-to Column -->
+         <ng-container matColumnDef="go">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Event </mat-header-cell>
+          <mat-cell *matCellDef="let notification"> 
+            <button mat-stroked-button color="primary">{{notification.event}}</button>
+          </mat-cell>
+        </ng-container>
+
         <!-- Message Column -->
         <ng-container matColumnDef="read">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Message </mat-header-cell>
           <mat-cell *matCellDef="let notification"
-            [ngStyle]="{'font-weight':notification.read === true ? 'bold' : 'normal' }"> {{notification.message}}
+            [ngStyle]="{'font-weight':notification.read === true ? 'bold' : 'normal' }"> {{notification.subject}}
           </mat-cell>
         </ng-container>
 

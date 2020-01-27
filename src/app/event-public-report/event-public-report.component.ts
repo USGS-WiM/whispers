@@ -1171,10 +1171,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       useCORS: true,
     };
 
-    html2canvas(document.getElementById('detailMap'), options2).then(function (canvas) {
-      detailMapUrl = canvas.toDataURL('image/png');
-    });
-
     for (let i = 0; i < myTiles2.length; i++) {
       if (tileMethod2[i] === 'left') {
         myTiles2[i].style.left = (tilesLeft2[i]) + 'px';
@@ -1203,8 +1199,17 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     mapPane2.style.top = '';
     // END detail map
 
+    let event;
+    html2canvas(document.getElementById('detailMap'), options2)
+      .then(function (canvas) {
+      event = new Event('image_ready');
+      detailMapUrl = canvas.toDataURL('image/png');
+      event = new Event('image_ready');
+      window.dispatchEvent(event); // Dispatching an event for when the image is done rendering
+    });
+
     // need to give some time for html2canvas to finish rendering
-    setTimeout(() => {
+    window.addEventListener('image_ready', () => {
       // Getting date/time for timestamp
       const date = APP_UTILITIES.getReportDateTime;
 
@@ -1672,8 +1677,9 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       pdfMake.createPdf(docDefinition).download('WHISPers_Event_' + this.data.event_data.id + '_' + APP_UTILITIES.getFileNameDate + '.pdf');
       this.downloadingReport = false;
       this.eventPublicReportDialogRef.close();
-    }, 2500);
-
+    }, {
+      once: true // Only add listnener once. If this is not set then it will print multiple times after the first print if the page is not reloaded
+    });
   }
 
 }

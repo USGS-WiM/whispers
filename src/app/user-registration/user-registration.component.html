@@ -92,7 +92,7 @@
 
     <div class="vertical-form-container" *ngIf="data.registration_type === 'partner'">
 
-      <span class="reg-hint">Select the organization you would like to join</span>
+      <span class="reg-hint">Select the partner organization you would like to join</span>
       <mat-form-field class="form-control org-select">
         <mat-select formControlName="organization" placeholder="Organization" #organizationSelect>
           <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="'Find organization...'"
@@ -107,13 +107,13 @@
       </mat-form-field>
 
 
-      <span class="reg-hint">Select the role you would like within your chosen organization</span>
+      <span class="reg-hint">Select the role you would like within your chosen partner organization</span>
 
       <mat-form-field class="form-control">
         <mat-select placeholder="Role" formControlName="role">
-          <mat-option [value]="5">User</mat-option>
-          <mat-option [value]="4">Manager</mat-option>
-          <mat-option [value]="3">Administrator</mat-option>
+          <mat-option [value]="5">Partner User</mat-option>
+          <mat-option [value]="4">Partner Manager</mat-option>
+          <mat-option [value]="3">Partner Administrator</mat-option>
         </mat-select>
         <mat-icon class="hint-hover-text" matSuffix 
                   matTooltip={{regRoleTooltip()}} matTooltipClass="tooltip-breakline">

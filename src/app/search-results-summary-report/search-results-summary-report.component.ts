@@ -596,7 +596,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       .then(function (canvas) {
         event = new Event('image_ready');
         mapurl = canvas.toDataURL('image/png');
-        event = new Event('image_ready');
         window.dispatchEvent(event); // Dispatching an event for when the image is done rendering
         console.log('canvas success');
       })

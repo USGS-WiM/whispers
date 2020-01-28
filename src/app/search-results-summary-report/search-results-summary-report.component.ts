@@ -514,6 +514,12 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       }
       if (splitTransform[0] === '') {
 
+        // when printing without reloading the style.transform property is blank
+        // but the values we need are in the style.cssText string
+        // so with the code below I'm manipulating those strings to get the values we need
+
+        dx.push(myDivicons[i].style.cssText.split(' left: ')[1].split('px')[0]);
+        dy.push(myDivicons[i].style.cssText.split('top')[1].replace('px;', ''));
       } else {
         dy.push(parseFloat(splitTransform[1].replace('px', '')));
       }

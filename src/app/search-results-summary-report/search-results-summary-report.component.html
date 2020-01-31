@@ -6,7 +6,10 @@
   <div class="wrapper">
     <div class="map">
       <h4>Geographic Context:</h4>
-      <div id="resultsMap"></div>
+      <div id="resultsMap">
+        <!-- Warning about map center -->
+        <div id="mapLocationNote"><b>Note:</b> Map shows centroid of county where event occured</div>
+      </div>
       <mat-progress-bar mode="determinate" [value]="value" id="bar"></mat-progress-bar>
       <span *ngIf="loadingData">
         <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>

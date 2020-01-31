@@ -1,6 +1,27 @@
 #resultsMap {
     width: 400px;
     height: 350px;
+    #mapLocationNote{
+      position: absolute;
+      top: 11px;
+      left: 21px;
+      background-color: white;
+      font-size: 11px;
+      z-index: 401;
+      box-sizing: border-box;
+      padding: 3px;
+      border-radius: 3px;
+      color: #313B57;
+      width: 155px;
+      line-height: 12px;
+      border: 1px solid rgba(160, 175, 205, 0.4);
+
+      b{
+          color: rgb(7, 7, 7);
+          font-weight: 700;
+          text-decoration: underline;
+      }
+  }
 }
 
 .leaflet-marker-icon {

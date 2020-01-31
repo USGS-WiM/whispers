@@ -199,8 +199,8 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="notificationDisplayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let event; columns: notificationDisplayedColumns;" (click)="navigateToEvent(event)"
-          matTooltip="Click notification to navigate to event details page"></mat-row>
+        <mat-row *matRowDef="let notification; columns: notificationDisplayedColumns;" (click)="openNotification(notification)"
+          matTooltip="Click to view full notification text"></mat-row>
       </mat-table>
 
       <div *ngIf="notificationsDataSource.data.length === 0 && notificationsLoading === false">

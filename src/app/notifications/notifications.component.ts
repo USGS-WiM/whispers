@@ -226,6 +226,11 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  openNotification(notification) {
+    // just proof of concept. need to update to reflect new notification fields ('body')
+    alert(notification.message);
+  }
+
   // From angular material table sample on material api reference site
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {

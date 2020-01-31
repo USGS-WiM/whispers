@@ -48,6 +48,7 @@ import 'leaflet';
 import 'leaflet-draw';
 import * as esri from 'esri-leaflet';
 import { UserRegistrationComponent } from '@app/user-registration/user-registration.component';
+import { DataUpdatedService } from '@services/data-updated.service';
 declare let gtag: Function;
 
 // export class ResultsDataSource extends MatTableDataSource<any> {
@@ -149,6 +150,7 @@ export class HomeComponent implements OnInit {
     private dialog: MatDialog,
     public snackBar: MatSnackBar,
     private searchDialogService: SearchDialogService,
+    private dataUpdatedService: DataUpdatedService,
     private displayValuePipe: DisplayValuePipe,
     private adminLevelOneService: AdministrativeLevelOneService,
     private adminLevelTwoService: AdministrativeLevelTwoService,
@@ -161,6 +163,13 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
+
+    // listen for a refresh data trigger
+    dataUpdatedService.trigger.subscribe((action) => {
+      if (action === 'refresh') {
+        this.mapResults(this.currentResults);
+      }
+    });
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
@@ -700,6 +709,8 @@ export class HomeComponent implements OnInit {
   }
 
   mapResults(currentResults: any) {
+
+    this.locationMarkers.clearLayers();
 
     // set/reset currentResultsMarker var to an empty array
     const currentResultsMarkers = [];

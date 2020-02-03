@@ -905,12 +905,12 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               columns: [
                 {
                   width: 700,
-                  style: 'smallest',
+                  style: 'footer',
                   text: [reportNameOrgString + ' from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about this event, connect with the Contact Organization.\n For more information, see “About” at ', { text: 'https://whispers.usgs.gov', link: 'https://whispers.usgs.gov', color: '#0000EE' }, '.']
                 },
                 {
                   width: 50,
-                  style: 'smaller',
+                  style: 'footer',
                   alignment: 'right',
                   text: 'Page ' + currentPage.toString()
                 }
@@ -930,6 +930,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               {
                 style: 'header',
                 text: 'Summary of Search Results',
+                alignment: 'right',
                 margin: [0, 15, 0, 0]
               },
             ]
@@ -1028,6 +1029,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               },
               {
                 style: 'header',
+                alignment: 'right',
                 text: 'Summary of Search Results',
                 margin: [0, 15, 0, 0]
               },
@@ -1055,6 +1057,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               },
               {
                 style: 'header',
+                alignment: 'right',
                 text: 'Explanation of Terms',
                 margin: [0, 15, 0, 0]
               }
@@ -1062,8 +1065,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           },
           {
             alignment: 'justify',
-            text: ['WHISPers stands for Wildlife Health Information Sharing Partnership - event reporting system. It is a partner-driven, web-based repository for sharing basic information about historic and ongoing wildlife mortality (death) and/or morbidity (illness) events. The information, such as county-level locations, onset and ending dates, species affected, and diagnosis has generously been shared with the USGS National Wildlife Health Center over time by hundreds of natural resource managers and stakeholders across the U.S. and beyond. The primary goal of the system is to provide natural resource management partners and the public with timely, accurate information on where wildlife disease events are occurring or have occurred for better preparation and decision making. The information is opportunistically collected and does not reflect all the mortality events that occur in North America. \n\n', { text: 'Disclaimer', fontSize: 11, bold: true, paddingTop: 20, paddingBottom: 20 }, '\n\n The data on this website are provided for situational awareness of wildlife health events. The USGS National Wildlife Health Center (NWHC) makes every effort to provide accurate and timely information; however, data may not be final or fully accurate, especially if an event is ongoing or data synthesis is not complete. Conclusions drawn from or actions undertaken on the basis of such data and information are the sole responsibility of the user. To ensure that information is accurately interpreted and appropriately credited, dissemination of information from this site (publication, press release, technical report, etc.) should be done in collaboration with the specific agencies and laboratories that have generated the information. \n\n Note: WHISPers data fields and business rules for reporting of surveillance events are under development and thus display of surveillance information may be inconsistent.\n\n'],
-            style: 'smaller',
+            text: ['WHISPers stands for Wildlife Health Information Sharing Partnership - event reporting system. It is a partner-driven, web-based repository for sharing basic information about historic and ongoing wildlife mortality (death) and/or morbidity (illness) events. The information, such as county-level locations, onset and ending dates, species affected, and diagnosis has generously been shared with the USGS National Wildlife Health Center over time by hundreds of natural resource managers and stakeholders across the U.S. and beyond. The primary goal of the system is to provide natural resource management partners and the public with timely, accurate information on where wildlife disease events are occurring or have occurred for better preparation and decision making. The information is opportunistically collected and does not reflect all the mortality events that occur in North America. \n\n', { text: 'Disclaimer', fontSize: 11, bold: true, paddingTop: 20, paddingBottom: 20 }, '\n The data on this website are provided for situational awareness of wildlife health events. The USGS National Wildlife Health Center (NWHC) makes every effort to provide accurate and timely information; however, data may not be final or fully accurate, especially if an event is ongoing or data synthesis is not complete. Conclusions drawn from or actions undertaken on the basis of such data and information are the sole responsibility of the user. To ensure that information is accurately interpreted and appropriately credited, dissemination of information from this site (publication, press release, technical report, etc.) should be done in collaboration with the specific agencies and laboratories that have generated the information. \n\n Note: WHISPers data fields and business rules for reporting of surveillance events are under development and thus display of surveillance information may be inconsistent.\n\n'],
+            style: 'explanation',
           },
           {
             style: 'definitionsTable',
@@ -1089,7 +1092,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           },
           {
             alignment: 'justify',
-            margin: [0, 115, 0, 0],
+            margin: [0, 145, 0, 0],
             text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
             style: 'footer',
             pageBreak: 'after'
@@ -1104,6 +1107,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               },
               {
                 style: 'header',
+                alignment: 'right',
                 text: 'Explanation of Terms cont...',
                 margin: [0, 15, 0, 0]
               }
@@ -1144,12 +1148,15 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         },
         styles: {
           header: {
-            fontSize: 16,
+            fontSize: 15,
             bold: true
           },
           bigger: {
             fontSize: 18,
             bold: true
+          },
+          explanation: {
+            fontSize: 9
           },
           smaller: {
             fontSize: 10

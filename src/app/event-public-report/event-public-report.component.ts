@@ -1661,7 +1661,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             fontSize: 8
           },
           footer: {
-            fontSize: 7
+            fontSize: 9
           },
           definitionsTable: {
             fontSize: 9

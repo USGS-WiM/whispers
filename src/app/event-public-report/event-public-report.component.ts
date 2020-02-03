@@ -1033,7 +1033,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         // when printing without reloading the style.transform property is blank
         // but the values we need are in the style.cssText string
         // so with the code below I'm manipulating those strings to get the values we need
-        
+
         dx.push(myDivicons[i].style.cssText.split(' left: ')[1].split('px')[0]);
         dy.push(myDivicons[i].style.cssText.split('top')[1].replace('px;', ''));
       } else {
@@ -1399,7 +1399,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         // checking to see if this eventlocation has a species. If not, then we don't want to inlcude it in the array used to make the tables
         if (event_location.locationspecies.length !== 0) {
           for (const locationspecies of event_location.locationspecies) {
-
             // checking to see if this location species has a species diagnosis. If not, then we add it to the array with 'Not Assesed' in diagnoses field.
             if (locationspecies.speciesdiagnoses.length === 0) {
               let captive = locationspecies.captive;
@@ -1455,15 +1454,31 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               });
             }
 
-            // Loop through each species diagnoses for a location species
-            for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
-              let numAssess;
-              if ((speciesdiagnosis.tested_count === null) && (speciesdiagnosis.diagnosis_count === null)) {
-                numAssess = '';
-              } else {
-                const testedCount = speciesdiagnosis.tested_count || 0;
-                const diagnosisCount = speciesdiagnosis.diagnosis_count || 0;
-                numAssess = testedCount + '/' + diagnosisCount;
+            if (locationspecies.speciesdiagnoses.length > 0) {
+              const multipleDiags = [];
+              const multipleNums = [];
+              const multipleLabs = [];
+              if (locationspecies.speciesdiagnoses.length > 0) {
+                for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                  let numAssess;
+                  multipleDiags.push(speciesdiagnosis.diagnosis_string);
+                  if ((speciesdiagnosis.tested_count === null) && (speciesdiagnosis.diagnosis_count === null)) {
+                    numAssess = 'N/A';
+                  } else {
+                    const testedCount = speciesdiagnosis.tested_count || 0;
+                    const diagnosisCount = speciesdiagnosis.diagnosis_count || 0;
+                    numAssess = testedCount + '/' + diagnosisCount;
+                  }
+                  multipleNums.push(numAssess);
+
+                  if (speciesdiagnosis.organizations_string === null) {
+                    multipleLabs.push('N/A');
+                  } else if (speciesdiagnosis.organizations_string.length > 0) {
+                    for (const l of speciesdiagnosis.organizations_string) {
+                      multipleLabs.push(speciesdiagnosis.organizations_string[0]);
+                    }
+                  }
+                }
               }
 
               let captive = locationspecies.captive;
@@ -1487,9 +1502,26 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                 edate = APP_UTILITIES.formatEventDates(event_location.end_date);
               }
               captive = 'Yes' || 'No';
-              const s_diag = speciesdiagnosis.diagnosis_string || ' ';
+
+              // accounting for multiple species diagnoses for 1 location species
+              let s_diag;
+              let lab;
+              let numAssess;
+              if (multipleDiags.length > 0) {
+                s_diag = multipleDiags.join(', ');
+                lab = multipleLabs.join(', ');
+                numAssess = multipleNums.join(', ');
+              } else {
+                s_diag = locationspecies.speciesdiagnoses.diagnosis_string || ' ';
+                numAssess = '';
+                if (locationspecies.speciesdiagnoses.organizations_string === undefined) {
+                  lab = '';
+                } else {
+                  lab = locationspecies.speciesdiagnoses.organizations_string[0];
+                }
+              }
+              // const s_diag = speciesdiagnosis.diagnosis_string || ' ';
               const county = locationspecies.administrative_level_two_string || ' ';
-              let lab = speciesdiagnosis.organizations_string[0] || ' ';
 
               let locationName;
 
@@ -1497,13 +1529,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                 locationName = 'Location ' + eventLocNum;
               } else {
                 locationName = 'Location ' + eventLocNum + ' - ' + event_location.name;
-              }
-
-              if (speciesdiagnosis.organizations_string.length > 0) {
-                for (const l of speciesdiagnosis.organizations_string) {
-                  labs.push(speciesdiagnosis.organizations_string[0]);
-                }
-                lab = labs.join(', ');
               }
 
               speciesDiag.push({
@@ -1530,177 +1555,177 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         }
       }
 
-      let recordStatus;
-      if (this.data.event_data.complete) {
-        recordStatus = 'Complete';
-      } else {
-        recordStatus = 'Incomplete';
-      }
+        let recordStatus;
+        if (this.data.event_data.complete) {
+          recordStatus = 'Complete';
+        } else {
+          recordStatus = 'Incomplete';
+        }
 
-      // check for user role so that we show them the right report
-      const docDefinition = {
-        pageOrientation: 'landscape',
-        pageMargins: [20, 20, 20, 35],
-        footer: function (currentPage, pageCount) {
-          const SecondToLastPage = pageCount - 1;
-          if (currentPage === SecondToLastPage) { return; }
-          if (currentPage !== pageCount) {
-            return {
-              margin: [20, 0, 20, 0],
-              style: 'footer',
+        // check for user role so that we show them the right report
+        const docDefinition = {
+          pageOrientation: 'landscape',
+          pageMargins: [20, 20, 20, 35],
+          footer: function (currentPage, pageCount) {
+            const SecondToLastPage = pageCount - 1;
+            if (currentPage === SecondToLastPage) { return; }
+            if (currentPage !== pageCount) {
+              return {
+                margin: [20, 0, 20, 0],
+                style: 'footer',
+                columns: [
+                  {
+                    width: 700,
+                    text: ['Report generated ' + nameOrgString + 'from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about this event, connect with the Contact Organization.\n For more information about WHISPers, see “About” at ', { text: 'https://whispers.usgs.gov', link: 'https://whispers.usgs.gov', color: '#0000EE' }, '.'
+                    ]
+                  },
+                  {
+                    width: 50,
+                    alignment: 'right',
+                    text: 'Page ' + currentPage.toString()
+                  }
+                ]
+              };
+            }
+          },
+          content: [
+            {
+              alignment: 'justify',
               columns: [
                 {
-                  width: 700,
-                  text: ['Report generated ' + nameOrgString + 'from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about this event, connect with the Contact Organization.\n For more information about WHISPers, see “About” at ', { text: 'https://whispers.usgs.gov', link: 'https://whispers.usgs.gov', color: '#0000EE' }, '.'
-                  ]
+                  image: this.pngURL,
+                  width: 450,
+                  height: 65,
+                  margin: [0, 0, 0, 30]
                 },
                 {
-                  width: 50,
+                  style: 'header',
                   alignment: 'right',
-                  text: 'Page ' + currentPage.toString()
-                }
+                  text: 'Summary of ' + data.event_type_string + ' Event ID ' + data.id,
+                  margin: [0, 20, 0, 0]
+                },
               ]
-            };
-          }
-        },
-        content: [
-          {
-            alignment: 'justify',
-            columns: [
-              {
-                image: this.pngURL,
-                width: 450,
-                height: 65,
-                margin: [0, 0, 0, 30]
-              },
-              {
-                style: 'header',
-                alignment: 'right',
-                text: 'Summary of ' + data.event_type_string + ' Event ID ' + data.id,
-                margin: [0, 20, 0, 0]
-              },
-            ]
-          },
-          {
-            // style: 'tableExample',
-            table: {
-              // width: [400, 'auto'],
-              body: [
-                [
-                  {
-                    style: 'smaller',
-                    table: {
-                      widths: [180, 250],
-                      body: [
-                        [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, organizations],
-                        [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, recordStatus],
-                        [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
-                        [{ border: [false, false, false, false], text: 'Summary Information', bold: true, fontSize: 22, margin: [30, 10], colSpan: 2 }, ' '],
-                        [{ border: [false, false, true, false], text: '# of Locations', bold: true, alignment: 'right' }, locationCount],
-                        [{ border: [false, false, true, false], text: 'County (or equivalent)', bold: true, alignment: 'right' }, [{ text: counties }]],
-                        [{ border: [false, false, true, false], text: 'Event Diagnosis', bold: true, alignment: 'right' }, eventDiagnosises],
-                        [{ border: [false, false, true, false], text: 'Diagnostic Laboratory', bold: true, alignment: 'right' }, this.labs],
-                        [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, data.affected_count],
-                        [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, speciesAffectedCount],
-                        [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, speciesAffected],
-                        [{ border: [false, false, true, false], text: 'Event Start Date - End Date', bold: true, alignment: 'right' }, this.getEventDates()], // TODO: format according to wireframe & Create function to get count of total days event lasted
-                        [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, [{ text: this.eventsAndLinks }]], // TODO: Figure out what to do regarding links & Display none if there are none {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}
-                        [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, this.getEventVisibility()]
-                      ],
-                    },
-                    layout: {
-                      defaultBorder: false,
-                      paddingLeft: function (i, node) { return 15; },
-                      paddingRight: function (i, node) { return 10; },
-                    },
-                  },
+            },
+            {
+              // style: 'tableExample',
+              table: {
+                // width: [400, 'auto'],
+                body: [
                   [
                     {
-                      alignment: 'center',
-                      image: natMapUrl,
-                      width: 300,
-                      height: 200
+                      style: 'smaller',
+                      table: {
+                        widths: [180, 250],
+                        body: [
+                          [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, organizations],
+                          [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, recordStatus],
+                          [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
+                          [{ border: [false, false, false, false], text: 'Summary Information', bold: true, fontSize: 22, margin: [30, 10], colSpan: 2 }, ' '],
+                          [{ border: [false, false, true, false], text: '# of Locations', bold: true, alignment: 'right' }, locationCount],
+                          [{ border: [false, false, true, false], text: 'County (or equivalent)', bold: true, alignment: 'right' }, [{ text: counties }]],
+                          [{ border: [false, false, true, false], text: 'Event Diagnosis', bold: true, alignment: 'right' }, eventDiagnosises],
+                          [{ border: [false, false, true, false], text: 'Diagnostic Laboratory', bold: true, alignment: 'right' }, this.labs],
+                          [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, data.affected_count],
+                          [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, speciesAffectedCount],
+                          [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, speciesAffected],
+                          [{ border: [false, false, true, false], text: 'Event Start Date - End Date', bold: true, alignment: 'right' }, this.getEventDates()], // TODO: format according to wireframe & Create function to get count of total days event lasted
+                          [{ border: [false, false, true, false], text: 'Associated Events', bold: true, alignment: 'right' }, [{ text: this.eventsAndLinks }]], // TODO: Figure out what to do regarding links & Display none if there are none {text: eventIds, link: 'http://localhost:4200/event/' + associatedEvents, color: '#0000EE'}
+                          [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, this.getEventVisibility()]
+                        ],
+                      },
+                      layout: {
+                        defaultBorder: false,
+                        paddingLeft: function (i, node) { return 15; },
+                        paddingRight: function (i, node) { return 10; },
+                      },
                     },
-                    {
-                      text: ' \n\n'
-                    },
-                    {
-                      alignment: 'center',
-                      image: detailMapUrl,
-                      width: 300,
-                      height: 200
-                    },
+                    [
+                      {
+                        alignment: 'center',
+                        image: natMapUrl,
+                        width: 300,
+                        height: 200
+                      },
+                      {
+                        text: ' \n\n'
+                      },
+                      {
+                        alignment: 'center',
+                        image: detailMapUrl,
+                        width: 300,
+                        height: 200
+                      },
+                    ],
                   ],
                 ],
-              ],
+              },
+              layout: 'noBorders'
             },
-            layout: 'noBorders'
+          ],
+          images: {
+            logo: this.pngURL,
+            detailMap: detailMapUrl,
+            nationalMap: natMapUrl
           },
-        ],
-        images: {
-          logo: this.pngURL,
-          detailMap: detailMapUrl,
-          nationalMap: natMapUrl
-        },
-        styles: {
-          header: {
-            fontSize: 15,
-            bold: true
+          styles: {
+            header: {
+              fontSize: 15,
+              bold: true
+            },
+            bigger: {
+              fontSize: 18,
+              bold: true
+            },
+            explanation: {
+              fontSize: 9
+            },
+            smaller: {
+              fontSize: 10
+            },
+            smallest: {
+              fontSize: 8
+            },
+            footer: {
+              fontSize: 9
+            },
+            definitionsTable: {
+              fontSize: 9
+            }
           },
-          bigger: {
-            fontSize: 18,
-            bold: true
-          },
-          explanation: {
-            fontSize: 9
-          },
-          smaller: {
-            fontSize: 10
-          },
-          smallest: {
-            fontSize: 8
-          },
-          footer: {
-            fontSize: 9
-          },
-          definitionsTable: {
-            fontSize: 9
+          defaultStyle: {
+            columnGap: 20
           }
-        },
-        defaultStyle: {
-          columnGap: 20
+        };
+
+        // pushing pre-made tables and other elements into doc definition
+        for (const loc of this.eventLocsPlusDiagnoses) {
+          docDefinition.content.push(this.makeHeader());
+          docDefinition.content.push(this.makeTitle(loc[0]));
+          docDefinition.content.push(this.makeHorizontalLine());
+          docDefinition.content.push(this.makeSpace());
+          docDefinition.content.push(this.makeLocationTable(loc));
         }
-      };
 
-      // pushing pre-made tables and other elements into doc definition
-      for (const loc of this.eventLocsPlusDiagnoses) {
-        docDefinition.content.push(this.makeHeader());
-        docDefinition.content.push(this.makeTitle(loc[0]));
-        docDefinition.content.push(this.makeHorizontalLine());
-        docDefinition.content.push(this.makeSpace());
-        docDefinition.content.push(this.makeLocationTable(loc));
-      }
+        if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
+          docDefinition.content.push(this.makeCommentsTitle());
+          docDefinition.content.push(this.makeCommentsTable());
+        }
 
-      if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
-        docDefinition.content.push(this.makeCommentsTitle());
-        docDefinition.content.push(this.makeCommentsTable());
-      }
-
-      docDefinition.content.push(this.explanationPageHeader());
-      docDefinition.content.push(this.makeExplanationDescription());
-      docDefinition.content.push(this.explanationPartOne());
-      docDefinition.content.push(this.explanationOneForMoreDetails());
-      docDefinition.content.push(this.explanationPartTwoHeader());
-      docDefinition.content.push(this.explanationPartTwo());
-      docDefinition.content.push(this.explanationTwoForMoreDetails());
+        docDefinition.content.push(this.explanationPageHeader());
+        docDefinition.content.push(this.makeExplanationDescription());
+        docDefinition.content.push(this.explanationPartOne());
+        docDefinition.content.push(this.explanationOneForMoreDetails());
+        docDefinition.content.push(this.explanationPartTwoHeader());
+        docDefinition.content.push(this.explanationPartTwo());
+        docDefinition.content.push(this.explanationTwoForMoreDetails());
 
 
-      pdfMake.createPdf(docDefinition).download('WHISPers_Event_' + this.data.event_data.id + '_' + APP_UTILITIES.getFileNameDate + '.pdf');
-      this.downloadingReport = false;
-      this.eventPublicReportDialogRef.close();
-    }, {
-      once: true // Only add listnener once. If this is not set then it will print multiple times after the first print if the page is not reloaded
-    });
+        pdfMake.createPdf(docDefinition).download('WHISPers_Event_' + this.data.event_data.id + '_' + APP_UTILITIES.getFileNameDate + '.pdf');
+        this.downloadingReport = false;
+        this.eventPublicReportDialogRef.close();
+      }, {
+        once: true // Only add listnener once. If this is not set then it will print multiple times after the first print if the page is not reloaded
+      });
   }
 
 }

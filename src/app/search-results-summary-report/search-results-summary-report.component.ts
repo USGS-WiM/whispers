@@ -359,11 +359,16 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         row.push(adminLevelTwoCell);
         let eventDiagnosesCell = new Array();
         if (elData.eventdiagnoses) {
-          for (let key in elData.eventdiagnoses) {
-            eventDiagnosesCell.push({ text: elData.eventdiagnoses[key].diagnosis_string + "\n", alignment: 'left' });
+          const semiColon = elData.eventdiagnoses.length - 1;
+          for (let i = 0; i < elData.eventdiagnoses.length; i++) {
+            if (i !== semiColon) {
+              eventDiagnosesCell.push({ text: elData.eventdiagnoses[i].diagnosis_string + ', ', alignment: 'left' });
+            } else {
+              eventDiagnosesCell.push({ text: elData.eventdiagnoses[i].diagnosis_string, alignment: 'left' });
+            }
           }
         } else {
-          eventDiagnosesCell.push("");
+          eventDiagnosesCell.push('');
         }
         row.push(eventDiagnosesCell);
         row.push(elData.affected_count);
@@ -377,12 +382,12 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
         row.push({ text: speciesCell, alignment: 'left' });
         row.push({ text: elData.event_status_string, alignment: 'left' });
-        //TODO: need to come back and fix this. it's a number. Maybe need to have organization_string added to event? Or maybe just use organization service
+        // TODO: need to come back and fix this. it's a number. Maybe need to have organization_string added to event? Or maybe just use organization service
         if (elData.organizations) {
 
-          //row.push(elData.organizations[0].toString());
+          // row.push(elData.organizations[0].toString());
         } else {
-          //row.push('');
+          // row.push('');
         }
         let orgCell = new Array();
         for (let key in elData.organizations) {
@@ -612,7 +617,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       });
 
     window.addEventListener('image_ready', () => {
-      const date = APP_UTILITIES.getDateTime;
+      const date = APP_UTILITIES.getReportDateTime;
 
       // whispers logo
       this.pngURL = this.canvas.toDataURL();

@@ -13,6 +13,7 @@ import { APP_UTILITIES } from '@app/app.utilities';
 import { Notification } from '@app/interfaces/notification';
 import { CurrentUserService } from '@app/services/current-user.service';
 import { NotificationService } from '@services/notification.service';
+import { ViewNotificationDetailsComponent } from '@app/notifications/view-notification-details/view-notification-details.component';
 // remove this interface once actual data is being loaded
 export interface Cue {
   name: string;
@@ -80,6 +81,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) notificationPaginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  viewNotificationsDetailRef: MatDialogRef<ViewNotificationDetailsComponent>;
 
   buildStandardNotificationSettingsForm() {
     this.standardNotificationSettingsForm = this.formBuilder.group({
@@ -105,7 +107,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private notificationService: NotificationService,
-    private currentUserService: CurrentUserService,
+    private currentUserService: CurrentUserService
   ) {
 
     currentUserService.currentUser.subscribe(user => {
@@ -118,15 +120,18 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     const initialSelection = [];
     const allowMultiSelect = true;
     this.selection = new SelectionModel<Notification>(allowMultiSelect, initialSelection);
-
-    this.notificationsDataSource = new MatTableDataSource(this.dummyNotifications);
     this.notificationsLoading = true;
-    this.notificationsDataSource.paginator = this.notificationPaginator;
+
+    // this.notificationsDataSource = new MatTableDataSource(this.dummyNotifications);
+    // this.notificationsDataSource.paginator = this.notificationPaginator;
 
     this.notificationService.getUserNotifications()
       .subscribe(
         (notifications) => {
           this.userNotifications = notifications;
+          this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
+          this.notificationsDataSource.paginator = this.notificationPaginator;
+
         },
         error => {
           this.errorMessage = <any>error;
@@ -227,8 +232,14 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   }
 
   openNotification(notification) {
-    // just proof of concept. need to update to reflect new notification fields ('body')
-    alert(notification.message);
+
+    this.viewNotificationsDetailRef = this.dialog.open(ViewNotificationDetailsComponent,
+      {
+        data: {
+          notification: notification
+        }
+      }
+    );
   }
 
   // From angular material table sample on material api reference site

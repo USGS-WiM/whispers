@@ -131,6 +131,7 @@ import { BulkUploadComponent } from './bulk-upload/bulk-upload.component';
 import { PapaParseModule } from 'ngx-papaparse';
 import { EventPublicReportComponent } from './event-public-report/event-public-report.component';
 import { SearchResultsSummaryReportComponent } from './search-results-summary-report/search-results-summary-report.component';
+import { ViewNotificationDetailsComponent } from './notifications/view-notification-details/view-notification-details.component';
 
 
 @NgModule({
@@ -185,6 +186,7 @@ import { SearchResultsSummaryReportComponent } from './search-results-summary-re
     BulkUploadComponent,
     EventPublicReportComponent,
     SearchResultsSummaryReportComponent,
+    ViewNotificationDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -309,7 +311,8 @@ import { SearchResultsSummaryReportComponent } from './search-results-summary-re
     CustomNotificationComponent,
     CollaborationRequestComponent,
     BrowserWarningComponent,
-    BulkUploadComponent
+    BulkUploadComponent,
+    ViewNotificationDetailsComponent
   ]
 })
 export class AppModule { }

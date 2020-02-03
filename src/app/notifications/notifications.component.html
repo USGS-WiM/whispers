@@ -174,7 +174,7 @@
          <ng-container matColumnDef="go">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Event </mat-header-cell>
           <mat-cell *matCellDef="let notification"> 
-            <button mat-stroked-button color="primary">{{notification.event}}</button>
+            <button mat-stroked-button color="primary" (click)="$event.stopPropagation()" matTooltip="Click to go to event details page">{{notification.event}}</button>
           </mat-cell>
         </ng-container>
 

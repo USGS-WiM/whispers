@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>
+  <mat-icon>notifications</mat-icon> Notification Details
+
+  <mat-dialog-content>
+
+    <div class="user-info-card">
+      <div class="comment-detail">
+        <small>Event</small>
+        {{data.notification.event}}
+      </div>
+      <div class="comment-detail">
+        <small>Date created</small>
+        {{data.notification.created_date |date:'shortDate'}}
+      </div>
+      <div class="comment-detail">
+        <small>Source</small>
+        {{data.notification.source}}
+      </div>
+      <div class="comment-detail">
+        <small>Summary</small>
+        {{data.notification.subject}}
+      </div>
+      <div class="comment-detail">
+        <small>Details</small>
+        <div [innerHTML]="data.notification.body"></div>
+      </div>
+    </div>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <div>
+      <button mat-button color="primary" (click)="this.viewNotificationDetailsDialogRef.close();">
+        &nbsp;Close
+      </button>
+    </div>
+  </mat-dialog-actions>

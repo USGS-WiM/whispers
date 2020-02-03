@@ -151,7 +151,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     this.detailMap = new L.Map('detailMap', {
       center: new L.LatLng(39.8283, -98.5795),
-      zoom: 4,
+      zoom: 5,
       zoomControl: false,
       attributionControl: false,
       layers: [streets2]
@@ -185,7 +185,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.detailMap.dragging.disable();
     this.detailMap.touchZoom.disable();
     this.detailMap.doubleClickZoom.disable();
-    this.detailMap.scrollWheelZoom.disable();
+    //this.detailMap.scrollWheelZoom.disable();
 
     // mapping the event centroid for the national map
     setTimeout(() => {
@@ -337,7 +337,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     }
 
     if (markers.length || countyPolys.length) {
-      this.detailMap.fitBounds(bounds, { padding: [10, 10] });
+      this.detailMap.fitBounds(bounds, { padding: [30, 30] });
     }
   }
 
@@ -455,7 +455,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         row.push({ text: elData.captive, alignment: 'center' });
         row.push({ text: elData.species_dia, alignment: 'left' });
         row.push({ text: elData.count, alignment: 'center' });
-        row.push({text: elData.lab, alignment: 'left'});
+        row.push({ text: elData.lab, alignment: 'left' });
         locationBody.push(row);
       }
     }
@@ -513,7 +513,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   makeSpace() {
     let space;
     space = {
-          text: ' \n'
+      text: ' \n'
     };
     return space;
   }
@@ -717,12 +717,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
   explanationOneForMoreDetails() {
     let explanationOneForMoreDetails;
-      explanationOneForMoreDetails = {
-        alignment: 'justify',
-        text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
-        style: 'footer',
-      };
-      return explanationOneForMoreDetails;
+    explanationOneForMoreDetails = {
+      alignment: 'justify',
+      text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
+      style: 'footer',
+    };
+    return explanationOneForMoreDetails;
   }
 
   explanationPartTwoHeader() {
@@ -1024,6 +1024,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       }
       if (splitTransform[0] === '') {
 
+        // when printing without reloading the style.transform property is blank
+        // but the values we need are in the style.cssText string
+        // so with the code below I'm manipulating those strings to get the values we need
+        
+        dx.push(myDivicons[i].style.cssText.split(' left: ')[1].split('px')[0]);
+        dy.push(myDivicons[i].style.cssText.split('top')[1].replace('px;', ''));
       } else {
         dy.push(parseFloat(splitTransform[1].replace('px', '')));
       }
@@ -1055,10 +1061,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       useCORS: true,
     };
 
-    html2canvas(document.getElementById('hiddenNatMap'), options).then(function (canvas) {
-      natMapUrl = canvas.toDataURL('image/png');
-    });
-
     for (let i = 0; i < myTiles.length; i++) {
       if (tileMethod[i] === 'left') {
         myTiles[i].style.left = (tilesLeft[i]) + 'px';
@@ -1085,131 +1087,141 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     mapPane.style.transform = 'translate(' + (mapX) + 'px,' + (mapY) + 'px)';
     mapPane.style.left = '';
     mapPane.style.top = '';
+
+    let natMapEvent;
+    html2canvas(document.getElementById('hiddenNatMap'), options)
+      .then(function (canvas) {
+        natMapEvent = new Event('natmap_ready');
+        natMapUrl = canvas.toDataURL('image/png');
+        window.dispatchEvent(natMapEvent); // Dispatching an event for when the image is done rendering
+      });
     // END national map
 
-    // START detail map
-    const mapPane2 = $('.leaflet-map-pane')[0];
-    const mapTransform2 = mapPane2.style.transform.split(',');
-    let mapX2;
-    // fix for firefox
-    if (mapTransform[0] === undefined) {
-      mapX2 = '';
-    } if (mapTransform[0].split('(')[1] === undefined) {
-      mapX2 = '';
-    } else {
-      mapX2 = parseFloat(mapTransform2[0].split('(')[1].replace('px', ''));
-    }
-
-    // fix for firefox
-    let mapY2;
-    if (mapTransform2[1] === undefined) {
-      mapY2 = '';
-    } else {
-      mapY2 = parseFloat(mapTransform2[1].replace('px', ''));
-    }
-    mapPane2.style.transform = '';
-    mapPane2.style.left = mapX2 + 'px';
-    mapPane2.style.top = mapY2 + 'px';
-
-    const myTiles2 = $('img.leaflet-tile');
-    const tilesLeft2 = [];
-    const tilesTop2 = [];
-    const tileMethod2 = [];
-    for (let i = 0; i < myTiles2.length; i++) {
-      if (myTiles2[i].style.left !== '') {
-        tilesLeft2.push(parseFloat(myTiles2[i].style.left.replace('px', '')));
-        tilesTop2.push(parseFloat(myTiles2[i].style.top.replace('px', '')));
-        tileMethod2[i] = 'left';
-      } else if (myTiles2[i].style.transform !== '') {
-        const tileTransform = myTiles2[i].style.transform.split(',');
-        tilesLeft2[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
-        tilesTop2[i] = parseFloat(tileTransform[1].replace('px', ''));
-        myTiles2[i].style.transform = '';
-        tileMethod2[i] = 'transform';
+    window.addEventListener('natmap_ready', () => {// START detail map
+      const mapPane2 = $('.leaflet-map-pane')[0];
+      const mapTransform2 = mapPane2.style.transform.split(',');
+      let mapX2;
+      // fix for firefox
+      if (mapTransform[0] === undefined) {
+        mapX2 = '';
+      } if (mapTransform[0].split('(')[1] === undefined) {
+        mapX2 = '';
       } else {
-        tilesLeft2[i] = 0;
-        // tilesRight[i] = 0;
-        tileMethod2[i] = 'neither';
+        mapX2 = parseFloat(mapTransform2[0].split('(')[1].replace('px', ''));
       }
-      myTiles2[i].style.left = (tilesLeft2[i]) + 'px';
-      myTiles2[i].style.top = (tilesTop2[i]) + 'px';
-    }
 
-    /* const myDivicons = $('.leaflet-marker-icon');
-    const dx = [];
-    const dy = [];
-    const mLeft = [];
-    const mTop = [];
-    for (let i = 0; i < myDivicons.length; i++) {
-      const curTransform = myDivicons[i].style.transform;
-      const splitTransform = curTransform.split(',');
-      dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
-      dy.push(parseFloat(splitTransform[1].replace('px', '')));
-      myDivicons[i].style.transform = '';
-      myDivicons[i].style.left = dx[i] + 'px';
-      myDivicons[i].style.top = dy[i] + 'px';
-    } */
+      // fix for firefox
+      let mapY2;
+      if (mapTransform2[1] === undefined) {
+        mapY2 = '';
+      } else {
+        mapY2 = parseFloat(mapTransform2[1].replace('px', ''));
+      }
+      mapPane2.style.transform = '';
+      mapPane2.style.left = mapX2 + 'px';
+      mapPane2.style.top = mapY2 + 'px';
 
-    const mapWidth2 = parseFloat($('#map').css('width').replace('px', ''));
-    const mapHeight2 = parseFloat($('#map').css('height').replace('px', ''));
-
-    const linesLayer2 = $('svg.leaflet-zoom-animated')[0];
-    const oldLinesWidth2 = linesLayer2.getAttribute('width');
-    const oldLinesHeight2 = linesLayer2.getAttribute('height');
-    const oldViewbox2 = linesLayer2.getAttribute('viewBox');
-    linesLayer2.setAttribute('width', mapWidth2.toString());
-    linesLayer2.setAttribute('height', mapHeight2.toString());
-    linesLayer2.setAttribute('viewBox', '0 0 ' + mapWidth2 + ' ' + mapHeight2);
-    const linesTransform2 = linesLayer2.style.transform.split(',');
-    const linesX2 = parseFloat(linesTransform2[0].split('(')[1].replace('px', ''));
-    const linesY2 = parseFloat(linesTransform2[1].replace('px', ''));
-    linesLayer2.style.transform = '';
-    linesLayer2.style.left = '';
-    linesLayer2.style.top = '';
-
-    const options2 = {
-      useCORS: true,
-    };
-
-    for (let i = 0; i < myTiles2.length; i++) {
-      if (tileMethod2[i] === 'left') {
+      const myTiles2 = $('img.leaflet-tile');
+      const tilesLeft2 = [];
+      const tilesTop2 = [];
+      const tileMethod2 = [];
+      for (let i = 0; i < myTiles2.length; i++) {
+        if (myTiles2[i].style.left !== '') {
+          tilesLeft2.push(parseFloat(myTiles2[i].style.left.replace('px', '')));
+          tilesTop2.push(parseFloat(myTiles2[i].style.top.replace('px', '')));
+          tileMethod2[i] = 'left';
+        } else if (myTiles2[i].style.transform !== '') {
+          const tileTransform = myTiles2[i].style.transform.split(',');
+          tilesLeft2[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
+          tilesTop2[i] = parseFloat(tileTransform[1].replace('px', ''));
+          myTiles2[i].style.transform = '';
+          tileMethod2[i] = 'transform';
+        } else {
+          tilesLeft2[i] = 0;
+          // tilesRight[i] = 0;
+          tileMethod2[i] = 'neither';
+        }
         myTiles2[i].style.left = (tilesLeft2[i]) + 'px';
         myTiles2[i].style.top = (tilesTop2[i]) + 'px';
-      } else if (tileMethod2[i] === 'transform') {
-        myTiles2[i].style.left = '';
-        myTiles2[i].style.top = '';
-        myTiles2[i].style.transform = 'translate(' + tilesLeft2[i] + 'px, ' + tilesTop2[i] + 'px)';
-      } else {
-        myTiles2[i].style.left = '0px';
-        myTiles2[i].style.top = '0px';
-        myTiles2[i].style.transform = 'translate(0px, 0px)';
       }
-    }
-    /* for (let i = 0; i < myDivicons.length; i++) {
-      myDivicons[i].style.transform = 'translate(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
-      myDivicons[i].style.marginLeft = mLeft[i] + 'px';
-      myDivicons[i].style.marginTop = mTop[i] + 'px';
-    } */
-    linesLayer2.style.transform = 'translate(' + (linesX2) + 'px,' + (linesY2) + 'px)';
-    linesLayer2.setAttribute('viewBox', oldViewbox2);
-    linesLayer2.setAttribute('width', oldLinesWidth2);
-    linesLayer2.setAttribute('height', oldLinesHeight2);
-    mapPane2.style.transform = 'translate(' + (mapX2) + 'px,' + (mapY2) + 'px)';
-    mapPane2.style.left = '';
-    mapPane2.style.top = '';
-    // END detail map
 
-    let event;
-    html2canvas(document.getElementById('detailMap'), options2)
-      .then(function (canvas) {
-      event = new Event('image_ready');
-      detailMapUrl = canvas.toDataURL('image/png');
-      event = new Event('image_ready');
-      window.dispatchEvent(event); // Dispatching an event for when the image is done rendering
+      /* const myDivicons = $('.leaflet-marker-icon');
+      const dx = [];
+      const dy = [];
+      const mLeft = [];
+      const mTop = [];
+      for (let i = 0; i < myDivicons.length; i++) {
+        const curTransform = myDivicons[i].style.transform;
+        const splitTransform = curTransform.split(',');
+        dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
+        dy.push(parseFloat(splitTransform[1].replace('px', '')));
+        myDivicons[i].style.transform = '';
+        myDivicons[i].style.left = dx[i] + 'px';
+        myDivicons[i].style.top = dy[i] + 'px';
+      } */
+
+      const mapWidth2 = parseFloat($('#map').css('width').replace('px', ''));
+      const mapHeight2 = parseFloat($('#map').css('height').replace('px', ''));
+
+      const linesLayer2 = $('svg.leaflet-zoom-animated')[0];
+      const oldLinesWidth2 = linesLayer2.getAttribute('width');
+      const oldLinesHeight2 = linesLayer2.getAttribute('height');
+      const oldViewbox2 = linesLayer2.getAttribute('viewBox');
+      linesLayer2.setAttribute('width', mapWidth2.toString());
+      linesLayer2.setAttribute('height', mapHeight2.toString());
+      linesLayer2.setAttribute('viewBox', '0 0 ' + mapWidth2 + ' ' + mapHeight2);
+      const linesTransform2 = linesLayer2.style.transform.split(',');
+      const linesX2 = parseFloat(linesTransform2[0].split('(')[1].replace('px', ''));
+      const linesY2 = parseFloat(linesTransform2[1].replace('px', ''));
+      linesLayer2.style.transform = '';
+      linesLayer2.style.left = '';
+      linesLayer2.style.top = '';
+
+      const options2 = {
+        useCORS: true,
+      };
+
+      for (let i = 0; i < myTiles2.length; i++) {
+        if (tileMethod2[i] === 'left') {
+          myTiles2[i].style.left = (tilesLeft2[i]) + 'px';
+          myTiles2[i].style.top = (tilesTop2[i]) + 'px';
+        } else if (tileMethod2[i] === 'transform') {
+          myTiles2[i].style.left = '';
+          myTiles2[i].style.top = '';
+          myTiles2[i].style.transform = 'translate(' + tilesLeft2[i] + 'px, ' + tilesTop2[i] + 'px)';
+        } else {
+          myTiles2[i].style.left = '0px';
+          myTiles2[i].style.top = '0px';
+          myTiles2[i].style.transform = 'translate(0px, 0px)';
+        }
+      }
+      /* for (let i = 0; i < myDivicons.length; i++) {
+        myDivicons[i].style.transform = 'translate(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
+        myDivicons[i].style.marginLeft = mLeft[i] + 'px';
+        myDivicons[i].style.marginTop = mTop[i] + 'px';
+      } */
+      linesLayer2.style.transform = 'translate(' + (linesX2) + 'px,' + (linesY2) + 'px)';
+      linesLayer2.setAttribute('viewBox', oldViewbox2);
+      linesLayer2.setAttribute('width', oldLinesWidth2);
+      linesLayer2.setAttribute('height', oldLinesHeight2);
+      mapPane2.style.transform = 'translate(' + (mapX2) + 'px,' + (mapY2) + 'px)';
+      mapPane2.style.left = '';
+      mapPane2.style.top = '';
+      // END detail map
+
+      let event;
+      html2canvas(document.getElementById('detailMap'), options2)
+        .then(function (canvas) {
+          event = new Event('images_ready');
+          detailMapUrl = canvas.toDataURL('image/png');
+          window.dispatchEvent(event); // Dispatching an event for when the image is done rendering
+        });
+    }, {
+      once: true
     });
 
     // need to give some time for html2canvas to finish rendering
-    window.addEventListener('image_ready', () => {
+    window.addEventListener('images_ready', () => {
       // Getting date/time for timestamp
       const date = APP_UTILITIES.getReportDateTime;
 
@@ -1355,7 +1367,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       // whispers logo
       this.pngURL = this.canvas.toDataURL();
       console.log(this.pngURL);
-      console.log(this.data.map);
       console.log(natMapUrl);
 
       // printing user's info
@@ -1526,25 +1537,25 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         pageMargins: [20, 20, 20, 35],
         footer: function (currentPage, pageCount) {
           const SecondToLastPage = pageCount - 1;
-            if (currentPage === SecondToLastPage) { return; }
-            if (currentPage !== pageCount) {
-              return {
-                margin: [20, 0, 20, 0],
-                style: 'footer',
-                columns: [
-                  {
-                    width: 700,
-                    text: ['Report generated ' + nameOrgString + 'from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about this event, connect with the Contact Organization.\n For more information about WHISPers, see “About” at ', { text: 'https://whispers.usgs.gov', link: 'https://whispers.usgs.gov', color: '#0000EE' }, '.'
-                    ]
-                  },
-                  {
-                    width: 50,
-                    alignment: 'right',
-                    text: 'Page ' + currentPage.toString()
-                  }
-                ]
-              };
-            }
+          if (currentPage === SecondToLastPage) { return; }
+          if (currentPage !== pageCount) {
+            return {
+              margin: [20, 0, 20, 0],
+              style: 'footer',
+              columns: [
+                {
+                  width: 700,
+                  text: ['Report generated ' + nameOrgString + 'from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about this event, connect with the Contact Organization.\n For more information about WHISPers, see “About” at ', { text: 'https://whispers.usgs.gov', link: 'https://whispers.usgs.gov', color: '#0000EE' }, '.'
+                  ]
+                },
+                {
+                  width: 50,
+                  alignment: 'right',
+                  text: 'Page ' + currentPage.toString()
+                }
+              ]
+            };
+          }
         },
         content: [
           {

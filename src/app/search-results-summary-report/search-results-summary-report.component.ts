@@ -19,6 +19,7 @@ import { AdministrativeLevelOneService } from '@app/services/administrative-leve
 import { AdministrativeLevelTwoService } from '@app/services/administrative-level-two.service';
 import { CountryService } from '@app/services/country.service';
 import { OrganizationService } from '@app/services/organization.service';
+import { DataUpdatedService } from '@app/services/data-updated.service';
 
 import { EventDetail } from '@interfaces/event-detail';
 import { forEach } from '@angular/router/src/utils/collection';
@@ -63,6 +64,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     public resultsSummaryReportDialogRef: MatDialogRef<SearchResultsSummaryReportComponent>,
     private countryService: CountryService,
     private organizationService: OrganizationService,
+    private dataUpdatedService: DataUpdatedService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
@@ -151,30 +153,30 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   mapResults(currentResults: any) {
 
     // set/reset currentResultsMarker var to an empty array
-    const currentResultsMarkers = [];
+    const markers = [];
     // tslint:disable-next-line:forin
     // loop through currentResults repsonse from a search query
     for (const event in currentResults) {
 
-      // if event has any administrativeleveltwos (counties), add them to the currentResultsMarkers array
+      // if event has any administrativeleveltwos (counties), add them to the markers array
       if (currentResults[event]['administrativeleveltwos'].length > 0) {
 
         // tslint:disable-next-line:forin
         for (const adminleveltwo in currentResults[event]['administrativeleveltwos']) {
 
-          // check if the administrativeleveltwo (county) of the event has already been placed into the currentResultsMarkers array.
+          // check if the administrativeleveltwo (county) of the event has already been placed into the markers array.
           // If it has, push its events array into the existing marker for that administrativeleveltwo. This is to ensure one
           // marker per administrativeleveltwo, with events nested
           // tslint:disable-next-line:max-line-length
-          if (this.searchInArray(currentResultsMarkers, 'adminleveltwo', currentResults[event]['administrativeleveltwos'][adminleveltwo]['id'])) {
-            for (const marker of currentResultsMarkers) {
+          if (this.searchInArray(markers, 'adminleveltwo', currentResults[event]['administrativeleveltwos'][adminleveltwo]['id'])) {
+            for (const marker of markers) {
               if (marker.adminleveltwo === currentResults[event]['administrativeleveltwos'][adminleveltwo]['id']) {
                 marker.events.push(currentResults[event]);
               }
             }
           } else {
 
-            currentResultsMarkers.push({
+            markers.push({
               lat: Number(currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_latitude']),
               long: Number(currentResults[event]['administrativeleveltwos'][adminleveltwo]['centroid_longitude']),
               eventdiagnoses: currentResults[event]['eventdiagnoses'],
@@ -189,8 +191,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       }
     }
 
-    // loop through currentResultsMarkers
-    for (const marker of currentResultsMarkers) {
+    // loop through markers
+    for (const marker of markers) {
 
       // set vars for classes that will define the marker icons, per WIM markermaker CSS
       let colorClass;
@@ -453,8 +455,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     let mapurl;
     // using html2Canvas to capture leaflet map for reports
     // solution found here: https://github.com/niklasvh/html2canvas/issues/567
-    const mapPane = $('.leaflet-map-pane')[0];
-    const mapTransform = mapPane.style.transform.split(',');
+    const contextMapPane = $('.leaflet-map-pane')[0];
+    const mapTransform = contextMapPane.style.transform.split(',');
     // const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
     let mapX;
 
@@ -471,41 +473,41 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     } else {
       mapY = parseFloat(mapTransform[1].replace('px', ''));
     }
-    mapPane.style.transform = '';
-    mapPane.style.left = mapX + 'px';
-    mapPane.style.top = mapY + 'px';
+    contextMapPane.style.transform = '';
+    contextMapPane.style.left = mapX + 'px';
+    contextMapPane.style.top = mapY + 'px';
 
-    const myTiles = $('img.leaflet-tile');
+    const contextMapTiles = $('img.leaflet-tile');
     const tilesLeft = [];
     const tilesTop = [];
     const tileMethod = [];
-    for (let i = 0; i < myTiles.length; i++) {
-      if (myTiles[i].style.left !== '') {
-        tilesLeft.push(parseFloat(myTiles[i].style.left.replace('px', '')));
-        tilesTop.push(parseFloat(myTiles[i].style.top.replace('px', '')));
+    for (let i = 0; i < contextMapTiles.length; i++) {
+      if (contextMapTiles[i].style.left !== '') {
+        tilesLeft.push(parseFloat(contextMapTiles[i].style.left.replace('px', '')));
+        tilesTop.push(parseFloat(contextMapTiles[i].style.top.replace('px', '')));
         tileMethod[i] = 'left';
-      } else if (myTiles[i].style.transform !== '') {
-        const tileTransform = myTiles[i].style.transform.split(',');
+      } else if (contextMapTiles[i].style.transform !== '') {
+        const tileTransform = contextMapTiles[i].style.transform.split(',');
         tilesLeft[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
         tilesTop[i] = parseFloat(tileTransform[1].replace('px', ''));
-        myTiles[i].style.transform = '';
+        contextMapTiles[i].style.transform = '';
         tileMethod[i] = 'transform';
       } else {
         tilesLeft[i] = 0;
         // tilesRight[i] = 0;
         tileMethod[i] = 'neither';
       }
-      myTiles[i].style.left = (tilesLeft[i]) + 'px';
-      myTiles[i].style.top = (tilesTop[i]) + 'px';
+      contextMapTiles[i].style.left = (tilesLeft[i]) + 'px';
+      contextMapTiles[i].style.top = (tilesTop[i]) + 'px';
     }
 
-    const myDivicons = $('.leaflet-marker-icon');
+    const contextMapDivIcons = $('.leaflet-marker-icon');
     const dx = [];
     const dy = [];
     const mLeft = [];
     const mTop = [];
-    for (let i = 0; i < myDivicons.length; i++) {
-      const curTransform = myDivicons[i].style.transform;
+    for (let i = 0; i < contextMapDivIcons.length; i++) {
+      const curTransform = contextMapDivIcons[i].style.transform;
       const splitTransform = curTransform.split(',');
       if (splitTransform[0] === '') {
 
@@ -514,14 +516,20 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       }
       if (splitTransform[0] === '') {
 
+        // when printing without reloading the style.transform property is blank
+        // but the values we need are in the style.cssText string
+        // so with the code below I'm manipulating those strings to get the values we need
+
+        dx.push(contextMapDivIcons[i].style.cssText.split(' left: ')[1].split('px')[0]);
+        dy.push(contextMapDivIcons[i].style.cssText.split('top')[1].replace('px;', ''));
       } else {
         dy.push(parseFloat(splitTransform[1].replace('px', '')));
       }
       // dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
       // dy.push(parseFloat(splitTransform[1].replace('px', '')));
-      myDivicons[i].style.transform = '';
-      myDivicons[i].style.left = dx[i] + 'px';
-      myDivicons[i].style.top = dy[i] + 'px';
+      contextMapDivIcons[i].style.transform = '';
+      contextMapDivIcons[i].style.left = dx[i] + 'px';
+      contextMapDivIcons[i].style.top = dy[i] + 'px';
     }
 
     const mapWidth = parseFloat($('#map').css('width').replace('px', ''));
@@ -558,32 +566,32 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     }); */
 
     this.mapImageProcessed = true;
-    for (let i = 0; i < myTiles.length; i++) {
+    for (let i = 0; i < contextMapTiles.length; i++) {
       if (tileMethod[i] === 'left') {
-        myTiles[i].style.left = (tilesLeft[i]) + 'px';
-        myTiles[i].style.top = (tilesTop[i]) + 'px';
+        contextMapTiles[i].style.left = (tilesLeft[i]) + 'px';
+        contextMapTiles[i].style.top = (tilesTop[i]) + 'px';
       } else if (tileMethod[i] === 'transform') {
-        myTiles[i].style.left = '';
-        myTiles[i].style.top = '';
-        myTiles[i].style.transform = 'translate(' + tilesLeft[i] + 'px, ' + tilesTop[i] + 'px)';
+        contextMapTiles[i].style.left = '';
+        contextMapTiles[i].style.top = '';
+        contextMapTiles[i].style.transform = 'translate(' + tilesLeft[i] + 'px, ' + tilesTop[i] + 'px)';
       } else {
-        myTiles[i].style.left = '0px';
-        myTiles[i].style.top = '0px';
-        myTiles[i].style.transform = 'translate(0px, 0px)';
+        contextMapTiles[i].style.left = '0px';
+        contextMapTiles[i].style.top = '0px';
+        contextMapTiles[i].style.transform = 'translate(0px, 0px)';
       }
     }
-    for (let i = 0; i < myDivicons.length; i++) {
-      myDivicons[i].style.transform = 'translate(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
-      myDivicons[i].style.marginLeft = mLeft[i] + 'px';
-      myDivicons[i].style.marginTop = mTop[i] + 'px';
+    for (let i = 0; i < contextMapDivIcons.length; i++) {
+      contextMapDivIcons[i].style.transform = 'translate(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
+      contextMapDivIcons[i].style.marginLeft = mLeft[i] + 'px';
+      contextMapDivIcons[i].style.marginTop = mTop[i] + 'px';
     }
     /* linesLayer.style.transform = 'translate(' + (linesX) + 'px,' + (linesY) + 'px)';
     linesLayer.setAttribute('viewBox', oldViewbox);
     linesLayer.setAttribute('width', oldLinesWidth);
     linesLayer.setAttribute('height', oldLinesHeight); */
-    mapPane.style.transform = 'translate(' + (mapX) + 'px,' + (mapY) + 'px)';
-    mapPane.style.left = '';
-    mapPane.style.top = '';
+    contextMapPane.style.transform = 'translate(' + (mapX) + 'px,' + (mapY) + 'px)';
+    contextMapPane.style.left = '';
+    contextMapPane.style.top = '';
     // placeholder for google analytics event
     // gtag('event', 'click', { 'event_category': 'Search Results', 'event_label': 'Downloaded Search Results Summary Report' });
     let legendURL;
@@ -596,7 +604,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       .then(function (canvas) {
         event = new Event('image_ready');
         mapurl = canvas.toDataURL('image/png');
-        event = new Event('image_ready');
         window.dispatchEvent(event); // Dispatching an event for when the image is done rendering
         console.log('canvas success');
       })
@@ -630,9 +637,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       // Section with SEARCH CRITERIA for page 1
       // TODO: calculation of record status for page 1
       let record_status;
-      if (search_query.complete == true) {
+      if (search_query.complete === true) {
         record_status = "Complete events only";
-      } else if (search_query.complete == false) {
+      } else if (search_query.complete === false) {
         record_status = "Incomplete events only";
       } else {
         record_status = "Complete and incomplete events";
@@ -644,11 +651,11 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       } else {
         search_query.administrative_level_one.forEach(search_level_one => {
           this.adminLevelOnes.forEach(level_one => {
-            if (search_level_one == Number(level_one.id)) {
+            if (search_level_one === Number(level_one.id)) {
               if (search_admin_level_one == null) {
                 search_admin_level_one = level_one.name;
               } else {
-                search_admin_level_one += ", " + level_one.name;
+                search_admin_level_one += ', ' + level_one.name;
               }
             }
           });
@@ -661,11 +668,11 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       } else {
         search_query.administrative_level_two.forEach(search_level_two => {
           this.adminLevelTwos.forEach(level_two => {
-            if (search_level_two == Number(level_two.id)) {
+            if (search_level_two === Number(level_two.id)) {
               if (search_admin_level_two == null) {
                 search_admin_level_two = level_two.name;
               } else {
-                search_admin_level_two += ", " + level_two.name;
+                search_admin_level_two += ', ' + level_two.name;
               }
             }
           });
@@ -678,11 +685,11 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       } else {
         search_query.diagnosis_type.forEach(search_diag_type => {
           this.diagnosisTypes.forEach(diag_type => {
-            if (search_diag_type == Number(diag_type.id)) {
+            if (search_diag_type === Number(diag_type.id)) {
               if (search_diagnosis_type == null) {
                 search_diagnosis_type = diag_type.name;
               } else {
-                search_diagnosis_type += ", " + diag_type.name;
+                search_diagnosis_type += ', ' + diag_type.name;
               }
             }
           });
@@ -695,11 +702,11 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       } else {
         search_query.diagnosis.forEach(search_event_diag => {
           this.eventDiagnoses.forEach(event_diag => {
-            if (search_event_diag == event_diag.id) {
+            if (search_event_diag === event_diag.id) {
               if (search_event_diagnosis == null) {
                 search_event_diagnosis = event_diag.name;
               } else {
-                search_event_diagnosis += ", " + event_diag.name;
+                search_event_diagnosis += ', ' + event_diag.name;
               }
             }
           });
@@ -718,16 +725,16 @@ export class SearchResultsSummaryReportComponent implements OnInit {
        */
 
       // Section with SEARCH RESULTS SUMMARY
-      let number_events = result_data.length.toString();
+      const number_events = result_data.length.toString();
 
       let most_frequent_diagnosis;
-      let diagnosisArray = [];
+      const diagnosisArray = [];
 
       let number_animals_affected = 0;
       let number_species_affected = 0;
 
       let species_most_affected;
-      let speciesArray = [];
+      const speciesArray = [];
 
       let average_event_time_span;
       let total_days_all_events = 0;
@@ -744,54 +751,54 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
       result_data.forEach(element => {
         if (!element.hasOwnProperty('public')) {
-          element["public"] = true;
+          element['public'] = true;
         }
-        //initial calc Most Frequent Diagnosis
-        if (diagnosisArray.length == 0) {
+        // initial calc Most Frequent Diagnosis
+        if (diagnosisArray.length === 0) {
           element.eventdiagnoses.forEach(diagnosis => {
-            diagnosisArray.push({ name: diagnosis.diagnosis_string, count: 1 })
+            diagnosisArray.push({ name: diagnosis.diagnosis_string, count: 1 });
           });
         }
         element.eventdiagnoses.forEach(diagnosis => {
           if (diagnosisArray.find(function (item) {
-            return diagnosis.diagnosis_string == item.name;
+            return diagnosis.diagnosis_string === item.name;
           })) {
             diagnosisArray.forEach(diagnosisItem => {
-              if (diagnosis.diagnosis_string == diagnosisItem.name) {
+              if (diagnosis.diagnosis_string === diagnosisItem.name) {
                 diagnosisItem.count += 1;
               }
             });
           } else {
-            diagnosisArray.push({ name: diagnosis.diagnosis_string, count: 1 })
+            diagnosisArray.push({ name: diagnosis.diagnosis_string, count: 1 });
           };
         });
 
-        //calc for Number of Animals Affected
+        // calc for Number of Animals Affected
         number_animals_affected += element.affected_count;
-        //calc for Number Species Affected
+        // calc for Number Species Affected
         number_species_affected += element.species.length;
 
-        //initial calc for Species Most Affected
-        if (speciesArray.length == 0) {
+        // initial calc for Species Most Affected
+        if (speciesArray.length === 0) {
           element.species.forEach(species => {
-            speciesArray.push({ name: species.name, count: 1 })
+            speciesArray.push({ name: species.name, count: 1 });
           });
         }
         element.species.forEach(species => {
           if (speciesArray.find(function (item) {
-            return species.name == item.name;
+            return species.name === item.name;
           })) {
             speciesArray.forEach(speciesItem => {
-              if (species.name == speciesItem.name) {
+              if (species.name === speciesItem.name) {
                 speciesItem.count += 1;
               }
             });
           } else {
-            speciesArray.push({ name: species.name, count: 1 })
+            speciesArray.push({ name: species.name, count: 1 });
           };
         });
 
-        //inital calc for Average Event Time Span
+        // initial calc for Average Event Time Span
         let start_date;
         start_date = new Date(element.start_date);
         let end_date;
@@ -805,58 +812,58 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         num_days = (end_date - start_date) / (1000 * 3600 * 24);
         total_days_all_events += num_days;
 
-        //calc for Event with Most Affected
+        // calc for Event with Most Affected
         if (element.affected_count > event_with_most_affected_count) {
           event_with_most_affected = element.id;
           event_with_most_affected_count = element.affected_count;
         }
 
-        //calc for Longest Running Event
+        // calc for Longest Running Event
         if (num_days > longest_running_event_count) {
           longest_running_event = element.id;
           longest_running_event_count = num_days;
         }
 
-        //initial calc for Event Visibility
-        if (public_count == 0 && element.public == true) {
+        // initial calc for Event Visibility
+        if (public_count === 0 && element.public === true) {
           public_count = 1;
-        } else if (not_public_count == 0 && element.public == false) {
+        } else if (not_public_count === 0 && element.public === false) {
           not_public_count = 1;
         }
 
       });
 
-      //final determination of Most Frequent Diagnosis
+      // final determination of Most Frequent Diagnosis
       let diagnosis_count_test = 0;
       diagnosisArray.forEach(diagnosisItem => {
         if (diagnosisItem.count > diagnosis_count_test) {
           diagnosis_count_test = diagnosisItem.count;
           most_frequent_diagnosis = diagnosisItem.name;
-        } else if (diagnosisItem.count == diagnosis_count_test) {
-          most_frequent_diagnosis += ", " + diagnosisItem.name;
+        } else if (diagnosisItem.count === diagnosis_count_test) {
+          most_frequent_diagnosis += ', ' + diagnosisItem.name;
         }
-      })
+      });
 
-      //final determination of Speciest Most Affected
+      // final determination of Speciest Most Affected
       let species_count_test = 0;
       speciesArray.forEach(speciesItem => {
         if (speciesItem.count > species_count_test) {
           species_count_test = speciesItem.count;
           species_most_affected = speciesItem.name;
-        } else if (speciesItem.count == species_count_test) {
-          species_most_affected += ", " + speciesItem.name;
+        } else if (speciesItem.count === species_count_test) {
+          species_most_affected += ', ' + speciesItem.name;
         }
-      })
+      });
 
-      //final determination of Average Event Time Span
+      // final determination of Average Event Time Span
       average_event_time_span = total_days_all_events / Number(number_events);
 
-      //final determination of Event Visibility
-      if (public_count == 1 && not_public_count == 1) {
+      // final determination of Event Visibility
+      if (public_count === 1 && not_public_count === 1) {
         event_visibility = { text: 'See details', bold: true };
-      } else if (public_count == 1) {
+      } else if (public_count === 1) {
         event_visibility = 'Visible to the public';
-      } else if (not_public_count == 1) {
+      } else if (not_public_count === 1) {
         event_visibility = { text: 'NOT VISIBLE TO THE PUBLIC', bold: true };
       } else {
         event_visibility = { text: 'See details', bold: true };
@@ -875,12 +882,12 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       if (search_query.event_type === null) {
       } else {
         search_query.event_type.forEach(eventTypeItem => {
-          if (eventTypeItem == 1) {
-            event_type += "Mortality/Morbidity";
-          } else if (eventTypeItem == 2 && event_type != '') {
-            event_type += ", Surveillance";
-          } else if (eventTypeItem == 2) {
-            event_type = "Surveillance";
+          if (eventTypeItem === 1) {
+            event_type += 'Mortality/Morbidity';
+          } else if (eventTypeItem === 2 && event_type !== '') {
+            event_type += ', Surveillance';
+          } else if (eventTypeItem === 2) {
+            event_type = 'Surveillance';
           }
         });
       }
@@ -1163,6 +1170,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       };
       pdfMake.createPdf(docDefinition).download('WHISPers_Search_Results_' + APP_UTILITIES.getFileNameDate + '.pdf');
       this.loadingReport = false;
+      this.dataUpdatedService.triggerRefresh();
       this.resultsSummaryReportDialogRef.close();
     }, {
       once: true // Only add listnener once. If this is not set then it will print multiple times after the first print if the page is not reloaded

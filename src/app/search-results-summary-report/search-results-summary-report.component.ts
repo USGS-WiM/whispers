@@ -1005,8 +1005,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               {
                 alignment: 'justify',
                 image: legendURL,
-                width: 110,
-                height: 240
+                width: 120,
+                height: 280
               }
             ],
             pageBreak: 'after'
@@ -1084,7 +1084,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             alignment: 'justify',
             margin: [0, 115, 0, 0],
             text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
-            style: 'smallest',
+            style: 'footer',
             pageBreak: 'after'
           },
           {
@@ -1127,7 +1127,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             alignment: 'justify',
             margin: [0, 260, 0, 0],
             text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
-            style: 'smallest'
+            style: 'footer'
           },
         ],
         images: {
@@ -1149,6 +1149,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           },
           smallest: {
             fontSize: 8
+          },
+          footer: {
+            fontSize: 7
           },
           definitionsTable: {
             fontSize: 9

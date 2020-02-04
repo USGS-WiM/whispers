@@ -185,7 +185,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.detailMap.dragging.disable();
     this.detailMap.touchZoom.disable();
     this.detailMap.doubleClickZoom.disable();
-    //this.detailMap.scrollWheelZoom.disable();
+    this.detailMap.scrollWheelZoom.disable();
 
     // mapping the event centroid for the national map
     setTimeout(() => {

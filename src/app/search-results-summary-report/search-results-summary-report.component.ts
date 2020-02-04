@@ -389,25 +389,50 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         } else {
           // row.push('');
         }
-        let orgCell = new Array();
-        for (let key in elData.organizations) {
+        const orgCell = new Array();
+        const semiColon = elData.organizations.length - 1;
+        for (let i = 0; i < elData.organizations.length; i++) {
           let organization;
-          for (let orgKey in this.orgs) {
-            if (this.orgs[orgKey].id == elData.organizations[key]) {
+          for (const orgKey in this.orgs) {
+            if (this.orgs[orgKey].id === elData.organizations[i]) {
               organization = this.orgs[orgKey].name;
             }
           }
-          if (Number(key) % 2 == 0) {
-            orgCell.push({ text: organization + "\n", alignment: 'left', color: 'black', fontSize: 9 });
+          if (i !== semiColon) {
+            orgCell.push({ text: organization + ';\n\n', alignment: 'left' });
+          } else {
+            orgCell.push({ text: organization, alignment: 'left' });
+          }
+
+          /* for (let i = 0; i < data.eventlocations.length; i++) {
+            let formattedString = '';
+            let stateAbbrev;
+            let countryAbbrev;
+            const semiColon = data.eventlocations.length - 1;
+
+            stateAbbrev = this.adminLevelOnes.find(item => item.name === data.eventlocations[i].administrative_level_one_string);
+            countryAbbrev = this.country.find(item => item.name === data.eventlocations[i].country_string);
+            if (i !== semiColon) {
+              formattedString = data.eventlocations[i].administrative_level_two_string + ', ' + stateAbbrev.abbreviation + ', ' + countryAbbrev.abbreviation + '; ';
+              counties.push(formattedString);
+            } else {
+              formattedString = data.eventlocations[i].administrative_level_two_string + ', ' + stateAbbrev.abbreviation + ', ' + countryAbbrev.abbreviation;
+              counties.push(formattedString);
+            }
+          } */
+
+          // code to alternate black and grey color
+          /* if (Number(key) % 2 == 0) {
+            orgCell.push({ text: organization + ";\n", alignment: 'left', color: 'black', fontSize: 9 });
           } else {
             orgCell.push({ text: organization + "\n", alignment: 'left', color: 'gray', fontSize: 9 });
-          }
+          } */
         }
         row.push({text: orgCell, fontSize: 9});
         if (elData.public) {
-          row.push({ text: "Visible to the public", alignment: 'left', fontSize: 9 });
+          row.push({ text: 'Visible to the public', alignment: 'left', fontSize: 9 });
         } else {
-          row.push({ text: "NOT VISIBLE TO THE PUBLIC", bold: true, alignment: 'left', fontSize: 9 });
+          row.push({ text: 'NOT VISIBLE TO THE PUBLIC', bold: true, alignment: 'left', fontSize: 9 });
         }
         locationBody.push(row);
       }

@@ -1,37 +1,59 @@
 <h1 mat-dialog-title>
   <mat-icon>notifications</mat-icon> Notification Details
+</h1>
 
-  <mat-dialog-content>
+<mat-dialog-content>
 
-    <div class="user-info-card">
-      <div class="comment-detail">
-        <small>Event</small>
-        {{data.notification.event}}
-      </div>
-      <div class="comment-detail">
-        <small>Date created</small>
-        {{data.notification.created_date |date:'shortDate'}}
-      </div>
-      <div class="comment-detail">
-        <small>Source</small>
-        {{data.notification.source}}
-      </div>
-      <div class="comment-detail">
-        <small>Summary</small>
-        {{data.notification.subject}}
-      </div>
-      <div class="comment-detail">
-        <small>Details</small>
-        <div [innerHTML]="data.notification.body"></div>
-      </div>
+  <div class="user-info-card">
+    <div class="comment-detail" *ngIf="data.notification.event !== null">
+      <small>Event</small>
+      {{data.notification.event}}
+      <br>
+      <button mat-stroked-button color="primary"
+        (click)="this.viewNotificationDetailsDialogRef.close({status: 'read', id: data.notification.id}); "
+        matTooltip="Click to go to event details page" routerLink="../event/{{data.notification.event}}">Go to Event
+        {{data.notification.event}}</button>
     </div>
-
-  </mat-dialog-content>
-
-  <mat-dialog-actions>
-    <div>
-      <button mat-button color="primary" (click)="this.viewNotificationDetailsDialogRef.close();">
-        &nbsp;Close
-      </button>
+    <div class="comment-detail">
+      <small>Date created</small>
+      {{data.notification.created_date |date:'shortDate'}}
     </div>
-  </mat-dialog-actions>
+    <div class="comment-detail">
+      <small>Source</small>
+      {{data.notification.source}}
+    </div>
+    <div class="comment-detail">
+      <small>Message Summary</small>
+      {{data.notification.subject}}
+    </div>
+    <div class="comment-detail">
+      <small>Full Message</small>
+      <div [innerHTML]=" sanitizeHTML(data.notification.body)"></div>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+
+  <button mat-button color="warn"
+    (click)="this.viewNotificationDetailsDialogRef.close({status: 'delete', id: data.notification.id});"
+    [mat-dialog-close]="unread">
+    <mat-icon>delete_forever</mat-icon>
+    &nbsp;Delete
+  </button>
+
+  <button mat-button color="accent"
+    (click)="this.viewNotificationDetailsDialogRef.close({status: 'unread', id: data.notification.id});"
+    [mat-dialog-close]="unread">
+    <mat-icon>markunread</mat-icon>
+    &nbsp;Close and mark as unread
+  </button>
+
+  <button mat-raised-button color="primary"
+    (click)="this.viewNotificationDetailsDialogRef.close({status: 'read', id: data.notification.id});"
+    [mat-dialog-close]="read">
+    <mat-icon>close</mat-icon>
+    &nbsp;Close
+  </button>
+</mat-dialog-actions>

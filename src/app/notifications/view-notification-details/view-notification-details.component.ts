@@ -3,6 +3,7 @@ import { Inject } from '@angular/core';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-view-notification-details',
@@ -13,13 +14,15 @@ export class ViewNotificationDetailsComponent implements OnInit {
 
   constructor(
     public viewNotificationDetailsDialogRef: MatDialogRef<ViewNotificationDetailsComponent>,
+    private domSanitizer: DomSanitizer,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
-  // TODO: figure out the DOM sanitization or whatever needs doing for the HTML injection.
-  // also figure out why the dialog is rendering wrong.
+  // neccesary to sanitize the HTML for some Angular HTML injection security protections
+  sanitizeHTML(html) {
+    return this.domSanitizer.bypassSecurityTrustHtml(html);
+  }
 
 }

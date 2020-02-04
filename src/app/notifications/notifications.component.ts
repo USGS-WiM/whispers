@@ -122,8 +122,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     this.selection = new SelectionModel<Notification>(allowMultiSelect, initialSelection);
     this.notificationsLoading = true;
 
-    // this.notificationsDataSource = new MatTableDataSource(this.dummyNotifications);
-    // this.notificationsDataSource.paginator = this.notificationPaginator;
+    this.notificationsDataSource = new MatTableDataSource([]);
+    this.notificationsDataSource.paginator = this.notificationPaginator;
 
     this.notificationService.getUserNotifications()
       .subscribe(
@@ -240,7 +240,98 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
         }
       }
     );
+
+    this.viewNotificationsDetailRef.afterClosed().subscribe(result => {
+      if (result.status === 'unread') {
+        // if the notification is marked as read, update to unread
+        if (notification.read === true) {
+          // update the read boolean to true both locally and on the server
+          const body = { id: result.id, read: false };
+          this.notificationService.updateNotification(body)
+            .subscribe(
+              (response) => {
+                this.viewNotificationsDetailRef.close();
+                this.notificationService.getUserNotifications()
+                  .subscribe(
+                    (notifications) => {
+                      this.userNotifications = notifications;
+                      this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
+                      this.notificationsDataSource.paginator = this.notificationPaginator;
+
+                    },
+                    error => {
+                      this.errorMessage = <any>error;
+                    }
+                  );
+              },
+              error => {
+                this.errorMessage = <any>error;
+              }
+            );
+        }
+        this.viewNotificationsDetailRef.close();
+      } else if (result.status === 'read') {
+        // update the read boolean to true both locally and on the server
+        // if the notification is marked as unread, mark it as read
+        if (notification.read === false) {
+          const body = { id: result.id, read: true };
+          this.notificationService.updateNotification(body)
+            .subscribe(
+              (response) => {
+                this.viewNotificationsDetailRef.close();
+                this.notificationService.getUserNotifications()
+                  .subscribe(
+                    (notifications) => {
+                      this.userNotifications = notifications;
+                      this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
+                      this.notificationsDataSource.paginator = this.notificationPaginator;
+
+                    },
+                    error => {
+                      this.errorMessage = <any>error;
+                    }
+                  );
+              },
+              error => {
+                this.errorMessage = <any>error;
+              }
+            );
+        }
+      } else if (result.status === 'delete') {
+        const id = result.id;
+        this.notificationService.deleteNotification(id)
+          .subscribe(
+            (response) => {
+              this.viewNotificationsDetailRef.close();
+              this.notificationService.getUserNotifications()
+                .subscribe(
+                  (notifications) => {
+                    this.userNotifications = notifications;
+                    this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
+                    this.notificationsDataSource.paginator = this.notificationPaginator;
+
+                  },
+                  error => {
+                    this.errorMessage = <any>error;
+                  }
+                );
+            },
+            error => {
+              this.errorMessage = <any>error;
+            }
+          );
+      }
+    });
   }
+
+  // updateRowData(row_obj) {
+  //   this.notificationsDataSource = this.notificationsDataSource.data.filter((value, key) => {
+  //     if (value.id == row_obj.id) {
+  //       value.name = row_obj.name;
+  //     }
+  //     return true;
+  //   });
+  // }
 
   // From angular material table sample on material api reference site
   /** Whether the number of selected elements matches the total number of rows. */

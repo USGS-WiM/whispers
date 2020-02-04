@@ -15,6 +15,7 @@ import { AuthenticationService } from '@app/services/authentication.service';
 
 import { APP_UTILITIES } from '@app/app.utilities';
 import { Notification } from '@app/interfaces/notification';
+import { NotificationService } from '@services/notification.service';
 
 // Needed for scroll to top
 import { isPlatformBrowser } from '@angular/common';
@@ -42,20 +43,22 @@ export class AppComponent implements OnInit {
   notificationsToDisplay;
 
   public currentUser;
-
-  // dummy data to work with. delete once notifications backend complete
-
+  private userNotifications;
+  private errorMessage;
 
   aboutDialogRef: MatDialogRef<AboutComponent>;
   authenticationDialogRef: MatDialogRef<AuthenticationComponent>;
   browserWarningDialogRef: MatDialogRef<BrowserWarningComponent>;
+
+  previewNotifications;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     public currentUserService: CurrentUserService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private notificationService: NotificationService,
   ) {
 
     currentUserService.currentUser.subscribe(user => {
@@ -112,15 +115,26 @@ export class AppComponent implements OnInit {
     //   });
     // }
 
-    // showing only the first 10 notifications in the mat-menu and adding button to dashboard
-    this.firstTenNotifications = this.dummyNotifications.slice(0, 10);
+    this.notificationService.getUserNotifications()
+      .subscribe(
+        (notifications) => {
+          this.userNotifications = notifications;
+          this.notificationCount = this.userNotifications.length;
+          this.previewNotifications = this.userNotifications.slice(0, 10);
 
-    this.notificationCount = this.dummyNotifications.length;
-    if (this.notificationCount > 10) {
-      this.notificationsToDisplay = this.firstTenNotifications;
-    } else {
-      this.notificationsToDisplay = this.dummyNotifications;
-    }
+          // if (this.userNotifications.length > 10) {
+          //   this.previewNotifications = this.userNotifications.slice(0, 10);
+          // } else {
+          //   this.previewNotifications = this.userNotifications;
+          // }
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+
   }
 
   openUserDashboard() {

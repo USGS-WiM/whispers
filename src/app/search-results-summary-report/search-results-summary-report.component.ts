@@ -341,8 +341,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       if (data.hasOwnProperty(key)) {
         const elData = data[key];
         const row = new Array();
-        row.push(elData.id);
-        row.push({ text: elData.start_date + " to " + ((elData.end_date == null) ? "open" : elData.end_date), alignment: 'left' });
+        row.push({text: elData.id, fontSize: 9, alignment: 'center'});
+        row.push({ text: elData.start_date + " to " + ((elData.end_date == null) ? "open" : elData.end_date), alignment: 'left', fontSize: 9 });
         let adminLevelTwoCell = new Array();
         for (let key in elData.administrativeleveltwos) {
           let countryAbbrev;
@@ -353,7 +353,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           }
           adminLevelTwoCell.push({
             text: elData.administrativeleveltwos[key].name + ", " + this.getAdminLevelOneAbbrev(elData, elData.administrativeleveltwos[key].administrative_level_one) + ", " + countryAbbrev + ";\n",
-            alignment: 'left'
+            alignment: 'left', fontSize: 9
           });
         }
         row.push(adminLevelTwoCell);
@@ -362,16 +362,16 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           const semiColon = elData.eventdiagnoses.length - 1;
           for (let i = 0; i < elData.eventdiagnoses.length; i++) {
             if (i !== semiColon) {
-              eventDiagnosesCell.push({ text: elData.eventdiagnoses[i].diagnosis_string + ', ', alignment: 'left' });
+              eventDiagnosesCell.push({ text: elData.eventdiagnoses[i].diagnosis_string + ', ', alignment: 'left', fontSize: 9 });
             } else {
-              eventDiagnosesCell.push({ text: elData.eventdiagnoses[i].diagnosis_string, alignment: 'left' });
+              eventDiagnosesCell.push({ text: elData.eventdiagnoses[i].diagnosis_string, alignment: 'left', fontSize: 9 });
             }
           }
         } else {
           eventDiagnosesCell.push('');
         }
-        row.push(eventDiagnosesCell);
-        row.push(elData.affected_count);
+        row.push({text: eventDiagnosesCell, fontSize: 9});
+        row.push({text: elData.affected_count, fontSize: 9, alignment: 'center'});
         let speciesCell = new Array();
         for (let key in elData.species) {
           if (Number(key) == elData.species.length - 1) {
@@ -380,8 +380,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             speciesCell.push(elData.species[key].name + ",\n");
           }
         }
-        row.push({ text: speciesCell, alignment: 'left' });
-        row.push({ text: elData.event_status_string, alignment: 'left' });
+        row.push({ text: speciesCell, alignment: 'left', fontSize: 9 });
+        row.push({ text: elData.event_status_string, alignment: 'left', fontSize: 9 });
         // TODO: need to come back and fix this. it's a number. Maybe need to have organization_string added to event? Or maybe just use organization service
         if (elData.organizations) {
 
@@ -398,16 +398,16 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             }
           }
           if (Number(key) % 2 == 0) {
-            orgCell.push({ text: organization + "\n", alignment: 'left', color: 'black' });
+            orgCell.push({ text: organization + "\n", alignment: 'left', color: 'black', fontSize: 9 });
           } else {
-            orgCell.push({ text: organization + "\n", alignment: 'left', color: 'gray' });
+            orgCell.push({ text: organization + "\n", alignment: 'left', color: 'gray', fontSize: 9 });
           }
         }
-        row.push(orgCell);
+        row.push({text: orgCell, fontSize: 9});
         if (elData.public) {
-          row.push({ text: "Visible to the public", alignment: 'left' });
+          row.push({ text: "Visible to the public", alignment: 'left', fontSize: 9 });
         } else {
-          row.push({ text: "NOT VISIBLE TO THE PUBLIC", bold: true, alignment: 'left' });
+          row.push({ text: "NOT VISIBLE TO THE PUBLIC", bold: true, alignment: 'left', fontSize: 9 });
         }
         locationBody.push(row);
       }
@@ -417,6 +417,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     table = {
       alignment: 'justify',
       table: {
+        widths: [35, '*', '*', 120, 60, '*', '*', '*', '*'],
         headerRows: 1,
         body: locationBody,
       },

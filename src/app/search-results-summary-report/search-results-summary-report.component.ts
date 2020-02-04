@@ -419,6 +419,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       table: {
         widths: [35, '*', '*', 120, 60, '*', '*', '*', '*'],
         headerRows: 1,
+        dontBreakRows: true,
         body: locationBody,
       },
       layout: {

@@ -342,7 +342,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       if (data.hasOwnProperty(key)) {
         const elData = data[key];
         const row = new Array();
-        row.push({ text: elData.id, fontSize: 9, alignment: 'center' });
+        row.push({ text: elData.id, link: window.location.origin + '/event/' + elData.id, color: 'blue', fontSize: 9, alignment: 'center' });
         row.push({ text: elData.start_date + " to " + ((elData.end_date == null) ? "open" : elData.end_date), alignment: 'left', fontSize: 9 });
         let adminLevelTwoCell = new Array();
         for (let key in elData.administrativeleveltwos) {

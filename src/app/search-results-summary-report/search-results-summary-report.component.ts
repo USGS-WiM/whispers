@@ -35,6 +35,45 @@ declare let gtag: Function;
 
 export class SearchResultsSummaryReportComponent implements OnInit {
 
+  // creating variables for field definitions
+  eventTypeDefinition = '';
+  eventIdDefinition = '';
+  contactOrgDefinition = '';
+  recordStatusDefinition = '';
+  numberOfLocationsDefinition = '';
+  countyDefinition = '';
+  eventDiagDefinition = '';
+  labDefinition = '';
+  numAnimalsAffectedDefinition = '';
+  numSpeciesAffectedDefinition = '';
+  speciesMostAffectedDefinition = '';
+  startEndDatesDefinition = '';
+  associatedEventsDefinition = '';
+  eventVisibilityDefinition = '';
+  stateDefinition = '';
+  countryDefinition = '';
+  startDateDefinition = '';
+  endDateDefinition = '';
+  speciesDefinition = '';
+  populationDefinition = '';
+  knownSickDefinition = '';
+  knownDeadDefinition = '';
+  estSickDefinition = '';
+  estDeadDefinition = '';
+  captiveDefinition = '';
+  speciesDiagDefinition = '';
+  numAssessedDefinition = '';
+  numWithDiagDefinition = '';
+  diagLabDefinition = '';
+  commentTypeDefinition = '';
+  commentSourceDefinition = '';
+  numOfEvents = '';
+  mostFrequentEvtDiag = '';
+  avgEventTimeSpan = '';
+  eventWithMostAffected = '';
+  longestRunningEvent = '';
+  // END creating variables for field definitions
+
   errorMessage: string;
 
   canvas = document.createElement('canvas');
@@ -114,6 +153,45 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     this.adminLevelTwos = this.data.adminLevelTwos;
     this.diagnosisTypes = this.data.diagnosisTypes;
     this.eventDiagnoses = this.data.diagnoses;
+
+    // Setting variables for field definitions
+    this.eventTypeDefinition = FIELD_HELP_TEXT.editEventTypeTooltip;
+    this.eventIdDefinition = FIELD_HELP_TEXT.eventIDTooltip;
+    this.contactOrgDefinition = FIELD_HELP_TEXT.editContactOrganizationTooltip;
+    this.recordStatusDefinition = FIELD_HELP_TEXT.editRecordStatusTooltip;
+    this.numberOfLocationsDefinition = FIELD_HELP_TEXT.numberOfLocationsDefinition;
+    this.countyDefinition = FIELD_HELP_TEXT.editCountyTooltip;
+    this.eventDiagDefinition = FIELD_HELP_TEXT.editEventDiagnosisTooltip;
+    this.labDefinition = FIELD_HELP_TEXT.editLabTooltip;
+    this.numAnimalsAffectedDefinition = FIELD_HELP_TEXT.numAnimalsAffected;
+    this.numSpeciesAffectedDefinition = FIELD_HELP_TEXT.numberOfSpeciesDefinition;
+    this.speciesMostAffectedDefinition = FIELD_HELP_TEXT.speciesMostAffectedDefinition;
+    this.startEndDatesDefinition = FIELD_HELP_TEXT.startEndDatesDefinition;
+    this.associatedEventsDefinition = FIELD_HELP_TEXT.associatedEventDefinition;
+    this.eventVisibilityDefinition = FIELD_HELP_TEXT.eventVisibility;
+    this.stateDefinition = FIELD_HELP_TEXT.stateTooltip;
+    this.countryDefinition = FIELD_HELP_TEXT.countryTooltip;
+    this.startDateDefinition = FIELD_HELP_TEXT.locationStartDateTooltip;
+    this.endDateDefinition = FIELD_HELP_TEXT.locationEndDateTooltip;
+    this.speciesDefinition = FIELD_HELP_TEXT.editSpeciesTooltip;
+    this.populationDefinition = FIELD_HELP_TEXT.populationTooltip;
+    this.knownSickDefinition = FIELD_HELP_TEXT.editKnownSickTooltip;
+    this.knownDeadDefinition = FIELD_HELP_TEXT.editKnownDeadTooltip;
+    this.estSickDefinition = FIELD_HELP_TEXT.editEstimatedSickTooltip;
+    this.estDeadDefinition = FIELD_HELP_TEXT.editEstimatedDeadTooltip;
+    this.captiveDefinition = FIELD_HELP_TEXT.editCaptiveTooltip;
+    this.speciesDiagDefinition = FIELD_HELP_TEXT.editSpeciesDiagnosisTooltip;
+    this.numAssessedDefinition = FIELD_HELP_TEXT.numberAssessedTooltip;
+    this.numWithDiagDefinition = FIELD_HELP_TEXT.numberWithDiagnosisTooltip;
+    this.diagLabDefinition = FIELD_HELP_TEXT.editLabTooltip;
+    this.commentTypeDefinition = FIELD_HELP_TEXT.locationCommentTypeTooltip;
+    this.commentSourceDefinition = FIELD_HELP_TEXT.commentSourceDefinition;
+    this.numOfEvents = FIELD_HELP_TEXT.numOfEvents;
+    this.mostFrequentEvtDiag = FIELD_HELP_TEXT.mostFrequentEvtDiag;
+    this.avgEventTimeSpan = FIELD_HELP_TEXT.avgEventTimeSpan;
+    this.eventWithMostAffected = FIELD_HELP_TEXT.eventWithMostAffected;
+    this.longestRunningEvent = FIELD_HELP_TEXT.longestRunningEvent;
+    // END Setting variables for field definitions
 
     this.countryService.getCountries()
       .subscribe(
@@ -342,20 +420,29 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       if (data.hasOwnProperty(key)) {
         const elData = data[key];
         const row = new Array();
-        row.push({ text: elData.id, link: window.location.origin + '/event/' + elData.id, color: 'blue', fontSize: 9, alignment: 'center' });
-        row.push({ text: elData.start_date + " to " + ((elData.end_date == null) ? "open" : elData.end_date), alignment: 'left', fontSize: 9 });
-        let adminLevelTwoCell = new Array();
-        for (let key in elData.administrativeleveltwos) {
+        row.push({ text: elData.id, link: window.location.origin + '/event/' + elData.id, color: 'blue', fontSize: 10, alignment: 'center' });
+        row.push({ text: elData.start_date + ' to ' + ((elData.end_date == null) ? 'open' : elData.end_date), alignment: 'left', fontSize: 10 });
+        const adminLevelTwoCell = new Array();
+        const semiColonCounty = elData.administrativeleveltwos.length - 1;
+        for (let i = 0; i < elData.administrativeleveltwos.length; i++) {
+          10
           let countryAbbrev;
-          for (let countryKey in this.countries) {
-            if (this.countries[countryKey].id == elData.administrativeleveltwos[key].country) {
+          for (const countryKey in this.countries) {
+            if (this.countries[countryKey].id === elData.administrativeleveltwos[i].country) {
               countryAbbrev = this.countries[countryKey].abbreviation;
             }
           }
-          adminLevelTwoCell.push({
-            text: elData.administrativeleveltwos[key].name + ", " + this.getAdminLevelOneAbbrev(elData, elData.administrativeleveltwos[key].administrative_level_one) + ", " + countryAbbrev + ";\n",
-            alignment: 'left', fontSize: 9
-          });
+          if (i !== semiColonCounty) {
+            adminLevelTwoCell.push({
+              text: elData.administrativeleveltwos[i].name + ', ' + this.getAdminLevelOneAbbrev(elData, elData.administrativeleveltwos[i].administrative_level_one) + ', ' + countryAbbrev + ';\n',
+              alignment: 'left', fontSize: 10
+            });
+          } else {
+            adminLevelTwoCell.push({
+              text: elData.administrativeleveltwos[i].name + ', ' + this.getAdminLevelOneAbbrev(elData, elData.administrativeleveltwos[i].administrative_level_one) + ', ' + countryAbbrev + '\n',
+              alignment: 'left', fontSize: 10
+            });
+          }
         }
         row.push(adminLevelTwoCell);
         const eventDiagnosesCell = new Array();
@@ -363,16 +450,16 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           const semiColon = elData.eventdiagnoses.length - 1;
           for (let i = 0; i < elData.eventdiagnoses.length; i++) {
             if (i !== semiColon) {
-              eventDiagnosesCell.push({ text: elData.eventdiagnoses[i].diagnosis_string + ', ', alignment: 'left', fontSize: 9 });
+              eventDiagnosesCell.push({ text: elData.eventdiagnoses[i].diagnosis_string + '; ', alignment: 'left', fontSize: 10 });
             } else {
-              eventDiagnosesCell.push({ text: elData.eventdiagnoses[i].diagnosis_string, alignment: 'left', fontSize: 9 });
+              eventDiagnosesCell.push({ text: elData.eventdiagnoses[i].diagnosis_string, alignment: 'left', fontSize: 10 });
             }
           }
         } else {
           eventDiagnosesCell.push('');
         }
-        row.push({ text: eventDiagnosesCell, fontSize: 9 });
-        row.push({ text: elData.affected_count, fontSize: 9, alignment: 'center' });
+        row.push({ text: eventDiagnosesCell, fontSize: 10 });
+        row.push({ text: elData.affected_count, fontSize: 10, alignment: 'center' });
         const speciesCell = new Array();
         for (let key in elData.species) {
           if (Number(key) === elData.species.length - 1) {
@@ -381,8 +468,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             speciesCell.push(elData.species[key].name + ',\n');
           }
         }
-        row.push({ text: speciesCell, alignment: 'left', fontSize: 9 });
-        row.push({ text: elData.event_status_string, alignment: 'left', fontSize: 9 });
+        row.push({ text: speciesCell, alignment: 'left', fontSize: 10 });
+        row.push({ text: elData.event_status_string, alignment: 'left', fontSize: 10 });
         // TODO: need to come back and fix this. it's a number. Maybe need to have organization_string added to event? Or maybe just use organization service
         if (elData.organizations) {
 
@@ -414,11 +501,11 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             } */
           }
         }
-        row.push({ text: orgCell, fontSize: 9 });
+        row.push({ text: orgCell, fontSize: 10 });
         if (elData.public) {
-          row.push({ text: 'Visible to the public', alignment: 'left', fontSize: 9 });
+          row.push({ text: 'Visible to the public', alignment: 'left', fontSize: 10 });
         } else {
-          row.push({ text: 'NOT VISIBLE TO THE PUBLIC', bold: true, alignment: 'left', fontSize: 9 });
+          row.push({ text: 'NOT VISIBLE TO THE PUBLIC', bold: true, alignment: 'left', fontSize: 10 });
         }
         locationBody.push(row);
       }
@@ -446,8 +533,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     };
 
     if (data.length === 0) {
-      // const text = { text: '\n\n\n\n No Results', fontSize: '16', alignment: 'center', pageBreak: 'after' };
-
       return;
     } else {
       return table;
@@ -482,10 +567,11 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       paddingBottom: 100
     }];
 
+
     if (data.length !== 0) {
       return image;
     } else {
-      return;
+      return; // return nothing if there is no data
     }
   }
 
@@ -493,7 +579,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     let text;
     let eventtype;
     if (data.length !== 0) {
-      eventtype = data[1].event_type;
+      eventtype = data[0].event_type; // data passed are of the same event type. Establish eventtype in this function so that we display the correct title text for the table
       if (eventtype === 1) {
         text = {
           text: 'Mortality/Morbidity Events',
@@ -512,7 +598,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
       return text;
     } else {
-      return;
+      return; // return nothing if there is no data
     }
   }
 
@@ -1164,16 +1250,17 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           {
             style: 'definitionsTable',
             table: {
+              widths: [105, '*'],
               body: [
-                [{ text: '# of Events', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Number of WHISPers events.', border: [false, false, false, false] }],
-                [{ text: 'Most Frequent Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Top event diagnosis or diagnoses based on the number of events with that diagnosis reported.', border: [false, false, false, false] }],
-                [{ text: '# of Animals Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Total number affected. A count of sick plus dead animals for a morbidity/mortality event.', border: [false, false, false, false] }],
-                [{ text: '# of Species Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Total number of species affected.', border: [false, false, false, false] }],
-                [{ text: 'Species Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Top species affected based on sick and dead numbers reported.', border: [false, false, false, false] }],
-                [{ text: 'Average Event Time Span', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Mean number of days between start and end dates across all events. If no end date provided for an event, date of report generation was used.', border: [false, false, false, false] }],
-                [{ text: 'Event with Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'WHISPers event with the highest number of animals affected.', border: [false, false, false, false] }],
-                [{ text: 'Longest Running Event', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'WHISPers event with the longest time span in days. If no end date provided for an event, date of report generation was used.', border: [false, false, false, false] }],
-                [{ text: 'Event Visibility', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Indicates whether event is visible to the public or not.', border: [false, false, false, false] }]
+                [{ text: '# of Events', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numOfEvents, border: [false, false, false, false] }],
+                [{ text: 'Most Frequent Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.mostFrequentEvtDiag, border: [false, false, false, false] }],
+                [{ text: '# of Animals Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numAnimalsAffectedDefinition, border: [false, false, false, false] }],
+                [{ text: '# of Species Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numSpeciesAffectedDefinition, border: [false, false, false, false] }],
+                [{ text: 'Species Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesMostAffectedDefinition, border: [false, false, false, false] }],
+                [{ text: 'Average Event Time Span', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.avgEventTimeSpan, border: [false, false, false, false] }],
+                [{ text: 'Event with Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventWithMostAffected, border: [false, false, false, false] }],
+                [{ text: 'Longest Running Event', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.longestRunningEvent, border: [false, false, false, false] }],
+                [{ text: 'Event Visibility', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventVisibilityDefinition, border: [false, false, false, false] }]
               ]
             },
             layout: {
@@ -1185,7 +1272,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           },
           {
             alignment: 'justify',
-            margin: [0, 145, 0, 0],
+            margin: [0, 130, 0, 0],
             text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
             style: 'footer',
             pageBreak: 'after'
@@ -1209,15 +1296,16 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           {
             style: 'definitionsTable',
             table: {
+              widths: [105, '*'],
               body: [
-                [{ text: 'Event Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Mortality/Morbidity: Noteworthy occurrence of one or more sick or dead animals clustered in space and time. Surveillance: Positive detections of a pathogen during active surveillance of healthy live animals.', border: [false, false, false, false] }],
-                [{ text: 'Event ID', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'System-generated unique identifier for an event.', border: [false, false, false, false] }],
-                [{ text: 'Start Date - End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Beginning date of the event (considering all locations). Ending date of the event (considering all locations).', border: [false, false, false, false] }],
-                [{ text: 'County (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'County of location (or equivalent, such as parish or borough in the United States).', border: [false, false, false, false] }],
-                [{ text: 'Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'The overall main reason(s) for illness and/or death across all locations and species and thus the major cause(s) of the event, or a diagnosis deemed significant enough to list at the event level for situational awareness.', border: [false, false, false, false] }],
-                [{ text: 'Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Species affected at this location.', border: [false, false, false, false] }],
-                [{ text: 'Record Status', border: [false, false, true, false], alignment: 'right', bold: true }, { text: '"Complete" if 1.) the event has ended, 2.) diagnostic tests are finalized, and 3.) all information is updated in WHISPers. Otherwise, "Incomplete".', border: [false, false, false, false] }],
-                [{ text: 'Contact Organization', border: [false, false, true, false], alignment: 'right', bold: true }, { text: 'Organization(s) to contact regarding general inquiries about the event.', border: [false, false, false, false] }],
+                [{ text: 'Event Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventTypeDefinition, border: [false, false, false, false] }],
+                [{ text: 'Event ID', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventIdDefinition, border: [false, false, false, false] }],
+                [{ text: 'Start Date - End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.startEndDatesDefinition, border: [false, false, false, false] }],
+                [{ text: 'County (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.countyDefinition, border: [false, false, false, false] }],
+                [{ text: 'Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventDiagDefinition, border: [false, false, false, false] }],
+                [{ text: 'Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesDefinition, border: [false, false, false, false] }],
+                [{ text: 'Record Status', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.recordStatusDefinition, border: [false, false, false, false] }],
+                [{ text: 'Contact Organization', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.contactOrgDefinition, border: [false, false, false, false] }],
               ]
             },
             layout: {
@@ -1229,7 +1317,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           },
           {
             alignment: 'justify',
-            margin: [0, 260, 0, 0],
+            margin: [0, 270, 0, 0],
             text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
             style: 'footer'
           },

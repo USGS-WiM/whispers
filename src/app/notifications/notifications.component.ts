@@ -5,6 +5,7 @@ import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternVali
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
+import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { CustomNotificationComponent } from '@app/custom-notification/custom-notification.component';
@@ -107,7 +108,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private notificationService: NotificationService,
-    private currentUserService: CurrentUserService
+    private currentUserService: CurrentUserService,
+    public snackBar: MatSnackBar,
   ) {
 
     currentUserService.currentUser.subscribe(user => {
@@ -323,6 +325,83 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  openNotificationDeleteConfirm(selection) {
+    // const idArray = [];
+    // for (const item of selection) {
+    //   idArray.push(item.id);
+    // }
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: 'Delete Notifications Confirm',
+          titleIcon: 'delete_forever',
+          // tslint:disable-next-line:max-line-length
+          message: 'Are you sure you want to delete these notifications? This action cannot be undone.',
+          confirmButtonText: 'Yes, Delete',
+          messageIcon: '',
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.updateNotifications(selection, 'delete');
+      }
+    });
+  }
+
+  updateNotifications(selection, action) {
+
+    const idArray = [];
+    for (const item of selection) {
+      idArray.push(item.id);
+    }
+
+    const updateObject = { 'action': action, 'ids': idArray };
+    this.notificationService.bulkUpdateNotifications(updateObject)
+      .subscribe(
+        () => {
+
+          if (action === 'delete') {
+            this.openSnackBar('Notifications successfully deleted', 'OK', 5000);
+          }
+
+          this.notificationService.getUserNotifications()
+            .subscribe(
+              (notifications) => {
+                this.userNotifications = notifications;
+                this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
+                this.notificationsDataSource.paginator = this.notificationPaginator;
+
+              },
+              error => {
+                this.errorMessage = <any>error;
+              }
+            );
+
+          // clear selection
+          // this.selection.deselect(id);
+          // this.updateSelectedEventGroup(null);
+          // this.refreshTable();
+        },
+        error => {
+          this.errorMessage = <any>error;
+          if (action === 'delete') {
+            this.openSnackBar('Error. Notifications not deleted. Error message: ' + error, 'OK', 8000);
+          }
+        }
+      );
+
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
 
   // updateRowData(row_obj) {
   //   this.notificationsDataSource = this.notificationsDataSource.data.filter((value, key) => {

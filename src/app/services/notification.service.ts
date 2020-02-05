@@ -47,6 +47,16 @@ export class NotificationService {
       }));
   }
 
+  public bulkUpdateNotifications(updateObject): Observable<any> {
+
+    return this.http.post(APP_SETTINGS.NOTIFICATIONS_URL + 'bulk_update/', updateObject, {
+      headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS
+    }).pipe(
+      map((res: any) => {
+        return res.results;
+      }));
+  }
+
   private handleError(error: Response) {
     console.error(error);
     return throwError(JSON.stringify(error.json()) || 'Server error');

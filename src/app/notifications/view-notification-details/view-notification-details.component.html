@@ -8,12 +8,18 @@
     <div class="comment-detail" *ngIf="data.notification.event !== null">
       <small>Event</small>
       {{data.notification.event}}
-      <br>
+      &nbsp;&nbsp;
       <button mat-stroked-button color="primary"
         (click)="this.viewNotificationDetailsDialogRef.close({status: 'read', id: data.notification.id}); "
         matTooltip="Click to go to event details page" routerLink="../event/{{data.notification.event}}">Go to Event
         {{data.notification.event}}</button>
     </div>
+
+    <!-- <button mat-stroked-button color="primary"
+    (click)="this.viewNotificationDetailsDialogRef.close({status: 'read', id: data.notification.id}); "
+    matTooltip="Click to go to event details page" routerLink="../event/{{data.notification.event}}">Event
+    {{data.notification.event}}</button> -->
+
     <div class="comment-detail">
       <small>Date created</small>
       {{data.notification.created_date |date:'shortDate'}}

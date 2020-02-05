@@ -139,19 +139,27 @@
 
       <div class="results-card-title-row">
         <span class="results-button-row">
-          <button mat-button color="accent">
-            <i class="material-icons">
+          <button mat-button color="accent" [disabled]="selection.selected.length === 0"
+            (click)="updateNotifications(selection.selected, 'set_read')">
+            <mat-icon>
               check_circle_outline
-            </i> Mark as Read</button>
-          <button mat-button color="warn" [disabled]="selection.selected.length === 0">
-            <i class="material-icons">
-              remove_circle
-            </i> Delete</button>
+            </mat-icon> Mark as Read
+          </button>
+          <button mat-button color="accent" [disabled]="selection.selected.length === 0"
+            (click)="updateNotifications(selection.selected, 'set_unread')">
+            <mat-icon>
+              markunread
+            </mat-icon> Mark as Unread
+          </button>
+          <button mat-button color="warn" [disabled]="selection.selected.length === 0"
+            (click)="openNotificationDeleteConfirm(selection.selected)">
+            <mat-icon>delete</mat-icon> Delete
+          </button>
         </span>
 
       </div>
     </mat-card-title>
-    <div class="results-table-div">
+    <div class=" results-table-div">
 
       <mat-table [dataSource]="notificationsDataSource" matSort matSortActive="read" matSortDirection="desc"
         *ngIf="notificationsDataSource.data.length > 0">

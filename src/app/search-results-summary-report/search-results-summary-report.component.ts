@@ -391,7 +391,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         col_6: { text: 'Species', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
         col_7: { text: 'Record Status', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
         col_8: { text: 'Contact Organization', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] },
-        col_9: { text: 'Event Visibility', border: [false, false, true, true], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] }
+        col_9: { text: 'Event Visibility', border: [false, false, false, false], style: 'tableHeader', bold: true, alignment: 'center', margin: [0, 8, 0, 0] }
       }
     };
     // [{image: writeRotatedText('I am rotated'), fit:[7,53], alignment: 'center'}]
@@ -947,7 +947,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             });
           } else {
             diagnosisArray.push({ name: diagnosis.diagnosis_string, count: 1 });
-          };
+          }
         });
 
         // calc for Number of Animals Affected
@@ -1083,7 +1083,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                 {
                   width: 700,
                   style: 'footer',
-                  text: [reportNameOrgString + ' from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about this event, connect with the Contact Organization.\n For more information, see “About” at ', { text: 'https://whispers.usgs.gov', link: 'https://whispers.usgs.gov', color: '#0000EE' }, '.']
+                  text: [reportNameOrgString + ' from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about these event, connect with the Contact Organization.\n For more information about WHISPers, see “About” at ', { text: 'https://whispers.usgs.gov', link: 'https://whispers.usgs.gov', color: '#0000EE' }, '.']
                 },
                 {
                   width: 50,

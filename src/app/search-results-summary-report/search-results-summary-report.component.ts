@@ -300,6 +300,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
   // START defining event location table
   makeResultsSummaryTable(data) {
+
     let table;
 
     const locationHeaders = {
@@ -341,7 +342,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       if (data.hasOwnProperty(key)) {
         const elData = data[key];
         const row = new Array();
-        row.push({text: elData.id, fontSize: 9, alignment: 'center'});
+        row.push({ text: elData.id, fontSize: 9, alignment: 'center' });
         row.push({ text: elData.start_date + " to " + ((elData.end_date == null) ? "open" : elData.end_date), alignment: 'left', fontSize: 9 });
         let adminLevelTwoCell = new Array();
         for (let key in elData.administrativeleveltwos) {
@@ -357,7 +358,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           });
         }
         row.push(adminLevelTwoCell);
-        let eventDiagnosesCell = new Array();
+        const eventDiagnosesCell = new Array();
         if (elData.eventdiagnoses) {
           const semiColon = elData.eventdiagnoses.length - 1;
           for (let i = 0; i < elData.eventdiagnoses.length; i++) {
@@ -370,14 +371,14 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         } else {
           eventDiagnosesCell.push('');
         }
-        row.push({text: eventDiagnosesCell, fontSize: 9});
-        row.push({text: elData.affected_count, fontSize: 9, alignment: 'center'});
-        let speciesCell = new Array();
+        row.push({ text: eventDiagnosesCell, fontSize: 9 });
+        row.push({ text: elData.affected_count, fontSize: 9, alignment: 'center' });
+        const speciesCell = new Array();
         for (let key in elData.species) {
-          if (Number(key) == elData.species.length - 1) {
+          if (Number(key) === elData.species.length - 1) {
             speciesCell.push(elData.species[key].name);
           } else {
-            speciesCell.push(elData.species[key].name + ",\n");
+            speciesCell.push(elData.species[key].name + ',\n');
           }
         }
         row.push({ text: speciesCell, alignment: 'left', fontSize: 9 });
@@ -390,45 +391,30 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           // row.push('');
         }
         const orgCell = new Array();
-        const semiColon = elData.organizations.length - 1;
-        for (let i = 0; i < elData.organizations.length; i++) {
-          let organization;
-          for (const orgKey in this.orgs) {
-            if (this.orgs[orgKey].id === elData.organizations[i]) {
-              organization = this.orgs[orgKey].name;
+        if (elData.organizations !== undefined) {
+          const semiColon = elData.organizations.length - 1;
+          for (let i = 0; i < elData.organizations.length; i++) {
+            let organization;
+            for (const orgKey in this.orgs) {
+              if (this.orgs[orgKey].id === elData.organizations[i]) {
+                organization = this.orgs[orgKey].name;
+              }
             }
-          }
-          if (i !== semiColon) {
-            orgCell.push({ text: organization + ';\n\n', alignment: 'left' });
-          } else {
-            orgCell.push({ text: organization, alignment: 'left' });
-          }
-
-          /* for (let i = 0; i < data.eventlocations.length; i++) {
-            let formattedString = '';
-            let stateAbbrev;
-            let countryAbbrev;
-            const semiColon = data.eventlocations.length - 1;
-
-            stateAbbrev = this.adminLevelOnes.find(item => item.name === data.eventlocations[i].administrative_level_one_string);
-            countryAbbrev = this.country.find(item => item.name === data.eventlocations[i].country_string);
             if (i !== semiColon) {
-              formattedString = data.eventlocations[i].administrative_level_two_string + ', ' + stateAbbrev.abbreviation + ', ' + countryAbbrev.abbreviation + '; ';
-              counties.push(formattedString);
+              orgCell.push({ text: organization + ';\n', alignment: 'left' });
             } else {
-              formattedString = data.eventlocations[i].administrative_level_two_string + ', ' + stateAbbrev.abbreviation + ', ' + countryAbbrev.abbreviation;
-              counties.push(formattedString);
+              orgCell.push({ text: organization, alignment: 'left' });
             }
-          } */
 
-          // code to alternate black and grey color
-          /* if (Number(key) % 2 == 0) {
-            orgCell.push({ text: organization + ";\n", alignment: 'left', color: 'black', fontSize: 9 });
-          } else {
-            orgCell.push({ text: organization + "\n", alignment: 'left', color: 'gray', fontSize: 9 });
-          } */
+            // code to alternate black and grey color
+            /* if (Number(key) % 2 == 0) {
+              orgCell.push({ text: organization + ";\n", alignment: 'left', color: 'black', fontSize: 9 });
+            } else {
+              orgCell.push({ text: organization + "\n", alignment: 'left', color: 'gray', fontSize: 9 });
+            } */
+          }
         }
-        row.push({text: orgCell, fontSize: 9});
+        row.push({ text: orgCell, fontSize: 9 });
         if (elData.public) {
           row.push({ text: 'Visible to the public', alignment: 'left', fontSize: 9 });
         } else {
@@ -441,6 +427,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     // table object to be placed in doc definition
     table = {
       alignment: 'justify',
+      margin: [0, 10, 0, 0],
       table: {
         widths: [35, '*', '*', 120, 60, '*', '*', '*', '*'],
         headerRows: 1,
@@ -458,20 +445,75 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       pageBreak: 'after'
     };
 
-    return table;
+    if (data.length === 0) {
+      // const text = { text: '\n\n\n\n No Results', fontSize: '16', alignment: 'center', pageBreak: 'after' };
+
+      return;
+    } else {
+      return table;
+    }
   }
   // END defining event location table
 
   getAdminLevelOneAbbrev(data, state) {
     let abbrev;
 
-    for (let key in data.administrativelevelones) {
-      if (data.administrativelevelones[key].id == state) {
+    for (const key in data.administrativelevelones) {
+      if (data.administrativelevelones[key].id === state) {
         abbrev = data.administrativelevelones[key].abbreviation;
       }
     }
 
     return abbrev;
+  }
+
+  getBanner(data) {
+    let image;
+    image = [{
+      image: this.pngURL,
+      width: 450,
+      height: 65,
+    },
+    {
+      style: 'header',
+      alignment: 'right',
+      text: 'Summary of Search Results',
+      margin: [0, -45, 0, 40],
+      paddingBottom: 100
+    }];
+
+    if (data.length !== 0) {
+      return image;
+    } else {
+      return;
+    }
+  }
+
+  getText(data) {
+    let text;
+    let eventtype;
+    if (data.length !== 0) {
+      eventtype = data[1].event_type;
+      if (eventtype === 1) {
+        text = {
+          text: 'Mortality/Morbidity Events',
+          alignment: 'center',
+          style: 'bigger',
+          margin: [30, 0, 10, 20]
+        };
+      } else if (eventtype === 2) {
+        text = {
+          text: 'Surveillance Events',
+          alignment: 'center',
+          style: 'bigger',
+          margin: [30, 0, 10, 20]
+        };
+      }
+
+      return text;
+    } else {
+      return;
+    }
   }
 
   loadProgressBar() {
@@ -644,6 +686,22 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       });
 
     window.addEventListener('image_ready', () => {
+      const mortEvents = [];
+      const survEvents = [];
+      for (const event of this.data.current_results) {
+        if (event.event_type === 1) {
+          mortEvents.push(event);
+        }
+        if (event.event_type === 2) {
+          survEvents.push(event);
+        }
+      }
+
+      // setting data for tables
+      const morTable = mortEvents;
+      const surTable = survEvents;
+
+      // creating a formatted report data
       const date = APP_UTILITIES.getReportDateTime;
 
       // whispers logo
@@ -651,6 +709,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
       // search query
       const search_query = this.data.current_search_query;
+
       // results summary details
       const result_data = this.data.current_results;
 
@@ -1046,37 +1105,39 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                 alignment: 'justify',
                 image: legendURL,
                 width: 120,
-                height: 280
+                height: 300
               }
             ],
             pageBreak: 'after'
           },
           {
-            alignment: 'justify',
+
             columns: [
-              {
-                image: this.pngURL,
-                width: 450,
-                height: 65
-              },
-              {
-                style: 'header',
-                alignment: 'right',
-                text: 'Summary of Search Results',
-                margin: [0, 15, 0, 0]
-              },
+              this.getBanner(morTable)
             ]
           },
           {
-            text: 'Morbidity/Mortality Events',
-            alignment: 'center',
-            style: 'bigger',
-            margin: [30, 10]
+            text: this.getText(morTable)
           },
           {
             alignment: 'justify',
             columns: [
-              this.makeResultsSummaryTable(this.data.current_results)
+              this.makeResultsSummaryTable(morTable)
+            ],
+          },
+          {
+
+            columns: [
+              this.getBanner(surTable)
+            ]
+          },
+          {
+            text: this.getText(surTable)
+          },
+          {
+            alignment: 'justify',
+            columns: [
+              this.makeResultsSummaryTable(surTable)
             ],
           },
           {

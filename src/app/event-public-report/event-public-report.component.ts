@@ -447,15 +447,15 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         const elData = rows[key];
         const row = new Array();
         row.push(elData.species);
-        row.push({ text: elData.population, alignment: 'center' });
-        row.push({ text: elData.known_sick, alignment: 'center' });
-        row.push({ text: elData.known_dead, alignment: 'center' });
-        row.push({ text: elData.est_sick, alignment: 'center' });
-        row.push({ text: elData.est_dead, alignment: 'center' });
-        row.push({ text: elData.captive, alignment: 'center' });
-        row.push({ text: elData.species_dia, alignment: 'left' });
-        row.push({ text: elData.count, alignment: 'center' });
-        row.push({ text: elData.lab, alignment: 'left' });
+        row.push({ text: elData.population, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.known_sick, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.known_dead, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.est_sick, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.est_dead, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.captive, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.species_dia, alignment: 'left', fontSize: 10 });
+        row.push({ text: elData.count, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.lab, alignment: 'left', fontSize: 10 });
         locationBody.push(row);
       }
     }

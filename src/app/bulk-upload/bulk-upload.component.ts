@@ -190,6 +190,7 @@ export class BulkUploadComponent implements OnInit {
         // since the item's event_ordinal is larger than the currentEventOrdinal,
         // event record does not exist.
         // create new event record with all the child data from the CSV line
+        // Note: the new_species_diagnosis field population below includes a ternary operator to catch undefined and null values and insert a blank array to satisfy serializer on the server/
         let newEvent: EventSubmission;
         newEvent = this.buildEventRecord({
           event_reference: item.event_reference,
@@ -218,7 +219,7 @@ export class BulkUploadComponent implements OnInit {
                   sick_count_estimated: item.sick_count_estimated,
                   dead_count_estimated: item.dead_count_estimated,
                   captive: item.captive,
-                  new_species_diagnoses: [
+                  new_species_diagnoses: item.diagnosis === undefined || item.diagnosis === null ? [] : [
                     {
                       diagnosis: item.diagnosis,
                       cause: item.cause,
@@ -268,7 +269,7 @@ export class BulkUploadComponent implements OnInit {
                 sick_count_estimated: item.sick_count_estimated,
                 dead_count_estimated: item.dead_count_estimated,
                 captive: item.captive,
-                new_species_diagnoses: [
+                new_species_diagnoses: item.diagnosis === undefined || item.diagnosis === null ? [] : [
                   {
                     diagnosis: item.diagnosis,
                     cause: item.cause,
@@ -308,7 +309,7 @@ export class BulkUploadComponent implements OnInit {
               sick_count_estimated: item.sick_count_estimated,
               dead_count_estimated: item.dead_count_estimated,
               captive: item.captive,
-              new_species_diagnoses: [
+              new_species_diagnoses: item.diagnosis === undefined || item.diagnosis === null ? [] : [
                 {
                   diagnosis: item.diagnosis,
                   cause: item.cause,
@@ -334,6 +335,8 @@ export class BulkUploadComponent implements OnInit {
             // the locationSpecies already exists.
             // Next step:
             // add the speciesDiagnosis
+            // the only reason for a location species to appear more than once is to include an addtional species diagnosis, so there should be no case
+            // where there is an undefined or null diagnosis value at this part of the logic tree, negating need for the ternary operator used above.
             let newSpeciesDiagnosis: NewSpeciesDiagnosis;
             newSpeciesDiagnosis = this.addSpeciesDiagnosis(
               {

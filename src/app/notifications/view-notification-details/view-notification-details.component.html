@@ -43,22 +43,19 @@
 <mat-dialog-actions>
 
   <button mat-button color="warn"
-    (click)="this.viewNotificationDetailsDialogRef.close({status: 'delete', id: data.notification.id});"
-    [mat-dialog-close]="unread">
+    (click)="this.viewNotificationDetailsDialogRef.close({status: 'delete', id: data.notification.id});">
     <mat-icon>delete_forever</mat-icon>
     &nbsp;Delete
   </button>
 
   <button mat-button color="accent"
-    (click)="this.viewNotificationDetailsDialogRef.close({status: 'unread', id: data.notification.id});"
-    [mat-dialog-close]="unread">
+    (click)="this.viewNotificationDetailsDialogRef.close({status: 'unread', id: data.notification.id});">
     <mat-icon>markunread</mat-icon>
     &nbsp;Close and mark as unread
   </button>
 
   <button mat-raised-button color="primary"
-    (click)="this.viewNotificationDetailsDialogRef.close({status: 'read', id: data.notification.id});"
-    [mat-dialog-close]="read">
+    (click)="this.viewNotificationDetailsDialogRef.close({status: 'read', id: data.notification.id});">
     <mat-icon>close</mat-icon>
     &nbsp;Close
   </button>

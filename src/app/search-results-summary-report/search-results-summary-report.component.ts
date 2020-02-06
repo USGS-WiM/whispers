@@ -425,7 +425,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         const adminLevelTwoCell = new Array();
         const semiColonCounty = elData.administrativeleveltwos.length - 1;
         for (let i = 0; i < elData.administrativeleveltwos.length; i++) {
-          10
           let countryAbbrev;
           for (const countryKey in this.countries) {
             if (this.countries[countryKey].id === elData.administrativeleveltwos[i].country) {
@@ -469,7 +468,13 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           }
         }
         row.push({ text: speciesCell, alignment: 'left', fontSize: 10 });
-        row.push({ text: elData.event_status_string, alignment: 'left', fontSize: 10 });
+        let recordStatus;
+        if (elData.complete) {
+          recordStatus = 'Complete';
+        } else {
+          recordStatus = 'Incomplete';
+        }
+        row.push({ text: recordStatus, alignment: 'left', fontSize: 10 });
         // TODO: need to come back and fix this. it's a number. Maybe need to have organization_string added to event? Or maybe just use organization service
         if (elData.organizations) {
 

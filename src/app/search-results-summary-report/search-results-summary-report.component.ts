@@ -562,7 +562,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     {
       style: 'header',
       alignment: 'right',
-      text: 'Summary of Search Results',
+      text: 'Details of Search Results',
       margin: [0, -45, 0, 40],
       paddingBottom: 100
     }];

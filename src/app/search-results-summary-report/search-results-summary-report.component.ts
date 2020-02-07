@@ -930,6 +930,10 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       let event_visibility;
       let public_count = 0;
       let not_public_count = 0;
+      const eventsAndDayCounts = [];
+      const multipleLongRunEvt = [];
+      const eventsAndMostAffCounts = [];
+      const multipleMostAffected = [];
 
       result_data.forEach(element => {
         if (!element.hasOwnProperty('public')) {
@@ -977,7 +981,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             });
           } else {
             speciesArray.push({ name: species.name, count: 1 });
-          };
+          }
         });
 
         // initial calc for Average Event Time Span
@@ -999,12 +1003,14 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           event_with_most_affected = element.id;
           event_with_most_affected_count = element.affected_count;
         }
+        eventsAndMostAffCounts.push({id: element.id, count: element.affected_count});
 
         // calc for Longest Running Event
         if (num_days > longest_running_event_count) {
           longest_running_event = element.id;
           longest_running_event_count = num_days;
         }
+        eventsAndDayCounts.push({id: element.id, count: num_days});
 
         // initial calc for Event Visibility
         if (public_count === 0 && element.public === true) {
@@ -1014,6 +1020,50 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
 
       });
+
+      const eventsAndlinksLongest = [];
+      // check to see if there are multiple longest running events
+      for (const evt of eventsAndDayCounts) {
+        if (evt.count === longest_running_event_count) {
+          multipleLongRunEvt.push({ id: evt.id});
+        }
+      }
+      if (multipleLongRunEvt.length > 0) {
+        for (let i = 0; i < multipleLongRunEvt.length; i++) {
+
+          // formatting string so that there is not a ',' at the end of last associated event
+          const addComma = multipleLongRunEvt.length - 1;
+          if (i !== addComma) {
+            eventsAndlinksLongest.push({ text: multipleLongRunEvt[i].id.toString(), link: window.location.origin + '/event/' + multipleLongRunEvt[i].id, color: 'blue' });
+            eventsAndlinksLongest.push({ text: ', ' }); // pushing it separately so that that the ',' is not part of the link
+          } else {
+            eventsAndlinksLongest.push({ text: multipleLongRunEvt[i].id.toString(), link: window.location.origin + '/event/' + multipleLongRunEvt[i].id, color: 'blue' });
+            eventsAndlinksLongest.push({ text: ' (' + longest_running_event_count.toFixed(0) + ' days)'});
+          }
+        }
+      }
+
+      const eventsAndlinksAffected = [];
+      // check to see if there are multiple events with the same number of most affected
+      for (const evt of eventsAndMostAffCounts) {
+        if (evt.count === event_with_most_affected_count) {
+          multipleMostAffected.push({ id: evt.id});
+        }
+      }
+      if (multipleMostAffected.length > 0) {
+        for (let i = 0; i < multipleMostAffected.length; i++) {
+
+          // formatting string so that there is not a ',' at the end of last associated event
+          const addComma = multipleMostAffected.length - 1;
+          if (i !== addComma) {
+            eventsAndlinksAffected.push({ text: multipleMostAffected[i].id.toString(), link: window.location.origin + '/event/' + multipleMostAffected[i].id, color: 'blue' });
+            eventsAndlinksAffected.push({ text: ', ' }); // pushing it separately so that that the ',' is not part of the link
+          } else {
+            eventsAndlinksAffected.push({ text: multipleMostAffected[i].id.toString(), link: window.location.origin + '/event/' + multipleMostAffected[i].id, color: 'blue' });
+            eventsAndlinksAffected.push({text: ' (' + event_with_most_affected_count.toFixed(0) + ' days)'});
+          }
+        }
+      }
 
       // final determination of Most Frequent Diagnosis
       let diagnosis_count_test = 0;
@@ -1052,11 +1102,12 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       }
 
       let affected_count;
-
-      if (search_query.affected_count != undefined) {
-        affected_count = 'Affected Count ' + search_query.affected_count_operator + ' ' + search_query.affected_count.toString();
-      } else {
-        affected_count = '';
+      if (search_query.affected_count !== null) {
+        if (search_query.affected_count !== undefined) {
+          affected_count = 'Affected Count ' + search_query.affected_count_operator + ' ' + search_query.affected_count.toString();
+        } else {
+          affected_count = '';
+        }
       }
 
       let event_type = '';
@@ -1133,7 +1184,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               + ((search_diagnosis_type && search_diagnosis_type.length > 0) ? search_diagnosis_type + ' | ' : '')
               + ((search_event_diagnosis && search_event_diagnosis.length > 0) ? search_event_diagnosis + ' | ' : ''),
             margin: [30, 10]
-          },/*
+          }, /*
                     {
                       alignment: 'justify',
                       columns: [
@@ -1174,9 +1225,9 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                     [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, number_animals_affected],
                     [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, number_species_affected],
                     [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, { text: species_most_affected, alignment: 'left' }],
-                    [{ border: [false, false, true, false], text: 'Average Event Time Span', bold: true, alignment: 'right' }, average_event_time_span.toFixed(0).toString() + " days"],
-                    [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [{ text: [{ text: event_with_most_affected, link: window.location.href.split('/home')[0] + "/event/" + event_with_most_affected, color: 'blue' }, " (" + event_with_most_affected_count + " affected)"] }]],
-                    [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [{ text: [{ text: longest_running_event, link: window.location.href.split('/home')[0] + "/event/" + longest_running_event, color: 'blue' }, " (" + longest_running_event_count.toFixed(0) + " days)"] }]],
+                    [{ border: [false, false, true, false], text: 'Average Event Time Span', bold: true, alignment: 'right' }, average_event_time_span.toFixed(0).toString() + ' days'],
+                    [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [{ text: eventsAndlinksAffected }]],
+                    [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [{ text: eventsAndlinksLongest }]],
                     [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, event_visibility],
                   ]
                 },

@@ -62,7 +62,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   labDefinition = '';
   numAnimalsAffectedDefinition = '';
   numSpeciesAffectedDefinition = '';
-  speceisMostAffectedDefinition = '';
+  speciesMostAffectedDefinition = '';
   startEndDatesDefinition = '';
   associatedEventsDefinition = '';
   eventVisibilityDefinition = '';
@@ -83,6 +83,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   diagLabDefinition = '';
   commentTypeDefinition = '';
   commentSourceDefinition = '';
+  // END creating variables for field definitions
+
   errorMessage;
   secondToLastPageNoFooter;
   locationNumber = 1;
@@ -185,7 +187,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.detailMap.dragging.disable();
     this.detailMap.touchZoom.disable();
     this.detailMap.doubleClickZoom.disable();
-    //this.detailMap.scrollWheelZoom.disable();
+    this.detailMap.scrollWheelZoom.disable();
 
     // mapping the event centroid for the national map
     setTimeout(() => {
@@ -213,7 +215,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         },
       );
 
-    // creating variables for field definitions
+    // Setting variables for field definitions
     this.eventTypeDefinition = FIELD_HELP_TEXT.editEventTypeTooltip;
     this.eventIdDefinition = FIELD_HELP_TEXT.eventIDTooltip;
     this.contactOrgDefinition = FIELD_HELP_TEXT.editContactOrganizationTooltip;
@@ -224,7 +226,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.labDefinition = FIELD_HELP_TEXT.editLabTooltip;
     this.numAnimalsAffectedDefinition = FIELD_HELP_TEXT.numAnimalsAffected;
     this.numSpeciesAffectedDefinition = FIELD_HELP_TEXT.numberOfSpeciesDefinition;
-    this.speceisMostAffectedDefinition = FIELD_HELP_TEXT.speciesMostAffectedDefinition;
+    this.speciesMostAffectedDefinition = FIELD_HELP_TEXT.speciesMostAffectedDefinition;
     this.startEndDatesDefinition = FIELD_HELP_TEXT.startEndDatesDefinition;
     this.associatedEventsDefinition = FIELD_HELP_TEXT.associatedEventDefinition;
     this.eventVisibilityDefinition = FIELD_HELP_TEXT.eventVisibility;
@@ -245,6 +247,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     this.diagLabDefinition = FIELD_HELP_TEXT.editLabTooltip;
     this.commentTypeDefinition = FIELD_HELP_TEXT.locationCommentTypeTooltip;
     this.commentSourceDefinition = FIELD_HELP_TEXT.commentSourceDefinition;
+    // END Setting variables for field definitions
 
     // converting whipsers logo png to a dataURL for use in pdfMake
     const whispersLogo = './assets/logo-transparent.png';
@@ -446,16 +449,16 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       if (rows.hasOwnProperty(key)) {
         const elData = rows[key];
         const row = new Array();
-        row.push(elData.species);
-        row.push({ text: elData.population, alignment: 'center' });
-        row.push({ text: elData.known_sick, alignment: 'center' });
-        row.push({ text: elData.known_dead, alignment: 'center' });
-        row.push({ text: elData.est_sick, alignment: 'center' });
-        row.push({ text: elData.est_dead, alignment: 'center' });
-        row.push({ text: elData.captive, alignment: 'center' });
-        row.push({ text: elData.species_dia, alignment: 'left' });
-        row.push({ text: elData.count, alignment: 'center' });
-        row.push({ text: elData.lab, alignment: 'left' });
+        row.push({ text: elData.species, fontSize: 10 });
+        row.push({ text: elData.population, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.known_sick, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.known_dead, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.est_sick, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.est_dead, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.captive, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.species_dia, alignment: 'left', fontSize: 10 });
+        row.push({ text: elData.count, alignment: 'center', fontSize: 10 });
+        row.push({ text: elData.lab, alignment: 'left', fontSize: 10 });
         locationBody.push(row);
       }
     }
@@ -501,6 +504,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         },
         {
           style: 'header',
+          alignment: 'right',
           text: 'Details of ' + this.data.event_data.event_type_string + ' Event ID ' + this.data.event_data.id,
           margin: [0, 20, 0, 0]
         }
@@ -569,6 +573,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         },
         {
           style: 'header',
+          alignment: 'right',
           text: 'Comments Timeline for Event ID ' + this.data.event_data.id,
           margin: [0, 20, 0, 0]
         },
@@ -617,12 +622,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       if (commentRows.hasOwnProperty(key)) {
         const elData = commentRows[key];
         const row = new Array();
-        row.push({ text: elData.comment, fontSize: 9 });
-        row.push({ text: elData.comment_type_string, fontSize: 9 });
-        row.push({ text: elData.created_date, fontSize: 9 });
-        row.push({ text: elData.created_by_string, fontSize: 9 });
-        row.push({ text: elData.created_by_organization_string, alignment: 'left', fontSize: 9 });
-        row.push({ text: elData.source, alignment: 'left', fontSize: 9 });
+        row.push({ text: elData.comment, fontSize: 10 });
+        row.push({ text: elData.comment_type_string, fontSize: 10 });
+        row.push({ text: elData.created_date, fontSize: 10 });
+        row.push({ text: elData.created_by_string, fontSize: 10 });
+        row.push({ text: elData.created_by_organization_string, alignment: 'left', fontSize: 10 });
+        row.push({ text: elData.source, alignment: 'left', fontSize: 10 });
         commentBody.push(row);
       }
     }
@@ -657,7 +662,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     explanationDescription = {
       alignment: 'justify',
       text: ['WHISPers stands for Wildlife Health Information Sharing Partnership - event reporting system. It is a partner-driven, web-based repository for sharing basic information about historic and ongoing wildlife mortality (death) and/or morbidity (illness) events. The information, such as county-level locations, onset and ending dates, species affected, and diagnosis has generously been shared with the USGS National Wildlife Health Center over time by hundreds of natural resource managers and stakeholders across the U.S. and beyond. The primary goal of the system is to provide natural resource management partners and the public with timely, accurate information on where wildlife disease events are occurring or have occurred for better preparation and decision making. The information is opportunistically collected and does not reflect all the mortality events that occur in North America. \n\n', { text: 'Disclaimer', fontSize: 11, bold: true }, '\n The data on this website are provided for situational awareness of wildlife health events. The USGS National Wildlife Health Center (NWHC) makes every effort to provide accurate and timely information; however, data may not be final or fully accurate, especially if an event is ongoing or data synthesis is not complete. Conclusions drawn from or actions undertaken on the basis of such data and information are the sole responsibility of the user. To ensure that information is accurately interpreted and appropriately credited, dissemination of information from this site (publication, press release, technical report, etc.) should be done in collaboration with the specific agencies and laboratories that have generated the information. \n\n Note: WHISPers data fields and business rules for reporting of surveillance events are under development and thus display of surveillance information may be inconsistent.\n\n'],
-      style: 'smallest',
+      style: 'explanation',
     };
     return explanationDescription;
   }
@@ -676,7 +681,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         {
           text: 'Explanation of Terms',
           margin: [0, 20, 0, 0],
-          style: 'header'
+          style: 'header',
+          alignment: 'right',
         }
       ]
     };
@@ -686,8 +692,9 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   explanationPartOne() {
     let explanationPartOne;
     explanationPartOne = {
-      style: 'smaller',
+      style: 'definitionsTable',
       table: {
+        widths: [100, '*'],
         body: [
           [{ text: 'Event Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventTypeDefinition, border: [false, false, false, false] }],
           [{ text: 'Event ID', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventIdDefinition, border: [false, false, false, false] }],
@@ -699,7 +706,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
           [{ text: 'Diagnostic Laboratory', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.labDefinition, border: [false, false, false, false] }],
           [{ text: '# of Animals Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numAnimalsAffectedDefinition, border: [false, false, false, false] }],
           [{ text: '# of Species Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numSpeciesAffectedDefinition, border: [false, false, false, false] }],
-          [{ text: 'Species Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speceisMostAffectedDefinition, border: [false, false, false, false] }],
+          [{ text: 'Species Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesMostAffectedDefinition, border: [false, false, false, false] }],
           [{ text: 'Event Start Date - End Date', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.startEndDatesDefinition, border: [false, false, false, false] }],
           [{ text: 'Associated Events', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.associatedEventsDefinition, border: [false, false, false, false] }],
           [{ text: 'Event Visibility', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventVisibilityDefinition, border: [false, false, false, false] }],
@@ -719,6 +726,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     let explanationOneForMoreDetails;
     explanationOneForMoreDetails = {
       alignment: 'justify',
+      margin: [0, 25, 0, 0], // situating this text in the footer position
       text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
       style: 'footer',
     };
@@ -737,8 +745,9 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         },
         {
           text: 'Explanation of Terms cont...',
+          margin: [0, 20, 0, 0],
           style: 'header',
-          margin: [0, 40, 0, 0],
+          alignment: 'right'
         }
       ]
     };
@@ -751,6 +760,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         style: 'definitionsTable',
         id: 'explanationPartTwo',
         table: {
+          widths: [105, '*'],
           body: [
             [{ text: 'State (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.stateDefinition, border: [false, false, false, false] }],
             [{ text: 'Country', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.countryDefinition, border: [false, false, false, false] }],
@@ -784,6 +794,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         style: 'definitionsTable',
         id: 'explanationPartTwo',
         table: {
+          widths: [105, '*'],
           body: [
             [{ text: 'State (or equivalent)', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.stateDefinition, border: [false, false, false, false] }],
             [{ text: 'Country', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.countryDefinition, border: [false, false, false, false] }],
@@ -817,6 +828,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     let explanationTwoForMoreDetails;
     explanationTwoForMoreDetails = {
       alignment: 'justify',
+      margin: [0, 105, 0, 0], // situating this text in the footer position
       text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
       style: 'footer',
     };
@@ -827,7 +839,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     let text;
     if ((this.data.event_data.public === undefined) || (this.data.event_data.public === true)) {
       text = {
-        text: 'VISIBLE TO THE PUBLIC'
+        text: 'Visible to the public'
       };
     } else if (this.data.event_data.public === false) {
       text = {
@@ -944,8 +956,11 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     return locationName;
   }
 
-  getDetailMap() {
-    // START detail map
+  checkForDuplicateDiagnosis(array) {
+    const unique = array.filter(function (elem, index, self) {
+      return index === self.indexOf(elem);
+    });
+    return unique.join(';\n');
   }
 
   downloadEventReport() {
@@ -1027,7 +1042,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         // when printing without reloading the style.transform property is blank
         // but the values we need are in the style.cssText string
         // so with the code below I'm manipulating those strings to get the values we need
-        
+
         dx.push(myDivicons[i].style.cssText.split(' left: ')[1].split('px')[0]);
         dy.push(myDivicons[i].style.cssText.split('top')[1].replace('px;', ''));
       } else {
@@ -1275,7 +1290,9 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             if (sd.organizations_string.length === 0) {
               return;
             } else {
-              hasLabs.push(sd.organizations_string);
+              sd.organizations_string.forEach(org => {
+                hasLabs.push(org);
+              });
             }
           });
         });
@@ -1285,7 +1302,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       if (hasLabs.length === 0) {
         this.labs = noLabs;
       } else {
-        this.labs = hasLabs;
+        this.labs = this.checkForDuplicateDiagnosis(hasLabs);
+        // this.labs = hasLabs;
       }
 
 
@@ -1393,7 +1411,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         // checking to see if this eventlocation has a species. If not, then we don't want to inlcude it in the array used to make the tables
         if (event_location.locationspecies.length !== 0) {
           for (const locationspecies of event_location.locationspecies) {
-
             // checking to see if this location species has a species diagnosis. If not, then we add it to the array with 'Not Assesed' in diagnoses field.
             if (locationspecies.speciesdiagnoses.length === 0) {
               let captive = locationspecies.captive;
@@ -1449,15 +1466,31 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               });
             }
 
-            // Loop through each species diagnoses for a location species
-            for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
-              let numAssess;
-              if ((speciesdiagnosis.tested_count === null) && (speciesdiagnosis.diagnosis_count === null)) {
-                numAssess = '';
-              } else {
-                const testedCount = speciesdiagnosis.tested_count || 0;
-                const diagnosisCount = speciesdiagnosis.diagnosis_count || 0;
-                numAssess = testedCount + '/' + diagnosisCount;
+            if (locationspecies.speciesdiagnoses.length > 0) {
+              const multipleDiags = [];
+              const multipleNums = [];
+              const multipleLabs = [];
+              if (locationspecies.speciesdiagnoses.length > 0) {
+                for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                  let num;
+                  multipleDiags.push(speciesdiagnosis.diagnosis_string);
+                  if ((speciesdiagnosis.tested_count === null) && (speciesdiagnosis.diagnosis_count === null)) {
+                    num = 'N/A';
+                  } else {
+                    const testedCount = speciesdiagnosis.tested_count || 0;
+                    const diagnosisCount = speciesdiagnosis.diagnosis_count || 0;
+                    num = testedCount + '/' + diagnosisCount;
+                  }
+                  multipleNums.push(num);
+
+                  if (speciesdiagnosis.organizations_string === null) {
+                    multipleLabs.push('N/A');
+                  } else if (speciesdiagnosis.organizations_string.length > 0) {
+                    for (const l of speciesdiagnosis.organizations_string) {
+                      multipleLabs.push(l);
+                    }
+                  }
+                }
               }
 
               let captive = locationspecies.captive;
@@ -1481,9 +1514,27 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                 edate = APP_UTILITIES.formatEventDates(event_location.end_date);
               }
               captive = 'Yes' || 'No';
-              const s_diag = speciesdiagnosis.diagnosis_string || ' ';
+
+              // accounting for multiple species diagnoses for 1 location species
+              let s_diag;
+              let lab;
+              let numAssess;
+              if (multipleDiags.length > 0) { // lab
+                s_diag = multipleDiags.join(';\n');
+                lab = multipleLabs.join(';\n');
+                numAssess = multipleNums.join(';\n');
+              } else {
+                s_diag = locationspecies.speciesdiagnoses.diagnosis_string || ' ';
+                numAssess = '';
+                if (locationspecies.speciesdiagnoses.organizations_string === undefined) {
+                  lab = '';
+                } else {
+                  lab = locationspecies.speciesdiagnoses.organizations_string[0];
+                }
+              }
+
+              // const s_diag = speciesdiagnosis.diagnosis_string || ' ';
               const county = locationspecies.administrative_level_two_string || ' ';
-              let lab = speciesdiagnosis.organizations_string[0] || ' ';
 
               let locationName;
 
@@ -1491,13 +1542,6 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                 locationName = 'Location ' + eventLocNum;
               } else {
                 locationName = 'Location ' + eventLocNum + ' - ' + event_location.name;
-              }
-
-              if (speciesdiagnosis.organizations_string.length > 0) {
-                for (const l of speciesdiagnosis.organizations_string) {
-                  labs.push(speciesdiagnosis.organizations_string[0]);
-                }
-                lab = labs.join(', ');
               }
 
               speciesDiag.push({
@@ -1569,6 +1613,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               },
               {
                 style: 'header',
+                alignment: 'right',
                 text: 'Summary of ' + data.event_type_string + ' Event ID ' + data.id,
                 margin: [0, 20, 0, 0]
               },
@@ -1637,12 +1682,15 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         },
         styles: {
           header: {
-            fontSize: 14,
+            fontSize: 15,
             bold: true
           },
           bigger: {
             fontSize: 18,
             bold: true
+          },
+          explanation: {
+            fontSize: 9
           },
           smaller: {
             fontSize: 10
@@ -1651,7 +1699,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             fontSize: 8
           },
           footer: {
-            fontSize: 7
+            fontSize: 9
           },
           definitionsTable: {
             fontSize: 9

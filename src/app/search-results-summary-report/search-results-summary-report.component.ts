@@ -1060,7 +1060,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             eventsAndlinksAffected.push({ text: ', ' }); // pushing it separately so that that the ',' is not part of the link
           } else {
             eventsAndlinksAffected.push({ text: multipleMostAffected[i].id.toString(), link: window.location.origin + '/event/' + multipleMostAffected[i].id, color: 'blue' });
-            eventsAndlinksAffected.push({ text: ' (' + event_with_most_affected_count.toFixed(0) + ' days)' });
+            eventsAndlinksAffected.push({ text: ' (' + event_with_most_affected_count.toFixed(0) + ' affected)' });
           }
         }
       }
@@ -1235,8 +1235,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                     [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, number_species_affected],
                     [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, { text: species_most_affected, alignment: 'left' }],
                     [{ border: [false, false, true, false], text: 'Average Event Time Span', bold: true, alignment: 'right' }, average_event_time_span.toFixed(0).toString() + ' days'],
-                    [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [{ text: eventsAndlinksAffected }]],
-                    [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [{ text: eventsAndlinksLongest }]],
+                    [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [{ text: eventsAndlinksAffected, alignment: 'left' }]],
+                    [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [{ text: eventsAndlinksLongest, alignment: 'left' }]],
                     [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, event_visibility],
                   ]
                 },

@@ -500,7 +500,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         {
           image: this.pngURL,
           width: 450,
-          // height: 65
+           height: 65
         },
         {
           style: 'header',
@@ -568,7 +568,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         {
           image: this.pngURL,
           width: 450,
-          // height: 65,
+          height: 65,
           margin: [0, 0, 0, 30]
         },
         {
@@ -676,7 +676,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         {
           image: this.pngURL,
           width: 450,
-          // height: 65
+           height: 65
         },
         {
           text: 'Explanation of Terms',
@@ -741,7 +741,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         {
           image: this.pngURL,
           width: 450,
-          // height: 65
+           height: 65
         },
         {
           text: 'Explanation of Terms cont...',
@@ -1608,7 +1608,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               {
                 image: this.pngURL,
                 width: 450,
-                // height: 65,
+                height: 65,
                 margin: [0, 0, 0, 30]
               },
               {

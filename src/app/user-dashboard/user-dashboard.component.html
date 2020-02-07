@@ -52,7 +52,11 @@
 <mat-tab-group (selectedIndexChange)="_setDataSource($event)" [selectedIndex]="selectedTab">
 
   <!-- Events tab -->
-  <mat-tab label="Events">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">assignment</mat-icon>&nbsp;
+      Events
+    </ng-template>
     <mat-card>
       <div class="app-event-table">
         <app-event-table></app-event-table>
@@ -82,7 +86,11 @@
   <!-- End Your Events Tab -->
 
   <!-- Contacts tab -->
-  <mat-tab label="Contacts" *ngIf="currentUser.role !== 7">
+  <mat-tab *ngIf="currentUser.role !== 7">
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">contacts</mat-icon>&nbsp;
+      Contacts
+    </ng-template>
 
     <mat-card>
       <mat-card-title>
@@ -185,7 +193,10 @@
   <!-- End Contacts tab -->
 
   <!-- Saved Searches Tab -->
-  <mat-tab label="Saved Searches">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">search</mat-icon>&nbsp; Saved Searches
+    </ng-template>
     <div class="saved-searches-div">
       <app-saved-searches></app-saved-searches>
     </div>
@@ -193,7 +204,12 @@
   <!-- End Saved Searches Tab -->
 
   <!-- Circles Tab -->
-  <mat-tab label="Circles" *ngIf="currentUser.role !== 7">
+  <mat-tab *ngIf="currentUser.role !== 7">
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">people</mat-icon>&nbsp;
+      Circles
+    </ng-template>
+
     <div class="circles-div">
       <app-circles></app-circles>
     </div>
@@ -201,7 +217,11 @@
   <!-- End Circles Tab -->
 
   <!-- Notifications Tab -->
-  <mat-tab label="Notifications" *ngIf="currentUser.role !== 7">
+  <mat-tab *ngIf="currentUser.role !== 7">
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">notifications</mat-icon>&nbsp;
+      Notifications
+    </ng-template>
     <div class="notifications-div">
       <app-notifications></app-notifications>
     </div>

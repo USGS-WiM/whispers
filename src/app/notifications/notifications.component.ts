@@ -133,10 +133,12 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
           this.userNotifications = notifications;
           this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
           this.notificationsDataSource.paginator = this.notificationPaginator;
+          this.notificationsLoading = false;
 
         },
         error => {
           this.errorMessage = <any>error;
+          this.notificationsLoading = false;
         }
       );
   }

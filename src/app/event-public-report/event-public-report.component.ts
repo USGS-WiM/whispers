@@ -694,7 +694,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
     explanationPartOne = {
       style: 'definitionsTable',
       table: {
-        widths: [100, '*'],
+        widths: [105, '*'],
         body: [
           [{ text: 'Event Type', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventTypeDefinition, border: [false, false, false, false] }],
           [{ text: 'Event ID', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventIdDefinition, border: [false, false, false, false] }],

@@ -826,13 +826,23 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
   explanationTwoForMoreDetails() {
     let explanationTwoForMoreDetails;
-    explanationTwoForMoreDetails = {
-      alignment: 'justify',
-      margin: [0, 105, 0, 0], // situating this text in the footer position
-      text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
-      style: 'footer',
-    };
-    return explanationTwoForMoreDetails;
+    if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
+      explanationTwoForMoreDetails = {
+        alignment: 'justify',
+        margin: [0, 70, 0, 0], // situating this text in the footer position
+        text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
+        style: 'footer',
+      };
+      return explanationTwoForMoreDetails;
+    } else {
+      explanationTwoForMoreDetails = {
+        alignment: 'justify',
+        margin: [0, 105, 0, 0], // situating this text in the footer position
+        text: ['\n\nFor more details, see WHISPers metadata at ', { text: 'https://www.usgs.gov/nwhc/whispers', link: 'https://www.usgs.gov/nwhc/whispers', color: '#0000EE' }, '.'],
+        style: 'footer',
+      };
+      return explanationTwoForMoreDetails;
+    }
   }
 
   getEventVisibility() {

@@ -820,11 +820,11 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       // TODO: calculation of record status for page 1
       let record_status;
       if (search_query.complete === true) {
-        record_status = "Complete events only";
+        record_status = 'Complete events only';
       } else if (search_query.complete === false) {
-        record_status = "Incomplete events only";
+        record_status = 'Incomplete events only';
       } else {
-        record_status = "Complete and incomplete events";
+        record_status = 'Complete and incomplete events';
       }
 
       // get string for admin level ones in search criteria
@@ -1003,14 +1003,14 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           event_with_most_affected = element.id;
           event_with_most_affected_count = element.affected_count;
         }
-        eventsAndMostAffCounts.push({id: element.id, count: element.affected_count});
+        eventsAndMostAffCounts.push({ id: element.id, count: element.affected_count });
 
         // calc for Longest Running Event
         if (num_days > longest_running_event_count) {
           longest_running_event = element.id;
           longest_running_event_count = num_days;
         }
-        eventsAndDayCounts.push({id: element.id, count: num_days});
+        eventsAndDayCounts.push({ id: element.id, count: num_days });
 
         // initial calc for Event Visibility
         if (public_count === 0 && element.public === true) {
@@ -1025,7 +1025,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       // check to see if there are multiple longest running events
       for (const evt of eventsAndDayCounts) {
         if (evt.count === longest_running_event_count) {
-          multipleLongRunEvt.push({ id: evt.id});
+          multipleLongRunEvt.push({ id: evt.id });
         }
       }
       if (multipleLongRunEvt.length > 0) {
@@ -1038,7 +1038,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             eventsAndlinksLongest.push({ text: ', ' }); // pushing it separately so that that the ',' is not part of the link
           } else {
             eventsAndlinksLongest.push({ text: multipleLongRunEvt[i].id.toString(), link: window.location.origin + '/event/' + multipleLongRunEvt[i].id, color: 'blue' });
-            eventsAndlinksLongest.push({ text: ' (' + longest_running_event_count.toFixed(0) + ' days)'});
+            eventsAndlinksLongest.push({ text: ' (' + longest_running_event_count.toFixed(0) + ' days)' });
           }
         }
       }
@@ -1047,7 +1047,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       // check to see if there are multiple events with the same number of most affected
       for (const evt of eventsAndMostAffCounts) {
         if (evt.count === event_with_most_affected_count) {
-          multipleMostAffected.push({ id: evt.id});
+          multipleMostAffected.push({ id: evt.id });
         }
       }
       if (multipleMostAffected.length > 0) {
@@ -1060,7 +1060,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             eventsAndlinksAffected.push({ text: ', ' }); // pushing it separately so that that the ',' is not part of the link
           } else {
             eventsAndlinksAffected.push({ text: multipleMostAffected[i].id.toString(), link: window.location.origin + '/event/' + multipleMostAffected[i].id, color: 'blue' });
-            eventsAndlinksAffected.push({text: ' (' + event_with_most_affected_count.toFixed(0) + ' days)'});
+            eventsAndlinksAffected.push({ text: ' (' + event_with_most_affected_count.toFixed(0) + ' days)' });
           }
         }
       }
@@ -1147,7 +1147,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                 {
                   width: 700,
                   style: 'footer',
-                  text: [reportNameOrgString + ' from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about these event, connect with the Contact Organization.\n For more information about WHISPers, see “About” at ', { text: 'https://whispers.usgs.gov', link: 'https://whispers.usgs.gov', color: '#0000EE' }, '.']
+                  text: [reportNameOrgString + ' from ', { text: url, link: url, color: '#0000EE' }, ' on ' + date + '. \n For more information about these events, connect with the Contact Organization.\n For more information about WHISPers, see “About” at ', { text: 'https://whispers.usgs.gov', link: 'https://whispers.usgs.gov', color: '#0000EE' }, '.']
                 },
                 {
                   width: 50,
@@ -1190,32 +1190,32 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               + ((affected_count !== '') ? affected_count + ' | ' : '')
               + ((event_type !== '') ? event_type + ' | ' : '')
               + ((search_diagnosis_type && search_diagnosis_type.length > 0) ? search_diagnosis_type + ' | ' : '')
-               + ((search_event_diagnosis && search_event_diagnosis.length > 0) ? search_event_diagnosis + ' | ' : ''),
+              + ((search_event_diagnosis && search_event_diagnosis.length > 0) ? search_event_diagnosis + ' | ' : ''),
             margin: [30, 10]
           },
-           /*
-                    {
-                      alignment: 'justify',
-                      columns: [
-                        {
-                          style: 'smaller',
-                          table: {
-                            widths: [150, 250],
-                            body: [
-                              [{ border: [false, false, true, false], text: 'Start Date', bold: true, alignment: 'right' }, (search_query.start_date) ? search_query.start_date : 'n/a'],
-                              [{ border: [false, false, true, false], text: 'End Date', bold: true, alignment: 'right' }, (search_query.end_date) ? search_query.end_date : 'n/a'],
-                              [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, record_status],
-                              [{ border: [false, false, true, false], text: 'State (or equivalent)', bold: true, alignment: 'right' }, (search_admin_level_one) ? search_admin_level_one : 'n/a'],
-                              [{ border: [false, false, true, false], text: 'Country (or equivalent)', bold: true, alignment: 'right' }, 'xxxxx'],
-                            ]
-                          },
-                          layout: { defaultBorder: false,
-                            paddingLeft: function(i, node) { return 15; },
-                            paddingRight: function(i, node) { return 10; },
-                           }
-                        }
-                      ]
-                    },*/
+          /*
+                   {
+                     alignment: 'justify',
+                     columns: [
+                       {
+                         style: 'smaller',
+                         table: {
+                           widths: [150, 250],
+                           body: [
+                             [{ border: [false, false, true, false], text: 'Start Date', bold: true, alignment: 'right' }, (search_query.start_date) ? search_query.start_date : 'n/a'],
+                             [{ border: [false, false, true, false], text: 'End Date', bold: true, alignment: 'right' }, (search_query.end_date) ? search_query.end_date : 'n/a'],
+                             [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, record_status],
+                             [{ border: [false, false, true, false], text: 'State (or equivalent)', bold: true, alignment: 'right' }, (search_admin_level_one) ? search_admin_level_one : 'n/a'],
+                             [{ border: [false, false, true, false], text: 'Country (or equivalent)', bold: true, alignment: 'right' }, 'xxxxx'],
+                           ]
+                         },
+                         layout: { defaultBorder: false,
+                           paddingLeft: function(i, node) { return 15; },
+                           paddingRight: function(i, node) { return 10; },
+                          }
+                       }
+                     ]
+                   },*/
           {
             text: 'Search Results Summary',
             style: 'bigger',

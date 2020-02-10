@@ -500,7 +500,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         {
           image: this.pngURL,
           width: 450,
-           height: 65
+          height: 65
         },
         {
           style: 'header',
@@ -676,7 +676,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         {
           image: this.pngURL,
           width: 450,
-           height: 65
+          height: 65
         },
         {
           text: 'Explanation of Terms',
@@ -741,7 +741,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         {
           image: this.pngURL,
           width: 450,
-           height: 65
+          height: 65
         },
         {
           text: 'Explanation of Terms cont...',
@@ -1255,15 +1255,15 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
       // looping thru all organizations incase there are multiple
       const organizations = [];
-      if (data.eventorganizations !== undefined) {
-      for (const organization of data.eventorganizations) {
-        /* organizations.push(organization.organization.name); */
+      if (data.organizations !== undefined) {
+        for (const organization of data.organizations) {
+          /* organizations.push(organization.organization.name); */
 
-        organizations.push(organization.organization.name);
+          organizations.push(organization.organization.name);
+        }
+      } else {
+        organizations.push('N/A');
       }
-    } else {
-      organizations.push( 'N/A');
-    }
 
       // getting number of locations associated with event
       let locationCount;

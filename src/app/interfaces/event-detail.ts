@@ -29,7 +29,7 @@ export interface EventDetail extends History {
     eventgroups: EventGroup[];
     eventdiagnoses: EventDiagnosis[];
     eventlocations: EventLocation[];
-    eventorganizations: Organization[];
+    organizations: Organization[];
     combined_comments: CombinedComments[];
     read_collaborators: User[];
     write_collaborators: User[];

@@ -1255,11 +1255,15 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
       // looping thru all organizations incase there are multiple
       const organizations = [];
+      if (data.eventorganizations !== undefined) {
       for (const organization of data.eventorganizations) {
         /* organizations.push(organization.organization.name); */
 
-        organizations.push({ text: organization.organization.name });
+        organizations.push(organization.organization.name);
       }
+    } else {
+      organizations.push( 'N/A');
+    }
 
       // getting number of locations associated with event
       let locationCount;
@@ -1640,7 +1644,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                     table: {
                       widths: [180, 250],
                       body: [
-                        [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, organizations],
+                        [{ border: [false, false, true, false], text: 'Contact Organization(s)', bold: true, alignment: 'right' }, organizations.join(';\n')],
                         [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, recordStatus],
                         [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
                         [{ border: [false, false, false, false], text: 'Summary Information', bold: true, fontSize: 22, margin: [30, 10], colSpan: 2 }, ' '],

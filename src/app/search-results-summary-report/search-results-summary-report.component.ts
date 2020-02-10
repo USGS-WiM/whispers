@@ -481,7 +481,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           const semiColon = elData.organizations.length - 1;
           for (let i = 0; i < elData.organizations.length; i++) {
             if (i !== semiColon) {
-              organizationCell.push({ text: elData.organizations[i].name +  + ';\n', alignment: 'left', fontSize: 10 });
+              organizationCell.push({ text: elData.organizations[i].name + ';\n', alignment: 'left', fontSize: 10 });
             } else {
               organizationCell.push({ text: elData.organizations[i].name, alignment: 'left', fontSize: 10 });
             }

@@ -96,7 +96,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   locationMarkers;
   donePrinting = false;
   readyToGenerate = false;
-  mapImageProcessed = false;
   orgsLoaded = false;
 
   constructor(
@@ -209,9 +208,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         (organizations) => {
           this.orgs = organizations;
           this.orgsLoaded = true;
-          if (this.mapImageProcessed == true) {
-            this.readyToGenerate = true;
-          }
         },
         error => {
           this.errorMessage = <any>error;
@@ -475,38 +471,23 @@ export class SearchResultsSummaryReportComponent implements OnInit {
           recordStatus = 'Incomplete';
         }
         row.push({ text: recordStatus, alignment: 'left', fontSize: 10 });
-        // TODO: need to come back and fix this. it's a number. Maybe need to have organization_string added to event? Or maybe just use organization service
-        if (elData.organizations) {
+        const organizationCell = new Array();
+        if (elData.organizations !== null && elData.organizations !== undefined) {
 
-          // row.push(elData.organizations[0].toString());
-        } else {
-          // row.push('');
-        }
-        const orgCell = new Array();
-        if (elData.organizations !== undefined) {
           const semiColon = elData.organizations.length - 1;
           for (let i = 0; i < elData.organizations.length; i++) {
-            let organization;
-            for (const orgKey in this.orgs) {
-              if (this.orgs[orgKey].id === elData.organizations[i]) {
-                organization = this.orgs[orgKey].name;
-              }
-            }
             if (i !== semiColon) {
-              orgCell.push({ text: organization + ';\n', alignment: 'left' });
+              organizationCell.push({ text: elData.organizations[i].name + ';\n', alignment: 'left', fontSize: 10 });
             } else {
-              orgCell.push({ text: organization, alignment: 'left' });
+              organizationCell.push({ text: elData.organizations[i].name, alignment: 'left', fontSize: 10 });
             }
-
-            // code to alternate black and grey color
-            /* if (Number(key) % 2 == 0) {
-              orgCell.push({ text: organization + ";\n", alignment: 'left', color: 'black', fontSize: 9 });
-            } else {
-              orgCell.push({ text: organization + "\n", alignment: 'left', color: 'gray', fontSize: 9 });
-            } */
           }
+
+        } else {
+          organizationCell.push('');
         }
-        row.push({ text: orgCell, fontSize: 10 });
+        row.push({ text: organizationCell, fontSize: 10 });
+
         if (elData.public) {
           row.push({ text: 'Visible to the public', alignment: 'left', fontSize: 10 });
         } else {
@@ -730,7 +711,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       return url;
     }); */
 
-    this.mapImageProcessed = true;
     for (let i = 0; i < contextMapTiles.length; i++) {
       if (tileMethod[i] === 'left') {
         contextMapTiles[i].style.left = (tilesLeft[i]) + 'px';
@@ -815,7 +795,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
       // formatting full URL for footer
       const url = window.location.href;
-      this.mapImageProcessed = true;
       // Section with SEARCH CRITERIA for page 1
       // TODO: calculation of record status for page 1
       let record_status;
@@ -1060,7 +1039,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
             eventsAndlinksAffected.push({ text: ', ' }); // pushing it separately so that that the ',' is not part of the link
           } else {
             eventsAndlinksAffected.push({ text: multipleMostAffected[i].id.toString(), link: window.location.origin + '/event/' + multipleMostAffected[i].id, color: 'blue' });
-            eventsAndlinksAffected.push({ text: ' (' + event_with_most_affected_count.toFixed(0) + ' days)' });
+            eventsAndlinksAffected.push({ text: ' (' + event_with_most_affected_count.toFixed(0) + ' affected)' });
           }
         }
       }
@@ -1235,8 +1214,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                     [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, number_species_affected],
                     [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, { text: species_most_affected, alignment: 'left' }],
                     [{ border: [false, false, true, false], text: 'Average Event Time Span', bold: true, alignment: 'right' }, average_event_time_span.toFixed(0).toString() + ' days'],
-                    [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [{ text: eventsAndlinksAffected }]],
-                    [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [{ text: eventsAndlinksLongest }]],
+                    [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [{ text: eventsAndlinksAffected, alignment: 'left' }]],
+                    [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [{ text: eventsAndlinksLongest, alignment: 'left' }]],
                     [{ border: [false, false, true, false], text: 'Event Visibility', bold: true, alignment: 'right' }, event_visibility],
                   ]
                 },

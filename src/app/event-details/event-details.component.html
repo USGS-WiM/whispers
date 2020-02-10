@@ -119,7 +119,7 @@
                     </th>
                     <th>Location</th>
                   </tr>
-                  <tr *ngFor="let eventOrganization of eventData.eventorganizations">
+                  <tr *ngFor="let eventOrganization of eventData.organizations">
                     <td>{{eventOrganization.organization.name}}</td>
                     <td> {{eventOrganization.organization.city}} {{eventOrganization.organization.administrative_level_one |
                                         displayValue:'abbreviation':this.administrative_level_one }} </td>
@@ -452,7 +452,7 @@
                             <th>Location</th>
                             <th>Delete</th>
                           </tr>
-                          <tr *ngFor="let eventOrganization of eventData.eventorganizations">
+                          <tr *ngFor="let eventOrganization of eventData.organizations">
                             <td>{{eventOrganization.organization.name}}</td>
                             <td> {{eventOrganization.organization.city}} {{eventOrganization.organization.administrative_level_one |
                                         displayValue:'abbreviation':this.administrative_level_one }} </td>

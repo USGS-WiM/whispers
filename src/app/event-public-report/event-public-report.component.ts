@@ -500,7 +500,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         {
           image: this.pngURL,
           width: 450,
-           height: 65
+          height: 65
         },
         {
           style: 'header',
@@ -676,7 +676,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         {
           image: this.pngURL,
           width: 450,
-           height: 65
+          height: 65
         },
         {
           text: 'Explanation of Terms',
@@ -741,7 +741,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         {
           image: this.pngURL,
           width: 450,
-           height: 65
+          height: 65
         },
         {
           text: 'Explanation of Terms cont...',
@@ -1255,10 +1255,14 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
       // looping thru all organizations incase there are multiple
       const organizations = [];
-      for (const organization of data.organizations) {
-        /* organizations.push(organization.organization.name); */
+      if (data.organizations !== undefined) {
+        for (const organization of data.organizations) {
+          /* organizations.push(organization.organization.name); */
 
-        organizations.push({ text: organization.organization.name });
+          organizations.push(organization.organization.name);
+        }
+      } else {
+        organizations.push('N/A');
       }
 
       // getting number of locations associated with event
@@ -1640,13 +1644,13 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
                     table: {
                       widths: [180, 250],
                       body: [
-                        [{ border: [false, false, true, false], text: 'Contact Organziation(s)', bold: true, alignment: 'right' }, organizations],
+                        [{ border: [false, false, true, false], text: 'Contact Organization(s)', bold: true, alignment: 'right' }, organizations.join(';\n')],
                         [{ border: [false, false, true, false], text: 'Record Status', bold: true, alignment: 'right' }, recordStatus],
                         [{ border: [false, false, true, false], text: 'Report Generated On', bold: true, alignment: 'right' }, date],
                         [{ border: [false, false, false, false], text: 'Summary Information', bold: true, fontSize: 22, margin: [30, 10], colSpan: 2 }, ' '],
                         [{ border: [false, false, true, false], text: '# of Locations', bold: true, alignment: 'right' }, locationCount],
                         [{ border: [false, false, true, false], text: 'County (or equivalent)', bold: true, alignment: 'right' }, [{ text: counties }]],
-                        [{ border: [false, false, true, false], text: 'Event Diagnosis', bold: true, alignment: 'right' }, eventDiagnosises],
+                        [{ border: [false, false, true, false], text: 'Event Diagnosis', bold: true, alignment: 'right' }, eventDiagnosises.join(';\n')],
                         [{ border: [false, false, true, false], text: 'Diagnostic Laboratory', bold: true, alignment: 'right' }, this.labs],
                         [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, data.affected_count],
                         [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, speciesAffectedCount],

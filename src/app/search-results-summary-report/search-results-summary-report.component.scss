@@ -51,7 +51,7 @@
 .legend-panel-content{
     box-sizing: border-box;
     padding-left: 15px;
-    padding-top: 10px;
+    //padding-top: 10px;
 
     .wmm-circle,
     .wmm-diamond{
@@ -80,11 +80,11 @@
 }
 
 .legend-label{
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   text-align: left;
-  display: block;
-  margin: 5px 0 1px 0;
+  //display: block;
+  //margin: 5px 0 1px 0;
   padding-top: 0;
 }
 .legend-hint{
@@ -93,7 +93,7 @@
   font-style: italic;
   opacity: 0.5;
   font-weight: 500;
-  margin: 1px 0 6px 0;
+  //margin: 1px 0 6px 0;
   line-height: 10px;
 }
 
@@ -139,6 +139,7 @@
 
 .legend-icon{
     box-sizing: border-box;
+    font-size: 12px;
 }
 
 .wmm-size-14 {

@@ -96,7 +96,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   locationMarkers;
   donePrinting = false;
   readyToGenerate = false;
-  mapImageProcessed = false;
   orgsLoaded = false;
 
   constructor(
@@ -209,9 +208,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         (organizations) => {
           this.orgs = organizations;
           this.orgsLoaded = true;
-          if (this.mapImageProcessed === true) {
-            this.readyToGenerate = true;
-          }
         },
         error => {
           this.errorMessage = <any>error;
@@ -715,7 +711,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       return url;
     }); */
 
-    this.mapImageProcessed = true;
     for (let i = 0; i < contextMapTiles.length; i++) {
       if (tileMethod[i] === 'left') {
         contextMapTiles[i].style.left = (tilesLeft[i]) + 'px';
@@ -800,7 +795,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
       // formatting full URL for footer
       const url = window.location.href;
-      this.mapImageProcessed = true;
       // Section with SEARCH CRITERIA for page 1
       // TODO: calculation of record status for page 1
       let record_status;

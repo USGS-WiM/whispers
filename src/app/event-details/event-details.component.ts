@@ -785,7 +785,7 @@ export class EventDetailsComponent implements OnInit {
       data: {
         event_id: id,
         organizations: this.organizations,
-        existing_event_orgs: this.eventData.eventorganizations
+        existing_event_orgs: this.eventData.organizations
       }
     });
 

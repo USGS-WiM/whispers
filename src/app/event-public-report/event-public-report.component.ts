@@ -1255,7 +1255,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
       // looping thru all organizations incase there are multiple
       const organizations = [];
-      for (const organization of data.eventorganizations) {
+      for (const organization of data.organizations) {
         /* organizations.push(organization.organization.name); */
 
         organizations.push({ text: organization.organization.name });

@@ -598,6 +598,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
   downloadResultsSummaryReport() {
     this.loadingReport = true;
+    gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'Downloaded Summary Report' });
     let mapurl;
     // using html2Canvas to capture leaflet map for reports
     // solution found here: https://github.com/niklasvh/html2canvas/issues/567
@@ -738,7 +739,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     contextMapPane.style.left = '';
     contextMapPane.style.top = '';
     // placeholder for google analytics event
-    // gtag('event', 'click', { 'event_category': 'Search Results', 'event_label': 'Downloaded Search Results Summary Report' });
     let legendURL;
     let event;
     html2canvas(document.getElementById('legendImage'), options).then(function (canvas) {

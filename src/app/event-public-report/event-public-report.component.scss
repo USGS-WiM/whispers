@@ -1,0 +1,66 @@
+.natMap {
+    width: 400px;
+    height: 300px;
+    background-color: white;
+}
+
+.detail-section-buttons{
+    display: flex !important;
+    width: 100% !important;
+    justify-content: center;
+
+    button{
+        position: relative;
+        top: -2px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+.mapContainer {
+    display: flex !important;
+    width: 100% !important;
+    justify-content: center;
+}
+
+.wrapper {
+    overflow: hidden;
+}
+
+.firstMap {
+    float: left;
+    padding-right: 10px;
+}
+
+.secondMap {
+    overflow: hidden;
+    padding-left: 10px;
+}
+
+.centeredHeader {
+    margin: 0 auto;
+}
+
+#mapLocationNote{
+    position: absolute;
+    top: 11px;
+    left: 15px;
+    background-color: white;
+    font-size: 11px;
+    z-index: 401;
+    box-sizing: border-box;
+    padding: 3px;
+    border-radius: 3px;
+    color: #313B57;
+    width: 175px;
+    line-height: 12px;
+    border: 1px solid rgba(160, 175, 205, 0.4);
+
+    b{
+        color: rgb(7, 7, 7);
+        font-weight: 700;
+        text-decoration: underline;
+    }
+}

@@ -122,6 +122,10 @@ import { DiagnosticInfoComponent } from './diagnostic-info/diagnostic-info.compo
 import { CommentsTableComponent } from './comments-table/comments-table.component';
 import { ViewCommentDetailsComponent } from './view-comment-details/view-comment-details.component';
 import { BrowserWarningComponent } from './browser-warning/browser-warning.component';
+import { BulkUploadComponent } from './bulk-upload/bulk-upload.component';
+import { PapaParseModule } from 'ngx-papaparse';
+import { EventPublicReportComponent } from './event-public-report/event-public-report.component';
+import { SearchResultsSummaryReportComponent } from './search-results-summary-report/search-results-summary-report.component';
 
 
 
@@ -171,6 +175,9 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     CommentsTableComponent,
     ViewCommentDetailsComponent,
     BrowserWarningComponent,
+    BulkUploadComponent,
+    EventPublicReportComponent,
+    SearchResultsSummaryReportComponent,
   ],
   imports: [
     BrowserModule,
@@ -215,7 +222,8 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     MatTooltipModule,
     MatBottomSheetModule,
     MatStepperModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    PapaParseModule
   ],
   providers: [
     AuthenticationService,
@@ -281,11 +289,14 @@ import { BrowserWarningComponent } from './browser-warning/browser-warning.compo
     UserRegistrationComponent,
     ViewContactDetailsComponent,
     EventGroupManagementComponent,
+    EventPublicReportComponent,
+    SearchResultsSummaryReportComponent,
     CircleManagementComponent,
     CircleChooseComponent,
     DiagnosticInfoComponent,
     ViewCommentDetailsComponent,
-    BrowserWarningComponent
+    BrowserWarningComponent,
+    BulkUploadComponent
   ]
 })
 export class AppModule { }

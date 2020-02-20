@@ -333,6 +333,7 @@
       </mat-expansion-panel-header>
       <app-saved-searches></app-saved-searches>
     </mat-expansion-panel>
+
   </div>
 
   <div class="resultsDiv">
@@ -508,6 +509,11 @@
           <span class="spacer"></span>
 
           <span class="results-button-row">
+            <button mat-button color="accent" (click)="generateResultsSummaryReport()">
+              <mat-icon>
+                list_alt
+              </mat-icon> Generate Search Results Report
+            </button>
             <button mat-button color="accent" (click)="exportEventSummaries()">
               <mat-icon>
                 unarchive

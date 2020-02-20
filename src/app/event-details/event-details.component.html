@@ -24,6 +24,9 @@
             <i class="material-icons">print</i> Print Event Details</button> -->
           <button mat-raised-button color="primary" class="event-detail-action-button" (click)="exportEventDetails()">
             <i class="material-icons">unarchive</i> Export Event Data</button>
+          <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadEventReport()">
+            <i class="material-icons">list_alt</i> Generate Event Report</button>
+            <!-- <app-event-public-report></app-event-public-report> (click)="eventReportComponent.print()" -->
         </div>
       </div>
 
@@ -116,7 +119,7 @@
                     </th>
                     <th>Location</th>
                   </tr>
-                  <tr *ngFor="let eventOrganization of eventData.eventorganizations">
+                  <tr *ngFor="let eventOrganization of eventData.organizations">
                     <td>{{eventOrganization.organization.name}}</td>
                     <td> {{eventOrganization.organization.city}} {{eventOrganization.organization.administrative_level_one |
                                         displayValue:'abbreviation':this.administrative_level_one }} </td>
@@ -128,7 +131,7 @@
               <!-- Event groups -->
               <!-- Event groups -->
               <div class="event-page-split-half" *ngIf="eventData.eventgroups && eventData.eventgroups.length > 0">
-                <div class="event-table-header">Associated Events</div>
+                <div class="event-table-header" matTooltip={{associatedEventsTooltip()}}>Associated Events</div>
                 <table>
                   <tr>
                     <th>Event Group</th>
@@ -138,9 +141,9 @@
                     <td>{{eventGroup.name}}</td>
                     <td>
                       <span *ngFor="let eventID of eventGroup.events">
-                        <button mat-button  class="link-button" *ngIf="eventID !== eventData.id"
+                        <button mat-button class="link-button" *ngIf="eventID !== eventData.id"
                           (click)="navigateToEventDetails(eventID);" class="link-button">{{eventID}}</button>
-                        </span>
+                      </span>
                       <!-- <button mat-button *ngFor="let eventID of eventGroup.events" class="link-button"
                         routerLink="../../event/{{eventID}}" class="link-button">{{eventID}}</button> -->
                     </td>
@@ -361,8 +364,8 @@
           </div>
         </div>
 
-        <mat-tab-group class="tab-bar" (selectedTabChange)="resetExpansionPanels()"
-          *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+        <mat-tab-group class="tab-bar"(selectedIndexChange)="_setDataSource($event)" [selectedIndex]="selectedTab" (selectedTabChange)="resetExpansionPanels()"
+          *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined" #eventDetailsTabs>
           <!-- (selectedIndexChange)="_setDataSource($event)" -->
           <!-- Events tab -->
 
@@ -449,7 +452,7 @@
                             <th>Location</th>
                             <th>Delete</th>
                           </tr>
-                          <tr *ngFor="let eventOrganization of eventData.eventorganizations">
+                          <tr *ngFor="let eventOrganization of eventData.organizations">
                             <td>{{eventOrganization.organization.name}}</td>
                             <td> {{eventOrganization.organization.city}} {{eventOrganization.organization.administrative_level_one |
                                         displayValue:'abbreviation':this.administrative_level_one }} </td>
@@ -748,7 +751,8 @@
                       <div class="event-table-header">Event Location Details</div>
 
                       <mat-expansion-panel *ngFor="let eventLocation of eventData.eventlocations; let i = index"
-                        [attr.data-index]="i" (change)="panelDataChange()" class="event-location-detail-wrapper">
+                        [attr.data-index]="i" class="event-location-detail-wrapper">
+                        <!-- [attr.data-index]="i" (change)="panelDataChange()" class="event-location-detail-wrapper"> -->
                         <mat-expansion-panel-header>
                           <mat-panel-title>
                             <mat-icon>location_on</mat-icon> {{determineLocationName(eventLocation.name,i+1)}}
@@ -791,7 +795,8 @@
                               <div class="label" matTooltip={{flywayTooltip()}}>Flyways
                               </div>
                               <div class="value"><span
-                                  *ngFor="let flyway of eventLocation.flyways">{{flyway.name}}</span></div>
+                                  *ngFor="let flyway of eventLocation.flyways">{{flyway.name}}</span>
+                              </div>
                             </div>
                             <div class="item">
                               <div class="label">Latitude</div>
@@ -808,11 +813,16 @@
 
 
                         <!-- Begin Event Location Comments section -->
-                        <mat-expansion-panel (opened)="locationCommentsPanelOpen = true"
-                          (closed)="locationCommentsPanelOpen = false">
+                        <mat-expansion-panel (opened)="eventLocation.commentsOpen = true"
+                          (closed)="eventLocation.commentsOpen = false" style="margin: 18px 0;">
+                          <!-- <mat-expansion-panel (opened)="setOpened(i)" (closed)="setClosed(i)"> -->
+                          <!-- <mat-expansion-panel (opened)="setOpened(i)" (closed)="setClosed(i)" *ngFor="let locationComment of"> -->
                           <mat-expansion-panel-header>
+                            <!-- <mat-panel-title>
+                              {{ currentlyOpenedItemIndex === i ? 'Hide Location Comments' : 'View Location Comments' }}
+                            </mat-panel-title> -->
                             <mat-panel-title>
-                              {{locationCommentsPanelOpen ? 'Hide Location Comments' : 'View Location Comments'}}
+                              {{ eventLocation.commentsOpen ? 'Hide Location Comments' : 'View Location Comments' }}
                             </mat-panel-title>
                           </mat-expansion-panel-header>
 
@@ -858,11 +868,11 @@
 
 
                         <!-- Begin Event Location Contacts section -->
-                        <mat-expansion-panel (opened)="locationContactsPanelOpen = true"
-                          (closed)="locationContactsPanelOpen = false" style="margin: 18px 0;">
+                        <mat-expansion-panel (opened)="eventLocation.contactsOpen = true"
+                          (closed)="eventLocation.contactsOpen  = false" style="margin: 18px 0;">
                           <mat-expansion-panel-header>
                             <mat-panel-title>
-                              {{locationContactsPanelOpen ? 'Hide Location Contacts' : 'View Location Contacts'}}
+                              {{eventLocation.contactsOpen  ? 'Hide Location Contacts' : 'View Location Contacts'}}
                             </mat-panel-title>
                           </mat-expansion-panel-header>
 
@@ -983,7 +993,6 @@
                     </div>
                   </div>
 
-
                   <!-- 
                               Add new event location
                               Add new event location
@@ -1032,7 +1041,7 @@
     <mat-card>
       <div id="map">
 
-        <mat-card class="unmappable-warning"
+        <mat-card class="unmappable-warning" data-html2canvas-ignore
           *ngIf="unMappables.length > 0 && currentUser.username != '' && currentUser.role !== 7"
           matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
           [matTooltipPosition]="'above'">
@@ -1048,7 +1057,7 @@
         </mat-card>
 
 
-        <mat-expansion-panel id="legend" class="legend">
+        <mat-expansion-panel id="legend" class="legend" data-html2canvas-ignore>
           <mat-expansion-panel-header>
             <mat-panel-title>
               Legend

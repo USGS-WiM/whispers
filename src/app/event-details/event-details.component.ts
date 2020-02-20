@@ -1,21 +1,22 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
+import { MatDialog, MatDialogRef, MatExpansionPanel, MatTabGroup } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
-
 //declare let L: any;
 
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
-//import * as esrilegend from 'esri-leaflet-legend';
+import pdfMake from 'pdfmake/build/pdfMake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import html2canvas from 'html2canvas';
+// import * as esrilegend from 'esri-leaflet-legend';
 
 import { MatSnackBar } from '@angular/material';
 import { TooltipPosition } from '@angular/material';
-
-
 
 import { EventService } from '@services/event.service';
 import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
@@ -52,6 +53,7 @@ import { CommentType } from '@interfaces/comment-type';
 import { AddCommentComponent } from '@app/add-comment/add-comment.component';
 import { AddEventLocationContactComponent } from '@app/add-event-location-contact/add-event-location-contact.component';
 import { AddServiceRequestComponent } from '@app/add-service-request/add-service-request.component';
+import { EventPublicReportComponent } from '@app/event-public-report/event-public-report.component';
 
 import { EventLocationContactService } from '@services/event-location-contact.service';
 
@@ -59,7 +61,6 @@ import { ContactService } from '@services/contact.service';
 
 import { CreateContactComponent } from '@create-contact/create-contact.component';
 import { CreateContactService } from '@create-contact/create-contact.service';
-
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -73,6 +74,11 @@ import { CircleChooseComponent } from '@app/circle-management/circle-choose/circ
 import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
 declare let gtag: Function;
+
+export interface AssociatedEvents {
+  id: any;
+  link: string;
+}
 
 @Component({
   selector: 'app-event-details',
@@ -88,6 +94,8 @@ declare let gtag: Function;
   ],
 })
 export class EventDetailsComponent implements OnInit {
+  @Output() myEvent = new EventEmitter();
+  @Input() selectedTab: number;
 
   // @ViewChild('speciesTable') table: any;
   eventID: string;
@@ -97,15 +105,16 @@ export class EventDetailsComponent implements OnInit {
   landownerships;
   species: Species[] = [];
   speciesLoading = false;
+  associatedEvents: Array<AssociatedEvents> = [];
+  currentlyOpenedItemIndex = -1;
 
   eventCommentsPanelOpen = false;
   serviceRequestPanelOpen = false;
   collaboratorsPanelOpen = false;
   locationCommentsPanelOpen = false;
   locationContactsPanelOpen = false;
-
   eventOwner;
-
+  natMapPoints;
   eventNotFound = false;
 
   showAddEventLocation = false;
@@ -120,6 +129,7 @@ export class EventDetailsComponent implements OnInit {
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   circleChooseDialogRef: MatDialogRef<CircleChooseComponent>;
   circleManagementDialogRef: MatDialogRef<CircleManagementComponent>;
+  eventPublicReportDialogRef: MatDialogRef<EventPublicReportComponent>;
 
   addCommentDialogRef: MatDialogRef<AddCommentComponent>;
 
@@ -140,7 +150,8 @@ export class EventDetailsComponent implements OnInit {
 
   eventDataLoading = true;
 
-  viewPanelStates: Object;
+  // see comment on line 182
+  // viewPanelStates: Object;
 
   currentUser;
 
@@ -158,6 +169,12 @@ export class EventDetailsComponent implements OnInit {
   errorMessage;
   flywaysVisible = false;
   watershedsVisible = false;
+
+  canvas = document.createElement('canvas');
+  capturedImage;
+  commentTableImage: any;
+
+  // selectedTab: number;
 
   locationSpeciesDisplayedColumns = [
     'species',
@@ -178,8 +195,16 @@ export class EventDetailsComponent implements OnInit {
 
   @ViewChild(MatPaginator) locationSpeciesPaginator: MatPaginator;
   @ViewChild(MatSort) locationSpeciesSort: MatSort;
-
+  @ViewChild(EventPublicReportComponent) eventReportComponent: EventPublicReportComponent;
   @ViewChildren(MatExpansionPanel) viewPanels: QueryList<MatExpansionPanel>;
+  @ViewChild(MatTabGroup) eventDetailsTabs: MatTabGroup;
+
+  // this use of the viewPanels variable and associated functions is assumed (but not confirmed) deprecated.
+  // the original purpose may have been superceded by later development. it was removed 12/30/19 to fix a bug
+  // that involved breaking of location comments and location contacts collapse panels after a new item was added.
+  // associated functions(commented out below): getViewPanelState, setViewPanelState
+  // all left in for now in case issues are uncovered. - B.Draper 12/31/19
+  // @ViewChildren(MatExpansionPanel) viewPanels: QueryList<MatExpansionPanel>;
 
   constructor(private route: ActivatedRoute,
     private _eventService: EventService,
@@ -202,6 +227,7 @@ export class EventDetailsComponent implements OnInit {
     private commentService: CommentService,
     private contactService: ContactService,
     private circleService: CircleService,
+
     public snackBar: MatSnackBar,
     private router: Router
   ) {
@@ -230,9 +256,10 @@ export class EventDetailsComponent implements OnInit {
 
   ngOnInit() {
 
+    // this.selectedTab = 0;
+
     const initialSelection = [];
     const allowMultiSelect = true;
-
     this.eventLocationSpecies = [];
 
     this.route.paramMap.subscribe(params => {
@@ -388,6 +415,14 @@ export class EventDetailsComponent implements OnInit {
       );
 
     this.speciesLoading = true;
+
+    // get event summary for reports
+    this._eventService.getEventSummary(this.eventID)
+      .subscribe(
+        (eventsummary) => {
+          this.natMapPoints = eventsummary;
+        }
+      );
     // get species from the species service
     this.speciesService.getSpecies()
       .subscribe(
@@ -497,14 +532,14 @@ export class EventDetailsComponent implements OnInit {
         'Flyways': flyways,
         'Watersheds (HUC 2)': watersheds,
         'Land Use': landUse
-      }
+      };
 
-      //const x = { position: 'topleft'};
+      // const x = { position: 'topleft'};
 
       L.control.layers(baseMaps, overlays, { position: 'topleft' }).addTo(this.map);
       L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
-      //L.control.layers(baseMaps).addTo(this.map);
+      // L.control.layers(baseMaps).addTo(this.map);
 
       this.mapEvent(this.eventData);
 
@@ -525,7 +560,11 @@ export class EventDetailsComponent implements OnInit {
           this.watershedsVisible = false;
         }
       });
-
+      /* this.natMap = new L.Map('hiddenNatMap', {
+        center: new L.LatLng(39.8283, -98.5795),
+        zoom: 4,
+        layers: [streets]
+      }); */
     }, 3000);
   }
 
@@ -597,7 +636,6 @@ export class EventDetailsComponent implements OnInit {
     if (markers.length || countyPolys.length) {
       this.map.fitBounds(bounds);
     }
-
   }
 
   reloadMap() {
@@ -605,6 +643,7 @@ export class EventDetailsComponent implements OnInit {
       this.locationMarkers.clearLayers();
       this.mapEvent(this.eventData);
     }, 2500);
+ 
   }
 
   navigateToHome() {
@@ -615,6 +654,7 @@ export class EventDetailsComponent implements OnInit {
     this.eventLocationSpecies = [];
     this.router.navigate([`../${eventID}`], { relativeTo: this.route });
     this.reloadMap();
+    this.eventDetailsTabs.selectedIndex = 0;
     // location.reload();
     // this.refreshEvent();
   }
@@ -627,6 +667,16 @@ export class EventDetailsComponent implements OnInit {
     this.locationCommentsPanelOpen = false;
     this.locationContactsPanelOpen = false;
 
+  }
+
+  setOpened(itemIndex) {
+    this.currentlyOpenedItemIndex = itemIndex;
+  }
+
+  setClosed(itemIndex) {
+    if (this.currentlyOpenedItemIndex === itemIndex) {
+      this.currentlyOpenedItemIndex = -1;
+    }
   }
 
   editEvent(id: string) {
@@ -694,6 +744,40 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
+  downloadEventReport(id: string) {
+
+    this.selectedTab = 0;
+
+    setTimeout(() => {
+      this.eventPublicReportDialogRef = this.dialog.open(EventPublicReportComponent, {
+        minWidth: '40%',
+        data: {
+          event_data: this.eventData,
+          user: this.currentUser,
+          event_summary: this.natMapPoints
+        }
+      });
+
+      this.eventPublicReportDialogRef.afterClosed()
+        .subscribe(
+          () => {
+            // this.refreshEvent();
+          },
+          error => {
+            this.errorMessage = <any>error;
+          }
+        );
+
+      // adding back leaflet layers and controls
+      this.locationMarkers = L.featureGroup().addTo(this.map);
+      this.mapEvent(this.eventData);
+      $('.leaflet-control-zoom').css('visibility', 'visible');
+      $('.leaflet-control-layers').css('visibility', 'visible');
+      $('.leaflet-control-attribution').css('visibility', 'visible');
+
+    }, 1000);
+  }
+
   addEventOrganization(id: string) {
     // Open dialog for adding event diagnosis
     this.addEventOrganizationDialogRef = this.dialog.open(AddEventOrganizationComponent, {
@@ -701,7 +785,7 @@ export class EventDetailsComponent implements OnInit {
       data: {
         event_id: id,
         organizations: this.organizations,
-        existing_event_orgs: this.eventData.eventorganizations
+        existing_event_orgs: this.eventData.organizations
       }
     });
 
@@ -915,6 +999,7 @@ export class EventDetailsComponent implements OnInit {
   editEventDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editEventDiagnosisTooltip; return string; }
   locationsTooltip() { const string = FIELD_HELP_TEXT.locationsTooltip; return string; }
   contactPersonTooltip() { const string = FIELD_HELP_TEXT.contactPersonTooltip; return string; }
+  associatedEventsTooltip() { const string = FIELD_HELP_TEXT.associatedEventsTooltip; return string; }
 
   deleteComment(id: number) {
     this.commentService.delete(id)
@@ -1162,7 +1247,7 @@ export class EventDetailsComponent implements OnInit {
         },
         error => {
           this.errorMessage = <any>error;
-          this.openSnackBar('Error. Event organzation not deleted. Error message: ' + error, 'OK', 8000);
+          this.openSnackBar('Error. Event organization not deleted. Error message: ' + error, 'OK', 8000);
         }
       );
   }
@@ -1172,8 +1257,10 @@ export class EventDetailsComponent implements OnInit {
   }
 
   refreshEvent() {
-    this.viewPanelStates = new Object();
-    this.getViewPanelState(this.viewPanels);
+    // see comment on line 182
+    // this.viewPanelStates = new Object();
+    // this.getViewPanelState(this.viewPanels);
+    this.selectedTab = 0;
 
     console.log('Event Location Species list at start of refresh: ', this.eventLocationSpecies);
 
@@ -1237,9 +1324,10 @@ export class EventDetailsComponent implements OnInit {
 
           this.eventDataLoading = false;
 
-          setTimeout(() => {
-            this.setViewPanelState(this.viewPanels);
-          });
+          // see comment on line 182
+          // setTimeout(() => {
+          //   this.setViewPanelState(this.viewPanels);
+          // });
         },
         error => {
           this.errorMessage = <any>error;
@@ -1247,19 +1335,20 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
-  getViewPanelState(viewPanels: QueryList<MatExpansionPanel>) {
-    viewPanels.forEach((element, index) => {
-      this.viewPanelStates[index] = element.expanded;
-    });
-  }
+  // below deprecated. see comment on line 182
+  // getViewPanelState(viewPanels: QueryList<MatExpansionPanel>) {
+  //   viewPanels.forEach((element, index) => {
+  //     this.viewPanelStates[index] = element.expanded;
+  //   });
+  // }
 
-  setViewPanelState(viewPanels: QueryList<MatExpansionPanel>) {
-    viewPanels.forEach((element, index) => {
-      if (this.viewPanelStates[index]) {
-        element.open();
-      }
-    });
-  }
+  // setViewPanelState(viewPanels: QueryList<MatExpansionPanel>) {
+  //   viewPanels.forEach((element, index) => {
+  //     if (this.viewPanelStates[index]) {
+  //       element.open();
+  //     }
+  //   });
+  // }
 
   addLocationSpecies(eventlocation) {
     // Open dialog for adding location species
@@ -1474,6 +1563,4 @@ export class EventDetailsComponent implements OnInit {
     this._eventService.getEventDetailsCSV(this.eventID);
     gtag('event', 'click', { 'event_category': 'Event Details', 'event_label': 'Exported Event Details' });
   }
-
-
 }

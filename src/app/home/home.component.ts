@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, AfterViewChecked } from '@
 //declare let L: any;
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { Observable ,  Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { Event } from '@interfaces/event';
 import { EventSummary } from '@interfaces/event-summary';
@@ -37,6 +37,8 @@ import { SpeciesService } from '@app/services/species.service';
 import { ConfirmComponent } from '@confirm/confirm.component';
 
 import { SaveSearchComponent } from '@app/save-search/save-search.component';
+import { SearchResultsSummaryReportComponent } from '@app/search-results-summary-report/search-results-summary-report.component';
+
 
 import { User } from '@interfaces/user';
 
@@ -45,6 +47,7 @@ import 'leaflet';
 import 'leaflet-draw';
 import * as esri from 'esri-leaflet';
 import { UserRegistrationComponent } from '@app/user-registration/user-registration.component';
+import { DataUpdatedService } from '@services/data-updated.service';
 declare let gtag: Function;
 
 // export class ResultsDataSource extends MatTableDataSource<any> {
@@ -79,6 +82,7 @@ export class HomeComponent implements OnInit {
   private searchQuerySubscription: Subscription;
 
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
+  resultsSummaryReportDialogRef: MatDialogRef<SearchResultsSummaryReportComponent>;
 
   isloggedIn = APP_SETTINGS.IS_LOGGEDIN;
 
@@ -115,6 +119,8 @@ export class HomeComponent implements OnInit {
   longitude;
   zoomLevel;
 
+  resultsMapUrl;
+
   flywaysVisible = false;
   watershedsVisible = false;
 
@@ -135,12 +141,15 @@ export class HomeComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(SearchResultsSummaryReportComponent) eventReresultsSummaryReportDialogRefportComponent: SearchResultsSummaryReportComponent;
+
 
   constructor(
     private eventService: EventService,
     private dialog: MatDialog,
     public snackBar: MatSnackBar,
     private searchDialogService: SearchDialogService,
+    private dataUpdatedService: DataUpdatedService,
     private displayValuePipe: DisplayValuePipe,
     private adminLevelOneService: AdministrativeLevelOneService,
     private adminLevelTwoService: AdministrativeLevelTwoService,
@@ -153,6 +162,13 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
+
+    // listen for a refresh data trigger
+    dataUpdatedService.trigger.subscribe((action) => {
+      if (action === 'refresh') {
+        this.mapResults(this.currentResults);
+      }
+    });
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
@@ -317,6 +333,7 @@ export class HomeComponent implements OnInit {
     this.eventService.queryEvents(this.currentSearchQuery)
       .subscribe(
         eventSummaries => {
+
           this.currentResults = eventSummaries;
           this.dataSource = new MatTableDataSource(this.currentResults);
           this.dataSource.paginator = this.paginator;
@@ -692,6 +709,8 @@ export class HomeComponent implements OnInit {
 
   mapResults(currentResults: any) {
 
+    this.locationMarkers.clearLayers();
+
     // set/reset currentResultsMarker var to an empty array
     const currentResultsMarkers = [];
     // tslint:disable-next-line:forin
@@ -864,9 +883,9 @@ export class HomeComponent implements OnInit {
 
           // if event is not public, begin the markup with the not public icon
           if (event.public === false) {
-            popupContent = popupContent + '<h3><img src="/assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</h3>';
+            popupContent = popupContent + '<h3><img src="./assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</h3>';
           } else {
-            popupContent = popupContent +  '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>';
+            popupContent = popupContent + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>';
           }
 
           // else if (event.public === true) {
@@ -899,7 +918,7 @@ export class HomeComponent implements OnInit {
 
           // if event is not public, begin the markup with the not public icon
           if (event.public === false) {
-            popupContent = popupContent + '<button class="accordion accButton"> <img src="/assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</button>';
+            popupContent = popupContent + '<button class="accordion accButton"> <img src="./assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</button>';
           } else {
             popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>';
           }
@@ -1003,6 +1022,46 @@ export class HomeComponent implements OnInit {
   openMetadataLink() {
     window.open(APP_SETTINGS.WHISPERS_METADATA_URL, '_blank');
     gtag('event', 'click', { 'event_category': 'Home', 'event_label': 'Metadata Opened' });
+  }
+
+
+  // Function for creating a dialog to download results summary report pdf
+  generateResultsSummaryReport() {
+
+    /**********
+     * 
+     * TODO: Do a check for summaries equal to 0 (ZERO) to send notification to user to try again
+     *
+     * OR DISABLE BUTTON UNTIL AT LEAST ONE EVENT SUMMARY
+     * 
+     * 
+     */
+
+    this.resultsSummaryReportDialogRef = this.dialog.open(SearchResultsSummaryReportComponent, {
+      minHeight: '75%',
+      data: {
+        user: this.currentUser,
+        current_results: this.currentResults,
+        current_search_query: this.currentSearchQuery,
+        // mapUrl: this.resultsMapUrl.__zone_symbol__value,
+        adminLevelOnes: this.adminLevelOnes,
+        adminLevelTwos: this.administrative_level_two,
+        diagnosisTypes: this.diagnosisTypes,
+        diagnoses: this.diagnoses,
+        species: this.allSpecies
+        // locations:
+      }
+    });
+
+    this.resultsSummaryReportDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          // this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
   }
 
   exportEventSummaries() {

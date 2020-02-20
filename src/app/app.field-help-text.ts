@@ -185,8 +185,8 @@ public static get numAnimalsAffected(): string { return 'Total number affected. 
 public static get numOfEvents(): string { return 'Number of WHISPers events.'; }
 public static get mostFrequentEvtDiag(): string { return 'Top event diagnosis or diagnoses based on the number of events with that diagnosis reported.'; }
 public static get avgEventTimeSpan(): string { return 'Mean number of days between start and end dates across all events. If no end date provided for an event, date of report generation was used.'; }
-public static get eventWithMostAffected(): string { return 'WHISPers event with the highest number of animals affected.'; }
-public static get longestRunningEvent(): string { return 'WHISPers event with the longest time span in days. If no end date provided for an event, date of report generation was used.'; }
+public static get eventWithMostAffected(): string { return 'WHISPers event(s) with the highest number of animals affected.'; }
+public static get longestRunningEvent(): string { return 'WHISPers event(s) with the longest time span in days. If no end date provided for an event, date of report generation was used.'; }
 
 
 // PDF Defnition

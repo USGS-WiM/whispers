@@ -25,7 +25,7 @@
           <button mat-raised-button color="primary" class="event-detail-action-button" (click)="exportEventDetails()">
             <i class="material-icons">unarchive</i> Export Event Data</button>
           <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadEventReport()">
-            <i class="material-icons">archive</i> Generate Event Report</button>
+            <i class="material-icons">list_alt</i> Generate Event Report</button>
             <!-- <app-event-public-report></app-event-public-report> (click)="eventReportComponent.print()" -->
         </div>
       </div>
@@ -119,7 +119,7 @@
                     </th>
                     <th>Location</th>
                   </tr>
-                  <tr *ngFor="let eventOrganization of eventData.eventorganizations">
+                  <tr *ngFor="let eventOrganization of eventData.organizations">
                     <td>{{eventOrganization.organization.name}}</td>
                     <td> {{eventOrganization.organization.city}} {{eventOrganization.organization.administrative_level_one |
                                         displayValue:'abbreviation':this.administrative_level_one }} </td>
@@ -455,7 +455,7 @@
                             <th>Location</th>
                             <th>Delete</th>
                           </tr>
-                          <tr *ngFor="let eventOrganization of eventData.eventorganizations">
+                          <tr *ngFor="let eventOrganization of eventData.organizations">
                             <td>{{eventOrganization.organization.name}}</td>
                             <td> {{eventOrganization.organization.city}} {{eventOrganization.organization.administrative_level_one |
                                         displayValue:'abbreviation':this.administrative_level_one }} </td>

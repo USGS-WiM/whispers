@@ -91,150 +91,152 @@
   </mat-card>
   <!-- end Notifications table-->
 
-  <mat-card>
-    <!-- <mat-card-title>
+  <!-- <mat-card> -->
+  <!-- <mat-card-title>
       Notification Preferences
     </mat-card-title> -->
-    <mat-accordion>
-      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Notification Preferences
-          </mat-panel-title>
-          <mat-panel-description>
-            Manage Standard Notifictions, Add Custom Notifications or edit existing ones
-          </mat-panel-description>
-        </mat-expansion-panel-header>
+  <!-- <mat-accordion> -->
+  <div class="expansion-panel-wrapper">
+    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Notification Preferences
+        </mat-panel-title>
+        <mat-panel-description>
+          Manage Standard Notifictions, Add Custom Notifications or edit existing ones
+        </mat-panel-description>
+      </mat-expansion-panel-header>
 
-        <!--Standard notifications settings -->
-        <mat-card>
-          <mat-card-title>
-            Standard Notifications
-          </mat-card-title>
-          <mat-card-content>
-            <div class="results-table-div">
-              <div class="mat-table">
-                <div class="mat-header-row">
-                  <div class="mat-header-cell"></div>
-                  <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText"></span></div>
-                  <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
-                    <mat-icon class="icon">email</mat-icon><span class="headerText"> Email me all <mat-slide-toggle
-                        id="emailAllStandard" (change)="emailAllStandardNotifications()"
-                        [checked]="emailAllStandardChecked">
-                      </mat-slide-toggle></span>
-                  </div>
+      <!--Standard notifications settings -->
+      <mat-card>
+        <mat-card-title>
+          Standard Notifications
+        </mat-card-title>
+        <mat-card-content>
+          <div class="results-table-div">
+            <div class="mat-table">
+              <div class="mat-header-row">
+                <div class="mat-header-cell"></div>
+                <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText"></span></div>
+                <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
+                  <mat-icon class="icon">email</mat-icon><span class="headerText"> Email me all <mat-slide-toggle
+                      id="emailAllStandard" (change)="emailAllStandardNotifications()"
+                      [checked]="emailAllStandardChecked">
+                    </mat-slide-toggle></span>
                 </div>
-                <div class="mat-row">
-                  <div class="mat-header-cell">Your Events</div>
-                  <div class="mat-cell">
-                    <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                  </div>
-                  <div class="mat-cell">
-                    <mat-slide-toggle [checked]="yourEventsChecked" (change)="yourEvents()"></mat-slide-toggle>
-                    <span class="text-small text-italic">{{yourEventsChecked === true ? ' Send email ' :
+              </div>
+              <div class="mat-row">
+                <div class="mat-header-cell">Your Events</div>
+                <div class="mat-cell">
+                  <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
+                </div>
+                <div class="mat-cell">
+                  <mat-slide-toggle [checked]="yourEventsChecked" (change)="yourEvents()"></mat-slide-toggle>
+                  <span class="text-small text-italic">{{yourEventsChecked === true ? ' Send email ' :
                               yourEventsChecked === false ? ' Do not email' : ' Do not email ' }}</span>
-                  </div>
                 </div>
-                <div class="mat-row">
-                  <div class="mat-header-cell">Your Organization Events</div>
-                  <div class="mat-cell">
-                    <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                  </div>
-                  <div class="mat-cell">
-                    <mat-slide-toggle [checked]="yourOrgEventsChecked" (change)="yourOrgEvents()"></mat-slide-toggle>
-                    <span class="text-small text-italic">{{yourOrgEventsChecked === true ? ' Send email ' :
+              </div>
+              <div class="mat-row">
+                <div class="mat-header-cell">Your Organization Events</div>
+                <div class="mat-cell">
+                  <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
+                </div>
+                <div class="mat-cell">
+                  <mat-slide-toggle [checked]="yourOrgEventsChecked" (change)="yourOrgEvents()"></mat-slide-toggle>
+                  <span class="text-small text-italic">{{yourOrgEventsChecked === true ? ' Send email ' :
                         yourOrgEventsChecked === false ? ' Do not email ' : ' Do not email ' }}</span>
-                  </div>
                 </div>
-                <div class="mat-row">
-                  <div class="mat-header-cell">Your Collaboration Events</div>
-                  <div class="mat-cell">
-                    <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                  </div>
-                  <div class="mat-cell">
-                    <mat-slide-toggle [checked]="yourCollabEventsChecked" (change)="yourCollabEvents()">
-                    </mat-slide-toggle>
-                    <span class="text-small text-italic">{{yourCollabEventsChecked === true ? ' Send email ' :
+              </div>
+              <div class="mat-row">
+                <div class="mat-header-cell">Your Collaboration Events</div>
+                <div class="mat-cell">
+                  <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
+                </div>
+                <div class="mat-cell">
+                  <mat-slide-toggle [checked]="yourCollabEventsChecked" (change)="yourCollabEvents()">
+                  </mat-slide-toggle>
+                  <span class="text-small text-italic">{{yourCollabEventsChecked === true ? ' Send email ' :
                             yourCollabEventsChecked === false ? ' Do not email ' : ' Do not email ' }}</span>
-                  </div>
                 </div>
-                <div class="mat-row">
-                  <div class="mat-header-cell">All Events*</div>
-                  <div class="mat-cell">
-                    <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                  </div>
-                  <div class="mat-cell">
-                    <mat-slide-toggle [checked]="allEventsChecked" (change)="allEvents()"></mat-slide-toggle>
-                    <span class="text-small text-italic">{{allEventsChecked === true ? ' Send email ' :
+              </div>
+              <div class="mat-row">
+                <div class="mat-header-cell">All Events*</div>
+                <div class="mat-cell">
+                  <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
+                </div>
+                <div class="mat-cell">
+                  <mat-slide-toggle [checked]="allEventsChecked" (change)="allEvents()"></mat-slide-toggle>
+                  <span class="text-small text-italic">{{allEventsChecked === true ? ' Send email ' :
                             allEventsChecked === false ? ' Do not email ' : ' Do not email ' }}</span>
-                  </div>
                 </div>
               </div>
-              <div class="warning">
-                <p>* Beware that selecting this option will create notifications for all events that you have permission
-                  to view,
-                  regardless of ownership,
-                  diagnosis, species, location, or any other detail. Consider a Custom Notification (below) to specify
-                  events
-                  pertaining to your specific interest.</p>
-              </div>
             </div>
-          </mat-card-content>
-        </mat-card>
-        <!--end Standard notifications settings -->
+            <div class="warning">
+              <p>* Beware that selecting this option will create notifications for all events that you have permission
+                to view,
+                regardless of ownership,
+                diagnosis, species, location, or any other detail. Consider a Custom Notification (below) to specify
+                events
+                pertaining to your specific interest.</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <!--end Standard notifications settings -->
 
-        <mat-divider style="margin: 25px auto;" [inset]="true"></mat-divider>
+      <mat-divider style="margin: 25px auto;" [inset]="true"></mat-divider>
 
-        <!--Custom notifications settings-->
-        <mat-card>
-          <mat-card-title>
-            Custom Notification Cues
-            <button mat-button color="accent" (click)="newCustomNotification()">
-              <mat-icon>add_alert</mat-icon>Add New Custom Notification
-            </button>
-          </mat-card-title>
-          <mat-card-content>
-            <div class="results-table-div">
+      <!--Custom notifications settings-->
+      <mat-card>
+        <mat-card-title>
+          Custom Notification Cues
+          <button mat-button color="accent" (click)="newCustomNotification()">
+            <mat-icon>add_alert</mat-icon>Add New Custom Notification
+          </button>
+        </mat-card-title>
+        <mat-card-content>
+          <div class="results-table-div">
 
-              <div class="mat-table">
-                <div class="mat-header-row">
-                  <div class="mat-header-cell" style="font-weight: bold;">Cue</div>
-                  <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText"></span></div>
-                  <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
-                    <mat-icon class="icon">email</mat-icon><span class="headerText"> Email me all <mat-slide-toggle>
-                        <span class="text-small text-italic">{{emailAllCustom === true ? ' On ' :
+            <div class="mat-table">
+              <div class="mat-header-row">
+                <div class="mat-header-cell" style="font-weight: bold;">Cue</div>
+                <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText"></span></div>
+                <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
+                  <mat-icon class="icon">email</mat-icon><span class="headerText"> Email me all <mat-slide-toggle>
+                      <span class="text-small text-italic">{{emailAllCustom === true ? ' On ' :
                         emailAllCustom === false ? ' Off ' : ' Off ' }}</span></mat-slide-toggle></span>
-                  </div>
-                  <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText">Delete Cue</span>
-                  </div>
                 </div>
+                <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText">Delete Cue</span>
+                </div>
+              </div>
 
-                <div class="mat-row" *ngFor="let cue of dummy_custom_cues">
-                  <div class="mat-header-cell">{{cue.name}}</div>
-                  <div class="mat-cell">
-                    <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                  </div>
-                  <div class="mat-cell">
-                    <mat-slide-toggle><span class="text-small text-italic">{{emailCustom === true ? ' On ' :
+              <div class="mat-row" *ngFor="let cue of dummy_custom_cues">
+                <div class="mat-header-cell">{{cue.name}}</div>
+                <div class="mat-cell">
+                  <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
+                </div>
+                <div class="mat-cell">
+                  <mat-slide-toggle><span class="text-small text-italic">{{emailCustom === true ? ' On ' :
                       emailCustom === false ? ' Off ' : ' Off ' }}</span></mat-slide-toggle>
-                  </div>
-                  <div class="mat-cell">
-                    <mat-icon class="icon" color="warn" (click)="deleteWarning(cue)">delete</mat-icon>
-                  </div>
                 </div>
+                <div class="mat-cell">
+                  <mat-icon class="icon" color="warn" (click)="deleteWarning(cue)">delete</mat-icon>
+                </div>
+              </div>
 
-              </div>
-              <div class="warning">
-                <p>Note that deleting a Cue only deletes the notification for you - it does not delete the event or any
-                  other data.</p>
-              </div>
             </div>
-          </mat-card-content>
-        </mat-card>
-        <!--end Custom notifications settings-->
+            <div class="warning">
+              <p>Note that deleting a Cue only deletes the notification for you - it does not delete the event or any
+                other data.</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <!--end Custom notifications settings-->
 
-      </mat-expansion-panel>
-    </mat-accordion>
-  </mat-card>
+    </mat-expansion-panel>
+  </div>
+  <!-- </mat-accordion> -->
+  <!-- </mat-card> -->
 
 </div>

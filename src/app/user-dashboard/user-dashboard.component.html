@@ -66,7 +66,13 @@
   <!-- End Events tab-->
 
   <!-- Event Groups tab-->
-  <mat-tab label="Event Groups" *ngIf="currentUser.role === 1 || currentUser.role === 2">
+  <mat-tab *ngIf="currentUser.role === 1 || currentUser.role === 2">
+
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">group_work</mat-icon>&nbsp;
+      Event Groups
+    </ng-template>
+
     <mat-card>
       <div class="app-event-group">
         <app-event-group></app-event-group>
@@ -76,7 +82,13 @@
   <!-- End Event Groups tab-->
 
   <!-- Your Events Tab -->
-  <mat-tab label="Your Events" *ngIf="currentUser.role !== 7">
+  <mat-tab *ngIf="currentUser.role !== 7">
+
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">account_circle</mat-icon>&nbsp;
+      Your Events
+    </ng-template>
+
     <mat-card>
       <div class="user-events-div">
         <app-user-events></app-user-events>

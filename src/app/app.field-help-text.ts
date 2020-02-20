@@ -182,6 +182,12 @@ public static get startEndDatesDefinition(): string { return 'Beginning date of 
 public static get associatedEventDefinition(): string { return 'Events that are biologically equivalent and were grouped together by wildlife disease specialists at the USGS National Wildlife Health Center.'; }
 public static get commentSourceDefinition(): string { return 'Comment timeline is a compilation of comments entered in various sections of the event record; the source identifies from where the comment originated.'; }
 public static get numAnimalsAffected(): string { return 'Total number affected. A count of sick plus dead animals for a morbidity/mortality event.'; }
+public static get numOfEvents(): string { return 'Number of WHISPers events.'; }
+public static get mostFrequentEvtDiag(): string { return 'Top event diagnosis or diagnoses based on the number of events with that diagnosis reported.'; }
+public static get avgEventTimeSpan(): string { return 'Mean number of days between start and end dates across all events. If no end date provided for an event, date of report generation was used.'; }
+public static get eventWithMostAffected(): string { return 'WHISPers event(s) with the highest number of animals affected.'; }
+public static get longestRunningEvent(): string { return 'WHISPers event(s) with the longest time span in days. If no end date provided for an event, date of report generation was used.'; }
+
 
 // PDF Defnition
 

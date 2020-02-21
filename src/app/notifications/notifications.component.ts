@@ -14,6 +14,7 @@ import { APP_UTILITIES } from '@app/app.utilities';
 import { Notification } from '@app/interfaces/notification';
 import { CurrentUserService } from '@app/services/current-user.service';
 import { NotificationService } from '@services/notification.service';
+import { DataUpdatedService } from '@services/data-updated.service';
 import { ViewNotificationDetailsComponent } from '@app/notifications/view-notification-details/view-notification-details.component';
 // remove this interface once actual data is being loaded
 export interface Cue {
@@ -39,11 +40,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   userNotifications;
 
   // toggles
-  emailAllStandardChecked: boolean;
-  yourEventsChecked: boolean;
-  yourOrgEventsChecked: boolean;
-  yourCollabEventsChecked: boolean;
-  allEventsChecked: boolean;
+  emailAllStandard: boolean;
 
   // emailAllOwnedandCollab: boolean;
   emailCustom: boolean;
@@ -89,12 +86,15 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       yourEvents_new: false,
       yourEvents_updated: false,
       yourEvents_email: false,
+
       orgEvents_new: false,
       orgEvents_updated: false,
       orgEvents_email: false,
+
       collabEvents_new: false,
       collabEvents_updated: false,
       collabEvents_email: false,
+
       allEvents_new: false,
       allEvents_updated: false,
       allEvents_email: false
@@ -109,11 +109,16 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private notificationService: NotificationService,
     private currentUserService: CurrentUserService,
+    private dataUpdatedService: DataUpdatedService,
     public snackBar: MatSnackBar,
   ) {
 
+    this.buildStandardNotificationSettingsForm();
+
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
+      // pass the notification_cue_standards to populate the settings form
+      this.populateStandardNotificationSettingsForm(this.currentUser.notification_cue_standards);
     });
 
   }
@@ -127,6 +132,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     this.notificationsDataSource = new MatTableDataSource([]);
     this.notificationsDataSource.paginator = this.notificationPaginator;
 
+    // retrieve user's notifications
     this.notificationService.getUserNotifications()
       .subscribe(
         (notifications) => {
@@ -134,6 +140,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
           this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
           this.notificationsDataSource.paginator = this.notificationPaginator;
           this.notificationsLoading = false;
+          // use dataUpdatedService to refresh notifications in app.component as well
 
         },
         error => {
@@ -141,6 +148,20 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
           this.notificationsLoading = false;
         }
       );
+
+    this.standardNotificationSettingsForm.get('yourEvents_email').valueChanges.subscribe(value => { if (value === false) { this.emailAllStandard = false; } });
+    this.standardNotificationSettingsForm.get('orgEvents_email').valueChanges.subscribe(value => { if (value === false) { this.emailAllStandard = false; } });
+    this.standardNotificationSettingsForm.get('collabEvents_email').valueChanges.subscribe(value => { if (value === false) { this.emailAllStandard = false; } });
+    this.standardNotificationSettingsForm.get('allEvents_email').valueChanges.subscribe(value => { if (value === false) { this.emailAllStandard = false; } });
+
+    this.standardNotificationSettingsForm.valueChanges.subscribe(value => {
+      console.log('Standard Notifications updated! New value: ', value);
+
+      this.updateStandardNotificationSettings(value);
+
+    });
+
+
   }
 
   ngAfterViewInit(): void {
@@ -149,13 +170,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       this.notificationsDataSource.sort = this.sort;
     }, 3000);
 
-    // TODO - populate with default states or with existing state from service
     // sidenote: I'm setting them here because they weren't working on the first click if I set them in the ngOnInit function ¯\_(ツ)_/¯
-    this.emailAllStandardChecked = false;
-    this.yourEventsChecked = false;
-    this.yourOrgEventsChecked = false;
-    this.yourCollabEventsChecked = false;
-    this.allEventsChecked = false;
+    this.emailAllStandard = false;
   }
 
   navigateToEvent(event) {
@@ -169,49 +185,62 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  emailAllStandardNotifications() {
-    this.emailAllStandardChecked = !this.emailAllStandardChecked;
-    if (this.emailAllStandardChecked === true) {
-      this.yourEventsChecked = true;
-      this.yourOrgEventsChecked = true;
-      this.yourCollabEventsChecked = true;
-      this.allEventsChecked = true;
-    } else {
-      this.yourEventsChecked = false;
-      this.yourOrgEventsChecked = false;
-      this.yourCollabEventsChecked = false;
-      this.allEventsChecked = false;
+  emailAllToggle(notificationType) {
+    if (notificationType === 'standard') {
+      this.emailAllStandard = !this.emailAllStandard;
+      if (this.emailAllStandard === true) {
+        this.standardNotificationSettingsForm.patchValue({
+          yourEvents_email: true,
+          orgEvents_email: true,
+          collabEvents_email: true,
+          allEvents_email: true
+        });
+      } else {
+        // do not un-check the boxes if the 'email on for all is unchecked'
+        // should only go one way- check on to check them all
+        // below block does un-check them all, if that behavior is requested.
+        // this.standardNotificationSettingsForm.patchValue({
+        //   yourEvents_email: false,
+        //   orgEvents_email: false,
+        //   collabEvents_email: false,
+        //   allEvents_email: false
+        // });
+      }
+
+    } else if (notificationType === 'custom') {
+      // TODO: set all customs to email on
     }
+
   }
 
-  yourEvents() {
-    this.yourEventsChecked = !this.yourEventsChecked;
-    this.checkIfAllStandardTogglesTrue();
-  }
+  // yourEvents() {
+  //   this.yourEventsChecked = !this.yourEventsChecked;
+  //   this.checkIfAllStandardTogglesTrue();
+  // }
 
-  yourOrgEvents() {
-    this.yourOrgEventsChecked = !this.yourOrgEventsChecked;
-    this.checkIfAllStandardTogglesTrue();
-  }
+  // yourOrgEvents() {
+  //   this.yourOrgEventsChecked = !this.yourOrgEventsChecked;
+  //   this.checkIfAllStandardTogglesTrue();
+  // }
 
-  yourCollabEvents() {
-    this.yourCollabEventsChecked = !this.yourCollabEventsChecked;
-    this.checkIfAllStandardTogglesTrue();
-  }
+  // yourCollabEvents() {
+  //   this.yourCollabEventsChecked = !this.yourCollabEventsChecked;
+  //   this.checkIfAllStandardTogglesTrue();
+  // }
 
-  allEvents() {
-    this.allEventsChecked = !this.allEventsChecked;
-    this.checkIfAllStandardTogglesTrue();
-  }
+  // allEvents() {
+  //   this.allEventsChecked = !this.allEventsChecked;
+  //   this.checkIfAllStandardTogglesTrue();
+  // }
 
-  checkIfAllStandardTogglesTrue() {
-    if (this.yourEventsChecked && this.yourOrgEventsChecked && this.yourCollabEventsChecked && this.allEventsChecked) {
-      // this.emailAllStandardNotificationsToggle = true;
-      this.emailAllStandardChecked = true;
-    } else {
-      this.emailAllStandardChecked = false;
-    }
-  }
+  // checkIfAllStandardTogglesTrue() {
+  //   if (this.yourEventsChecked && this.yourOrgEventsChecked && this.yourCollabEventsChecked && this.allEventsChecked) {
+  //     // this.emailAllStandardNotificationsToggle = true;
+  //     this.emailAllStandard = true;
+  //   } else {
+  //     this.emailAllStandard = false;
+  //   }
+  // }
 
   deleteWarning(cue) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
@@ -402,6 +431,84 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     this.snackBar.open(message, action, {
       duration: duration,
     });
+  }
+
+  populateStandardNotificationSettingsForm(userSettings) {
+
+    // parse out from userSettings object and fill in here
+
+    const bloop = userSettings.find(setting => setting.standard_type === 1).notification_cue_preference;
+    console.log(bloop);
+
+    this.standardNotificationSettingsForm.patchValue({
+      yourEvents_new: userSettings.find(setting => setting.standard_type === 1).notification_cue_preference.create_when_new,
+      yourEvents_updated: userSettings.find(setting => setting.standard_type === 1).notification_cue_preference.create_when_modified,
+      yourEvents_email: userSettings.find(setting => setting.standard_type === 1).notification_cue_preference.send_email,
+
+      orgEvents_new: userSettings.find(setting => setting.standard_type === 2).notification_cue_preference.create_when_new,
+      orgEvents_updated: userSettings.find(setting => setting.standard_type === 2).notification_cue_preference.create_when_modified,
+      orgEvents_email: userSettings.find(setting => setting.standard_type === 2).notification_cue_preference.send_email,
+
+      collabEvents_new: userSettings.find(setting => setting.standard_type === 3).notification_cue_preference.create_when_new,
+      collabEvents_updated: userSettings.find(setting => setting.standard_type === 3).notification_cue_preference.create_when_modified,
+      collabEvents_email: userSettings.find(setting => setting.standard_type === 3).notification_cue_preference.send_email,
+
+      allEvents_new: userSettings.find(setting => setting.standard_type === 4).notification_cue_preference.create_when_new,
+      allEvents_updated: userSettings.find(setting => setting.standard_type === 4).notification_cue_preference.create_when_modified,
+      allEvents_email: userSettings.find(setting => setting.standard_type === 4).notification_cue_preference.send_email,
+    });
+
+  }
+
+  updateStandardNotificationSettings(settingsObject) {
+    const updateObject = {
+      'new_notification_cue_standard_preferences': [
+        {
+          'standard_type': 1,
+          'new_notification_cue_preference': {
+            'create_when_new': settingsObject.yourEvents_new,
+            'create_when_modified': settingsObject.yourEvents_updated,
+            'send_email': settingsObject.yourEvents_email,
+          }
+        },
+        {
+          'standard_type': 2,
+          'new_notification_cue_preference': {
+            'create_when_new': settingsObject.orgEvents_new,
+            'create_when_modified': settingsObject.orgEvents_updated,
+            'send_email': settingsObject.orgEvents_email,
+          }
+        },
+        {
+          'standard_type': 3,
+          'new_notification_cue_preference': {
+            'create_when_new': settingsObject.collabEvents_new,
+            'create_when_modified': settingsObject.collabEvents_updated,
+            'send_email': settingsObject.collabEvents_email,
+          }
+        },
+        {
+          'standard_type': 4,
+          'new_notification_cue_preference': {
+            'create_when_new': settingsObject.allEvents_new,
+            'create_when_modified': settingsObject.allEvents_updated,
+            'send_email': settingsObject.allEvents_email,
+          }
+        }
+      ]
+    };
+
+    this.notificationService.updateUserStandardNotificationSettings(this.currentUser.id, updateObject)
+      .subscribe(
+        (response) => {
+          this.openSnackBar('Notification Settings Updated!', 'OK', 5000);
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.openSnackBar('Notification Settings Updated Failed. Error: ' + this.errorMessage, 'OK', 5000);
+        }
+      );
   }
 
 

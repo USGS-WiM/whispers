@@ -37,6 +37,17 @@ export class NotificationService {
       }));
   }
 
+  public updateUserStandardNotificationSettings(userID, body): Observable<any> {
+
+    return this.http.patch(APP_SETTINGS.USERS_URL + userID + '/', body, {
+      headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS
+    }).pipe(
+      map((res: any) => {
+        return res.results;
+      }));
+  }
+
+
   public deleteNotification(id): Observable<any> {
 
     return this.http.delete(APP_SETTINGS.NOTIFICATIONS_URL + id + '/', {

@@ -113,73 +113,120 @@
           Standard Notifications
         </mat-card-title>
         <mat-card-content>
-          <div class="results-table-div">
-            <div class="mat-table">
-              <div class="mat-header-row">
-                <div class="mat-header-cell"></div>
-                <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText"></span></div>
-                <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
-                  <mat-icon class="icon">email</mat-icon><span class="headerText"> Email me all <mat-slide-toggle
-                      id="emailAllStandard" (change)="emailAllStandardNotifications()"
-                      [checked]="emailAllStandardChecked">
-                    </mat-slide-toggle></span>
+          <form [formGroup]="standardNotificationSettingsForm" autocomplete="off">
+            <div class="results-table-div">
+              <div class="mat-table">
+                <div class="mat-header-row">
+                  <div class="mat-header-cell"></div>
+                  <div class="mat-header-cell" style="font-weight: bold;">
+                    <span class="row align-items-center">
+                      <span class="headerText" class="row align-items-center">
+                        <mat-icon>notifications</mat-icon>&nbsp;Receive when event is
+                      </span>
+                    </span>
+                  </div>
+                  <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
+                    <span class="row align-items-center">
+                      <mat-checkbox (change)="emailAllToggle('standard')" [checked]="emailAllStandard">
+                      </mat-checkbox>
+                      <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                          {{emailAllStandard === true ? 'email' :
+                          emailAllStandard === false ?  'email' :  'email'}}
+                        </mat-icon>
+                        &nbsp;{{emailAllStandard === true ? 'Email on for all' :
+                        emailAllStandard === false ?  'Click to recieve emails for all' :  'Click to recieve emails for all'}}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="mat-row">
+                  <div class="mat-header-cell">Your Events</div>
+                  <div class="mat-cell">
+                    <mat-checkbox formControlName="yourEvents_new">new</mat-checkbox> &nbsp; &nbsp;
+                    <mat-checkbox formControlName="yourEvents_updated">updated</mat-checkbox>
+                  </div>
+                  <div class="mat-cell">
+                    <span class="row align-items-center">
+                      <mat-checkbox formControlName="yourEvents_email"></mat-checkbox>
+                      <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                          {{standardNotificationSettingsForm.get('yourEvents_email').value === true ? 'email' :
+                        standardNotificationSettingsForm.get('yourEvents_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+                        </mat-icon>
+                        &nbsp;{{standardNotificationSettingsForm.get('yourEvents_email').value === true ? ' Email ' :
+                        standardNotificationSettingsForm.get('yourEvents_email').value === false ?  'Do not email' :  'Do not email '}}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div class="mat-row">
+                  <div class="mat-header-cell">Your Organization Events</div>
+                  <div class="mat-cell">
+                    <mat-checkbox formControlName="orgEvents_new">new</mat-checkbox> &nbsp; &nbsp;
+                    <mat-checkbox formControlName="orgEvents_updated">updated</mat-checkbox>
+                  </div>
+                  <div class="mat-cell">
+                    <span class="row align-items-center">
+                      <mat-checkbox formControlName="orgEvents_email"></mat-checkbox>
+                      <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                          {{standardNotificationSettingsForm.get('orgEvents_email').value === true ? 'email' :
+                        standardNotificationSettingsForm.get('orgEvents_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+                        </mat-icon>
+                        &nbsp;{{standardNotificationSettingsForm.get('orgEvents_email').value === true ? ' Email ' :
+                        standardNotificationSettingsForm.get('orgEvents_email').value === false ?  'Do not email' :  'Do not email '}}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div class="mat-row">
+                  <div class="mat-header-cell">Your Collaboration Events</div>
+                  <div class="mat-cell">
+                    <mat-checkbox formControlName="collabEvents_new">new</mat-checkbox> &nbsp; &nbsp;
+                    <mat-checkbox formControlName="collabEvents_updated">updated</mat-checkbox>
+                  </div>
+                  <div class="mat-cell">
+                    <span class="row align-items-center">
+                      <mat-checkbox formControlName="collabEvents_email"></mat-checkbox>
+                      <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                          {{standardNotificationSettingsForm.get('collabEvents_email').value === true ? 'email' :
+                        standardNotificationSettingsForm.get('collabEvents_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+                        </mat-icon>
+                        &nbsp;{{standardNotificationSettingsForm.get('collabEvents_email').value === true ? ' Email ' :
+                        standardNotificationSettingsForm.get('collabEvents_email').value === false ?  'Do not email' :  'Do not email '}}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div class="mat-row">
+                  <div class="mat-header-cell">All Events*</div>
+                  <div class="mat-cell">
+                    <mat-checkbox formControlName="allEvents_new">new</mat-checkbox> &nbsp; &nbsp;
+                    <mat-checkbox formControlName="allEvents_updated">updated</mat-checkbox>
+                  </div>
+                  <div class="mat-cell">
+                    <span class="row align-items-center">
+                      <mat-checkbox formControlName="allEvents_email"></mat-checkbox>
+                      <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                          {{standardNotificationSettingsForm.get('allEvents_email').value === true ? 'email' :
+                        standardNotificationSettingsForm.get('allEvents_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+                        </mat-icon>
+                        &nbsp;{{standardNotificationSettingsForm.get('allEvents_email').value === true ? ' Email ' :
+                        standardNotificationSettingsForm.get('allEvents_email').value === false ?  'Do not email' :  'Do not email '}}
+                      </span>
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div class="mat-row">
-                <div class="mat-header-cell">Your Events</div>
-                <div class="mat-cell">
-                  <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                </div>
-                <div class="mat-cell">
-                  <mat-slide-toggle [checked]="yourEventsChecked" (change)="yourEvents()"></mat-slide-toggle>
-                  <span class="text-small text-italic">{{yourEventsChecked === true ? ' Send email ' :
-                              yourEventsChecked === false ? ' Do not email' : ' Do not email ' }}</span>
-                </div>
-              </div>
-              <div class="mat-row">
-                <div class="mat-header-cell">Your Organization Events</div>
-                <div class="mat-cell">
-                  <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                </div>
-                <div class="mat-cell">
-                  <mat-slide-toggle [checked]="yourOrgEventsChecked" (change)="yourOrgEvents()"></mat-slide-toggle>
-                  <span class="text-small text-italic">{{yourOrgEventsChecked === true ? ' Send email ' :
-                        yourOrgEventsChecked === false ? ' Do not email ' : ' Do not email ' }}</span>
-                </div>
-              </div>
-              <div class="mat-row">
-                <div class="mat-header-cell">Your Collaboration Events</div>
-                <div class="mat-cell">
-                  <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                </div>
-                <div class="mat-cell">
-                  <mat-slide-toggle [checked]="yourCollabEventsChecked" (change)="yourCollabEvents()">
-                  </mat-slide-toggle>
-                  <span class="text-small text-italic">{{yourCollabEventsChecked === true ? ' Send email ' :
-                            yourCollabEventsChecked === false ? ' Do not email ' : ' Do not email ' }}</span>
-                </div>
-              </div>
-              <div class="mat-row">
-                <div class="mat-header-cell">All Events*</div>
-                <div class="mat-cell">
-                  <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                </div>
-                <div class="mat-cell">
-                  <mat-slide-toggle [checked]="allEventsChecked" (change)="allEvents()"></mat-slide-toggle>
-                  <span class="text-small text-italic">{{allEventsChecked === true ? ' Send email ' :
-                            allEventsChecked === false ? ' Do not email ' : ' Do not email ' }}</span>
-                </div>
+              <div class="warning">
+                <p>* Beware that selecting this option will create notifications for all events that you have permission
+                  to view,
+                  regardless of ownership,
+                  diagnosis, species, location, or any other detail. Consider a Custom Notification (below) to specify
+                  events
+                  pertaining to your specific interest.</p>
               </div>
             </div>
-            <div class="warning">
-              <p>* Beware that selecting this option will create notifications for all events that you have permission
-                to view,
-                regardless of ownership,
-                diagnosis, species, location, or any other detail. Consider a Custom Notification (below) to specify
-                events
-                pertaining to your specific interest.</p>
-            </div>
-          </div>
+          </form>
         </mat-card-content>
       </mat-card>
       <!--end Standard notifications settings -->
@@ -200,12 +247,35 @@
             <div class="mat-table">
               <div class="mat-header-row">
                 <div class="mat-header-cell" style="font-weight: bold;">Cue</div>
-                <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText"></span></div>
-                <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
+                <div class="mat-header-cell" style="font-weight: bold;">
+                  <span class="row align-items-center">
+                    <span class="headerText" class="row align-items-center">
+                      <mat-icon>notifications</mat-icon>&nbsp;Receive when event matching cue is
+                    </span>
+                  </span>
+                </div>
+
+
+                <!-- <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
                   <mat-icon class="icon">email</mat-icon><span class="headerText"> Email me all <mat-slide-toggle>
                       <span class="text-small text-italic">{{emailAllCustom === true ? ' On ' :
                         emailAllCustom === false ? ' Off ' : ' Off ' }}</span></mat-slide-toggle></span>
+                </div> -->
+
+                <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
+                  <span class="row align-items-center">
+                    <mat-checkbox (change)="emailAllToggle('custom')" [checked]="emailAllCustom">
+                    </mat-checkbox>
+                    <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                        {{emailAllCustom === true ? 'email' :
+                        emailAllCustom=== false ?  'email' :  'email'}}
+                      </mat-icon>
+                      &nbsp;{{emailAllCustom === true ? 'Email on for all' :
+                      emailAllCustom === false ?  'Click to recieve emails for all' :  'Click to recieve emails for all'}}
+                    </span>
+                  </span>
                 </div>
+
                 <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText">Delete Cue</span>
                 </div>
               </div>
@@ -216,8 +286,16 @@
                   <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
                 </div>
                 <div class="mat-cell">
-                  <mat-slide-toggle><span class="text-small text-italic">{{emailCustom === true ? ' On ' :
-                      emailCustom === false ? ' Off ' : ' Off ' }}</span></mat-slide-toggle>
+                  <span class="row align-items-center">
+                    <mat-checkbox></mat-checkbox>
+                    <!-- <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                        {{standardNotificationSettingsForm.get('collabEvents_email').value === true ? 'email' :
+                      standardNotificationSettingsForm.get('collabEvents_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+                      </mat-icon>
+                      &nbsp;{{standardNotificationSettingsForm.get('collabEvents_email').value === true ? ' Email ' :
+                      standardNotificationSettingsForm.get('collabEvents_email').value === false ?  'Do not email' :  'Do not email '}}
+                    </span> -->
+                  </span>
                 </div>
                 <div class="mat-cell">
                   <mat-icon class="icon" color="warn" (click)="deleteWarning(cue)">delete</mat-icon>
@@ -226,7 +304,7 @@
 
             </div>
             <div class="warning">
-              <p>Note that deleting a Cue only deletes the notification for you - it does not delete the event or any
+              <p>Note that deleting a Cue only deletes the notification for you - it does not delete the event, a notification for another user, or any
                 other data.</p>
             </div>
           </div>

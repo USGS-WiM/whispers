@@ -51,6 +51,9 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   customNotificationRef: MatDialogRef<CustomNotificationComponent>;
 
   standardNotificationSettingsForm: FormGroup;
+  customNotificationSettingsForm: FormGroup;
+
+  previousValueStandardNotificationSettingsForm;
 
   // this.allEventsChecked = false;
 
@@ -101,6 +104,12 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  buildCustomNotificationSettingsForm() {
+    this.customNotificationSettingsForm = this.formBuilder.group({
+      custom_cues: this.formBuilder.array([])
+    });
+  }
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -114,11 +123,12 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   ) {
 
     this.buildStandardNotificationSettingsForm();
+    this.buildCustomNotificationSettingsForm();
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
       // pass the notification_cue_standards to populate the settings form
-      this.populateStandardNotificationSettingsForm(this.currentUser.notification_cue_standards);
+      // this.populateStandardNotificationSettingsForm(this.currentUser.notification_cue_standards);
     });
 
   }
@@ -154,13 +164,17 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     this.standardNotificationSettingsForm.get('collabEvents_email').valueChanges.subscribe(value => { if (value === false) { this.emailAllStandard = false; } });
     this.standardNotificationSettingsForm.get('allEvents_email').valueChanges.subscribe(value => { if (value === false) { this.emailAllStandard = false; } });
 
+    // populate the form with currentUser's settings onInit
+    this.populateStandardNotificationSettingsForm(this.currentUser.notification_cue_standards);
+
+    // subscribe to changes to the form and update the server with changes
     this.standardNotificationSettingsForm.valueChanges.subscribe(value => {
       console.log('Standard Notifications updated! New value: ', value);
-
+      const match = (this.previousValueStandardNotificationSettingsForm === this.standardNotificationSettingsForm.value);
       this.updateStandardNotificationSettings(value);
-
     });
 
+    this.previousValueStandardNotificationSettingsForm = this.standardNotificationSettingsForm.value;
 
   }
 
@@ -436,10 +450,6 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   populateStandardNotificationSettingsForm(userSettings) {
 
     // parse out from userSettings object and fill in here
-
-    const bloop = userSettings.find(setting => setting.standard_type === 1).notification_cue_preference;
-    console.log(bloop);
-
     this.standardNotificationSettingsForm.patchValue({
       yourEvents_new: userSettings.find(setting => setting.standard_type === 1).notification_cue_preference.create_when_new,
       yourEvents_updated: userSettings.find(setting => setting.standard_type === 1).notification_cue_preference.create_when_modified,
@@ -501,11 +511,19 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     this.notificationService.updateUserStandardNotificationSettings(this.currentUser.id, updateObject)
       .subscribe(
         (response) => {
+          // update cuurentUser service  with updated user object containing updated settings object
+          this.currentUserService.updateCurrentUser(response);
+          // update sessionStorage with updated user object containing updated settings object
+          sessionStorage.setItem('currentUser', JSON.stringify(response));
+          // since the update succeeded, update the previous form value var to be able to compare to next change
+          this.previousValueStandardNotificationSettingsForm = this.standardNotificationSettingsForm.value;
+          // display success message
           this.openSnackBar('Notification Settings Updated!', 'OK', 5000);
-
         },
         error => {
           this.errorMessage = <any>error;
+          // since the updated failed, revert the form back to previous value so display is in sync with database values
+          this.standardNotificationSettingsForm.setValue(this.previousValueStandardNotificationSettingsForm);
           this.openSnackBar('Notification Settings Updated Failed. Error: ' + this.errorMessage, 'OK', 5000);
         }
       );

@@ -242,73 +242,78 @@
           </button>
         </mat-card-title>
         <mat-card-content>
-          <div class="results-table-div">
+          <form [formGroup]="customNotificationSettingsForm" class="event-submission-locations" autocomplete="off">
 
-            <div class="mat-table">
-              <div class="mat-header-row">
-                <div class="mat-header-cell" style="font-weight: bold;">Cue</div>
-                <div class="mat-header-cell" style="font-weight: bold;">
-                  <span class="row align-items-center">
-                    <span class="headerText" class="row align-items-center">
-                      <mat-icon>notifications</mat-icon>&nbsp;Receive when event matching cue is
+            <div class="results-table-div">
+              <div class="mat-table">
+                <!--Begin header row-->
+                <div class="mat-header-row">
+
+                  <div class="mat-header-cell" style="font-weight: bold;">Cue</div>
+                  <div class="mat-header-cell" style="font-weight: bold;">
+                    <span class="row align-items-center">
+                      <span class="headerText" class="row align-items-center">
+                        <mat-icon>notifications</mat-icon>&nbsp;Receive when event matching cue is
+                      </span>
                     </span>
-                  </span>
-                </div>
-
-
-                <!-- <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
-                  <mat-icon class="icon">email</mat-icon><span class="headerText"> Email me all <mat-slide-toggle>
-                      <span class="text-small text-italic">{{emailAllCustom === true ? ' On ' :
-                        emailAllCustom === false ? ' Off ' : ' Off ' }}</span></mat-slide-toggle></span>
-                </div> -->
-
-                <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
-                  <span class="row align-items-center">
-                    <mat-checkbox (change)="emailAllToggle('custom')" [checked]="emailAllCustom">
-                    </mat-checkbox>
-                    <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
-                        {{emailAllCustom === true ? 'email' :
+                  </div>
+                  <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
+                    <span class="row align-items-center">
+                      <mat-checkbox (change)="emailAllToggle('custom')" [checked]="emailAllCustom">
+                      </mat-checkbox>
+                      <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                          {{emailAllCustom === true ? 'email' :
                         emailAllCustom=== false ?  'email' :  'email'}}
-                      </mat-icon>
-                      &nbsp;{{emailAllCustom === true ? 'Email on for all' :
+                        </mat-icon>
+                        &nbsp;{{emailAllCustom === true ? 'Email on for all' :
                       emailAllCustom === false ?  'Click to recieve emails for all' :  'Click to recieve emails for all'}}
+                      </span>
                     </span>
-                  </span>
-                </div>
+                  </div>
+                  <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText">Delete Cue</span>
+                  </div>
 
-                <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText">Delete Cue</span>
                 </div>
-              </div>
+                <!--End header row-->
 
-              <div class="mat-row" *ngFor="let cue of dummy_custom_cues">
-                <div class="mat-header-cell">{{cue.name}}</div>
-                <div class="mat-cell">
-                  <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
-                </div>
-                <div class="mat-cell">
-                  <span class="row align-items-center">
-                    <mat-checkbox></mat-checkbox>
-                    <!-- <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                <!-- Begin form array and table body-->
+
+                <div formArrayName="custom_cues">
+
+                  <!-- <div class="mat-row" *ngFor="let cue of dummy_custom_cues"> -->
+                  <div class="mat-row" *ngFor="let cue of getCustomCues(customNotificationSettingsForm); let customCueIndex = index">
+                    <div class="mat-header-cell">{{cue.cue_string}}</div>
+                    <div class="mat-cell">
+                      <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
+                    </div>
+                    <div class="mat-cell">
+                      <span class="row align-items-center">
+                        <mat-checkbox></mat-checkbox>
+                        <!-- <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
                         {{standardNotificationSettingsForm.get('collabEvents_email').value === true ? 'email' :
                       standardNotificationSettingsForm.get('collabEvents_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
                       </mat-icon>
                       &nbsp;{{standardNotificationSettingsForm.get('collabEvents_email').value === true ? ' Email ' :
                       standardNotificationSettingsForm.get('collabEvents_email').value === false ?  'Do not email' :  'Do not email '}}
                     </span> -->
-                  </span>
+                      </span>
+                    </div>
+                    <div class="mat-cell">
+                      <mat-icon class="icon" color="warn" (click)="deleteWarning(cue)">delete</mat-icon>
+                    </div>
+                  </div>
                 </div>
-                <div class="mat-cell">
-                  <mat-icon class="icon" color="warn" (click)="deleteWarning(cue)">delete</mat-icon>
-                </div>
-              </div>
+                <!-- End form array and table body-->
 
+              </div>
+              <div class="warning">
+                <p>Note that deleting a Cue only deletes the notification for you - it does not delete the event, a
+                  notification for another user, or any
+                  other data.</p>
+              </div>
             </div>
-            <div class="warning">
-              <p>Note that deleting a Cue only deletes the notification for you - it does not delete the event, a
-                notification for another user, or any
-                other data.</p>
-            </div>
-          </div>
+
+          </form>
         </mat-card-content>
       </mat-card>
       <!--end Custom notifications settings-->

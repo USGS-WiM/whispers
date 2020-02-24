@@ -16,10 +16,7 @@ import { CurrentUserService } from '@app/services/current-user.service';
 import { NotificationService } from '@services/notification.service';
 import { DataUpdatedService } from '@services/data-updated.service';
 import { ViewNotificationDetailsComponent } from '@app/notifications/view-notification-details/view-notification-details.component';
-// remove this interface once actual data is being loaded
-export interface Cue {
-  name: string;
-}
+import { CustomNotificationCue } from '@interfaces/custom-notification-cue'
 
 @Component({
   selector: 'app-notifications',
@@ -58,17 +55,97 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   // this.allEventsChecked = false;
 
   // test data
-  dummy_custom_cues: Cue[] = [
-    { name: 'Event with Species: Alligator' },
-    { name: 'Event with ID 17044' },
-    { name: 'Event with State: Wisconsin OR Minnesota' },
-    { name: 'Event with ID 1337' },
-    { name: 'Event with ID 7775556' },
-    { name: 'Event with ID 17055' },
-    { name: 'Event with Diagnosis: E.Coli and Species: Squirrel and State: Wisconsin' },
-    { name: 'Event with ID 00977' },
-    { name: 'Event with ID 4323455' },
-    { name: 'Event with ID 675465' },
+  dummy_custom_cues: CustomNotificationCue[] = [
+    {
+      'id': 1000, 'cue_string': 'Event with Species: Alligator',
+      'notification_cue_preference': {
+        'id': 400,
+        'create_when_new': true,
+        'create_when_modified': true,
+        'send_email': false
+      }
+    },
+    {
+      'id': 1001, 'cue_string': 'Event with ID 17044',
+      'notification_cue_preference': {
+        'id': 400,
+        'create_when_new': true,
+        'create_when_modified': true,
+        'send_email': false
+      }
+    },
+    {
+      'id': 1002, 'cue_string': 'Event with State: Wisconsin OR Minnesota',
+      'notification_cue_preference': {
+        'id': 400,
+        'create_when_new': true,
+        'create_when_modified': true,
+        'send_email': false
+      }
+    },
+    {
+      'id': 1003, 'cue_string': 'Event with ID 1337',
+      'notification_cue_preference': {
+        'id': 400,
+        'create_when_new': true,
+        'create_when_modified': true,
+        'send_email': false
+      }
+    },
+    {
+      'id': 1004, 'cue_string': 'Event with ID 7775556',
+      'notification_cue_preference': {
+        'id': 400,
+        'create_when_new': true,
+        'create_when_modified': true,
+        'send_email': false
+      }
+    },
+    {
+      'id': 1005, 'cue_string': 'Event with ID 17055',
+      'notification_cue_preference': {
+        'id': 400,
+        'create_when_new': true,
+        'create_when_modified': true,
+        'send_email': false
+      }
+    },
+    {
+      'id': 1006, 'cue_string': 'Event with Diagnosis: E.Coli and Species: Squirrel and State: Wisconsin',
+      'notification_cue_preference': {
+        'id': 400,
+        'create_when_new': true,
+        'create_when_modified': true,
+        'send_email': false
+      }
+    },
+    {
+      'id': 1007, 'cue_string': 'Event with ID 00977',
+      'notification_cue_preference': {
+        'id': 400,
+        'create_when_new': true,
+        'create_when_modified': true,
+        'send_email': false
+      }
+    },
+    {
+      'id': 1008, 'cue_string': 'Event with ID 4323455',
+      'notification_cue_preference': {
+        'id': 400,
+        'create_when_new': true,
+        'create_when_modified': true,
+        'send_email': false
+      }
+    },
+    {
+      'id': 1009, 'cue_string': 'Event with ID 675465',
+      'notification_cue_preference': {
+        'id': 400,
+        'create_when_new': true,
+        'create_when_modified': true,
+        'send_email': false
+      }
+    },
   ];
 
   notificationDisplayedColumns = [
@@ -174,7 +251,23 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       this.updateStandardNotificationSettings(value);
     });
 
+    // set the previous form value to the current to intialize the page
     this.previousValueStandardNotificationSettingsForm = this.standardNotificationSettingsForm.value;
+
+    // retrieve user's custom notifications and populate the formArray
+    // note: this will be done via a service call. pulling from test/dummy data object temporarily
+    const customCuesFormArray = <FormArray>this.customNotificationSettingsForm.get('custom_cues');
+    for (const cue of this.dummy_custom_cues) {
+      customCuesFormArray.push(
+        this.formBuilder.group({
+          id: cue.id,
+          cue_string: cue.cue_string,
+          new: cue.notification_cue_preference.create_when_new,
+          updated: cue.notification_cue_preference.create_when_modified,
+          email: cue.notification_cue_preference.send_email
+        })
+      );
+    }
 
   }
 
@@ -225,6 +318,20 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       // TODO: set all customs to email on
     }
 
+  }
+
+  initCustomCue(cue) {
+    return this.formBuilder.group({
+      id: cue.id,
+      cue_string: cue.cue_string,
+      new: cue.new,
+      updated: cue.updated,
+      email: cue.email
+    });
+  }
+
+  getCustomCues(form) {
+    return form.controls.custom_cues.controls;
   }
 
   // yourEvents() {

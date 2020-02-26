@@ -40,7 +40,8 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatBottomSheetModule,
-  MatStepperModule
+  MatStepperModule,
+  MatBadgeModule,
 } from '@angular/material';
 
 
@@ -121,13 +122,16 @@ import { CircleChooseComponent } from './circle-management/circle-choose/circle-
 import { DiagnosticInfoComponent } from './diagnostic-info/diagnostic-info.component';
 import { CommentsTableComponent } from './comments-table/comments-table.component';
 import { ViewCommentDetailsComponent } from './view-comment-details/view-comment-details.component';
+import { AlertCollaboratorsComponent } from './alert-collaborators/alert-collaborators.component';
+import { NotificationsComponent } from './notifications/notifications.component';
+import { CustomNotificationComponent } from './custom-notification/custom-notification.component';
 import { BrowserWarningComponent } from './browser-warning/browser-warning.component';
+import { CollaborationRequestComponent } from './collaboration-request/collaboration-request.component';
 import { BulkUploadComponent } from './bulk-upload/bulk-upload.component';
 import { PapaParseModule } from 'ngx-papaparse';
 import { EventPublicReportComponent } from './event-public-report/event-public-report.component';
 import { SearchResultsSummaryReportComponent } from './search-results-summary-report/search-results-summary-report.component';
-
-
+import { ViewNotificationDetailsComponent } from './notifications/view-notification-details/view-notification-details.component';
 
 
 @NgModule({
@@ -174,10 +178,15 @@ import { SearchResultsSummaryReportComponent } from './search-results-summary-re
     DiagnosticInfoComponent,
     CommentsTableComponent,
     ViewCommentDetailsComponent,
+    AlertCollaboratorsComponent,
+    NotificationsComponent,
+    CustomNotificationComponent,
     BrowserWarningComponent,
+    CollaborationRequestComponent,
     BulkUploadComponent,
     EventPublicReportComponent,
     SearchResultsSummaryReportComponent,
+    ViewNotificationDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -222,6 +231,8 @@ import { SearchResultsSummaryReportComponent } from './search-results-summary-re
     MatTooltipModule,
     MatBottomSheetModule,
     MatStepperModule,
+    MatBadgeModule,
+    NgxMatSelectSearchModule,
     NgxMatSelectSearchModule,
     PapaParseModule
   ],
@@ -295,8 +306,13 @@ import { SearchResultsSummaryReportComponent } from './search-results-summary-re
     CircleChooseComponent,
     DiagnosticInfoComponent,
     ViewCommentDetailsComponent,
+    CustomNotificationComponent,
     BrowserWarningComponent,
-    BulkUploadComponent
+    CustomNotificationComponent,
+    CollaborationRequestComponent,
+    BrowserWarningComponent,
+    BulkUploadComponent,
+    ViewNotificationDetailsComponent
   ]
 })
 export class AppModule { }

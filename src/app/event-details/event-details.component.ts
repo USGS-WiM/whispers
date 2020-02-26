@@ -73,6 +73,7 @@ import { CircleManagementComponent } from '@app/circle-management/circle-managem
 import { CircleChooseComponent } from '@app/circle-management/circle-choose/circle-choose.component';
 import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
+import { CollaborationRequestComponent } from '@app/collaboration-request/collaboration-request.component';
 declare let gtag: Function;
 
 export interface AssociatedEvents {
@@ -129,6 +130,7 @@ export class EventDetailsComponent implements OnInit {
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
   circleChooseDialogRef: MatDialogRef<CircleChooseComponent>;
   circleManagementDialogRef: MatDialogRef<CircleManagementComponent>;
+  collaborationRequestDialogRef: MatDialogRef<CollaborationRequestComponent>;
   eventPublicReportDialogRef: MatDialogRef<EventPublicReportComponent>;
 
   addCommentDialogRef: MatDialogRef<AddCommentComponent>;
@@ -884,7 +886,6 @@ export class EventDetailsComponent implements OnInit {
     // Open add service request dialog for response field update
     this.addServiceRequestDialogRef = this.dialog.open(AddServiceRequestComponent, {
       disableClose: true,
-      // minWidth: '60%',
       data: {
         event_id: this.eventData.id,
         servicerequest: servicerequest,
@@ -1256,6 +1257,31 @@ export class EventDetailsComponent implements OnInit {
 
   }
 
+  openCollaborationRequestDialog(eventID) {
+    // Open dialog for collaboration request
+    this.collaborationRequestDialogRef = this.dialog.open(CollaborationRequestComponent, {
+      disableClose: true,
+      data: {
+        event_id: eventID,
+        title: 'Request to Collaborate',
+        titleIcon: 'group',
+        showCancelButton: true,
+        action_button_text: 'Submit request',
+        actionButtonIcon: 'send'
+      }
+    });
+
+    this.collaborationRequestDialogRef.afterClosed()
+      .subscribe(
+        () => {
+          this.refreshEvent();
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+  }
+
   refreshEvent() {
     // see comment on line 182
     // this.viewPanelStates = new Object();
@@ -1468,7 +1494,6 @@ export class EventDetailsComponent implements OnInit {
             for (const user of this.readCollaboratorArray) {
               readCollaboratorIDArray.push(user.id);
             }
-
             const writeCollaboratorIDArray = [];
             for (const user of this.writeCollaboratorArray) {
               writeCollaboratorIDArray.push(user.id);

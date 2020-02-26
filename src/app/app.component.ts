@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 
 import { MatDialog, MatDialogRef } from '@angular/material';
 
@@ -13,6 +13,9 @@ import { CurrentUserService } from '@services/current-user.service';
 import { APP_SETTINGS } from '@app/app.settings';
 import { AuthenticationService } from '@app/services/authentication.service';
 
+import { APP_UTILITIES } from '@app/app.utilities';
+import { Notification } from '@app/interfaces/notification';
+import { NotificationService } from '@services/notification.service';
 
 // Needed for scroll to top
 import { isPlatformBrowser } from '@angular/common';
@@ -33,20 +36,30 @@ export class AppComponent implements OnInit {
   public whispersVersion = '';
   public bannerWarning = '';
   public bannerTextColor = '';
-  //public isLoggedIn;
+  // public isLoggedIn;
+  notificationCount;
+  unreadNotificationCount;
+  firstTenNotifications = [];
+  dummyNotifications = APP_UTILITIES.dummyData;
+  notificationsToDisplay;
 
   public currentUser;
+  private userNotifications;
+  private errorMessage;
 
   aboutDialogRef: MatDialogRef<AboutComponent>;
   authenticationDialogRef: MatDialogRef<AuthenticationComponent>;
   browserWarningDialogRef: MatDialogRef<BrowserWarningComponent>;
+
+  previewNotifications;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     public currentUserService: CurrentUserService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private notificationService: NotificationService,
   ) {
 
     currentUserService.currentUser.subscribe(user => {
@@ -82,7 +95,7 @@ export class AppComponent implements OnInit {
     }
 
     if (/msie\s|trident\/\//i.test(window.navigator.userAgent)) {
-      //if (/msie\s|trident\/|edge\//i.test(window.navigator.userAgent)) {
+      // if (/msie\s|trident\/|edge\//i.test(window.navigator.userAgent)) {
       this.openBrowserWarningDialog();
     }
 
@@ -102,6 +115,37 @@ export class AppComponent implements OnInit {
     //     'username': ''
     //   });
     // }
+
+    this.notificationService.getUserNotifications()
+      .subscribe(
+        (notifications) => {
+          this.userNotifications = notifications;
+          this.notificationCount = this.userNotifications.length;
+          this.previewNotifications = this.userNotifications.slice(0, 10);
+
+          const unreadNotifications = this.userNotifications;
+
+          for (let i = unreadNotifications.length - 1; i >= 0; i--) {
+            if (unreadNotifications[i].read === true) {
+              unreadNotifications.splice(i, 1);
+            }
+          }
+
+          this.unreadNotificationCount = unreadNotifications.length;
+
+          // if (this.userNotifications.length > 10) {
+          //   this.previewNotifications = this.userNotifications.slice(0, 10);
+          // } else {
+          //   this.previewNotifications = this.userNotifications;
+          // }
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+
   }
 
   openUserDashboard() {
@@ -127,7 +171,7 @@ export class AppComponent implements OnInit {
 
   openAuthenticationDialog() {
     this.authenticationDialogRef = this.dialog.open(AuthenticationComponent, {
-      //minWidth: '60%'
+      // minWidth: '60%'
       // disableClose: true, data: {
       //   query: this.currentDisplayQuery
       // }
@@ -144,6 +188,21 @@ export class AppComponent implements OnInit {
     this.router.navigate([`../eventsubmission/`], { relativeTo: this.route });
   }
 
+  navigateNotificationSelect(event) {
+    if (!event) {
+      // Some notifications need to take the user to the user dashboard
+      // for now, to the notifications tab (to be later developed to higher sophistication)
+      // 6 is the index number  for the notifications tab
+      const tabSpecification: NavigationExtras = { state: { tab: 6 } };
+      this.router.navigate([`../userdashboard/`], tabSpecification);
+
+      // the old way, sans tab specification
+      // this.router.navigate([`../userdashboard/`], { relativeTo: this.route });
+    } else {
+
+      this.router.navigate([`../event/${event}`], { relativeTo: this.route });
+    }
+  }
 
   // Scroll to top on each route change
   onActivate(event: any) {

@@ -78,10 +78,19 @@
 
         <!-- Notifications -->
         <span *ngIf="currentUser.username != ''" class="login-status signin-button">
-          <button mat-button aria-label="notifications" matBadge="{{notificationCount}}" matBadgePosition="after"
-            matBadgeColor="warn" [matMenuTriggerFor]="menu">
-            Notifications&nbsp;
+          <!--Button if there are no notifications-->
+          <button mat-button aria-label="notifications" *ngIf="notificationCount === 0"
+            (click)="navigateNotificationSelect()">
+            <mat-icon>notifications</mat-icon>&nbsp;Notifications&nbsp;
           </button>
+
+          <!--Button if there are notifications-->
+          <button mat-button aria-label="notifications" *ngIf="notificationCount > 0" matBadge="{{notificationCount}}"
+            matBadgePosition="after" matBadgeColor="warn" [matMenuTriggerFor]="menu">
+            <mat-icon>notifications</mat-icon>&nbsp;Notifications&nbsp;
+          </button>
+
+
           <mat-menu #menu="matMenu" [overlapTrigger]="false">
             <button *ngFor="let notification of previewNotifications" matTooltip="{{notification.subject}}"
               (click)="navigateNotificationSelect(notification.event)" mat-menu-item>{{notification.subject}}</button>

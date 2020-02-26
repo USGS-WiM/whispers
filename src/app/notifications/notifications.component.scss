@@ -75,9 +75,13 @@ th {
     padding: 10px;
 }
 
-.unread {
+.read mat-cell {
+    color: darkgray !important;
+    font-size: smaller !important;
+}
+
+.unread mat-cell {
     font-weight: bold;
-    font-size: larger;
 }
 
 mat-expansion-panel {

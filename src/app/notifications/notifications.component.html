@@ -79,7 +79,7 @@
         <mat-header-row *matHeaderRowDef="notificationDisplayedColumns"></mat-header-row>
         <mat-row *matRowDef="let notification; columns: notificationDisplayedColumns;"
           (click)="openNotification(notification)" matTooltip="Click to view full notification text"
-          [ngClass]="{'' :notification.read === true, 'unread':notification.read === false}"></mat-row>
+          [ngClass]="{'read' :notification.read === true, 'unread':notification.read === false}"></mat-row>
       </mat-table>
 
       <div *ngIf="notificationsDataSource.data.length === 0 && notificationsLoading === false">

@@ -1,9 +1,9 @@
 
-import {catchError,  map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable ,  throwError ,  Subject } from 'rxjs';
+import { Observable, throwError, Subject } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -13,6 +13,7 @@ import { EventSummary } from '@interfaces/event-summary';
 import { EventDetail } from '@interfaces/event-detail';
 import { PageData } from '@interfaces/page-data';
 import { ResultsCountService } from '@services/results-count.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class EventService {
@@ -155,7 +156,7 @@ export class EventService {
 
     return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'get_count/' + queryString, options).pipe(
       map((response: Response) => <any>response.json()),
-      catchError(this.handleError),);
+      catchError(this.handleError));
   }
 
   public queryEvents(eventQuery): Observable<EventSummary[]> {
@@ -226,7 +227,7 @@ export class EventService {
 
     return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString, options).pipe(
       map((response: Response) => <EventSummary[]>response.json()),
-      catchError(this.handleError),);
+      catchError(this.handleError));
   }
 
 
@@ -272,7 +273,7 @@ export class EventService {
 
     return this._http.get(APP_SETTINGS.EVENT_DETAILS_URL + eventID + '?no_page', options).pipe(
       map((response: Response) => <EventDetail>response.json()),
-      catchError(this.handleEventDetailsError),);
+      catchError(this.handleEventDetailsError));
   }
 
   // Function for retrieving event summary given event id
@@ -302,7 +303,7 @@ export class EventService {
 
     return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + 'user_events?no_page', options).pipe(
       map((response: Response) => <EventSummary[]>response.json()),
-      catchError(this.handleError),);
+      catchError(this.handleError));
 
   }
 
@@ -388,6 +389,46 @@ export class EventService {
       }));
   }
 
+  public requestCollaboration(formValue): Observable<any> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_TEXT_HEADERS
+    });
+
+    return this._http.post(APP_SETTINGS.EVENTS_URL + formValue.event + '/request_collaboration/', formValue.comment, options).pipe(
+      map((response: Response) => <Event>response.json()),
+      catchError(this.handleError));
+
+
+    // const httpOptions = {
+    //   headers: new HttpHeaders({
+    //     'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+    //     'Content-Type': 'text/plain',
+    //     'Accept': 'application/json'
+    //   }),
+    //   body: formValue.comment
+    // };
+    // // below is newer HttpClient method
+    // return this.http.post(APP_SETTINGS.EVENTS_URL + formValue.event + '/request_collaboration/', httpOptions).pipe(
+    //   map((res: any) => {
+    //     // const response = res.json();
+    //     return res.results;
+    //   }));
+
+  }
+
+  public alertCollaborators(formValue): Observable<any> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+    });
+
+    return this._http.post(APP_SETTINGS.EVENTS_URL + formValue.event + '/alert_collaborator/', formValue, options).pipe(
+      map((response: Response) => <Event>response.json()),
+      catchError(this.handleError));
+
+  }
+
   public create(formValue): Observable<Event> {
 
     const options = new RequestOptions({
@@ -396,7 +437,7 @@ export class EventService {
 
     return this._http.post(APP_SETTINGS.EVENTS_URL, formValue, options).pipe(
       map((response: Response) => <Event>response.json()),
-      catchError(this.handleError),);
+      catchError(this.handleError));
 
   }
 
@@ -408,7 +449,7 @@ export class EventService {
 
     return this._http.put(APP_SETTINGS.EVENTS_URL + formValue.id + '/', formValue, options).pipe(
       map((response: Response) => <Event>response.json()),
-      catchError(this.handleError),);
+      catchError(this.handleError));
   }
 
   public patchUpdate(formValue): Observable<Event> {
@@ -419,7 +460,7 @@ export class EventService {
 
     return this._http.patch(APP_SETTINGS.EVENTS_URL + formValue.id + '/', formValue, options).pipe(
       map((response: Response) => <Event>response.json()),
-      catchError(this.handleError),);
+      catchError(this.handleError));
   }
 
   private handleError(error: Response) {

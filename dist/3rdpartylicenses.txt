@@ -1426,6 +1426,8 @@ SOFTWARE.
 ngx-papaparse
 MIT
 
+@angular/material/menu
+
 @angular/material/toolbar
 
 core-js

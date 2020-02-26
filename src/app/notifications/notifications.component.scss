@@ -1,0 +1,114 @@
+.mat-table {
+    display: block;
+    font-family: Tahoma, Verdana;
+}
+
+.mat-row,
+.mat-header-row {
+    display: flex;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 24px;
+}
+
+.mat-cell,
+.mat-header-cell {
+    flex: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.text-small {
+    font-size: small;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+#headerWithIcon {
+    position: relative;
+    padding-top: 4px;
+}
+
+.icon {
+    position: relative;
+}
+
+.headerText {
+    position: absolute;
+    padding-top: 2px;
+}
+
+.event-details td {
+    text-align: left;
+}
+
+.event-header td {
+    text-align: left;
+}
+
+.event-details td {
+    text-align: left;
+}
+
+tr.noBorder td {
+    border: 0;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.limit-width {
+    width: 3em;
+}
+
+th {
+    word-break: break-all;
+    text-align: left;
+}
+
+.warning {
+    padding: 10px;
+}
+
+.read mat-cell {
+    color: darkgray !important;
+    font-size: smaller !important;
+}
+
+.unread mat-cell {
+    font-weight: bold;
+}
+
+mat-expansion-panel {
+    border: 1px solid rgba(210, 210, 220, 1);
+}
+
+.expansion-panel-wrapper {
+    display: block;
+    width: 100%;
+    max-width: 1200px;
+    // margin: 0 auto;
+    margin: 10px;
+}
+
+.text-large {
+    font-size: large;
+}
+
+.text-red {
+    color: darkred;
+}
+
+
+.row {
+    display: flex;
+}
+
+.align-items-center {
+    align-items: center;
+}

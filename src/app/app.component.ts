@@ -38,6 +38,7 @@ export class AppComponent implements OnInit {
   public bannerTextColor = '';
   // public isLoggedIn;
   notificationCount;
+  unreadNotificationCount;
   firstTenNotifications = [];
   dummyNotifications = APP_UTILITIES.dummyData;
   notificationsToDisplay;
@@ -121,6 +122,16 @@ export class AppComponent implements OnInit {
           this.userNotifications = notifications;
           this.notificationCount = this.userNotifications.length;
           this.previewNotifications = this.userNotifications.slice(0, 10);
+
+          const unreadNotifications = this.userNotifications;
+
+          for (let i = unreadNotifications.length - 1; i >= 0; i--) {
+            if (unreadNotifications[i].read === true) {
+              unreadNotifications.splice(i, 1);
+            }
+          }
+
+          this.unreadNotificationCount = unreadNotifications.length;
 
           // if (this.userNotifications.length > 10) {
           //   this.previewNotifications = this.userNotifications.slice(0, 10);

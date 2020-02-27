@@ -86,7 +86,9 @@
         <h3>No notifications</h3>
       </div>
 
-      <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+      <span [hidden]="notificationsDataSource.data.length === 0 && notificationsLoading === false">
+        <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+      </span>
     </div>
   </mat-card>
   <!-- end Notifications table-->

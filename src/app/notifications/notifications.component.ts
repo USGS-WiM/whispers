@@ -309,6 +309,20 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       minWidth: '60%',
       data: {}
     });
+
+
+    this.customNotificationRef.afterClosed()
+      .subscribe(
+        (customCueObject) => {
+
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+
   }
 
   emailAllToggle(notificationType) {
@@ -396,13 +410,13 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   //   }
   // }
 
-  deleteWarning(cue) {
+  deleteWarning(cue, customcueIndex) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
         data: {
           title: 'Delete Custom Notification',
-          // tslint:disable-next-line:max-line-length
-          message: 'Are you sure you want to delete the custom notification " ' + cue.name + ' "?',
+          // message: 'Are you sure you want to delete the custom notification " ' + cue.value.cue_string + ' "?',
+          message: 'Are you sure you want to delete this custom notification?',
           confirmButtonText: 'Delete',
           messageIcon: 'delete_forever',
           showCancelButton: true
@@ -412,10 +426,31 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        // add delete function
+        this.deleteCustomNotificationCue(cue, customcueIndex);
         this.confirmDialogRef.close();
       }
     });
+  }
+
+  deleteCustomNotificationCue(cue, customcueIndex) {
+    this.notificationService.deleteCustomNotificationCue(cue.value.id)
+      .subscribe(
+        (response) => {
+          // if delete action is successful, delete the form array item
+          this.removeCustomCue(customcueIndex);
+          this.openSnackBar('Custom Notification Successfully Deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+
+          this.openSnackBar('Custom Notification Delete failed. Error: ' + this.errorMessage, 'OK', 5000);
+        }
+      );
+  }
+
+  removeCustomCue(customcueIndex) {
+    const control = <FormArray>this.customNotificationSettingsForm.get('custom_cues');
+    control.removeAt(customcueIndex);
   }
 
   openNotification(notification) {
@@ -580,6 +615,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       );
 
   }
+
 
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {

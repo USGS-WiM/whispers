@@ -46,3 +46,15 @@ font-size: small;
 .text-light {
 color: rgba(0, 0, 0, 0.54);
 }
+
+.row {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+#settings {
+padding-top: 1em;
+}

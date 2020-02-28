@@ -68,6 +68,16 @@ export class NotificationService {
       }));
   }
 
+  public deleteCustomNotificationCue(id): Observable<any> {
+
+    return this.http.delete(APP_SETTINGS.NOTIFICATION_CUE_CUSTOM_URL + id + '/', {
+      headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS
+    }).pipe(
+      map((res: any) => {
+        return res.results;
+      }));
+  }
+
   public bulkUpdateNotifications(updateObject): Observable<any> {
 
     return this.http.post(APP_SETTINGS.NOTIFICATIONS_URL + 'bulk_update/', updateObject, {

@@ -243,6 +243,32 @@
       </mat-expansion-panel>
       <!--- end Number Affected expansion panel -->
 
+      <!--Settings section-->
+      <div id="settings" class="row align-items-center">
+        <span class="row align-items-center">
+          <span class="row align-items-center">
+            <span class="headerText" class="row align-items-center">
+              <mat-icon>notifications</mat-icon>&nbsp;Receive when event is&nbsp; &nbsp;
+            </span>
+            <mat-checkbox formControlName="create_when_new">new</mat-checkbox> &nbsp; &nbsp;
+            <mat-checkbox formControlName="create_when_modified">updated</mat-checkbox> &nbsp; &nbsp;
+          </span>
+          &nbsp; &nbsp;&nbsp; &nbsp;
+          <span class="row align-items-center">
+            <mat-checkbox formControlName="send_email"></mat-checkbox>
+            <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                {{cueForm.get('send_email').value === true ? 'email' :
+        cueForm.get('send_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+              </mat-icon>
+              &nbsp;{{cueForm.get('send_email').value === true ? ' Email ' :
+        cueForm.get('send_email').value === false ?  'Do not email' :  'Do not email '}}
+            </span>
+          </span>
+        </span>
+
+      </div>
+      <!--Settings section-->
+
     </mat-accordion>
   </form>
 
@@ -252,7 +278,7 @@
     <button mat-button color="warn" (click)="this.customNotificationDialogRef.close();">
       <mat-icon>close</mat-icon>&nbsp;Cancel
     </button>
-    <button mat-button color="primary" (click)="onSubmit()">
+    <button mat-button color="primary" (click)="onSubmit(cueForm.value)">
       <mat-icon>save</mat-icon>&nbsp;Save
     </button>
   </div>

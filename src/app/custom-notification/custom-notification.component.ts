@@ -67,15 +67,19 @@ export class CustomNotificationComponent implements OnInit {
       species_diagnosis: null,
       species: null,
       administrative_level_one: null,
-      administrative_level_two: null,
+      land_ownerships: null,
       affected_count: null,
       affected_count_operator: '__gte',
+
       diagnosis_includes_all: false,
       species_includes_all: false,
       administrative_level_one_includes_all: false,
       speciesDiagnosis_includes_all: false,
+
       and_params: [],
-      complete: null
+      create_when_new: false,
+      create_when_modified: false,
+      send_email: false
     });
   }
 
@@ -319,35 +323,43 @@ export class CustomNotificationComponent implements OnInit {
     }
   }
 
-  // TODO - set up DELETE Cue
-  deleteCue() {
 
-  }
+  onSubmit(formValue) {
 
-  openCueDeleteConfirm(eventGroup) {
-    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-      {
-        data: {
-          title: 'Delete Cue Confirm',
-          titleIcon: 'delete_forever',
-          // tslint:disable-next-line:max-line-length
-          message: 'Are you sure you want to delete this cue?\nThis action cannot be undone.',
-          confirmButtonText: 'Yes, Delete Cue',
-          messageIcon: '',
-          showCancelButton: true
-        }
-      }
-    );
+    const customCueObj = {
+      administrative_level_one: [],
+      species: [],
+      species_diagnosis: [],
+      land_ownerships: [],
+      affected_count: formValue.affected_count,
+      affected_count_operator: formValue.affected_count_operator,
+      species_diagnosis_includes_all: formValue.species_diagnosis_includes_all,
+      species_includes_all: formValue.species_includes_all,
+      administrative_level_one_includes_all: formValue.administrative_level_one_includes_all,
+      land_ownerships_includes_all: formValue.land_ownerships_includes_all,
+      and_params: []
+    };
 
-    this.confirmDialogRef.afterClosed().subscribe(result => {
-      if (result === true) {
-        this.deleteCue();
-      }
-    });
-  }
 
-  // TODO - set up POST for notification cue
-  onSubmit() {
+    if (formValue.diagnosis_type_includes_all === true) {
+      formValue.and_params.push('diagnosis_type');
+    }
+    if (formValue.speciesDiagnosis_includes_all === true) {
+      formValue.and_params.push('diagnosis');
+    }
+    if (formValue.species_includes_all === true) {
+      formValue.and_params.push('species');
+    }
+    if (formValue.administrative_level_one_includes_all === true) {
+      formValue.and_params.push('administrative_level_one');
+    }
+
+    formValue.administrative_level_one = this.selectedAdminLevelOnes;
+    formValue.species = this.selectedSpecies;
+    formValue.species_diagnosis = this.selectedDiagnoses;
+    formValue.land_ownerships = this.selectedLandOwnership;
+
+    this.customNotificationDialogRef.close(customCueObj);
     this.customNotificationDialogRef.close();
   }
 }

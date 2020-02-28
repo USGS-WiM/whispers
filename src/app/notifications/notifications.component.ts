@@ -24,6 +24,8 @@ import { CustomNotificationCue } from '@interfaces/custom-notification-cue'
   styleUrls: ['./notifications.component.scss']
 })
 export class NotificationsComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) notificationPaginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
   notificationsDataSource: MatTableDataSource<Notification>;
@@ -51,6 +53,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   customNotificationSettingsForm: FormGroup;
 
   previousValueStandardNotificationSettingsForm;
+
+  customCueArray: FormArray;
 
   // this.allEventsChecked = false;
 
@@ -156,9 +160,6 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     'source'
   ];
 
-  @ViewChild(MatPaginator) notificationPaginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-
   viewNotificationsDetailRef: MatDialogRef<ViewNotificationDetailsComponent>;
 
   buildStandardNotificationSettingsForm() {
@@ -208,6 +209,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       // this.populateStandardNotificationSettingsForm(this.currentUser.notification_cue_standards);
     });
 
+    this.customCueArray = this.customNotificationSettingsForm.get('custom_cues') as FormArray;
+
   }
 
   ngOnInit() {
@@ -254,20 +257,36 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     // set the previous form value to the current to intialize the page
     this.previousValueStandardNotificationSettingsForm = this.standardNotificationSettingsForm.value;
 
-    // retrieve user's custom notifications and populate the formArray
-    // note: this will be done via a service call. pulling from test/dummy data object temporarily
-    const customCuesFormArray = <FormArray>this.customNotificationSettingsForm.get('custom_cues');
-    for (const cue of this.dummy_custom_cues) {
-      customCuesFormArray.push(
-        this.formBuilder.group({
-          id: cue.id,
-          cue_string: cue.cue_string,
-          new: cue.notification_cue_preference.create_when_new,
-          updated: cue.notification_cue_preference.create_when_modified,
-          email: cue.notification_cue_preference.send_email
-        })
+    // retrieve user's custom notification cues
+    this.notificationService.getUserCustomNotificationCues()
+      .subscribe(
+        (notificationcuecustoms) => {
+
+          // retrieve user's custom notifications and populate the formArray
+          // const customCuesFormArray = <FormArray>this.customNotificationSettingsForm.get('custom_cues');
+          for (const cue of notificationcuecustoms) {
+            this.customCueArray.push(
+              this.formBuilder.group({
+                id: cue.id,
+                cue_string: 'display pending development',
+                create_when_new: cue.notification_cue_preference.create_when_new,
+                create_when_modified: cue.notification_cue_preference.create_when_modified,
+                send_email: cue.notification_cue_preference.send_email
+              })
+            );
+          }
+
+          // this.notificationsLoading = false;
+          // use dataUpdatedService to refresh notifications in app.component as well
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+          // this.notificationsLoading = false;
+        }
       );
-    }
+
+
 
   }
 
@@ -320,18 +339,32 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   }
 
-  initCustomCue(cue) {
+  initCustomCue() {
     return this.formBuilder.group({
-      id: cue.id,
-      cue_string: cue.cue_string,
-      new: cue.new,
-      updated: cue.updated,
-      email: cue.email
+      id: null,
+      cue_string: null,
+      create_when_new: null,
+      create_when_modified: null,
+      send_email: null
     });
   }
 
   getCustomCues(form) {
     return form.controls.custom_cues.controls;
+  }
+
+  parseCustomCue(cue) {
+
+    // TODO: on hold pending the resolution of https://github.com/USGS-WiM/whispersservices_django/issues/337
+    // let cueStringArray = [];
+    // let eventLocationString = 'Land Ownership: ';
+    // if (cue.event_location_land_ownership !== null) {
+    //   for (let value of cue.event_location_land_ownership.values) {
+    //     eventLocationString.concat(value)
+    //   }
+    // }
+
+    // comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
   }
 
   // yourEvents() {

@@ -27,6 +27,16 @@ export class NotificationService {
       }));
   }
 
+  public getUserCustomNotificationCues(): Observable<any> {
+
+    return this.http.get(APP_SETTINGS.NOTIFICATION_CUE_CUSTOM_URL, {
+      headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS
+    }).pipe(
+      map((res: any) => {
+        return res.results;
+      }));
+  }
+
   public updateNotification(body): Observable<any> {
 
     return this.http.patch(APP_SETTINGS.NOTIFICATIONS_URL + body.id + '/', body, {

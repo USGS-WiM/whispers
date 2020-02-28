@@ -152,6 +152,7 @@ export class APP_SETTINGS {
     public static get EVENT_GROUP_CATEGORIES_URL(): string { return this.API_ROOT + 'eventgroupcategories/'; }
 
     public static get NOTIFICATIONS_URL(): string { return this.API_ROOT + 'notifications/'; }
+    public static get NOTIFICATION_CUE_CUSTOM_URL(): string { return this.API_ROOT + 'notificationcuecustoms/'; }
 
     public static get GO_USA_GOV_SHORTEN_URL(): string { return 'https://go.usa.gov/api/shorten.json'; }
     public static get GO_USA_GOV_USER(): string { return 'bdraper'; }

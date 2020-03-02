@@ -291,12 +291,15 @@
                     *ngFor="let cue of getCustomCues(customNotificationSettingsForm); let customCueIndex = index">
                     <div class="mat-cell">{{cue.value.cue_string}}</div>
                     <div class="mat-cell" [formGroupName]="customCueIndex">
-                      <mat-checkbox formControlName="create_when_new">new</mat-checkbox> &nbsp; &nbsp;
-                      <mat-checkbox formControlName="create_when_modified">updated</mat-checkbox>
+                      <mat-checkbox formControlName="create_when_new"
+                        (click)="updateCustomNotificationSettings(cue, customCueIndex)">new</mat-checkbox> &nbsp; &nbsp;
+                      <mat-checkbox formControlName="create_when_modified"
+                        (click)="updateCustomNotificationSettings(cue, customCueIndex)">updated</mat-checkbox>
                     </div>
                     <div class="mat-cell" [formGroupName]="customCueIndex">
                       <span class="row align-items-center">
-                        <mat-checkbox formControlName="send_email"></mat-checkbox>
+                        <mat-checkbox formControlName="send_email"
+                          (click)="updateCustomNotificationSettings(cue, customCueIndex)"></mat-checkbox>
                         <!-- <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
                         {{standardNotificationSettingsForm.get('collabEvents_email').value === true ? 'email' :
                       standardNotificationSettingsForm.get('collabEvents_email').value === false ?  'unsubscribe' :  'unsubscribe'}}

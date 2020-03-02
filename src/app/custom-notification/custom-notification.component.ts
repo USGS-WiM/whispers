@@ -63,18 +63,19 @@ export class CustomNotificationComponent implements OnInit {
 
   buildCueForm() {
     this.cueForm = this.formBuilder.group({
-      event_id: null,
-      species_diagnosis: null,
+      event: null,
+      species_diagnosis_diagnosis: null,
       species: null,
-      administrative_level_one: null,
-      land_ownerships: null,
-      affected_count: null,
-      affected_count_operator: '__gte',
+      event_location_administrative_level_one: null,
+      event_location_land_ownership: null,
+      event_affected_count: null,
+      event_affected_count_operator: '__gte',
 
       diagnosis_includes_all: false,
       species_includes_all: false,
-      administrative_level_one_includes_all: false,
-      speciesDiagnosis_includes_all: false,
+      event_location_administrative_level_one_includes_all: false,
+      species_diagnosis_diagnosis_includes_all: false,
+      event_location_land_ownership_includes_all: false,
 
       and_params: [],
       create_when_new: false,
@@ -323,43 +324,63 @@ export class CustomNotificationComponent implements OnInit {
     }
   }
 
+  extractIDs(objectArray) {
+    const idArray = [];
+    for (const object of objectArray) {
+      idArray.push(object.id);
+    }
+    return idArray;
+  }
 
   onSubmit(formValue) {
 
     const customCueObj = {
-      administrative_level_one: [],
-      species: [],
-      species_diagnosis: [],
-      land_ownerships: [],
-      affected_count: formValue.affected_count,
-      affected_count_operator: formValue.affected_count_operator,
-      species_diagnosis_includes_all: formValue.species_diagnosis_includes_all,
-      species_includes_all: formValue.species_includes_all,
-      administrative_level_one_includes_all: formValue.administrative_level_one_includes_all,
-      land_ownerships_includes_all: formValue.land_ownerships_includes_all,
-      and_params: []
+      event: formValue.event,
+      event_affected_count: formValue.event_affected_count,
+      event_affected_count_operator: formValue.event_affected_count_operator,
+      event_location_administrative_level_one: { 'operator': 'OR', 'values': [] },
+      species: { 'operator': 'OR', 'values': [] },
+      species_diagnosis_diagnosis: { 'operator': 'OR', 'values': [] },
+      event_location_land_ownership: { 'operator': 'OR', 'values': [] },
+      new_notification_cue_preference: { 'create_when_new': formValue.create_when_new, 'create_when_modified': formValue.create_when_modified, 'send_email': formValue.send_email }
+      // species_diagnosis_diagnosis_includes_all: formValue.species_diagnosis_includes_all,
+      // species_includes_all: formValue.species_includes_all,
+      // event_location_administrative_level_one_includes_all: formValue.event_location_administrative_level_one_includes_all,
+      // event_location_land_ownership_includes_all: formValue.event_location_land_ownership_includes_all,
+      // and_params: []
     };
 
-
-    if (formValue.diagnosis_type_includes_all === true) {
-      formValue.and_params.push('diagnosis_type');
-    }
-    if (formValue.speciesDiagnosis_includes_all === true) {
-      formValue.and_params.push('diagnosis');
+    if (formValue.event_location_administrative_level_one_includes_all === true) {
+      customCueObj.event_location_administrative_level_one.operator = 'AND';
     }
     if (formValue.species_includes_all === true) {
-      formValue.and_params.push('species');
-    }
-    if (formValue.administrative_level_one_includes_all === true) {
-      formValue.and_params.push('administrative_level_one');
+      customCueObj.species.operator = 'AND';
     }
 
-    formValue.administrative_level_one = this.selectedAdminLevelOnes;
-    formValue.species = this.selectedSpecies;
-    formValue.species_diagnosis = this.selectedDiagnoses;
-    formValue.land_ownerships = this.selectedLandOwnership;
+    if (formValue.species_diagnosis_diagnosis_includes_all === true) {
+      customCueObj.species_diagnosis_diagnosis.operator = 'AND';
+    }
+    if (formValue.event_location_land_ownership_includes_all === true) {
+      customCueObj.event_location_land_ownership.operator = 'AND';
+    }
 
+    customCueObj.event_location_administrative_level_one.values = this.extractIDs(this.selectedAdminLevelOnes);
+    customCueObj.species.values = this.extractIDs(this.selectedSpecies);
+    customCueObj.species_diagnosis_diagnosis.values = this.extractIDs(this.selectedDiagnoses);
+    customCueObj.event_location_land_ownership.values = this.extractIDs(this.selectedLandOwnership);
+
+    // if the selected array is empty (parameter not used) - leave a blank object (TSlint does not like this, but it works)
+    // if (customCueObj.event_location_administrative_level_one.values.length === 0) { customCueObj.event_location_administrative_level_one = {}; }
+    // if (customCueObj.species.values.length === 0) { customCueObj.species = {}; }
+    // if (customCueObj.species_diagnosis_diagnosis.values.length === 0) { customCueObj.species_diagnosis_diagnosis = {}; }
+    // if (customCueObj.event_location_land_ownership.values.length === 0) { customCueObj.event_location_land_ownership = {}; }
+
+    if (customCueObj.event_location_administrative_level_one.values.length === 0) { delete customCueObj.event_location_administrative_level_one; }
+    if (customCueObj.species.values.length === 0) { delete customCueObj.species; }
+    if (customCueObj.species_diagnosis_diagnosis.values.length === 0) { delete customCueObj.species_diagnosis_diagnosis; }
+    if (customCueObj.event_location_land_ownership.values.length === 0) { delete customCueObj.event_location_land_ownership; }
+
+    // close the dialog, passing the customCueObj back to the notifications component
     this.customNotificationDialogRef.close(customCueObj);
-    this.customNotificationDialogRef.close();
   }
 }

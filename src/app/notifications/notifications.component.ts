@@ -54,6 +54,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   previousValueStandardNotificationSettingsForm;
 
+  previousValueCustomNotificationSettingsForm;
+
   customCueArray: FormArray;
 
   // this.allEventsChecked = false;
@@ -247,7 +249,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     // populate the form with currentUser's settings onInit
     this.populateStandardNotificationSettingsForm(this.currentUser.notification_cue_standards);
 
-    // subscribe to changes to the form and update the server with changes
+    // subscribe to changes to the standard notifications form and update the server with changes
     this.standardNotificationSettingsForm.valueChanges.subscribe(value => {
       console.log('Standard Notifications updated! New value: ', value);
       const match = (this.previousValueStandardNotificationSettingsForm === this.standardNotificationSettingsForm.value);
@@ -271,13 +273,14 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
                 cue_string: 'display pending development',
                 create_when_new: cue.notification_cue_preference.create_when_new,
                 create_when_modified: cue.notification_cue_preference.create_when_modified,
-                send_email: cue.notification_cue_preference.send_email
+                send_email: cue.notification_cue_preference.send_email,
+                preference_id: cue.notification_cue_preference.id
               })
             );
           }
 
-          // this.notificationsLoading = false;
-          // use dataUpdatedService to refresh notifications in app.component as well
+          // set the previous form value to the current to intialize the page
+          this.previousValueCustomNotificationSettingsForm = this.customNotificationSettingsForm.value;
 
         },
         error => {
@@ -315,6 +318,29 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       .subscribe(
         (customCueObject) => {
 
+          this.notificationService.createCustomNotificationCue(customCueObject)
+            .subscribe(
+              (customCue) => {
+                // TODO: add the succesful one to the form array for display
+                this.customCueArray.push(
+                  this.formBuilder.group({
+                    id: customCue.id,
+                    cue_string: 'display pending development',
+                    create_when_new: customCue.notification_cue_preference.create_when_new,
+                    create_when_modified: customCue.notification_cue_preference.create_when_modified,
+                    send_email: customCue.notification_cue_preference.send_email,
+                    preference_id: customCue.notification_cue_preference.id
+                  })
+                );
+
+                this.openSnackBar('Custom Notification Successfully Saved!', 'OK', 5000);
+
+              },
+              error => {
+                this.errorMessage = <any>error;
+                this.openSnackBar('Custom Notification Save Failed. Error: ' + this.errorMessage, 'OK', 5000);
+              }
+            );
 
         },
         error => {
@@ -381,34 +407,6 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     // comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
   }
 
-  // yourEvents() {
-  //   this.yourEventsChecked = !this.yourEventsChecked;
-  //   this.checkIfAllStandardTogglesTrue();
-  // }
-
-  // yourOrgEvents() {
-  //   this.yourOrgEventsChecked = !this.yourOrgEventsChecked;
-  //   this.checkIfAllStandardTogglesTrue();
-  // }
-
-  // yourCollabEvents() {
-  //   this.yourCollabEventsChecked = !this.yourCollabEventsChecked;
-  //   this.checkIfAllStandardTogglesTrue();
-  // }
-
-  // allEvents() {
-  //   this.allEventsChecked = !this.allEventsChecked;
-  //   this.checkIfAllStandardTogglesTrue();
-  // }
-
-  // checkIfAllStandardTogglesTrue() {
-  //   if (this.yourEventsChecked && this.yourOrgEventsChecked && this.yourCollabEventsChecked && this.allEventsChecked) {
-  //     // this.emailAllStandardNotificationsToggle = true;
-  //     this.emailAllStandard = true;
-  //   } else {
-  //     this.emailAllStandard = false;
-  //   }
-  // }
 
   deleteWarning(cue, customcueIndex) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
@@ -703,6 +701,36 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
           this.openSnackBar('Notification Settings Updated Failed. Error: ' + this.errorMessage, 'OK', 5000);
         }
       );
+  }
+
+  updateCustomNotificationSettings(cue, cueIndex) {
+    // cue.value contains the data
+    console.log(cue);
+
+    const updateObject = {
+      id: cue.value.preference_id,
+      create_when_new: cue.value.create_when_new,
+      create_when_modified: cue.value.create_when_modified,
+      send_email: cue.value.send_email
+    }
+
+    this.notificationService.updateCustomNotificationSettings(updateObject)
+      .subscribe(
+        (response) => {
+
+          // since the update succeeded, update the previous form value var to be able to compare to next change
+          this.previousValueCustomNotificationSettingsForm = this.customNotificationSettingsForm.value;
+          // display success message
+          this.openSnackBar('Notification Settings Updated!', 'OK', 5000);
+
+        },
+        error => {
+          // since the updated failed, revert the form back to previous value so display is in sync with database values
+          this.customNotificationSettingsForm.setValue(this.previousValueCustomNotificationSettingsForm);
+          this.openSnackBar('Notification Settings Updated Failed. Error: ' + this.errorMessage, 'OK', 5000);
+        }
+      );
+
   }
 
 

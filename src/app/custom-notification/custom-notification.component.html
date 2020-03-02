@@ -13,12 +13,12 @@
             <b>Event ID</b>
           </mat-panel-title>
           <mat-panel-description>
-            <span>{{cueForm.get('event_id').value}}</span>
+            <span>{{cueForm.get('event').value}}</span>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div>
           <mat-form-field>
-            <input matInput type="number" min="0" placeholder="Event ID" formControlName="event_id">
+            <input matInput type="number" min="0" placeholder="Event ID" formControlName="event">
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -40,7 +40,7 @@
                       {{adminLevelOne.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedAdminLevelOnes.indexOf(adminLevelOne)) < (selectedAdminLevelOnes.length - 1)">{{(cueForm.get('administrative_level_one_includes_all').value)
+                    <span *ngIf="(selectedAdminLevelOnes.indexOf(adminLevelOne)) < (selectedAdminLevelOnes.length - 1)">{{(cueForm.get('event_location_administrative_level_one_includes_all').value)
                       ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
@@ -63,7 +63,7 @@
           </div>
           <div class="search-type-radios">
             <label>Search type </label>
-            <mat-radio-group formControlName="administrative_level_one_includes_all">
+            <mat-radio-group formControlName="event_location_administrative_level_one_includes_all">
               <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
               &nbsp;&nbsp;
               <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
@@ -137,7 +137,7 @@
                       (removed)="removeChip(diagnosis, selectedDiagnoses, 'diagnosis')">{{ diagnosis.name }}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedDiagnoses.indexOf(diagnosis)) < (selectedDiagnoses.length - 1)">{{(cueForm.get('speciesDiagnosis_includes_all').value)
+                    <span *ngIf="(selectedDiagnoses.indexOf(diagnosis)) < (selectedDiagnoses.length - 1)">{{(cueForm.get('species_diagnosis_diagnosis_includes_all').value)
                                 ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
@@ -161,7 +161,7 @@
           </div>
           <div class="search-type-radios">
             <label>Search type </label>
-            <mat-radio-group formControlName="speciesDiagnosis_includes_all">
+            <mat-radio-group formControlName="species_diagnosis_diagnosis_includes_all">
               <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>
               &nbsp;&nbsp;
               <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
@@ -222,14 +222,14 @@
           </mat-panel-title>
           <mat-panel-description>
             <span>
-              {{ cueForm.get('affected_count_operator').value === '__gte' && cueForm.get('affected_count').value != null ? '&ge;' :
-              cueForm.get('affected_count_operator').value === '__lte' && cueForm.get('affected_count').value != null ? '&le;' : '' }}
-              {{cueForm.get('affected_count').value}}</span>
+              {{ cueForm.get('event_affected_count_operator').value === '__gte' && cueForm.get('event_affected_count').value != null ? '&ge;' :
+              cueForm.get('event_affected_count_operator').value === '__lte' && cueForm.get('event_affected_count').value != null ? '&le;' : '' }}
+              {{cueForm.get('event_affected_count').value}}</span>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div>
           <div class="affected-count-operator-radios">
-            <mat-radio-group formControlName="affected_count_operator">
+            <mat-radio-group formControlName="event_affected_count_operator">
               <mat-radio-button [value]="'__gte'" matTooltip="Greater than or equal to">Greater than or equal to ( &ge;
                 )</mat-radio-button>&nbsp;&nbsp;
               <mat-radio-button [value]="'__lte'" matTooltip="Less than or equal to">Less than or equal to ( &le; )
@@ -237,7 +237,7 @@
             </mat-radio-group>
           </div>
           <mat-form-field>
-            <input matInput type="number" min="0" placeholder="Number Affected" formControlName="affected_count">
+            <input matInput type="number" min="0" placeholder="Number Affected" formControlName="event_affected_count">
           </mat-form-field>
         </div>
       </mat-expansion-panel>

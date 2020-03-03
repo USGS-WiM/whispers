@@ -222,17 +222,17 @@
           </mat-panel-title>
           <mat-panel-description>
             <span>
-              {{ cueForm.get('event_affected_count_operator').value === '__gte' && cueForm.get('event_affected_count').value != null ? '&ge;' :
-              cueForm.get('event_affected_count_operator').value === '__lte' && cueForm.get('event_affected_count').value != null ? '&le;' : '' }}
+              {{ cueForm.get('event_affected_count_operator').value === 'GTE' && cueForm.get('event_affected_count').value != null ? '&ge;' :
+              cueForm.get('event_affected_count_operator').value === 'LTE' && cueForm.get('event_affected_count').value != null ? '&le;' : '' }}
               {{cueForm.get('event_affected_count').value}}</span>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div>
           <div class="affected-count-operator-radios">
             <mat-radio-group formControlName="event_affected_count_operator">
-              <mat-radio-button [value]="'__gte'" matTooltip="Greater than or equal to">Greater than or equal to ( &ge;
+              <mat-radio-button [value]="'GTE'" matTooltip="Greater than or equal to">Greater than or equal to ( &ge;
                 )</mat-radio-button>&nbsp;&nbsp;
-              <mat-radio-button [value]="'__lte'" matTooltip="Less than or equal to">Less than or equal to ( &le; )
+              <mat-radio-button [value]="'LTE'" matTooltip="Less than or equal to">Less than or equal to ( &le; )
               </mat-radio-button>
             </mat-radio-group>
           </div>

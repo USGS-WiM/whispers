@@ -234,10 +234,6 @@
 
       <mat-divider style="margin: 25px auto;" [inset]="true"></mat-divider>
 
-      <span class="text-large text-red text-bold">
-        <mat-icon>announcement</mat-icon>&nbsp;Custom Notifications is under development and not yet fully functional.
-      </span>
-
       <!--Custom notifications settings-->
       <mat-card>
         <mat-card-title>
@@ -250,7 +246,9 @@
           <!-- <form [formGroup]="customNotificationSettingsForm" class="event-submission-locations" autocomplete="off"> -->
           <form [formGroup]="customNotificationSettingsForm" autocomplete="off">
 
-            <div class="results-table-div">
+            <div *ngIf="customCueArray.length === 0"><h4>No Custom Notifications</h4></div>
+
+            <div class="results-table-div" *ngIf="customCueFormReady">
               <div class="mat-table">
                 <!--Begin header row-->
                 <div class="mat-header-row">
@@ -265,15 +263,15 @@
                   </div>
                   <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
                     <span class="row align-items-center">
-                      <mat-checkbox (change)="emailAllToggle('custom')" [checked]="emailAllCustom">
+                      <!--<mat-checkbox (change)="emailAllToggle('custom')" [checked]="emailAllCustom">
                       </mat-checkbox>
-                      <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                       <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
                           {{emailAllCustom === true ? 'email' :
                         emailAllCustom=== false ?  'email' :  'email'}}
                         </mat-icon>
                         &nbsp;{{emailAllCustom === true ? 'Email on for all' :
                       emailAllCustom === false ?  'Click to recieve emails for all' :  'Click to recieve emails for all'}}
-                      </span>
+                      </span> -->
                     </span>
                   </div>
                   <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText">Delete Cue</span>
@@ -289,28 +287,36 @@
                   <!-- <div class="mat-row" *ngFor="let cue of dummy_custom_cues"> -->
                   <div class="mat-row"
                     *ngFor="let cue of getCustomCues(customNotificationSettingsForm); let customCueIndex = index">
-                    <div class="mat-cell">{{cue.value.cue_string}}</div>
+                    <div class="mat-cell">
+
+
+                      <div *ngFor="let parameterString of cue.value.cue_strings">
+                        <span>{{parameterString}}</span><br>
+                      </div>
+                    </div>
                     <div class="mat-cell" [formGroupName]="customCueIndex">
                       <mat-checkbox formControlName="create_when_new"
-                        (click)="updateCustomNotificationSettings(cue, customCueIndex)">new</mat-checkbox> &nbsp; &nbsp;
+                        (click)="updateCustomNotificationSettings(cue, customCueIndex)" matTooltip="Click to recieve when a matching event is new">new</mat-checkbox> &nbsp; &nbsp;
                       <mat-checkbox formControlName="create_when_modified"
-                        (click)="updateCustomNotificationSettings(cue, customCueIndex)">updated</mat-checkbox>
+                        (click)="updateCustomNotificationSettings(cue, customCueIndex)" matTooltip="Click to recieve when a matching event is updated">updated</mat-checkbox>
                     </div>
                     <div class="mat-cell" [formGroupName]="customCueIndex">
                       <span class="row align-items-center">
                         <mat-checkbox formControlName="send_email"
-                          (click)="updateCustomNotificationSettings(cue, customCueIndex)"></mat-checkbox>
-                        <!-- <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
-                        {{standardNotificationSettingsForm.get('collabEvents_email').value === true ? 'email' :
-                      standardNotificationSettingsForm.get('collabEvents_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
-                      </mat-icon>
-                      &nbsp;{{standardNotificationSettingsForm.get('collabEvents_email').value === true ? ' Email ' :
-                      standardNotificationSettingsForm.get('collabEvents_email').value === false ?  'Do not email' :  'Do not email '}}
-                    </span> -->
+                          (click)="updateCustomNotificationSettings(cue, customCueIndex)" matTooltip="Click to have notification forwarded to your email"></mat-checkbox>
+
+                        <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                            {{customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('send_email').value === true ? 'email' :
+                                customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('send_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+                          </mat-icon>
+                          &nbsp;{{customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('send_email').value === true ? ' Email ' :
+                              customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('send_email').value === false ?  'Do not email' :  'Do not email '}}
+                        </span>
+
                       </span>
                     </div>
                     <div class="mat-cell">
-                      <mat-icon class="icon" color="warn" (click)="deleteWarning(cue, customCueIndex)">delete</mat-icon>
+                      <mat-icon class="icon" color="warn" (click)="deleteWarning(cue, customCueIndex)" matTooltip="Click to delete this notification cue">delete</mat-icon>
                     </div>
                   </div>
                 </div>

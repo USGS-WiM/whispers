@@ -69,7 +69,7 @@ export class CustomNotificationComponent implements OnInit {
       event_location_administrative_level_one: null,
       event_location_land_ownership: null,
       event_affected_count: null,
-      event_affected_count_operator: '__gte',
+      event_affected_count_operator: 'GTE',
 
       diagnosis_includes_all: false,
       species_includes_all: false,
@@ -379,6 +379,8 @@ export class CustomNotificationComponent implements OnInit {
     if (customCueObj.species.values.length === 0) { delete customCueObj.species; }
     if (customCueObj.species_diagnosis_diagnosis.values.length === 0) { delete customCueObj.species_diagnosis_diagnosis; }
     if (customCueObj.event_location_land_ownership.values.length === 0) { delete customCueObj.event_location_land_ownership; }
+
+    if (customCueObj.event_affected_count === null) { delete customCueObj.event_affected_count; delete customCueObj.event_affected_count_operator; }
 
     // close the dialog, passing the customCueObj back to the notifications component
     this.customNotificationDialogRef.close(customCueObj);

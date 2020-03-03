@@ -58,101 +58,103 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   customCueArray: FormArray;
 
+  customCueFormReady = false;
+
   // this.allEventsChecked = false;
 
   // test data
-  dummy_custom_cues: CustomNotificationCue[] = [
-    {
-      'id': 1000, 'cue_string': 'Event with Species: Alligator',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1001, 'cue_string': 'Event with ID 17044',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1002, 'cue_string': 'Event with State: Wisconsin OR Minnesota',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1003, 'cue_string': 'Event with ID 1337',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1004, 'cue_string': 'Event with ID 7775556',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1005, 'cue_string': 'Event with ID 17055',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1006, 'cue_string': 'Event with Diagnosis: E.Coli and Species: Squirrel and State: Wisconsin',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1007, 'cue_string': 'Event with ID 00977',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1008, 'cue_string': 'Event with ID 4323455',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1009, 'cue_string': 'Event with ID 675465',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-  ];
+  // dummy_custom_cues: CustomNotificationCue[] = [
+  //   {
+  //     'id': 1000, 'cue_string': 'Event with Species: Alligator',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1001, 'cue_string': 'Event with ID 17044',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1002, 'cue_string': 'Event with State: Wisconsin OR Minnesota',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1003, 'cue_string': 'Event with ID 1337',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1004, 'cue_string': 'Event with ID 7775556',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1005, 'cue_string': 'Event with ID 17055',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1006, 'cue_string': 'Event with Diagnosis: E.Coli and Species: Squirrel and State: Wisconsin',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1007, 'cue_string': 'Event with ID 00977',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1008, 'cue_string': 'Event with ID 4323455',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1009, 'cue_string': 'Event with ID 675465',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  // ];
 
   notificationDisplayedColumns = [
     'select',
@@ -264,23 +266,27 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       .subscribe(
         (notificationcuecustoms) => {
 
-          // retrieve user's custom notifications and populate the formArray
-          // const customCuesFormArray = <FormArray>this.customNotificationSettingsForm.get('custom_cues');
-          for (const cue of notificationcuecustoms) {
-            this.customCueArray.push(
-              this.formBuilder.group({
-                id: cue.id,
-                cue_string: 'display pending development',
-                create_when_new: cue.notification_cue_preference.create_when_new,
-                create_when_modified: cue.notification_cue_preference.create_when_modified,
-                send_email: cue.notification_cue_preference.send_email,
-                preference_id: cue.notification_cue_preference.id
-              })
-            );
+          if (notificationcuecustoms.length > 0) {
+            // retrieve user's custom notifications and populate the formArray
+            // const customCuesFormArray = <FormArray>this.customNotificationSettingsForm.get('custom_cues');
+            for (const cue of notificationcuecustoms) {
+              this.customCueArray.push(
+                this.formBuilder.group({
+                  id: cue.id,
+                  cue_strings: [cue.cue_strings],
+                  create_when_new: cue.notification_cue_preference.create_when_new,
+                  create_when_modified: cue.notification_cue_preference.create_when_modified,
+                  send_email: cue.notification_cue_preference.send_email,
+                  preference_id: cue.notification_cue_preference.id
+                })
+              );
+            }
+            // set the previous form value to the current to intialize the page
+            this.previousValueCustomNotificationSettingsForm = this.customNotificationSettingsForm.value;
+            this.customCueFormReady = true;
           }
 
-          // set the previous form value to the current to intialize the page
-          this.previousValueCustomNotificationSettingsForm = this.customNotificationSettingsForm.value;
+
 
         },
         error => {
@@ -325,7 +331,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
                 this.customCueArray.push(
                   this.formBuilder.group({
                     id: customCue.id,
-                    cue_string: 'display pending development',
+                    cue_strings: [customCue.cue_strings],
                     create_when_new: customCue.notification_cue_preference.create_when_new,
                     create_when_modified: customCue.notification_cue_preference.create_when_modified,
                     send_email: customCue.notification_cue_preference.send_email,
@@ -382,7 +388,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   initCustomCue() {
     return this.formBuilder.group({
       id: null,
-      cue_string: null,
+      cue_strings: [],
       create_when_new: null,
       create_when_modified: null,
       send_email: null
@@ -712,7 +718,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       create_when_new: cue.value.create_when_new,
       create_when_modified: cue.value.create_when_modified,
       send_email: cue.value.send_email
-    }
+    };
 
     this.notificationService.updateCustomNotificationSettings(updateObject)
       .subscribe(

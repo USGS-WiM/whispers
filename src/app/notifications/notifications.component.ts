@@ -266,27 +266,23 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       .subscribe(
         (notificationcuecustoms) => {
 
-          if (notificationcuecustoms.length > 0) {
-            // retrieve user's custom notifications and populate the formArray
-            // const customCuesFormArray = <FormArray>this.customNotificationSettingsForm.get('custom_cues');
-            for (const cue of notificationcuecustoms) {
-              this.customCueArray.push(
-                this.formBuilder.group({
-                  id: cue.id,
-                  cue_strings: [cue.cue_strings],
-                  create_when_new: cue.notification_cue_preference.create_when_new,
-                  create_when_modified: cue.notification_cue_preference.create_when_modified,
-                  send_email: cue.notification_cue_preference.send_email,
-                  preference_id: cue.notification_cue_preference.id
-                })
-              );
-            }
-            // set the previous form value to the current to intialize the page
-            this.previousValueCustomNotificationSettingsForm = this.customNotificationSettingsForm.value;
-            this.customCueFormReady = true;
+          // retrieve user's custom notifications and populate the formArray
+          // const customCuesFormArray = <FormArray>this.customNotificationSettingsForm.get('custom_cues');
+          for (const cue of notificationcuecustoms) {
+            this.customCueArray.push(
+              this.formBuilder.group({
+                id: cue.id,
+                cue_strings: [cue.cue_strings],
+                create_when_new: cue.notification_cue_preference.create_when_new,
+                create_when_modified: cue.notification_cue_preference.create_when_modified,
+                send_email: cue.notification_cue_preference.send_email,
+                preference_id: cue.notification_cue_preference.id
+              })
+            );
           }
-
-
+          // set the previous form value to the current to intialize the page
+          this.previousValueCustomNotificationSettingsForm = this.customNotificationSettingsForm.value;
+          this.customCueFormReady = true;
 
         },
         error => {
@@ -294,8 +290,6 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
           // this.notificationsLoading = false;
         }
       );
-
-
 
   }
 
@@ -709,16 +703,44 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       );
   }
 
-  updateCustomNotificationSettings(cue, cueIndex) {
+  updateCustomNotificationSettings(field, event, cue) {
     // cue.value contains the data
-    console.log(cue);
 
-    const updateObject = {
+    let updateObject = {
       id: cue.value.preference_id,
       create_when_new: cue.value.create_when_new,
       create_when_modified: cue.value.create_when_modified,
       send_email: cue.value.send_email
     };
+
+
+    switch (field) {
+      case 'create_when_new':
+        updateObject = {
+          id: cue.value.preference_id,
+          create_when_new: event.checked,
+          create_when_modified: cue.value.create_when_modified,
+          send_email: cue.value.send_email
+        };
+        break;
+      case 'create_when_modified':
+        updateObject = {
+          id: cue.value.preference_id,
+          create_when_new: event.checked,
+          create_when_modified: cue.value.create_when_modified,
+          send_email: cue.value.send_email
+        };
+        break;
+      case 'send_email':
+        updateObject = {
+          id: cue.value.preference_id,
+          create_when_new: cue.value.create_when_new,
+          create_when_modified: cue.value.create_when_modified,
+          send_email: event.checked,
+        };
+        break;
+    }
+
 
     this.notificationService.updateCustomNotificationSettings(updateObject)
       .subscribe(

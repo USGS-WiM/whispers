@@ -24,6 +24,8 @@ import { CustomNotificationCue } from '@interfaces/custom-notification-cue'
   styleUrls: ['./notifications.component.scss']
 })
 export class NotificationsComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) notificationPaginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
   notificationsDataSource: MatTableDataSource<Notification>;
@@ -52,101 +54,107 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   previousValueStandardNotificationSettingsForm;
 
+  previousValueCustomNotificationSettingsForm;
+
+  customCueArray: FormArray;
+
+  customCueFormReady = false;
+
   // this.allEventsChecked = false;
 
   // test data
-  dummy_custom_cues: CustomNotificationCue[] = [
-    {
-      'id': 1000, 'cue_string': 'Event with Species: Alligator',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1001, 'cue_string': 'Event with ID 17044',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1002, 'cue_string': 'Event with State: Wisconsin OR Minnesota',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1003, 'cue_string': 'Event with ID 1337',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1004, 'cue_string': 'Event with ID 7775556',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1005, 'cue_string': 'Event with ID 17055',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1006, 'cue_string': 'Event with Diagnosis: E.Coli and Species: Squirrel and State: Wisconsin',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1007, 'cue_string': 'Event with ID 00977',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1008, 'cue_string': 'Event with ID 4323455',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-    {
-      'id': 1009, 'cue_string': 'Event with ID 675465',
-      'notification_cue_preference': {
-        'id': 400,
-        'create_when_new': true,
-        'create_when_modified': true,
-        'send_email': false
-      }
-    },
-  ];
+  // dummy_custom_cues: CustomNotificationCue[] = [
+  //   {
+  //     'id': 1000, 'cue_string': 'Event with Species: Alligator',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1001, 'cue_string': 'Event with ID 17044',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1002, 'cue_string': 'Event with State: Wisconsin OR Minnesota',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1003, 'cue_string': 'Event with ID 1337',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1004, 'cue_string': 'Event with ID 7775556',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1005, 'cue_string': 'Event with ID 17055',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1006, 'cue_string': 'Event with Diagnosis: E.Coli and Species: Squirrel and State: Wisconsin',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1007, 'cue_string': 'Event with ID 00977',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1008, 'cue_string': 'Event with ID 4323455',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  //   {
+  //     'id': 1009, 'cue_string': 'Event with ID 675465',
+  //     'notification_cue_preference': {
+  //       'id': 400,
+  //       'create_when_new': true,
+  //       'create_when_modified': true,
+  //       'send_email': false
+  //     }
+  //   },
+  // ];
 
   notificationDisplayedColumns = [
     'select',
@@ -155,9 +163,6 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     'created_date',
     'source'
   ];
-
-  @ViewChild(MatPaginator) notificationPaginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
 
   viewNotificationsDetailRef: MatDialogRef<ViewNotificationDetailsComponent>;
 
@@ -208,6 +213,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       // this.populateStandardNotificationSettingsForm(this.currentUser.notification_cue_standards);
     });
 
+    this.customCueArray = this.customNotificationSettingsForm.get('custom_cues') as FormArray;
+
   }
 
   ngOnInit() {
@@ -244,7 +251,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     // populate the form with currentUser's settings onInit
     this.populateStandardNotificationSettingsForm(this.currentUser.notification_cue_standards);
 
-    // subscribe to changes to the form and update the server with changes
+    // subscribe to changes to the standard notifications form and update the server with changes
     this.standardNotificationSettingsForm.valueChanges.subscribe(value => {
       console.log('Standard Notifications updated! New value: ', value);
       const match = (this.previousValueStandardNotificationSettingsForm === this.standardNotificationSettingsForm.value);
@@ -254,20 +261,35 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     // set the previous form value to the current to intialize the page
     this.previousValueStandardNotificationSettingsForm = this.standardNotificationSettingsForm.value;
 
-    // retrieve user's custom notifications and populate the formArray
-    // note: this will be done via a service call. pulling from test/dummy data object temporarily
-    const customCuesFormArray = <FormArray>this.customNotificationSettingsForm.get('custom_cues');
-    for (const cue of this.dummy_custom_cues) {
-      customCuesFormArray.push(
-        this.formBuilder.group({
-          id: cue.id,
-          cue_string: cue.cue_string,
-          new: cue.notification_cue_preference.create_when_new,
-          updated: cue.notification_cue_preference.create_when_modified,
-          email: cue.notification_cue_preference.send_email
-        })
+    // retrieve user's custom notification cues
+    this.notificationService.getUserCustomNotificationCues()
+      .subscribe(
+        (notificationcuecustoms) => {
+
+          // retrieve user's custom notifications and populate the formArray
+          // const customCuesFormArray = <FormArray>this.customNotificationSettingsForm.get('custom_cues');
+          for (const cue of notificationcuecustoms) {
+            this.customCueArray.push(
+              this.formBuilder.group({
+                id: cue.id,
+                cue_strings: [cue.cue_strings],
+                create_when_new: cue.notification_cue_preference.create_when_new,
+                create_when_modified: cue.notification_cue_preference.create_when_modified,
+                send_email: cue.notification_cue_preference.send_email,
+                preference_id: cue.notification_cue_preference.id
+              })
+            );
+          }
+          // set the previous form value to the current to intialize the page
+          this.previousValueCustomNotificationSettingsForm = this.customNotificationSettingsForm.value;
+          this.customCueFormReady = true;
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+          // this.notificationsLoading = false;
+        }
       );
-    }
 
   }
 
@@ -290,6 +312,43 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       minWidth: '60%',
       data: {}
     });
+
+
+    this.customNotificationRef.afterClosed()
+      .subscribe(
+        (customCueObject) => {
+
+          this.notificationService.createCustomNotificationCue(customCueObject)
+            .subscribe(
+              (customCue) => {
+                // TODO: add the succesful one to the form array for display
+                this.customCueArray.push(
+                  this.formBuilder.group({
+                    id: customCue.id,
+                    cue_strings: [customCue.cue_strings],
+                    create_when_new: customCue.notification_cue_preference.create_when_new,
+                    create_when_modified: customCue.notification_cue_preference.create_when_modified,
+                    send_email: customCue.notification_cue_preference.send_email,
+                    preference_id: customCue.notification_cue_preference.id
+                  })
+                );
+
+                this.openSnackBar('Custom Notification Successfully Saved!', 'OK', 5000);
+
+              },
+              error => {
+                this.errorMessage = <any>error;
+                this.openSnackBar('Custom Notification Save Failed. Error: ' + this.errorMessage, 'OK', 5000);
+              }
+            );
+
+        },
+        error => {
+          this.errorMessage = <any>error;
+        }
+      );
+
+
   }
 
   emailAllToggle(notificationType) {
@@ -320,13 +379,13 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   }
 
-  initCustomCue(cue) {
+  initCustomCue() {
     return this.formBuilder.group({
-      id: cue.id,
-      cue_string: cue.cue_string,
-      new: cue.new,
-      updated: cue.updated,
-      email: cue.email
+      id: null,
+      cue_strings: [],
+      create_when_new: null,
+      create_when_modified: null,
+      send_email: null
     });
   }
 
@@ -334,42 +393,28 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     return form.controls.custom_cues.controls;
   }
 
-  // yourEvents() {
-  //   this.yourEventsChecked = !this.yourEventsChecked;
-  //   this.checkIfAllStandardTogglesTrue();
-  // }
+  parseCustomCue(cue) {
 
-  // yourOrgEvents() {
-  //   this.yourOrgEventsChecked = !this.yourOrgEventsChecked;
-  //   this.checkIfAllStandardTogglesTrue();
-  // }
+    // TODO: on hold pending the resolution of https://github.com/USGS-WiM/whispersservices_django/issues/337
+    // let cueStringArray = [];
+    // let eventLocationString = 'Land Ownership: ';
+    // if (cue.event_location_land_ownership !== null) {
+    //   for (let value of cue.event_location_land_ownership.values) {
+    //     eventLocationString.concat(value)
+    //   }
+    // }
 
-  // yourCollabEvents() {
-  //   this.yourCollabEventsChecked = !this.yourCollabEventsChecked;
-  //   this.checkIfAllStandardTogglesTrue();
-  // }
+    // comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
+  }
 
-  // allEvents() {
-  //   this.allEventsChecked = !this.allEventsChecked;
-  //   this.checkIfAllStandardTogglesTrue();
-  // }
 
-  // checkIfAllStandardTogglesTrue() {
-  //   if (this.yourEventsChecked && this.yourOrgEventsChecked && this.yourCollabEventsChecked && this.allEventsChecked) {
-  //     // this.emailAllStandardNotificationsToggle = true;
-  //     this.emailAllStandard = true;
-  //   } else {
-  //     this.emailAllStandard = false;
-  //   }
-  // }
-
-  deleteWarning(cue) {
+  deleteWarning(cue, customcueIndex) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
         data: {
           title: 'Delete Custom Notification',
-          // tslint:disable-next-line:max-line-length
-          message: 'Are you sure you want to delete the custom notification " ' + cue.name + ' "?',
+          // message: 'Are you sure you want to delete the custom notification " ' + cue.value.cue_string + ' "?',
+          message: 'Are you sure you want to delete this custom notification?',
           confirmButtonText: 'Delete',
           messageIcon: 'delete_forever',
           showCancelButton: true
@@ -379,10 +424,31 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        // add delete function
+        this.deleteCustomNotificationCue(cue, customcueIndex);
         this.confirmDialogRef.close();
       }
     });
+  }
+
+  deleteCustomNotificationCue(cue, customcueIndex) {
+    this.notificationService.deleteCustomNotificationCue(cue.value.id)
+      .subscribe(
+        (response) => {
+          // if delete action is successful, delete the form array item
+          this.removeCustomCue(customcueIndex);
+          this.openSnackBar('Custom Notification Successfully Deleted', 'OK', 5000);
+        },
+        error => {
+          this.errorMessage = <any>error;
+
+          this.openSnackBar('Custom Notification Delete failed. Error: ' + this.errorMessage, 'OK', 5000);
+        }
+      );
+  }
+
+  removeCustomCue(customcueIndex) {
+    const control = <FormArray>this.customNotificationSettingsForm.get('custom_cues');
+    control.removeAt(customcueIndex);
   }
 
   openNotification(notification) {
@@ -548,6 +614,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   }
 
+
   openSnackBar(message: string, action: string, duration: number) {
     this.snackBar.open(message, action, {
       duration: duration,
@@ -634,6 +701,64 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
           this.openSnackBar('Notification Settings Updated Failed. Error: ' + this.errorMessage, 'OK', 5000);
         }
       );
+  }
+
+  updateCustomNotificationSettings(field, event, cue) {
+    // cue.value contains the data
+
+    let updateObject = {
+      id: cue.value.preference_id,
+      create_when_new: cue.value.create_when_new,
+      create_when_modified: cue.value.create_when_modified,
+      send_email: cue.value.send_email
+    };
+
+
+    switch (field) {
+      case 'create_when_new':
+        updateObject = {
+          id: cue.value.preference_id,
+          create_when_new: event.checked,
+          create_when_modified: cue.value.create_when_modified,
+          send_email: cue.value.send_email
+        };
+        break;
+      case 'create_when_modified':
+        updateObject = {
+          id: cue.value.preference_id,
+          create_when_new: event.checked,
+          create_when_modified: cue.value.create_when_modified,
+          send_email: cue.value.send_email
+        };
+        break;
+      case 'send_email':
+        updateObject = {
+          id: cue.value.preference_id,
+          create_when_new: cue.value.create_when_new,
+          create_when_modified: cue.value.create_when_modified,
+          send_email: event.checked,
+        };
+        break;
+    }
+
+
+    this.notificationService.updateCustomNotificationSettings(updateObject)
+      .subscribe(
+        (response) => {
+
+          // since the update succeeded, update the previous form value var to be able to compare to next change
+          this.previousValueCustomNotificationSettingsForm = this.customNotificationSettingsForm.value;
+          // display success message
+          this.openSnackBar('Notification Settings Updated!', 'OK', 5000);
+
+        },
+        error => {
+          // since the updated failed, revert the form back to previous value so display is in sync with database values
+          this.customNotificationSettingsForm.setValue(this.previousValueCustomNotificationSettingsForm);
+          this.openSnackBar('Notification Settings Updated Failed. Error: ' + this.errorMessage, 'OK', 5000);
+        }
+      );
+
   }
 
 

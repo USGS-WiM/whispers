@@ -27,6 +27,16 @@ export class NotificationService {
       }));
   }
 
+  public getUserCustomNotificationCues(): Observable<any> {
+
+    return this.http.get(APP_SETTINGS.NOTIFICATION_CUE_CUSTOM_URL, {
+      headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS
+    }).pipe(
+      map((res: any) => {
+        return res.results;
+      }));
+  }
+
   public updateNotification(body): Observable<any> {
 
     return this.http.patch(APP_SETTINGS.NOTIFICATIONS_URL + body.id + '/', body, {
@@ -58,6 +68,7 @@ export class NotificationService {
       }));
   }
 
+
   public bulkUpdateNotifications(updateObject): Observable<any> {
 
     return this.http.post(APP_SETTINGS.NOTIFICATIONS_URL + 'bulk_update/', updateObject, {
@@ -67,6 +78,40 @@ export class NotificationService {
         return res.results;
       }));
   }
+
+
+  public deleteCustomNotificationCue(id): Observable<any> {
+
+    return this.http.delete(APP_SETTINGS.NOTIFICATION_CUE_CUSTOM_URL + id + '/', {
+      headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS
+    }).pipe(
+      map((res: any) => {
+        // return res.results;
+      }));
+  }
+
+
+  public createCustomNotificationCue(customCueObject): Observable<any> {
+
+    return this.http.post(APP_SETTINGS.NOTIFICATION_CUE_CUSTOM_URL, customCueObject, {
+      headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS
+    }).pipe(
+      map((res: any) => {
+        return res;
+      }));
+  }
+
+  public updateCustomNotificationSettings(body): Observable<any> {
+    //change URL
+
+    return this.http.patch(APP_SETTINGS.NOTIFICATION_CUE_PREFERENCES_URL + body.id + '/', body, {
+      headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS
+    }).pipe(
+      map((res: any) => {
+        return res;
+      }));
+  }
+
 
   private handleError(error: Response) {
     console.error(error);

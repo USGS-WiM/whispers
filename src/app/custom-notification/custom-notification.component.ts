@@ -63,19 +63,24 @@ export class CustomNotificationComponent implements OnInit {
 
   buildCueForm() {
     this.cueForm = this.formBuilder.group({
-      event_id: null,
-      species_diagnosis: null,
+      event: null,
+      species_diagnosis_diagnosis: null,
       species: null,
-      administrative_level_one: null,
-      administrative_level_two: null,
-      affected_count: null,
-      affected_count_operator: '__gte',
+      event_location_administrative_level_one: null,
+      event_location_land_ownership: null,
+      event_affected_count: null,
+      event_affected_count_operator: 'GTE',
+
       diagnosis_includes_all: false,
       species_includes_all: false,
-      administrative_level_one_includes_all: false,
-      speciesDiagnosis_includes_all: false,
+      event_location_administrative_level_one_includes_all: false,
+      species_diagnosis_diagnosis_includes_all: false,
+      event_location_land_ownership_includes_all: false,
+
       and_params: [],
-      complete: null
+      create_when_new: false,
+      create_when_modified: false,
+      send_email: false
     });
   }
 
@@ -319,35 +324,65 @@ export class CustomNotificationComponent implements OnInit {
     }
   }
 
-  // TODO - set up DELETE Cue
-  deleteCue() {
-
+  extractIDs(objectArray) {
+    const idArray = [];
+    for (const object of objectArray) {
+      idArray.push(object.id);
+    }
+    return idArray;
   }
 
-  openCueDeleteConfirm(eventGroup) {
-    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-      {
-        data: {
-          title: 'Delete Cue Confirm',
-          titleIcon: 'delete_forever',
-          // tslint:disable-next-line:max-line-length
-          message: 'Are you sure you want to delete this cue?\nThis action cannot be undone.',
-          confirmButtonText: 'Yes, Delete Cue',
-          messageIcon: '',
-          showCancelButton: true
-        }
-      }
-    );
+  onSubmit(formValue) {
 
-    this.confirmDialogRef.afterClosed().subscribe(result => {
-      if (result === true) {
-        this.deleteCue();
-      }
-    });
-  }
+    const customCueObj = {
+      event: formValue.event,
+      event_affected_count: formValue.event_affected_count,
+      event_affected_count_operator: formValue.event_affected_count_operator,
+      event_location_administrative_level_one: { 'operator': 'OR', 'values': [] },
+      species: { 'operator': 'OR', 'values': [] },
+      species_diagnosis_diagnosis: { 'operator': 'OR', 'values': [] },
+      event_location_land_ownership: { 'operator': 'OR', 'values': [] },
+      new_notification_cue_preference: { 'create_when_new': formValue.create_when_new, 'create_when_modified': formValue.create_when_modified, 'send_email': formValue.send_email }
+      // species_diagnosis_diagnosis_includes_all: formValue.species_diagnosis_includes_all,
+      // species_includes_all: formValue.species_includes_all,
+      // event_location_administrative_level_one_includes_all: formValue.event_location_administrative_level_one_includes_all,
+      // event_location_land_ownership_includes_all: formValue.event_location_land_ownership_includes_all,
+      // and_params: []
+    };
 
-  // TODO - set up POST for notification cue
-  onSubmit() {
-    this.customNotificationDialogRef.close();
+    if (formValue.event_location_administrative_level_one_includes_all === true) {
+      customCueObj.event_location_administrative_level_one.operator = 'AND';
+    }
+    if (formValue.species_includes_all === true) {
+      customCueObj.species.operator = 'AND';
+    }
+
+    if (formValue.species_diagnosis_diagnosis_includes_all === true) {
+      customCueObj.species_diagnosis_diagnosis.operator = 'AND';
+    }
+    if (formValue.event_location_land_ownership_includes_all === true) {
+      customCueObj.event_location_land_ownership.operator = 'AND';
+    }
+
+    customCueObj.event_location_administrative_level_one.values = this.extractIDs(this.selectedAdminLevelOnes);
+    customCueObj.species.values = this.extractIDs(this.selectedSpecies);
+    customCueObj.species_diagnosis_diagnosis.values = this.extractIDs(this.selectedDiagnoses);
+    customCueObj.event_location_land_ownership.values = this.extractIDs(this.selectedLandOwnership);
+
+    // if the selected array is empty (parameter not used) - leave a blank object (TSlint does not like this, but it works)
+    // if (customCueObj.event_location_administrative_level_one.values.length === 0) { customCueObj.event_location_administrative_level_one = {}; }
+    // if (customCueObj.species.values.length === 0) { customCueObj.species = {}; }
+    // if (customCueObj.species_diagnosis_diagnosis.values.length === 0) { customCueObj.species_diagnosis_diagnosis = {}; }
+    // if (customCueObj.event_location_land_ownership.values.length === 0) { customCueObj.event_location_land_ownership = {}; }
+
+    if (customCueObj.event_location_administrative_level_one.values.length === 0) { delete customCueObj.event_location_administrative_level_one; }
+    if (customCueObj.species.values.length === 0) { delete customCueObj.species; }
+    if (customCueObj.species_diagnosis_diagnosis.values.length === 0) { delete customCueObj.species_diagnosis_diagnosis; }
+    if (customCueObj.event_location_land_ownership.values.length === 0) { delete customCueObj.event_location_land_ownership; }
+
+    if (customCueObj.event_affected_count === null) { delete customCueObj.event_affected_count; delete customCueObj.event_affected_count_operator; }
+
+    // close the dialog, passing the customCueObj back to the notifications component
+    this.customNotificationDialogRef.close(customCueObj);
   }
 }

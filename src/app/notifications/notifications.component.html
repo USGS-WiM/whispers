@@ -86,7 +86,9 @@
         <h3>No notifications</h3>
       </div>
 
-      <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+      <span [hidden]="notificationsDataSource.data.length === 0 && notificationsLoading === false">
+        <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+      </span>
     </div>
   </mat-card>
   <!-- end Notifications table-->
@@ -103,7 +105,7 @@
           Notification Preferences
         </mat-panel-title>
         <mat-panel-description>
-          Manage Standard Notifications, Add Custom Notification Cues or edit existing ones
+          Manage Standard Notifications, Add Custom Notifications or edit existing ones
         </mat-panel-description>
       </mat-expansion-panel-header>
 
@@ -231,22 +233,26 @@
       </mat-card>
       <!--end Standard notifications settings -->
 
-    
-      <mat-divider style="margin: 25px auto;" [inset]="true"></mat-divider>
 
-      <span class="text-large text-red text-bold"><mat-icon>announcement</mat-icon>&nbsp;Custom Notification Cues is under development and not yet fully functional.</span>
+      <mat-divider style="margin: 25px auto;" [inset]="true"></mat-divider>
 
       <!--Custom notifications settings-->
       <mat-card>
         <mat-card-title>
-          Custom Notification Cues
+          Custom Notifications
           <button mat-button color="accent" (click)="newCustomNotification()">
             <mat-icon>add_alert</mat-icon>Add New Custom Notification
           </button>
         </mat-card-title>
         <mat-card-content>
-          <form [formGroup]="customNotificationSettingsForm" class="event-submission-locations" autocomplete="off">
+          <!-- <form [formGroup]="customNotificationSettingsForm" class="event-submission-locations" autocomplete="off"> -->
+          <form [formGroup]="customNotificationSettingsForm" autocomplete="off">
 
+            <div *ngIf="customCueArray.length === 0">
+              <h4>No Custom Notifications</h4>
+            </div>
+
+            <!-- <div class="results-table-div" *ngIf="customCueFormReady"> -->
             <div class="results-table-div">
               <div class="mat-table">
                 <!--Begin header row-->
@@ -262,15 +268,15 @@
                   </div>
                   <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
                     <span class="row align-items-center">
-                      <mat-checkbox (change)="emailAllToggle('custom')" [checked]="emailAllCustom">
+                      <!--<mat-checkbox (change)="emailAllToggle('custom')" [checked]="emailAllCustom">
                       </mat-checkbox>
-                      <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                       <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
                           {{emailAllCustom === true ? 'email' :
                         emailAllCustom=== false ?  'email' :  'email'}}
                         </mat-icon>
                         &nbsp;{{emailAllCustom === true ? 'Email on for all' :
                       emailAllCustom === false ?  'Click to recieve emails for all' :  'Click to recieve emails for all'}}
-                      </span>
+                      </span> -->
                     </span>
                   </div>
                   <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText">Delete Cue</span>
@@ -284,46 +290,64 @@
                 <div formArrayName="custom_cues">
 
                   <!-- <div class="mat-row" *ngFor="let cue of dummy_custom_cues"> -->
-                  <div class="mat-row" *ngFor="let cue of getCustomCues(customNotificationSettingsForm); let customCueIndex = index">
-                    <div class="mat-header-cell">{{cue.cue_string}}</div>
+                  <div class="mat-row"
+                    *ngFor="let cue of getCustomCues(customNotificationSettingsForm); let customCueIndex = index">
                     <div class="mat-cell">
-                      <mat-checkbox>new</mat-checkbox> &nbsp; &nbsp; <mat-checkbox>updated</mat-checkbox>
+
+
+                      <div *ngFor="let parameterString of cue.value.cue_strings">
+                        <span>{{parameterString}}</span><br>
+                      </div>
                     </div>
-                    <div class="mat-cell">
-                      <span class="row align-items-center">
-                        <mat-checkbox></mat-checkbox>
-                        <!-- <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
-                        {{standardNotificationSettingsForm.get('collabEvents_email').value === true ? 'email' :
-                      standardNotificationSettingsForm.get('collabEvents_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
-                      </mat-icon>
-                      &nbsp;{{standardNotificationSettingsForm.get('collabEvents_email').value === true ? ' Email ' :
-                      standardNotificationSettingsForm.get('collabEvents_email').value === false ?  'Do not email' :  'Do not email '}}
-                    </span> -->
+                     <div class="mat-cell" [formGroupName]="customCueIndex">
+                      <mat-checkbox formControlName="create_when_new" #createWhenNew
+                        (change)="updateCustomNotificationSettings('create_when_new', $event, cue)"
+                        matTooltip="Click to recieve when a matching event is new">new</mat-checkbox> &nbsp; &nbsp;
+                    <mat-checkbox formControlName="create_when_modified" #createWhenModified
+                      (change)="updateCustomNotificationSettings('create_when_modified', $event, cue)"
+                      matTooltip="Click to recieve when a matching event is updated">updated</mat-checkbox>
+                  </div>
+                  <div class="mat-cell" [formGroupName]="customCueIndex">
+                    <span class="row align-items-center">
+                      <mat-checkbox formControlName="send_email"
+                      (change)="updateCustomNotificationSettings('send_email', $event, cue)"
+                        matTooltip="Click to have notification forwarded to your email"></mat-checkbox>
+
+                      <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                          {{customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('send_email').value === true ? 'email' :
+                                customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('send_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+                        </mat-icon>
+                        &nbsp;{{customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('send_email').value === true ? ' Email ' :
+                              customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('send_email').value === false ?  'Do not email' :  'Do not email '}}
                       </span>
-                    </div>
-                    <div class="mat-cell">
-                      <mat-icon class="icon" color="warn" (click)="deleteWarning(cue)">delete</mat-icon>
-                    </div>
+
+                    </span>
+                  </div>
+                  <div class="mat-cell">
+                    <mat-icon class="icon" color="warn" (click)="deleteWarning(cue, customCueIndex)"
+                      matTooltip="Click to delete this notification cue">delete</mat-icon>
                   </div>
                 </div>
-                <!-- End form array and table body-->
+              </div>
+              <!-- End form array and table body-->
 
-              </div>
-              <div class="warning">
-                <p>Note that deleting a Cue only deletes the notification for you - it does not delete the event, a
-                  notification for another user, or any
-                  other data.</p>
-              </div>
             </div>
-
-          </form>
-        </mat-card-content>
-      </mat-card>
-      <!--end Custom notifications settings-->
-
-    </mat-expansion-panel>
+            <div class="warning">
+              <p>Note that deleting a Notification Cue only deletes the notification for you - it does not delete the
+                event, a
+                notification for another user, or any
+                other data.</p>
+            </div>
   </div>
-  <!-- </mat-accordion> -->
-  <!-- </mat-card> -->
+
+  </form>
+  </mat-card-content>
+  </mat-card>
+  <!--end Custom notifications settings-->
+
+  </mat-expansion-panel>
+</div>
+<!-- </mat-accordion> -->
+<!-- </mat-card> -->
 
 </div>

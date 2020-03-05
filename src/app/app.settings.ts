@@ -96,6 +96,27 @@ export class APP_SETTINGS {
             {
                 'id': 11,
                 'name': 'Event Group',
+            },
+            {
+                'id': 12,
+                'name': 'Collaborator Alert',
+            }
+        ];
+    }
+
+    public static get EVENTLOCATION_EXCLUDED_COMMENT_TYPES() {
+        return [
+            {
+                'id': 8,
+                'name': 'NWHC',
+            },
+            {
+                'id': 11,
+                'name': 'Event Group',
+            },
+            {
+                'id': 12,
+                'name': 'Collaborator Alert',
             }
         ];
     }

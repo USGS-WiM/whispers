@@ -93,6 +93,17 @@ export class AddCommentComponent implements OnInit {
               }
             }
           }
+
+          // if the comment context is event location, exclude the event location exclusion types
+          if (this.data.comment_object === 'eventlocation') {
+            for (const type of APP_SETTINGS.EVENTLOCATION_EXCLUDED_COMMENT_TYPES) {
+              for (const commentType of this.commentTypes) {
+                if (commentType.id === type.id) {
+                  this.commentTypes = this.commentTypes.filter(commenttype => commenttype.id !== type.id);
+                }
+              }
+            }
+          }
         },
         error => {
           this.errorMessage = <any>error;
@@ -112,21 +123,21 @@ export class AddCommentComponent implements OnInit {
       string = 'Comments on Event Group';
     }
     return string;
-   }
+  }
 
-   commentTypeTooltip() {
+  commentTypeTooltip() {
     let string;
     if (this.data.comment_object === 'eventlocation') {
       string = FIELD_HELP_TEXT.locationCommentTypeTooltip;
     } else if (this.data.comment_object === 'event') {
       string = FIELD_HELP_TEXT.eventCommentTypeTooltip;
-    }else if (this.data.comment_object === 'servicerequest') {
+    } else if (this.data.comment_object === 'servicerequest') {
       string = 'Flags comment as belonging to a certain category.';
     } else if (this.data.comment_object === 'eventgroup') {
       string = 'Flags comment as belonging to a certain category.';
     }
     return string;
-   }
+  }
 
   eventCommentTooltip() { const string = FIELD_HELP_TEXT.eventCommentTooltip; return string; }
   eventCommentTypeTooltip() { const string = FIELD_HELP_TEXT.eventCommentTypeTooltip; return string; }

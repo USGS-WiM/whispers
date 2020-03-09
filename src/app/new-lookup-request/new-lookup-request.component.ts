@@ -73,7 +73,8 @@ export class NewLookupRequestComponent implements OnInit {
           .subscribe(
             (response) => {
               this.openSnackBar('Species addition request sent', 'OK', 5000);
-              gtag('event', 'click', {'event_category': 'User Dashboard', 'event_label': 'Species Addition Request Submitted'});
+              this.newLookupRequestDialogRef.close();
+              gtag('event', 'click', { 'event_category': 'User Dashboard', 'event_label': 'Species Addition Request Submitted' });
             },
             error => {
               this.openSnackBar('Error. Species addition request not sent. Error message: ' + error, 'OK', 8000);
@@ -88,7 +89,8 @@ export class NewLookupRequestComponent implements OnInit {
           .subscribe(
             (response) => {
               this.openSnackBar('Organization addition request sent', 'OK', 5000);
-              gtag('event', 'click', {'event_category': 'User Dashboard','event_label': 'Organization Addition Request Submitted'});
+              gtag('event', 'click', { 'event_category': 'User Dashboard', 'event_label': 'Organization Addition Request Submitted' });
+              this.newLookupRequestDialogRef.close();
             },
             error => {
               this.openSnackBar('Error. Organization addition request not sent. Error message: ' + error, 'OK', 8000);
@@ -103,7 +105,8 @@ export class NewLookupRequestComponent implements OnInit {
           .subscribe(
             (response) => {
               this.openSnackBar('Diagnosis addition request sent', 'OK', 5000);
-              gtag('event', 'click', {'event_category': 'User Dashboard','event_label': 'Diagnosis Addition Request Submitted'});
+              this.newLookupRequestDialogRef.close();
+              gtag('event', 'click', { 'event_category': 'User Dashboard', 'event_label': 'Diagnosis Addition Request Submitted' });
             },
             error => {
               this.openSnackBar('Error. Diagnosis addition request not sent. Error message: ' + error, 'OK', 8000);

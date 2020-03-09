@@ -293,7 +293,7 @@ export class UserDashboardComponent implements OnInit {
     this.newLookupRequestDialogRef.afterClosed()
       .subscribe(
         () => {
-          // do something after close
+
         },
         error => {
           this.errorMessage = <any>error;

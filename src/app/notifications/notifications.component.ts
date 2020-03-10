@@ -2,7 +2,7 @@ import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatSortModule, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar } from '@angular/material';
@@ -60,106 +60,10 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   customCueFormReady = false;
 
-  // this.allEventsChecked = false;
-
-  // test data
-  // dummy_custom_cues: CustomNotificationCue[] = [
-  //   {
-  //     'id': 1000, 'cue_string': 'Event with Species: Alligator',
-  //     'notification_cue_preference': {
-  //       'id': 400,
-  //       'create_when_new': true,
-  //       'create_when_modified': true,
-  //       'send_email': false
-  //     }
-  //   },
-  //   {
-  //     'id': 1001, 'cue_string': 'Event with ID 17044',
-  //     'notification_cue_preference': {
-  //       'id': 400,
-  //       'create_when_new': true,
-  //       'create_when_modified': true,
-  //       'send_email': false
-  //     }
-  //   },
-  //   {
-  //     'id': 1002, 'cue_string': 'Event with State: Wisconsin OR Minnesota',
-  //     'notification_cue_preference': {
-  //       'id': 400,
-  //       'create_when_new': true,
-  //       'create_when_modified': true,
-  //       'send_email': false
-  //     }
-  //   },
-  //   {
-  //     'id': 1003, 'cue_string': 'Event with ID 1337',
-  //     'notification_cue_preference': {
-  //       'id': 400,
-  //       'create_when_new': true,
-  //       'create_when_modified': true,
-  //       'send_email': false
-  //     }
-  //   },
-  //   {
-  //     'id': 1004, 'cue_string': 'Event with ID 7775556',
-  //     'notification_cue_preference': {
-  //       'id': 400,
-  //       'create_when_new': true,
-  //       'create_when_modified': true,
-  //       'send_email': false
-  //     }
-  //   },
-  //   {
-  //     'id': 1005, 'cue_string': 'Event with ID 17055',
-  //     'notification_cue_preference': {
-  //       'id': 400,
-  //       'create_when_new': true,
-  //       'create_when_modified': true,
-  //       'send_email': false
-  //     }
-  //   },
-  //   {
-  //     'id': 1006, 'cue_string': 'Event with Diagnosis: E.Coli and Species: Squirrel and State: Wisconsin',
-  //     'notification_cue_preference': {
-  //       'id': 400,
-  //       'create_when_new': true,
-  //       'create_when_modified': true,
-  //       'send_email': false
-  //     }
-  //   },
-  //   {
-  //     'id': 1007, 'cue_string': 'Event with ID 00977',
-  //     'notification_cue_preference': {
-  //       'id': 400,
-  //       'create_when_new': true,
-  //       'create_when_modified': true,
-  //       'send_email': false
-  //     }
-  //   },
-  //   {
-  //     'id': 1008, 'cue_string': 'Event with ID 4323455',
-  //     'notification_cue_preference': {
-  //       'id': 400,
-  //       'create_when_new': true,
-  //       'create_when_modified': true,
-  //       'send_email': false
-  //     }
-  //   },
-  //   {
-  //     'id': 1009, 'cue_string': 'Event with ID 675465',
-  //     'notification_cue_preference': {
-  //       'id': 400,
-  //       'create_when_new': true,
-  //       'create_when_modified': true,
-  //       'send_email': false
-  //     }
-  //   },
-  // ];
-
   notificationDisplayedColumns = [
     'select',
     'go',
-    'read',
+    'subject',
     'created_date',
     'source'
   ];

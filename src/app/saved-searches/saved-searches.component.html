@@ -3,7 +3,7 @@
   <span>Loading Saved Searches...</span>
 </span>
 
-<div class="deleteToggle">
+<div class="deleteToggle" [hidden]="parsedSearches.length === 0">
   <mat-slide-toggle color="warn" (click)="deleteMode()"><span class="text-small text-italic">{{deleteModeOn === true ? 'Delete mode (on)' :
     deleteModeOn === false ? 'Delete mode (off)' : 'Delete mode' }}</span></mat-slide-toggle>
 </div>

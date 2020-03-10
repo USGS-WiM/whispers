@@ -49,7 +49,7 @@
 
         <!-- Go-to Column -->
         <ng-container matColumnDef="go">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Event </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef > Event </mat-header-cell>
           <mat-cell *matCellDef="let notification">
             <button mat-stroked-button color="primary" (click)="$event.stopPropagation()"
               matTooltip="Click to go to event details page" *ngIf="notification.event !== null"
@@ -58,7 +58,7 @@
         </ng-container>
 
         <!-- Message Column -->
-        <ng-container matColumnDef="read">
+        <ng-container matColumnDef="subject">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Message </mat-header-cell>
           <mat-cell *matCellDef="let notification"> {{notification.subject}}
           </mat-cell>

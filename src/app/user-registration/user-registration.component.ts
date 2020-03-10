@@ -92,11 +92,11 @@ export class UserRegistrationComponent implements OnInit {
       ],
       organization: null,
       role: null,
-      message: '',
+      comment: '',
       terms: [false, Validators.requiredTrue],
     }, {
-        validator: [this.matchPassword, this.matchEmail]
-      });
+      validator: [this.matchPassword, this.matchEmail]
+    });
 
   }
 
@@ -212,6 +212,17 @@ export class UserRegistrationComponent implements OnInit {
     if (this.data.registration_type === 'public') {
       formValue.role = 7;
       formValue.organization = 1;
+    }
+
+    if (this.data.registration_type === 'partner') {
+      formValue.new_user_change_request = {
+        'role_requested': formValue.role,
+        'organization_requested': formValue.organization,
+        'comment': formValue.comment
+      };
+      delete formValue.role;
+      delete formValue.organization;
+      delete formValue.comment;
     }
 
     this.userService.createNew(formValue)

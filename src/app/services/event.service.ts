@@ -160,7 +160,7 @@ export class EventService {
   }
 
   public queryEvents(eventQuery): Observable<EventSummary[]> {
-
+    this.isloggedIn = APP_SETTINGS.IS_LOGGEDIN;
     // console.log(JSON.stringify(eventQuery));
 
     let queryString = '?no_page';

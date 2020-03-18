@@ -187,7 +187,7 @@ tr.noBorder td {
     }
 }
 
-#map {
+#eventDetailsMap {
     text-align: center;
 }
 
@@ -538,7 +538,7 @@ tr.noBorder td {
         border-left: 1.5px solid fade-out($text, 0.3);
         max-width: 600px;
 
-        #map {
+        #eventDetailsMap {
             width: 100%;
             height: 100vh;
             height: calc(100vh - 104px);
@@ -555,7 +555,7 @@ tr.noBorder td {
             border-bottom: 2px solid #10152C;
             border-left: none;
 
-            #map {
+            #eventDetailsMap {
                 height: 340px;
             }
         }

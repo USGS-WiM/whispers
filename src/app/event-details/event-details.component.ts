@@ -74,6 +74,7 @@ import { CircleChooseComponent } from '@app/circle-management/circle-choose/circ
 import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
 import { CollaborationRequestComponent } from '@app/collaboration-request/collaboration-request.component';
+import { buildMapFromList } from '@angular/flex-layout/extended/typings/style/style-transforms';
 declare let gtag: Function;
 
 export interface AssociatedEvents {
@@ -473,101 +474,112 @@ export class EventDetailsComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
+    this.waitForMapElementToDisplay('#eventDetailsMap', 500);
+  }
 
-    setTimeout(() => {
+  waitForMapElementToDisplay(selector, time) {
 
-      const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        // tslint:disable-next-line:max-line-length
-        mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+    const self = this;
+    if (document.querySelector(selector) != null) {
+      // alert('The element is displayed, you can put your code instead of this alert.');
+      this.buildMap();
+      return;
+    } else {
+      setTimeout(function () {
+        self.waitForMapElementToDisplay(selector, time);
+      }, time);
+    }
+  }
 
-      const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      });
-      const grayscale = L.tileLayer(mbUrl, { id: 'mapbox.light', attribution: mbAttr });
-      const streets = L.tileLayer(mbUrl, { id: 'mapbox.streets', attribution: mbAttr });
+  buildMap() {
 
-      this.map = new L.Map('map', {
-        center: new L.LatLng(39.8283, -98.5795),
-        zoom: 4,
-        layers: [streets]
-      });
+    const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      // tslint:disable-next-line:max-line-length
+      mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
-      this.locationMarkers = L.featureGroup().addTo(this.map);
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    });
+    const grayscale = L.tileLayer(mbUrl, { id: 'mapbox.light', attribution: mbAttr });
+    const streets = L.tileLayer(mbUrl, { id: 'mapbox.streets', attribution: mbAttr });
 
-      const baseMaps = {
-        'Open Street Map': osm,
-        'Grayscale': grayscale,
-        'Streets': streets
-      };
+    this.map = new L.Map('eventDetailsMap', {
+      center: new L.LatLng(39.8283, -98.5795),
+      zoom: 4,
+      layers: [streets]
+    });
 
-      // Flyways hosted by Fish and Wildlife Service
-      const flyways = esri.featureLayer({
-        url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
-        style: function (feature) {
-          if (feature.properties.NAME === 'Atlantic Flyway') {
-            return { color: '#28995b', weight: 2 };
-          } else if (feature.properties.NAME === 'Pacific Flyway') {
-            return { color: '#ffbd4f', weight: 2 };
-          } else if (feature.properties.NAME === 'Mississippi Flyway') {
-            return { color: '#eb5834', weight: 2 };
-          } else if (feature.properties.NAME === 'Central Flyway') {
-            return { color: '#b43cc7', weight: 2 };
-          }
+    this.locationMarkers = L.featureGroup().addTo(this.map);
+
+    const baseMaps = {
+      'Open Street Map': osm,
+      'Grayscale': grayscale,
+      'Streets': streets
+    };
+
+    // Flyways hosted by Fish and Wildlife Service
+    const flyways = esri.featureLayer({
+      url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
+      style: function (feature) {
+        if (feature.properties.NAME === 'Atlantic Flyway') {
+          return { color: '#28995b', weight: 2 };
+        } else if (feature.properties.NAME === 'Pacific Flyway') {
+          return { color: '#ffbd4f', weight: 2 };
+        } else if (feature.properties.NAME === 'Mississippi Flyway') {
+          return { color: '#eb5834', weight: 2 };
+        } else if (feature.properties.NAME === 'Central Flyway') {
+          return { color: '#b43cc7', weight: 2 };
         }
-      });
+      }
+    });
 
-      // Watersheds hosted by The National Map (USGS)
-      const watersheds = esri.dynamicMapLayer({
-        url: 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer',
-        opacity: 0.7
-      });
+    // Watersheds hosted by The National Map (USGS)
+    const watersheds = esri.dynamicMapLayer({
+      url: 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer',
+      opacity: 0.7
+    });
 
-      // Land use hosted by USGS
-      const landUse = esri.dynamicMapLayer({
-        url: 'https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer',
-        opacity: 0.7
-      });
+    // Land use hosted by USGS
+    const landUse = esri.dynamicMapLayer({
+      url: 'https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer',
+      opacity: 0.7
+    });
 
-      const overlays = {
-        'Flyways': flyways,
-        'Watersheds (HUC 2)': watersheds,
-        'Land Use': landUse
-      };
+    const overlays = {
+      'Flyways': flyways,
+      'Watersheds (HUC 2)': watersheds,
+      'Land Use': landUse
+    };
 
-      // const x = { position: 'topleft'};
+    // const x = { position: 'topleft'};
 
-      L.control.layers(baseMaps, overlays, { position: 'topleft' }).addTo(this.map);
-      L.control.scale({ position: 'bottomright' }).addTo(this.map);
+    L.control.layers(baseMaps, overlays, { position: 'topleft' }).addTo(this.map);
+    L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
-      // L.control.layers(baseMaps).addTo(this.map);
+    // L.control.layers(baseMaps).addTo(this.map);
 
-      this.mapEvent(this.eventData);
+    this.mapEvent(this.eventData);
 
-      this.map.on('overlayadd', (e) => {
-        console.log('overlayadd');
-        if (e.name === 'Flyways') {
-          this.flywaysVisible = true;
-        } else if (e.name === 'Watersheds (HUC 2)') {
-          this.watershedsVisible = true;
-        }
-      });
+    this.map.on('overlayadd', (e) => {
+      console.log('overlayadd');
+      if (e.name === 'Flyways') {
+        this.flywaysVisible = true;
+      } else if (e.name === 'Watersheds (HUC 2)') {
+        this.watershedsVisible = true;
+      }
+    });
 
-      this.map.on('overlayremove', (e) => {
-        console.log('overlayremove');
-        if (e.name === 'Flyways') {
-          this.flywaysVisible = false;
-        } else if (e.name === 'Watersheds (HUC 2)') {
-          this.watershedsVisible = false;
-        }
-      });
-      /* this.natMap = new L.Map('hiddenNatMap', {
-        center: new L.LatLng(39.8283, -98.5795),
-        zoom: 4,
-        layers: [streets]
-      }); */
-    }, 3000);
+    this.map.on('overlayremove', (e) => {
+      console.log('overlayremove');
+      if (e.name === 'Flyways') {
+        this.flywaysVisible = false;
+      } else if (e.name === 'Watersheds (HUC 2)') {
+        this.watershedsVisible = false;
+      }
+    });
+
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -587,7 +599,7 @@ export class EventDetailsComponent implements OnInit {
 
   mapEvent(eventData) {
     const markers = [];
-    let countyPolys = [];
+    const countyPolys = [];
     this.unMappables = [];
     for (const eventlocation of eventData.eventlocations) {
       markers.push(eventlocation);
@@ -623,15 +635,15 @@ export class EventDetailsComponent implements OnInit {
 
     }
 
-    let bounds = L.latLngBounds([]);
+    const bounds = L.latLngBounds([]);
 
     if (markers.length > this.unMappables.length) {
-      var markerBounds = this.locationMarkers.getBounds();
+      const markerBounds = this.locationMarkers.getBounds();
       bounds.extend(markerBounds);
     }
 
     if (countyPolys.length > 0) {
-      var countyBounds = this.eventPolys.getBounds();
+      const countyBounds = this.eventPolys.getBounds();
       bounds.extend(countyBounds);
     }
 
@@ -645,7 +657,6 @@ export class EventDetailsComponent implements OnInit {
       this.locationMarkers.clearLayers();
       this.mapEvent(this.eventData);
     }, 2500);
- 
   }
 
   navigateToHome() {
@@ -801,7 +812,6 @@ export class EventDetailsComponent implements OnInit {
         }
       );
   }
-
 
   addEventComment(id: string) {
     // Open dialog for adding event diagnosis

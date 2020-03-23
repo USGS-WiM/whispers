@@ -338,13 +338,13 @@
 
   <div class="resultsDiv">
 
-	<!-- Results Loading Shade -->
-	<!-- Covers map and results, not sidebar -->
-	<div class="data-loading-shade" *ngIf="searchResultsLoading">
-		<mat-spinner></mat-spinner>
-	</div>
-	<!-- <div class="data-loading-shade" *ngIf="searchResultsLoading"></div> -->
-		  
+    <!-- Results Loading Shade -->
+    <!-- Covers map and results, not sidebar -->
+    <div class="data-loading-shade" *ngIf="searchResultsLoading">
+      <mat-spinner></mat-spinner>
+    </div>
+    <!-- <div class="data-loading-shade" *ngIf="searchResultsLoading"></div> -->
+
 
     <mat-expansion-panel expanded id="mapPanel">
       <mat-expansion-panel-header>
@@ -528,7 +528,8 @@
       </mat-card-title>
       <mat-card-content>
 
-        <div *ngIf="dataSource" class="results-table-div">
+        <div class="results-table-div">
+          <!-- <div *ngIf="dataSource" class="results-table-div"> -->
 
           <!-- <mat-form-field>
                   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
@@ -537,38 +538,45 @@
 
             <!-- ID Column -->
             <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventIDTooltip()}}" matTooltipClass="tooltip-breakline">Event ID</mat-header-cell>
-              <mat-cell *matCellDef="let event"><mat-icon *ngIf="event.public == false">visibility_off</mat-icon>&nbsp;{{event.id}}</mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventIDTooltip()}}"
+                matTooltipClass="tooltip-breakline">Event ID</mat-header-cell>
+              <mat-cell *matCellDef="let event">
+                <mat-icon *ngIf="event.public == false">visibility_off</mat-icon>&nbsp;{{event.id}}
+              </mat-cell>
             </ng-container>
 
             <!-- Event Type Column -->
             <ng-container matColumnDef="event_type_string">
-              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{editEventTypeTooltip()}}" matTooltipClass="tooltip-breakline">Event Type</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{editEventTypeTooltip()}}"
+                matTooltipClass="tooltip-breakline">Event Type</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.event_type_string}}</mat-cell>
             </ng-container>
 
             <!-- Affected Count Column -->
             <ng-container matColumnDef="affected_count">
-              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{numberAffectedTooltip()}}" matTooltipClass="tooltip-breakline">Number Affected</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{numberAffectedTooltip()}}"
+                matTooltipClass="tooltip-breakline">Number Affected</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.affected_count}}</mat-cell>
             </ng-container>
 
             <!-- Start Date Column -->
             <ng-container matColumnDef="start_date">
-              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventStartDateTooltip()}}" matTooltipClass="tooltip-breakline">Event Start Date</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventStartDateTooltip()}}"
+                matTooltipClass="tooltip-breakline">Event Start Date</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.start_date | date:'shortDate'}}</mat-cell>
             </ng-container>
 
             <!-- End Date Column -->
             <ng-container matColumnDef="end_date">
-              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventEndDateTooltip()}}" matTooltipClass="tooltip-breakline">Event End Date</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventEndDateTooltip()}}"
+                matTooltipClass="tooltip-breakline">Event End Date</mat-header-cell>
               <mat-cell *matCellDef="let event">{{event.end_date | date:'shortDate'}}</mat-cell>
             </ng-container>
 
             <!-- Location Column -->
             <ng-container matColumnDef="locations">
-              <mat-header-cell *matHeaderCellDef
-                matTooltip="{{locationsTooltip()}}" matTooltipClass="tooltip-breakline">
+              <mat-header-cell *matHeaderCellDef matTooltip="{{locationsTooltip()}}"
+                matTooltipClass="tooltip-breakline">
                 Location</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
@@ -612,7 +620,8 @@
 
             <!-- Species Column -->
             <ng-container matColumnDef="species">
-              <mat-header-cell *matHeaderCellDef matTooltip="{{generalTableSpeciesTooltip()}}" matTooltipClass="tooltip-breakline">Species</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef matTooltip="{{generalTableSpeciesTooltip()}}"
+                matTooltipClass="tooltip-breakline">Species</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let species of event.species">{{species.name}}</li>
@@ -625,7 +634,8 @@
 
             <!-- Event Diagnosis Column -->
             <ng-container matColumnDef="eventdiagnoses">
-              <mat-header-cell *matHeaderCellDef matTooltip="{{editEventDiagnosisTooltip()}}" matTooltipClass="tooltip-breakline">Event Diagnosis</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef matTooltip="{{editEventDiagnosisTooltip()}}"
+                matTooltipClass="tooltip-breakline">Event Diagnosis</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <ul class="table-cell-list">
                   <li *ngFor="let diagnosis of event.eventdiagnoses">{{diagnosis.diagnosis_string}}</li>
@@ -637,7 +647,8 @@
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns;"></mat-header-row>
-            <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"  [ngClass]="{'' : event.public == true, 'red-highlight': event.public == false}"></mat-row>
+            <mat-row *matRowDef="let event; columns: displayedColumns;" (click)="selectEvent(event)"
+              [ngClass]="{'' : event.public == true, 'red-highlight': event.public == false}"></mat-row>
           </mat-table>
 
           <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>

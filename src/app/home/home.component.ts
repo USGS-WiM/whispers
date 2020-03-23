@@ -50,23 +50,15 @@ import { UserRegistrationComponent } from '@app/user-registration/user-registrat
 import { DataUpdatedService } from '@services/data-updated.service';
 declare let gtag: Function;
 
-// export class ResultsDataSource extends MatTableDataSource<any> {
-//   constructor(private userService: EventService) {
-//     super();
-//   }
-//   connect(): Observable<EventSummary[]> {
-//     return this.eventService.queryEvents();
-//   }
-//   disconnect() { }
-// }
-
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(SearchResultsSummaryReportComponent) eventReresultsSummaryReportDialogRefportComponent: SearchResultsSummaryReportComponent;
 
   errorMessage: string;
 
@@ -99,7 +91,6 @@ export class HomeComponent implements OnInit {
   allSpecies = [];
   administrative_level_one = [];
   administrative_level_two = [];
-
 
   dataSource: MatTableDataSource<EventSummary>;
 
@@ -138,12 +129,6 @@ export class HomeComponent implements OnInit {
     'eventdiagnoses'
   ];
 
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(SearchResultsSummaryReportComponent) eventReresultsSummaryReportDialogRefportComponent: SearchResultsSummaryReportComponent;
-
-
   constructor(
     private eventService: EventService,
     private dialog: MatDialog,
@@ -177,8 +162,6 @@ export class HomeComponent implements OnInit {
     this.searchQuerySubscription = this.searchDialogService.getSearchQuery().subscribe(
       searchQuery => {
 
-        const countLimit = 300;
-
         this.searchResultsLoading = true;
 
         // this is the listener for a new search query
@@ -186,33 +169,29 @@ export class HomeComponent implements OnInit {
         this.eventService.queryEventsCount(searchQuery)
           .subscribe(
             count => {
-              if (count.count >= countLimit) {
+              if (count.count >= APP_SETTINGS.QUERY_COUNT_LIMIT) {
                 // this.sampleQuerySizeErrorFlag = true;
-                this.openSnackBar('Your Query result is too large. Please narrow your search and try again', 'OK', 8000);
+                this.openSnackBar('Your Query result is too large. Please narrow your search and try again', 'OK', 60000);
                 this.searchResultsLoading = false;
-              } else if (count.count < countLimit) {
+              } else if (count.count < APP_SETTINGS.QUERY_COUNT_LIMIT) {
 
                 if (searchQuery) {
                   this.eventService.queryEvents(searchQuery)
                     .subscribe(
                       eventSummaries => {
                         this.currentResults = eventSummaries;
-                        this.dataSource = new MatTableDataSource(this.currentResults);
-                        this.dataSource.paginator = this.paginator;
-                        this.dataSource.sort = this.sort;
-                        this.searchResultsLoading = false;
 
                         setTimeout(() => {
-                          /*this.map = new L.Map('map', {
-                            center: new L.LatLng(39.8283, -98.5795),
-                            zoom: 4,
-                          });*/
+                          this.dataSource = new MatTableDataSource(this.currentResults);
+                          this.dataSource.paginator = this.paginator;
+                          this.dataSource.sort = this.sort;
+                          this.searchResultsLoading = false;
 
-
-                          this.locationMarkers.clearLayers();
-
-
-                          this.mapResults(this.currentResults);
+                          if (this.map === undefined) {
+                            this.buildMap();
+                          } else {
+                            this.mapResults(this.currentResults);
+                          }
 
 
                         }, 500);
@@ -225,10 +204,6 @@ export class HomeComponent implements OnInit {
                       }
                     );
                 }
-
-                this.dataSource = new MatTableDataSource(this.currentResults);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
 
                 searchQuery.and_params = [];
 
@@ -327,237 +302,49 @@ export class HomeComponent implements OnInit {
       this.currentSearchQuery.and_params.push('administrative_level_two');
     }
 
-    // two lines below for the DataSource as separate class method (possibly revisit)
-    // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
-    // this.testDataSource.loadResults(defaultEventQuery);
-    this.eventService.queryEvents(this.currentSearchQuery)
+    this.eventService.queryEventsCount(this.currentSearchQuery)
       .subscribe(
-        eventSummaries => {
+        count => {
+          if (count.count >= APP_SETTINGS.QUERY_COUNT_LIMIT) {
+            // this.sampleQuerySizeErrorFlag = true;
+            this.openSnackBar('Your Query result is too large. Please narrow your search and try again', 'OK', 60000);
+            this.searchResultsLoading = false;
+          } else if (count.count < APP_SETTINGS.QUERY_COUNT_LIMIT) {
 
-          this.currentResults = eventSummaries;
-          this.dataSource = new MatTableDataSource(this.currentResults);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.searchResultsLoading = false;
+            this.eventService.queryEvents(this.currentSearchQuery)
+              .subscribe(
+                eventSummaries => {
 
-          setTimeout(() => {
+                  this.currentResults = eventSummaries;
 
-            const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-              '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-              'Imagery © <a href="https://www.mapbox.com/">Mapbox</a> contributors.',
-              // tslint:disable-next-line:max-line-length
-              mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+                  setTimeout(() => {
+                    this.dataSource = new MatTableDataSource(eventSummaries);
+                    this.dataSource.paginator = this.paginator;
+                    this.dataSource.sort = this.sort;
+                    this.searchResultsLoading = false;
+                    if (this.map === undefined) {
+                      this.buildMap();
+                    } else {
+                      this.mapResults(this.currentResults);
+                    }
+                  }, 500);
 
-            const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors.'
-
-            });
-
-            const grayscale = L.tileLayer(mbUrl, { id: 'mapbox.light', attribution: mbAttr });
-            const streets = L.tileLayer(mbUrl, { id: 'mapbox.streets', attribution: mbAttr });
-
-            this.map = new L.Map('map', {
-              center: new L.LatLng(39.8283, -98.5795),
-              zoom: 4,
-              layers: [streets]
-            });
-            this.locationMarkers = L.featureGroup().addTo(this.map);
-
-            const baseMaps = {
-              'Open Street Map': osm,
-              'Grayscale': grayscale,
-              'Streets': streets
-            };
-
-            // Flyways hosted by Fish and Wildlife Service
-            const flyways = esri.featureLayer({
-              url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
-              style: function (feature) {
-                if (feature.properties.NAME === 'Atlantic Flyway') {
-                  return { color: '#28995b', weight: 2 };
-                } else if (feature.properties.NAME === 'Pacific Flyway') {
-                  return { color: '#ffbd4f', weight: 2 };
-                } else if (feature.properties.NAME === 'Mississippi Flyway') {
-                  return { color: '#eb5834', weight: 2 };
-                } else if (feature.properties.NAME === 'Central Flyway') {
-                  return { color: '#b43cc7', weight: 2 };
-                }
-              }
-            });
-
-            // Watersheds hosted by The National Map (USGS)
-            const watersheds = esri.dynamicMapLayer({
-              url: 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer',
-              opacity: 0.7
-            });
-
-            const overlays = {
-              'Flyways': flyways,
-              'Watersheds (HUC 2)': watersheds
-            };
-
-            const drawnItems = L.featureGroup().addTo(this.map);
-
-            L.control.layers(
-              baseMaps,
-              overlays, { position: 'topleft' }, { 'drawlayer': drawnItems }).addTo(this.map);
-
-            L.control.scale({ position: 'bottomright' }).addTo(this.map);
-
-            const drawControl = new L.Control.Draw({
-              edit: {
-                featureGroup: drawnItems,
-                poly: {
-                  allowIntersection: false
-                }
-              },
-              draw: {
-                polygon: {
-                  allowIntersection: false,
-                  showArea: true
                 },
-                marker: false,
-                circle: false,
-                circlemarker: false,
-                rectangle: false
-              }
-            });
-
-            this.map.addControl(drawControl);
-
-            // Truncate value based on number of decimals
-            const _round = function (num, len) {
-              return Math.round(num * (Math.pow(10, len))) / (Math.pow(10, len));
-            };
-            // Helper method to format LatLng object (x.xxxxxx, y.yyyyyy)
-            const strLatLng = function (latlng) {
-              return '(' + _round(latlng.lat, 6) + ', ' + _round(latlng.lng, 6) + ')';
-            };
-
-            // Generate popup content based on layer type
-            // - Returns HTML string, or null if unknown object
-            const getPopupContent = function (layer) {
-              // Marker - add lat/long
-              if (layer instanceof L.Marker || layer instanceof L.CircleMarker) {
-                return strLatLng(layer.getLatLng());
-                // Circle - lat/long, radius
-              } else if (layer instanceof L.Circle) {
-                const center = layer.getLatLng(),
-                  radius = layer.getRadius();
-                return 'Center: ' + strLatLng(center) + '<br />'
-                  + 'Radius: ' + _round(radius, 2) + ' m';
-                // Rectangle/Polygon - area
-              } else if (layer instanceof L.Polygon) {
-                const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
-                  area = L.GeometryUtil.geodesicArea(latlngs);
-                return 'Area: ' + L.GeometryUtil.readableArea(area, true);
-                // Polyline - distance
-              } else if (layer instanceof L.Polyline) {
-                const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs();
-                let distance = 0;
-                if (latlngs.length < 2) {
-                  return 'Distance: N/A';
-                } else {
-                  for (let i = 0; i < latlngs.length - 1; i++) {
-                    distance += latlngs[i].distanceTo(latlngs[i + 1]);
-                  }
-                  return 'Distance: ' + _round(distance, 2) + ' m';
+                error => {
+                  this.errorMessage = <any>error;
                 }
-              }
-              return null;
-            };
+              );
 
-            // Object created - bind popup to layer, add to feature group
-            this.map.on(L.Draw.Event.CREATED, function (event) {
-              const layer = event.layer;
-              const content = getPopupContent(layer);
-              if (content !== null) {
-                layer.bindPopup(content);
-              }
-              drawnItems.addLayer(layer);
-            });
-
-            // Object(s) edited - update popups
-            this.map.on(L.Draw.Event.EDITED, function (event) {
-              const layers = event.layers;
-              // const content = null;
-              layers.eachLayer(function (layer) {
-                const content = getPopupContent(layer);
-                if (content !== null) {
-                  layer.setPopupContent(content);
-                }
-              });
-            });
-
-            this.mapResults(this.currentResults);
-
-            // begin latLngScale utility logic/////////////////////////////////////////////////////////////////////////////////////////
-            // grabbed from FEV
-            // displays map scale on map load
-            // map.on( 'load', function() {
-            this.map.whenReady(() => {
-              const mapZoom = this.map.getZoom();
-              const tempMapScale = this.scaleLookup(this.map.getZoom());
-              this.zoomLevel = mapZoom;
-              this.mapScale = tempMapScale;
-              const initMapCenter = this.map.getCenter();
-              this.latitude = initMapCenter.lat.toFixed(4);
-              this.longitude = initMapCenter.lng.toFixed(4);
-            });
-
-            // displays map scale on scale change (i.e. zoom level)
-            this.map.on('zoomend', () => {
-              const mapZoom = this.map.getZoom();
-              const mapScale = this.scaleLookup(mapZoom);
-              this.mapScale = mapScale;
-              this.zoomLevel = mapZoom;
-            });
-
-            // updates lat/lng indicator on mouse move. does not apply on devices w/out mouse. removes 'map center' label
-            this.map.on('mousemove', (cursorPosition) => {
-              // $('#mapCenterLabel').css('display', 'none');
-              if (cursorPosition.latlng !== null) {
-                this.latitude = cursorPosition.latlng.lat.toFixed(4);
-                this.longitude = cursorPosition.latlng.lng.toFixed(4);
-              }
-            });
-            // updates lat/lng indicator to map center after pan and shows 'map center' label.
-            this.map.on('dragend', () => {
-              // displays latitude and longitude of map center
-              // $('#mapCenterLabel').css('display', 'inline');
-              const geographicMapCenter = this.map.getCenter();
-              this.latitude = geographicMapCenter.lat.toFixed(4);
-              this.longitude = geographicMapCenter.lng.toFixed(4);
-            });
-            // end latLngScale utility logic/////////
-
-            this.map.on('overlayadd', (e) => {
-              console.log('overlayadd');
-              if (e.name === 'Flyways') {
-                this.flywaysVisible = true;
-              } else if (e.name === 'Watersheds (HUC 2)') {
-                this.watershedsVisible = true;
-              }
-            });
-
-            this.map.on('overlayremove', (e) => {
-              console.log('overlayremove');
-              if (e.name === 'Flyways') {
-                this.flywaysVisible = false;
-              } else if (e.name === 'Watersheds (HUC 2)') {
-                this.watershedsVisible = false;
-              }
-            });
-
-          }, 500);
+          }
 
         },
         error => {
           this.errorMessage = <any>error;
+          this.openSnackBar('Query failed due to web service error. Please try again later.', 'OK', 8000);
         }
       );
 
-    this.dataSource = new MatTableDataSource(this.currentResults);
+
 
     // get adminLevelOnes from the adminLevelOne service
     this.adminLevelOneService.getAdminLevelOnes()
@@ -707,9 +494,231 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  buildMap() {
+
+    const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a> contributors.',
+      // tslint:disable-next-line:max-line-length
+      mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors.'
+
+    });
+
+    const grayscale = L.tileLayer(mbUrl, { id: 'mapbox.light', attribution: mbAttr });
+    const streets = L.tileLayer(mbUrl, { id: 'mapbox.streets', attribution: mbAttr });
+
+    if (this.map === undefined) {
+      this.map = new L.Map('map', {
+        center: new L.LatLng(39.8283, -98.5795),
+        zoom: 4,
+        layers: [streets]
+      });
+
+    }
+
+    if (this.locationMarkers) {
+      this.locationMarkers.clearLayers();
+    }
+
+
+    this.locationMarkers = L.featureGroup().addTo(this.map);
+
+    const baseMaps = {
+      'Open Street Map': osm,
+      'Grayscale': grayscale,
+      'Streets': streets
+    };
+
+    // Flyways hosted by Fish and Wildlife Service
+    const flyways = esri.featureLayer({
+      url: 'https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0',
+      style: function (feature) {
+        if (feature.properties.NAME === 'Atlantic Flyway') {
+          return { color: '#28995b', weight: 2 };
+        } else if (feature.properties.NAME === 'Pacific Flyway') {
+          return { color: '#ffbd4f', weight: 2 };
+        } else if (feature.properties.NAME === 'Mississippi Flyway') {
+          return { color: '#eb5834', weight: 2 };
+        } else if (feature.properties.NAME === 'Central Flyway') {
+          return { color: '#b43cc7', weight: 2 };
+        }
+      }
+    });
+
+    // Watersheds hosted by The National Map (USGS)
+    const watersheds = esri.dynamicMapLayer({
+      url: 'https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer',
+      opacity: 0.7
+    });
+
+    const overlays = {
+      'Flyways': flyways,
+      'Watersheds (HUC 2)': watersheds
+    };
+
+    const drawnItems = L.featureGroup().addTo(this.map);
+
+    L.control.layers(
+      baseMaps,
+      overlays, { position: 'topleft' }, { 'drawlayer': drawnItems }).addTo(this.map);
+
+    L.control.scale({ position: 'bottomright' }).addTo(this.map);
+
+    const drawControl = new L.Control.Draw({
+      edit: {
+        featureGroup: drawnItems,
+        poly: {
+          allowIntersection: false
+        }
+      },
+      draw: {
+        polygon: {
+          allowIntersection: false,
+          showArea: true
+        },
+        marker: false,
+        circle: false,
+        circlemarker: false,
+        rectangle: false
+      }
+    });
+
+    this.map.addControl(drawControl);
+
+    // Truncate value based on number of decimals
+    const _round = function (num, len) {
+      return Math.round(num * (Math.pow(10, len))) / (Math.pow(10, len));
+    };
+    // Helper method to format LatLng object (x.xxxxxx, y.yyyyyy)
+    const strLatLng = function (latlng) {
+      return '(' + _round(latlng.lat, 6) + ', ' + _round(latlng.lng, 6) + ')';
+    };
+
+    // Generate popup content based on layer type
+    // - Returns HTML string, or null if unknown object
+    const getPopupContent = function (layer) {
+      // Marker - add lat/long
+      if (layer instanceof L.Marker || layer instanceof L.CircleMarker) {
+        return strLatLng(layer.getLatLng());
+        // Circle - lat/long, radius
+      } else if (layer instanceof L.Circle) {
+        const center = layer.getLatLng(),
+          radius = layer.getRadius();
+        return 'Center: ' + strLatLng(center) + '<br />'
+          + 'Radius: ' + _round(radius, 2) + ' m';
+        // Rectangle/Polygon - area
+      } else if (layer instanceof L.Polygon) {
+        const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs(),
+          area = L.GeometryUtil.geodesicArea(latlngs);
+        return 'Area: ' + L.GeometryUtil.readableArea(area, true);
+        // Polyline - distance
+      } else if (layer instanceof L.Polyline) {
+        const latlngs = layer._defaultShape ? layer._defaultShape() : layer.getLatLngs();
+        let distance = 0;
+        if (latlngs.length < 2) {
+          return 'Distance: N/A';
+        } else {
+          for (let i = 0; i < latlngs.length - 1; i++) {
+            distance += latlngs[i].distanceTo(latlngs[i + 1]);
+          }
+          return 'Distance: ' + _round(distance, 2) + ' m';
+        }
+      }
+      return null;
+    };
+
+    // Object created - bind popup to layer, add to feature group
+    this.map.on(L.Draw.Event.CREATED, function (event) {
+      const layer = event.layer;
+      const content = getPopupContent(layer);
+      if (content !== null) {
+        layer.bindPopup(content);
+      }
+      drawnItems.addLayer(layer);
+    });
+
+    // Object(s) edited - update popups
+    this.map.on(L.Draw.Event.EDITED, function (event) {
+      const layers = event.layers;
+      // const content = null;
+      layers.eachLayer(function (layer) {
+        const content = getPopupContent(layer);
+        if (content !== null) {
+          layer.setPopupContent(content);
+        }
+      });
+    });
+
+    this.mapResults(this.currentResults);
+
+    // begin latLngScale utility logic/////////////////////////////////////////////////////////////////////////////////////////
+    // grabbed from FEV
+    // displays map scale on map load
+    // map.on( 'load', function() {
+    this.map.whenReady(() => {
+      const mapZoom = this.map.getZoom();
+      const tempMapScale = this.scaleLookup(this.map.getZoom());
+      this.zoomLevel = mapZoom;
+      this.mapScale = tempMapScale;
+      const initMapCenter = this.map.getCenter();
+      this.latitude = initMapCenter.lat.toFixed(4);
+      this.longitude = initMapCenter.lng.toFixed(4);
+    });
+
+    // displays map scale on scale change (i.e. zoom level)
+    this.map.on('zoomend', () => {
+      const mapZoom = this.map.getZoom();
+      const mapScale = this.scaleLookup(mapZoom);
+      this.mapScale = mapScale;
+      this.zoomLevel = mapZoom;
+    });
+
+    // updates lat/lng indicator on mouse move. does not apply on devices w/out mouse. removes 'map center' label
+    this.map.on('mousemove', (cursorPosition) => {
+      // $('#mapCenterLabel').css('display', 'none');
+      if (cursorPosition.latlng !== null) {
+        this.latitude = cursorPosition.latlng.lat.toFixed(4);
+        this.longitude = cursorPosition.latlng.lng.toFixed(4);
+      }
+    });
+    // updates lat/lng indicator to map center after pan and shows 'map center' label.
+    this.map.on('dragend', () => {
+      // displays latitude and longitude of map center
+      // $('#mapCenterLabel').css('display', 'inline');
+      const geographicMapCenter = this.map.getCenter();
+      this.latitude = geographicMapCenter.lat.toFixed(4);
+      this.longitude = geographicMapCenter.lng.toFixed(4);
+    });
+    // end latLngScale utility logic/////////
+
+    this.map.on('overlayadd', (e) => {
+      console.log('overlayadd');
+      if (e.name === 'Flyways') {
+        this.flywaysVisible = true;
+      } else if (e.name === 'Watersheds (HUC 2)') {
+        this.watershedsVisible = true;
+      }
+    });
+
+    this.map.on('overlayremove', (e) => {
+      console.log('overlayremove');
+      if (e.name === 'Flyways') {
+        this.flywaysVisible = false;
+      } else if (e.name === 'Watersheds (HUC 2)') {
+        this.watershedsVisible = false;
+      }
+    });
+
+  }
+
   mapResults(currentResults: any) {
 
-    this.locationMarkers.clearLayers();
+    if (this.locationMarkers) {
+      this.locationMarkers.clearLayers();
+    }
 
     // set/reset currentResultsMarker var to an empty array
     const currentResultsMarkers = [];
@@ -1166,10 +1175,9 @@ export class HomeComponent implements OnInit {
     // use displayQuery for display of current query in markup, send to searchDialogService
     this.searchDialogService.setDisplayQuery(displayQuery);
 
-
     // use searchForm.value to build the web service query, send to searchDialogService
     this.searchDialogService.setSearchQuery(search);
-    //this.router.navigate([`../home/`], { relativeTo: this.route });
+    // this.router.navigate([`../home/`], { relativeTo: this.route });
   }
 
 
@@ -1199,32 +1207,9 @@ export class HomeComponent implements OnInit {
   }
 
 
-  /**
-   * Set the paginator and sort after the view init since this component will
-   * be able to query its view for the initialized paginator and sort.
-   */
-  // ngAfterViewInit() {
-  //   this.dataSource.paginator = this.paginator;
-  //   this.dataSource.sort = this.sort;
-  // }
-
-  // applyFilter(filterValue: string) {
-  //   filterValue = filterValue.trim(); // Remove whitespace
-  //   filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-  //   this.dataSource.filter = filterValue;
-  // }
-
   selectEvent(event) {
     this.router.navigate([`../event/${event.id}`], { relativeTo: this.route });
   }
-
-  // onSelect({ selected }) {
-  //   console.log('Select Event', selected, this.selected);
-  // }
-
-  // onActivate(event) {
-  //   console.log('Activate Event', event);
-  // }
 
 }
 

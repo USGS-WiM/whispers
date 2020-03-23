@@ -92,7 +92,7 @@ export class EventService {
       queryString = queryString + '&complete=True';
     }
 
-    queryString = queryString + '&format=csv';
+    queryString = queryString + '&format=csv&no_page';
 
     window.location.href = APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString;
 

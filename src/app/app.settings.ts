@@ -40,9 +40,9 @@ export class APP_SETTINGS {
 
     public static get DEFAULT_COUNTRY(): string { return 'USA'; }
 
-    public static get VERSION() {
-        return environment.version;
-    }
+    public static get VERSION() { return environment.version; }
+
+    public static get QUERY_COUNT_LIMIT() { return 500; }
 
     public static get UNDET_PENDING_DIAGNOSES() {
         return [

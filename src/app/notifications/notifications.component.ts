@@ -359,6 +359,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
     this.viewNotificationsDetailRef = this.dialog.open(ViewNotificationDetailsComponent,
       {
+        disableClose: true,
         data: {
           notification: notification
         }
@@ -480,6 +481,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     for (const item of selection) {
       idArray.push(item.id);
     }
+
+    this.selection.clear();
 
     const updateObject = { 'action': action, 'ids': idArray };
     this.notificationService.bulkUpdateNotifications(updateObject)
@@ -677,16 +680,64 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   // From angular material table sample on material api reference site
   /** Whether the number of selected elements matches the total number of rows. */
+  // isAllSelected() {
+  //   const numSelected = this.selection.selected.length;
+  //   const numRows = this.notificationsDataSource.data.length;
+  //   return numSelected === numRows;
+  // }
+
+  // /** Selects all rows if they are not all selected; otherwise clear selection. */
+  // masterToggle() {
+  //   this.isAllSelected() ?
+  //     this.selection.clear() :
+  //     this.notificationsDataSource.data.forEach(row => this.selection.select(row));
+  // }
+
+
+
+  /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.notificationsDataSource.data.length;
-    return numSelected === numRows;
+    const page = this.notificationsDataSource.paginator.pageSize;
+    let endIndex: number;
+    // First check whether data source length is greater than current page index multiply by page size.
+    // If yes then endIdex will be current page index multiply by page size.
+    // If not then select the remaining elements in current page only.
+    if (this.notificationsDataSource.data.length > (this.notificationsDataSource.paginator.pageIndex + 1) * this.notificationsDataSource.paginator.pageSize) {
+      endIndex = (this.notificationsDataSource.paginator.pageIndex + 1) * this.notificationsDataSource.paginator.pageSize;
+    } else {
+      // tslint:disable-next-line:max-line-length
+      endIndex = this.notificationsDataSource.data.length - (this.notificationsDataSource.paginator.pageIndex * this.notificationsDataSource.paginator.pageSize);
+    }
+    return numSelected === endIndex;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.notificationsDataSource.data.forEach(row => this.selection.select(row));
+    // this.isAllSelected() ?
+    //   this.selection.clear() : this.selectRows();
+
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.selectRows();
+    }
   }
+
+  selectRows() {
+    // tslint:disable-next-line:max-line-length
+    let endIndex: number;
+    // tslint:disable-next-line:max-line-length
+    if (this.notificationsDataSource.data.length > (this.notificationsDataSource.paginator.pageIndex + 1) * this.notificationsDataSource.paginator.pageSize) {
+      endIndex = (this.notificationsDataSource.paginator.pageIndex + 1) * this.notificationsDataSource.paginator.pageSize;
+    } else {
+      // tslint:disable-next-line:max-line-length
+      endIndex = this.notificationsDataSource.data.length;
+    }
+
+    for (let index = (this.notificationsDataSource.paginator.pageIndex * this.notificationsDataSource.paginator.pageSize); index < endIndex; index++) {
+      this.selection.select(this.notificationsDataSource.data[index]);
+    }
+  }
+
 }

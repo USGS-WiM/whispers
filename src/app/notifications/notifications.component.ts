@@ -482,6 +482,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       idArray.push(item.id);
     }
 
+    this.selection.clear();
+
     const updateObject = { 'action': action, 'ids': idArray };
     this.notificationService.bulkUpdateNotifications(updateObject)
       .subscribe(
@@ -698,9 +700,9 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     const numSelected = this.selection.selected.length;
     const page = this.notificationsDataSource.paginator.pageSize;
     let endIndex: number;
-	// First check whether data source length is greater than current page index multiply by page size.
-	// If yes then endIdex will be current page index multiply by page size.
-	// If not then select the remaining elements in current page only.
+    // First check whether data source length is greater than current page index multiply by page size.
+    // If yes then endIdex will be current page index multiply by page size.
+    // If not then select the remaining elements in current page only.
     if (this.notificationsDataSource.data.length > (this.notificationsDataSource.paginator.pageIndex + 1) * this.notificationsDataSource.paginator.pageSize) {
       endIndex = (this.notificationsDataSource.paginator.pageIndex + 1) * this.notificationsDataSource.paginator.pageSize;
     } else {
@@ -712,8 +714,14 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() : this.selectRows();
+    // this.isAllSelected() ?
+    //   this.selection.clear() : this.selectRows();
+
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.selectRows();
+    }
   }
 
   selectRows() {
@@ -726,7 +734,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       // tslint:disable-next-line:max-line-length
       endIndex = this.notificationsDataSource.data.length;
     }
-	
+
     for (let index = (this.notificationsDataSource.paginator.pageIndex * this.notificationsDataSource.paginator.pageSize); index < endIndex; index++) {
       this.selection.select(this.notificationsDataSource.data[index]);
     }

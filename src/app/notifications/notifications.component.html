@@ -140,7 +140,7 @@
                           emailAllStandard === false ?  'email' :  'email'}}
                         </mat-icon>
                         &nbsp;{{emailAllStandard === true ? 'Email on for all' :
-                        emailAllStandard === false ?  'Click to recieve emails for all' :  'Click to recieve emails for all'}}
+                        emailAllStandard === false ?  'Click to receive emails for all' :  'Click to receive emails for all'}}
                       </span>
                     </span>
                   </div>
@@ -296,7 +296,7 @@
                         emailAllCustom=== false ?  'email' :  'email'}}
                         </mat-icon>
                         &nbsp;{{emailAllCustom === true ? 'Email on for all' :
-                      emailAllCustom === false ?  'Click to recieve emails for all' :  'Click to recieve emails for all'}}
+                      emailAllCustom === false ?  'Click to receive emails for all' :  'Click to receive emails for all'}}
                       </span> -->
                     </span>
                   </div>
@@ -323,10 +323,10 @@
                     <div class="mat-cell" [formGroupName]="customCueIndex">
                       <mat-checkbox formControlName="create_when_new" #createWhenNew
                         (change)="updateCustomNotificationSettings('create_when_new', $event, cue)"
-                        matTooltip="Click to recieve when a matching event is new">new</mat-checkbox> &nbsp; &nbsp;
+                        matTooltip="Click to receive when a matching event is new">new</mat-checkbox> &nbsp; &nbsp;
                       <mat-checkbox formControlName="create_when_modified" #createWhenModified
                         (change)="updateCustomNotificationSettings('create_when_modified', $event, cue)"
-                        matTooltip="Click to recieve when a matching event is updated">updated</mat-checkbox>
+                        matTooltip="Click to receive when a matching event is updated">updated</mat-checkbox>
                     </div>
                     <div class="mat-cell" [formGroupName]="customCueIndex">
                       <span class="row align-items-center">

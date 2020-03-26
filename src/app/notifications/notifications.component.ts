@@ -269,12 +269,12 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
         // do not un-check the boxes if the 'email on for all is unchecked'
         // should only go one way- check on to check them all
         // below block does un-check them all, if that behavior is requested.
-        // this.standardNotificationSettingsForm.patchValue({
-        //   yourEvents_email: false,
-        //   orgEvents_email: false,
-        //   collabEvents_email: false,
-        //   allEvents_email: false
-        // });
+        this.standardNotificationSettingsForm.patchValue({
+          yourEvents_email: false,
+          orgEvents_email: false,
+          collabEvents_email: false,
+          allEvents_email: false
+        });
       }
 
     } else if (notificationType === 'custom') {

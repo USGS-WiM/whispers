@@ -1027,7 +1027,7 @@
           <mat-tab label="Comment Timeline"
             *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
             <ng-template matTabContent>
-              <mat-card>
+              <mat-card class="overflow-auto">
                 <div class="app-comments-table">
                   <app-comments-table [eventData]="eventData" [commentTypes]="commentTypes"></app-comments-table>
                 </div>

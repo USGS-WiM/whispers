@@ -16,6 +16,7 @@ import { AuthenticationService } from '@app/services/authentication.service';
 import { APP_UTILITIES } from '@app/app.utilities';
 import { Notification } from '@app/interfaces/notification';
 import { NotificationService } from '@services/notification.service';
+import { ResultsCountService } from '@services/results-count.service';
 
 // Needed for scroll to top
 import { isPlatformBrowser } from '@angular/common';
@@ -37,7 +38,7 @@ export class AppComponent implements OnInit {
   public bannerWarning = '';
   public bannerTextColor = '';
   // public isLoggedIn;
-  notificationCount;
+  allNotificationCount;
   unreadNotificationCount;
   firstTenNotifications = [];
   dummyNotifications = APP_UTILITIES.dummyData;
@@ -60,10 +61,17 @@ export class AppComponent implements OnInit {
     public currentUserService: CurrentUserService,
     private authenticationService: AuthenticationService,
     private notificationService: NotificationService,
+    private resultsCountService: ResultsCountService
   ) {
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
+    });
+
+    this.resultsCountService.unreadNotificationsCount.subscribe(count => {
+
+      this.unreadNotificationCount = count;
+      this.getUserNotifications();
     });
   }
 
@@ -99,7 +107,7 @@ export class AppComponent implements OnInit {
       this.openBrowserWarningDialog();
     }
 
-
+    this.getUserNotifications();
 
     // if ((!!sessionStorage.getItem('username') && !!sessionStorage.getItem('password'))) {
 
@@ -116,15 +124,21 @@ export class AppComponent implements OnInit {
     //   });
     // }
 
+
+
+  }
+
+  getUserNotifications() {
     this.notificationService.getUserNotifications()
       .subscribe(
         (notifications) => {
           this.userNotifications = notifications;
-          this.notificationCount = this.userNotifications.length;
-          this.previewNotifications = this.userNotifications.slice(0, 10);
+          this.allNotificationCount = this.userNotifications.length;
 
+          // establish unreadNotifications variable. first contains all notifications
           const unreadNotifications = this.userNotifications;
 
+          // splice out all the read notififcations
           for (let i = unreadNotifications.length - 1; i >= 0; i--) {
             if (unreadNotifications[i].read === true) {
               unreadNotifications.splice(i, 1);
@@ -133,18 +147,18 @@ export class AppComponent implements OnInit {
 
           this.unreadNotificationCount = unreadNotifications.length;
 
-          // if (this.userNotifications.length > 10) {
-          //   this.previewNotifications = this.userNotifications.slice(0, 10);
-          // } else {
-          //   this.previewNotifications = this.userNotifications;
-          // }
+          // if unreadNotifications array is greater than 10, cut it down for the previewNotifications array
+          if (unreadNotifications.length > 10) {
+            this.previewNotifications = unreadNotifications.slice(0, 10);
+          } else {
+            this.previewNotifications = unreadNotifications;
+          }
 
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
-
 
   }
 

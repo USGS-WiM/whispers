@@ -30,6 +30,10 @@
     </mat-card-title>
     <div class=" results-table-div">
 
+      <div class="spinner-container" *ngIf="notificationsLoading">
+        <mat-spinner></mat-spinner>
+      </div>
+
       <mat-table [dataSource]="notificationsDataSource" matSort matSortDirection="desc"
         *ngIf="notificationsDataSource.data.length > 0">
 

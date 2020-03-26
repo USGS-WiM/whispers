@@ -2,10 +2,14 @@ import { map, catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
 import { HttpClient, HttpParams } from '@angular/common/http';
+// import { Observable, Subject, throwError, Notification } from 'rxjs';
 import { Observable, Subject, throwError } from 'rxjs';
+import { Notification } from '@interfaces/notification';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
+
+import { ResultsCountService } from '@services/results-count.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +18,7 @@ export class NotificationService {
 
   constructor(
     private http: HttpClient,
+    private resultsCountService: ResultsCountService
   ) { }
 
   // uses the newer HttpClient method
@@ -23,6 +28,18 @@ export class NotificationService {
       headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS
     }).pipe(
       map((res: any) => {
+
+        // establish unreadNotifications variable. first contains all notifications
+        const unreadNotifications: Notification[] = Array.from(res.results);
+
+        // splice out all the read notififcations
+        for (let i = unreadNotifications.length - 1; i >= 0; i--) {
+          if (unreadNotifications[i].read === true) {
+            unreadNotifications.splice(i, 1);
+          }
+        }
+        this.resultsCountService.updateUnreadNotificationsCount(unreadNotifications.length);
+
         return res.results;
       }));
   }

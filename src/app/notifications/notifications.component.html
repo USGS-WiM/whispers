@@ -122,15 +122,15 @@
             <div class="results-table-div">
               <div class="mat-table">
                 <div class="mat-header-row">
-                  <div class="mat-header-cell"></div>
-                  <div class="mat-header-cell" style="font-weight: bold;">
+                  <div class="mat-header-cell standard-cue-col"></div>
+                  <div class="mat-header-cell standard-receive-col" style="font-weight: bold;">
                     <span class="row align-items-center">
                       <span class="headerText" class="row align-items-center">
                         <mat-icon>notifications</mat-icon>&nbsp;Receive when event is
                       </span>
                     </span>
                   </div>
-                  <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
+                  <div class="mat-header-cell standard-email-col" id="headerWithIcon" style="font-weight: bold;">
                     <span class="row align-items-center">
                       <mat-checkbox (change)="emailAllToggle('standard')" [checked]="emailAllStandard">
                       </mat-checkbox>
@@ -146,12 +146,12 @@
                 </div>
 
                 <div class="mat-row">
-                  <div class="mat-header-cell">Your Events</div>
-                  <div class="mat-cell">
+                  <div class="mat-cell standard-cue-col">Your Events</div>
+                  <div class="mat-cell standard-receive-col">
                     <mat-checkbox formControlName="yourEvents_new">new</mat-checkbox> &nbsp; &nbsp;
                     <mat-checkbox formControlName="yourEvents_updated">updated</mat-checkbox>
                   </div>
-                  <div class="mat-cell">
+                  <div class="mat-cell standard-email-col">
                     <span class="row align-items-center">
                       <mat-checkbox formControlName="yourEvents_email"
                         [disabled]="standardNotificationSettingsForm.get('yourEvents_new').value === false && standardNotificationSettingsForm.get('yourEvents_updated').value === false">
@@ -170,12 +170,12 @@
                   </div>
                 </div>
                 <div class="mat-row">
-                  <div class="mat-header-cell">Your Organization's Events</div>
-                  <div class="mat-cell">
+                  <div class="mat-cell standard-cue-col">Your Organization's Events</div>
+                  <div class="mat-cell standard-receive-col">
                     <mat-checkbox formControlName="orgEvents_new">new</mat-checkbox> &nbsp; &nbsp;
                     <mat-checkbox formControlName="orgEvents_updated">updated</mat-checkbox>
                   </div>
-                  <div class="mat-cell">
+                  <div class="mat-cell standard-email-col">
                     <span class="row align-items-center">
                       <mat-checkbox formControlName="orgEvents_email"
                         [disabled]="standardNotificationSettingsForm.get('orgEvents_new').value === false && standardNotificationSettingsForm.get('orgEvents_updated').value === false">
@@ -193,12 +193,12 @@
                   </div>
                 </div>
                 <div class="mat-row">
-                  <div class="mat-header-cell">Your Collaboration Events</div>
-                  <div class="mat-cell">
+                  <div class="mat-cell standard-cue-col">Your Collaboration Events</div>
+                  <div class="mat-cell standard-receive-col">
                     <mat-checkbox formControlName="collabEvents_new">new</mat-checkbox> &nbsp; &nbsp;
                     <mat-checkbox formControlName="collabEvents_updated">updated</mat-checkbox>
                   </div>
-                  <div class="mat-cell">
+                  <div class="mat-cell standard-email-col">
                     <span class="row align-items-center">
                       <mat-checkbox formControlName="collabEvents_email"
                         [disabled]="standardNotificationSettingsForm.get('collabEvents_new').value === false && standardNotificationSettingsForm.get('collabEvents_updated').value === false">
@@ -216,12 +216,12 @@
                   </div>
                 </div>
                 <div class="mat-row">
-                  <div class="mat-header-cell">All Events*</div>
-                  <div class="mat-cell">
+                  <div class="mat-cell standard-cue-col">All Events*</div>
+                  <div class="mat-cell standard-receive-col">
                     <mat-checkbox formControlName="allEvents_new">new</mat-checkbox> &nbsp; &nbsp;
                     <mat-checkbox formControlName="allEvents_updated">updated</mat-checkbox>
                   </div>
-                  <div class="mat-cell">
+                  <div class="mat-cell standard-email-col">
                     <span class="row align-items-center">
                       <mat-checkbox formControlName="allEvents_email"
                         [disabled]="standardNotificationSettingsForm.get('allEvents_new').value === false && standardNotificationSettingsForm.get('allEvents_updated').value === false">
@@ -277,16 +277,15 @@
               <div class="mat-table">
                 <!--Begin header row-->
                 <div class="mat-header-row">
-
-                  <div class="mat-header-cell" style="font-weight: bold;">Cue</div>
-                  <div class="mat-header-cell" style="font-weight: bold;">
+                  <div class="mat-header-cell custom-cue-col" style="font-weight: bold;">Notification Trigger</div>
+                  <div class="mat-header-cell custom-receive-col" style="font-weight: bold;">
                     <span class="row align-items-center">
                       <span class="headerText" class="row align-items-center">
-                        <mat-icon>notifications</mat-icon>&nbsp;Receive when event matching cue is
+                        <mat-icon>notifications</mat-icon>&nbsp;Receive when matching event is
                       </span>
                     </span>
                   </div>
-                  <div class="mat-header-cell" id="headerWithIcon" style="font-weight: bold;">
+                  <div class="mat-header-cell custom-email-col" id="headerWithIcon" style="font-weight: bold;">
                     <span class="row align-items-center">
                       <!--<mat-checkbox (change)="emailAllToggle('custom')" [checked]="emailAllCustom">
                       </mat-checkbox>
@@ -299,9 +298,8 @@
                       </span> -->
                     </span>
                   </div>
-                  <div class="mat-header-cell" style="font-weight: bold;"><span class="headerText">Delete Cue</span>
+                  <div class="mat-header-cell custom-delete-col" style="font-weight: bold;"><span class="headerText">Delete</span>
                   </div>
-
                 </div>
                 <!--End header row-->
 
@@ -310,16 +308,14 @@
                 <div formArrayName="custom_cues">
 
                   <!-- <div class="mat-row" *ngFor="let cue of dummy_custom_cues"> -->
-                  <div class="mat-row"
-                    *ngFor="let cue of getCustomCues(customNotificationSettingsForm); let customCueIndex = index">
-                    <div class="mat-cell">
-
+                  <div class="mat-row" *ngFor="let cue of getCustomCues(customNotificationSettingsForm); let customCueIndex = index">
+                    <div class="mat-cell custom-cue-col">
 
                       <div *ngFor="let parameterString of cue.value.cue_strings">
                         <span>{{parameterString}}</span><br>
                       </div>
                     </div>
-                    <div class="mat-cell" [formGroupName]="customCueIndex">
+                    <div class="mat-cell custom-receive-col" [formGroupName]="customCueIndex">
                       <mat-checkbox formControlName="create_when_new" #createWhenNew
                         (change)="updateCustomNotificationSettings('create_when_new', $event, cue)"
                         matTooltip="Click to receive when a matching event is new">new</mat-checkbox> &nbsp; &nbsp;
@@ -327,7 +323,7 @@
                         (change)="updateCustomNotificationSettings('create_when_modified', $event, cue)"
                         matTooltip="Click to receive when a matching event is updated">updated</mat-checkbox>
                     </div>
-                    <div class="mat-cell" [formGroupName]="customCueIndex">
+                    <div class="mat-cell custom-email-col" [formGroupName]="customCueIndex">
                       <span class="row align-items-center">
                         <mat-checkbox formControlName="send_email"
                           (change)="updateCustomNotificationSettings('send_email', $event, cue)"
@@ -347,7 +343,7 @@
 
                       </span>
                     </div>
-                    <div class="mat-cell">
+                    <div class="mat-cell custom-delete-col">
                       <mat-icon class="icon" color="warn" (click)="deleteWarning(cue, customCueIndex)"
                         matTooltip="Click to delete this notification cue">delete</mat-icon>
                     </div>
@@ -357,9 +353,9 @@
 
               </div>
               <div class="warning">
-                <p>Note that deleting a Notification Cue only deletes the notification for you - it does not delete the
+                <p>Note that deleting a Custom Notification only deletes the notification trigger for you - it does not delete the
                   event, a
-                  notification for another user, or any
+                  notification trigger for another user, or any
                   other data.</p>
               </div>
             </div>

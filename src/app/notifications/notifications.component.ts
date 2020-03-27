@@ -62,7 +62,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   notificationDisplayedColumns = [
     'select',
-    'go',
+    'event',
     'subject',
     'created_date',
     'source'
@@ -126,9 +126,6 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     const allowMultiSelect = true;
     this.selection = new SelectionModel<Notification>(allowMultiSelect, initialSelection);
     this.notificationsLoading = true;
-
-    this.notificationsDataSource = new MatTableDataSource([]);
-    this.notificationsDataSource.paginator = this.notificationPaginator;
 
     // retrieve user's notifications
     this.notificationService.getUserNotifications()
@@ -382,7 +379,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
                       this.userNotifications = notifications;
                       this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
                       this.notificationsDataSource.paginator = this.notificationPaginator;
-
+                      this.notificationsDataSource.sort = this.sort;
+                    
                     },
                     error => {
                       this.errorMessage = <any>error;
@@ -410,7 +408,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
                       this.userNotifications = notifications;
                       this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
                       this.notificationsDataSource.paginator = this.notificationPaginator;
-
+                      this.notificationsDataSource.sort = this.sort;
                     },
                     error => {
                       this.errorMessage = <any>error;
@@ -434,6 +432,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
                     this.userNotifications = notifications;
                     this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
                     this.notificationsDataSource.paginator = this.notificationPaginator;
+                    this.notificationsDataSource.sort = this.sort;
 
                   },
                   error => {
@@ -499,7 +498,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
                 this.userNotifications = notifications;
                 this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
                 this.notificationsDataSource.paginator = this.notificationPaginator;
-
+                this.notificationsDataSource.sort = this.sort;
               },
               error => {
                 this.errorMessage = <any>error;

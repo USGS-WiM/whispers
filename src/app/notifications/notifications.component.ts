@@ -62,7 +62,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   notificationDisplayedColumns = [
     'select',
-    'go',
+    'event',
     'subject',
     'created_date',
     'source'
@@ -126,9 +126,6 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
     const allowMultiSelect = true;
     this.selection = new SelectionModel<Notification>(allowMultiSelect, initialSelection);
     this.notificationsLoading = true;
-
-    this.notificationsDataSource = new MatTableDataSource([]);
-    this.notificationsDataSource.paginator = this.notificationPaginator;
 
     // retrieve user's notifications
     this.notificationService.getUserNotifications()
@@ -269,12 +266,12 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
         // do not un-check the boxes if the 'email on for all is unchecked'
         // should only go one way- check on to check them all
         // below block does un-check them all, if that behavior is requested.
-        // this.standardNotificationSettingsForm.patchValue({
-        //   yourEvents_email: false,
-        //   orgEvents_email: false,
-        //   collabEvents_email: false,
-        //   allEvents_email: false
-        // });
+        this.standardNotificationSettingsForm.patchValue({
+          yourEvents_email: false,
+          orgEvents_email: false,
+          collabEvents_email: false,
+          allEvents_email: false
+        });
       }
 
     } else if (notificationType === 'custom') {
@@ -359,6 +356,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
     this.viewNotificationsDetailRef = this.dialog.open(ViewNotificationDetailsComponent,
       {
+        disableClose: true,
         data: {
           notification: notification
         }
@@ -381,7 +379,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
                       this.userNotifications = notifications;
                       this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
                       this.notificationsDataSource.paginator = this.notificationPaginator;
-
+                      this.notificationsDataSource.sort = this.sort;
+                    
                     },
                     error => {
                       this.errorMessage = <any>error;
@@ -409,7 +408,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
                       this.userNotifications = notifications;
                       this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
                       this.notificationsDataSource.paginator = this.notificationPaginator;
-
+                      this.notificationsDataSource.sort = this.sort;
                     },
                     error => {
                       this.errorMessage = <any>error;
@@ -433,6 +432,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
                     this.userNotifications = notifications;
                     this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
                     this.notificationsDataSource.paginator = this.notificationPaginator;
+                    this.notificationsDataSource.sort = this.sort;
 
                   },
                   error => {
@@ -481,6 +481,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       idArray.push(item.id);
     }
 
+    this.selection.clear();
+
     const updateObject = { 'action': action, 'ids': idArray };
     this.notificationService.bulkUpdateNotifications(updateObject)
       .subscribe(
@@ -496,7 +498,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
                 this.userNotifications = notifications;
                 this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
                 this.notificationsDataSource.paginator = this.notificationPaginator;
-
+                this.notificationsDataSource.sort = this.sort;
               },
               error => {
                 this.errorMessage = <any>error;
@@ -677,16 +679,64 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   // From angular material table sample on material api reference site
   /** Whether the number of selected elements matches the total number of rows. */
+  // isAllSelected() {
+  //   const numSelected = this.selection.selected.length;
+  //   const numRows = this.notificationsDataSource.data.length;
+  //   return numSelected === numRows;
+  // }
+
+  // /** Selects all rows if they are not all selected; otherwise clear selection. */
+  // masterToggle() {
+  //   this.isAllSelected() ?
+  //     this.selection.clear() :
+  //     this.notificationsDataSource.data.forEach(row => this.selection.select(row));
+  // }
+
+
+
+  /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.notificationsDataSource.data.length;
-    return numSelected === numRows;
+    const page = this.notificationsDataSource.paginator.pageSize;
+    let endIndex: number;
+    // First check whether data source length is greater than current page index multiply by page size.
+    // If yes then endIdex will be current page index multiply by page size.
+    // If not then select the remaining elements in current page only.
+    if (this.notificationsDataSource.data.length > (this.notificationsDataSource.paginator.pageIndex + 1) * this.notificationsDataSource.paginator.pageSize) {
+      endIndex = (this.notificationsDataSource.paginator.pageIndex + 1) * this.notificationsDataSource.paginator.pageSize;
+    } else {
+      // tslint:disable-next-line:max-line-length
+      endIndex = this.notificationsDataSource.data.length - (this.notificationsDataSource.paginator.pageIndex * this.notificationsDataSource.paginator.pageSize);
+    }
+    return numSelected === endIndex;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.notificationsDataSource.data.forEach(row => this.selection.select(row));
+    // this.isAllSelected() ?
+    //   this.selection.clear() : this.selectRows();
+
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.selectRows();
+    }
   }
+
+  selectRows() {
+    // tslint:disable-next-line:max-line-length
+    let endIndex: number;
+    // tslint:disable-next-line:max-line-length
+    if (this.notificationsDataSource.data.length > (this.notificationsDataSource.paginator.pageIndex + 1) * this.notificationsDataSource.paginator.pageSize) {
+      endIndex = (this.notificationsDataSource.paginator.pageIndex + 1) * this.notificationsDataSource.paginator.pageSize;
+    } else {
+      // tslint:disable-next-line:max-line-length
+      endIndex = this.notificationsDataSource.data.length;
+    }
+
+    for (let index = (this.notificationsDataSource.paginator.pageIndex * this.notificationsDataSource.paginator.pageSize); index < endIndex; index++) {
+      this.selection.select(this.notificationsDataSource.data[index]);
+    }
+  }
+
 }

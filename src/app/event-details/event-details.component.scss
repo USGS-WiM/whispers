@@ -530,7 +530,6 @@ tr.noBorder td {
     .mapDiv {
         width: 100%;
         height: 100vh;
-        height: calc(100vh - 104px);
         position: -webkit-sticky;
         /* Safari */
         position: sticky;
@@ -541,7 +540,6 @@ tr.noBorder td {
         #eventDetailsMap {
             width: 100%;
             height: 100vh;
-            height: calc(100vh - 104px);
         }
 
         // Height where map moves to top instead of side

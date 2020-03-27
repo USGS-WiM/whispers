@@ -16,6 +16,9 @@ export class ResultsCountService {
   private circlesResultsCountSource = new BehaviorSubject('None');
   circlesResultsCount = this.circlesResultsCountSource.asObservable();
 
+  private unreadNotificationsCountSource = new BehaviorSubject('None');
+  unreadNotificationsCount = this.unreadNotificationsCountSource.asObservable();
+
   constructor() { }
 
   updateUserEventsResultsCount(count) {
@@ -32,6 +35,10 @@ export class ResultsCountService {
 
   updateCirclesResultsCount(count) {
     this.circlesResultsCountSource.next(count);
+  }
+
+  updateUnreadNotificationsCount(count) {
+    this.unreadNotificationsCountSource.next(count);
   }
 
 }

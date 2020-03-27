@@ -34,8 +34,7 @@
         <mat-spinner></mat-spinner>
       </div>
 
-      <mat-table [dataSource]="notificationsDataSource" matSort matSortDirection="desc"
-        *ngIf="notificationsDataSource.data.length > 0">
+      <mat-table [dataSource]="notificationsDataSource" matSort>
 
         <!-- Selection column -->
         <ng-container matColumnDef="select">
@@ -51,9 +50,9 @@
           </mat-cell>
         </ng-container>
 
-        <!-- Go-to Column -->
-        <ng-container matColumnDef="go">
-          <mat-header-cell *matHeaderCellDef> Event </mat-header-cell>
+        <!-- Event Column -->
+        <ng-container matColumnDef="event">
+          <mat-header-cell *matHeaderCellDef  mat-sort-header> Event </mat-header-cell>
           <mat-cell *matCellDef="let notification">
             <button mat-stroked-button color="primary" (click)="$event.stopPropagation()"
               matTooltip="Click to go to event details page" *ngIf="notification.event !== null"
@@ -64,20 +63,20 @@
         <!-- Message Column -->
         <ng-container matColumnDef="subject">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Message </mat-header-cell>
-          <mat-cell *matCellDef="let notification"> {{notification.subject}}
+          <mat-cell *matCellDef="let notification">{{notification.subject}}
           </mat-cell>
         </ng-container>
 
         <!-- Source -->
         <ng-container matColumnDef="created_date">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Date </mat-header-cell>
-          <mat-cell *matCellDef="let notification"> {{notification.created_date | date:'mediumDate'}} </mat-cell>
+          <mat-cell *matCellDef="let notification">{{notification.created_date | date:'mediumDate'}}</mat-cell>
         </ng-container>
 
         <!-- Date -->
         <ng-container matColumnDef="source">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Source </mat-header-cell>
-          <mat-cell *matCellDef="let notification"> {{notification.source}} </mat-cell>
+          <mat-cell *matCellDef="let notification">{{notification.source}}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="notificationDisplayedColumns"></mat-header-row>

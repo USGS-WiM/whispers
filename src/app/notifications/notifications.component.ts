@@ -60,6 +60,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
   customCueFormReady = false;
 
+  selectedTab: number;
+
   notificationDisplayedColumns = [
     'select',
     'event',
@@ -119,9 +121,12 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
 
     this.customCueArray = this.customNotificationSettingsForm.get('custom_cues') as FormArray;
 
+    this.selectedTab = 0;
+
   }
 
   ngOnInit() {
+
     const initialSelection = [];
     const allowMultiSelect = true;
     this.selection = new SelectionModel<Notification>(allowMultiSelect, initialSelection);
@@ -380,7 +385,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
                       this.notificationsDataSource = new MatTableDataSource(this.userNotifications);
                       this.notificationsDataSource.paginator = this.notificationPaginator;
                       this.notificationsDataSource.sort = this.sort;
-                    
+
                     },
                     error => {
                       this.errorMessage = <any>error;

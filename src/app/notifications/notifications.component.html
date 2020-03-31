@@ -1,118 +1,119 @@
 <div>
-  <!-- Notifications table-->
-  <mat-card>
-    <mat-card-title>
-      Notifications
-    </mat-card-title>
-    <mat-card-title>
+  <mat-tab-group [selectedIndex]="selectedTab">
 
-      <div class="results-card-title-row">
-        <span class="results-button-row">
-          <button mat-button color="accent" [disabled]="selection.selected.length === 0"
-            (click)="updateNotifications(selection.selected, 'set_read')">
-            <mat-icon>
-              check_circle_outline
-            </mat-icon> Mark as Read
-          </button>
-          <button mat-button color="accent" [disabled]="selection.selected.length === 0"
-            (click)="updateNotifications(selection.selected, 'set_unread')">
-            <mat-icon>
-              markunread
-            </mat-icon> Mark as Unread
-          </button>
-          <button mat-button color="warn" [disabled]="selection.selected.length === 0"
-            (click)="openNotificationDeleteConfirm(selection.selected)">
-            <mat-icon>delete</mat-icon> Delete
-          </button>
-        </span>
+    <mat-tab aria-selected>
 
-      </div>
-    </mat-card-title>
-    <div class=" results-table-div">
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">list</mat-icon>&nbsp;
+        Notifications
+      </ng-template>
 
-      <div class="spinner-container" *ngIf="notificationsLoading">
-        <mat-spinner></mat-spinner>
-      </div>
+      <!-- Notifications table-->
+      <mat-card>
+        <mat-card-title>
+          Notifications
+        </mat-card-title>
+        <mat-card-title>
 
-      <mat-table [dataSource]="notificationsDataSource" matSort>
+          <div class="results-card-title-row">
+            <span class="results-button-row">
+              <button mat-button color="accent" [disabled]="selection.selected.length === 0"
+                (click)="updateNotifications(selection.selected, 'set_read')">
+                <mat-icon>
+                  check_circle_outline
+                </mat-icon> Mark as Read
+              </button>
+              <button mat-button color="accent" [disabled]="selection.selected.length === 0"
+                (click)="updateNotifications(selection.selected, 'set_unread')">
+                <mat-icon>
+                  markunread
+                </mat-icon> Mark as Unread
+              </button>
+              <button mat-button color="warn" [disabled]="selection.selected.length === 0"
+                (click)="openNotificationDeleteConfirm(selection.selected)">
+                <mat-icon>delete</mat-icon> Delete
+              </button>
+            </span>
 
-        <!-- Selection column -->
-        <ng-container matColumnDef="select">
-          <mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()">
-            </mat-checkbox>
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-              [checked]="selection.isSelected(row)">
-            </mat-checkbox>
-          </mat-cell>
-        </ng-container>
+          </div>
+        </mat-card-title>
+        <div class=" results-table-div">
 
-        <!-- Event Column -->
-        <ng-container matColumnDef="event">
-          <mat-header-cell *matHeaderCellDef  mat-sort-header> Event </mat-header-cell>
-          <mat-cell *matCellDef="let notification">
-            <button mat-stroked-button color="primary" (click)="$event.stopPropagation()"
-              matTooltip="Click to go to event details page" *ngIf="notification.event !== null"
-              routerLink="../event/{{notification.event}}">{{notification.event}}</button>
-          </mat-cell>
-        </ng-container>
+          <div class="spinner-container" *ngIf="notificationsLoading">
+            <mat-spinner></mat-spinner>
+          </div>
 
-        <!-- Message Column -->
-        <ng-container matColumnDef="subject">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Message </mat-header-cell>
-          <mat-cell *matCellDef="let notification">{{notification.subject}}
-          </mat-cell>
-        </ng-container>
+          <mat-table [dataSource]="notificationsDataSource" matSort>
 
-        <!-- Source -->
-        <ng-container matColumnDef="created_date">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Date </mat-header-cell>
-          <mat-cell *matCellDef="let notification">{{notification.created_date | date:'mediumDate'}}</mat-cell>
-        </ng-container>
+            <!-- Selection column -->
+            <ng-container matColumnDef="select">
+              <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                  [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
 
-        <!-- Date -->
-        <ng-container matColumnDef="source">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Source </mat-header-cell>
-          <mat-cell *matCellDef="let notification">{{notification.source}}</mat-cell>
-        </ng-container>
+            <!-- Event Column -->
+            <ng-container matColumnDef="event">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Event </mat-header-cell>
+              <mat-cell *matCellDef="let notification">
+                <button mat-stroked-button color="primary" (click)="$event.stopPropagation()"
+                  matTooltip="Click to go to event details page" *ngIf="notification.event !== null"
+                  routerLink="../event/{{notification.event}}">{{notification.event}}</button>
+              </mat-cell>
+            </ng-container>
 
-        <mat-header-row *matHeaderRowDef="notificationDisplayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let notification; columns: notificationDisplayedColumns;"
-          (click)="openNotification(notification)" matTooltip="Click to view full notification text"
-          [ngClass]="{'read' :notification.read === true, 'unread':notification.read === false}"></mat-row>
-      </mat-table>
+            <!-- Message Column -->
+            <ng-container matColumnDef="subject">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Message </mat-header-cell>
+              <mat-cell *matCellDef="let notification">{{notification.subject}}
+              </mat-cell>
+            </ng-container>
 
-      <div *ngIf="notificationsDataSource.data.length === 0 && notificationsLoading === false">
-        <h3>No notifications</h3>
-      </div>
+            <!-- Source -->
+            <ng-container matColumnDef="created_date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Date </mat-header-cell>
+              <mat-cell *matCellDef="let notification">{{notification.created_date | date:'mediumDate'}}</mat-cell>
+            </ng-container>
 
-      <span [hidden]="notificationsDataSource.data.length === 0 && notificationsLoading === false">
-        <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
-      </span>
-    </div>
-  </mat-card>
-  <!-- end Notifications table-->
+            <!-- Date -->
+            <ng-container matColumnDef="source">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Source </mat-header-cell>
+              <mat-cell *matCellDef="let notification">{{notification.source}}</mat-cell>
+            </ng-container>
 
-  <!-- <mat-card> -->
-  <!-- <mat-card-title>
-      Notification Preferences
-    </mat-card-title> -->
-  <!-- <mat-accordion> -->
-  <div class="expansion-panel-wrapper">
-    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Notification Preferences
-        </mat-panel-title>
-        <mat-panel-description>
-          Manage Standard Notifications, Add Custom Notifications or edit existing ones
-        </mat-panel-description>
-      </mat-expansion-panel-header>
+            <mat-header-row *matHeaderRowDef="notificationDisplayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let notification; columns: notificationDisplayedColumns;"
+              (click)="openNotification(notification)" matTooltip="Click to view full notification text"
+              [ngClass]="{'read' :notification.read === true, 'unread':notification.read === false}"></mat-row>
+          </mat-table>
 
-      <!--Standard notifications settings -->
+          <div *ngIf="notificationsDataSource.data.length === 0 && notificationsLoading === false">
+            <h3>No notifications</h3>
+          </div>
+
+          <span [hidden]="notificationsDataSource.data.length === 0 && notificationsLoading === false">
+            <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+          </span>
+        </div>
+      </mat-card>
+      <!-- end Notifications table-->
+    </mat-tab>
+
+    <mat-tab label="Manage Notification Preferences">
+
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">settings</mat-icon>&nbsp;
+        Manage Notification Preferences
+      </ng-template>
+
       <mat-card>
         <mat-card-title>
           Standard Notifications
@@ -216,7 +217,7 @@
                   </div>
                 </div>
                 <div class="mat-row">
-                  <div class="mat-cell standard-cue-col">All Events*</div>
+                  <div class="mat-cell standard-cue-col">All Events &#8224;</div>
                   <div class="mat-cell standard-receive-col">
                     <mat-checkbox formControlName="allEvents_new">new</mat-checkbox> &nbsp; &nbsp;
                     <mat-checkbox formControlName="allEvents_updated">updated</mat-checkbox>
@@ -240,10 +241,12 @@
                 </div>
               </div>
               <div class="warning">
-                <p>* Beware that selecting this option will create notifications for all events that you have permission
+                <p>&#8224; Beware that selecting this option will create notifications for all events that you have
+                  permission
                   to view,
                   regardless of ownership,
-                  diagnosis, species, location, or any other detail. Consider a Custom Notification (below) to specify
+                  diagnosis, species, location, or any other detail. Consider a Custom Notification (below) to
+                  specify
                   events
                   pertaining to your specific interest.</p>
               </div>
@@ -253,8 +256,7 @@
       </mat-card>
       <!--end Standard notifications settings -->
 
-
-      <mat-divider style="margin: 25px auto;" [inset]="true"></mat-divider>
+      <!-- <mat-divider [inset]="true"></mat-divider> -->
 
       <!--Custom notifications settings-->
       <mat-card>
@@ -298,7 +300,8 @@
                       </span> -->
                     </span>
                   </div>
-                  <div class="mat-header-cell custom-delete-col" style="font-weight: bold;"><span class="headerText">Delete</span>
+                  <div class="mat-header-cell custom-delete-col" style="font-weight: bold;"><span
+                      class="headerText">Delete&nbsp;&#8225;</span>
                   </div>
                 </div>
                 <!--End header row-->
@@ -308,7 +311,8 @@
                 <div formArrayName="custom_cues">
 
                   <!-- <div class="mat-row" *ngFor="let cue of dummy_custom_cues"> -->
-                  <div class="mat-row" *ngFor="let cue of getCustomCues(customNotificationSettingsForm); let customCueIndex = index">
+                  <div class="mat-row"
+                    *ngFor="let cue of getCustomCues(customNotificationSettingsForm); let customCueIndex = index">
                     <div class="mat-cell custom-cue-col">
 
                       <div *ngFor="let parameterString of cue.value.cue_strings">
@@ -353,7 +357,8 @@
 
               </div>
               <div class="warning">
-                <p>Note that deleting a Custom Notification only deletes the notification trigger for you - it does not delete the
+                <p>&#8225; Deleting a Custom Notification only deletes the notification trigger for you - it does
+                  not delete the
                   event, a
                   notification trigger for another user, or any
                   other data.</p>
@@ -365,9 +370,7 @@
       </mat-card>
       <!--end Custom notifications settings-->
 
-    </mat-expansion-panel>
-  </div>
-  <!-- </mat-accordion> -->
-  <!-- </mat-card> -->
+    </mat-tab>
 
+  </mat-tab-group>
 </div>

@@ -70,8 +70,10 @@ export class AppComponent implements OnInit {
 
     this.resultsCountService.unreadNotificationsCount.subscribe(count => {
 
-      this.unreadNotificationCount = count;
-      this.getUserNotifications();
+      if (count !== this.unreadNotificationCount) {
+        this.unreadNotificationCount = count;
+        this.getUserNotifications();
+      }
     });
   }
 
@@ -129,6 +131,8 @@ export class AppComponent implements OnInit {
   }
 
   getUserNotifications() {
+
+    this.previewNotifications = [];
     this.notificationService.getUserNotifications()
       .subscribe(
         (notifications) => {

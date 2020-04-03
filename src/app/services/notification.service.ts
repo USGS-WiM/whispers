@@ -81,7 +81,7 @@ export class NotificationService {
       headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS
     }).pipe(
       map((res: any) => {
-        return res.results;
+        // return res.results;
       }));
   }
 

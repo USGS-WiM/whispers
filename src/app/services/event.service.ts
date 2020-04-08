@@ -14,6 +14,7 @@ import { EventDetail } from '@interfaces/event-detail';
 import { PageData } from '@interfaces/page-data';
 import { ResultsCountService } from '@services/results-count.service';
 import { HttpHeaders } from '@angular/common/http';
+import * as FileSaver from 'file-saver';
 
 @Injectable()
 export class EventService {
@@ -29,8 +30,40 @@ export class EventService {
 
   public getEventDetailsCSV(eventID) {
 
-    window.location.href = APP_SETTINGS.EVENT_DETAILS_URL + eventID + '/flat/?format=csv';
+    // window.location.href = APP_SETTINGS.EVENT_DETAILS_URL + eventID + '/flat/?format=csv';
 
+    this.downloadEventDetailsCSV(eventID)
+      .then(function (data) {
+        const blob = new Blob([data[0]], { type: 'text/csv' });
+        FileSaver.saveAs(blob, data[1]);
+      });
+  }
+
+  downloadEventDetailsCSV(eventID) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            let filename = '';
+            const disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+              const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+              const matches = filenameRegex.exec(disposition);
+              if (matches != null && matches[1]) { filename = matches[1].replace(/['"]/g, '') }
+            }
+            resolve([xhr.response, filename]);
+          } else {
+            reject(xhr.response);
+          }
+        }
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', APP_SETTINGS.EVENT_DETAILS_URL + eventID + '/flat/?format=csv', true);
+      xhr.setRequestHeader('Authorization',
+        'Basic ' + btoa(sessionStorage.getItem('username') + ':' + sessionStorage.getItem('password')));
+      xhr.send();
+    });
   }
 
   public getEventSummaryCSV(eventQuery) {
@@ -94,8 +127,41 @@ export class EventService {
 
     queryString = queryString + '&format=csv&no_page';
 
-    window.location.href = APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString;
+    // window.location.href = APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString;
 
+    this.downloadEventSummaryCSV(queryString)
+      .then(function (data) {
+        const blob = new Blob([data[0]], { type: 'text/csv' });
+        FileSaver.saveAs(blob, data[1]);
+      });
+
+  }
+
+  downloadEventSummaryCSV(queryString?: string) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            let filename = '';
+            const disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+              const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+              const matches = filenameRegex.exec(disposition);
+              if (matches != null && matches[1]) { filename = matches[1].replace(/['"]/g, '') }
+            }
+            resolve([xhr.response, filename]);
+          } else {
+            reject(xhr.response);
+          }
+        }
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString, true);
+      xhr.setRequestHeader('Authorization',
+        'Basic ' + btoa(sessionStorage.getItem('username') + ':' + sessionStorage.getItem('password')));
+      xhr.send();
+    });
   }
 
   public queryEventsCount(eventQuery): Observable<any> {
@@ -292,7 +358,7 @@ export class EventService {
 
     return this._http.get(APP_SETTINGS.EVENTS_SUMMARIES_URL + eventID + '?no_page', options).pipe(
       map((response: Response) => <EventSummary>response.json()),
-      catchError(this.handleEventDetailsError),);
+      catchError(this.handleEventDetailsError));
   }
 
   public getUserDashboardEventSummaries(): Observable<EventSummary[]> {

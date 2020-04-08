@@ -77,7 +77,7 @@
         </span>
 
         <!-- Notifications -->
-        <span *ngIf="currentUser.username !== '' && currentUser.role !== 7 && currentUser.role !== 6"
+        <span *ngIf="currentUser.username !== '' && currentUser.role !== 7"
           class="login-status signin-button">
           <!--Button if there are no notifications-->
           <button mat-button aria-label="notifications" *ngIf="unreadNotificationCount === 0"

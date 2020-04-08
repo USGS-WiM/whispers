@@ -1065,8 +1065,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       myDivicons[i].style.top = dy[i] + 'px';
     }
 
-    const mapWidth = parseFloat($('#map').css('width').replace('px', ''));
-    const mapHeight = parseFloat($('#map').css('height').replace('px', ''));
+    const mapWidth = parseFloat($('#hiddenNatMap').css('width').replace('px', ''));
+    const mapHeight = parseFloat($('#hiddenNatMap').css('height').replace('px', ''));
 
     const linesLayer = $('svg.leaflet-zoom-animated')[0];
     const oldLinesWidth = linesLayer.getAttribute('width');
@@ -1185,8 +1185,8 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         myDivicons[i].style.top = dy[i] + 'px';
       } */
 
-      const mapWidth2 = parseFloat($('#map').css('width').replace('px', ''));
-      const mapHeight2 = parseFloat($('#map').css('height').replace('px', ''));
+      const mapWidth2 = parseFloat($('#detailMap').css('width').replace('px', ''));
+      const mapHeight2 = parseFloat($('#detailMap').css('height').replace('px', ''));
 
       const linesLayer2 = $('svg.leaflet-zoom-animated')[0];
       const oldLinesWidth2 = linesLayer2.getAttribute('width');

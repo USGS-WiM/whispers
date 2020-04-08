@@ -1527,7 +1527,13 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               } else {
                 edate = APP_UTILITIES.formatEventDates(event_location.end_date);
               }
-              captive = 'Yes' || 'No';
+
+              // setting text for captive boolean
+              if (captive) {
+                captive = 'Yes';
+              } else {
+                captive = 'No';
+              }
 
               // accounting for multiple species diagnoses for 1 location species
               let s_diag;

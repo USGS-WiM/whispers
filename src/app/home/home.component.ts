@@ -1076,14 +1076,6 @@ export class HomeComponent implements OnInit {
   exportEventSummaries() {
     this.eventService.getEventSummaryCSV(this.currentSearchQuery);
     gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'Current Search Query Exported' });
-    // .subscribe(
-    //   eventSummaries => {
-
-    //   },
-    //   error => {
-    //     this.errorMessage = <any>error;
-    //   }
-    // )
   }
 
   saveSearch() {

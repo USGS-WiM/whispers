@@ -1446,7 +1446,12 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
               } else {
                 edate = APP_UTILITIES.formatEventDates(event_location.end_date);
               }
-              captive = 'Yes' || 'No';
+              // setting text for captive boolean
+              if (captive) {
+                captive = 'Yes';
+              } else {
+                captive = 'No';
+              }
               const s_diag = ' ';
               const county = locationspecies.administrative_level_two_string || ' ';
               const country = locationspecies.country_string || ' ';

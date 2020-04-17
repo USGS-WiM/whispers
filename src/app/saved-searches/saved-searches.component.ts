@@ -40,7 +40,6 @@ export class SavedSearchesComponent implements OnInit {
   searchDialogRef: MatDialogRef<SearchDialogComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
 
-
   errorMessage;
   searches;
   parsedSearches = [];
@@ -156,13 +155,10 @@ export class SavedSearchesComponent implements OnInit {
           this.speciesLoading = false;
         }
       );
-
-        /*  */
-
-
   }
 
   loadSavedSearches() {
+    this.searchesLoading = true;
 
     this.parsedSearches = [];
     this._searchService.getUserDashboardSearches()

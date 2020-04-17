@@ -41,7 +41,6 @@ export class AppComponent implements OnInit {
   allNotificationCount;
   unreadNotificationCount;
   firstTenNotifications = [];
-  dummyNotifications = APP_UTILITIES.dummyData;
   notificationsToDisplay;
 
   public currentUser;

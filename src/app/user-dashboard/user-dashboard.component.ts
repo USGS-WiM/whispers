@@ -53,8 +53,6 @@ export class UserDashboardComponent implements OnInit {
 
   selectedTab: number;
 
-  username = APP_SETTINGS.API_USERNAME;
-
   contactDisplayedColumns = [
     'select',
     'last_name',

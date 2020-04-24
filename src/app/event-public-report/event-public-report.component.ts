@@ -1255,7 +1255,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
       // looping thru all organizations incase there are multiple
       const organizations = [];
-      if (data.organizations !== undefined) {
+      if ((data.organizations !== undefined) && (data.organizations.length !== 0)) {
         for (const organization of data.organizations) {
           /* organizations.push(organization.organization.name); */
 
@@ -1336,10 +1336,10 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         return self.indexOf(value) === index;
       };
       // filtering out the duplicates
-     const distinctSpecies = speciesTotal.filter(distinct);
+      const distinctSpecies = speciesTotal.filter(distinct);
 
-     // setting distinct species count
-     speciesAffectedCount = distinctSpecies.length;
+      // setting distinct species count
+      speciesAffectedCount = distinctSpecies.length;
 
       // Species Most Affected
       let numberOfSpecies = 0;

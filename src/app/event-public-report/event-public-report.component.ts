@@ -1322,16 +1322,24 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
 
       // getting species affected count
+      // putting all species for each eventlocation into an array
+      const speciesTotal = [];
       let speciesAffectedCount = 0;
       data.eventlocations.forEach(el => {
         el.locationspecies.forEach(ls => {
-          speciesAffectedCount = speciesAffectedCount + 1;
+          speciesTotal.push(ls.species);
         });
       });
 
-      const startDate = data.start_date;
-      const endDate = data.end_date;
-      const formattedDate = data.start_date + ' - ' + data.end_date;
+      // function for filtering out duplicates
+      const distinct = (value, index, self) => {
+        return self.indexOf(value) === index;
+      };
+      // filtering out the duplicates
+     const distinctSpecies = speciesTotal.filter(distinct);
+
+     // setting distinct species count
+     speciesAffectedCount = distinctSpecies.length;
 
       // Species Most Affected
       let numberOfSpecies = 0;

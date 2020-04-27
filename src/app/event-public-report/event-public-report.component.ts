@@ -639,7 +639,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       alignment: 'justify',
       table: {
         // heights: 40,
-        widths: [400, '*', '*', '*', 100, '*'],
+        widths: [350, '*', '*', '*', 100, '*'],
         headerRows: 1,
         dontBreakRows: true, // Some info on breaking table rows across pages: https://github.com/bpampuch/pdfmake/issues/1159
         body: commentBody,

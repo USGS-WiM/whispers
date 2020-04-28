@@ -1,6 +1,6 @@
 {
   "name": "whispers",
-  "version": "2.14.4",
+  "version": "2.14.5",
   "description": "Wildlife Health Information Sharing Partnership event reporting system (WHISPers)",
   "scripts": {
     "ng": "ng",
@@ -9,7 +9,8 @@
     "test": "ng test",
     "hmr": "ng serve --hmr",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "compodoc": "npx compodoc -p src/tsconfig.app.json -w -s"
   },
   "private": true,
   "dependencies": {

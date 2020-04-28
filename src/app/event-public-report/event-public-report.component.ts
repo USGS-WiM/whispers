@@ -639,7 +639,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       alignment: 'justify',
       table: {
         // heights: 40,
-        widths: [400, '*', '*', '*', 100, '*'],
+        widths: [350, '*', '*', '*', 100, '*'],
         headerRows: 1,
         dontBreakRows: true, // Some info on breaking table rows across pages: https://github.com/bpampuch/pdfmake/issues/1159
         body: commentBody,
@@ -1255,7 +1255,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
       // looping thru all organizations incase there are multiple
       const organizations = [];
-      if (data.organizations !== undefined) {
+      if ((data.organizations !== undefined) && (data.organizations.length !== 0)) {
         for (const organization of data.organizations) {
           /* organizations.push(organization.organization.name); */
 
@@ -1322,16 +1322,24 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
 
       // getting species affected count
+      // putting all species for each eventlocation into an array
+      const speciesTotal = [];
       let speciesAffectedCount = 0;
       data.eventlocations.forEach(el => {
         el.locationspecies.forEach(ls => {
-          speciesAffectedCount = speciesAffectedCount + 1;
+          speciesTotal.push(ls.species);
         });
       });
 
-      const startDate = data.start_date;
-      const endDate = data.end_date;
-      const formattedDate = data.start_date + ' - ' + data.end_date;
+      // function for filtering out duplicates
+      const distinct = (value, index, self) => {
+        return self.indexOf(value) === index;
+      };
+      // filtering out the duplicates
+      const distinctSpecies = speciesTotal.filter(distinct);
+
+      // setting distinct species count
+      speciesAffectedCount = distinctSpecies.length;
 
       // Species Most Affected
       let numberOfSpecies = 0;

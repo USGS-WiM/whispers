@@ -1007,7 +1007,6 @@ export class HomeComponent implements OnInit {
         valueReturned = value;
       }
     }
-
     return valueReturned;
 
   }
@@ -1033,18 +1032,8 @@ export class HomeComponent implements OnInit {
     gtag('event', 'click', { 'event_category': 'Home', 'event_label': 'Metadata Opened' });
   }
 
-
   // Function for creating a dialog to download results summary report pdf
   generateResultsSummaryReport() {
-
-    /**********
-     * 
-     * TODO: Do a check for summaries equal to 0 (ZERO) to send notification to user to try again
-     *
-     * OR DISABLE BUTTON UNTIL AT LEAST ONE EVENT SUMMARY
-     * 
-     * 
-     */
 
     this.resultsSummaryReportDialogRef = this.dialog.open(SearchResultsSummaryReportComponent, {
       minHeight: '75%',
@@ -1092,15 +1081,16 @@ export class HomeComponent implements OnInit {
       }
     });
 
-    this.saveSearchDialogRef.afterClosed()
-      .subscribe(
-        () => {
-          // TODO: show snackbar confirmation
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    // this block not currently in use
+    // this.saveSearchDialogRef.afterClosed()
+    //   .subscribe(
+    //     () => {
+    //       // the logic for closing this dialog is handled within the SaveSearchComponent.
+    //     },
+    //     error => {
+    //       this.errorMessage = <any>error;
+    //     }
+    //   );
 
   }
 
@@ -1187,15 +1177,15 @@ export class HomeComponent implements OnInit {
       }
     });
 
-    this.userRegistrationDialogRef.afterClosed()
-      .subscribe(
-        () => {
-          // TODO: show snackbar confirmation
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    // this block not currently in use
+    // this.userRegistrationDialogRef.afterClosed()
+    //   .subscribe(
+    //     () => {
+    //     },
+    //     error => {
+    //       this.errorMessage = <any>error;
+    //     }
+    //   );
   }
 
 

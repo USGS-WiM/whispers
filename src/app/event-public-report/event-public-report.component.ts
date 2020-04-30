@@ -50,6 +50,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   icon;
   adminLevelOnes;
   country;
+  noLargeComments = true;
 
   // creating variables for field definitions
   eventTypeDefinition = '';
@@ -629,6 +630,11 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         row.push({ text: elData.created_by_organization_string, alignment: 'left', fontSize: 10 });
         row.push({ text: elData.source, alignment: 'left', fontSize: 10 });
         commentBody.push(row);
+
+        // allowing large comments to break pages
+        if (commentRows[key].comment.length > 2200) {
+          this.noLargeComments = false;
+        }
       }
     }
     // END defining comment table
@@ -641,7 +647,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         // heights: 40,
         widths: [350, '*', '*', '*', 100, '*'],
         headerRows: 1,
-        dontBreakRows: true, // Some info on breaking table rows across pages: https://github.com/bpampuch/pdfmake/issues/1159
+        dontBreakRows: this.noLargeComments, // Some info on breaking table rows across pages: https://github.com/bpampuch/pdfmake/issues/1159
         body: commentBody,
       },
       layout: {

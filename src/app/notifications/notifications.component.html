@@ -95,11 +95,11 @@
               [ngClass]="{'read' :notification.read === true, 'unread':notification.read === false}"></mat-row>
           </mat-table>
 
-          <div *ngIf="notificationsDataSource.data.length === 0 && notificationsLoading === false">
+          <div *ngIf="notificationsDataSource && notificationsDataSource.data.length === 0 && notificationsLoading === false">
             <h3>No notifications</h3>
           </div>
 
-          <span [hidden]="notificationsDataSource.data.length === 0 && notificationsLoading === false">
+          <span [hidden]="notificationsDataSource && notificationsDataSource.data.length === 0 && notificationsLoading === false">
             <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
           </span>
         </div>

@@ -59,7 +59,7 @@ export class SaveSearchComponent implements OnInit {
     // formValue.data = this.data.currentSearchQuery;
 
     // remove all blank variables from the submission
-    if (formValue.data.affected_count === null || formValue.data.affected_count === '' || formValue.data.affected_count !== undefined) {
+    if (formValue.data.affected_count === null || formValue.data.affected_count === '' || formValue.data.affected_count === undefined) {
       delete formValue.data.affected_count;
     }
     if (formValue.data.start_date === null || formValue.data.start_date === '' || formValue.data.start_date === undefined) {

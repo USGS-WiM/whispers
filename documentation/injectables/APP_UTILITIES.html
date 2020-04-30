@@ -1,0 +1,1386 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>whispers documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">whispers documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Injectables</li>
+  <li>APP_UTILITIES</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/app.utilities.ts</code>
+        </p>
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#dummyData">dummyData</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#checkDuplicateInObject">checkDuplicateInObject</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#formatEventDates">formatEventDates</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#parseSearch">parseSearch</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Static</span>
+                                <a href="#timeZoneAdjust">timeZoneAdjust</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#TODAY">TODAY</a>
+                                </li>
+                                <li>
+                                    <a href="#getTodayDate">getTodayDate</a>
+                                </li>
+                                <li>
+                                    <a href="#getDateTime">getDateTime</a>
+                                </li>
+                                <li>
+                                    <a href="#getReportDateTime">getReportDateTime</a>
+                                </li>
+                                <li>
+                                    <a href="#getFileNameDate">getFileNameDate</a>
+                                </li>
+                                <li>
+                                    <a href="#getDaysPreviousDate">getDaysPreviousDate</a>
+                                </li>
+                                <li>
+                                    <a href="#TIME">TIME</a>
+                                </li>
+                                <li>
+                                    <a href="#DEFAULT_COUNTRY_ID">DEFAULT_COUNTRY_ID</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkDuplicateInObject"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            checkDuplicateInObject
+                        </b>
+                        <a href="#checkDuplicateInObject"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>checkDuplicateInObject(propertyName, inputArray)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="408"
+                            class="link-to-prism">src/app/app.utilities.ts:408</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>propertyName</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>inputArray</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="formatEventDates"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            formatEventDates
+                        </b>
+                        <a href="#formatEventDates"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>formatEventDates(date)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="344"
+                            class="link-to-prism">src/app/app.utilities.ts:344</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>date</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseSearch"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            parseSearch
+                        </b>
+                        <a href="#parseSearch"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>parseSearch(search)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="427"
+                            class="link-to-prism">src/app/app.utilities.ts:427</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>search</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="timeZoneAdjust"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Static</span>
+                            timeZoneAdjust
+                        </b>
+                        <a href="#timeZoneAdjust"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>timeZoneAdjust(dateString)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="179"
+                            class="link-to-prism">src/app/app.utilities.ts:179</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>dateString</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="dummyData"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Static</span>
+                            dummyData</b>
+                            <a href="#dummyData"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Notification[]</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[{
+        id: 1,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Mark Adams&#x27;,
+        event: 170676,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Mark Adams has added a species to Event 170676.&#x27;,
+        created_date: &#x27;2019-10-17&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-09-23&#x27;,
+        modified_by: &#x27;2019-01-30&#x27;
+    }, {
+        id: 2,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Barb Smith&#x27;,
+        event: 170627,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Barb Smith has added a diagnosis to event 170627.&#x27;,
+        created_date: &#x27;2018-10-07&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-03-03&#x27;,
+        modified_by: &#x27;2018-11-18&#x27;
+    }, {
+        id: 3,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Custom Notification&#x27;,
+        event: 170630,
+        read: false,
+        link: &#x27;event&#x27;,
+        message: &#x27;An event with E.coli in Minnesota has been added: Event 170630.&#x27;,
+        created_date: &#x27;2019-06-17&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2018-12-12&#x27;,
+        modified_by: &#x27;2019-05-04&#x27;
+    }, {
+        id: 4,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Standard Notification&#x27;,
+        event: 170672,
+        read: false,
+        link: &#x27;event&#x27;,
+        message: &#x27;Jane Farmington (a member of your organization) has added an Event: Event 170672.&#x27;,
+        created_date: &#x27;2018-10-22&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-03-19&#x27;,
+        modified_by: &#x27;2019-08-22&#x27;
+    }, {
+        id: 5,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Custom Notification&#x27;,
+        event: 170671,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;An event with White-tailed deer in Minnesota or Wisconsin with the diagnosis Chronic wasting disease has been added: Event 170671.&#x27;,
+        created_date: &#x27;2019-06-04&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-02-23&#x27;,
+        modified_by: &#x27;2019-03-14&#x27;
+    }, {
+        id: 6,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Barb Smith&#x27;,
+        event: 170665,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Barb Smith has edited a species on event 170665.&#x27;,
+        created_date: &#x27;2019-10-02&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-02-23&#x27;,
+        modified_by: &#x27;2018-12-24&#x27;
+    }, {
+        id: 7,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Custom Notification&#x27;,
+        event: 170669,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Cynthia Dietze (a member of your organization) has added an Event: Event 170669.&#x27;,
+        created_date: &#x27;2019-06-17&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-06-11&#x27;,
+        modified_by: &#x27;2019-05-21&#x27;
+    }, {
+        id: 8,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Custom Notification&#x27;,
+        event: 170674,
+        read: false,
+        link: &#x27;event&#x27;,
+        message: &#x27;An event with E.coli in Minnesota has been added: Event 170674.&#x27;,
+        created_date: &#x27;2018-10-25&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-04-30&#x27;,
+        modified_by: &#x27;2019-03-28&#x27;
+    }, {
+        id: 9,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Barb Smith&#x27;,
+        event: 170643,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Barb Smith edited a species on event 170643.&#x27;,
+        created_date: &#x27;2019-08-14&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-04-17&#x27;,
+        modified_by: &#x27;2018-12-23&#x27;
+    }, {
+        id: 10,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Standard Notification&#x27;,
+        event: null,
+        read: true,
+        link: &#x27;userdashboard&#x27;,
+        message: &#x27;A user (bheckler) has requested a role change.&#x27;,
+        created_date: &#x27;2019-09-15&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-02-04&#x27;,
+        modified_by: &#x27;2018-11-15&#x27;
+    }, {
+        id: 11,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Neil Baertlein&#x27;,
+        event: 170657,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Neil Baertlein has updated a service request on event 170657.&#x27;,
+        created_date: &#x27;2019-06-24&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-09-12&#x27;,
+        modified_by: &#x27;2018-11-20&#x27;
+    }, {
+        id: 12,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Custom Notification&#x27;,
+        event: 170657,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Jane Farmington (a member of your organization) has added an Event: Event 170657.&#x27;,
+        created_date: &#x27;2019-04-19&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-03-06&#x27;,
+        modified_by: &#x27;2018-10-29&#x27;
+    }]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/app.utilities.ts:24</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="TODAY"></a>
+                        <span class="name"><b>TODAY</b><a href="#TODAY"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>TODAY()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="170" class="link-to-prism">src/app/app.utilities.ts:170</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="getTodayDate"></a>
+                        <span class="name"><b>getTodayDate</b><a href="#getTodayDate"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>getTodayDate()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="186" class="link-to-prism">src/app/app.utilities.ts:186</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="getDateTime"></a>
+                        <span class="name"><b>getDateTime</b><a href="#getDateTime"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>getDateTime()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="213" class="link-to-prism">src/app/app.utilities.ts:213</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="getReportDateTime"></a>
+                        <span class="name"><b>getReportDateTime</b><a href="#getReportDateTime"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>getReportDateTime()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="264" class="link-to-prism">src/app/app.utilities.ts:264</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="getFileNameDate"></a>
+                        <span class="name"><b>getFileNameDate</b><a href="#getFileNameDate"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>getFileNameDate()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="318" class="link-to-prism">src/app/app.utilities.ts:318</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="getDaysPreviousDate"></a>
+                        <span class="name"><b>getDaysPreviousDate</b><a href="#getDaysPreviousDate"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>getDaysPreviousDate()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="366" class="link-to-prism">src/app/app.utilities.ts:366</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="TIME"></a>
+                        <span class="name"><b>TIME</b><a href="#TIME"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>TIME()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="394" class="link-to-prism">src/app/app.utilities.ts:394</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="DEFAULT_COUNTRY_ID"></a>
+                        <span class="name"><b>DEFAULT_COUNTRY_ID</b><a href="#DEFAULT_COUNTRY_ID"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>DEFAULT_COUNTRY_ID()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="396" class="link-to-prism">src/app/app.utilities.ts:396</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { SearchQuery } from &#x27;@app/interfaces/search-query&#x27;;
+import { DisplayQuery } from &#x27;@interfaces/display-query&#x27;;
+
+import { APP_SETTINGS } from &#x27;@app/app.settings&#x27;;
+
+export interface Notification {
+    id: number;
+    user: string;
+    source: string;
+    event: number;
+    read: boolean;
+    link: string;
+    message: string;
+    created_date: string;
+    created_by: string;
+    modified_date: string;
+    modified_by: string;
+}
+
+@Injectable()
+export class APP_UTILITIES {
+
+    public static dummyData: Notification[] &#x3D; [{
+        id: 1,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Mark Adams&#x27;,
+        event: 170676,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Mark Adams has added a species to Event 170676.&#x27;,
+        created_date: &#x27;2019-10-17&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-09-23&#x27;,
+        modified_by: &#x27;2019-01-30&#x27;
+    }, {
+        id: 2,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Barb Smith&#x27;,
+        event: 170627,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Barb Smith has added a diagnosis to event 170627.&#x27;,
+        created_date: &#x27;2018-10-07&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-03-03&#x27;,
+        modified_by: &#x27;2018-11-18&#x27;
+    }, {
+        id: 3,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Custom Notification&#x27;,
+        event: 170630,
+        read: false,
+        link: &#x27;event&#x27;,
+        message: &#x27;An event with E.coli in Minnesota has been added: Event 170630.&#x27;,
+        created_date: &#x27;2019-06-17&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2018-12-12&#x27;,
+        modified_by: &#x27;2019-05-04&#x27;
+    }, {
+        id: 4,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Standard Notification&#x27;,
+        event: 170672,
+        read: false,
+        link: &#x27;event&#x27;,
+        message: &#x27;Jane Farmington (a member of your organization) has added an Event: Event 170672.&#x27;,
+        created_date: &#x27;2018-10-22&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-03-19&#x27;,
+        modified_by: &#x27;2019-08-22&#x27;
+    }, {
+        id: 5,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Custom Notification&#x27;,
+        event: 170671,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;An event with White-tailed deer in Minnesota or Wisconsin with the diagnosis Chronic wasting disease has been added: Event 170671.&#x27;,
+        created_date: &#x27;2019-06-04&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-02-23&#x27;,
+        modified_by: &#x27;2019-03-14&#x27;
+    }, {
+        id: 6,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Barb Smith&#x27;,
+        event: 170665,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Barb Smith has edited a species on event 170665.&#x27;,
+        created_date: &#x27;2019-10-02&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-02-23&#x27;,
+        modified_by: &#x27;2018-12-24&#x27;
+    }, {
+        id: 7,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Custom Notification&#x27;,
+        event: 170669,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Cynthia Dietze (a member of your organization) has added an Event: Event 170669.&#x27;,
+        created_date: &#x27;2019-06-17&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-06-11&#x27;,
+        modified_by: &#x27;2019-05-21&#x27;
+    }, {
+        id: 8,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Custom Notification&#x27;,
+        event: 170674,
+        read: false,
+        link: &#x27;event&#x27;,
+        message: &#x27;An event with E.coli in Minnesota has been added: Event 170674.&#x27;,
+        created_date: &#x27;2018-10-25&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-04-30&#x27;,
+        modified_by: &#x27;2019-03-28&#x27;
+    }, {
+        id: 9,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Barb Smith&#x27;,
+        event: 170643,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Barb Smith edited a species on event 170643.&#x27;,
+        created_date: &#x27;2019-08-14&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-04-17&#x27;,
+        modified_by: &#x27;2018-12-23&#x27;
+    }, {
+        id: 10,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Standard Notification&#x27;,
+        event: null,
+        read: true,
+        link: &#x27;userdashboard&#x27;,
+        message: &#x27;A user (bheckler) has requested a role change.&#x27;,
+        created_date: &#x27;2019-09-15&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-02-04&#x27;,
+        modified_by: &#x27;2018-11-15&#x27;
+    }, {
+        id: 11,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Neil Baertlein&#x27;,
+        event: 170657,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Neil Baertlein has updated a service request on event 170657.&#x27;,
+        created_date: &#x27;2019-06-24&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-09-12&#x27;,
+        modified_by: &#x27;2018-11-20&#x27;
+    }, {
+        id: 12,
+        user: &#x27;admin&#x27;,
+        source: &#x27;Custom Notification&#x27;,
+        event: 170657,
+        read: true,
+        link: &#x27;event&#x27;,
+        message: &#x27;Jane Farmington (a member of your organization) has added an Event: Event 170657.&#x27;,
+        created_date: &#x27;2019-04-19&#x27;,
+        created_by: &#x27;admin&#x27;,
+        modified_date: &#x27;2019-03-06&#x27;,
+        modified_by: &#x27;2018-10-29&#x27;
+    }];
+
+    public static get TODAY(): any {
+        const now &#x3D; new Date();
+        const today &#x3D; new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+        const t &#x3D; new Date(new Date().toDateString());
+        return t;
+
+    }
+
+    // converts date string for use in date pickers (compensates for UTC)
+    public static timeZoneAdjust(dateString): any {
+        const dateStringMidnight &#x3D; dateString + &#x27;T00:00:00&#x27;;
+        const convertedDate &#x3D; new Date(dateStringMidnight);
+        return convertedDate;
+    }
+
+    // e.g. 2020-01-01
+    public static get getTodayDate(): any {
+        let today_string &#x3D; &#x27;&#x27;;
+        const today &#x3D; new Date();
+        const dd &#x3D; today.getDate();
+        let dd_string &#x3D; &#x27;&#x27;;
+        const mm &#x3D; today.getMonth() + 1; // January is 0!
+        let mm_string &#x3D; &#x27;&#x27;;
+        const yyyy &#x3D; today.getFullYear();
+
+        if (dd &lt; 10) {
+            dd_string &#x3D; &#x27;0&#x27; + dd;
+        } else {
+            dd_string &#x3D; dd.toString();
+        }
+
+        if (mm &lt; 10) {
+            mm_string &#x3D; &#x27;0&#x27; + mm;
+        } else {
+            mm_string &#x3D; mm.toString();
+        }
+
+        today_string &#x3D; yyyy + &#x27;-&#x27; + mm_string + &#x27;-&#x27; + dd_string;
+
+        return today_string;
+    }
+
+    // e.g. 01/01/2020 12:00 AM
+    public static get getDateTime(): any {
+        let today_string &#x3D; &#x27;&#x27;;
+        const today &#x3D; new Date();
+        const dd &#x3D; today.getDate();
+        let dd_string &#x3D; &#x27;&#x27;;
+        const mm &#x3D; today.getMonth() + 1; // January is 0!
+        let mm_string &#x3D; &#x27;&#x27;;
+        const yyyy &#x3D; today.getFullYear();
+        let hr &#x3D; today.getHours();
+        let hr_string &#x3D; &#x27;&#x27;;
+        const min &#x3D; today.getMinutes();
+        let min_string &#x3D; &#x27;&#x27;;
+
+        const ampm &#x3D; hr &gt;&#x3D; 12 ? &#x27;PM&#x27; : &#x27;AM&#x27;;
+
+        // the hour &#x27;0&#x27; should be &#x27;12&#x27;
+        if (hr &#x3D;&#x3D;&#x3D; 0) {
+            hr_string &#x3D; &#x27;12&#x27;;
+        } else {
+            hr &#x3D; hr % 12; // using mod 12 to calculate time for 12hr clock
+            hr_string &#x3D; hr.toString();
+        }
+
+        // adding zero if necessary
+        if (min &lt; 10) {
+            min_string &#x3D; &#x27;0&#x27; + min;
+        } else {
+            min_string &#x3D; min.toString();
+        }
+
+        // adding zero if necessary
+        if (dd &lt; 10) {
+            dd_string &#x3D; &#x27;0&#x27; + dd;
+        } else {
+            dd_string &#x3D; dd.toString();
+        }
+
+        // adding zero if necessary
+        if (mm &lt; 10) {
+            mm_string &#x3D; &#x27;0&#x27; + mm;
+        } else {
+            mm_string &#x3D; mm.toString();
+        }
+
+        // formatting the date
+        today_string &#x3D; mm_string + &#x27;/&#x27; + dd_string + &#x27;/&#x27; + yyyy + &#x27; &#x27; + hr_string + &#x27;:&#x27; + min_string + &#x27; &#x27; + ampm;
+
+        return today_string;
+    }
+
+    // e.g. Jan 01, 2020 12:00 AM
+    public static get getReportDateTime(): any {
+        const monthNames &#x3D; [&#x27;Jan&#x27;, &#x27;Feb&#x27;, &#x27;Mar&#x27;, &#x27;Apr&#x27;, &#x27;May&#x27;, &#x27;Jun&#x27;,
+            &#x27;Jul&#x27;, &#x27;Aug&#x27;, &#x27;Sep&#x27;, &#x27;Oct&#x27;, &#x27;Nov&#x27;, &#x27;Dec&#x27;];
+
+        let today_string &#x3D; &#x27;&#x27;;
+        const today &#x3D; new Date();
+        const dd &#x3D; today.getDate();
+        let dd_string &#x3D; &#x27;&#x27;;
+        const mm &#x3D; today.getMonth() + 1; // January is 0!
+        let mm_string &#x3D; &#x27;&#x27;;
+        const yyyy &#x3D; today.getFullYear();
+        let hr &#x3D; today.getHours();
+        let hr_string &#x3D; &#x27;&#x27;;
+        const min &#x3D; today.getMinutes();
+        let min_string &#x3D; &#x27;&#x27;;
+
+        const ampm &#x3D; hr &gt;&#x3D; 12 ? &#x27;PM&#x27; : &#x27;AM&#x27;;
+
+        // the hour &#x27;0&#x27; should be &#x27;12&#x27;
+        if (hr &#x3D;&#x3D;&#x3D; 0) {
+            hr_string &#x3D; &#x27;12&#x27;;
+        } else {
+            hr &#x3D; hr % 12; // using mod 12 to calculate time for 12hr clock
+            hr_string &#x3D; hr.toString();
+        }
+
+        // adding zero if necessary
+        if (min &lt; 10) {
+            min_string &#x3D; &#x27;0&#x27; + min;
+        } else {
+            min_string &#x3D; min.toString();
+        }
+
+        // adding zero if necessary
+        if (dd &lt; 10) {
+            dd_string &#x3D; &#x27;0&#x27; + dd;
+        } else {
+            dd_string &#x3D; dd.toString();
+        }
+
+        // adding zero if necessary
+        if (mm &lt; 10) {
+            mm_string &#x3D; &#x27;0&#x27; + mm;
+        } else {
+            mm_string &#x3D; mm.toString();
+        }
+
+        // formatting the date
+        today_string &#x3D; monthNames[today.getMonth()] + &#x27; &#x27; + dd_string + &#x27;, &#x27; + yyyy + &#x27; &#x27; + hr_string + &#x27;:&#x27; + min_string + &#x27; &#x27; + ampm;
+
+        return today_string;
+    }
+
+    // e.g. 20200101
+    public static get getFileNameDate() {
+        let today_string &#x3D; &#x27;&#x27;;
+        const today &#x3D; new Date();
+        const dd &#x3D; today.getDate();
+        let dd_string &#x3D; &#x27;&#x27;;
+        const mm &#x3D; today.getMonth() + 1; // January is 0!
+        let mm_string &#x3D; &#x27;&#x27;;
+        const yyyy &#x3D; today.getFullYear();
+
+        if (dd &lt; 10) {
+            dd_string &#x3D; &#x27;0&#x27; + dd;
+        } else {
+            dd_string &#x3D; dd.toString();
+        }
+
+        if (mm &lt; 10) {
+            mm_string &#x3D; &#x27;0&#x27; + mm;
+        } else {
+            mm_string &#x3D; mm.toString();
+        }
+
+        today_string &#x3D; yyyy + mm_string  + dd_string;
+
+        return today_string;
+    }
+
+    public static formatEventDates(date): any {
+
+        let date_string;
+        const monthNames &#x3D; [&#x27;Jan&#x27;, &#x27;Feb&#x27;, &#x27;Mar&#x27;, &#x27;Apr&#x27;, &#x27;May&#x27;, &#x27;Jun&#x27;,
+            &#x27;Jul&#x27;, &#x27;Aug&#x27;, &#x27;Sep&#x27;, &#x27;Oct&#x27;, &#x27;Nov&#x27;, &#x27;Dec&#x27;];
+
+        let input_date &#x3D; date;
+
+        // getting date elements
+        const d &#x3D; input_date.substr(8, 2);
+        let m &#x3D; input_date.substr(5, 2);
+        const y &#x3D; input_date.substr(0, 4);
+
+        m &#x3D; Number(m);
+        m &#x3D; m - 1;
+
+        input_date &#x3D; new Date(y, m, d);
+
+        date_string &#x3D; monthNames[m] + &#x27; &#x27; + d + &#x27;, &#x27; + y;
+        return date_string;
+    }
+
+    public static get getDaysPreviousDate(): any {
+        const daysPrevious &#x3D; 28;
+        let previousDate_string &#x3D; &#x27;&#x27;;
+        const previousDate &#x3D; new Date();
+        previousDate.setDate(previousDate.getDate() - daysPrevious);
+        const dd &#x3D; previousDate.getDate();
+        let dd_string &#x3D; &#x27;&#x27;;
+        const mm &#x3D; previousDate.getMonth() + 1; // January is 0!
+        let mm_string &#x3D; &#x27;&#x27;;
+        const yyyy &#x3D; previousDate.getFullYear();
+
+        if (dd &lt; 10) {
+            dd_string &#x3D; &#x27;0&#x27; + dd;
+        } else {
+            dd_string &#x3D; dd.toString();
+        }
+
+        if (mm &lt; 10) {
+            mm_string &#x3D; &#x27;0&#x27; + mm;
+        } else {
+            mm_string &#x3D; mm.toString();
+        }
+
+        previousDate_string &#x3D; yyyy + &#x27;-&#x27; + mm_string + &#x27;-&#x27; + dd_string;
+
+        return previousDate_string;
+    }
+
+    public static get TIME(): string { return new Date().toISOString().substr(14, 22); }
+
+    public static get DEFAULT_COUNTRY_ID(): string {
+
+        // TODO: improve this function to actually lookup the default country id
+        // using the default country abbreviation string from APP_SETTINGS.
+        // doing this quick and dirty to make quick progress now.
+        return &#x27;30&#x27;;
+    }
+
+    // currently not in use because the conversion requires access to the full selected object (with name)
+    // from the search dialog form. an independent lookup of associated names may need to be developed.
+    // public static convertSearchQuerytoDisplayQuery(searchQuery): any {}
+
+    public static checkDuplicateInObject(propertyName, inputArray): boolean {
+        let seenDuplicate &#x3D; false;
+        const testObject &#x3D; {};
+
+        inputArray.map(function (item) {
+            const itemPropertyName &#x3D; item[propertyName];
+            if (itemPropertyName in testObject) {
+                testObject[itemPropertyName].duplicate &#x3D; true;
+                item.duplicate &#x3D; true;
+                seenDuplicate &#x3D; true;
+            } else {
+                testObject[itemPropertyName] &#x3D; item;
+                delete item.duplicate;
+            }
+        });
+
+        return seenDuplicate;
+    }
+
+    public static parseSearch(search): any {
+
+        const parsedSearch: SearchQuery &#x3D; {
+            id: null,
+            name: &#x27;&#x27;,
+            event_type: null,
+            diagnosis: null,
+            diagnosis_type: null,
+            species: null,
+            administrative_level_one: null,
+            administrative_level_two: null,
+            affected_count: null,
+            affected_count_operator: &#x27;&#x27;,
+            start_date: &#x27;&#x27;,
+            end_date: &#x27;&#x27;,
+            diagnosis_type_includes_all: false,
+            diagnosis_includes_all: false,
+            species_includes_all: false,
+            administrative_level_one_includes_all: false,
+            administrative_level_two_includes_all: false,
+            and_params: [],
+            complete: null
+        };
+
+        parsedSearch.id &#x3D; search.id;
+        parsedSearch.name &#x3D; search.name;
+
+        if (search.data.start_date) {
+            parsedSearch.start_date &#x3D; search.data.start_date;
+        }
+        if (search.data.end_date) {
+            parsedSearch.end_date &#x3D; search.data.end_date;
+        }
+        if (search.data.affected_count) {
+            parsedSearch.affected_count &#x3D; search.data.affected_count;
+        }
+        if (search.data.complete) {
+            parsedSearch.complete &#x3D; search.data.complete;
+        }
+        if (search.data.affected_count_operator) {
+            parsedSearch.affected_count_operator &#x3D; search.data.affected_count_operator;
+        }
+        if (search.data.event_type) {
+            parsedSearch.event_type &#x3D; JSON.parse(&#x27;[&#x27; + search.data.event_type + &#x27;]&#x27;);
+        }
+        if (search.data.diagnosis_type) {
+            parsedSearch.diagnosis_type &#x3D; JSON.parse(&#x27;[&#x27; + search.data.diagnosis_type + &#x27;]&#x27;);
+        }
+        if (search.data.diagnosis) {
+            parsedSearch.diagnosis &#x3D; JSON.parse(&#x27;[&#x27; + search.data.diagnosis + &#x27;]&#x27;);
+        }
+        if (search.data.species) {
+            parsedSearch.species &#x3D; JSON.parse(&#x27;[&#x27; + search.data.species + &#x27;]&#x27;);
+        }
+        if (search.data.administrative_level_one) {
+            parsedSearch.administrative_level_one &#x3D; JSON.parse(&#x27;[&#x27; + search.data.administrative_level_one + &#x27;]&#x27;);
+        }
+        if (search.data.administrative_level_two) {
+            parsedSearch.administrative_level_two &#x3D; JSON.parse(&#x27;[&#x27; + search.data.administrative_level_two + &#x27;]&#x27;);
+        }
+
+        if (search.data.and_params) {
+            if (search.data.and_params.includes(&#x27;diagnosis_type&#x27;)) {
+                parsedSearch.diagnosis_type_includes_all &#x3D; true;
+            }
+            if (search.data.and_params.includes(&#x27;diagnosis&#x27;)) {
+                parsedSearch.diagnosis_includes_all &#x3D; true;
+            }
+            if (search.data.and_params.includes(&#x27;species&#x27;)) {
+                parsedSearch.species_includes_all &#x3D; true;
+            }
+            if (search.data.and_params.includes(&#x27;administrative_level_one&#x27;)) {
+                parsedSearch.administrative_level_one_includes_all &#x3D; true;
+            }
+            if (search.data.and_params.includes(&#x27;administrative_level_two&#x27;)) {
+                parsedSearch.administrative_level_two_includes_all &#x3D; true;
+            }
+        }
+        return parsedSearch;
+    }
+
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'APP_UTILITIES.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

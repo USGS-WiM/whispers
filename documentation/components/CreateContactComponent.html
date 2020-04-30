@@ -1,0 +1,1823 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>whispers documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">whispers documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>CreateContactComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/create-contact/create-contact.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-create-contact</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./create-contact.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./create-contact.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_onDestroy">_onDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#action_button_text">action_button_text</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#createContactDialogRef">createContactDialogRef</a>
+                            </li>
+                            <li>
+                                <a href="#createContactForm">createContactForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#data">data</a>
+                            </li>
+                            <li>
+                                <a href="#dialogTitle">dialogTitle</a>
+                            </li>
+                            <li>
+                                <a href="#errorMessage">errorMessage</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#filteredOrganizations">filteredOrganizations</a>
+                            </li>
+                            <li>
+                                <a href="#organizationFilterCtrl">organizationFilterCtrl</a>
+                            </li>
+                            <li>
+                                <a href="#organizations">organizations</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#snackBar">snackBar</a>
+                            </li>
+                            <li>
+                                <a href="#submitLoading">submitLoading</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#affiliationTooltip">affiliationTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#buildCreateContactForm">buildCreateContactForm</a>
+                            </li>
+                            <li>
+                                <a href="#emailAddressTooltip">emailAddressTooltip</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#filterOrganization">filterOrganization</a>
+                            </li>
+                            <li>
+                                <a href="#firstNameTooltip">firstNameTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#getErrorMessage">getErrorMessage</a>
+                            </li>
+                            <li>
+                                <a href="#lastNameTooltip">lastNameTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onSubmit">onSubmit</a>
+                            </li>
+                            <li>
+                                <a href="#openSnackBar">openSnackBar</a>
+                            </li>
+                            <li>
+                                <a href="#organizationTooltip">organizationTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#phoneNumberTooltip">phoneNumberTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#positionTooltip">positionTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#titleTooltip">titleTooltip</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(formBuilder: <a href="https://angular.io/api/forms/FormBuilder" target="_blank">FormBuilder</a>, createContactDialogRef: <a href="../interfaces/Contact.html">MatDialogRef<CreateContactComponent></a>, organizationService: <a href="../injectables/OrganizationService.html">OrganizationService</a>, contactService: <a href="../injectables/ContactService.html">ContactService</a>, createContactService: <a href="../injectables/CreateContactService.html">CreateContactService</a>, snackBar: MatSnackBar, data: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/create-contact/create-contact.component.ts:58</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>formBuilder</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>createContactDialogRef</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/Contact.html" target="_self" >MatDialogRef&lt;CreateContactComponent&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>organizationService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/OrganizationService.html" target="_self" >OrganizationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>contactService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ContactService.html" target="_self" >ContactService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>createContactService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CreateContactService.html" target="_self" >CreateContactService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>snackBar</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatSnackBar</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>data</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="affiliationTooltip"></a>
+                    <span class="name">
+                        <b>
+                            affiliationTooltip
+                        </b>
+                        <a href="#affiliationTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>affiliationTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="148"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:148</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildCreateContactForm"></a>
+                    <span class="name">
+                        <b>
+                            buildCreateContactForm
+                        </b>
+                        <a href="#buildCreateContactForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>buildCreateContactForm()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="46"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:46</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="emailAddressTooltip"></a>
+                    <span class="name">
+                        <b>
+                            emailAddressTooltip
+                        </b>
+                        <a href="#emailAddressTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>emailAddressTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="143"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:143</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filterOrganization"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            filterOrganization
+                        </b>
+                        <a href="#filterOrganization"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>filterOrganization()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="123"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:123</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="firstNameTooltip"></a>
+                    <span class="name">
+                        <b>
+                            firstNameTooltip
+                        </b>
+                        <a href="#firstNameTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>firstNameTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="141"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:141</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getErrorMessage"></a>
+                    <span class="name">
+                        <b>
+                            getErrorMessage
+                        </b>
+                        <a href="#getErrorMessage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getErrorMessage(formControlName)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="150"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:150</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>formControlName</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>&quot;&quot; | &quot;Please enter a value&quot; | &quot;Not a valid email&quot;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="lastNameTooltip"></a>
+                    <span class="name">
+                        <b>
+                            lastNameTooltip
+                        </b>
+                        <a href="#lastNameTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>lastNameTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="142"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:142</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="72"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:72</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onSubmit"></a>
+                    <span class="name">
+                        <b>
+                            onSubmit
+                        </b>
+                        <a href="#onSubmit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onSubmit(formValue)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="163"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:163</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>formValue</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openSnackBar"></a>
+                    <span class="name">
+                        <b>
+                            openSnackBar
+                        </b>
+                        <a href="#openSnackBar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openSnackBar(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, duration: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="156"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:156</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>message</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>duration</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="organizationTooltip"></a>
+                    <span class="name">
+                        <b>
+                            organizationTooltip
+                        </b>
+                        <a href="#organizationTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>organizationTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="147"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:147</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="phoneNumberTooltip"></a>
+                    <span class="name">
+                        <b>
+                            phoneNumberTooltip
+                        </b>
+                        <a href="#phoneNumberTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>phoneNumberTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="144"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:144</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="positionTooltip"></a>
+                    <span class="name">
+                        <b>
+                            positionTooltip
+                        </b>
+                        <a href="#positionTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>positionTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="146"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:146</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="titleTooltip"></a>
+                    <span class="name">
+                        <b>
+                            titleTooltip
+                        </b>
+                        <a href="#titleTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>titleTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="145"
+                            class="link-to-prism">src/app/create-contact/create-contact.component.ts:145</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="_onDestroy"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            _onDestroy</b>
+                            <a href="#_onDestroy"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new Subject&lt;void&gt;()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/create-contact/create-contact.component.ts:44</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>Subject that emits when the component has been destroyed. </p>
+</div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="action_button_text"></a>
+                        <span class="name">
+                            <b>
+                            action_button_text</b>
+                            <a href="#action_button_text"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/create-contact/create-contact.component.ts:36</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="createContactDialogRef"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            createContactDialogRef</b>
+                            <a href="#createContactDialogRef"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../interfaces/Contact.html" target="_self" >MatDialogRef&lt;CreateContactComponent&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/create-contact/create-contact.component.ts:62</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="createContactForm"></a>
+                        <span class="name">
+                            <b>
+                            createContactForm</b>
+                            <a href="#createContactForm"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/create-contact/create-contact.component.ts:33</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="data"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            data</b>
+                            <a href="#data"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @Inject(MAT_DIALOG_DATA)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/app/create-contact/create-contact.component.ts:67</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="dialogTitle"></a>
+                        <span class="name">
+                            <b>
+                            dialogTitle</b>
+                            <a href="#dialogTitle"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/create-contact/create-contact.component.ts:35</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="errorMessage"></a>
+                        <span class="name">
+                            <b>
+                            errorMessage</b>
+                            <a href="#errorMessage"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/create-contact/create-contact.component.ts:30</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="filteredOrganizations"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            filteredOrganizations</b>
+                            <a href="#filteredOrganizations"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../interfaces/Organization.html" target="_self" >ReplaySubject&lt;Organization[]&gt;</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new ReplaySubject&lt;Organization[]&gt;(1)</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/create-contact/create-contact.component.ts:40</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="organizationFilterCtrl"></a>
+                        <span class="name">
+                            <b>
+                            organizationFilterCtrl</b>
+                            <a href="#organizationFilterCtrl"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormControl" target="_blank" >FormControl</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new FormControl()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/create-contact/create-contact.component.ts:41</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="organizations"></a>
+                        <span class="name">
+                            <b>
+                            organizations</b>
+                            <a href="#organizations"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../interfaces/Organization.html" target="_self" >Organization[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/create-contact/create-contact.component.ts:31</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="snackBar"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            snackBar</b>
+                            <a href="#snackBar"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>MatSnackBar</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/app/create-contact/create-contact.component.ts:66</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="submitLoading"></a>
+                        <span class="name">
+                            <b>
+                            submitLoading</b>
+                            <a href="#submitLoading"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/create-contact/create-contact.component.ts:38</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { Inject } from &#x27;@angular/core&#x27;;
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from &#x27;@angular/forms/&#x27;;
+import { Observable ,  Subject, ReplaySubject } from &#x27;rxjs&#x27;;
+import { take, takeUntil } from &#x27;rxjs/operators&#x27;;
+
+import { MatDialog, MatDialogRef } from &#x27;@angular/material&#x27;;
+
+import { MatSnackBar } from &#x27;@angular/material&#x27;;
+import { MAT_DIALOG_DATA } from &#x27;@angular/material&#x27;;
+
+import { Organization } from &#x27;@interfaces/organization&#x27;;
+import { OrganizationService } from &#x27;@services/organization.service&#x27;;
+
+import { FIELD_HELP_TEXT } from &#x27;@app/app.field-help-text&#x27;;
+
+import { Contact } from &#x27;@interfaces/contact&#x27;;
+import { ContactService } from &#x27;@services/contact.service&#x27;;
+
+import { CreateContactService } from &#x27;@create-contact/create-contact.service&#x27;;
+declare let gtag: Function;
+
+@Component({
+  selector: &#x27;app-create-contact&#x27;,
+  templateUrl: &#x27;./create-contact.component.html&#x27;,
+  styleUrls: [&#x27;./create-contact.component.scss&#x27;]
+})
+export class CreateContactComponent implements OnInit {
+
+  errorMessage &#x3D; &#x27;&#x27;;
+  organizations: Organization[];
+
+  createContactForm: FormGroup;
+
+  dialogTitle: string;
+  action_button_text: string;
+
+  submitLoading &#x3D; false;
+
+  public filteredOrganizations: ReplaySubject&lt;Organization[]&gt; &#x3D; new ReplaySubject&lt;Organization[]&gt;(1);
+  organizationFilterCtrl: FormControl &#x3D; new FormControl();
+
+   /** Subject that emits when the component has been destroyed. */
+   private _onDestroy &#x3D; new Subject&lt;void&gt;();
+
+  buildCreateContactForm() {
+    this.createContactForm &#x3D; this.formBuilder.group({
+      first_name: [&#x27;&#x27;, Validators.required],
+      last_name: [&#x27;&#x27;, Validators.required],
+      phone: [&#x27;&#x27;],
+      email: [&#x27;&#x27;, [Validators.required, Validators.email]],
+      title: &#x27;&#x27;,
+      position: &#x27;&#x27;,
+      organization: null,
+      owner_organization: null,
+      affiliation: &#x27;&#x27;
+    });
+  }
+
+  constructor(
+    private formBuilder: FormBuilder,
+    public createContactDialogRef: MatDialogRef&lt;CreateContactComponent&gt;,
+    private organizationService: OrganizationService,
+    private contactService: ContactService,
+    private createContactService: CreateContactService,
+    public snackBar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.buildCreateContactForm();
+  }
+
+  ngOnInit() {
+
+    if (this.data.contact_action &#x3D;&#x3D;&#x3D; &#x27;create&#x27;) {
+      this.dialogTitle &#x3D; &#x27;Create New&#x27;;
+      this.action_button_text &#x3D; &#x27;Submit&#x27;;
+    } else if (this.data.contact_action &#x3D;&#x3D;&#x3D; &#x27;edit&#x27;) {
+      this.dialogTitle &#x3D; &#x27;Edit&#x27;;
+      this.action_button_text &#x3D; &#x27;Update&#x27;;
+
+      // Access the form here and set the value to the objects property/value
+      this.createContactForm.get(&#x27;first_name&#x27;).setValue(this.data.contact.first_name);
+      this.createContactForm.get(&#x27;last_name&#x27;).setValue(this.data.contact.last_name);
+      this.createContactForm.get(&#x27;email&#x27;).setValue(this.data.contact.email);
+      this.createContactForm.get(&#x27;phone&#x27;).setValue(this.data.contact.phone);
+      this.createContactForm.get(&#x27;title&#x27;).setValue(this.data.contact.title);
+      this.createContactForm.get(&#x27;position&#x27;).setValue(this.data.contact.position);
+      this.createContactForm.get(&#x27;affiliation&#x27;).setValue(this.data.contact.affiliation);
+    }
+
+    const contactForm &#x3D; this.createContactForm;
+
+    // get organizations from the OrganizationService
+    this.organizationService.getOrganizations()
+      .subscribe(
+        organizations &#x3D;&gt; {
+          this.organizations &#x3D; organizations;
+          this.organizations.sort(function (a, b) {
+            if (a.name &lt; b.name) { return -1; }
+            if (a.name &gt; b.name) { return 1; }
+            return 0;
+          });
+          if (this.data.contact_action &#x3D;&#x3D;&#x3D; &#x27;edit&#x27;) {
+            contactForm.get(&#x27;organization&#x27;).setValue(this.data.contact.organization.toString());
+          }
+
+          // populate the search select options for the species control
+          this.filteredOrganizations.next(organizations);
+
+          // listen for search field value changes
+          this.organizationFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() &#x3D;&gt; {
+              this.filterOrganization();
+            });
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+  private filterOrganization() {
+    if (!this.organizations) {
+      return;
+    }
+    // get the search keyword
+    let search &#x3D; this.organizationFilterCtrl.value;
+    if (!search) {
+      this.filteredOrganizations.next(this.organizations.slice());
+      return;
+    } else {
+      search &#x3D; search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredOrganizations.next(
+      this.organizations.filter(organization &#x3D;&gt; organization.name.toLowerCase().indexOf(search) &gt; -1)
+    );
+  }
+
+  firstNameTooltip() {const string &#x3D; FIELD_HELP_TEXT.firstNameTooltip; return string; }
+  lastNameTooltip() { const string &#x3D; FIELD_HELP_TEXT.lastNameTooltip; return string; }
+  emailAddressTooltip() { const string &#x3D; FIELD_HELP_TEXT.emailAddressTooltip; return string; }
+  phoneNumberTooltip() { const string &#x3D; FIELD_HELP_TEXT.phoneNumberTooltip; return string; }
+  titleTooltip() { const string &#x3D; FIELD_HELP_TEXT.titleTooltip; return string; }
+  positionTooltip() { const string &#x3D; FIELD_HELP_TEXT.positionTooltip; return string; }
+  organizationTooltip() { const string &#x3D; FIELD_HELP_TEXT.organizationTooltip; return string; }
+  affiliationTooltip() { const string &#x3D; FIELD_HELP_TEXT.affiliationTooltip; return string; }
+
+  getErrorMessage(formControlName) {
+    return this.createContactForm.get(formControlName).hasError(&#x27;required&#x27;) ? &#x27;Please enter a value&#x27; :
+      this.createContactForm.get(formControlName).hasError(&#x27;email&#x27;) ? &#x27;Not a valid email&#x27; :
+        &#x27;&#x27;;
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+
+  onSubmit(formValue) {
+
+    this.submitLoading &#x3D; true;
+
+    if (this.data.contact_action &#x3D;&#x3D;&#x3D; &#x27;create&#x27;) {
+      this.contactService.create(formValue)
+        .subscribe(
+          (contact) &#x3D;&gt; {
+            this.submitLoading &#x3D; false;
+            this.createContactService.setCreatedContact(contact);
+            this.openSnackBar(&#x27;Contact Created&#x27;, &#x27;OK&#x27;, 5000);
+            this.createContactDialogRef.close();
+            gtag(&#x27;event&#x27;, &#x27;click&#x27;, { &#x27;event_category&#x27;: &#x27;Contacts&#x27;, &#x27;event_label&#x27;: &#x27;New Contact Created&#x27; });
+          },
+          error &#x3D;&gt; {
+            this.submitLoading &#x3D; false;
+            this.openSnackBar(&#x27;Error. Contact not Created. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+          }
+        );
+    } else if (this.data.contact_action &#x3D;&#x3D;&#x3D; &#x27;edit&#x27;) {
+      formValue.id &#x3D; this.data.contact.id;
+      this.contactService.update(formValue)
+        .subscribe(
+          (contact) &#x3D;&gt; {
+            this.submitLoading &#x3D; false;
+            this.createContactService.setCreatedContact(contact);
+            this.openSnackBar(&#x27;Contact Updated&#x27;, &#x27;OK&#x27;, 5000);
+            this.createContactDialogRef.close();
+          },
+          error &#x3D;&gt; {
+            this.submitLoading &#x3D; false;
+            this.openSnackBar(&#x27;Error. Contact not Created. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+          }
+        );
+    }
+
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;h1 mat-dialog-title&gt;
+  &lt;mat-icon&gt;person_add&lt;/mat-icon&gt; {{dialogTitle}} Contact
+&lt;/h1&gt;
+
+&lt;mat-dialog-content&gt;
+
+  &lt;form [formGroup]&#x3D;&quot;createContactForm&quot; autocomplete&#x3D;&quot;off&quot;&gt;
+
+    &lt;div class&#x3D;&quot;horizontal-form-container&quot;&gt;
+      &lt;mat-form-field class&#x3D;&quot;form-control&quot;&gt;
+        &lt;input matInput placeholder&#x3D;&quot;First Name&quot; formControlName&#x3D;&quot;first_name&quot; required&gt;
+        &lt;mat-icon class&#x3D;&quot;hint-hover-text&quot; matSuffix 
+          matTooltip&#x3D;{{firstNameTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+        &lt;mat-error *ngIf&#x3D;&quot;createContactForm.get(&#x27;first_name&#x27;).invalid&quot;&gt;{{getErrorMessage(&#x27;first_name&#x27;)}}&lt;/mat-error&gt;
+      &lt;/mat-form-field&gt;
+
+      &lt;mat-form-field class&#x3D;&quot;form-control&quot;&gt;
+        &lt;input matInput placeholder&#x3D;&quot;Last Name&quot; formControlName&#x3D;&quot;last_name&quot; required&gt;
+        &lt;mat-icon class&#x3D;&quot;hint-hover-text&quot; matSuffix 
+          matTooltip&#x3D;{{lastNameTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+        &lt;mat-error *ngIf&#x3D;&quot;createContactForm.get(&#x27;last_name&#x27;).invalid&quot;&gt;{{getErrorMessage(&#x27;last_name&#x27;)}}&lt;/mat-error&gt;
+      &lt;/mat-form-field&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;horizontal-form-container&quot;&gt;
+      &lt;mat-form-field class&#x3D;&quot;form-control&quot;&gt;
+        &lt;input matInput placeholder&#x3D;&quot;Email Address&quot; formControlName&#x3D;&quot;email&quot; required&gt;
+        &lt;mat-icon class&#x3D;&quot;hint-hover-text&quot; matSuffix 
+          matTooltip&#x3D;{{emailAddressTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+        &lt;mat-error *ngIf&#x3D;&quot;createContactForm.get(&#x27;email&#x27;).invalid&quot;&gt;{{getErrorMessage(&#x27;email&#x27;)}}&lt;/mat-error&gt;
+      &lt;/mat-form-field&gt;
+
+      &lt;mat-form-field class&#x3D;&quot;form-control&quot;&gt;
+        &lt;input matInput placeholder&#x3D;&quot;Phone Number&quot; formControlName&#x3D;&quot;phone&quot;&gt;
+        &lt;mat-icon class&#x3D;&quot;hint-hover-text&quot; matSuffix 
+          matTooltip&#x3D;{{phoneNumberTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+      &lt;/mat-form-field&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;horizontal-form-container&quot;&gt;
+      &lt;mat-form-field class&#x3D;&quot;form-control&quot;&gt;
+        &lt;input matInput placeholder&#x3D;&quot;Title&quot; formControlName&#x3D;&quot;title&quot;&gt;
+        &lt;mat-icon class&#x3D;&quot;hint-hover-text&quot; matSuffix 
+          matTooltip&#x3D;{{titleTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+      &lt;/mat-form-field&gt;
+
+      &lt;mat-form-field class&#x3D;&quot;form-control&quot;&gt;
+        &lt;input matInput placeholder&#x3D;&quot;Position&quot; formControlName&#x3D;&quot;position&quot;&gt;
+        &lt;mat-icon class&#x3D;&quot;hint-hover-text&quot; matSuffix 
+          matTooltip&#x3D;{{positionTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+      &lt;/mat-form-field&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;vertical-form-container&quot;&gt;
+
+      &lt;mat-form-field class&#x3D;&quot;form-control org-select&quot;&gt;
+        &lt;mat-select formControlName&#x3D;&quot;organization&quot; placeholder&#x3D;&quot;Organization&quot; #organizationSelect&gt;
+          &lt;ngx-mat-select-search [formControl]&#x3D;&quot;organizationFilterCtrl&quot; [placeholderLabel]&#x3D;&quot;&#x27;Find organization...&#x27;&quot;
+            [noEntriesFoundLabel]&#x3D;&quot;&#x27;no matching organization found&#x27;&quot;&gt;&lt;/ngx-mat-select-search&gt;
+          &lt;mat-option *ngFor&#x3D;&quot;let organization of filteredOrganizations | async&quot; [value]&#x3D;&quot;organization.id&quot;  matTooltip&#x3D;{{organization.name}}&gt;
+            {{organization.name}}
+          &lt;/mat-option&gt;
+        &lt;/mat-select&gt;
+        &lt;mat-hint align&#x3D;&quot;start&quot;&gt;{{ organizationTooltip() }}&lt;/mat-hint&gt;
+      &lt;/mat-form-field&gt;
+
+      &lt;mat-form-field class&#x3D;&quot;form-control org-select&quot;&gt;
+        &lt;input matInput placeholder&#x3D;&quot;Company/Business/Affiliation&quot; formControlName&#x3D;&quot;affiliation&quot;&gt;
+        &lt;mat-hint align&#x3D;&quot;start&quot;&gt;{{ affiliationTooltip() }}&lt;/mat-hint&gt;
+      &lt;/mat-form-field&gt;
+
+    &lt;/div&gt;
+
+  &lt;/form&gt;
+&lt;/mat-dialog-content&gt;
+&lt;mat-dialog-actions&gt;
+
+  &lt;div class&#x3D;&quot;form-buttons-flex&quot;&gt;
+    &lt;button mat-button color&#x3D;&quot;warn&quot; (click)&#x3D;&quot;this.createContactDialogRef.close(&#x27;cancel&#x27;);&quot;&gt;&lt;mat-icon&gt;cancel&lt;/mat-icon&gt;Cancel&lt;/button&gt;
+    &lt;button mat-button color&#x3D;&quot;primary&quot; type&#x3D;&quot;submit&quot; [disabled]&#x3D;&quot;createContactForm.invalid&quot; (click)&#x3D;&quot;onSubmit(createContactForm.value)&quot;&gt;
+        &lt;mat-icon&gt;save&lt;/mat-icon&gt;Save
+    &lt;/button&gt;
+    &lt;mat-progress-bar mode&#x3D;&quot;indeterminate&quot; *ngIf&#x3D;&quot;submitLoading&quot;&gt;&lt;/mat-progress-bar&gt;
+  &lt;/div&gt;
+
+
+&lt;/mat-dialog-actions&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./create-contact.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+}
+
+.form-control {
+    width: 18em;
+    margin: 10px;
+}
+
+.alert{ 
+    width: 100%;
+    background-color: lightcoral;
+}
+
+.org-select {
+    width: 40em;
+}
+
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><h1 mat-dialog-title>  <mat-icon>person_add</mat-icon> {{dialogTitle}} Contact</h1><mat-dialog-content>  <form [formGroup]="createContactForm" autocomplete="off">    <div class="horizontal-form-container">      <mat-form-field class="form-control">        <input matInput placeholder="First Name" formControlName="first_name" required>        <mat-icon class="hint-hover-text" matSuffix           matTooltip={{firstNameTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>        <mat-error *ngIf="createContactForm.get(\'first_name\').invalid">{{getErrorMessage(\'first_name\')}}</mat-error>      </mat-form-field>      <mat-form-field class="form-control">        <input matInput placeholder="Last Name" formControlName="last_name" required>        <mat-icon class="hint-hover-text" matSuffix           matTooltip={{lastNameTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>        <mat-error *ngIf="createContactForm.get(\'last_name\').invalid">{{getErrorMessage(\'last_name\')}}</mat-error>      </mat-form-field>    </div>    <div class="horizontal-form-container">      <mat-form-field class="form-control">        <input matInput placeholder="Email Address" formControlName="email" required>        <mat-icon class="hint-hover-text" matSuffix           matTooltip={{emailAddressTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>        <mat-error *ngIf="createContactForm.get(\'email\').invalid">{{getErrorMessage(\'email\')}}</mat-error>      </mat-form-field>      <mat-form-field class="form-control">        <input matInput placeholder="Phone Number" formControlName="phone">        <mat-icon class="hint-hover-text" matSuffix           matTooltip={{phoneNumberTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>      </mat-form-field>    </div>    <div class="horizontal-form-container">      <mat-form-field class="form-control">        <input matInput placeholder="Title" formControlName="title">        <mat-icon class="hint-hover-text" matSuffix           matTooltip={{titleTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>      </mat-form-field>      <mat-form-field class="form-control">        <input matInput placeholder="Position" formControlName="position">        <mat-icon class="hint-hover-text" matSuffix           matTooltip={{positionTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>      </mat-form-field>    </div>    <div class="vertical-form-container">      <mat-form-field class="form-control org-select">        <mat-select formControlName="organization" placeholder="Organization" #organizationSelect>          <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="\'Find organization...\'"            [noEntriesFoundLabel]="\'no matching organization found\'"></ngx-mat-select-search>          <mat-option *ngFor="let organization of filteredOrganizations | async" [value]="organization.id"  matTooltip={{organization.name}}>            {{organization.name}}          </mat-option>        </mat-select>        <mat-hint align="start">{{ organizationTooltip() }}</mat-hint>      </mat-form-field>      <mat-form-field class="form-control org-select">        <input matInput placeholder="Company/Business/Affiliation" formControlName="affiliation">        <mat-hint align="start">{{ affiliationTooltip() }}</mat-hint>      </mat-form-field>    </div>  </form></mat-dialog-content><mat-dialog-actions>  <div class="form-buttons-flex">    <button mat-button color="warn" (click)="this.createContactDialogRef.close(\'cancel\');"><mat-icon>cancel</mat-icon>Cancel</button>    <button mat-button color="primary" type="submit" [disabled]="createContactForm.invalid" (click)="onSubmit(createContactForm.value)">        <mat-icon>save</mat-icon>Save    </button>    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>  </div></mat-dialog-actions></div>'
+    var COMPONENTS = [{'name': 'AboutComponent', 'selector': 'app-about'},{'name': 'AddCommentComponent', 'selector': 'app-add-comment'},{'name': 'AddEventDiagnosisComponent', 'selector': 'app-add-event-diagnosis'},{'name': 'AddEventLocationComponent', 'selector': 'app-add-event-location'},{'name': 'AddEventLocationContactComponent', 'selector': 'app-add-event-location-contact'},{'name': 'AddEventOrganizationComponent', 'selector': 'app-add-event-organization'},{'name': 'AddServiceRequestComponent', 'selector': 'app-add-service-request'},{'name': 'AlertCollaboratorsComponent', 'selector': 'app-alert-collaborators'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AuthenticationComponent', 'selector': 'app-authentication'},{'name': 'BrowserWarningComponent', 'selector': 'app-browser-warning'},{'name': 'BulkUploadComponent', 'selector': 'app-bulk-upload'},{'name': 'CircleChooseComponent', 'selector': 'app-circle-choose'},{'name': 'CircleManagementComponent', 'selector': 'app-circle-management'},{'name': 'CirclesComponent', 'selector': 'app-circles'},{'name': 'CollaborationRequestComponent', 'selector': 'app-collaboration-request'},{'name': 'CommentsTableComponent', 'selector': 'app-comments-table'},{'name': 'ConfirmComponent', 'selector': 'app-confirm'},{'name': 'CreateContactComponent', 'selector': 'app-create-contact'},{'name': 'CustomNotificationComponent', 'selector': 'app-custom-notification'},{'name': 'DiagnosticInfoComponent', 'selector': 'app-diagnostic-info'},{'name': 'DiagnosticServicesComponent', 'selector': 'app-diagnostic-services'},{'name': 'EditEventComponent', 'selector': 'app-edit-event'},{'name': 'EditEventLocationComponent', 'selector': 'app-edit-event-location'},{'name': 'EditLocationSpeciesComponent', 'selector': 'app-edit-location-species'},{'name': 'EditSpeciesDiagnosisComponent', 'selector': 'app-edit-species-diagnosis'},{'name': 'EditUserComponent', 'selector': 'app-edit-user'},{'name': 'EventDetailsComponent', 'selector': 'app-event-details'},{'name': 'EventDetailsShareComponent', 'selector': 'app-event-details-share'},{'name': 'EventGroupComponent', 'selector': 'app-event-group'},{'name': 'EventGroupManagementComponent', 'selector': 'app-event-group-management'},{'name': 'EventPublicReportComponent', 'selector': 'app-event-public-report'},{'name': 'EventsComponent', 'selector': 'app-event-table'},{'name': 'EventSubmissionComponent', 'selector': 'app-event-submission'},{'name': 'EventSubmissionConfirmComponent', 'selector': 'app-event-submission-confirm'},{'name': 'GnisLookupComponent', 'selector': 'app-gnis-lookup'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'LocationSpeciesTableComponent', 'selector': 'app-location-species-table'},{'name': 'NewLookupRequestComponent', 'selector': 'app-new-lookup-request'},{'name': 'NotificationsComponent', 'selector': 'app-notifications'},{'name': 'SavedSearchesComponent', 'selector': 'app-saved-searches'},{'name': 'SaveSearchComponent', 'selector': 'app-save-search'},{'name': 'SearchDialogComponent', 'selector': 'app-search-dialog'},{'name': 'SearchResultsSummaryReportComponent', 'selector': 'app-search-results-summary-report'},{'name': 'UserDashboardComponent', 'selector': 'app-user-dashboard'},{'name': 'UserEventsComponent', 'selector': 'app-user-events'},{'name': 'UserRegistrationComponent', 'selector': 'app-user-registration'},{'name': 'ViewCommentDetailsComponent', 'selector': 'app-view-comment-details'},{'name': 'ViewContactDetailsComponent', 'selector': 'app-view-contact-details'},{'name': 'ViewNotificationDetailsComponent', 'selector': 'app-view-notification-details'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'CreateContactComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'CreateContactComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

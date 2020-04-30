@@ -199,7 +199,9 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
 
     setTimeout(() => {
-      this.notificationsDataSource.sort = this.sort;
+      if (this.notificationsDataSource) {
+        this.notificationsDataSource.sort = this.sort;
+      }
     }, 3000);
 
     // sidenote: I'm setting them here because they weren't working on the first click if I set them in the ngOnInit function ¯\_(ツ)_/¯

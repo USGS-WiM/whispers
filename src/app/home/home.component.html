@@ -508,7 +508,7 @@
 
           <span class="spacer"></span>
 
-          <span class="results-button-row">
+          <span class="results-button-row" *ngIf="this.currentResults">
             <button mat-button color="accent" [disabled]="this.currentResults.length < 1"
               (click)="generateResultsSummaryReport()"
               matTooltip="Click to generate a printable summary report of your results. Disabled when no results available.">

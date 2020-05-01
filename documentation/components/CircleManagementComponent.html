@@ -1,0 +1,2644 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>whispers documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">whispers documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>CircleManagementComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/circle-management/circle-management.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-circle-management</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./circle-management.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./circle-management.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_onDestroy">_onDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#actionButtonIcon">actionButtonIcon</a>
+                            </li>
+                            <li>
+                                <a href="#actionButtonText">actionButtonText</a>
+                            </li>
+                            <li>
+                                <a href="#addOnBlur">addOnBlur</a>
+                            </li>
+                            <li>
+                                <a href="#circleForm">circleForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#circleManagementDialogRef">circleManagementDialogRef</a>
+                            </li>
+                            <li>
+                                <a href="#contactFilterCtrl">contactFilterCtrl</a>
+                            </li>
+                            <li>
+                                <a href="#contactsLoading">contactsLoading</a>
+                            </li>
+                            <li>
+                                <a href="#contactsSearchControl">contactsSearchControl</a>
+                            </li>
+                            <li>
+                                <a href="#currentUserList">currentUserList</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#data">data</a>
+                            </li>
+                            <li>
+                                <a href="#dataSource">dataSource</a>
+                            </li>
+                            <li>
+                                <a href="#errorMessage">errorMessage</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#filteredContacts">filteredContacts</a>
+                            </li>
+                            <li>
+                                <a href="#filteredUserContacts">filteredUserContacts</a>
+                            </li>
+                            <li>
+                                <a href="#matchingUser">matchingUser</a>
+                            </li>
+                            <li>
+                                <a href="#newUserList">newUserList</a>
+                            </li>
+                            <li>
+                                <a href="#nonMatch">nonMatch</a>
+                            </li>
+                            <li>
+                                <a href="#removable">removable</a>
+                            </li>
+                            <li>
+                                <a href="#selectable">selectable</a>
+                            </li>
+                            <li>
+                                <a href="#selectedUser">selectedUser</a>
+                            </li>
+                            <li>
+                                <a href="#separatorKeysCodes">separatorKeysCodes</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#snackBar">snackBar</a>
+                            </li>
+                            <li>
+                                <a href="#submitLoading">submitLoading</a>
+                            </li>
+                            <li>
+                                <a href="#title">title</a>
+                            </li>
+                            <li>
+                                <a href="#titleIcon">titleIcon</a>
+                            </li>
+                            <li>
+                                <a href="#userAddSubmitLoading">userAddSubmitLoading</a>
+                            </li>
+                            <li>
+                                <a href="#userContacts">userContacts</a>
+                            </li>
+                            <li>
+                                <a href="#userContactsLoading">userContactsLoading</a>
+                            </li>
+                            <li>
+                                <a href="#userInput">userInput</a>
+                            </li>
+                            <li>
+                                <a href="#userLookupControl">userLookupControl</a>
+                            </li>
+                            <li>
+                                <a href="#visible">visible</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#addContactEmail">addContactEmail</a>
+                            </li>
+                            <li>
+                                <a href="#addUserAsCollaborator">addUserAsCollaborator</a>
+                            </li>
+                            <li>
+                                <a href="#addUserToCircle">addUserToCircle</a>
+                            </li>
+                            <li>
+                                <a href="#buildCircleForm">buildCircleForm</a>
+                            </li>
+                            <li>
+                                <a href="#filterContact">filterContact</a>
+                            </li>
+                            <li>
+                                <a href="#lookupUser">lookupUser</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onSubmit">onSubmit</a>
+                            </li>
+                            <li>
+                                <a href="#openSnackBar">openSnackBar</a>
+                            </li>
+                            <li>
+                                <a href="#removeUser">removeUser</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(formBuilder: <a href="https://angular.io/api/forms/FormBuilder" target="_blank">FormBuilder</a>, circleManagementDialogRef: <a href="../interfaces/Circle.html">MatDialogRef<CircleManagementComponent></a>, circleService: <a href="../injectables/CircleService.html">CircleService</a>, circleManagementService: <a href="../injectables/CircleManagementService.html">CircleManagementService</a>, contactService: <a href="../injectables/ContactService.html">ContactService</a>, userService: <a href="../injectables/UserService.html">UserService</a>, snackBar: MatSnackBar, data: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="87" class="link-to-prism">src/app/circle-management/circle-management.component.ts:87</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>formBuilder</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>circleManagementDialogRef</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/Circle.html" target="_self" >MatDialogRef&lt;CircleManagementComponent&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>circleService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CircleService.html" target="_self" >CircleService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>circleManagementService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CircleManagementService.html" target="_self" >CircleManagementService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>contactService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ContactService.html" target="_self" >ContactService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>userService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/UserService.html" target="_self" >UserService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>snackBar</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatSnackBar</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>data</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addContactEmail"></a>
+                    <span class="name">
+                        <b>
+                            addContactEmail
+                        </b>
+                        <a href="#addContactEmail"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addContactEmail(selectedContact)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="205"
+                            class="link-to-prism">src/app/circle-management/circle-management.component.ts:205</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>selectedContact</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addUserAsCollaborator"></a>
+                    <span class="name">
+                        <b>
+                            addUserAsCollaborator
+                        </b>
+                        <a href="#addUserAsCollaborator"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addUserAsCollaborator()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="269"
+                            class="link-to-prism">src/app/circle-management/circle-management.component.ts:269</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addUserToCircle"></a>
+                    <span class="name">
+                        <b>
+                            addUserToCircle
+                        </b>
+                        <a href="#addUserToCircle"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addUserToCircle()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="248"
+                            class="link-to-prism">src/app/circle-management/circle-management.component.ts:248</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildCircleForm"></a>
+                    <span class="name">
+                        <b>
+                            buildCircleForm
+                        </b>
+                        <a href="#buildCircleForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>buildCircleForm()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="79"
+                            class="link-to-prism">src/app/circle-management/circle-management.component.ts:79</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filterContact"></a>
+                    <span class="name">
+                        <b>
+                            filterContact
+                        </b>
+                        <a href="#filterContact"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>filterContact()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="289"
+                            class="link-to-prism">src/app/circle-management/circle-management.component.ts:289</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="lookupUser"></a>
+                    <span class="name">
+                        <b>
+                            lookupUser
+                        </b>
+                        <a href="#lookupUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>lookupUser()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="214"
+                            class="link-to-prism">src/app/circle-management/circle-management.component.ts:214</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="106"
+                            class="link-to-prism">src/app/circle-management/circle-management.component.ts:106</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onSubmit"></a>
+                    <span class="name">
+                        <b>
+                            onSubmit
+                        </b>
+                        <a href="#onSubmit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onSubmit(formValue)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="327"
+                            class="link-to-prism">src/app/circle-management/circle-management.component.ts:327</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>formValue</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openSnackBar"></a>
+                    <span class="name">
+                        <b>
+                            openSnackBar
+                        </b>
+                        <a href="#openSnackBar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openSnackBar(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, duration: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="242"
+                            class="link-to-prism">src/app/circle-management/circle-management.component.ts:242</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>message</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>duration</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeUser"></a>
+                    <span class="name">
+                        <b>
+                            removeUser
+                        </b>
+                        <a href="#removeUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>removeUser(id)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="273"
+                            class="link-to-prism">src/app/circle-management/circle-management.component.ts:273</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="_onDestroy"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            _onDestroy</b>
+                            <a href="#_onDestroy"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new Subject&lt;void&gt;()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="77" class="link-to-prism">src/app/circle-management/circle-management.component.ts:77</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>Subject that emits when the component has been destroyed. </p>
+</div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="actionButtonIcon"></a>
+                        <span class="name">
+                            <b>
+                            actionButtonIcon</b>
+                            <a href="#actionButtonIcon"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/app/circle-management/circle-management.component.ts:66</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="actionButtonText"></a>
+                        <span class="name">
+                            <b>
+                            actionButtonText</b>
+                            <a href="#actionButtonText"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/app/circle-management/circle-management.component.ts:65</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="addOnBlur"></a>
+                        <span class="name">
+                            <b>
+                            addOnBlur</b>
+                            <a href="#addOnBlur"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>true</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/circle-management/circle-management.component.ts:52</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="circleForm"></a>
+                        <span class="name">
+                            <b>
+                            circleForm</b>
+                            <a href="#circleForm"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/app/circle-management/circle-management.component.ts:67</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="circleManagementDialogRef"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            circleManagementDialogRef</b>
+                            <a href="#circleManagementDialogRef"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../interfaces/Circle.html" target="_self" >MatDialogRef&lt;CircleManagementComponent&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="91" class="link-to-prism">src/app/circle-management/circle-management.component.ts:91</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="contactFilterCtrl"></a>
+                        <span class="name">
+                            <b>
+                            contactFilterCtrl</b>
+                            <a href="#contactFilterCtrl"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormControl" target="_blank" >FormControl</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new FormControl()</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/circle-management/circle-management.component.ts:42</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="contactsLoading"></a>
+                        <span class="name">
+                            <b>
+                            contactsLoading</b>
+                            <a href="#contactsLoading"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>true</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/circle-management/circle-management.component.ts:47</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="contactsSearchControl"></a>
+                        <span class="name">
+                            <b>
+                            contactsSearchControl</b>
+                            <a href="#contactsSearchControl"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormControl" target="_blank" >FormControl</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/circle-management/circle-management.component.ts:45</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="currentUserList"></a>
+                        <span class="name">
+                            <b>
+                            currentUserList</b>
+                            <a href="#currentUserList"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/circle-management/circle-management.component.ts:60</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="data"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            data</b>
+                            <a href="#data"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @Inject(MAT_DIALOG_DATA)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="97" class="link-to-prism">src/app/circle-management/circle-management.component.ts:97</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="dataSource"></a>
+                        <span class="name">
+                            <b>
+                            dataSource</b>
+                            <a href="#dataSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../interfaces/Circle.html" target="_self" >CirclesDataSource</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/circle-management/circle-management.component.ts:34</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="errorMessage"></a>
+                        <span class="name">
+                            <b>
+                            errorMessage</b>
+                            <a href="#errorMessage"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/circle-management/circle-management.component.ts:31</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="filteredContacts"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            filteredContacts</b>
+                            <a href="#filteredContacts"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../interfaces/Contact.html" target="_self" >ReplaySubject&lt;Contact[]&gt;</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new ReplaySubject&lt;Contact[]&gt;(1)</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/circle-management/circle-management.component.ts:41</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="filteredUserContacts"></a>
+                        <span class="name">
+                            <b>
+                            filteredUserContacts</b>
+                            <a href="#filteredUserContacts"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Observable&lt;any&gt;</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/circle-management/circle-management.component.ts:40</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="matchingUser"></a>
+                        <span class="name">
+                            <b>
+                            matchingUser</b>
+                            <a href="#matchingUser"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>null</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>null</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="71" class="link-to-prism">src/app/circle-management/circle-management.component.ts:71</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="newUserList"></a>
+                        <span class="name">
+                            <b>
+                            newUserList</b>
+                            <a href="#newUserList"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/circle-management/circle-management.component.ts:61</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="nonMatch"></a>
+                        <span class="name">
+                            <b>
+                            nonMatch</b>
+                            <a href="#nonMatch"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>null</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>null</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="72" class="link-to-prism">src/app/circle-management/circle-management.component.ts:72</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="removable"></a>
+                        <span class="name">
+                            <b>
+                            removable</b>
+                            <a href="#removable"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>true</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/circle-management/circle-management.component.ts:51</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="selectable"></a>
+                        <span class="name">
+                            <b>
+                            selectable</b>
+                            <a href="#selectable"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>true</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/circle-management/circle-management.component.ts:50</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="selectedUser"></a>
+                        <span class="name">
+                            <b>
+                            selectedUser</b>
+                            <a href="#selectedUser"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/app/circle-management/circle-management.component.ts:69</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="separatorKeysCodes"></a>
+                        <span class="name">
+                            <b>
+                            separatorKeysCodes</b>
+                            <a href="#separatorKeysCodes"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>number[]</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[ENTER, COMMA]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/circle-management/circle-management.component.ts:53</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="snackBar"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            snackBar</b>
+                            <a href="#snackBar"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>MatSnackBar</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="96" class="link-to-prism">src/app/circle-management/circle-management.component.ts:96</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="submitLoading"></a>
+                        <span class="name">
+                            <b>
+                            submitLoading</b>
+                            <a href="#submitLoading"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/circle-management/circle-management.component.ts:32</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="title"></a>
+                        <span class="name">
+                            <b>
+                            title</b>
+                            <a href="#title"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/circle-management/circle-management.component.ts:63</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="titleIcon"></a>
+                        <span class="name">
+                            <b>
+                            titleIcon</b>
+                            <a href="#titleIcon"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/app/circle-management/circle-management.component.ts:64</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="userAddSubmitLoading"></a>
+                        <span class="name">
+                            <b>
+                            userAddSubmitLoading</b>
+                            <a href="#userAddSubmitLoading"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/circle-management/circle-management.component.ts:74</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="userContacts"></a>
+                        <span class="name">
+                            <b>
+                            userContacts</b>
+                            <a href="#userContacts"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../interfaces/Contact.html" target="_self" >Contact[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/circle-management/circle-management.component.ts:38</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="userContactsLoading"></a>
+                        <span class="name">
+                            <b>
+                            userContactsLoading</b>
+                            <a href="#userContactsLoading"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/circle-management/circle-management.component.ts:36</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="userInput"></a>
+                        <span class="name">
+                            <b>
+                            userInput</b>
+                            <a href="#userInput"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#L" target="_self" >ElementRef&lt;HTMLInputElement&gt;</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @ViewChild(&#x27;userInput&#x27;)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/circle-management/circle-management.component.ts:57</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="userLookupControl"></a>
+                        <span class="name">
+                            <b>
+                            userLookupControl</b>
+                            <a href="#userLookupControl"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormControl" target="_blank" >FormControl</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/circle-management/circle-management.component.ts:55</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="visible"></a>
+                        <span class="name">
+                            <b>
+                            visible</b>
+                            <a href="#visible"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>true</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/circle-management/circle-management.component.ts:49</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, ElementRef, ViewChild } from &#x27;@angular/core&#x27;;
+import { Inject } from &#x27;@angular/core&#x27;;
+import { COMMA, ENTER } from &#x27;@angular/cdk/keycodes&#x27;;
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from &#x27;@angular/forms/&#x27;;
+import { Observable ,  Subject, ReplaySubject } from &#x27;rxjs&#x27;;
+import { take, takeUntil } from &#x27;rxjs/operators&#x27;;
+import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocomplete } from &#x27;@angular/material&#x27;;
+
+import { MatDialog, MatDialogRef } from &#x27;@angular/material&#x27;;
+
+import { MatSnackBar } from &#x27;@angular/material&#x27;;
+import { MAT_DIALOG_DATA } from &#x27;@angular/material&#x27;;
+
+import { CirclesDataSource } from &#x27;@app/circles/circles.datasource&#x27;;
+import { CircleService } from &#x27;@services/circle.service&#x27;;
+import { CircleManagementService } from &#x27;@services/circle-management.service&#x27;;
+import { Circle } from &#x27;@interfaces/circle&#x27;;
+
+import { Contact } from &#x27;@interfaces/contact&#x27;;
+import { ContactService } from &#x27;@services/contact.service&#x27;;
+import { UserService } from &#x27;@services/user.service&#x27;;
+declare let gtag: Function;
+
+@Component({
+  selector: &#x27;app-circle-management&#x27;,
+  templateUrl: &#x27;./circle-management.component.html&#x27;,
+  styleUrls: [&#x27;./circle-management.component.scss&#x27;]
+})
+export class CircleManagementComponent implements OnInit {
+
+  errorMessage &#x3D; &#x27;&#x27;;
+  submitLoading &#x3D; false;
+
+  dataSource: CirclesDataSource;
+
+  userContactsLoading;
+
+  userContacts: Contact[];
+
+  filteredUserContacts: Observable&lt;any&gt;;
+  public filteredContacts: ReplaySubject&lt;Contact[]&gt; &#x3D; new ReplaySubject&lt;Contact[]&gt;(1);
+  contactFilterCtrl: FormControl &#x3D; new FormControl();
+
+  // contactsSearchControl used for searching User&#x27;s contacts to retrive email address
+  contactsSearchControl: FormControl;
+
+  contactsLoading &#x3D; true;
+
+  visible &#x3D; true;
+  selectable &#x3D; true;
+  removable &#x3D; true;
+  addOnBlur &#x3D; true;
+  separatorKeysCodes: number[] &#x3D; [ENTER, COMMA];
+  // userLookupControl used to query the User endpoint for user records with matching email addresses
+  userLookupControl: FormControl;
+
+  @ViewChild(&#x27;userInput&#x27;) userInput: ElementRef&lt;HTMLInputElement&gt;;
+  // @ViewChild(&#x27;auto&#x27;) matAutocomplete: MatAutocomplete;
+
+  currentUserList;
+  newUserList;
+
+  title;
+  titleIcon;
+  actionButtonText;
+  actionButtonIcon;
+  circleForm: FormGroup;
+
+  selectedUser;
+
+  matchingUser &#x3D; null;
+  nonMatch &#x3D; null;
+
+  userAddSubmitLoading &#x3D; false;
+
+  /** Subject that emits when the component has been destroyed. */
+  private _onDestroy &#x3D; new Subject&lt;void&gt;();
+
+  buildCircleForm() {
+    this.circleForm &#x3D; this.formBuilder.group({
+      id: null,
+      name: [&#x27;&#x27;, Validators.required],
+      description: &#x27;&#x27;,
+      //new_users: this.formBuilder.array([])
+      new_users: []
+    });
+  }
+
+  constructor(
+    private formBuilder: FormBuilder,
+    public circleManagementDialogRef: MatDialogRef&lt;CircleManagementComponent&gt;,
+    private circleService: CircleService,
+    private circleManagementService: CircleManagementService,
+    private contactService: ContactService,
+    private userService: UserService,
+    public snackBar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+
+    this.buildCircleForm();
+
+    this.userLookupControl &#x3D; new FormControl();
+    this.contactsSearchControl &#x3D; new FormControl();
+  }
+
+  ngOnInit() {
+
+    this.dataSource &#x3D; new CirclesDataSource(this.circleService);
+
+    this.circleForm.get(&#x27;new_users&#x27;).setValue([]);
+
+    if (this.data.circle) {
+      this.currentUserList &#x3D; this.data.circle.users;
+    }
+
+    this.userContactsLoading &#x3D; true;
+    this.contactService.getContacts()
+      .subscribe(
+        contacts &#x3D;&gt; {
+          this.userContacts &#x3D; contacts;
+          this.userContacts.sort(function (a, b) {
+            if (a.last_name &lt; b.last_name) { return -1; }
+            if (a.last_name &gt; b.last_name) { return 1; }
+            return 0;
+          });
+
+          // populate the search select options for the contact control
+          this.filteredContacts.next(this.userContacts);
+
+          // listen for search field value changes
+          this.contactFilterCtrl.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() &#x3D;&gt; {
+              this.filterContact();
+            });
+
+          this.userContactsLoading &#x3D; false;
+
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.userContactsLoading &#x3D; false;
+        }
+      );
+
+    switch (this.data.action) {
+      case &#x27;create&#x27;:
+        this.title &#x3D; &#x27;Create New Circle&#x27;;
+        this.titleIcon &#x3D; &#x27;fiber_new&#x27;;
+        this.actionButtonText &#x3D; &#x27;Save&#x27;;
+        this.actionButtonIcon &#x3D; &#x27;save&#x27;;
+        break;
+      case &#x27;edit&#x27;:
+        this.title &#x3D; &#x27;Update Circle&#x27;;
+        this.titleIcon &#x3D; &#x27;edit&#x27;;
+        this.actionButtonText &#x3D; &#x27;Save Changes&#x27;;
+        this.actionButtonIcon &#x3D; &#x27;save&#x27;;
+
+        // populate the circleForm
+        this.circleForm.patchValue({
+          id: this.data.circle.id,
+          name: this.data.circle.name,
+          description: this.data.circle.description
+        });
+
+        for (const user of this.data.circle.users) {
+          this.circleForm.value.new_users.push(user.id);
+        }
+
+        break;
+      case &#x27;addUser&#x27;:
+        this.title &#x3D; &#x27;Add User to Circle&#x27;;
+        this.titleIcon &#x3D; &#x27;person_add&#x27;;
+        this.actionButtonText &#x3D; &#x27;Save Changes&#x27;;
+        this.actionButtonIcon &#x3D; &#x27;save&#x27;;
+
+        // populate the circleForm
+        this.circleForm.patchValue({
+          id: this.data.circle.id,
+          name: this.data.circle.name,
+          description: this.data.circle.description
+        });
+
+        for (const user of this.data.circle.users) {
+          this.circleForm.value.new_users.push(user.id);
+        }
+
+
+        break;
+      case &#x27;removeUser&#x27;:
+        this.title &#x3D; &#x27;Remove User from Circle&#x27;;
+        this.titleIcon &#x3D; &#x27;remove_circle&#x27;;
+        this.actionButtonText &#x3D; &#x27;Save Changes&#x27;;
+        this.actionButtonIcon &#x3D; &#x27;save&#x27;;
+
+        break;
+      case &#x27;selectUser&#x27;:
+        this.title &#x3D; &#x27;Select User for Collaborator List&#x27;;
+        this.titleIcon &#x3D; &#x27;person_add&#x27;;
+        this.actionButtonText &#x3D; &#x27;Save Changes&#x27;;
+        this.actionButtonIcon &#x3D; &#x27;save&#x27;;
+    }
+  }
+
+  addContactEmail(selectedContact) {
+
+    if (selectedContact.email &#x3D;&#x3D;&#x3D; &#x27;&#x27;) {
+      this.openSnackBar(&#x27;This contact has no email address&#x27;, &#x27;OK&#x27;, 5000);
+    } else {
+      this.userLookupControl.setValue(selectedContact.email);
+    }
+  }
+
+  lookupUser() {
+
+    this.matchingUser &#x3D; null;
+    this.nonMatch &#x3D; null;
+
+    const emailArray &#x3D; [];
+    emailArray.push(this.userLookupControl.value);
+
+    this.userService.queryUserByEmail(emailArray)
+      .subscribe(
+        userQueryResponse &#x3D;&gt; {
+          console.log(userQueryResponse);
+
+          if (userQueryResponse.matching_users.length &gt; 0) {
+            this.matchingUser &#x3D; userQueryResponse.matching_users[0];
+          }
+
+          if (userQueryResponse.no_matching_users.length &gt; 0) {
+            this.nonMatch &#x3D; userQueryResponse.no_matching_users[0];
+          }
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+  addUserToCircle() {
+    this.userAddSubmitLoading &#x3D; true;
+
+    this.circleForm.value.new_users.push(this.matchingUser.id);
+
+    this.circleService.update(this.circleForm.value)
+      .subscribe(
+        circle &#x3D;&gt; {
+          this.userAddSubmitLoading &#x3D; false;
+          this.openSnackBar(&#x27;User successfully added to Circle.&#x27;, &#x27;OK&#x27;, 5000);
+          this.circleManagementService.setCircleReload();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.userAddSubmitLoading &#x3D; false;
+        }
+      );
+  }
+
+  // this function exists slightly outside the Circles workflow, though related.
+  // this is for adding a verified User to an event&#x27;s collaborator list (read or write)
+  addUserAsCollaborator() {
+    this.circleManagementDialogRef.close(this.matchingUser);
+  }
+
+  removeUser(id) {
+
+    const index &#x3D; this.circleForm.value.new_users.indexOf(id);
+    if (index &gt; -1) {
+      this.circleForm.value.new_users.splice(index, 1);
+    }
+
+    for (const user of this.data.circle.users) {
+      if (user.id &#x3D;&#x3D;&#x3D; id) {
+        user.removed &#x3D; true;
+      }
+    }
+
+
+  }
+
+  filterContact() {
+
+    // get the search keyword
+    let search &#x3D; this.contactFilterCtrl.value;
+    if (!search) {
+      this.filteredContacts.next(this.userContacts.slice());
+      return;
+    } else {
+      search &#x3D; search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredContacts.next(
+      // tslint:disable-next-line:max-line-length
+      this.userContacts.filter(contact &#x3D;&gt; contact.first_name.toLowerCase().indexOf(search) &gt; -1 || contact.last_name.toLowerCase().indexOf(search) &gt; -1)
+    );
+  }
+
+  // add(event: MatChipInputEvent): void {
+  //   // Add user only when MatAutocomplete is not open
+  //   // To make sure this does not conflict with OptionSelected Event
+  //   //if (!this.matAutocomplete.isOpen) {
+  //   const input &#x3D; event.input;
+  //   const value &#x3D; event.value;
+
+  //   // Add our email
+  //   if ((value || &#x27;&#x27;).trim()) {
+  //     this.newUserList.push(value.trim());
+  //   }
+
+  //   // Reset the input value
+  //   if (input) {
+  //     input.value &#x3D; &#x27;&#x27;;
+  //   }
+
+  //   this.userLookupControl.setValue(null);
+  //   //}
+  // }
+
+  onSubmit(formValue) {
+
+    if (this.data.action &#x3D;&#x3D;&#x3D; &#x27;create&#x27;) {
+
+      this.submitLoading &#x3D; true;
+
+      // if (formValue.new_users.length &#x3D;&#x3D;&#x3D; 0) {
+      //   delete formValue.new_users;
+      // }
+
+      this.circleService.create(formValue)
+        .subscribe(
+          circle &#x3D;&gt; {
+            this.submitLoading &#x3D; false;
+            this.openSnackBar(&#x27;Circle successfully created.&#x27;, &#x27;OK&#x27;, 5000);
+            this.circleManagementService.setCircleReload();
+            this.circleManagementDialogRef.close();
+            gtag(&#x27;event&#x27;, &#x27;click&#x27;, {&#x27;event_category&#x27;: &#x27;User Dashboard&#x27;, &#x27;event_label&#x27;: &#x27;New Circle Created&#x27;});
+          },
+          error &#x3D;&gt; {
+            this.errorMessage &#x3D; &lt;any&gt;error;
+            this.openSnackBar(&#x27;Error. Circle not created. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+
+          }
+        );
+
+    } else if (this.data.action &#x3D;&#x3D;&#x3D; &#x27;edit&#x27;) {
+
+      this.submitLoading &#x3D; true;
+
+      // formValue.new_users &#x3D; this.users;
+
+      // if (this.currentUserList) {
+      //   formValue.new_users &#x3D; formValue.new_users.concat(this.currentUserList);
+      // }
+
+      this.circleService.update(formValue)
+        .subscribe(
+          circle &#x3D;&gt; {
+            this.submitLoading &#x3D; false;
+            this.openSnackBar(&#x27;Circle successfully updated.&#x27;, &#x27;OK&#x27;, 5000);
+            this.circleManagementService.setCircleReload();
+            this.circleManagementDialogRef.close();
+
+          },
+          error &#x3D;&gt; {
+            this.errorMessage &#x3D; &lt;any&gt;error;
+            this.openSnackBar(&#x27;Error. Circle not updated. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+
+          }
+        );
+
+    } else if (this.data.action &#x3D;&#x3D;&#x3D; &#x27;addUser&#x27;) {
+      this.circleManagementDialogRef.close();
+
+    }
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;h1 mat-dialog-title *ngIf&#x3D;&quot;title&quot;&gt;
+  &lt;mat-icon *ngIf&#x3D;&quot;titleIcon !&#x3D;&#x3D; &#x27;&#x27;&quot;&gt;{{titleIcon}}&lt;/mat-icon&gt; {{title}}
+&lt;/h1&gt;
+
+&lt;mat-dialog-content&gt;
+
+  &lt;form [formGroup]&#x3D;&quot;circleForm&quot;&gt;
+    &lt;div class&#x3D;&quot;vertical-form-container&quot;&gt;
+
+      &lt;div class&#x3D;&quot;vertical-form-container&quot;&gt;
+
+        &lt;div *ngIf&#x3D;&quot;data.action &#x3D;&#x3D;&#x3D; &#x27;create&#x27; || data.action &#x3D;&#x3D;&#x3D; &#x27;edit&#x27;&quot;&gt;
+          &lt;mat-form-field class&#x3D;&quot;form-control&quot;&gt;
+            &lt;input matInput placeholder&#x3D;&quot;Name&quot; formControlName&#x3D;&quot;name&quot;&gt;
+          &lt;/mat-form-field&gt;
+
+          &lt;mat-form-field class&#x3D;&quot;general-comment-text-area&quot;&gt;
+            &lt;textarea matInput maxlength&#x3D;&quot;5000&quot; #description placeholder&#x3D;&quot;Description&quot; formControlName&#x3D;&quot;description&quot;
+              rows&#x3D;&quot;3&quot;&gt;&lt;/textarea&gt;
+            &lt;mat-hint align&#x3D;&quot;end&quot;&gt;{{description.value.length}} / 5000&lt;/mat-hint&gt;
+          &lt;/mat-form-field&gt;
+
+          &lt;div *ngIf&#x3D;&quot;data.action &#x3D;&#x3D;&#x3D; &#x27;edit&#x27;&quot;&gt;
+            &lt;label class&#x3D;&quot;text-bold&quot;&gt;Remove Users from Circle&lt;/label&gt;
+            &lt;mat-list role&#x3D;&quot;list&quot;&gt;
+              &lt;mat-list-item *ngFor&#x3D;&quot;let user of data.circle.users&quot; role&#x3D;&quot;listitem&quot;
+                [ngClass]&#x3D;&quot;{&#x27;line-through&#x27; : user.removed &#x3D;&#x3D;&#x3D; true, &#x27;&#x27;: user.removed &#x3D;&#x3D;&#x3D; undefined}&quot;&gt;
+                {{user.first_name}}&amp;nbsp;{{user.last_name}}&amp;nbsp;|&amp;nbsp;{{user.organization_string}}
+                &lt;button mat-icon-button aria-label&#x3D;&quot;remove user from circle&quot; color&#x3D;&quot;warn&quot; (click)&#x3D;&quot;removeUser(user.id)&quot;&gt;
+                  &lt;mat-icon&gt;remove_circle&lt;/mat-icon&gt;
+                &lt;/button&gt;&lt;/mat-list-item&gt;
+            &lt;/mat-list&gt;
+          &lt;/div&gt;
+
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+
+
+      &lt;!-- &lt;div *ngIf&#x3D;&quot;data.action &#x3D;&#x3D;&#x3D; &#x27;edit&#x27;&quot;&gt;
+        &lt;label class&#x3D;&quot;circle-label&quot;&gt;Current Members&lt;/label&gt;
+
+        &lt;mat-form-field class&#x3D;&quot;users-chip-list&quot;&gt;
+          &lt;mat-chip-list #currentUsersChipList&gt;
+
+            &lt;mat-chip color&#x3D;&quot;accent&quot; *ngFor&#x3D;&quot;let user of currentUserList&quot; [selectable]&#x3D;&quot;selectable&quot;
+              [removable]&#x3D;&quot;removable&quot; (removed)&#x3D;&quot;remove(user)&quot;&gt;
+              {{user}}
+              &lt;mat-icon matChipRemove *ngIf&#x3D;&quot;removable&quot;&gt;cancel&lt;/mat-icon&gt;
+            &lt;/mat-chip&gt;
+
+          &lt;/mat-chip-list&gt;
+
+          &lt;label&gt;New users&lt;/label&gt;
+          &lt;mat-chip-list #newUsersChipList&gt;
+              &lt;mat-chip color&#x3D;&quot;primary&quot; selected *ngFor&#x3D;&quot;let user of newUserList&quot; [selectable]&#x3D;&quot;selectable&quot;
+              [removable]&#x3D;&quot;removable&quot; (removed)&#x3D;&quot;removeFromNewUserList(event)&quot;&gt;
+              &lt;mat-icon&gt;fiber_new&lt;/mat-icon&gt;{{event}}
+              &lt;mat-icon matChipRemove *ngIf&#x3D;&quot;removable&quot;&gt;cancel&lt;/mat-icon&gt;
+            &lt;/mat-chip&gt;
+            &lt;input
+            placeholder&#x3D;&quot;Email address...&quot;
+            #userInput
+            [formControl]&#x3D;&quot;userLookupControl&quot;
+            [matChipInputFor]&#x3D;&quot;newUsersChipList&quot;
+            [matChipInputSeparatorKeyCodes]&#x3D;&quot;separatorKeysCodes&quot;
+            [matChipInputAddOnBlur]&#x3D;&quot;addOnBlur&quot;
+            (matChipInputTokenEnd)&#x3D;&quot;add($event)&quot;&gt;
+          &lt;/mat-chip-list&gt;
+
+        &lt;/mat-form-field&gt;
+      &lt;/div&gt; --&gt;
+
+      &lt;div *ngIf&#x3D;&quot;data.action &#x3D;&#x3D;&#x3D; &#x27;addUser&#x27; || data.action &#x3D;&#x3D;&#x3D; &#x27;selectUser&#x27;&quot;&gt;
+        &lt;p&gt;
+          &lt;span class&#x3D;&quot;text-smaller&quot;&gt;Lookup a WHISPers User by email address. You may freely enter an email address or
+            use
+            the Contacts lookup below to populate the lookup using a Contact&#x27;s email.&lt;/span&gt;&lt;/p&gt;
+
+        &lt;div class&#x3D;&quot;vertical-form-container&quot;&gt;
+
+          &lt;div class&#x3D;&quot;horizontal-form-container&quot;&gt;
+            &lt;mat-form-field class&#x3D;&quot;form-control&quot;&gt;
+              &lt;input matInput type&#x3D;&quot;text&quot; placeholder&#x3D;&quot;Email Address&quot; [formControl]&#x3D;&quot;userLookupControl&quot;&gt;
+            &lt;/mat-form-field&gt;
+            &lt;div class&#x3D;&quot;button-row&quot;&gt;
+              &lt;button mat-flat-button color&#x3D;&quot;primary&quot; (click)&#x3D;&quot;lookupUser();&quot;&gt;
+                &lt;mat-icon class&#x3D;&quot;icon&quot;&gt;search&lt;/mat-icon&gt;Search
+              &lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div *ngIf&#x3D;&quot;nonMatch !&#x3D;&#x3D; null&quot;&gt;
+            &lt;div class&#x3D;&quot;submissionReviewErrors&quot;&gt;
+              &lt;mat-error color&#x3D;&quot;warn&quot;&gt;
+                &lt;mat-icon class&#x3D;&quot;icon&quot;&gt;error&lt;/mat-icon&gt;
+                &lt;span class&#x3D;&quot;alert-text&quot;&gt;No WHISPers User with email address {{nonMatch}}.&lt;/span&gt;
+              &lt;/mat-error&gt;
+
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div *ngIf&#x3D;&quot;matchingUser !&#x3D;&#x3D; null&quot; class&#x3D;&quot;vertical-form-container match-div&quot;&gt;
+            &lt;label class&#x3D;&quot;text-larger text-bold&quot;&gt;
+              &lt;mat-icon class&#x3D;&quot;icon&quot;&gt;check_circle&lt;/mat-icon&gt; User Match Found for {{matchingUser.email}}
+            &lt;/label&gt;&lt;br&gt;
+            &lt;!-- &lt;div class&#x3D;&quot;horizontal-form-container&quot;&gt; --&gt;
+            &lt;span&gt;{{matchingUser.first_name}}&amp;nbsp;{{matchingUser.last_name}}&amp;nbsp;|&amp;nbsp;{{matchingUser.organization_string}}&lt;/span&gt;&lt;br&gt;
+            &lt;div class&#x3D;&quot;button-row&quot;&gt;
+              &lt;button mat-flat-button color&#x3D;&quot;primary&quot; *ngIf&#x3D;&quot;data.action &#x3D;&#x3D;&#x3D; &#x27;addUser&#x27;&quot; (click)&#x3D;&quot;addUserToCircle();&quot;&gt;
+                &lt;mat-icon class&#x3D;&quot;icon&quot;&gt;person_add&lt;/mat-icon&gt;Add to Circle
+              &lt;/button&gt;
+              &lt;button mat-flat-button color&#x3D;&quot;primary&quot; *ngIf&#x3D;&quot;data.action &#x3D;&#x3D;&#x3D; &#x27;selectUser&#x27;&quot;
+                (click)&#x3D;&quot;addUserAsCollaborator();&quot;&gt;
+                &lt;mat-icon class&#x3D;&quot;icon&quot;&gt;person_add&lt;/mat-icon&gt;Add as Collaborator
+              &lt;/button&gt;
+            &lt;/div&gt;
+            &lt;!-- &lt;/div&gt; --&gt;
+            &lt;br&gt;
+            &lt;mat-progress-bar mode&#x3D;&quot;indeterminate&quot; *ngIf&#x3D;&quot;userAddSubmitLoading&quot;&gt;&lt;/mat-progress-bar&gt;
+          &lt;/div&gt;
+
+
+          &lt;p&gt;
+
+            &lt;!-----------------------------------&gt;
+            &lt;mat-card class&#x3D;&quot;contact-lookup-card&quot;&gt;
+              &lt;mat-card-subtitle&gt;
+                Get Email Address from Contacts
+              &lt;/mat-card-subtitle&gt;
+
+              &lt;span *ngIf&#x3D;&quot;userContactsLoading&quot; class&#x3D;&quot;event-group-no-data&quot;&gt;
+                &lt;mat-spinner [diameter]&#x3D;20 style&#x3D;&quot;margin: 0 auto;&quot;&gt;&lt;/mat-spinner&gt;
+                &lt;span&gt;Loading contacts...&lt;/span&gt;
+              &lt;/span&gt;
+
+              &lt;div class&#x3D;&quot;autocomplete-input&quot; *ngIf&#x3D;&quot;!userContactsLoading&quot;&gt;
+                &lt;mat-form-field class&#x3D;&quot;contact-select&quot;&gt;
+                  &lt;mat-select [formControl]&#x3D;&quot;contactsSearchControl&quot; placeholder&#x3D;&quot;Contact&quot; #contactSelect
+                    (ngModelChange)&#x3D;&quot;addContactEmail($event)&quot;&gt;
+                    &lt;ngx-mat-select-search [formControl]&#x3D;&quot;contactFilterCtrl&quot; [placeholderLabel]&#x3D;&quot;&#x27;Find contact...&#x27;&quot;
+                      [noEntriesFoundLabel]&#x3D;&quot;&#x27;no matching contact found&#x27;&quot;&gt;&lt;/ngx-mat-select-search&gt;
+                    &lt;mat-option *ngFor&#x3D;&quot;let contact of filteredContacts | async&quot; [value]&#x3D;&quot;contact&quot;
+                      [ngClass]&#x3D;&quot;{&#x27;&#x27; : contact.email !&#x3D;&#x3D; &#x27;&#x27;, &#x27;no-email&#x27;: contact.email &#x3D;&#x3D;&#x3D; &#x27;&#x27;}&quot;&gt;
+                      &lt;span&gt;{{contact.first_name}}
+                        {{contact.last_name}} | {{contact.organization_string}} | &lt;span *ngIf&#x3D;&quot;contact.email &#x3D;&#x3D;&#x3D; &#x27;&#x27;&quot;
+                          class&#x3D;&quot;text-bold text-italic&quot;&gt;No
+                          Email Associated&lt;/span&gt;&lt;span *ngIf&#x3D;&quot;contact.email !&#x3D;&#x3D; &#x27;&#x27;&quot;
+                          class&#x3D;&quot;text-bold&quot;&gt;{{contact.email}}&lt;/span&gt; &lt;/span&gt;
+                    &lt;/mat-option&gt;
+                  &lt;/mat-select&gt;
+                &lt;/mat-form-field&gt;
+              &lt;/div&gt;
+
+            &lt;/mat-card&gt;
+            &lt;!-----------------------------------&gt;
+
+
+
+        &lt;/div&gt;
+
+
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/form&gt;
+
+  &lt;!-- &lt;div class&#x3D;&quot;submissionReviewErrors&quot;&gt;
+    &lt;mat-error color&#x3D;&quot;warn&quot; *ngIf&#x3D;&quot;duplicateEventsViolation&quot;&gt;
+      &lt;mat-icon class&#x3D;&quot;icon&quot;&gt;error&lt;/mat-icon&gt;
+      &lt;span class&#x3D;&quot;alert-text&quot;&gt;Remove duplicate events: {{repeats}}&lt;/span&gt;
+    &lt;/mat-error&gt;
+
+    &lt;mat-error color&#x3D;&quot;warn&quot; *ngIf&#x3D;&quot;minimumCountViolation&quot;&gt;
+      &lt;mat-icon class&#x3D;&quot;icon&quot;&gt;error&lt;/mat-icon&gt;
+      &lt;span class&#x3D;&quot;alert-text&quot;&gt;An Event Group must contain at least 2 events.&lt;/span&gt;
+    &lt;/mat-error&gt;
+  &lt;/div&gt; --&gt;
+
+&lt;/mat-dialog-content&gt;
+
+&lt;mat-dialog-actions&gt;
+  &lt;div class&#x3D;&quot;detail-section-buttons&quot;&gt;
+    &lt;button mat-button color&#x3D;&quot;warn&quot; (click)&#x3D;&quot;this.circleManagementDialogRef.close(&#x27;cancel&#x27;);&quot;&gt;
+      &lt;mat-icon&gt;cancel&lt;/mat-icon&gt;&amp;nbsp;Cancel
+    &lt;/button&gt;
+    &lt;button mat-button color&#x3D;&quot;primary&quot; type&#x3D;&quot;submit&quot; [disabled]&#x3D;&quot;circleForm.invalid&quot;
+      (click)&#x3D;&quot;onSubmit(circleForm.value)&quot; *ngIf&#x3D;&quot;data.action !&#x3D;&#x3D; &#x27;selectUser&#x27;&quot;&gt;
+      &lt;mat-icon&gt;{{actionButtonIcon}}&lt;/mat-icon&gt;{{actionButtonText}}
+    &lt;/button&gt;
+    &lt;mat-progress-bar mode&#x3D;&quot;indeterminate&quot; *ngIf&#x3D;&quot;submitLoading&quot;&gt;&lt;/mat-progress-bar&gt;
+  &lt;/div&gt;
+&lt;/mat-dialog-actions&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./circle-management.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.form-control {
+    width: 320px;
+    margin: 10px;
+}
+
+.alert {
+    width: 100%;
+    background-color: lightcoral;
+}
+
+.general-comment-text-area {
+    width: 40em;
+    margin-bottom: 2em;
+}
+
+.text-larger {
+    font-size: larger;
+}
+
+.circles-chip-list {
+    width: 100%;
+}
+
+.circle-label {
+    color: rgba(40, 40, 60, 0.5);
+    font-size: smaller;
+}
+
+.submissionReviewErrors {
+    display: block;
+    margin: 0 auto;
+    padding: 25px 0 40px 0;
+    width: 40em;
+
+    .mat-error {
+        display: flex;
+        margin: 6px 0;
+        width: 40em;
+
+        .mat-icon,
+        span {
+            display: flex;
+            flex-direction: column;
+            justify-content: left;
+        }
+
+        span {
+            font-size: 16px;
+            font-weight: 600;
+            padding-left: 4px;
+            padding-bottom: 1px;
+        }
+    }
+}
+
+.autocomplete-form {
+    // min-width: 300px;
+    // max-width: 500px;
+    width: 100%;
+}
+
+.autocomplete-input {
+    width: 40%;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.autocomplete-input {
+    display: inline-block;
+    margin-right: 2em;
+}
+
+.contact-select {
+    width: 60em;
+    flex-grow: 2;
+}
+
+.no-email {
+    background-color: lightcoral;
+}
+
+.text-smaller {
+    font-size: smaller;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+.text-bold {
+    font-style: bold;
+}
+
+.button-row button,
+.button-row a {
+    margin-right: 8px;
+}
+
+.match-div {
+    border: 2px solid darkgray;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.contact-lookup-card {
+    background-color: #fafafa
+}
+
+.line-through {
+    text-decoration: line-through
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><h1 mat-dialog-title *ngIf="title">  <mat-icon *ngIf="titleIcon !== \'\'">{{titleIcon}}</mat-icon> {{title}}</h1><mat-dialog-content>  <form [formGroup]="circleForm">    <div class="vertical-form-container">      <div class="vertical-form-container">        <div *ngIf="data.action === \'create\' || data.action === \'edit\'">          <mat-form-field class="form-control">            <input matInput placeholder="Name" formControlName="name">          </mat-form-field>          <mat-form-field class="general-comment-text-area">            <textarea matInput maxlength="5000" #description placeholder="Description" formControlName="description"              rows="3"></textarea>            <mat-hint align="end">{{description.value.length}} / 5000</mat-hint>          </mat-form-field>          <div *ngIf="data.action === \'edit\'">            <label class="text-bold">Remove Users from Circle</label>            <mat-list role="list">              <mat-list-item *ngFor="let user of data.circle.users" role="listitem"                [ngClass]="{\'line-through\' : user.removed === true, \'\': user.removed === undefined}">                {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}                <button mat-icon-button aria-label="remove user from circle" color="warn" (click)="removeUser(user.id)">                  <mat-icon>remove_circle</mat-icon>                </button></mat-list-item>            </mat-list>          </div>        </div>      </div>      <!-- <div *ngIf="data.action === \'edit\'">        <label class="circle-label">Current Members</label>        <mat-form-field class="users-chip-list">          <mat-chip-list #currentUsersChipList>            <mat-chip color="accent" *ngFor="let user of currentUserList" [selectable]="selectable"              [removable]="removable" (removed)="remove(user)">              {{user}}              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>            </mat-chip>          </mat-chip-list>          <label>New users</label>          <mat-chip-list #newUsersChipList>              <mat-chip color="primary" selected *ngFor="let user of newUserList" [selectable]="selectable"              [removable]="removable" (removed)="removeFromNewUserList(event)">              <mat-icon>fiber_new</mat-icon>{{event}}              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>            </mat-chip>            <input            placeholder="Email address..."            #userInput            [formControl]="userLookupControl"            [matChipInputFor]="newUsersChipList"            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"            [matChipInputAddOnBlur]="addOnBlur"            (matChipInputTokenEnd)="add($event)">          </mat-chip-list>        </mat-form-field>      </div> -->      <div *ngIf="data.action === \'addUser\' || data.action === \'selectUser\'">        <p>          <span class="text-smaller">Lookup a WHISPers User by email address. You may freely enter an email address or            use            the Contacts lookup below to populate the lookup using a Contact\'s email.</span></p>        <div class="vertical-form-container">          <div class="horizontal-form-container">            <mat-form-field class="form-control">              <input matInput type="text" placeholder="Email Address" [formControl]="userLookupControl">            </mat-form-field>            <div class="button-row">              <button mat-flat-button color="primary" (click)="lookupUser();">                <mat-icon class="icon">search</mat-icon>Search              </button>            </div>          </div>          <div *ngIf="nonMatch !== null">            <div class="submissionReviewErrors">              <mat-error color="warn">                <mat-icon class="icon">error</mat-icon>                <span class="alert-text">No WHISPers User with email address {{nonMatch}}.</span>              </mat-error>            </div>          </div>          <div *ngIf="matchingUser !== null" class="vertical-form-container match-div">            <label class="text-larger text-bold">              <mat-icon class="icon">check_circle</mat-icon> User Match Found for {{matchingUser.email}}            </label><br>            <!-- <div class="horizontal-form-container"> -->            <span>{{matchingUser.first_name}}&nbsp;{{matchingUser.last_name}}&nbsp;|&nbsp;{{matchingUser.organization_string}}</span><br>            <div class="button-row">              <button mat-flat-button color="primary" *ngIf="data.action === \'addUser\'" (click)="addUserToCircle();">                <mat-icon class="icon">person_add</mat-icon>Add to Circle              </button>              <button mat-flat-button color="primary" *ngIf="data.action === \'selectUser\'"                (click)="addUserAsCollaborator();">                <mat-icon class="icon">person_add</mat-icon>Add as Collaborator              </button>            </div>            <!-- </div> -->            <br>            <mat-progress-bar mode="indeterminate" *ngIf="userAddSubmitLoading"></mat-progress-bar>          </div>          <p>            <!----------------------------------->            <mat-card class="contact-lookup-card">              <mat-card-subtitle>                Get Email Address from Contacts              </mat-card-subtitle>              <span *ngIf="userContactsLoading" class="event-group-no-data">                <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>                <span>Loading contacts...</span>              </span>              <div class="autocomplete-input" *ngIf="!userContactsLoading">                <mat-form-field class="contact-select">                  <mat-select [formControl]="contactsSearchControl" placeholder="Contact" #contactSelect                    (ngModelChange)="addContactEmail($event)">                    <ngx-mat-select-search [formControl]="contactFilterCtrl" [placeholderLabel]="\'Find contact...\'"                      [noEntriesFoundLabel]="\'no matching contact found\'"></ngx-mat-select-search>                    <mat-option *ngFor="let contact of filteredContacts | async" [value]="contact"                      [ngClass]="{\'\' : contact.email !== \'\', \'no-email\': contact.email === \'\'}">                      <span>{{contact.first_name}}                        {{contact.last_name}} | {{contact.organization_string}} | <span *ngIf="contact.email === \'\'"                          class="text-bold text-italic">No                          Email Associated</span><span *ngIf="contact.email !== \'\'"                          class="text-bold">{{contact.email}}</span> </span>                    </mat-option>                  </mat-select>                </mat-form-field>              </div>            </mat-card>            <!----------------------------------->        </div>      </div>    </div>  </form>  <!-- <div class="submissionReviewErrors">    <mat-error color="warn" *ngIf="duplicateEventsViolation">      <mat-icon class="icon">error</mat-icon>      <span class="alert-text">Remove duplicate events: {{repeats}}</span>    </mat-error>    <mat-error color="warn" *ngIf="minimumCountViolation">      <mat-icon class="icon">error</mat-icon>      <span class="alert-text">An Event Group must contain at least 2 events.</span>    </mat-error>  </div> --></mat-dialog-content><mat-dialog-actions>  <div class="detail-section-buttons">    <button mat-button color="warn" (click)="this.circleManagementDialogRef.close(\'cancel\');">      <mat-icon>cancel</mat-icon>&nbsp;Cancel    </button>    <button mat-button color="primary" type="submit" [disabled]="circleForm.invalid"      (click)="onSubmit(circleForm.value)" *ngIf="data.action !== \'selectUser\'">      <mat-icon>{{actionButtonIcon}}</mat-icon>{{actionButtonText}}    </button>    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>  </div></mat-dialog-actions></div>'
+    var COMPONENTS = [{'name': 'AboutComponent', 'selector': 'app-about'},{'name': 'AddCommentComponent', 'selector': 'app-add-comment'},{'name': 'AddEventDiagnosisComponent', 'selector': 'app-add-event-diagnosis'},{'name': 'AddEventLocationComponent', 'selector': 'app-add-event-location'},{'name': 'AddEventLocationContactComponent', 'selector': 'app-add-event-location-contact'},{'name': 'AddEventOrganizationComponent', 'selector': 'app-add-event-organization'},{'name': 'AddServiceRequestComponent', 'selector': 'app-add-service-request'},{'name': 'AlertCollaboratorsComponent', 'selector': 'app-alert-collaborators'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AuthenticationComponent', 'selector': 'app-authentication'},{'name': 'BrowserWarningComponent', 'selector': 'app-browser-warning'},{'name': 'BulkUploadComponent', 'selector': 'app-bulk-upload'},{'name': 'CircleChooseComponent', 'selector': 'app-circle-choose'},{'name': 'CircleManagementComponent', 'selector': 'app-circle-management'},{'name': 'CirclesComponent', 'selector': 'app-circles'},{'name': 'CollaborationRequestComponent', 'selector': 'app-collaboration-request'},{'name': 'CommentsTableComponent', 'selector': 'app-comments-table'},{'name': 'ConfirmComponent', 'selector': 'app-confirm'},{'name': 'CreateContactComponent', 'selector': 'app-create-contact'},{'name': 'CustomNotificationComponent', 'selector': 'app-custom-notification'},{'name': 'DiagnosticInfoComponent', 'selector': 'app-diagnostic-info'},{'name': 'DiagnosticServicesComponent', 'selector': 'app-diagnostic-services'},{'name': 'EditEventComponent', 'selector': 'app-edit-event'},{'name': 'EditEventLocationComponent', 'selector': 'app-edit-event-location'},{'name': 'EditLocationSpeciesComponent', 'selector': 'app-edit-location-species'},{'name': 'EditSpeciesDiagnosisComponent', 'selector': 'app-edit-species-diagnosis'},{'name': 'EditUserComponent', 'selector': 'app-edit-user'},{'name': 'EventDetailsComponent', 'selector': 'app-event-details'},{'name': 'EventDetailsShareComponent', 'selector': 'app-event-details-share'},{'name': 'EventGroupComponent', 'selector': 'app-event-group'},{'name': 'EventGroupManagementComponent', 'selector': 'app-event-group-management'},{'name': 'EventPublicReportComponent', 'selector': 'app-event-public-report'},{'name': 'EventsComponent', 'selector': 'app-event-table'},{'name': 'EventSubmissionComponent', 'selector': 'app-event-submission'},{'name': 'EventSubmissionConfirmComponent', 'selector': 'app-event-submission-confirm'},{'name': 'GnisLookupComponent', 'selector': 'app-gnis-lookup'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'LocationSpeciesTableComponent', 'selector': 'app-location-species-table'},{'name': 'NewLookupRequestComponent', 'selector': 'app-new-lookup-request'},{'name': 'NotificationsComponent', 'selector': 'app-notifications'},{'name': 'SavedSearchesComponent', 'selector': 'app-saved-searches'},{'name': 'SaveSearchComponent', 'selector': 'app-save-search'},{'name': 'SearchDialogComponent', 'selector': 'app-search-dialog'},{'name': 'SearchResultsSummaryReportComponent', 'selector': 'app-search-results-summary-report'},{'name': 'UserDashboardComponent', 'selector': 'app-user-dashboard'},{'name': 'UserEventsComponent', 'selector': 'app-user-events'},{'name': 'UserRegistrationComponent', 'selector': 'app-user-registration'},{'name': 'ViewCommentDetailsComponent', 'selector': 'app-view-comment-details'},{'name': 'ViewContactDetailsComponent', 'selector': 'app-view-contact-details'},{'name': 'ViewNotificationDetailsComponent', 'selector': 'app-view-notification-details'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'CircleManagementComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'CircleManagementComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

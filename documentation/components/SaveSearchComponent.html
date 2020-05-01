@@ -805,7 +805,7 @@ export class SaveSearchComponent implements OnInit {
     // formValue.data &#x3D; this.data.currentSearchQuery;
 
     // remove all blank variables from the submission
-    if (formValue.data.affected_count &#x3D;&#x3D;&#x3D; null || formValue.data.affected_count &#x3D;&#x3D;&#x3D; &#x27;&#x27; || formValue.data.affected_count !&#x3D;&#x3D; undefined) {
+    if (formValue.data.affected_count &#x3D;&#x3D;&#x3D; null || formValue.data.affected_count &#x3D;&#x3D;&#x3D; &#x27;&#x27; || formValue.data.affected_count &#x3D;&#x3D;&#x3D; undefined) {
       delete formValue.data.affected_count;
     }
     if (formValue.data.start_date &#x3D;&#x3D;&#x3D; null || formValue.data.start_date &#x3D;&#x3D;&#x3D; &#x27;&#x27; || formValue.data.start_date &#x3D;&#x3D;&#x3D; undefined) {

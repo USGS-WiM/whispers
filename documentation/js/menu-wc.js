@@ -65,13 +65,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="modules/AppModule.html" data-type="entity-link">AppModule</a>
                                     <li class="chapter inner">
                                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                            'data-target="#components-links-module-AppModule-62b745974af2ee3dea27d4b15d331591"' : 'data-target="#xs-components-links-module-AppModule-62b745974af2ee3dea27d4b15d331591"' }>
+                                            'data-target="#components-links-module-AppModule-ef285e26195db8a6a22d28478c3fcb3b"' : 'data-target="#xs-components-links-module-AppModule-ef285e26195db8a6a22d28478c3fcb3b"' }>
                                             <span class="icon ion-md-cog"></span>
                                             <span>Components</span>
                                             <span class="icon ion-ios-arrow-down"></span>
                                         </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="components-links-module-AppModule-62b745974af2ee3dea27d4b15d331591"' :
-                                            'id="xs-components-links-module-AppModule-62b745974af2ee3dea27d4b15d331591"' }>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="components-links-module-AppModule-ef285e26195db8a6a22d28478c3fcb3b"' :
+                                            'id="xs-components-links-module-AppModule-ef285e26195db8a6a22d28478c3fcb3b"' }>
                                             <li class="link">
                                                 <a href="components/AboutComponent.html"
                                                     data-type="entity-link" data-context="sub-entity" data-context-id="modules">AboutComponent</a>
@@ -276,13 +276,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                     </li>
                                 <li class="chapter inner">
                                     <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                        'data-target="#injectables-links-module-AppModule-62b745974af2ee3dea27d4b15d331591"' : 'data-target="#xs-injectables-links-module-AppModule-62b745974af2ee3dea27d4b15d331591"' }>
+                                        'data-target="#injectables-links-module-AppModule-ef285e26195db8a6a22d28478c3fcb3b"' : 'data-target="#xs-injectables-links-module-AppModule-ef285e26195db8a6a22d28478c3fcb3b"' }>
                                         <span class="icon ion-md-arrow-round-down"></span>
                                         <span>Injectables</span>
                                         <span class="icon ion-ios-arrow-down"></span>
                                     </div>
-                                    <ul class="links collapse" ${ isNormalMode ? 'id="injectables-links-module-AppModule-62b745974af2ee3dea27d4b15d331591"' :
-                                        'id="xs-injectables-links-module-AppModule-62b745974af2ee3dea27d4b15d331591"' }>
+                                    <ul class="links collapse" ${ isNormalMode ? 'id="injectables-links-module-AppModule-ef285e26195db8a6a22d28478c3fcb3b"' :
+                                        'id="xs-injectables-links-module-AppModule-ef285e26195db8a6a22d28478c3fcb3b"' }>
                                         <li class="link">
                                             <a href="injectables/AdministrativeLevelOneService.html"
                                                 data-type="entity-link" data-context="sub-entity" data-context-id="modules" }>AdministrativeLevelOneService</a>
@@ -411,13 +411,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 </li>
                                     <li class="chapter inner">
                                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                            'data-target="#pipes-links-module-AppModule-62b745974af2ee3dea27d4b15d331591"' : 'data-target="#xs-pipes-links-module-AppModule-62b745974af2ee3dea27d4b15d331591"' }>
+                                            'data-target="#pipes-links-module-AppModule-ef285e26195db8a6a22d28478c3fcb3b"' : 'data-target="#xs-pipes-links-module-AppModule-ef285e26195db8a6a22d28478c3fcb3b"' }>
                                             <span class="icon ion-md-add"></span>
                                             <span>Pipes</span>
                                             <span class="icon ion-ios-arrow-down"></span>
                                         </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-AppModule-62b745974af2ee3dea27d4b15d331591"' :
-                                            'id="xs-pipes-links-module-AppModule-62b745974af2ee3dea27d4b15d331591"' }>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="pipes-links-module-AppModule-ef285e26195db8a6a22d28478c3fcb3b"' :
+                                            'id="xs-pipes-links-module-AppModule-ef285e26195db8a6a22d28478c3fcb3b"' }>
                                             <li class="link">
                                                 <a href="pipes/DisplayValuePipe.html"
                                                     data-type="entity-link" data-context="sub-entity" data-context-id="modules">DisplayValuePipe</a>
@@ -436,7 +436,151 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                         </div>
                         <ul class="links collapse " ${ isNormalMode ? 'id="components-links"' : 'id="xs-components-links"' }>
                             <li class="link">
+                                <a href="components/AboutComponent.html" data-type="entity-link">AboutComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/AddCommentComponent.html" data-type="entity-link">AddCommentComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/AddEventDiagnosisComponent.html" data-type="entity-link">AddEventDiagnosisComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/AddEventLocationComponent.html" data-type="entity-link">AddEventLocationComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/AddEventLocationContactComponent.html" data-type="entity-link">AddEventLocationContactComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/AddEventOrganizationComponent.html" data-type="entity-link">AddEventOrganizationComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/AddServiceRequestComponent.html" data-type="entity-link">AddServiceRequestComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/AlertCollaboratorsComponent.html" data-type="entity-link">AlertCollaboratorsComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/AuthenticationComponent.html" data-type="entity-link">AuthenticationComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/BrowserWarningComponent.html" data-type="entity-link">BrowserWarningComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/BulkUploadComponent.html" data-type="entity-link">BulkUploadComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/CircleChooseComponent.html" data-type="entity-link">CircleChooseComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/CircleManagementComponent.html" data-type="entity-link">CircleManagementComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/CirclesComponent.html" data-type="entity-link">CirclesComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/CollaborationRequestComponent.html" data-type="entity-link">CollaborationRequestComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/CommentsTableComponent.html" data-type="entity-link">CommentsTableComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/ConfirmComponent.html" data-type="entity-link">ConfirmComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/CreateContactComponent.html" data-type="entity-link">CreateContactComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/CustomNotificationComponent.html" data-type="entity-link">CustomNotificationComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/DiagnosticInfoComponent.html" data-type="entity-link">DiagnosticInfoComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/DiagnosticServicesComponent.html" data-type="entity-link">DiagnosticServicesComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/EditEventComponent.html" data-type="entity-link">EditEventComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/EditEventLocationComponent.html" data-type="entity-link">EditEventLocationComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/EditLocationSpeciesComponent.html" data-type="entity-link">EditLocationSpeciesComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/EditSpeciesDiagnosisComponent.html" data-type="entity-link">EditSpeciesDiagnosisComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/EditUserComponent.html" data-type="entity-link">EditUserComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/EventDetailsComponent.html" data-type="entity-link">EventDetailsComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/EventDetailsShareComponent.html" data-type="entity-link">EventDetailsShareComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/EventGroupComponent.html" data-type="entity-link">EventGroupComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/EventGroupManagementComponent.html" data-type="entity-link">EventGroupManagementComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/EventPublicReportComponent.html" data-type="entity-link">EventPublicReportComponent</a>
+                            </li>
+                            <li class="link">
                                 <a href="components/EventsComponent.html" data-type="entity-link">EventsComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/EventSubmissionComponent.html" data-type="entity-link">EventSubmissionComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/EventSubmissionConfirmComponent.html" data-type="entity-link">EventSubmissionConfirmComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/GnisLookupComponent.html" data-type="entity-link">GnisLookupComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/HomeComponent.html" data-type="entity-link">HomeComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/LocationSpeciesTableComponent.html" data-type="entity-link">LocationSpeciesTableComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/NewLookupRequestComponent.html" data-type="entity-link">NewLookupRequestComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/NotificationsComponent.html" data-type="entity-link">NotificationsComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/SavedSearchesComponent.html" data-type="entity-link">SavedSearchesComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/SaveSearchComponent.html" data-type="entity-link">SaveSearchComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/SearchDialogComponent.html" data-type="entity-link">SearchDialogComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/SearchResultsSummaryReportComponent.html" data-type="entity-link">SearchResultsSummaryReportComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/UserDashboardComponent.html" data-type="entity-link">UserDashboardComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/UserEventsComponent.html" data-type="entity-link">UserEventsComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/UserRegistrationComponent.html" data-type="entity-link">UserRegistrationComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/ViewCommentDetailsComponent.html" data-type="entity-link">ViewCommentDetailsComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/ViewContactDetailsComponent.html" data-type="entity-link">ViewContactDetailsComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/ViewNotificationDetailsComponent.html" data-type="entity-link">ViewNotificationDetailsComponent</a>
                             </li>
                         </ul>
                     </li>
@@ -813,6 +957,19 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                         </ul>
                     </li>
+                        <li class="chapter">
+                            <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ? 'data-target="#pipes-links"' :
+                                'data-target="#xs-pipes-links"' }>
+                                <span class="icon ion-md-add"></span>
+                                <span>Pipes</span>
+                                <span class="icon ion-ios-arrow-down"></span>
+                            </div>
+                            <ul class="links collapse " ${ isNormalMode ? 'id="pipes-links"' : 'id="xs-pipes-links"' }>
+                                <li class="link">
+                                    <a href="pipes/DisplayValuePipe.html" data-type="entity-link">DisplayValuePipe</a>
+                                </li>
+                            </ul>
+                        </li>
                     <li class="chapter">
                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ? 'data-target="#miscellaneous-links"'
                             : 'data-target="#xs-miscellaneous-links"' }>

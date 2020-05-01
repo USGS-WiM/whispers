@@ -3514,10 +3514,13 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       contextMapDivIcons[i].style.marginLeft &#x3D; mLeft[i] + &#x27;px&#x27;;
       contextMapDivIcons[i].style.marginTop &#x3D; mTop[i] + &#x27;px&#x27;;
     }
+
+    // Not need lines of code for what we&#x27;re doing but leaving in incase it&#x27;s needed sometime in the future
     /* linesLayer.style.transform &#x3D; &#x27;translate(&#x27; + (linesX) + &#x27;px,&#x27; + (linesY) + &#x27;px)&#x27;;
     linesLayer.setAttribute(&#x27;viewBox&#x27;, oldViewbox);
     linesLayer.setAttribute(&#x27;width&#x27;, oldLinesWidth);
     linesLayer.setAttribute(&#x27;height&#x27;, oldLinesHeight); */
+
     contextMapPane.style.transform &#x3D; &#x27;translate(&#x27; + (mapX) + &#x27;px,&#x27; + (mapY) + &#x27;px)&#x27;;
     contextMapPane.style.left &#x3D; &#x27;&#x27;;
     contextMapPane.style.top &#x3D; &#x27;&#x27;;
@@ -3657,17 +3660,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         });
       }
 
-      /************
-       *
-       * Check with Lauren&#x27;s code to see if she has any functions reformatting dates from YYYY-MM-DD format
-       * Lauren: Hi, yes I have a couple ways for formatting todays date in the app.utilities.ts file, function name: getReportDateTime or formatEventDates
-       * Nick: oh hai fren
-       * Lauren: hai fren
-       *
-       * Coordinate with her to use a common function to get it into the format NHWC requests
-       * Lauren: We put common functions like that in the app.utilites.ts file. There may be an existing one that will work, if not feel free to add one
-       */
-
       // Section with SEARCH RESULTS SUMMARY
       const number_events &#x3D; result_data.length.toString();
 
@@ -3696,6 +3688,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       const multipleLongRunEvt &#x3D; [];
       const eventsAndMostAffCounts &#x3D; [];
       const multipleMostAffected &#x3D; [];
+      const speciesTotal &#x3D; [];
 
       result_data.forEach(element &#x3D;&gt; {
         if (!element.hasOwnProperty(&#x27;public&#x27;)) {
@@ -3723,8 +3716,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
         // calc for Number of Animals Affected
         number_animals_affected +&#x3D; element.affected_count;
-        // calc for Number Species Affected
-        number_species_affected +&#x3D; element.species.length;
 
         // initial calc for Species Most Affected
         if (speciesArray.length &#x3D;&#x3D;&#x3D; 0) {
@@ -3782,6 +3773,24 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
 
       });
+
+      // getting species affected count
+      // putting all species for each eventlocation into an array
+      result_data.forEach(rd &#x3D;&gt; {
+        rd.species.forEach(sp &#x3D;&gt; {
+          speciesTotal.push(sp.id);
+        });
+      });
+
+      // function for filtering out duplicates
+      const distinct &#x3D; (value, index, self) &#x3D;&gt; {
+        return self.indexOf(value) &#x3D;&#x3D;&#x3D; index;
+      };
+      // filtering out the duplicates
+      const distinctSpecies &#x3D; speciesTotal.filter(distinct);
+
+      // setting distinct species count
+      number_species_affected &#x3D; distinctSpecies.length;
 
       const eventsAndlinksLongest &#x3D; [];
       // check to see if there are multiple longest running events

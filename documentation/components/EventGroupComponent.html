@@ -1,0 +1,2074 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>whispers documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">whispers documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>EventGroupComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/event-group/event-group.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/AfterViewInit" target="_blank" >AfterViewInit</a></code>
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-event-group</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./event-group.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./event-group.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#allowMultiSelect">allowMultiSelect</a>
+                            </li>
+                            <li>
+                                <a href="#confirmDialogRef">confirmDialogRef</a>
+                            </li>
+                            <li>
+                                <a href="#dataSource">dataSource</a>
+                            </li>
+                            <li>
+                                <a href="#displayedColumns">displayedColumns</a>
+                            </li>
+                            <li>
+                                <a href="#docsOnThisPage">docsOnThisPage</a>
+                            </li>
+                            <li>
+                                <a href="#errorMessage">errorMessage</a>
+                            </li>
+                            <li>
+                                <a href="#eventGroupCategories">eventGroupCategories</a>
+                            </li>
+                            <li>
+                                <a href="#eventGroupCount">eventGroupCount</a>
+                            </li>
+                            <li>
+                                <a href="#eventGroupManagementDialogRef">eventGroupManagementDialogRef</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#eventGroupSubscription">eventGroupSubscription</a>
+                            </li>
+                            <li>
+                                <a href="#from">from</a>
+                            </li>
+                            <li>
+                                <a href="#initialSelection">initialSelection</a>
+                            </li>
+                            <li>
+                                <a href="#orderParams">orderParams</a>
+                            </li>
+                            <li>
+                                <a href="#pageSize">pageSize</a>
+                            </li>
+                            <li>
+                                <a href="#paginator">paginator</a>
+                            </li>
+                            <li>
+                                <a href="#selection">selection</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#snackBar">snackBar</a>
+                            </li>
+                            <li>
+                                <a href="#sort">sort</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#deleteEventGroup">deleteEventGroup</a>
+                            </li>
+                            <li>
+                                <a href="#eventGroupIDTooltip">eventGroupIDTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#isAllSelected">isAllSelected</a>
+                            </li>
+                            <li>
+                                <a href="#loadEventGroupsPage">loadEventGroupsPage</a>
+                            </li>
+                            <li>
+                                <a href="#masterToggle">masterToggle</a>
+                            </li>
+                            <li>
+                                <a href="#ngAfterViewInit">ngAfterViewInit</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#openEventGroupDeleteConfirm">openEventGroupDeleteConfirm</a>
+                            </li>
+                            <li>
+                                <a href="#openEventGroupManagementDialog">openEventGroupManagementDialog</a>
+                            </li>
+                            <li>
+                                <a href="#openSnackBar">openSnackBar</a>
+                            </li>
+                            <li>
+                                <a href="#refreshTable">refreshTable</a>
+                            </li>
+                            <li>
+                                <a href="#selectEvent">selectEvent</a>
+                            </li>
+                            <li>
+                                <a href="#updateSelectedEventGroup">updateSelectedEventGroup</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(eventGroupService: <a href="../injectables/EventGroupService.html">EventGroupService</a>, resultsCountService: <a href="../injectables/ResultsCountService.html">ResultsCountService</a>, eventGroupManagementService: <a href="../injectables/EventGroupManagementService.html">EventGroupManagementService</a>, router: <a href="https://angular.io/api/router/Router" target="_blank">Router</a>, route: <a href="https://angular.io/api/router/ActivatedRoute" target="_blank">ActivatedRoute</a>, dialog: MatDialog, snackBar: MatSnackBar)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/event-group/event-group.component.ts:60</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>eventGroupService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/EventGroupService.html" target="_self" >EventGroupService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>resultsCountService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ResultsCountService.html" target="_self" >ResultsCountService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>eventGroupManagementService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/EventGroupManagementService.html" target="_self" >EventGroupManagementService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/Router" target="_blank" >Router</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/ActivatedRoute" target="_blank" >ActivatedRoute</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dialog</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatDialog</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>snackBar</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatSnackBar</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteEventGroup"></a>
+                    <span class="name">
+                        <b>
+                            deleteEventGroup
+                        </b>
+                        <a href="#deleteEventGroup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteEventGroup(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="168"
+                            class="link-to-prism">src/app/event-group/event-group.component.ts:168</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="eventGroupIDTooltip"></a>
+                    <span class="name">
+                        <b>
+                            eventGroupIDTooltip
+                        </b>
+                        <a href="#eventGroupIDTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>eventGroupIDTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="228"
+                            class="link-to-prism">src/app/event-group/event-group.component.ts:228</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isAllSelected"></a>
+                    <span class="name">
+                        <b>
+                            isAllSelected
+                        </b>
+                        <a href="#isAllSelected"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isAllSelected()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="208"
+                            class="link-to-prism">src/app/event-group/event-group.component.ts:208</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadEventGroupsPage"></a>
+                    <span class="name">
+                        <b>
+                            loadEventGroupsPage
+                        </b>
+                        <a href="#loadEventGroupsPage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadEventGroupsPage()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="111"
+                            class="link-to-prism">src/app/event-group/event-group.component.ts:111</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="masterToggle"></a>
+                    <span class="name">
+                        <b>
+                            masterToggle
+                        </b>
+                        <a href="#masterToggle"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>masterToggle()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="214"
+                            class="link-to-prism">src/app/event-group/event-group.component.ts:214</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngAfterViewInit"></a>
+                    <span class="name">
+                        <b>
+                            ngAfterViewInit
+                        </b>
+                        <a href="#ngAfterViewInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngAfterViewInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="100"
+                            class="link-to-prism">src/app/event-group/event-group.component.ts:100</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="78"
+                            class="link-to-prism">src/app/event-group/event-group.component.ts:78</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openEventGroupDeleteConfirm"></a>
+                    <span class="name">
+                        <b>
+                            openEventGroupDeleteConfirm
+                        </b>
+                        <a href="#openEventGroupDeleteConfirm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openEventGroupDeleteConfirm(eventGroup)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="186"
+                            class="link-to-prism">src/app/event-group/event-group.component.ts:186</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>eventGroup</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openEventGroupManagementDialog"></a>
+                    <span class="name">
+                        <b>
+                            openEventGroupManagementDialog
+                        </b>
+                        <a href="#openEventGroupManagementDialog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openEventGroupManagementDialog(selectedAction)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="146"
+                            class="link-to-prism">src/app/event-group/event-group.component.ts:146</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>selectedAction</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openSnackBar"></a>
+                    <span class="name">
+                        <b>
+                            openSnackBar
+                        </b>
+                        <a href="#openSnackBar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openSnackBar(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, duration: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="131"
+                            class="link-to-prism">src/app/event-group/event-group.component.ts:131</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>message</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>duration</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="refreshTable"></a>
+                    <span class="name">
+                        <b>
+                            refreshTable
+                        </b>
+                        <a href="#refreshTable"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>refreshTable()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="123"
+                            class="link-to-prism">src/app/event-group/event-group.component.ts:123</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectEvent"></a>
+                    <span class="name">
+                        <b>
+                            selectEvent
+                        </b>
+                        <a href="#selectEvent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>selectEvent(event)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="127"
+                            class="link-to-prism">src/app/event-group/event-group.component.ts:127</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateSelectedEventGroup"></a>
+                    <span class="name">
+                        <b>
+                            updateSelectedEventGroup
+                        </b>
+                        <a href="#updateSelectedEventGroup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>updateSelectedEventGroup(eventGroup)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="137"
+                            class="link-to-prism">src/app/event-group/event-group.component.ts:137</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>eventGroup</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="allowMultiSelect"></a>
+                        <span class="name">
+                            <b>
+                            allowMultiSelect</b>
+                            <a href="#allowMultiSelect"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/event-group/event-group.component.ts:53</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="confirmDialogRef"></a>
+                        <span class="name">
+                            <b>
+                            confirmDialogRef</b>
+                            <a href="#confirmDialogRef"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../components/ConfirmComponent.html" target="_self" >MatDialogRef&lt;ConfirmComponent&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/event-group/event-group.component.ts:50</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="dataSource"></a>
+                        <span class="name">
+                            <b>
+                            dataSource</b>
+                            <a href="#dataSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../classes/EventGroupsDataSource.html" target="_self" >EventGroupsDataSource</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/event-group/event-group.component.ts:31</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="displayedColumns"></a>
+                        <span class="name">
+                            <b>
+                            displayedColumns</b>
+                            <a href="#displayedColumns"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>[]</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[
+    &#x27;select&#x27;,
+    &#x27;id&#x27;,
+    &#x27;category&#x27;,
+    &#x27;comment&#x27;,
+    &#x27;events&#x27;
+  ]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/event-group/event-group.component.ts:42</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="docsOnThisPage"></a>
+                        <span class="name">
+                            <b>
+                            docsOnThisPage</b>
+                            <a href="#docsOnThisPage"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>any[]</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/event-group/event-group.component.ts:55</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="errorMessage"></a>
+                        <span class="name">
+                            <b>
+                            errorMessage</b>
+                            <a href="#errorMessage"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/event-group/event-group.component.ts:32</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="eventGroupCategories"></a>
+                        <span class="name">
+                            <b>
+                            eventGroupCategories</b>
+                            <a href="#eventGroupCategories"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/event-group/event-group.component.ts:38</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="eventGroupCount"></a>
+                        <span class="name">
+                            <b>
+                            eventGroupCount</b>
+                            <a href="#eventGroupCount"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/event-group/event-group.component.ts:36</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="eventGroupManagementDialogRef"></a>
+                        <span class="name">
+                            <b>
+                            eventGroupManagementDialogRef</b>
+                            <a href="#eventGroupManagementDialogRef"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../components/EventGroupManagementComponent.html" target="_self" >MatDialogRef&lt;EventGroupManagementComponent&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/event-group/event-group.component.ts:30</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="eventGroupSubscription"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            eventGroupSubscription</b>
+                            <a href="#eventGroupSubscription"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>Subscription</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/event-group/event-group.component.ts:34</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="from"></a>
+                        <span class="name">
+                            <b>
+                            from</b>
+                            <a href="#from"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/app/event-group/event-group.component.ts:56</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="initialSelection"></a>
+                        <span class="name">
+                            <b>
+                            initialSelection</b>
+                            <a href="#initialSelection"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>[]</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/event-group/event-group.component.ts:52</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="orderParams"></a>
+                        <span class="name">
+                            <b>
+                            orderParams</b>
+                            <a href="#orderParams"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/event-group/event-group.component.ts:40</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="pageSize"></a>
+                        <span class="name">
+                            <b>
+                            pageSize</b>
+                            <a href="#pageSize"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/event-group/event-group.component.ts:57</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="paginator"></a>
+                        <span class="name">
+                            <b>
+                            paginator</b>
+                            <a href="#paginator"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>MatPaginator</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @ViewChild(MatPaginator)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/event-group/event-group.component.ts:59</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="selection"></a>
+                        <span class="name">
+                            <b>
+                            selection</b>
+                            <a href="#selection"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>new SelectionModel&lt;Number&gt;(this.allowMultiSelect, this.initialSelection)</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/event-group/event-group.component.ts:54</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="snackBar"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            snackBar</b>
+                            <a href="#snackBar"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>MatSnackBar</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/app/event-group/event-group.component.ts:69</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="sort"></a>
+                        <span class="name">
+                            <b>
+                            sort</b>
+                            <a href="#sort"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>MatSort</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @ViewChild(MatSort)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/event-group/event-group.component.ts:60</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, AfterViewInit, ViewChild } from &#x27;@angular/core&#x27;;
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef } from &#x27;@angular/material&#x27;;
+import { Injectable } from &#x27;@angular/core&#x27;;
+
+import { FIELD_HELP_TEXT } from &#x27;@app/app.field-help-text&#x27;;
+
+import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from &#x27;@angular/material&#x27;;
+import { debounceTime, distinctUntilChanged, startWith, tap, delay } from &#x27;rxjs/operators&#x27;;
+import { merge ,  Subscription } from &#x27;rxjs&#x27;;
+import { EventService } from &#x27;@services/event.service&#x27;;
+import { ConfirmComponent } from &#x27;@app/confirm/confirm.component&#x27;;
+import { SelectionModel } from &#x27;@angular/cdk/collections&#x27;;
+import { MatSnackBar } from &#x27;@angular/material&#x27;;
+
+import { Router, ActivatedRoute } from &#x27;@angular/router&#x27;;
+
+import { EventGroupsDataSource } from &#x27;@app/event-group/event-groups.datasource&#x27;;
+import { ResultsCountService } from &#x27;@services/results-count.service&#x27;;
+import { EventGroupService } from &#x27;@services/event-group.service&#x27;;
+import { EventGroupManagementComponent } from &#x27;@app/event-group-management/event-group-management.component&#x27;;
+import { EventGroupManagementService } from &#x27;@services/event-group-management.service&#x27;;
+
+@Component({
+  selector: &#x27;app-event-group&#x27;,
+  templateUrl: &#x27;./event-group.component.html&#x27;,
+  styleUrls: [&#x27;./event-group.component.scss&#x27;]
+})
+export class EventGroupComponent implements AfterViewInit, OnInit {
+
+  eventGroupManagementDialogRef: MatDialogRef&lt;EventGroupManagementComponent&gt;;
+  dataSource: EventGroupsDataSource;
+  errorMessage &#x3D; &#x27;&#x27;;
+
+  private eventGroupSubscription: Subscription;
+
+  eventGroupCount;
+
+  eventGroupCategories;
+
+  orderParams &#x3D; &#x27;&#x27;;
+
+  displayedColumns &#x3D; [
+    &#x27;select&#x27;,
+    &#x27;id&#x27;,
+    &#x27;category&#x27;,
+    &#x27;comment&#x27;,
+    &#x27;events&#x27;
+  ];
+
+  confirmDialogRef: MatDialogRef&lt;ConfirmComponent&gt;;
+
+  initialSelection &#x3D; [];
+  allowMultiSelect &#x3D; false;
+  selection &#x3D; new SelectionModel&lt;Number&gt;(this.allowMultiSelect, this.initialSelection);
+  docsOnThisPage: any[] &#x3D; [];
+  from: number;
+  pageSize: number;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  constructor(
+    private eventGroupService: EventGroupService,
+    private resultsCountService: ResultsCountService,
+    private eventGroupManagementService: EventGroupManagementService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    public snackBar: MatSnackBar,
+  ) {
+
+    this.resultsCountService.eventGroupResultsCount.subscribe(count &#x3D;&gt; {
+      this.eventGroupCount &#x3D; count;
+      // this.refreshTable();
+    });
+  }
+
+  ngOnInit() {
+    this.dataSource &#x3D; new EventGroupsDataSource(this.eventGroupService);
+    this.dataSource.loadEventGroups(&#x27;&#x27;, 1, 20);
+
+    // the following block triggers the reloading of the eventGroups after a change is made to an event group
+    this.eventGroupSubscription &#x3D; this.eventGroupManagementService.getEventGroupReload().subscribe(
+      response &#x3D;&gt; {
+        this.dataSource.loadEventGroups(&#x27;&#x27;, 1, 20);
+
+      });
+
+    this.eventGroupService.getEventGroupCategories()
+      .subscribe(
+        eventGroupCategories &#x3D;&gt; {
+          this.eventGroupCategories &#x3D; eventGroupCategories;
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+  ngAfterViewInit() {
+
+    this.sort.sortChange.subscribe(() &#x3D;&gt; this.paginator.pageIndex &#x3D; 0);
+
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        tap(() &#x3D;&gt; this.loadEventGroupsPage())
+      )
+      .subscribe();
+  }
+
+  loadEventGroupsPage() {
+
+    this.orderParams &#x3D; this.sort.active;
+    if (this.sort.direction &#x3D;&#x3D;&#x3D; &#x27;desc&#x27;) {
+      this.orderParams &#x3D; &#x27;-&#x27; + this.sort.active;
+    }
+    this.dataSource.loadEventGroups(
+      this.orderParams,
+      this.paginator.pageIndex + 1,
+      this.paginator.pageSize);
+  }
+
+  refreshTable() {
+    this.dataSource.loadEventGroups(&#x27;&#x27;, 1, 20);
+  }
+
+  selectEvent(event) {
+    this.router.navigate([&#x60;../event/${event.id}&#x60;], { relativeTo: this.route });
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+  updateSelectedEventGroup(eventGroup) {
+
+    if (eventGroup &#x3D;&#x3D;&#x3D; undefined || eventGroup &#x3D;&#x3D;&#x3D; null) {
+      this.eventGroupManagementService.setSelectedEventGroup(null);
+    } else {
+      this.eventGroupManagementService.setSelectedEventGroup(eventGroup);
+    }
+  }
+
+  openEventGroupManagementDialog(selectedAction) {
+
+    this.eventGroupManagementDialogRef &#x3D; this.dialog.open(EventGroupManagementComponent, {
+      disableClose: true,
+      data: {
+        action: selectedAction,
+        eventGroup: this.selection.selected[0]
+      }
+    });
+
+    this.eventGroupManagementDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+
+  deleteEventGroup(id: number) {
+    this.eventGroupService.delete(id)
+      .subscribe(
+        () &#x3D;&gt; {
+          this.openSnackBar(&#x27;Event Group successfully deleted&#x27;, &#x27;OK&#x27;, 5000);
+          // clear selection
+          this.selection.deselect(id);
+          this.updateSelectedEventGroup(null);
+          this.refreshTable();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.openSnackBar(&#x27;Error. Event Group not deleted. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+        }
+      );
+
+  }
+
+  openEventGroupDeleteConfirm(eventGroup) {
+    this.confirmDialogRef &#x3D; this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: &#x27;Delete Event Group Confirm&#x27;,
+          titleIcon: &#x27;delete_forever&#x27;,
+          // tslint:disable-next-line:max-line-length
+          message: &#x27;Are you sure you want to delete this Event Group?\nThis action cannot be undone.&#x27;,
+          confirmButtonText: &#x27;Yes, Delete Event Group&#x27;,
+          messageIcon: &#x27;&#x27;,
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result &#x3D;&gt; {
+      if (result &#x3D;&#x3D;&#x3D; true) {
+        this.deleteEventGroup(eventGroup.id);
+      }
+    });
+  }
+
+  isAllSelected() {
+    const numSelected &#x3D; this.docsOnThisPage.length;
+    const numRows &#x3D; this.dataSource.eventGroupList.length;
+    return (numSelected &#x3D;&#x3D;&#x3D; numRows);
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+      (
+        this.docsOnThisPage.length &#x3D; 0,
+        this.dataSource.eventGroupList.forEach(row &#x3D;&gt; this.selection.deselect(row.id))
+      ) :
+      this.dataSource.eventGroupList.forEach(
+        row &#x3D;&gt; {
+          this.selection.select(row.id);
+          this.docsOnThisPage.push(row);
+        }
+      );
+  }
+
+  eventGroupIDTooltip() { const string &#x3D; FIELD_HELP_TEXT.eventGroupIDTooltip; return string; }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div&gt;
+  &lt;span class&#x3D;&quot;results-button-row&quot;&gt;
+    &lt;button mat-button color&#x3D;&quot;accent&quot; (click)&#x3D;&quot;openEventGroupManagementDialog(&#x27;edit&#x27;)&quot;
+      [disabled]&#x3D;&quot;selection.selected.length &#x3D;&#x3D;&#x3D; 0&quot;&gt;
+      &lt;mat-icon&gt;
+        edit
+      &lt;/mat-icon&gt;
+      Edit Selected Event Group
+    &lt;/button&gt;
+    &lt;button mat-button color&#x3D;&quot;warn&quot; (click)&#x3D;&quot;openEventGroupDeleteConfirm(selection.selected[0])&quot;
+      [disabled]&#x3D;&quot;selection.selected.length &#x3D;&#x3D;&#x3D; 0&quot;&gt;
+      &lt;mat-icon&gt;
+        delete
+      &lt;/mat-icon&gt;
+      Delete Selected Event Group
+    &lt;/button&gt;
+    &lt;!-- &lt;button mat-button color&#x3D;&quot;accent&quot; (click)&#x3D;&quot;refreshTable()&quot;&gt;
+    &lt;mat-icon&gt;
+      refresh
+    &lt;/mat-icon&gt;
+   Refresh table
+  &lt;/button&gt; --&gt;
+  &lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div class&#x3D;&quot;spinner-container&quot; *ngIf&#x3D;&quot;dataSource.loading$ | async&quot;&gt;
+  &lt;mat-spinner&gt;&lt;/mat-spinner&gt;
+&lt;/div&gt;
+
+&lt;div *ngIf&#x3D;&quot;dataSource&quot; class&#x3D;&quot;results-table-div&quot;&gt;
+
+  &lt;mat-table class&#x3D;&quot;user-events-table&quot; [dataSource]&#x3D;&quot;dataSource&quot; matSort matSortDirection&#x3D;&quot;asc&quot; matSortDisableClear&gt;
+
+    &lt;!-- Checkbox column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;select&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef&gt;
+        &lt;!-- &lt;mat-checkbox (change)&#x3D;&quot;$event ? masterToggle() : null;&quot; [checked]&#x3D;&quot;selection.hasValue() &amp;&amp; isAllSelected()&quot;
+          [indeterminate]&#x3D;&quot;selection.hasValue()  &amp;&amp; !isAllSelected()&quot;&gt;
+        &lt;/mat-checkbox&gt; --&gt;
+
+      &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let row&quot;&gt;
+        &lt;mat-checkbox (click)&#x3D;&quot;$event.stopPropagation();&quot;
+          (change)&#x3D;&quot;($event ? selection.toggle(row) : null); updateSelectedEventGroup(selection.selected[0]);&quot;
+          [checked]&#x3D;&quot;selection.isSelected(row)&quot;&gt;
+        &lt;/mat-checkbox&gt;
+      &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- ID/Name Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;id&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef mat-sort-header&gt; ID &lt;mat-icon class&#x3D;&quot;hint-table-hover-text&quot; matSuffix 
+        matTooltip&#x3D;{{eventGroupIDTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+  help&lt;/mat-icon&gt;&lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let eventGroup&quot;&gt; {{eventGroup.name}} &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Event Group Category Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;category&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef&gt; Category &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let eventGroup&quot;&gt; {{eventGroup.category  | displayValue:&#x27;name&#x27;:this.eventGroupCategories}}
+      &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Comment/&#x27;Justification&#x27; Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;comment&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef mat-sort-header&gt; Justification for Event Grouping &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let eventGroup&quot;&gt; &lt;span
+          *ngIf&#x3D;&quot;eventGroup.comments.length &gt; 0&quot;&gt;{{eventGroup.comments[0].comment}} &lt;/span&gt;&lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Event List Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;events&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef mat-sort-header&gt; Events &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let eventGroup&quot;&gt;
+        &lt;button mat-button *ngFor&#x3D;&quot;let event of eventGroup.events&quot; routerLink&#x3D;&quot;../event/{{event}}&quot;&gt;{{event}}&lt;/button&gt;
+      &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;mat-header-row *matHeaderRowDef&#x3D;&quot;displayedColumns&quot;&gt;&lt;/mat-header-row&gt;
+    &lt;mat-row *matRowDef&#x3D;&quot;let eventGroup; columns: displayedColumns;&quot;&gt;&lt;/mat-row&gt;
+  &lt;/mat-table&gt;
+
+  &lt;mat-paginator [length]&#x3D;&quot;eventGroupCount&quot; [pageSize]&#x3D;&quot;20&quot; [pageSizeOptions]&#x3D;&quot;[5, 10, 20]&quot;&gt;&lt;/mat-paginator&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./event-group.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.mat-table {
+    .mat-header-row {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+
+        .mat-header-cell {
+            box-sizing: border-box;
+            padding: 3px;
+
+            &amp;:first-child {
+                padding-left: 15px;
+            }
+
+            &amp;:last-child {
+                padding-right: 15px;
+            }
+        }
+    }
+
+    .mat-row {
+        .mat-cell {
+            // font-size: 12px;
+            box-sizing: border-box;
+            padding: 3px;
+            display: flex;
+            flex-wrap: wrap;
+
+            .button {
+                flex: 1;
+            }
+        }
+    }
+}</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div>  <span class="results-button-row">    <button mat-button color="accent" (click)="openEventGroupManagementDialog(\'edit\')"      [disabled]="selection.selected.length === 0">      <mat-icon>        edit      </mat-icon>      Edit Selected Event Group    </button>    <button mat-button color="warn" (click)="openEventGroupDeleteConfirm(selection.selected[0])"      [disabled]="selection.selected.length === 0">      <mat-icon>        delete      </mat-icon>      Delete Selected Event Group    </button>    <!-- <button mat-button color="accent" (click)="refreshTable()">    <mat-icon>      refresh    </mat-icon>   Refresh table  </button> -->  </span></div><div class="spinner-container" *ngIf="dataSource.loading$ | async">  <mat-spinner></mat-spinner></div><div *ngIf="dataSource" class="results-table-div">  <mat-table class="user-events-table" [dataSource]="dataSource" matSort matSortDirection="asc" matSortDisableClear>    <!-- Checkbox column -->    <ng-container matColumnDef="select">      <mat-header-cell *matHeaderCellDef>        <!-- <mat-checkbox (change)="$event ? masterToggle() : null;" [checked]="selection.hasValue() && isAllSelected()"          [indeterminate]="selection.hasValue()  && !isAllSelected()">        </mat-checkbox> -->      </mat-header-cell>      <mat-cell *matCellDef="let row">        <mat-checkbox (click)="$event.stopPropagation();"          (change)="($event ? selection.toggle(row) : null); updateSelectedEventGroup(selection.selected[0]);"          [checked]="selection.isSelected(row)">        </mat-checkbox>      </mat-cell>    </ng-container>    <!-- ID/Name Column -->    <ng-container matColumnDef="id">      <mat-header-cell *matHeaderCellDef mat-sort-header> ID <mat-icon class="hint-table-hover-text" matSuffix         matTooltip={{eventGroupIDTooltip()}} matTooltipClass="tooltip-breakline">  help</mat-icon></mat-header-cell>      <mat-cell *matCellDef="let eventGroup"> {{eventGroup.name}} </mat-cell>    </ng-container>    <!-- Event Group Category Column -->    <ng-container matColumnDef="category">      <mat-header-cell *matHeaderCellDef> Category </mat-header-cell>      <mat-cell *matCellDef="let eventGroup"> {{eventGroup.category  | displayValue:\'name\':this.eventGroupCategories}}      </mat-cell>    </ng-container>    <!-- Comment/\'Justification\' Column -->    <ng-container matColumnDef="comment">      <mat-header-cell *matHeaderCellDef mat-sort-header> Justification for Event Grouping </mat-header-cell>      <mat-cell *matCellDef="let eventGroup"> <span          *ngIf="eventGroup.comments.length > 0">{{eventGroup.comments[0].comment}} </span></mat-cell>    </ng-container>    <!-- Event List Column -->    <ng-container matColumnDef="events">      <mat-header-cell *matHeaderCellDef mat-sort-header> Events </mat-header-cell>      <mat-cell *matCellDef="let eventGroup">        <button mat-button *ngFor="let event of eventGroup.events" routerLink="../event/{{event}}">{{event}}</button>      </mat-cell>    </ng-container>    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>    <mat-row *matRowDef="let eventGroup; columns: displayedColumns;"></mat-row>  </mat-table>  <mat-paginator [length]="eventGroupCount" [pageSize]="20" [pageSizeOptions]="[5, 10, 20]"></mat-paginator></div></div>'
+    var COMPONENTS = [{'name': 'AboutComponent', 'selector': 'app-about'},{'name': 'AddCommentComponent', 'selector': 'app-add-comment'},{'name': 'AddEventDiagnosisComponent', 'selector': 'app-add-event-diagnosis'},{'name': 'AddEventLocationComponent', 'selector': 'app-add-event-location'},{'name': 'AddEventLocationContactComponent', 'selector': 'app-add-event-location-contact'},{'name': 'AddEventOrganizationComponent', 'selector': 'app-add-event-organization'},{'name': 'AddServiceRequestComponent', 'selector': 'app-add-service-request'},{'name': 'AlertCollaboratorsComponent', 'selector': 'app-alert-collaborators'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AuthenticationComponent', 'selector': 'app-authentication'},{'name': 'BrowserWarningComponent', 'selector': 'app-browser-warning'},{'name': 'BulkUploadComponent', 'selector': 'app-bulk-upload'},{'name': 'CircleChooseComponent', 'selector': 'app-circle-choose'},{'name': 'CircleManagementComponent', 'selector': 'app-circle-management'},{'name': 'CirclesComponent', 'selector': 'app-circles'},{'name': 'CollaborationRequestComponent', 'selector': 'app-collaboration-request'},{'name': 'CommentsTableComponent', 'selector': 'app-comments-table'},{'name': 'ConfirmComponent', 'selector': 'app-confirm'},{'name': 'CreateContactComponent', 'selector': 'app-create-contact'},{'name': 'CustomNotificationComponent', 'selector': 'app-custom-notification'},{'name': 'DiagnosticInfoComponent', 'selector': 'app-diagnostic-info'},{'name': 'DiagnosticServicesComponent', 'selector': 'app-diagnostic-services'},{'name': 'EditEventComponent', 'selector': 'app-edit-event'},{'name': 'EditEventLocationComponent', 'selector': 'app-edit-event-location'},{'name': 'EditLocationSpeciesComponent', 'selector': 'app-edit-location-species'},{'name': 'EditSpeciesDiagnosisComponent', 'selector': 'app-edit-species-diagnosis'},{'name': 'EditUserComponent', 'selector': 'app-edit-user'},{'name': 'EventDetailsComponent', 'selector': 'app-event-details'},{'name': 'EventDetailsShareComponent', 'selector': 'app-event-details-share'},{'name': 'EventGroupComponent', 'selector': 'app-event-group'},{'name': 'EventGroupManagementComponent', 'selector': 'app-event-group-management'},{'name': 'EventPublicReportComponent', 'selector': 'app-event-public-report'},{'name': 'EventsComponent', 'selector': 'app-event-table'},{'name': 'EventSubmissionComponent', 'selector': 'app-event-submission'},{'name': 'EventSubmissionConfirmComponent', 'selector': 'app-event-submission-confirm'},{'name': 'GnisLookupComponent', 'selector': 'app-gnis-lookup'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'LocationSpeciesTableComponent', 'selector': 'app-location-species-table'},{'name': 'NewLookupRequestComponent', 'selector': 'app-new-lookup-request'},{'name': 'NotificationsComponent', 'selector': 'app-notifications'},{'name': 'SavedSearchesComponent', 'selector': 'app-saved-searches'},{'name': 'SaveSearchComponent', 'selector': 'app-save-search'},{'name': 'SearchDialogComponent', 'selector': 'app-search-dialog'},{'name': 'SearchResultsSummaryReportComponent', 'selector': 'app-search-results-summary-report'},{'name': 'UserDashboardComponent', 'selector': 'app-user-dashboard'},{'name': 'UserEventsComponent', 'selector': 'app-user-events'},{'name': 'UserRegistrationComponent', 'selector': 'app-user-registration'},{'name': 'ViewCommentDetailsComponent', 'selector': 'app-view-comment-details'},{'name': 'ViewContactDetailsComponent', 'selector': 'app-view-contact-details'},{'name': 'ViewNotificationDetailsComponent', 'selector': 'app-view-notification-details'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'EventGroupComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'EventGroupComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

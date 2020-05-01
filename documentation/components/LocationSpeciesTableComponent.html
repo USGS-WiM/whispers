@@ -1,0 +1,2845 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>whispers documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">whispers documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>LocationSpeciesTableComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/location-species-table/location-species-table.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-location-species-table</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./location-species-table.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./location-species-table.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#confirmDialogRef">confirmDialogRef</a>
+                            </li>
+                            <li>
+                                <a href="#dataSource">dataSource</a>
+                            </li>
+                            <li>
+                                <a href="#displayedColumns">displayedColumns</a>
+                            </li>
+                            <li>
+                                <a href="#editLocationSpeciesDialogRef">editLocationSpeciesDialogRef</a>
+                            </li>
+                            <li>
+                                <a href="#editSpeciesDiagnosisDialogRef">editSpeciesDiagnosisDialogRef</a>
+                            </li>
+                            <li>
+                                <a href="#errorMessage">errorMessage</a>
+                            </li>
+                            <li>
+                                <a href="#expandedElement">expandedElement</a>
+                            </li>
+                            <li>
+                                <a href="#isExpansionDetailRow">isExpansionDetailRow</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#snackBar">snackBar</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#addSpeciesDiagnosis">addSpeciesDiagnosis</a>
+                            </li>
+                            <li>
+                                <a href="#deleteLocationSpecies">deleteLocationSpecies</a>
+                            </li>
+                            <li>
+                                <a href="#deleteSpeciesDiagnosis">deleteSpeciesDiagnosis</a>
+                            </li>
+                            <li>
+                                <a href="#editAgeBiasTooltip">editAgeBiasTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#editCaptiveTooltip">editCaptiveTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#editEstimatedDeadTooltip">editEstimatedDeadTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#editEstimatedSickTooltip">editEstimatedSickTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#editKnownDeadTooltip">editKnownDeadTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#editKnownSickTooltip">editKnownSickTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#editLocationSpecies">editLocationSpecies</a>
+                            </li>
+                            <li>
+                                <a href="#editSexBiasTooltip">editSexBiasTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#editSpeciesDiagnosis">editSpeciesDiagnosis</a>
+                            </li>
+                            <li>
+                                <a href="#editSpeciesDiagnosisTooltip">editSpeciesDiagnosisTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#editSpeciesTooltip">editSpeciesTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#openDeleteLocationSpeciesConfirm">openDeleteLocationSpeciesConfirm</a>
+                            </li>
+                            <li>
+                                <a href="#openDeleteSpeciesDiagnosisConfirm">openDeleteSpeciesDiagnosisConfirm</a>
+                            </li>
+                            <li>
+                                <a href="#openSnackBar">openSnackBar</a>
+                            </li>
+                            <li>
+                                <a href="#populationTooltip">populationTooltip</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#ageBiases">ageBiases</a>
+                            </li>
+                            <li>
+                                <a href="#eventData">eventData</a>
+                            </li>
+                            <li>
+                                <a href="#laboratories">laboratories</a>
+                            </li>
+                            <li>
+                                <a href="#locationspecies">locationspecies</a>
+                            </li>
+                            <li>
+                                <a href="#permissions">permissions</a>
+                            </li>
+                            <li>
+                                <a href="#sexBiases">sexBiases</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(dialog: MatDialog, locationSpeciesService: <a href="../injectables/LocationSpeciesService.html">LocationSpeciesService</a>, snackBar: MatSnackBar, speciesDiagnosisService: <a href="../injectables/SpeciesDiagnosisService.html">SpeciesDiagnosisService</a>, dataUpdatedService: <a href="../injectables/DataUpdatedService.html">DataUpdatedService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:69</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>dialog</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatDialog</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>locationSpeciesService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/LocationSpeciesService.html" target="_self" >LocationSpeciesService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>snackBar</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatSnackBar</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>speciesDiagnosisService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SpeciesDiagnosisService.html" target="_self" >SpeciesDiagnosisService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dataUpdatedService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/DataUpdatedService.html" target="_self" >DataUpdatedService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section>
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="ageBiases"></a>
+                        <b>ageBiases</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/AgeBias.html" target="_self" >AgeBias[]</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:41</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="eventData"></a>
+                        <b>eventData</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" >Object</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:38</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="laboratories"></a>
+                        <b>laboratories</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Organization.html" target="_self" >Organization[]</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:43</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="locationspecies"></a>
+                        <b>locationspecies</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#L" target="_self" >LocationSpecies[]</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:39</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="permissions"></a>
+                        <b>permissions</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" target="_blank" >Object</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:40</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="sexBiases"></a>
+                        <b>sexBiases</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/SexBias.html" target="_self" >SexBias[]</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:42</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addSpeciesDiagnosis"></a>
+                    <span class="name">
+                        <b>
+                            addSpeciesDiagnosis
+                        </b>
+                        <a href="#addSpeciesDiagnosis"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addSpeciesDiagnosis(locationspecies)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="205"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:205</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>locationspecies</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteLocationSpecies"></a>
+                    <span class="name">
+                        <b>
+                            deleteLocationSpecies
+                        </b>
+                        <a href="#deleteLocationSpecies"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteLocationSpecies(locationspecies)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="152"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:152</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>locationspecies</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteSpeciesDiagnosis"></a>
+                    <span class="name">
+                        <b>
+                            deleteSpeciesDiagnosis
+                        </b>
+                        <a href="#deleteSpeciesDiagnosis"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteSpeciesDiagnosis(speciesdiagnosis)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="265"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:265</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>speciesdiagnosis</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editAgeBiasTooltip"></a>
+                    <span class="name">
+                        <b>
+                            editAgeBiasTooltip
+                        </b>
+                        <a href="#editAgeBiasTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>editAgeBiasTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="287"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:287</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editCaptiveTooltip"></a>
+                    <span class="name">
+                        <b>
+                            editCaptiveTooltip
+                        </b>
+                        <a href="#editCaptiveTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>editCaptiveTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="289"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:289</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editEstimatedDeadTooltip"></a>
+                    <span class="name">
+                        <b>
+                            editEstimatedDeadTooltip
+                        </b>
+                        <a href="#editEstimatedDeadTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>editEstimatedDeadTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="283"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:283</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editEstimatedSickTooltip"></a>
+                    <span class="name">
+                        <b>
+                            editEstimatedSickTooltip
+                        </b>
+                        <a href="#editEstimatedSickTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>editEstimatedSickTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="285"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:285</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editKnownDeadTooltip"></a>
+                    <span class="name">
+                        <b>
+                            editKnownDeadTooltip
+                        </b>
+                        <a href="#editKnownDeadTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>editKnownDeadTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="282"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:282</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editKnownSickTooltip"></a>
+                    <span class="name">
+                        <b>
+                            editKnownSickTooltip
+                        </b>
+                        <a href="#editKnownSickTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>editKnownSickTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="284"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:284</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editLocationSpecies"></a>
+                    <span class="name">
+                        <b>
+                            editLocationSpecies
+                        </b>
+                        <a href="#editLocationSpecies"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>editLocationSpecies(locationspecies)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="95"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:95</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>locationspecies</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editSexBiasTooltip"></a>
+                    <span class="name">
+                        <b>
+                            editSexBiasTooltip
+                        </b>
+                        <a href="#editSexBiasTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>editSexBiasTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="288"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:288</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editSpeciesDiagnosis"></a>
+                    <span class="name">
+                        <b>
+                            editSpeciesDiagnosis
+                        </b>
+                        <a href="#editSpeciesDiagnosis"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>editSpeciesDiagnosis(speciesdiagnosis, locationspecies)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="168"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:168</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>speciesdiagnosis</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>locationspecies</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editSpeciesDiagnosisTooltip"></a>
+                    <span class="name">
+                        <b>
+                            editSpeciesDiagnosisTooltip
+                        </b>
+                        <a href="#editSpeciesDiagnosisTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>editSpeciesDiagnosisTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="290"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:290</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editSpeciesTooltip"></a>
+                    <span class="name">
+                        <b>
+                            editSpeciesTooltip
+                        </b>
+                        <a href="#editSpeciesTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>editSpeciesTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="281"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:281</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="79"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:79</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openDeleteLocationSpeciesConfirm"></a>
+                    <span class="name">
+                        <b>
+                            openDeleteLocationSpeciesConfirm
+                        </b>
+                        <a href="#openDeleteLocationSpeciesConfirm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openDeleteLocationSpeciesConfirm(locationspecies)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="128"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:128</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>locationspecies</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openDeleteSpeciesDiagnosisConfirm"></a>
+                    <span class="name">
+                        <b>
+                            openDeleteSpeciesDiagnosisConfirm
+                        </b>
+                        <a href="#openDeleteSpeciesDiagnosisConfirm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openDeleteSpeciesDiagnosisConfirm(speciesdiagnosis)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="240"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:240</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>speciesdiagnosis</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openSnackBar"></a>
+                    <span class="name">
+                        <b>
+                            openSnackBar
+                        </b>
+                        <a href="#openSnackBar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openSnackBar(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, duration: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="292"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:292</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>message</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>duration</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="populationTooltip"></a>
+                    <span class="name">
+                        <b>
+                            populationTooltip
+                        </b>
+                        <a href="#populationTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>populationTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="286"
+                            class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:286</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="confirmDialogRef"></a>
+                        <span class="name">
+                            <b>
+                            confirmDialogRef</b>
+                            <a href="#confirmDialogRef"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../components/ConfirmComponent.html" target="_self" >MatDialogRef&lt;ConfirmComponent&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:47</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="dataSource"></a>
+                        <span class="name">
+                            <b>
+                            dataSource</b>
+                            <a href="#dataSource"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:67</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="displayedColumns"></a>
+                        <span class="name">
+                            <b>
+                            displayedColumns</b>
+                            <a href="#displayedColumns"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>[]</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[
+    &#x27;species&#x27;,
+    &#x27;location&#x27;,
+    &#x27;population&#x27;,
+    &#x27;sick&#x27;,
+    &#x27;dead&#x27;,
+    &#x27;sick_estimated&#x27;,
+    &#x27;dead_estimated&#x27;,
+    &#x27;captive&#x27;,
+    &#x27;age_bias&#x27;,
+    &#x27;sex_bias&#x27;,
+    &#x27;diagnosis&#x27;
+  ]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:51</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="editLocationSpeciesDialogRef"></a>
+                        <span class="name">
+                            <b>
+                            editLocationSpeciesDialogRef</b>
+                            <a href="#editLocationSpeciesDialogRef"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../components/EditLocationSpeciesComponent.html" target="_self" >MatDialogRef&lt;EditLocationSpeciesComponent&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:46</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="editSpeciesDiagnosisDialogRef"></a>
+                        <span class="name">
+                            <b>
+                            editSpeciesDiagnosisDialogRef</b>
+                            <a href="#editSpeciesDiagnosisDialogRef"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../components/EditSpeciesDiagnosisComponent.html" target="_self" >MatDialogRef&lt;EditSpeciesDiagnosisComponent&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:45</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="errorMessage"></a>
+                        <span class="name">
+                            <b>
+                            errorMessage</b>
+                            <a href="#errorMessage"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:49</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="expandedElement"></a>
+                        <span class="name">
+                            <b>
+                            expandedElement</b>
+                            <a href="#expandedElement"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:65</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="isExpansionDetailRow"></a>
+                        <span class="name">
+                            <b>
+                            isExpansionDetailRow</b>
+                            <a href="#isExpansionDetailRow"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>() &#x3D;&gt; {...}</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:69</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="snackBar"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            snackBar</b>
+                            <a href="#snackBar"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>MatSnackBar</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/location-species-table/location-species-table.component.ts:74</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, Input } from &#x27;@angular/core&#x27;;
+import { animate, state, style, transition, trigger } from &#x27;@angular/animations&#x27;;
+import { MatDialog, MatDialogRef, MatExpansionPanel } from &#x27;@angular/material&#x27;;
+
+import { EditLocationSpeciesComponent } from &#x27;@app/edit-location-species/edit-location-species.component&#x27;;
+
+import { EditSpeciesDiagnosisComponent } from &#x27;@app/edit-species-diagnosis/edit-species-diagnosis.component&#x27;;
+
+import { MatTableDataSource } from &#x27;@angular/material&#x27;;
+import { MatSnackBar } from &#x27;@angular/material&#x27;;
+
+import { LocationSpecies } from &#x27;@interfaces/location-species&#x27;;
+
+import { ConfirmComponent } from &#x27;@confirm/confirm.component&#x27;;
+import { LocationSpeciesService } from &#x27;@services/location-species.service&#x27;;
+import { SpeciesDiagnosisService } from &#x27;@services/species-diagnosis.service&#x27;;
+
+import { DataUpdatedService } from &#x27;@app/services/data-updated.service&#x27;;
+
+import { AgeBias } from &#x27;@interfaces/age-bias&#x27;;
+import { SexBias } from &#x27;@interfaces/sex-bias&#x27;;
+import { Organization } from &#x27;@interfaces/organization&#x27;;
+import { FIELD_HELP_TEXT } from &#x27;@app/app.field-help-text&#x27;;
+
+@Component({
+  selector: &#x27;app-location-species-table&#x27;,
+  templateUrl: &#x27;./location-species-table.component.html&#x27;,
+  styleUrls: [&#x27;./location-species-table.component.scss&#x27;],
+  animations: [
+    trigger(&#x27;detailExpand&#x27;, [
+      state(&#x27;collapsed&#x27;, style({ height: &#x27;0px&#x27;, minHeight: &#x27;0&#x27;, visibility: &#x27;hidden&#x27; })),
+      state(&#x27;expanded&#x27;, style({ height: &#x27;*&#x27;, visibility: &#x27;visible&#x27; })),
+      transition(&#x27;expanded &lt;&#x3D;&gt; collapsed&#x27;, animate(&#x27;225ms cubic-bezier(0.4, 0.0, 0.2, 1)&#x27;)),
+    ]),
+  ],
+})
+export class LocationSpeciesTableComponent implements OnInit {
+  @Input(&#x27;eventData&#x27;) eventData: Object;
+  @Input(&#x27;locationspecies&#x27;) locationspecies: LocationSpecies[];
+  @Input(&#x27;permissions&#x27;) permissions: Object;
+  @Input(&#x27;ageBiases&#x27;) ageBiases: AgeBias[];
+  @Input(&#x27;sexBiases&#x27;) sexBiases: SexBias[];
+  @Input(&#x27;laboratories&#x27;) laboratories: Organization[];
+
+  editSpeciesDiagnosisDialogRef: MatDialogRef&lt;EditSpeciesDiagnosisComponent&gt;;
+  editLocationSpeciesDialogRef: MatDialogRef&lt;EditLocationSpeciesComponent&gt;;
+  confirmDialogRef: MatDialogRef&lt;ConfirmComponent&gt;;
+
+  errorMessage &#x3D; &#x27;&#x27;;
+
+  displayedColumns &#x3D; [
+    &#x27;species&#x27;,
+    &#x27;location&#x27;,
+    &#x27;population&#x27;,
+    &#x27;sick&#x27;,
+    &#x27;dead&#x27;,
+    &#x27;sick_estimated&#x27;,
+    &#x27;dead_estimated&#x27;,
+    &#x27;captive&#x27;,
+    &#x27;age_bias&#x27;,
+    &#x27;sex_bias&#x27;,
+    &#x27;diagnosis&#x27;
+  ];
+  // dataSource &#x3D; new ExampleDataSource();
+  expandedElement: any;
+
+  dataSource;
+
+  isExpansionDetailRow &#x3D; (i: number, row: Object) &#x3D;&gt; row.hasOwnProperty(&#x27;detailRow&#x27;);
+
+  constructor(
+    private dialog: MatDialog,
+    private locationSpeciesService: LocationSpeciesService,
+    public snackBar: MatSnackBar,
+    private speciesDiagnosisService: SpeciesDiagnosisService,
+    private dataUpdatedService: DataUpdatedService
+  ) { }
+
+  ngOnInit() {
+
+    // if (this.permissions) {
+    //   console.log(&#x27;location-species-table.component has this permissions object: &#x27; + this.permissions);
+    // }
+
+    const data &#x3D; this.locationspecies;
+
+    const rows &#x3D; [];
+    data.forEach(element &#x3D;&gt; rows.push(element, { detailRow: true, element }));
+    console.log(rows);
+
+    this.dataSource &#x3D; new MatTableDataSource(rows);
+  }
+
+
+  editLocationSpecies(locationspecies) {
+
+    // Open dialog for editing location species
+    this.editLocationSpeciesDialogRef &#x3D; this.dialog.open(EditLocationSpeciesComponent, {
+      disableClose: true,
+      data: {
+        eventData: this.eventData,
+        locationspecies: locationspecies,
+        ageBiases: this.ageBiases,
+        sexBiases: this.sexBiases,
+        location_species_action: &#x27;edit&#x27;,
+        action_text: &#x27;edit&#x27;,
+        action_button_text: &#x27;Save Changes&#x27;,
+        title: &#x27;Edit species&#x27;,
+        titleIcon: &#x27;edit&#x27;
+        // eventlocation: eventlocation
+      }
+    });
+
+    this.editLocationSpeciesDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          // this.refreshEvent();
+          // for (let i &#x3D; 0; i &lt; this.selection.length; i++) {
+          //   this.selection[i].clear();
+          // }
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+  openDeleteLocationSpeciesConfirm(locationspecies) {
+
+    this.confirmDialogRef &#x3D; this.dialog.open(ConfirmComponent,
+      {
+        disableClose: true,
+        data: {
+          title: &#x27;Delete species from this location&#x27;,
+          titleIcon: &#x27;delete_forever&#x27;,
+          message: &#x27;Are you sure you want to delete this species?&#x27;,
+          messageIcon: &#x27;&#x27;,
+          confirmButtonText: &#x27;Delete&#x27;,
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result &#x3D;&gt; {
+      if (result &#x3D;&#x3D;&#x3D; true) {
+        this.deleteLocationSpecies(locationspecies);
+      }
+    });
+
+  }
+
+  deleteLocationSpecies(locationspecies) {
+
+    this.locationSpeciesService.delete(locationspecies.id)
+      .subscribe(
+        () &#x3D;&gt; {
+          this.openSnackBar(&#x27;Species Deleted&#x27;, &#x27;OK&#x27;, 5000);
+          this.dataUpdatedService.triggerRefresh();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.openSnackBar(&#x27;Error. Species not deleted. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+
+        }
+      );
+  }
+
+  editSpeciesDiagnosis(speciesdiagnosis, locationspecies) {
+
+    // form the exisiting diagnosis id array
+    const existingDiagnoses &#x3D; [];
+    for (const item of locationspecies.speciesdiagnoses) {
+      existingDiagnoses.push(item.diagnosis);
+    }
+
+    this.editSpeciesDiagnosisDialogRef &#x3D; this.dialog.open(EditSpeciesDiagnosisComponent, {
+      minWidth: &#x27;75%&#x27;,
+      disableClose: true,
+      data: {
+        locationspecies: locationspecies,
+        speciesdiagnosis: speciesdiagnosis,
+        laboratories: this.laboratories,
+        existing_diagnoses: existingDiagnoses,
+        species_diagnosis_action: &#x27;edit&#x27;,
+        title: &#x27;Edit Species Diagnosis&#x27;,
+        titleIcon: &#x27;edit&#x27;,
+        actionButtonIcon: &#x27;save&#x27;,
+        action_button_text: &#x27;Save&#x27;
+      }
+    });
+
+    this.editSpeciesDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          this.dataUpdatedService.triggerRefresh();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+  }
+
+
+  addSpeciesDiagnosis(locationspecies) {
+
+    // form the exisiting diagnosis id array
+    const existingDiagnoses &#x3D; [];
+    for (const item of locationspecies.speciesdiagnoses) {
+      existingDiagnoses.push(item.diagnosis);
+    }
+
+    this.editSpeciesDiagnosisDialogRef &#x3D; this.dialog.open(EditSpeciesDiagnosisComponent, {
+      minWidth: &#x27;75%&#x27;,
+      disableClose: true,
+      data: {
+        locationspecies: locationspecies,
+        laboratories: this.laboratories,
+        existing_diagnoses: existingDiagnoses,
+        species_diagnosis_action: &#x27;add&#x27;,
+        title: &#x27;Add diagnosis for this species&#x27;,
+        titleIcon: &#x27;add&#x27;,
+        actionButtonIcon: &#x27;save&#x27;,
+        action_button_text: &#x27;Save&#x27;
+      }
+    });
+
+    this.editSpeciesDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          this.dataUpdatedService.triggerRefresh();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+  }
+
+  openDeleteSpeciesDiagnosisConfirm(speciesdiagnosis) {
+
+    this.confirmDialogRef &#x3D; this.dialog.open(ConfirmComponent,
+      {
+        disableClose: true,
+        data: {
+          title: &#x27;Delete diagnosis from this species&#x27;,
+          titleIcon: &#x27;delete_forever&#x27;,
+          message: &#x27;Are you sure you want to delete this diagnosis?&#x27;,
+          messageIcon: &#x27;&#x27;,
+          confirmButtonText: &#x27;Delete&#x27;,
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result &#x3D;&gt; {
+      if (result &#x3D;&#x3D;&#x3D; true) {
+        this.deleteSpeciesDiagnosis(speciesdiagnosis);
+        this.dataUpdatedService.triggerRefresh();
+      }
+    });
+
+  }
+
+  deleteSpeciesDiagnosis(speciesdiagnosis) {
+
+    this.speciesDiagnosisService.delete(speciesdiagnosis.id)
+      .subscribe(
+        () &#x3D;&gt; {
+          this.openSnackBar(&#x27;Species diagnosis deleted&#x27;, &#x27;OK&#x27;, 5000);
+          this.dataUpdatedService.triggerRefresh();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.openSnackBar(&#x27;Error. Species diagnosis not deleted. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+
+        }
+      );
+  }
+
+  editSpeciesTooltip() { const string &#x3D; FIELD_HELP_TEXT.editSpeciesTooltip; return string; }
+  editKnownDeadTooltip() { const string &#x3D; FIELD_HELP_TEXT.editKnownDeadTooltip; return string; }
+  editEstimatedDeadTooltip() { const string &#x3D; FIELD_HELP_TEXT.editEstimatedDeadTooltip; return string; }
+  editKnownSickTooltip() { const string &#x3D; FIELD_HELP_TEXT.editKnownSickTooltip; return string; }
+  editEstimatedSickTooltip() { const string &#x3D; FIELD_HELP_TEXT.editEstimatedSickTooltip; return string; }
+  populationTooltip() { const string &#x3D; FIELD_HELP_TEXT.populationTooltip; return string; }
+  editAgeBiasTooltip() { const string &#x3D; FIELD_HELP_TEXT.editAgeBiasTooltip; return string; }
+  editSexBiasTooltip() { const string &#x3D; FIELD_HELP_TEXT.editSexBiasTooltip; return string; }
+  editCaptiveTooltip() { const string &#x3D; FIELD_HELP_TEXT.editCaptiveTooltip; return string; }
+  editSpeciesDiagnosisTooltip() { const string &#x3D; FIELD_HELP_TEXT.editSpeciesDiagnosisTooltip; return string; }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+
+
+}
+
+
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div *ngIf&#x3D;&quot;locationspecies.length &gt; 0&quot; class&#x3D;&quot;example-container&quot;&gt;
+  &lt;mat-table #table [dataSource]&#x3D;&quot;dataSource&quot;&gt;
+
+    &lt;!-- Species Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;species&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef&gt; Species &lt;mat-icon class&#x3D;&quot;hint-table-hover-text&quot; matSuffix
+          matTooltip&#x3D;{{editSpeciesTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+          help&lt;/mat-icon&gt;
+      &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt; {{element.species_string}} &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Location Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;location&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef&gt; Location &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt;
+        &lt;span&gt;{{element.administrative_level_two_string}},
+          {{element.administrative_level_one_string}}&lt;/span&gt;
+      &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Population Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;population&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef&gt; Population &lt;mat-icon class&#x3D;&quot;hint-table-hover-text&quot; matSuffix
+        matTooltip&#x3D;{{populationTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+      &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt; {{element.population_count}} &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Sick Count Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;sick&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef&gt; Sick &lt;mat-icon class&#x3D;&quot;hint-table-hover-text&quot; matSuffix
+        matTooltip&#x3D;{{editKnownSickTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+    &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt; {{element.sick_count}} &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Dead Count Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;dead&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef&gt; Dead &lt;mat-icon class&#x3D;&quot;hint-table-hover-text&quot; matSuffix
+        matTooltip&#x3D;{{editKnownDeadTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+      &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt; {{element.dead_count}} &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Sick Count Estimated Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;sick_estimated&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef&gt; Sick Estimate &lt;mat-icon class&#x3D;&quot;hint-table-hover-text&quot; matSuffix
+        matTooltip&#x3D;{{editEstimatedSickTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+      &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt; {{element.sick_count_estimated}}
+      &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Dead Count Estimated Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;dead_estimated&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef&gt; Dead Estimate &lt;mat-icon class&#x3D;&quot;hint-table-hover-text&quot; matSuffix
+        matTooltip&#x3D;{{editEstimatedDeadTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+      &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt; {{element.dead_count_estimated}}
+      &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Captive Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;captive&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef&gt; Captive &lt;mat-icon class&#x3D;&quot;hint-table-hover-text&quot; matSuffix
+        matTooltip&#x3D;{{editCaptiveTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+      &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt; {{element.captive ? &#x27;Yes&#x27;: &#x27;No&#x27;}}
+      &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Age Bias Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;age_bias&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef&gt; Age Bias &lt;mat-icon class&#x3D;&quot;hint-table-hover-text&quot; matSuffix
+        matTooltip&#x3D;{{editAgeBiasTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+      &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt; {{element.age_bias | displayValue:&#x27;name&#x27;:this.ageBiases}}
+      &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Sex Bias Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;sex_bias&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef&gt; Sex Bias &lt;mat-icon class&#x3D;&quot;hint-table-hover-text&quot; matSuffix
+        matTooltip&#x3D;{{editSexBiasTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+      &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt; {{element.sex_bias | displayValue:&#x27;name&#x27;:this.sexBiases}}
+      &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+    &lt;!-- Diagnosis Column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;diagnosis&quot;&gt;
+      &lt;mat-header-cell *matHeaderCellDef&gt; Diagnosis &lt;mat-icon class&#x3D;&quot;hint-table-hover-text&quot; matSuffix
+        matTooltip&#x3D;{{editSpeciesDiagnosisTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+        help&lt;/mat-icon&gt;
+      &lt;/mat-header-cell&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt;
+        &lt;span *ngIf&#x3D;&quot;element.speciesdiagnoses&quot;&gt;
+          &lt;ul class&#x3D;&quot;table-cell-list&quot;&gt;
+            &lt;li *ngFor&#x3D;&quot;let speciesDiagnosis of element.speciesdiagnoses&quot;&gt;{{speciesDiagnosis.diagnosis_string}}&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/span&gt;
+      &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+
+
+    &lt;!-- Expanded Content Column - The detail row is made up of this one column --&gt;
+    &lt;ng-container matColumnDef&#x3D;&quot;expandedDetail&quot;&gt;
+      &lt;mat-cell *matCellDef&#x3D;&quot;let detail&quot; class&#x3D;&quot;addpadd&quot;&gt;
+        &lt;div class&#x3D;&quot;species-detail-action-bar-left&quot;&gt;
+          &lt;button mat-button color&#x3D;&quot;primary&quot; (click)&#x3D;&quot;editLocationSpecies(detail.element)&quot;
+            [disabled]&#x3D;&quot;!permissions.update || eventData.complete&quot;&gt;
+            &lt;mat-icon&gt;edit&lt;/mat-icon&gt; Edit Species
+          &lt;/button&gt;
+          &lt;button mat-button color&#x3D;&quot;warn&quot; (click)&#x3D;&quot;openDeleteLocationSpeciesConfirm(detail.element)&quot;
+            [disabled]&#x3D;&quot;!permissions.destroy || eventData.complete&quot;&gt;
+            &lt;mat-icon&gt;delete_forever&lt;/mat-icon&gt; Delete Species
+          &lt;/button&gt;
+        &lt;/div&gt;
+
+        &lt;div *ngIf&#x3D;&quot;detail.element.speciesdiagnoses.length &#x3D;&#x3D;&#x3D; 0&quot; class&#x3D;&quot;event-group-no-data&quot;&gt;No diagnosis for this species at this location&lt;/div&gt;
+        &lt;div *ngIf&#x3D;&quot;detail.element.speciesdiagnoses.length &gt; 0&quot;&gt;
+          &lt;label class&#x3D;&quot;text-larger text-bold&quot;&gt;Species Diagnoses&lt;/label&gt;
+          &lt;table class&#x3D;&quot;species-diagnosis-table&quot;&gt;
+            &lt;tr&gt;
+              &lt;th&gt;Species Diagnosis&lt;/th&gt;
+              &lt;th&gt;Significance of Diagnosis for Species&lt;/th&gt;
+              &lt;th&gt;Basis of Diagnosis&lt;/th&gt;
+              &lt;th&gt;Number Assessed&lt;/th&gt;
+              &lt;th&gt;Number with this diagnosis&lt;/th&gt;
+              &lt;th&gt;Species Diagnosis Suspect &lt;/th&gt;
+              &lt;th&gt;Diagnosing Lab &lt;/th&gt;
+              &lt;th&gt;Edit&lt;/th&gt;
+              &lt;th&gt;Delete&lt;/th&gt;
+            &lt;/tr&gt;
+
+            &lt;tr *ngFor&#x3D;&quot;let speciesdiagnosis of detail.element.speciesdiagnoses&quot;&gt;
+              &lt;td&gt;{{speciesdiagnosis.diagnosis_string}}&lt;/td&gt;
+              &lt;td&gt;{{speciesdiagnosis.cause_string}}&lt;/td&gt;
+              &lt;td&gt;{{speciesdiagnosis.basis_string}}&lt;/td&gt;
+              &lt;td&gt;{{speciesdiagnosis.tested_count}}&lt;/td&gt;
+              &lt;td&gt;{{speciesdiagnosis.diagnosis_count}}&lt;/td&gt;
+              &lt;td&gt;{{speciesdiagnosis.suspect ? &#x27;Yes&#x27; : &#x27;No&#x27;}}&lt;/td&gt;
+              &lt;td&gt;{{speciesdiagnosis.organizations_string}}&lt;/td&gt;
+              &lt;td&gt;
+                &lt;button mat-icon-button aria-label&#x3D;&quot;Edit species diagnosis&quot; color&#x3D;&quot;accent&quot; [disabled]&#x3D;&quot;!permissions.update || eventData.complete&quot;
+                  (click)&#x3D;&quot;editSpeciesDiagnosis(speciesdiagnosis, detail.element)&quot;&gt;
+                  &lt;mat-icon&gt;edit&lt;/mat-icon&gt;
+                &lt;/button&gt;
+              &lt;/td&gt;
+              &lt;td&gt;
+                &lt;button mat-icon-button aria-label&#x3D;&quot;delete species diagnosis&quot; color&#x3D;&quot;warn&quot; [disabled]&#x3D;&quot;!permissions.destroy || eventData.complete&quot;
+                  (click)&#x3D;&quot;openDeleteSpeciesDiagnosisConfirm(speciesdiagnosis)&quot;&gt;
+                  &lt;mat-icon&gt;remove_circle&lt;/mat-icon&gt;
+                &lt;/button&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/table&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;species-detail-action-bar-left&quot;&gt;
+          &lt;button mat-button color&#x3D;&quot;primary&quot; class&#x3D;&quot;species-detail-action-button&quot; (click)&#x3D;&quot;addSpeciesDiagnosis(detail.element)&quot;
+            [disabled]&#x3D;&quot;!permissions.update || eventData.complete&quot;&gt;
+            &lt;mat-icon&gt;add&lt;/mat-icon&gt; Add Species Diagnosis
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/mat-cell&gt;
+    &lt;/ng-container&gt;
+
+
+    &lt;mat-header-row *matHeaderRowDef&#x3D;&quot;displayedColumns&quot;&gt;&lt;/mat-header-row&gt;
+    &lt;mat-row *matRowDef&#x3D;&quot;let row; columns: displayedColumns;&quot; matRipple class&#x3D;&quot;element-row&quot; [class.expanded]&#x3D;&quot;expandedElement &#x3D;&#x3D; row&quot;
+      (click)&#x3D;&quot;expandedElement &#x3D; row&quot;&gt;&lt;/mat-row&gt;
+    &lt;mat-row *matRowDef&#x3D;&quot;let row; columns: [&#x27;expandedDetail&#x27;]; when: isExpansionDetailRow&quot; [@detailExpand]&#x3D;&quot;row.element &#x3D;&#x3D; expandedElement ? &#x27;expanded&#x27; : &#x27;collapsed&#x27;&quot;
+      style&#x3D;&quot;overflow: hidden&quot;&gt;
+    &lt;/mat-row&gt;
+  &lt;/mat-table&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./location-species-table.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.example-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    min-width: 300px;
+}
+
+.mat-table {
+    overflow: auto;
+    max-height: 500px;
+}
+
+.element-row {
+    position: relative;
+}
+
+.element-row:not(.expanded) {
+    cursor: pointer;
+}
+
+.element-row:not(.expanded):hover {
+    background: #f5f5f5;
+}
+
+.element-row.expanded {
+    border-bottom-color: transparent;
+}
+
+table {
+    border-radius: 5px;
+    color: rgba(40, 40, 60, 1);
+}
+
+table,
+th,
+td {
+    border: 1px solid rgba(210, 210, 220, 1);
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 8px;
+    font-size: 13px;
+}
+
+td {
+    text-align: center;
+}
+
+th {
+    text-align: left;
+    background-color: rgba(247, 247, 255, 1);
+}
+
+.event-header {
+    font-size: large;
+}
+
+.text-larger {
+    font-size: larger;
+}
+
+.text-smaller {
+    font-size: smaller;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(40, 40, 60, 0.5);
+}
+
+.event-detail-label {
+    font-size: large; //font-weight: bold;
+    // padding-top: 0;
+    // padding-bottom: 1em;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.event-header td {
+    text-align: left;
+}
+
+.event-details td {
+    text-align: left;
+}
+
+tr.noBorder td {
+    border: 0;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.limit-width {
+    width: 3em;
+}
+
+#privileged-event-data {
+    padding-top: 1em;
+}
+
+.event-detail-action-bar {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0 0 25px 0;
+    button {
+        margin: 0 10px 0 0;
+    }
+}
+
+.event-detail-action-bar-left {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+}
+
+.event-detail-action-button {
+    margin: 5px;
+}
+
+::ng-deep .mapDiv&gt;.mat-card {
+    padding: 0px 0px 0px 0px;
+}
+
+// Details div 
+.detailsDiv {
+    .details-info {
+        display: block;
+        padding: 15px 0;
+        .title {
+            font-size: 26px;
+            font-weight: 600;
+            color: rgba(40, 40, 60, 1);
+        }
+        .subtitle {
+            font-size: 18px;
+            font-weight: 500;
+            color: rgba(40, 40, 60, 1);
+        }
+        .meta {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(40, 40, 60, 0.5);
+        }
+    }
+}
+
+#map {
+    text-align: center;
+}
+
+.unmappable-warning {
+    z-index: 1000;
+    position: absolute; //height: 10px;
+    //width: 200px;
+    text-align: left;
+    margin: auto;
+    left: 50%;
+    bottom: 20px;
+}
+
+.legend {
+    position: absolute;
+    padding: 4px; // bottom: 60px !important;
+    top: 10px; //left: 15px;
+    right: 10px;
+    width: 200px;
+    /*height:320px;*/
+    z-index: 1000;
+    color: black;
+    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.87;
+}
+
+.legendIcon {
+    display: inline-block;
+}
+
+.legend-label {
+    padding-top: 1em;
+}
+
+#iconHolder {
+    margin-left: 15px;
+    padding-top: 2px;
+}
+
+
+#iconHolder .wmm-circle,
+#iconHolder .wmm-size-25 {
+    z-index: 0 !important;
+    margin-top: -4px;
+}
+
+#iconHolder-inline {}
+
+.flyway-blue:after {
+    background-color: rgba(0, 0, 255, 0.3);
+    border: 3px solid blue;
+}
+
+.flyway-yellow:after {
+    background-color: rgba(255, 255, 0, 0.3);
+    border: 3px solid yellow;
+}
+
+.flyway-green:after {
+    background-color: rgba(0, 255, 0, 0.3);
+    border: 3px solid green;
+}
+
+.flyway-red:after {
+    background-color: rgba(255, 238, 0, 0.3);
+    border: 3px solid red;
+}
+
+.huc-icon:after {
+    border: 3px solid #b57dcf;
+}
+
+.event-location-card {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.contacts-section-header {
+    display: flex;
+    flex-direction: row;
+    margin-right: 10em;
+}
+
+.form-control {
+    width: 18em;
+    margin: 10px;
+}
+
+
+.general-comment-text-area {
+    width: 40em;
+    margin-bottom: 2em;
+}
+
+.hint {
+    max-width: 90%;
+}
+
+.species-number-control {
+    width: 8em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    flex-grow: 1;
+}
+
+.species-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-style: groove;
+    border-radius: 5px;
+    margin-bottom: 1em;
+}
+
+.contacts-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-style: groove;
+    border-radius: 5px;
+    margin-bottom: 1em;
+    width: 100%;
+    display: inline-block;
+}
+
+.species-control-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.contact-select {
+    width: 40em;
+    flex-grow: 2;
+}
+
+.contact-type-select {
+    flex-grow: 1;
+    max-width: 100px;
+}
+
+.contact-button-div {
+    flex-grow: 1;
+}
+
+.alert-text {
+    vertical-align: middle;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+.mat-table {
+    .mat-header-row {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        .mat-header-cell {
+            box-sizing: border-box;
+            padding: 3px;
+            &amp;:first-child {
+                padding-left: 15px;
+            }
+            &amp;:last-child {
+                padding-right: 15px;
+            }
+        }
+    }
+    .mat-row {
+        .mat-cell {
+            font-size: 12px;
+            box-sizing: border-box;
+            padding: 3px;
+            &amp;:first-child {
+                padding-left: 15px;
+            }
+            &amp;:last-child {
+                padding-right: 15px;
+            }
+            ul {
+                padding-left: 15px;
+                li {
+                    line-height: 12px;
+                    padding: 3px 0;
+                    word-break: break-word;
+                }
+            }
+        }
+    }
+}
+
+.element-row {
+    position: relative;
+}
+
+.element-row:not(.expanded) {
+    cursor: pointer;
+}
+
+.element-row:not(.expanded):hover {
+    background: #f5f5f5;
+}
+
+.element-row.expanded {
+    border-bottom-color: transparent;
+}
+
+.text-bold {
+    font-style: bold !important;
+}
+
+.text-larger {
+    font-size: larger !important;
+}
+
+.species-detail-action-bar {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0 0 25px 0;
+    button {
+        margin: 0 10px 0 0;
+    }
+}
+
+.species-detail-action-bar-left {
+    display: flex;
+    flex-direction: column;
+
+    button{
+        margin: 5px auto;
+    }
+}
+
+
+
+// Message when no data in section
+.event-group-no-data{
+    display: block;
+    box-sizing: border-box;
+    padding: 25px 15px 45px 15px;
+    font-size: 18px;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.34);
+}
+
+
+.species-diagnosis-table{
+    margin: 12px auto;
+    td, th{
+        font-size: 12px;
+        box-sizing: border-box;
+        padding: 3px;
+        line-height: 12px;
+    }
+}
+.addpadd{
+    box-sizing: border-box;
+    padding: 12px 18px !important;
+}
+// Table styles
+.mat-table {
+    .mat-header-row {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        .mat-header-cell {
+            box-sizing: border-box;
+            padding: 3px;
+            &amp;:first-child {
+                padding-left: 15px;
+            }
+            &amp;:last-child {
+                padding-right: 15px;
+            }
+        }
+    }
+    .mat-row {
+        .mat-cell {
+            font-size: 12px;
+            box-sizing: border-box;
+            padding: 3px;
+            &amp;:first-child {
+                padding-left: 15px;
+            }
+            &amp;:last-child {
+                padding-right: 15px;
+            }
+            ul {
+                padding-left: 15px;
+                li {
+                    line-height: 12px;
+                    padding: 3px 0;
+                    word-break: break-word;
+                }
+            }
+        }
+    }
+}
+
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div *ngIf="locationspecies.length > 0" class="example-container">  <mat-table #table [dataSource]="dataSource">    <!-- Species Column -->    <ng-container matColumnDef="species">      <mat-header-cell *matHeaderCellDef> Species <mat-icon class="hint-table-hover-text" matSuffix          matTooltip={{editSpeciesTooltip()}} matTooltipClass="tooltip-breakline">          help</mat-icon>      </mat-header-cell>      <mat-cell *matCellDef="let element"> {{element.species_string}} </mat-cell>    </ng-container>    <!-- Location Column -->    <ng-container matColumnDef="location">      <mat-header-cell *matHeaderCellDef> Location </mat-header-cell>      <mat-cell *matCellDef="let element">        <span>{{element.administrative_level_two_string}},          {{element.administrative_level_one_string}}</span>      </mat-cell>    </ng-container>    <!-- Population Column -->    <ng-container matColumnDef="population">      <mat-header-cell *matHeaderCellDef> Population <mat-icon class="hint-table-hover-text" matSuffix        matTooltip={{populationTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>      </mat-header-cell>      <mat-cell *matCellDef="let element"> {{element.population_count}} </mat-cell>    </ng-container>    <!-- Sick Count Column -->    <ng-container matColumnDef="sick">      <mat-header-cell *matHeaderCellDef> Sick <mat-icon class="hint-table-hover-text" matSuffix        matTooltip={{editKnownSickTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>    </mat-header-cell>      <mat-cell *matCellDef="let element"> {{element.sick_count}} </mat-cell>    </ng-container>    <!-- Dead Count Column -->    <ng-container matColumnDef="dead">      <mat-header-cell *matHeaderCellDef> Dead <mat-icon class="hint-table-hover-text" matSuffix        matTooltip={{editKnownDeadTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>      </mat-header-cell>      <mat-cell *matCellDef="let element"> {{element.dead_count}} </mat-cell>    </ng-container>    <!-- Sick Count Estimated Column -->    <ng-container matColumnDef="sick_estimated">      <mat-header-cell *matHeaderCellDef> Sick Estimate <mat-icon class="hint-table-hover-text" matSuffix        matTooltip={{editEstimatedSickTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>      </mat-header-cell>      <mat-cell *matCellDef="let element"> {{element.sick_count_estimated}}      </mat-cell>    </ng-container>    <!-- Dead Count Estimated Column -->    <ng-container matColumnDef="dead_estimated">      <mat-header-cell *matHeaderCellDef> Dead Estimate <mat-icon class="hint-table-hover-text" matSuffix        matTooltip={{editEstimatedDeadTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>      </mat-header-cell>      <mat-cell *matCellDef="let element"> {{element.dead_count_estimated}}      </mat-cell>    </ng-container>    <!-- Captive Column -->    <ng-container matColumnDef="captive">      <mat-header-cell *matHeaderCellDef> Captive <mat-icon class="hint-table-hover-text" matSuffix        matTooltip={{editCaptiveTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>      </mat-header-cell>      <mat-cell *matCellDef="let element"> {{element.captive ? \'Yes\': \'No\'}}      </mat-cell>    </ng-container>    <!-- Age Bias Column -->    <ng-container matColumnDef="age_bias">      <mat-header-cell *matHeaderCellDef> Age Bias <mat-icon class="hint-table-hover-text" matSuffix        matTooltip={{editAgeBiasTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>      </mat-header-cell>      <mat-cell *matCellDef="let element"> {{element.age_bias | displayValue:\'name\':this.ageBiases}}      </mat-cell>    </ng-container>    <!-- Sex Bias Column -->    <ng-container matColumnDef="sex_bias">      <mat-header-cell *matHeaderCellDef> Sex Bias <mat-icon class="hint-table-hover-text" matSuffix        matTooltip={{editSexBiasTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>      </mat-header-cell>      <mat-cell *matCellDef="let element"> {{element.sex_bias | displayValue:\'name\':this.sexBiases}}      </mat-cell>    </ng-container>    <!-- Diagnosis Column -->    <ng-container matColumnDef="diagnosis">      <mat-header-cell *matHeaderCellDef> Diagnosis <mat-icon class="hint-table-hover-text" matSuffix        matTooltip={{editSpeciesDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">        help</mat-icon>      </mat-header-cell>      <mat-cell *matCellDef="let element">        <span *ngIf="element.speciesdiagnoses">          <ul class="table-cell-list">            <li *ngFor="let speciesDiagnosis of element.speciesdiagnoses">{{speciesDiagnosis.diagnosis_string}}</li>          </ul>        </span>      </mat-cell>    </ng-container>    <!-- Expanded Content Column - The detail row is made up of this one column -->    <ng-container matColumnDef="expandedDetail">      <mat-cell *matCellDef="let detail" class="addpadd">        <div class="species-detail-action-bar-left">          <button mat-button color="primary" (click)="editLocationSpecies(detail.element)"            [disabled]="!permissions.update || eventData.complete">            <mat-icon>edit</mat-icon> Edit Species          </button>          <button mat-button color="warn" (click)="openDeleteLocationSpeciesConfirm(detail.element)"            [disabled]="!permissions.destroy || eventData.complete">            <mat-icon>delete_forever</mat-icon> Delete Species          </button>        </div>        <div *ngIf="detail.element.speciesdiagnoses.length === 0" class="event-group-no-data">No diagnosis for this species at this location</div>        <div *ngIf="detail.element.speciesdiagnoses.length > 0">          <label class="text-larger text-bold">Species Diagnoses</label>          <table class="species-diagnosis-table">            <tr>              <th>Species Diagnosis</th>              <th>Significance of Diagnosis for Species</th>              <th>Basis of Diagnosis</th>              <th>Number Assessed</th>              <th>Number with this diagnosis</th>              <th>Species Diagnosis Suspect </th>              <th>Diagnosing Lab </th>              <th>Edit</th>              <th>Delete</th>            </tr>            <tr *ngFor="let speciesdiagnosis of detail.element.speciesdiagnoses">              <td>{{speciesdiagnosis.diagnosis_string}}</td>              <td>{{speciesdiagnosis.cause_string}}</td>              <td>{{speciesdiagnosis.basis_string}}</td>              <td>{{speciesdiagnosis.tested_count}}</td>              <td>{{speciesdiagnosis.diagnosis_count}}</td>              <td>{{speciesdiagnosis.suspect ? \'Yes\' : \'No\'}}</td>              <td>{{speciesdiagnosis.organizations_string}}</td>              <td>                <button mat-icon-button aria-label="Edit species diagnosis" color="accent" [disabled]="!permissions.update || eventData.complete"                  (click)="editSpeciesDiagnosis(speciesdiagnosis, detail.element)">                  <mat-icon>edit</mat-icon>                </button>              </td>              <td>                <button mat-icon-button aria-label="delete species diagnosis" color="warn" [disabled]="!permissions.destroy || eventData.complete"                  (click)="openDeleteSpeciesDiagnosisConfirm(speciesdiagnosis)">                  <mat-icon>remove_circle</mat-icon>                </button>              </td>            </tr>          </table>        </div>        <div class="species-detail-action-bar-left">          <button mat-button color="primary" class="species-detail-action-button" (click)="addSpeciesDiagnosis(detail.element)"            [disabled]="!permissions.update || eventData.complete">            <mat-icon>add</mat-icon> Add Species Diagnosis          </button>        </div>      </mat-cell>    </ng-container>    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>    <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row"      (click)="expandedElement = row"></mat-row>    <mat-row *matRowDef="let row; columns: [\'expandedDetail\']; when: isExpansionDetailRow" [@detailExpand]="row.element == expandedElement ? \'expanded\' : \'collapsed\'"      style="overflow: hidden">    </mat-row>  </mat-table></div></div>'
+    var COMPONENTS = [{'name': 'AboutComponent', 'selector': 'app-about'},{'name': 'AddCommentComponent', 'selector': 'app-add-comment'},{'name': 'AddEventDiagnosisComponent', 'selector': 'app-add-event-diagnosis'},{'name': 'AddEventLocationComponent', 'selector': 'app-add-event-location'},{'name': 'AddEventLocationContactComponent', 'selector': 'app-add-event-location-contact'},{'name': 'AddEventOrganizationComponent', 'selector': 'app-add-event-organization'},{'name': 'AddServiceRequestComponent', 'selector': 'app-add-service-request'},{'name': 'AlertCollaboratorsComponent', 'selector': 'app-alert-collaborators'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AuthenticationComponent', 'selector': 'app-authentication'},{'name': 'BrowserWarningComponent', 'selector': 'app-browser-warning'},{'name': 'BulkUploadComponent', 'selector': 'app-bulk-upload'},{'name': 'CircleChooseComponent', 'selector': 'app-circle-choose'},{'name': 'CircleManagementComponent', 'selector': 'app-circle-management'},{'name': 'CirclesComponent', 'selector': 'app-circles'},{'name': 'CollaborationRequestComponent', 'selector': 'app-collaboration-request'},{'name': 'CommentsTableComponent', 'selector': 'app-comments-table'},{'name': 'ConfirmComponent', 'selector': 'app-confirm'},{'name': 'CreateContactComponent', 'selector': 'app-create-contact'},{'name': 'CustomNotificationComponent', 'selector': 'app-custom-notification'},{'name': 'DiagnosticInfoComponent', 'selector': 'app-diagnostic-info'},{'name': 'DiagnosticServicesComponent', 'selector': 'app-diagnostic-services'},{'name': 'EditEventComponent', 'selector': 'app-edit-event'},{'name': 'EditEventLocationComponent', 'selector': 'app-edit-event-location'},{'name': 'EditLocationSpeciesComponent', 'selector': 'app-edit-location-species'},{'name': 'EditSpeciesDiagnosisComponent', 'selector': 'app-edit-species-diagnosis'},{'name': 'EditUserComponent', 'selector': 'app-edit-user'},{'name': 'EventDetailsComponent', 'selector': 'app-event-details'},{'name': 'EventDetailsShareComponent', 'selector': 'app-event-details-share'},{'name': 'EventGroupComponent', 'selector': 'app-event-group'},{'name': 'EventGroupManagementComponent', 'selector': 'app-event-group-management'},{'name': 'EventPublicReportComponent', 'selector': 'app-event-public-report'},{'name': 'EventsComponent', 'selector': 'app-event-table'},{'name': 'EventSubmissionComponent', 'selector': 'app-event-submission'},{'name': 'EventSubmissionConfirmComponent', 'selector': 'app-event-submission-confirm'},{'name': 'GnisLookupComponent', 'selector': 'app-gnis-lookup'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'LocationSpeciesTableComponent', 'selector': 'app-location-species-table'},{'name': 'NewLookupRequestComponent', 'selector': 'app-new-lookup-request'},{'name': 'NotificationsComponent', 'selector': 'app-notifications'},{'name': 'SavedSearchesComponent', 'selector': 'app-saved-searches'},{'name': 'SaveSearchComponent', 'selector': 'app-save-search'},{'name': 'SearchDialogComponent', 'selector': 'app-search-dialog'},{'name': 'SearchResultsSummaryReportComponent', 'selector': 'app-search-results-summary-report'},{'name': 'UserDashboardComponent', 'selector': 'app-user-dashboard'},{'name': 'UserEventsComponent', 'selector': 'app-user-events'},{'name': 'UserRegistrationComponent', 'selector': 'app-user-registration'},{'name': 'ViewCommentDetailsComponent', 'selector': 'app-view-comment-details'},{'name': 'ViewContactDetailsComponent', 'selector': 'app-view-contact-details'},{'name': 'ViewNotificationDetailsComponent', 'selector': 'app-view-notification-details'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'LocationSpeciesTableComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'LocationSpeciesTableComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

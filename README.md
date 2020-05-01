@@ -68,7 +68,11 @@ The three main environments are configured by environment files found at `/src/e
 
 Run `ng serve` for a dev server with live reload. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files. This will use the development environment configuration (environment.ts).
 
-  
+## Documentation
+
+The [Compodoc](https://compodoc.app/) documentation tool is used to generate static documenation of the WHISPers app. 
+
+Run `npm run compodoc` to generate and run the documentation server. Navigate to `http://127.0.0.1:8080`.
 
 ## Angular code scaffolding
 

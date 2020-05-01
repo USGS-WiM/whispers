@@ -46,6 +46,9 @@
 <p>The three main environments are configured by environment files found at <code>/src/enviroments/</code>. The API / web services root URL for each environment is stored in these files. Default environment is development at <code>environment.ts</code>, used by the development server (see below).  Test environment at <code>environment.test.ts</code> is used by the test build (see below). Production environment at <code>environment.prod.ts</code>is used by the production build (see below).</p>
 <h3 id="development-server-for-active-development">Development server for active development</h3>
 <p>Run <code>ng serve</code> for a dev server with live reload. Navigate to <code>http://localhost:4200/</code>. The app will automatically reload if you change any of the source files. This will use the development environment configuration (environment.ts).</p>
+<h2 id="documentation">Documentation</h2>
+<p>The <a href="https://compodoc.app/">Compodoc</a> documentation tool is used to generate static documenation of the WHISPers app. </p>
+<p>Run <code>npm run compodoc</code> to generate and run the documentation server. Navigate to <code>http://127.0.0.1:8080</code>.</p>
 <h2 id="angular-code-scaffolding">Angular code scaffolding</h2>
 <p>The Angular CLI offers a generate tool that makes the creation of some common component types a little easier.</p>
 <p>Run <code>ng generate component component-name</code> to generate a new component. You can also use <code>ng generate</code>  <code>directive</code>|<code>pipe</code>|<code>service</code>|<code>class</code>|<code>guard</code>|<code>interface</code>|<code>enum</code>|<code>module</code>.</p>

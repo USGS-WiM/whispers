@@ -10,11 +10,7 @@
     "hmr": "ng serve --hmr",
     "lint": "ng lint",
     "e2e": "ng e2e",
-<<<<<<< HEAD
     "compodoc": "./node_modules/.bin/compodoc -p tsconfig.json -w -s"
-=======
-    "compodoc": "npx compodoc -p src/tsconfig.app.json -w -s"
->>>>>>> c55086cdfd544c9ddc013e4f386aad891947f229
   },
   "private": true,
   "dependencies": {

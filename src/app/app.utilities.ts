@@ -21,158 +21,11 @@ export interface Notification {
 @Injectable()
 export class APP_UTILITIES {
 
-    public static dummyData: Notification[] = [{
-        id: 1,
-        user: 'admin',
-        source: 'Mark Adams',
-        event: 170676,
-        read: true,
-        link: 'event',
-        message: 'Mark Adams has added a species to Event 170676.',
-        created_date: '2019-10-17',
-        created_by: 'admin',
-        modified_date: '2019-09-23',
-        modified_by: '2019-01-30'
-    }, {
-        id: 2,
-        user: 'admin',
-        source: 'Barb Smith',
-        event: 170627,
-        read: true,
-        link: 'event',
-        message: 'Barb Smith has added a diagnosis to event 170627.',
-        created_date: '2018-10-07',
-        created_by: 'admin',
-        modified_date: '2019-03-03',
-        modified_by: '2018-11-18'
-    }, {
-        id: 3,
-        user: 'admin',
-        source: 'Custom Notification',
-        event: 170630,
-        read: false,
-        link: 'event',
-        message: 'An event with E.coli in Minnesota has been added: Event 170630.',
-        created_date: '2019-06-17',
-        created_by: 'admin',
-        modified_date: '2018-12-12',
-        modified_by: '2019-05-04'
-    }, {
-        id: 4,
-        user: 'admin',
-        source: 'Standard Notification',
-        event: 170672,
-        read: false,
-        link: 'event',
-        message: 'Jane Farmington (a member of your organization) has added an Event: Event 170672.',
-        created_date: '2018-10-22',
-        created_by: 'admin',
-        modified_date: '2019-03-19',
-        modified_by: '2019-08-22'
-    }, {
-        id: 5,
-        user: 'admin',
-        source: 'Custom Notification',
-        event: 170671,
-        read: true,
-        link: 'event',
-        message: 'An event with White-tailed deer in Minnesota or Wisconsin with the diagnosis Chronic wasting disease has been added: Event 170671.',
-        created_date: '2019-06-04',
-        created_by: 'admin',
-        modified_date: '2019-02-23',
-        modified_by: '2019-03-14'
-    }, {
-        id: 6,
-        user: 'admin',
-        source: 'Barb Smith',
-        event: 170665,
-        read: true,
-        link: 'event',
-        message: 'Barb Smith has edited a species on event 170665.',
-        created_date: '2019-10-02',
-        created_by: 'admin',
-        modified_date: '2019-02-23',
-        modified_by: '2018-12-24'
-    }, {
-        id: 7,
-        user: 'admin',
-        source: 'Custom Notification',
-        event: 170669,
-        read: true,
-        link: 'event',
-        message: 'Cynthia Dietze (a member of your organization) has added an Event: Event 170669.',
-        created_date: '2019-06-17',
-        created_by: 'admin',
-        modified_date: '2019-06-11',
-        modified_by: '2019-05-21'
-    }, {
-        id: 8,
-        user: 'admin',
-        source: 'Custom Notification',
-        event: 170674,
-        read: false,
-        link: 'event',
-        message: 'An event with E.coli in Minnesota has been added: Event 170674.',
-        created_date: '2018-10-25',
-        created_by: 'admin',
-        modified_date: '2019-04-30',
-        modified_by: '2019-03-28'
-    }, {
-        id: 9,
-        user: 'admin',
-        source: 'Barb Smith',
-        event: 170643,
-        read: true,
-        link: 'event',
-        message: 'Barb Smith edited a species on event 170643.',
-        created_date: '2019-08-14',
-        created_by: 'admin',
-        modified_date: '2019-04-17',
-        modified_by: '2018-12-23'
-    }, {
-        id: 10,
-        user: 'admin',
-        source: 'Standard Notification',
-        event: null,
-        read: true,
-        link: 'userdashboard',
-        message: 'A user (bheckler) has requested a role change.',
-        created_date: '2019-09-15',
-        created_by: 'admin',
-        modified_date: '2019-02-04',
-        modified_by: '2018-11-15'
-    }, {
-        id: 11,
-        user: 'admin',
-        source: 'Neil Baertlein',
-        event: 170657,
-        read: true,
-        link: 'event',
-        message: 'Neil Baertlein has updated a service request on event 170657.',
-        created_date: '2019-06-24',
-        created_by: 'admin',
-        modified_date: '2019-09-12',
-        modified_by: '2018-11-20'
-    }, {
-        id: 12,
-        user: 'admin',
-        source: 'Custom Notification',
-        event: 170657,
-        read: true,
-        link: 'event',
-        message: 'Jane Farmington (a member of your organization) has added an Event: Event 170657.',
-        created_date: '2019-04-19',
-        created_by: 'admin',
-        modified_date: '2019-03-06',
-        modified_by: '2018-10-29'
-    }];
-
     public static get TODAY(): any {
         const now = new Date();
         const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
         const t = new Date(new Date().toDateString());
         return t;
-
     }
 
     // converts date string for use in date pickers (compensates for UTC)
@@ -203,9 +56,7 @@ export class APP_UTILITIES {
         } else {
             mm_string = mm.toString();
         }
-
         today_string = yyyy + '-' + mm_string + '-' + dd_string;
-
         return today_string;
     }
 
@@ -253,10 +104,8 @@ export class APP_UTILITIES {
         } else {
             mm_string = mm.toString();
         }
-
         // formatting the date
         today_string = mm_string + '/' + dd_string + '/' + yyyy + ' ' + hr_string + ':' + min_string + ' ' + ampm;
-
         return today_string;
     }
 
@@ -310,7 +159,6 @@ export class APP_UTILITIES {
 
         // formatting the date
         today_string = monthNames[today.getMonth()] + ' ' + dd_string + ', ' + yyyy + ' ' + hr_string + ':' + min_string + ' ' + ampm;
-
         return today_string;
     }
 
@@ -335,9 +183,7 @@ export class APP_UTILITIES {
         } else {
             mm_string = mm.toString();
         }
-
         today_string = yyyy + mm_string  + dd_string;
-
         return today_string;
     }
 
@@ -385,9 +231,7 @@ export class APP_UTILITIES {
         } else {
             mm_string = mm.toString();
         }
-
         previousDate_string = yyyy + '-' + mm_string + '-' + dd_string;
-
         return previousDate_string;
     }
 
@@ -400,10 +244,6 @@ export class APP_UTILITIES {
         // doing this quick and dirty to make quick progress now.
         return '30';
     }
-
-    // currently not in use because the conversion requires access to the full selected object (with name)
-    // from the search dialog form. an independent lookup of associated names may need to be developed.
-    // public static convertSearchQuerytoDisplayQuery(searchQuery): any {}
 
     public static checkDuplicateInObject(propertyName, inputArray): boolean {
         let seenDuplicate = false;
@@ -420,7 +260,6 @@ export class APP_UTILITIES {
                 delete item.duplicate;
             }
         });
-
         return seenDuplicate;
     }
 
@@ -504,5 +343,4 @@ export class APP_UTILITIES {
         }
         return parsedSearch;
     }
-
 }

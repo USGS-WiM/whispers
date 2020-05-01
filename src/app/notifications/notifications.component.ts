@@ -44,9 +44,6 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   // emailAllOwnedandCollab: boolean;
   emailCustom: boolean;
   emailAllCustom: boolean;
-
-  dummyNotifications = APP_UTILITIES.dummyData;
-
   customNotificationRef: MatDialogRef<CustomNotificationComponent>;
 
   standardNotificationSettingsForm: FormGroup;
@@ -202,7 +199,9 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
 
     setTimeout(() => {
-      this.notificationsDataSource.sort = this.sort;
+      if (this.notificationsDataSource) {
+        this.notificationsDataSource.sort = this.sort;
+      }
     }, 3000);
 
     // sidenote: I'm setting them here because they weren't working on the first click if I set them in the ngOnInit function ¯\_(ツ)_/¯
@@ -280,7 +279,7 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
       }
 
     } else if (notificationType === 'custom') {
-      // TODO: set all customs to email on
+      // cuurently no 'email all' toggle for custom notifications.
     }
 
   }
@@ -298,21 +297,6 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
   getCustomCues(form) {
     return form.controls.custom_cues.controls;
   }
-
-  parseCustomCue(cue) {
-
-    // TODO: on hold pending the resolution of https://github.com/USGS-WiM/whispersservices_django/issues/337
-    // let cueStringArray = [];
-    // let eventLocationString = 'Land Ownership: ';
-    // if (cue.event_location_land_ownership !== null) {
-    //   for (let value of cue.event_location_land_ownership.values) {
-    //     eventLocationString.concat(value)
-    //   }
-    // }
-
-    // comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
-  }
-
 
   deleteWarning(cue, customcueIndex) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,

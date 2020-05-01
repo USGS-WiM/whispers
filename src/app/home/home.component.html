@@ -508,18 +508,23 @@
 
           <span class="spacer"></span>
 
-          <span class="results-button-row">
-            <button mat-button color="accent" (click)="generateResultsSummaryReport()">
+          <span class="results-button-row" *ngIf="this.currentResults">
+            <button mat-button color="accent" [disabled]="this.currentResults.length < 1"
+              (click)="generateResultsSummaryReport()"
+              matTooltip="Click to generate a printable summary report of your results. Disabled when no results available.">
               <mat-icon>
                 list_alt
               </mat-icon> Generate Search Results Report
             </button>
-            <button mat-button color="accent" (click)="exportEventSummaries()">
+            <button mat-button color="accent" [disabled]="this.currentResults.length < 1"
+              (click)="exportEventSummaries()"
+              matTooltip="Click to generate a CSV export of your results. Disabled when no results available.">
               <mat-icon>
                 unarchive
               </mat-icon> Export Data
             </button>
-            <button mat-button color="accent" (click)="openMetadataLink()">
+            <button mat-button color="accent" (click)="openMetadataLink()"
+              matTooltip="Click to open the WHISPers informational site, including metadata (external link).">
               <mat-icon>list</mat-icon> Metadata
             </button>
           </span>

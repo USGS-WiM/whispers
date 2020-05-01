@@ -29,10 +29,13 @@
         <b>END DATE</b>
         <span class="value">{{search.end_date|date:'mediumDate'}}</span>
       </span>
-      <!-- Affected Count -->
+      <!-- Affected Count and Affected Count Operator-->
       <span *ngIf="search.affected_count" class="search-param">
         <b>AFFECTED COUNT</b>
-        <span class="value">{{search.affected_count}}</span>
+        <span class="value">
+          {{search.affected_count_operator === '__gte' && search.affected_count_operator != null ? '&ge;' :
+          search.affected_count_operator === '__lte' && search.affected_count_operator != null ? '&le;' : '' }}&nbsp;{{search.affected_count}}
+        </span>
       </span>
       <!-- WHISPers Record Status -->
       <span class="search-param">

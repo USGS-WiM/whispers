@@ -70,6 +70,9 @@ export class AppComponent implements OnInit {
     this.resultsCountService.unreadNotificationsCount.subscribe(count => {
 
       if (count !== this.unreadNotificationCount) {
+        // if(this.unreadNotificationCount > 100) {
+
+        // }
         this.unreadNotificationCount = count;
         this.getUserNotifications();
       }
@@ -147,7 +150,6 @@ export class AppComponent implements OnInit {
               unreadNotifications.splice(i, 1);
             }
           }
-
           this.unreadNotificationCount = unreadNotifications.length;
 
           // if unreadNotifications array is greater than 10, cut it down for the previewNotifications array

@@ -1,0 +1,174 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>whispers documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+	      <link rel="stylesheet" href="./styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="./" class="navbar-brand">whispers documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content getting-started">
+                   <div class="content-data">
+
+<p><img src="USGS_ID_black.png" alt="USGS" class="img-responsive"> <img src="wimlogo.png" alt="WIM" class="img-responsive"></p>
+<h1 id="whispers">whispers</h1>
+<p>WHISPers v2</p>
+<p>This is the web client codebase for version 2 of Wildlife Health Information Sharing Partnership event reporting system. WHISPers allows users to enter, discover, and explore wildlife mortality data submitted by partners across North America and verified by trained biologists.</p>
+<p>This project was built with <a href="https://angular.io/">Angular</a> and generated with <a href="https://github.com/angular/angular-cli">Angular CLI</a>. It also relies on <a href="https://leafletjs.com">Leaflet</a>, <a href="https://www.openstreetmap.org/">OpenStreetMap</a>, <a href="https://github.com/bithost-gmbh/ngx-mat-select-search">NgxMatSelectSearch</a> and the <a href="https://github.com/usgs/search_api">USGS Search API</a>.</p>
+<h3 id="installation">Installation</h3>
+<p><em>Prerequisite</em>: Please install Angular-CLI by following <a href="https://github.com/angular/angular-cli#installation">these instructions</a>.</p>
+<p><code>git clone https://github.com/USGS-WiM/whispers.git</code></p>
+<p><code>cd whispers</code></p>
+<h4 id="install-the-projects-dependencies">install the project&#39;s dependencies</h4>
+<p><code>npm install</code></p>
+<p>Note: It is best to run <code>npm install</code> at least three times as it often takes several runs to successfully install all dependencies. </p>
+<h2 id="environments">Environments</h2>
+<p>The three main environments are configured by environment files found at <code>/src/enviroments/</code>. The API / web services root URL for each environment is stored in these files. Default environment is development at <code>environment.ts</code>, used by the development server (see below).  Test environment at <code>environment.test.ts</code> is used by the test build (see below). Production environment at <code>environment.prod.ts</code>is used by the production build (see below).</p>
+<h3 id="development-server-for-active-development">Development server for active development</h3>
+<p>Run <code>ng serve</code> for a dev server with live reload. Navigate to <code>http://localhost:4200/</code>. The app will automatically reload if you change any of the source files. This will use the development environment configuration (environment.ts).</p>
+<h2 id="documentation">Documentation</h2>
+<p>The <a href="https://compodoc.app/">Compodoc</a> documentation tool is used to generate static documenation of the WHISPers app. </p>
+<p>Run <code>npm run compodoc</code> to generate and run the documentation server. Navigate to <code>http://127.0.0.1:8080</code>.</p>
+<h2 id="angular-code-scaffolding">Angular code scaffolding</h2>
+<p>The Angular CLI offers a generate tool that makes the creation of some common component types a little easier.</p>
+<p>Run <code>ng generate component component-name</code> to generate a new component. You can also use <code>ng generate</code>  <code>directive</code>|<code>pipe</code>|<code>service</code>|<code>class</code>|<code>guard</code>|<code>interface</code>|<code>enum</code>|<code>module</code>.</p>
+<h2 id="distribution-build-for-test-and-production">Distribution build for test and production</h2>
+<p>When publishing the WHISPers app on the server for either the test phase or the final publishing to production level, a developer must run the Angular CLI build script to create a minimized, optimized package for server distribution. WHISPers has two build configurations: test and production. </p>
+<h4 id="test">Test</h4>
+<p>To be used when a new release version is ready for cooperator review but not yet ready for production. </p>
+<p>Run <code>ng build --configuration=test --base-href [relative path to web server root]</code> to build the project. The build artifacts will be stored in the <code>dist/</code> directory. This will use the test environment configuration.</p>
+<h3 id="production">Production</h3>
+<p>To be used when a release version has passed the testing phase by receiving approval for promotion by the cooperator. </p>
+<p>Run <code>ng build --prod --base-href [relative path to web server root]</code> to build the project. The build artifacts will be stored in the <code>dist/</code> directory. This will use the production environment configuration.</p>
+<p>Note: the main differences between these two configurations are 1) the API root (prod services/database vs test services/database) and 2) the inclusion of Google Analytics for the production configuration. </p>
+<h2 id="authors">Authors</h2>
+<ul>
+<li><strong><a href="https://github.com/BlakeDraper">Blake Draper</a></strong> - <em>Lead Developer</em> - <a href="https://wim.usgs.gov/">USGS Web Informatics &amp; Mapping</a></li>
+</ul>
+<ul>
+<li><strong><a href="https://github.com/njestes">Nick Estes</a></strong> - <em>Developer</em> - <a href="https://wim.usgs.gov/">USGS Web Informatics &amp; Mapping</a></li>
+</ul>
+<ul>
+<li><strong><a href="https://github.com/lprivette">Lauren Privette</a></strong> - <em>Developer</em> - <a href="https://wim.usgs.gov/">USGS Web Informatics &amp; Mapping</a></li>
+</ul>
+<ul>
+<li><strong><a href="https://github.com/mitchas">Mitch Samuels</a></strong> - <em>Designer/Developer</em> - <a href="https://wim.usgs.gov/">USGS Web Informatics &amp; Mapping</a></li>
+</ul>
+<p>See also the list of <a href="../../graphs/contributors">contributors</a> who participated in this project.</p>
+<h2 id="license">License</h2>
+<p>This software is in the Public Domain. See the <a href="LICENSE.md">LICENSE.md</a> file for details</p>
+<h2 id="suggested-citation">Suggested Citation</h2>
+<p>In the spirit of open source, please cite any re-use of the source code stored in this repository. Below is the suggested citation:</p>
+<p><code>This project contains code produced by the Web Informatics and Mapping (WIM) team at the United States Geological Survey (USGS). As a work of the United States Government, this project is in the public domain within the United States. https://wim.usgs.gov</code></p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<ul>
+<li><p><a href="https://angular.io/">Angular</a></p>
+</li>
+<li><p><a href="https://leafletjs.com">Leaflet</a></p>
+</li>
+<li><p><a href="https://www.openstreetmap.org/">OpenStreetMap</a></p>
+</li>
+<li><p><a href="https://github.com/bithost-gmbh/ngx-mat-select-search">NgxMatSelectSearch</a></p>
+</li>
+<li><p><a href="https://github.com/usgs/search_api">USGS Search API</a> and the <a href="https://webapps.usgs.gov/">Geospatial Science + Cyber Innovation Branch</a> of The USGS Texas Water Science Center</p>
+</li>
+</ul>
+<h2 id="about-wim">About WIM</h2>
+<ul>
+<li>This project authored by the <a href="https://wim.usgs.gov">USGS WIM team</a></li>
+</ul>
+<ul>
+<li>WIM is a team of developers and technologists who build and manage tools, software, web services, and databases to support USGS science and other federal government cooperators.</li>
+</ul>
+<ul>
+<li>WIM is a part of the <a href="https://www.usgs.gov/centers/wisconsin-water-science-center">Upper Midwest Water Science Center</a>.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'getting-started';
+            var COMPODOC_CURRENT_PAGE_URL = 'index.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="./js/libs/custom-elements.min.js"></script>
+       <script src="./js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="./js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="./js/menu-wc.js" defer></script>
+
+       <script src="./js/libs/bootstrap-native.js"></script>
+
+       <script src="./js/libs/es6-shim.min.js"></script>
+       <script src="./js/libs/EventDispatcher.js"></script>
+       <script src="./js/libs/promise.min.js"></script>
+       <script src="./js/libs/zepto.min.js"></script>
+
+       <script src="./js/compodoc.js"></script>
+
+       <script src="./js/tabs.js"></script>
+       <script src="./js/menu.js"></script>
+       <script src="./js/libs/clipboard.min.js"></script>
+       <script src="./js/libs/prism.js"></script>
+       <script src="./js/sourceCode.js"></script>
+          <script src="./js/search/search.js"></script>
+          <script src="./js/search/lunr.min.js"></script>
+          <script src="./js/search/search-lunr.js"></script>
+          <script src="./js/search/search_index.js"></script>
+       <script src="./js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -1,0 +1,1821 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>whispers documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">whispers documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Interfaces</li>
+  <li>AssociatedEvents</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/event-details/event-details.component.ts</code>
+        </p>
+
+
+
+        <section>
+            <h3 id="index">Index</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Properties</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#id">id</a>
+                                </li>
+                                <li>
+                                        <a href="#link">link</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section>
+                <h3 id="inputs">Properties</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="id"></a>
+                                        <span class="name"><b>id</b><a href="#id"><span class="icon ion-ios-link"></span></a></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>id:         <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="link"></a>
+                                        <span class="name"><b>link</b><a href="#link"><span class="icon ion-ios-link"></span></a></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>link:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { SelectionModel } from &#x27;@angular/cdk/collections&#x27;;
+import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, Output, EventEmitter, ViewEncapsulation } from &#x27;@angular/core&#x27;;
+import { Router, ActivatedRoute, ParamMap } from &#x27;@angular/router&#x27;;
+import { MatDialog, MatDialogRef, MatExpansionPanel, MatTabGroup } from &#x27;@angular/material&#x27;;
+import { MatPaginator, MatSort, MatTableDataSource } from &#x27;@angular/material&#x27;;
+
+import { animate, state, style, transition, trigger } from &#x27;@angular/animations&#x27;;
+//declare let L: any;
+
+import * as L from &#x27;leaflet&#x27;;
+import * as esri from &#x27;esri-leaflet&#x27;;
+import pdfMake from &#x27;pdfmake/build/pdfMake&#x27;;
+import pdfFonts from &#x27;pdfmake/build/vfs_fonts&#x27;;
+pdfMake.vfs &#x3D; pdfFonts.pdfMake.vfs;
+import html2canvas from &#x27;html2canvas&#x27;;
+// import * as esrilegend from &#x27;esri-leaflet-legend&#x27;;
+
+import { MatSnackBar } from &#x27;@angular/material&#x27;;
+import { TooltipPosition } from &#x27;@angular/material&#x27;;
+
+import { EventService } from &#x27;@services/event.service&#x27;;
+import { AdministrativeLevelOneService } from &#x27;@services/administrative-level-one.service&#x27;;
+import { CurrentUserService } from &#x27;@services/current-user.service&#x27;;
+
+import { EventDetail } from &#x27;@interfaces/event-detail&#x27;;
+import { EventLocation } from &#x27;@interfaces/event-location&#x27;;
+import { LocationSpecies } from &#x27;@interfaces/location-species&#x27;;
+import { EditEventComponent } from &#x27;@app/edit-event/edit-event.component&#x27;;
+import { AddEventDiagnosisComponent } from &#x27;@app/add-event-diagnosis/add-event-diagnosis.component&#x27;;
+import { AddEventOrganizationComponent } from &#x27;@app/add-event-organization/add-event-organization.component&#x27;;
+import { EditEventLocationComponent } from &#x27;@app/edit-event-location/edit-event-location.component&#x27;;
+import { EditLocationSpeciesComponent } from &#x27;@app/edit-location-species/edit-location-species.component&#x27;;
+import { LandOwnershipService } from &#x27;@services/land-ownership.service&#x27;;
+import { ConfirmComponent } from &#x27;@app/confirm/confirm.component&#x27;;
+import { marker } from &#x27;leaflet&#x27;;
+import { EventLocationService } from &#x27;@app/services/event-location.service&#x27;;
+import { EventOrganizationService } from &#x27;@app/services/event-organization.service&#x27;;
+import { EventDetailsShareComponent } from &#x27;@app/event-details/event-details-share/event-details-share.component&#x27;;
+import { AddEventLocationComponent } from &#x27;@app/add-event-location/add-event-location.component&#x27;;
+import { UserService } from &#x27;@app/services/user.service&#x27;;
+import { User } from &#x27;@interfaces/user&#x27;;
+import { SpeciesService } from &#x27;@services/species.service&#x27;;
+import { Species } from &#x27;@interfaces/species&#x27;;
+import { SexBiasService } from &#x27;@app/services/sex-bias.service&#x27;;
+import { SexBias } from &#x27;@interfaces/sex-bias&#x27;;
+import { AgeBiasService } from &#x27;@app/services/age-bias.service&#x27;;
+import { AgeBias } from &#x27;@interfaces/age-bias&#x27;;
+import { DataUpdatedService } from &#x27;@app/services/data-updated.service&#x27;;
+import { EventDiagnosisService } from &#x27;@app/services/event-diagnosis.service&#x27;;
+import { CommentTypeService } from &#x27;@services/comment-type.service&#x27;;
+import { CommentService } from &#x27;@app/services/comment.service&#x27;;
+import { CommentType } from &#x27;@interfaces/comment-type&#x27;;
+import { AddCommentComponent } from &#x27;@app/add-comment/add-comment.component&#x27;;
+import { AddEventLocationContactComponent } from &#x27;@app/add-event-location-contact/add-event-location-contact.component&#x27;;
+import { AddServiceRequestComponent } from &#x27;@app/add-service-request/add-service-request.component&#x27;;
+import { EventPublicReportComponent } from &#x27;@app/event-public-report/event-public-report.component&#x27;;
+
+import { EventLocationContactService } from &#x27;@services/event-location-contact.service&#x27;;
+
+import { ContactService } from &#x27;@services/contact.service&#x27;;
+
+import { CreateContactComponent } from &#x27;@create-contact/create-contact.component&#x27;;
+import { CreateContactService } from &#x27;@create-contact/create-contact.service&#x27;;
+
+import { APP_SETTINGS } from &#x27;@app/app.settings&#x27;;
+import { APP_UTILITIES } from &#x27;@app/app.utilities&#x27;;
+import { FIELD_HELP_TEXT } from &#x27;@app/app.field-help-text&#x27;;
+
+import { OrganizationService } from &#x27;@app/services/organization.service&#x27;;
+import { Organization } from &#x27;@interfaces/organization&#x27;;
+
+import { CircleManagementComponent } from &#x27;@app/circle-management/circle-management.component&#x27;;
+import { CircleChooseComponent } from &#x27;@app/circle-management/circle-choose/circle-choose.component&#x27;;
+import { CircleService } from &#x27;@services/circle.service&#x27;;
+import { Circle } from &#x27;@interfaces/circle&#x27;;
+import { CollaborationRequestComponent } from &#x27;@app/collaboration-request/collaboration-request.component&#x27;;
+import { buildMapFromList } from &#x27;@angular/flex-layout/extended/typings/style/style-transforms&#x27;;
+declare let gtag: Function;
+
+export interface AssociatedEvents {
+  id: any;
+  link: string;
+}
+
+@Component({
+  selector: &#x27;app-event-details&#x27;,
+  templateUrl: &#x27;./event-details.component.html&#x27;,
+  styleUrls: [&#x27;./event-details.component.scss&#x27;],
+  // encapsulation: ViewEncapsulation.None,
+  animations: [
+    trigger(&#x27;detailExpand&#x27;, [
+      state(&#x27;void&#x27;, style({ height: &#x27;0px&#x27;, minHeight: &#x27;0&#x27;, visibility: &#x27;hidden&#x27; })),
+      state(&#x27;*&#x27;, style({ height: &#x27;*&#x27;, visibility: &#x27;visible&#x27; })),
+      transition(&#x27;void &lt;&#x3D;&gt; *&#x27;, animate(&#x27;225ms cubic-bezier(0.4, 0.0, 0.2, 1)&#x27;)),
+    ]),
+  ],
+})
+export class EventDetailsComponent implements OnInit {
+  @Output() myEvent &#x3D; new EventEmitter();
+  @Input() selectedTab: number;
+
+  // @ViewChild(&#x27;speciesTable&#x27;) table: any;
+  eventID: string;
+  map;
+  icon;
+  administrative_level_one &#x3D; [];
+  landownerships;
+  species: Species[] &#x3D; [];
+  speciesLoading &#x3D; false;
+  associatedEvents: Array&lt;AssociatedEvents&gt; &#x3D; [];
+  currentlyOpenedItemIndex &#x3D; -1;
+
+  eventCommentsPanelOpen &#x3D; false;
+  serviceRequestPanelOpen &#x3D; false;
+  collaboratorsPanelOpen &#x3D; false;
+  locationCommentsPanelOpen &#x3D; false;
+  locationContactsPanelOpen &#x3D; false;
+  eventOwner;
+  natMapPoints;
+  eventNotFound &#x3D; false;
+
+  showAddEventLocation &#x3D; false;
+
+  editEventDialogRef: MatDialogRef&lt;EditEventComponent&gt;;
+  addEventDiagnosisDialogRef: MatDialogRef&lt;AddEventDiagnosisComponent&gt;;
+  addEventOrganizationDialogRef: MatDialogRef&lt;AddEventOrganizationComponent&gt;;
+  editEventLocationDialogRef: MatDialogRef&lt;EditEventLocationComponent&gt;;
+  editLocationSpeciesDialogRef: MatDialogRef&lt;EditLocationSpeciesComponent&gt;;
+  addEventLocationContactDialogRef: MatDialogRef&lt;AddEventLocationContactComponent&gt;;
+  addServiceRequestDialogRef: MatDialogRef&lt;AddServiceRequestComponent&gt;;
+  createContactDialogRef: MatDialogRef&lt;CreateContactComponent&gt;;
+  circleChooseDialogRef: MatDialogRef&lt;CircleChooseComponent&gt;;
+  circleManagementDialogRef: MatDialogRef&lt;CircleManagementComponent&gt;;
+  collaborationRequestDialogRef: MatDialogRef&lt;CollaborationRequestComponent&gt;;
+  eventPublicReportDialogRef: MatDialogRef&lt;EventPublicReportComponent&gt;;
+
+  addCommentDialogRef: MatDialogRef&lt;AddCommentComponent&gt;;
+
+  eventDetailsShareDialogRef: MatDialogRef&lt;EventDetailsShareComponent&gt;;
+
+  eventData: EventDetail;
+  eventLocationSpecies: LocationSpecies[] &#x3D; [];
+
+  confirmDialogRef: MatDialogRef&lt;ConfirmComponent&gt;;
+
+  selection &#x3D; [];
+
+  possibleEventDiagnoses &#x3D; [];
+
+  laboratories: Organization[] &#x3D; [];
+  organizations: Organization[] &#x3D; [];
+  userCircles: Circle[] &#x3D; [];
+
+  eventDataLoading &#x3D; true;
+
+  // see comment on line 182
+  // viewPanelStates: Object;
+
+  currentUser;
+
+  sexBiases: SexBias[];
+  ageBiases: AgeBias[];
+
+  commentTypes: CommentType[];
+
+  locationMarkers;
+  unMappables &#x3D; [];
+  eventPolys;
+  userContacts;
+  userContactsLoading &#x3D; false;
+
+  errorMessage;
+  flywaysVisible &#x3D; false;
+  watershedsVisible &#x3D; false;
+
+  canvas &#x3D; document.createElement(&#x27;canvas&#x27;);
+  capturedImage;
+  commentTableImage: any;
+
+  // selectedTab: number;
+
+  locationSpeciesDisplayedColumns &#x3D; [
+    &#x27;species&#x27;,
+    &#x27;location&#x27;,
+    &#x27;population&#x27;,
+    &#x27;sick&#x27;,
+    &#x27;dead&#x27;,
+    &#x27;sick_estimated&#x27;,
+    &#x27;dead_estimated&#x27;,
+    &#x27;captive&#x27;,
+    &#x27;age_bias&#x27;,
+    &#x27;sex_bias&#x27;,
+    &#x27;diagnosis&#x27;
+  ];
+
+  readCollaboratorArray: User[] &#x3D; [];
+  writeCollaboratorArray: User[] &#x3D; [];
+
+  @ViewChild(MatPaginator) locationSpeciesPaginator: MatPaginator;
+  @ViewChild(MatSort) locationSpeciesSort: MatSort;
+  @ViewChild(EventPublicReportComponent) eventReportComponent: EventPublicReportComponent;
+  @ViewChildren(MatExpansionPanel) viewPanels: QueryList&lt;MatExpansionPanel&gt;;
+  @ViewChild(MatTabGroup) eventDetailsTabs: MatTabGroup;
+
+  // this use of the viewPanels variable and associated functions is assumed (but not confirmed) deprecated.
+  // the original purpose may have been superceded by later development. it was removed 12/30/19 to fix a bug
+  // that involved breaking of location comments and location contacts collapse panels after a new item was added.
+  // associated functions(commented out below): getViewPanelState, setViewPanelState
+  // all left in for now in case issues are uncovered. - B.Draper 12/31/19
+  // @ViewChildren(MatExpansionPanel) viewPanels: QueryList&lt;MatExpansionPanel&gt;;
+
+  constructor(private route: ActivatedRoute,
+    private _eventService: EventService,
+    private userService: UserService,
+    private currentUserService: CurrentUserService,
+    private dataUpdatedService: DataUpdatedService,
+    private createContactSevice: CreateContactService,
+    private dialog: MatDialog,
+    private speciesService: SpeciesService,
+    private adminLevelOneService: AdministrativeLevelOneService,
+    private landownershipService: LandOwnershipService,
+    private eventLocationService: EventLocationService,
+    private eventDiagnosisService: EventDiagnosisService,
+    private eventLocationContactService: EventLocationContactService,
+    private eventOrganizationService: EventOrganizationService,
+    private ageBiasService: AgeBiasService,
+    private sexBiasService: SexBiasService,
+    private commentTypeService: CommentTypeService,
+    private organizationService: OrganizationService,
+    private commentService: CommentService,
+    private contactService: ContactService,
+    private circleService: CircleService,
+
+    public snackBar: MatSnackBar,
+    private router: Router
+  ) {
+    this.eventLocationSpecies &#x3D; [];
+
+    currentUserService.currentUser.subscribe(user &#x3D;&gt; {
+      this.currentUser &#x3D; user;
+    });
+
+    dataUpdatedService.trigger.subscribe((action) &#x3D;&gt; {
+      if (action &#x3D;&#x3D;&#x3D; &#x27;refresh&#x27;) {
+        this.refreshEvent();
+      }
+    });
+
+    createContactSevice.getCreatedContact().subscribe(
+      createdContact &#x3D;&gt; {
+        this.userContacts.push(createdContact);
+        this.userContacts.sort(function (a, b) {
+          if (a.last_name &lt; b.last_name) { return -1; }
+          if (a.last_name &gt; b.last_name) { return 1; }
+          return 0;
+        });
+      });
+  }
+
+  ngOnInit() {
+
+    // this.selectedTab &#x3D; 0;
+
+    const initialSelection &#x3D; [];
+    const allowMultiSelect &#x3D; true;
+    this.eventLocationSpecies &#x3D; [];
+
+    this.route.paramMap.subscribe(params &#x3D;&gt; {
+      this.eventID &#x3D; params.get(&#x27;id&#x27;);
+
+      // Actual request to event details service, using id
+      this._eventService.getEventDetails(this.eventID)
+        .subscribe(
+          (eventdetails) &#x3D;&gt; {
+            this.eventData &#x3D; eventdetails;
+
+            for (const event_location of this.eventData.eventlocations) {
+              for (const locationspecies of event_location.locationspecies) {
+                locationspecies.administrative_level_two_string &#x3D; event_location.administrative_level_two_string;
+                locationspecies.administrative_level_one_string &#x3D; event_location.administrative_level_one_string;
+                locationspecies.country_string &#x3D; event_location.country_string;
+                this.eventLocationSpecies.push(locationspecies);
+
+                this.readCollaboratorArray &#x3D; eventdetails.read_collaborators;
+                this.writeCollaboratorArray &#x3D; eventdetails.write_collaborators;
+
+                // for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                //   if (!this.searchInArray(this.possibleEventDiagnoses, &#x27;diagnosis&#x27;, speciesdiagnosis.diagnosis)) {
+                //     this.possibleEventDiagnoses.push(speciesdiagnosis);
+                //   }
+                // }
+
+                for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                  if (!this.searchInArray(this.possibleEventDiagnoses, &#x27;diagnosis&#x27;, speciesdiagnosis.diagnosis)) {
+                    this.possibleEventDiagnoses.push(speciesdiagnosis);
+                  } else {
+                    // it is in there already:
+                    // check if this one&#x27;s suspect field is false
+                    if (speciesdiagnosis.suspect &#x3D;&#x3D;&#x3D; false) {
+                      // if it is, then we need to remove the previously added one and add this one which is suspect &#x3D; false
+                      // loop thru possibleEventDiagnoses, if match, remove
+                      for (let i &#x3D; 0; i &lt; this.possibleEventDiagnoses.length; i++) {
+                        if (this.possibleEventDiagnoses[i].diagnosis &#x3D;&#x3D;&#x3D; speciesdiagnosis.diagnosis) {
+                          this.possibleEventDiagnoses.splice(i, 1);
+                        }
+                      }
+                      // then add the non suspect one
+                      this.possibleEventDiagnoses.push(speciesdiagnosis);
+
+                    }
+                  }
+                }
+
+              }
+            }
+
+            // add the &quot;Undetermined&quot; diagnosis to possibleDiagnoses, only if not already in the list
+            if (!this.searchInArray(this.possibleEventDiagnoses, &#x27;diagnosis&#x27;, APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis)) {
+              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+            }
+            // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of &quot;Pending&quot;.
+            // else if (eventdetails.complete &#x3D;&#x3D;&#x3D; false) {
+            //   this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+            // }
+
+            this.eventDataLoading &#x3D; false;
+          },
+          error &#x3D;&gt; {
+            this.errorMessage &#x3D; &lt;any&gt;error;
+            this.eventDataLoading &#x3D; false;
+            if (error.status !&#x3D;&#x3D; 200) {
+              this.eventNotFound &#x3D; true;
+            }
+            // if (JSON.parse(error).detail &#x3D;&#x3D;&#x3D; &#x27;Not found.&#x27;) {
+
+            // }
+          }
+        );
+    });
+
+    // get administrative_level_one  from the adminLevelOne service
+    this.adminLevelOneService.getAdminLevelOnes()
+      .subscribe(
+        (administrative_level_one) &#x3D;&gt; {
+          this.administrative_level_one &#x3D; administrative_level_one;
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+    // get landownerships from the landownership servce
+    this.landownershipService.getLandOwnerships()
+      .subscribe(
+        (landownerships) &#x3D;&gt; {
+          this.landownerships &#x3D; landownerships;
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+    // get sexBiases from the sexBias service
+    this.sexBiasService.getSexBiases()
+      .subscribe(
+        sexBiases &#x3D;&gt; {
+          this.sexBiases &#x3D; sexBiases;
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+    // get ageBiases from the ageBias service
+    this.ageBiasService.getAgeBiases()
+      .subscribe(
+        ageBiases &#x3D;&gt; {
+          this.ageBiases &#x3D; ageBiases;
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+    // get &#x27;laboratories&#x27; from the organizations service
+    // aliases the subset of organization records where laboratory &#x3D; true to an array called &#x27;laboratories&#x27;
+    this.organizationService.getLaboratories()
+      .subscribe(
+        (laboratories) &#x3D;&gt; {
+          this.laboratories &#x3D; laboratories;
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+    // get organizations from the OrganizationService
+    this.organizationService.getOrganizations()
+      .subscribe(
+        organizations &#x3D;&gt; {
+          this.organizations &#x3D; organizations;
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+
+    // get comment types from the commentTypes service
+    this.commentTypeService.getCommentTypes()
+      .subscribe(
+        commentTypes &#x3D;&gt; {
+          this.commentTypes &#x3D; commentTypes;
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+    this.speciesLoading &#x3D; true;
+
+    // get event summary for reports
+    this._eventService.getEventSummary(this.eventID)
+      .subscribe(
+        (eventsummary) &#x3D;&gt; {
+          this.natMapPoints &#x3D; eventsummary;
+        }
+      );
+    // get species from the species service
+    this.speciesService.getSpecies()
+      .subscribe(
+        (species) &#x3D;&gt; {
+          this.species &#x3D; species;
+          // alphabetize the species options list
+          this.species.sort(function (a, b) {
+            if (a.name &lt; b.name) { return -1; }
+            if (a.name &gt; b.name) { return 1; }
+            return 0;
+          });
+          this.speciesLoading &#x3D; false;
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.speciesLoading &#x3D; false;
+        }
+      );
+
+    // TEMPORARY- will need to use user creds to query user contact list
+    this.userContactsLoading &#x3D; true;
+    this.contactService.getContacts()
+      .subscribe(
+        contacts &#x3D;&gt; {
+          this.userContacts &#x3D; contacts;
+          this.userContacts.sort(function (a, b) {
+            if (a.last_name &lt; b.last_name) { return -1; }
+            if (a.last_name &gt; b.last_name) { return 1; }
+            return 0;
+          });
+          this.userContactsLoading &#x3D; false;
+
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.userContactsLoading &#x3D; false;
+        }
+      );
+
+    this.circleService.getAllUserCircles()
+      .subscribe(
+        circles &#x3D;&gt; {
+          this.userCircles &#x3D; circles;
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+    this.waitForMapElementToDisplay(&#x27;#eventDetailsMap&#x27;, 500);
+  }
+
+  waitForMapElementToDisplay(selector, time) {
+
+    const self &#x3D; this;
+    if (document.querySelector(selector) !&#x3D; null) {
+      // alert(&#x27;The element is displayed, you can put your code instead of this alert.&#x27;);
+      this.buildMap();
+      return;
+    } else {
+      setTimeout(function () {
+        self.waitForMapElementToDisplay(selector, time);
+      }, time);
+    }
+  }
+
+  buildMap() {
+
+    const mbAttr &#x3D; &#x27;Map data &amp;copy; &lt;a href&#x3D;&quot;https://www.openstreetmap.org/&quot;&gt;OpenStreetMap&lt;/a&gt; contributors, &#x27; +
+      &#x27;&lt;a href&#x3D;&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;&gt;CC-BY-SA&lt;/a&gt;, &#x27; +
+      &#x27;Imagery © &lt;a href&#x3D;&quot;https://www.mapbox.com/&quot;&gt;Mapbox&lt;/a&gt;&#x27;,
+      // tslint:disable-next-line:max-line-length
+      mbUrl &#x3D; &#x27;https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token&#x3D;pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw&#x27;;
+
+    const osm &#x3D; L.tileLayer(&#x27;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&#x27;, {
+      attribution: &#x27;&amp;copy; &lt;a href&#x3D;&quot;http://osm.org/copyright&quot;&gt;OpenStreetMap&lt;/a&gt; contributors&#x27;
+    });
+    const grayscale &#x3D; L.tileLayer(mbUrl, { id: &#x27;mapbox.light&#x27;, attribution: mbAttr });
+    const streets &#x3D; L.tileLayer(mbUrl, { id: &#x27;mapbox.streets&#x27;, attribution: mbAttr });
+
+    this.map &#x3D; new L.Map(&#x27;eventDetailsMap&#x27;, {
+      center: new L.LatLng(39.8283, -98.5795),
+      zoom: 4,
+      layers: [streets]
+    });
+
+    this.locationMarkers &#x3D; L.featureGroup().addTo(this.map);
+
+    const baseMaps &#x3D; {
+      &#x27;Open Street Map&#x27;: osm,
+      &#x27;Grayscale&#x27;: grayscale,
+      &#x27;Streets&#x27;: streets
+    };
+
+    // Flyways hosted by Fish and Wildlife Service
+    const flyways &#x3D; esri.featureLayer({
+      url: &#x27;https://services.arcgis.com/QVENGdaPbd4LUkLV/ArcGIS/rest/services/FWS_HQ_MB_Waterfowl_Flyway_Boundaries/FeatureServer/0&#x27;,
+      style: function (feature) {
+        if (feature.properties.NAME &#x3D;&#x3D;&#x3D; &#x27;Atlantic Flyway&#x27;) {
+          return { color: &#x27;#28995b&#x27;, weight: 2 };
+        } else if (feature.properties.NAME &#x3D;&#x3D;&#x3D; &#x27;Pacific Flyway&#x27;) {
+          return { color: &#x27;#ffbd4f&#x27;, weight: 2 };
+        } else if (feature.properties.NAME &#x3D;&#x3D;&#x3D; &#x27;Mississippi Flyway&#x27;) {
+          return { color: &#x27;#eb5834&#x27;, weight: 2 };
+        } else if (feature.properties.NAME &#x3D;&#x3D;&#x3D; &#x27;Central Flyway&#x27;) {
+          return { color: &#x27;#b43cc7&#x27;, weight: 2 };
+        }
+      }
+    });
+
+    // Watersheds hosted by The National Map (USGS)
+    const watersheds &#x3D; esri.dynamicMapLayer({
+      url: &#x27;https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer&#x27;,
+      opacity: 0.7
+    });
+
+    // Land use hosted by USGS
+    const landUse &#x3D; esri.dynamicMapLayer({
+      url: &#x27;https://gis1.usgs.gov/arcgis/rest/services/gap/GAP_Land_Cover_NVC_Class_Landuse/MapServer&#x27;,
+      opacity: 0.7
+    });
+
+    const overlays &#x3D; {
+      &#x27;Flyways&#x27;: flyways,
+      &#x27;Watersheds (HUC 2)&#x27;: watersheds,
+      &#x27;Land Use&#x27;: landUse
+    };
+
+    // const x &#x3D; { position: &#x27;topleft&#x27;};
+
+    L.control.layers(baseMaps, overlays, { position: &#x27;topleft&#x27; }).addTo(this.map);
+    L.control.scale({ position: &#x27;bottomright&#x27; }).addTo(this.map);
+
+    // L.control.layers(baseMaps).addTo(this.map);
+
+    this.mapEvent(this.eventData);
+
+    this.map.on(&#x27;overlayadd&#x27;, (e) &#x3D;&gt; {
+      console.log(&#x27;overlayadd&#x27;);
+      if (e.name &#x3D;&#x3D;&#x3D; &#x27;Flyways&#x27;) {
+        this.flywaysVisible &#x3D; true;
+      } else if (e.name &#x3D;&#x3D;&#x3D; &#x27;Watersheds (HUC 2)&#x27;) {
+        this.watershedsVisible &#x3D; true;
+      }
+    });
+
+    this.map.on(&#x27;overlayremove&#x27;, (e) &#x3D;&gt; {
+      console.log(&#x27;overlayremove&#x27;);
+      if (e.name &#x3D;&#x3D;&#x3D; &#x27;Flyways&#x27;) {
+        this.flywaysVisible &#x3D; false;
+      } else if (e.name &#x3D;&#x3D;&#x3D; &#x27;Watersheds (HUC 2)&#x27;) {
+        this.watershedsVisible &#x3D; false;
+      }
+    });
+
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+  searchInArray(array, field: string, value) {
+    for (const item of array) {
+      if (item[field] &#x3D;&#x3D;&#x3D; value) {
+        // console.log(&#x27;Duplicate detected. Already existing ID: &#x27; + value);
+        return true;
+      }
+    }
+  }
+
+  mapEvent(eventData) {
+    const markers &#x3D; [];
+    const countyPolys &#x3D; [];
+    this.unMappables &#x3D; [];
+    for (const eventlocation of eventData.eventlocations) {
+      markers.push(eventlocation);
+      if (eventlocation.administrative_level_two_points !&#x3D;&#x3D; null) {
+        countyPolys.push(JSON.parse(eventlocation.administrative_level_two_points.replace(&#x27;Y&#x27;, &#x27;&#x27;)));
+      }
+    }
+    console.log(&#x27;mapevents &#x27; + this.locationMarkers);
+    // let eventPolys;
+    if (countyPolys.length &gt; 0) {
+      if (this.eventPolys) {
+        this.map.removeLayer(this.eventPolys);
+      }
+      this.eventPolys &#x3D; L.polygon(countyPolys, { color: &#x27;blue&#x27; }).addTo(this.map);
+    }
+    for (const marker of markers) {
+      if (marker.latitude &#x3D;&#x3D;&#x3D; null || marker.longitude &#x3D;&#x3D;&#x3D; null || marker.latitude &#x3D;&#x3D;&#x3D; undefined || marker.longitude &#x3D;&#x3D;&#x3D; undefined) {
+        this.unMappables.push(marker);
+      } else if (marker.latitude !&#x3D;&#x3D; null || marker.longitude !&#x3D;&#x3D; null || marker.latitude !&#x3D;&#x3D; undefined || marker.longitude !&#x3D;&#x3D; undefined) {
+
+        this.icon &#x3D; L.divIcon({
+          className: &#x27;wmm-pin wmm-white wmm-icon-circle wmm-icon-black wmm-size-25&#x27;
+        });
+
+        L.marker([Number(marker.latitude), Number(marker.longitude)],
+          { icon: this.icon })
+          .addTo(this.locationMarkers);
+      }
+
+    }
+
+    if (this.unMappables.length &gt; 0) {
+
+    }
+
+    const bounds &#x3D; L.latLngBounds([]);
+
+    if (markers.length &gt; this.unMappables.length) {
+      const markerBounds &#x3D; this.locationMarkers.getBounds();
+      bounds.extend(markerBounds);
+    }
+
+    if (countyPolys.length &gt; 0) {
+      const countyBounds &#x3D; this.eventPolys.getBounds();
+      bounds.extend(countyBounds);
+    }
+
+    if (markers.length || countyPolys.length) {
+      this.map.fitBounds(bounds);
+    }
+  }
+
+  reloadMap() {
+    setTimeout(() &#x3D;&gt; {
+      this.locationMarkers.clearLayers();
+      this.mapEvent(this.eventData);
+    }, 2500);
+  }
+
+  navigateToHome() {
+    this.router.navigate([&#x60;../../home&#x60;], { relativeTo: this.route });
+  }
+
+  navigateToEventDetails(eventID) {
+    this.eventLocationSpecies &#x3D; [];
+    this.router.navigate([&#x60;../${eventID}&#x60;], { relativeTo: this.route });
+    this.reloadMap();
+    this.eventDetailsTabs.selectedIndex &#x3D; 0;
+    // location.reload();
+    // this.refreshEvent();
+  }
+
+  // panels are closed when tabs are switched, but the panel boolean isn&#x27;t actually changed. This is setting them all to false.
+  resetExpansionPanels() {
+    this.eventCommentsPanelOpen &#x3D; false;
+    this.serviceRequestPanelOpen &#x3D; false;
+    this.collaboratorsPanelOpen &#x3D; false;
+    this.locationCommentsPanelOpen &#x3D; false;
+    this.locationContactsPanelOpen &#x3D; false;
+
+  }
+
+  setOpened(itemIndex) {
+    this.currentlyOpenedItemIndex &#x3D; itemIndex;
+  }
+
+  setClosed(itemIndex) {
+    if (this.currentlyOpenedItemIndex &#x3D;&#x3D;&#x3D; itemIndex) {
+      this.currentlyOpenedItemIndex &#x3D; -1;
+    }
+  }
+
+  editEvent(id: string) {
+    // Open dialog for editing event
+    this.editEventDialogRef &#x3D; this.dialog.open(EditEventComponent, {
+      disableClose: true,
+      data: {
+        eventData: this.eventData,
+        organizations: this.organizations
+      },
+    });
+
+    this.editEventDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          this._eventService.getEventDetails(this.eventID)
+            .subscribe(
+              (eventdetails) &#x3D;&gt; {
+                this.eventData &#x3D; eventdetails;
+
+                this.eventLocationSpecies &#x3D; [];
+                for (const event_location of this.eventData.eventlocations) {
+                  for (const locationspecies of event_location.locationspecies) {
+                    locationspecies.administrative_level_two_string &#x3D; event_location.administrative_level_two_string;
+                    locationspecies.administrative_level_one_string &#x3D; event_location.administrative_level_one_string;
+                    locationspecies.country_string &#x3D; event_location.country_string;
+                    this.eventLocationSpecies.push(locationspecies);
+                  }
+                }
+
+                // console.log(&#x27;eventLocationSpecies:&#x27;, this.eventLocationSpecies);
+                //  this.speciesTableRows &#x3D; this.eventLocationSpecies;
+                this.eventDataLoading &#x3D; false;
+              },
+              error &#x3D;&gt; {
+                this.errorMessage &#x3D; &lt;any&gt;error;
+              }
+            );
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+  addEventDiagnosis(id: string) {
+    // Open dialog for adding event diagnosis
+    this.addEventDiagnosisDialogRef &#x3D; this.dialog.open(AddEventDiagnosisComponent, {
+      minWidth: &#x27;75%&#x27;,
+      data: {
+        event_id: id,
+        diagnosis_options: this.possibleEventDiagnoses,
+        event_data: this.eventData
+      }
+    });
+
+    this.addEventDiagnosisDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+  downloadEventReport(id: string) {
+
+    this.selectedTab &#x3D; 0;
+
+    setTimeout(() &#x3D;&gt; {
+      this.eventPublicReportDialogRef &#x3D; this.dialog.open(EventPublicReportComponent, {
+        minWidth: &#x27;40%&#x27;,
+        data: {
+          event_data: this.eventData,
+          user: this.currentUser,
+          event_summary: this.natMapPoints
+        }
+      });
+
+      this.eventPublicReportDialogRef.afterClosed()
+        .subscribe(
+          () &#x3D;&gt; {
+            // this.refreshEvent();
+          },
+          error &#x3D;&gt; {
+            this.errorMessage &#x3D; &lt;any&gt;error;
+          }
+        );
+
+      // adding back leaflet layers and controls
+      this.locationMarkers &#x3D; L.featureGroup().addTo(this.map);
+      this.mapEvent(this.eventData);
+      $(&#x27;.leaflet-control-zoom&#x27;).css(&#x27;visibility&#x27;, &#x27;visible&#x27;);
+      $(&#x27;.leaflet-control-layers&#x27;).css(&#x27;visibility&#x27;, &#x27;visible&#x27;);
+      $(&#x27;.leaflet-control-attribution&#x27;).css(&#x27;visibility&#x27;, &#x27;visible&#x27;);
+
+    }, 1000);
+  }
+
+  addEventOrganization(id: string) {
+    // Open dialog for adding event diagnosis
+    this.addEventOrganizationDialogRef &#x3D; this.dialog.open(AddEventOrganizationComponent, {
+      minWidth: &#x27;75%&#x27;,
+      data: {
+        event_id: id,
+        organizations: this.organizations,
+        existing_event_orgs: this.eventData.organizations
+      }
+    });
+
+    this.addEventOrganizationDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+  addEventComment(id: string) {
+    // Open dialog for adding event diagnosis
+    this.addCommentDialogRef &#x3D; this.dialog.open(AddCommentComponent, {
+      data: {
+        object_id: id,
+        title: &#x27;Add Comment&#x27;,
+        titleIcon: &#x27;add_comment&#x27;,
+        // confirmButtonText: &#x27;Add comment&#x27;,
+        showCancelButton: true,
+        action_button_text: &#x27;Add Comment&#x27;,
+        actionButtonIcon: &#x27;add_comment&#x27;,
+        comment_object: &#x27;event&#x27;
+      }
+    });
+
+    this.addCommentDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+
+  addEventLocationComment(id: string) {
+    // Open dialog for adding event location comment
+    this.addCommentDialogRef &#x3D; this.dialog.open(AddCommentComponent, {
+      data: {
+        object_id: id,
+        title: &#x27;Add Comment&#x27;,
+        titleIcon: &#x27;add_comment&#x27;,
+        // confirmButtonText: &#x27;Add comment&#x27;,
+        showCancelButton: true,
+        action_button_text: &#x27;Add Comment&#x27;,
+        actionButtonIcon: &#x27;add_comment&#x27;,
+        comment_object: &#x27;eventlocation&#x27;
+      }
+    });
+
+    this.addCommentDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+  addServiceRequestComment(id: string) {
+    // Open dialog for adding service request comment
+    this.addCommentDialogRef &#x3D; this.dialog.open(AddCommentComponent, {
+      data: {
+        object_id: id,
+        title: &#x27;Add Comment&#x27;,
+        titleIcon: &#x27;add_comment&#x27;,
+        // confirmButtonText: &#x27;Add comment&#x27;,
+        showCancelButton: true,
+        action_button_text: &#x27;Add Comment&#x27;,
+        actionButtonIcon: &#x27;add_comment&#x27;,
+        comment_object: &#x27;servicerequest&#x27;
+      }
+    });
+
+    this.addCommentDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+  addServiceRequestResponse(servicerequest) {
+    // Open add service request dialog for response field update
+    this.addServiceRequestDialogRef &#x3D; this.dialog.open(AddServiceRequestComponent, {
+      disableClose: true,
+      data: {
+        event_id: this.eventData.id,
+        servicerequest: servicerequest,
+        comment_types: this.commentTypes,
+        title: &#x27;Respond to service request&#x27;,
+        titleIcon: &#x27;question_answer&#x27;,
+        showCancelButton: true,
+        action_button_text: &#x27;Save Response&#x27;,
+        actionButtonIcon: &#x27;question_answer&#x27;,
+        action: &#x27;respond&#x27;
+      }
+    });
+
+    this.addServiceRequestDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+
+  addEventLocationContact(id: string) {
+    // Open dialog for adding event location contact
+    this.addEventLocationContactDialogRef &#x3D; this.dialog.open(AddEventLocationContactComponent, {
+      disableClose: true,
+      data: {
+        event_location_id: id,
+        userContacts: this.userContacts,
+        title: &#x27;Add Contact to event location&#x27;,
+        titleIcon: &#x27;add_circle&#x27;,
+        // confirmButtonText: &#x27;Add comment&#x27;,
+        showCancelButton: true,
+        action_button_text: &#x27;Add Contact&#x27;,
+        actionButtonIcon: &#x27;add_circle&#x27;
+      }
+    });
+
+    this.addEventLocationContactDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+  }
+
+
+  addServiceRequest(id: string) {
+    // Open dialog for adding event location contact
+    this.addServiceRequestDialogRef &#x3D; this.dialog.open(AddServiceRequestComponent, {
+      disableClose: true,
+      minWidth: &#x27;75%&#x27;,
+      data: {
+        event_id: id,
+        comment_types: this.commentTypes,
+        title: &#x27;Add a service request&#x27;,
+        titleIcon: &#x27;add_circle&#x27;,
+        showCancelButton: true,
+        action_button_text: &#x27;Submit request&#x27;,
+        actionButtonIcon: &#x27;question_answer&#x27;,
+        action: &#x27;add&#x27;
+      }
+    });
+
+    this.addServiceRequestDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+  }
+
+  // Tooltip text
+  editLocationNameTooltip() { const string &#x3D; FIELD_HELP_TEXT.editLocationNameTooltip; return string; }
+  editStandardizedLocationNameTooltip() { const string &#x3D; FIELD_HELP_TEXT.editStandardizedLocationNameTooltip; return string; }
+  flywayTooltip() { const string &#x3D; FIELD_HELP_TEXT.flywayTooltip; return string; }
+  editLandOwnershipTooltip() { const string &#x3D; FIELD_HELP_TEXT.editLandOwnershipTooltip; return string; }
+  longitudeTooltip() { const string &#x3D; FIELD_HELP_TEXT.longitudeTooltip; return string; }
+  latitudeTooltip() { const string &#x3D; FIELD_HELP_TEXT.latitudeTooltip; return string; }
+  editEventTypeTooltip() { const string &#x3D; FIELD_HELP_TEXT.editEventTypeTooltip; return string; }
+  editSpeciesTooltip() { const string &#x3D; FIELD_HELP_TEXT.editSpeciesTooltip; return string; }
+  editKnownDeadTooltip() { const string &#x3D; FIELD_HELP_TEXT.editKnownDeadTooltip; return string; }
+  editEstimatedDeadTooltip() { const string &#x3D; FIELD_HELP_TEXT.editEstimatedDeadTooltip; return string; }
+  editKnownSickTooltip() { const string &#x3D; FIELD_HELP_TEXT.editKnownSickTooltip; return string; }
+  editEstimatedSickTooltip() { const string &#x3D; FIELD_HELP_TEXT.editEstimatedSickTooltip; return string; }
+  populationTooltip() { const string &#x3D; FIELD_HELP_TEXT.populationTooltip; return string; }
+  editAgeBiasTooltip() { const string &#x3D; FIELD_HELP_TEXT.editAgeBiasTooltip; return string; }
+  editSexBiasTooltip() { const string &#x3D; FIELD_HELP_TEXT.editSexBiasTooltip; return string; }
+  editCaptiveTooltip() { const string &#x3D; FIELD_HELP_TEXT.editCaptiveTooltip; return string; }
+  editSpeciesDiagnosisTooltip() { const string &#x3D; FIELD_HELP_TEXT.editSpeciesDiagnosisTooltip; return string; }
+  locationNameTooltip() { const string &#x3D; FIELD_HELP_TEXT.locationNameTooltip; return string; }
+  numberAffectedTooltip() { const string &#x3D; FIELD_HELP_TEXT.numberAffectedTooltip; return string; }
+  editRecordStatusTooltip() { const string &#x3D; FIELD_HELP_TEXT.editRecordStatusTooltip; return string; }
+  collaboratorsAddIndividualTooltip() { const string &#x3D; FIELD_HELP_TEXT.collaboratorsAddIndividualTooltip; return string; }
+  collaboratorsAddCircleTooltip() { const string &#x3D; FIELD_HELP_TEXT.collaboratorsAddCircleTooltip; return string; }
+  editContactOrganizationTooltip() { const string &#x3D; FIELD_HELP_TEXT.editContactOrganizationTooltip; return string; }
+  eventIDTooltip() { const string &#x3D; FIELD_HELP_TEXT.eventIDTooltip; return string; }
+  eventStartDateTooltip() { const string &#x3D; FIELD_HELP_TEXT.eventStartDateTooltip; return string; }
+  eventEndDateTooltip() { const string &#x3D; FIELD_HELP_TEXT.eventEndDateTooltip; return string; }
+  nwhcCarcassSubApprovalTooltip() { const string &#x3D; FIELD_HELP_TEXT.nwhcCarcassSubApprovalTooltip; return string; }
+  editEventDiagnosisTooltip() { const string &#x3D; FIELD_HELP_TEXT.editEventDiagnosisTooltip; return string; }
+  locationsTooltip() { const string &#x3D; FIELD_HELP_TEXT.locationsTooltip; return string; }
+  contactPersonTooltip() { const string &#x3D; FIELD_HELP_TEXT.contactPersonTooltip; return string; }
+  associatedEventsTooltip() { const string &#x3D; FIELD_HELP_TEXT.associatedEventsTooltip; return string; }
+
+  deleteComment(id: number) {
+    this.commentService.delete(id)
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+          this.openSnackBar(&#x27;Comment successfully deleted&#x27;, &#x27;OK&#x27;, 5000);
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.openSnackBar(&#x27;Error. Comment not deleted. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+        }
+      );
+
+  }
+
+  openCommentDeleteConfirm(id) {
+    this.confirmDialogRef &#x3D; this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: &#x27;Delete Comment Confirm&#x27;,
+          titleIcon: &#x27;delete_forever&#x27;,
+          // tslint:disable-next-line:max-line-length
+          message: &#x27;Are you sure you want to delete this comment?\nThis action cannot be undone.&#x27;,
+          confirmButtonText: &#x27;Yes, Delete comment&#x27;,
+          messageIcon: &#x27;&#x27;,
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result &#x3D;&gt; {
+      if (result &#x3D;&#x3D;&#x3D; true) {
+        this.deleteComment(id);
+      }
+    });
+  }
+
+  deleteEventLocationComment(id: number) {
+    this.commentService.delete(id)
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+          this.openSnackBar(&#x27;Comment successfully deleted&#x27;, &#x27;OK&#x27;, 5000);
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.openSnackBar(&#x27;Error. Comment not deleted. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+        }
+      );
+  }
+
+
+  openEventLocationCommentDeleteConfirm(id) {
+    this.confirmDialogRef &#x3D; this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: &#x27;Delete Event Location Comment Confirm&#x27;,
+          titleIcon: &#x27;delete_forever&#x27;,
+          // tslint:disable-next-line:max-line-length
+          message: &#x27;Are you sure you want to delete this comment? This action cannot be undone.&#x27;,
+          confirmButtonText: &#x27;Yes, Delete comment&#x27;,
+          messageIcon: &#x27;&#x27;,
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result &#x3D;&gt; {
+      if (result &#x3D;&#x3D;&#x3D; true) {
+        this.deleteEventLocationComment(id);
+      }
+    });
+  }
+
+  deleteEventLocationContact(id: number) {
+    this.eventLocationContactService.delete(id)
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+          this.openSnackBar(&#x27;Contact successfully disassociated&#x27;, &#x27;OK&#x27;, 5000);
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.openSnackBar(&#x27;Error. Contact not disassociated. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+        }
+      );
+  }
+
+  openLocationContactRemoveConfirm(id) {
+    this.confirmDialogRef &#x3D; this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: &#x27;Disassociate contact&#x27;,
+          titleIcon: &#x27;remove_circle&#x27;,
+          // tslint:disable-next-line:max-line-length
+          message: &#x27;Are you sure you wish to disassociate this contact with this event location? This does not delete the contact record.&#x27;,
+          confirmButtonText: &#x27;Yes, remove this contact&#x27;,
+          messageIcon: &#x27;&#x27;,
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result &#x3D;&gt; {
+      if (result &#x3D;&#x3D;&#x3D; true) {
+        this.deleteEventLocationContact(id);
+      }
+    });
+  }
+
+  openCreateContactDialog() {
+    this.createContactDialogRef &#x3D; this.dialog.open(CreateContactComponent, {
+      minWidth: &#x27;75%&#x27;,
+      disableClose: true,
+      data: {
+        contact_action: &#x27;create&#x27;
+      }
+    });
+  }
+
+  addEventLocation() {
+    this.showAddEventLocation &#x3D; true;
+  }
+
+  openEventDetailsShare() {
+
+    this.eventDetailsShareDialogRef &#x3D; this.dialog.open(EventDetailsShareComponent, {
+      data: {
+        eventID: this.eventID,
+      }
+    });
+
+  }
+
+  editEventLocation(eventLocationData: Object) {
+    // Open dialog for editing event location
+    this.editEventLocationDialogRef &#x3D; this.dialog.open(EditEventLocationComponent, {
+      data: {
+        eventLocationData: eventLocationData
+      }
+    });
+  }
+
+  deleteEventLocation(id: number) {
+    this.eventLocationService.delete(id)
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+          this.openSnackBar(&#x27;Event location successfully deleted&#x27;, &#x27;OK&#x27;, 5000);
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.openSnackBar(&#x27;Error. Event location not deleted. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+        }
+      );
+  }
+
+  openEventLocationDeleteConfirm(id) {
+    this.confirmDialogRef &#x3D; this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: &#x27;Delete Event Location Confirm&#x27;,
+          titleIcon: &#x27;delete_forever&#x27;,
+          // tslint:disable-next-line:max-line-length
+          messageIcon: &#x27;warning&#x27;,
+          message: &#x27;Are you sure you want to delete this event location, and all its associated species, contacts, and comments? This action cannot be undone.&#x27;,
+          confirmButtonText: &#x27;Yes, Delete location and all associated data&#x27;,
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result &#x3D;&gt; {
+      if (result &#x3D;&#x3D;&#x3D; true) {
+        this.deleteEventLocation(id);
+      }
+    });
+  }
+
+  openEventDiagnosisDeleteConfirm(id) {
+    this.confirmDialogRef &#x3D; this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: &#x27;Delete Event Diagnosis Confirm&#x27;,
+          titleIcon: &#x27;delete_forever&#x27;,
+          // tslint:disable-next-line:max-line-length
+          message: &#x27;Are you sure you want to delete this event diagnosis? This action cannot be undone.&#x27;,
+          confirmButtonText: &#x27;Yes, Delete Event Diagnosis&#x27;,
+          messageIcon: &#x27;&#x27;,
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result &#x3D;&gt; {
+      if (result &#x3D;&#x3D;&#x3D; true) {
+        this.deleteEventDiagnosis(id);
+      }
+    });
+  }
+
+  deleteEventDiagnosis(id: number) {
+    this.eventDiagnosisService.delete(id)
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+          this.openSnackBar(&#x27;Event diagnosis successfully deleted&#x27;, &#x27;OK&#x27;, 5000);
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.openSnackBar(&#x27;Error. Event diagnosis not deleted. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+        }
+      );
+  }
+
+  openEventOrganizationDeleteConfirm(id) {
+    this.confirmDialogRef &#x3D; this.dialog.open(ConfirmComponent,
+      {
+        data: {
+          title: &#x27;Delete Event Organization Confirm&#x27;,
+          titleIcon: &#x27;delete_forever&#x27;,
+          // tslint:disable-next-line:max-line-length
+          message: &#x27;Are you sure you want to delete this event organization? This action cannot be undone.&#x27;,
+          confirmButtonText: &#x27;Yes, Delete Event Organization&#x27;,
+          messageIcon: &#x27;&#x27;,
+          showCancelButton: true
+        }
+      }
+    );
+
+    this.confirmDialogRef.afterClosed().subscribe(result &#x3D;&gt; {
+      if (result &#x3D;&#x3D;&#x3D; true) {
+        this.deleteEventOrganization(id);
+      }
+    });
+  }
+
+  deleteEventOrganization(id: number) {
+    this.eventOrganizationService.delete(id)
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+          this.openSnackBar(&#x27;Event organization successfully deleted&#x27;, &#x27;OK&#x27;, 5000);
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.openSnackBar(&#x27;Error. Event organization not deleted. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+        }
+      );
+  }
+
+  addToEventGroup() {
+
+  }
+
+  openCollaborationRequestDialog(eventID) {
+    // Open dialog for collaboration request
+    this.collaborationRequestDialogRef &#x3D; this.dialog.open(CollaborationRequestComponent, {
+      disableClose: true,
+      data: {
+        event_id: eventID,
+        title: &#x27;Request to Collaborate&#x27;,
+        titleIcon: &#x27;group&#x27;,
+        showCancelButton: true,
+        action_button_text: &#x27;Submit request&#x27;,
+        actionButtonIcon: &#x27;send&#x27;
+      }
+    });
+
+    this.collaborationRequestDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+  refreshEvent() {
+    // see comment on line 182
+    // this.viewPanelStates &#x3D; new Object();
+    // this.getViewPanelState(this.viewPanels);
+    this.selectedTab &#x3D; 0;
+
+    console.log(&#x27;Event Location Species list at start of refresh: &#x27;, this.eventLocationSpecies);
+
+    this.eventLocationSpecies &#x3D; [];
+    console.log(&#x27;Event Location Species list after set to blank array: &#x27;, this.eventLocationSpecies);
+
+    this.possibleEventDiagnoses &#x3D; [];
+
+    this._eventService.getEventDetails(this.eventID)
+      .subscribe(
+        (eventdetails) &#x3D;&gt; {
+          this.eventData &#x3D; eventdetails;
+
+          this.eventLocationSpecies &#x3D; [];
+
+          // this.possibleEventDiagnoses &#x3D; [];
+          for (const event_location of this.eventData.eventlocations) {
+            for (const locationspecies of event_location.locationspecies) {
+              locationspecies.administrative_level_two_string &#x3D; event_location.administrative_level_two_string;
+              locationspecies.administrative_level_one_string &#x3D; event_location.administrative_level_one_string;
+              locationspecies.country_string &#x3D; event_location.country_string;
+              this.eventLocationSpecies.push(locationspecies);
+
+              for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                if (!this.searchInArray(this.possibleEventDiagnoses, &#x27;diagnosis&#x27;, speciesdiagnosis.diagnosis)) {
+                  this.possibleEventDiagnoses.push(speciesdiagnosis);
+                } else {
+                  // it is in there already:
+                  // check if this one&#x27;s suspect field is false
+                  if (speciesdiagnosis.suspect &#x3D;&#x3D;&#x3D; false) {
+                    // if it is, then we need to remove the previously added one and add this one which is suspect &#x3D; false
+                    // loop thru possibleEventDiagnoses, if match, remove
+                    for (let i &#x3D; 0; i &lt; this.possibleEventDiagnoses.length; i++) {
+                      if (this.possibleEventDiagnoses[i].diagnosis &#x3D;&#x3D;&#x3D; speciesdiagnosis.diagnosis) {
+                        this.possibleEventDiagnoses.splice(i, 1);
+                      }
+                    }
+                    // then add the non suspect one
+                    this.possibleEventDiagnoses.push(speciesdiagnosis);
+
+                  }
+                }
+              }
+
+            }
+          }
+
+          console.log(&#x27;Event Location Species list after populated: &#x27;, this.eventLocationSpecies);
+
+          // add the &quot;Undetermined&quot; diagnosis to possibleDiagnoses, only if not already in the list
+          if (!this.searchInArray(this.possibleEventDiagnoses, &#x27;diagnosis&#x27;, APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis)) {
+            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+          }
+          // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of &quot;Pending&quot;.
+          // else if (eventdetails.complete &#x3D;&#x3D;&#x3D; false) {
+          //   this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+          // }
+
+          this.readCollaboratorArray &#x3D; eventdetails.read_collaborators;
+          this.writeCollaboratorArray &#x3D; eventdetails.write_collaborators;
+
+          this.eventDataLoading &#x3D; false;
+
+          // see comment on line 182
+          // setTimeout(() &#x3D;&gt; {
+          //   this.setViewPanelState(this.viewPanels);
+          // });
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+  // below deprecated. see comment on line 182
+  // getViewPanelState(viewPanels: QueryList&lt;MatExpansionPanel&gt;) {
+  //   viewPanels.forEach((element, index) &#x3D;&gt; {
+  //     this.viewPanelStates[index] &#x3D; element.expanded;
+  //   });
+  // }
+
+  // setViewPanelState(viewPanels: QueryList&lt;MatExpansionPanel&gt;) {
+  //   viewPanels.forEach((element, index) &#x3D;&gt; {
+  //     if (this.viewPanelStates[index]) {
+  //       element.open();
+  //     }
+  //   });
+  // }
+
+  addLocationSpecies(eventlocation) {
+    // Open dialog for adding location species
+    this.editLocationSpeciesDialogRef &#x3D; this.dialog.open(EditLocationSpeciesComponent, {
+      data: {
+        eventData: this.eventData,
+        species: this.species,
+        ageBiases: this.ageBiases,
+        sexBiases: this.sexBiases,
+        location_species_action: &#x27;add&#x27;,
+        action_text: &#x27;add&#x27;,
+        action_button_text: &#x27;Submit&#x27;,
+        eventlocation: eventlocation,
+        title: &#x27;Add species to this location&#x27;,
+        titleIcon: &#x27;add&#x27;
+      }
+    });
+
+    this.editLocationSpeciesDialogRef.afterClosed()
+      .subscribe(
+        () &#x3D;&gt; {
+          this.refreshEvent();
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+
+  determineLocationName(name, i) {
+    let locationName;
+
+    if (name &#x3D;&#x3D;&#x3D; &#x27;&#x27; || name &#x3D;&#x3D;&#x3D; undefined) {
+      locationName &#x3D; &#x27;Location &#x27; + i;
+    } else {
+      locationName &#x3D; &#x27;Location &#x27; + i + &#x27; - &#x27; + name;
+    }
+
+    return locationName;
+  }
+
+  // Determine comment type based on id, return for display in app along side comment
+  getCommentType(comment_id) {
+    let comment_type;
+    switch (comment_id) {
+      case 1:
+        comment_type &#x3D; &#x27;Site description&#x27;;
+        break;
+      case 2:
+        comment_type &#x3D; &#x27;History&#x27;;
+        break;
+      case 3:
+        comment_type &#x3D; &#x27;Environmental factors&#x27;;
+        break;
+      case 4:
+        comment_type &#x3D; &#x27;Clinical signs&#x27;;
+        break;
+      case 5:
+        comment_type &#x3D; &#x27;General&#x27;;
+        break;
+    }
+    return comment_type;
+  }
+
+  removeCollaborator(userID, list) {
+
+    // WIP below. seems to be good. test a few more times.
+    if (list &#x3D;&#x3D;&#x3D; &#x27;read&#x27;) {
+      const readIndex &#x3D; this.readCollaboratorArray.findIndex(function (o) {
+        return o.id &#x3D;&#x3D;&#x3D; userID;
+      });
+      if (readIndex !&#x3D;&#x3D; -1) { this.readCollaboratorArray.splice(readIndex, 1); }
+    } else if (list &#x3D;&#x3D;&#x3D; &#x27;write&#x27;) {
+      const writeIndex &#x3D; this.writeCollaboratorArray.findIndex(function (o) {
+        return o.id &#x3D;&#x3D;&#x3D; userID;
+      });
+      if (writeIndex !&#x3D;&#x3D; -1) { this.writeCollaboratorArray.splice(writeIndex, 1); }
+
+    }
+
+    const readCollaboratorIDArray &#x3D; [];
+    for (const user of this.readCollaboratorArray) {
+      readCollaboratorIDArray.push(user.id);
+    }
+
+    const writeCollaboratorIDArray &#x3D; [];
+    for (const user of this.writeCollaboratorArray) {
+      writeCollaboratorIDArray.push(user.id);
+    }
+
+    this.updateCollaboratorList(readCollaboratorIDArray, writeCollaboratorIDArray);
+
+  }
+
+  addCollaborator(accessType) {
+    this.circleManagementDialogRef &#x3D; this.dialog.open(CircleManagementComponent, {
+      disableClose: true,
+      data: {
+        action: &#x27;selectUser&#x27;,
+      }
+    });
+
+    this.circleManagementDialogRef.afterClosed()
+      .subscribe(
+        (selectedUser) &#x3D;&gt; {
+
+          if (selectedUser !&#x3D;&#x3D; &#x27;cancel&#x27;) {
+
+            if (accessType &#x3D;&#x3D;&#x3D; &#x27;read&#x27;) {
+              this.readCollaboratorArray.push(selectedUser);
+            } else if (accessType &#x3D;&#x3D;&#x3D; &#x27;write&#x27;) {
+              this.writeCollaboratorArray.push(selectedUser);
+            }
+
+            const readCollaboratorIDArray &#x3D; [];
+            for (const user of this.readCollaboratorArray) {
+              readCollaboratorIDArray.push(user.id);
+            }
+            const writeCollaboratorIDArray &#x3D; [];
+            for (const user of this.writeCollaboratorArray) {
+              writeCollaboratorIDArray.push(user.id);
+            }
+
+            this.updateCollaboratorList(readCollaboratorIDArray, writeCollaboratorIDArray);
+          }
+
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+  }
+
+  openCircleChooseDialog(accessType) {
+    this.circleChooseDialogRef &#x3D; this.dialog.open(CircleChooseComponent, {
+      minWidth: &#x27;60em&#x27;,
+      data: {
+        userCircles: this.userCircles
+      }
+    });
+
+    this.circleChooseDialogRef.afterClosed().subscribe(result &#x3D;&gt; {
+
+      if (result !&#x3D;&#x3D; &#x27;cancel&#x27;) {
+
+        if (accessType &#x3D;&#x3D;&#x3D; &#x27;read&#x27;) {
+          // add the users array to the new_read_collaborators array
+          this.readCollaboratorArray &#x3D; this.readCollaboratorArray.concat(result.users);
+          const readCollaboratorIDArray &#x3D; [];
+          for (const user of this.readCollaboratorArray) {
+            readCollaboratorIDArray.push(user.id);
+          }
+          this.updateCollaboratorList(&#x27;read&#x27;, readCollaboratorIDArray);
+
+        } else if (accessType &#x3D;&#x3D;&#x3D; &#x27;write&#x27;) {
+          this.writeCollaboratorArray &#x3D; this.writeCollaboratorArray.concat(result.users);
+          const writeCollaboratorIDArray &#x3D; [];
+          for (const user of this.writeCollaboratorArray) {
+            writeCollaboratorIDArray.push(user.id);
+          }
+          this.updateCollaboratorList(&#x27;write&#x27;, writeCollaboratorIDArray);
+
+        }
+
+      }
+    });
+
+  }
+
+  updateCollaboratorList(readCollaboratorArray, writeCollaboratorArray) {
+
+    // tslint:disable-next-line:max-line-length
+    const update &#x3D; { &#x27;id&#x27;: this.eventData.id, &#x27;event_type&#x27;: this.eventData.event_type, &#x27;new_read_collaborators&#x27;: readCollaboratorArray, &#x27;new_write_collaborators&#x27;: writeCollaboratorArray };
+    // if (accessType &#x3D;&#x3D;&#x3D; &#x27;read&#x27;) {
+    //   update &#x3D; { &#x27;id&#x27;: this.eventData.id, &#x27;event_type&#x27;: this.eventData.event_type, &#x27;new_read_collaborators&#x27;: userArray };
+    // } else if (accessType &#x3D;&#x3D;&#x3D; &#x27;write&#x27;) {
+    //   update &#x3D; { &#x27;id&#x27;: this.eventData.id, &#x27;event_type&#x27;: this.eventData.event_type, &#x27;new_write_collaborators&#x27;: userArray };
+    // }
+
+    this._eventService.update(update)
+      .subscribe(
+        (event) &#x3D;&gt; {
+          // this.submitLoading &#x3D; false;
+          this.openSnackBar(&#x27;Collaborator list updated.&#x27;, &#x27;OK&#x27;, 5000);
+          this.dataUpdatedService.triggerRefresh();
+        },
+        error &#x3D;&gt; {
+          // this.submitLoading &#x3D; false;
+          this.openSnackBar(&#x27;Error. Collaborator list not updated. Error message: &#x27; + error, &#x27;OK&#x27;, 15000);
+        }
+      );
+  }
+
+  // From angular material table sample on material api reference site
+  /** Whether the number of selected elements matches the total number of rows. */
+  // isAllSelected(i: number) {
+  //   const numSelected &#x3D; this.selection[i].selected.length;
+  //   const numRows &#x3D; this.locationSpeciesDataSource.data.length;
+  //   return numSelected &#x3D;&#x3D;&#x3D; numRows;
+  // }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  // masterToggle(i: number) {
+  //   this.isAllSelected(i) ?
+  //     this.selection[i].clear() :
+  //     this.locationSpeciesDataSource.data.forEach(row &#x3D;&gt; this.selection[i].select(row));
+  // }
+
+  exportEventDetails() {
+    this._eventService.getEventDetailsCSV(this.eventID);
+    gtag(&#x27;event&#x27;, &#x27;click&#x27;, { &#x27;event_category&#x27;: &#x27;Event Details&#x27;, &#x27;event_label&#x27;: &#x27;Exported Event Details&#x27; });
+  }
+}
+</code></pre>
+    </div>
+</div>
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'AssociatedEvents.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

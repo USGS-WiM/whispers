@@ -1,0 +1,1037 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>whispers documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">whispers documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>SaveSearchComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/save-search/save-search.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-save-search</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./save-search.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./save-search.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#data">data</a>
+                            </li>
+                            <li>
+                                <a href="#errorMessage">errorMessage</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#saveSearchDialogRef">saveSearchDialogRef</a>
+                            </li>
+                            <li>
+                                <a href="#saveSearchForm">saveSearchForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#snackBar">snackBar</a>
+                            </li>
+                            <li>
+                                <a href="#submitLoading">submitLoading</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#buildSaveSearchForm">buildSaveSearchForm</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onSubmit">onSubmit</a>
+                            </li>
+                            <li>
+                                <a href="#openSnackBar">openSnackBar</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(formBuilder: <a href="https://angular.io/api/forms/FormBuilder" target="_blank">FormBuilder</a>, dialog: MatDialog, saveSearchDialogRef: <a href="../interfaces/Search.html">MatDialogRef<SaveSearchComponent></a>, searchService: <a href="../injectables/SearchService.html">SearchService</a>, dataUpdatedService: <a href="../injectables/DataUpdatedService.html">DataUpdatedService</a>, snackBar: MatSnackBar, data: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/save-search/save-search.component.ts:32</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>formBuilder</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dialog</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatDialog</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>saveSearchDialogRef</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../interfaces/Search.html" target="_self" >MatDialogRef&lt;SaveSearchComponent&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>searchService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SearchService.html" target="_self" >SearchService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dataUpdatedService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/DataUpdatedService.html" target="_self" >DataUpdatedService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>snackBar</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatSnackBar</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>data</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildSaveSearchForm"></a>
+                    <span class="name">
+                        <b>
+                            buildSaveSearchForm
+                        </b>
+                        <a href="#buildSaveSearchForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>buildSaveSearchForm()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="27"
+                            class="link-to-prism">src/app/save-search/save-search.component.ts:27</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="46"
+                            class="link-to-prism">src/app/save-search/save-search.component.ts:46</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onSubmit"></a>
+                    <span class="name">
+                        <b>
+                            onSubmit
+                        </b>
+                        <a href="#onSubmit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onSubmit(formValue)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="57"
+                            class="link-to-prism">src/app/save-search/save-search.component.ts:57</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>formValue</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openSnackBar"></a>
+                    <span class="name">
+                        <b>
+                            openSnackBar
+                        </b>
+                        <a href="#openSnackBar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openSnackBar(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, duration: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="50"
+                            class="link-to-prism">src/app/save-search/save-search.component.ts:50</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>message</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>duration</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="data"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            data</b>
+                            <a href="#data"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @Inject(MAT_DIALOG_DATA)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/save-search/save-search.component.ts:41</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="errorMessage"></a>
+                        <span class="name">
+                            <b>
+                            errorMessage</b>
+                            <a href="#errorMessage"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/save-search/save-search.component.ts:22</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="saveSearchDialogRef"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            saveSearchDialogRef</b>
+                            <a href="#saveSearchDialogRef"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../interfaces/Search.html" target="_self" >MatDialogRef&lt;SaveSearchComponent&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/save-search/save-search.component.ts:37</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="saveSearchForm"></a>
+                        <span class="name">
+                            <b>
+                            saveSearchForm</b>
+                            <a href="#saveSearchForm"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/save-search/save-search.component.ts:25</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="snackBar"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            snackBar</b>
+                            <a href="#snackBar"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>MatSnackBar</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/save-search/save-search.component.ts:40</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="submitLoading"></a>
+                        <span class="name">
+                            <b>
+                            submitLoading</b>
+                            <a href="#submitLoading"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/save-search/save-search.component.ts:23</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, Input } from &#x27;@angular/core&#x27;;
+import { Inject } from &#x27;@angular/core&#x27;;
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from &#x27;@angular/forms/&#x27;;
+import { Observable } from &#x27;rxjs&#x27;;
+
+
+
+import { MatDialog, MatDialogRef } from &#x27;@angular/material&#x27;;
+import { MatSnackBar } from &#x27;@angular/material&#x27;;
+import { MAT_DIALOG_DATA } from &#x27;@angular/material&#x27;;
+
+import { DataUpdatedService } from &#x27;@app/services/data-updated.service&#x27;;
+import { SearchService } from &#x27;@app/services/search.service&#x27;;
+declare let gtag: Function;
+
+@Component({
+  selector: &#x27;app-save-search&#x27;,
+  templateUrl: &#x27;./save-search.component.html&#x27;,
+  styleUrls: [&#x27;./save-search.component.scss&#x27;]
+})
+export class SaveSearchComponent implements OnInit {
+  errorMessage &#x3D; &#x27;&#x27;;
+  submitLoading &#x3D; false;
+
+  saveSearchForm: FormGroup;
+
+  buildSaveSearchForm() {
+    this.saveSearchForm &#x3D; this.formBuilder.group({
+      name: &#x27;&#x27;,
+      data: &#x27;&#x27;
+    });
+  }
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
+    public saveSearchDialogRef: MatDialogRef&lt;SaveSearchComponent&gt;,
+    private searchService: SearchService,
+    private dataUpdatedService: DataUpdatedService,
+    public snackBar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.buildSaveSearchForm();
+  }
+
+  ngOnInit() {
+    this.saveSearchForm.get(&#x27;data&#x27;).setValue(this.data.currentSearchQuery);
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+
+  onSubmit(formValue) {
+
+    // formValue.data &#x3D; this.data.currentSearchQuery;
+
+    // remove all blank variables from the submission
+    if (formValue.data.affected_count &#x3D;&#x3D;&#x3D; null || formValue.data.affected_count &#x3D;&#x3D;&#x3D; &#x27;&#x27; || formValue.data.affected_count &#x3D;&#x3D;&#x3D; undefined) {
+      delete formValue.data.affected_count;
+    }
+    if (formValue.data.start_date &#x3D;&#x3D;&#x3D; null || formValue.data.start_date &#x3D;&#x3D;&#x3D; &#x27;&#x27; || formValue.data.start_date &#x3D;&#x3D;&#x3D; undefined) {
+      delete formValue.data.start_date;
+    }
+    if (formValue.data.end_date &#x3D;&#x3D;&#x3D; null || formValue.data.end_date &#x3D;&#x3D;&#x3D; &#x27;&#x27; || formValue.data.end_date &#x3D;&#x3D;&#x3D; undefined) {
+      delete formValue.data.end_date;
+    }
+    if (formValue.data.event_type !&#x3D;&#x3D; undefined &amp;&amp; formValue.data.event_type !&#x3D;&#x3D; null) {
+      if (formValue.data.event_type.length &#x3D;&#x3D;&#x3D; 0) {
+        delete formValue.data.event_type;
+      }
+    }
+    if (formValue.data.diagnosis !&#x3D;&#x3D; undefined &amp;&amp; formValue.data.diagnosis !&#x3D;&#x3D; null) {
+      if (formValue.data.diagnosis.length &#x3D;&#x3D;&#x3D; 0) {
+        delete formValue.data.diagnosis;
+      }
+    }
+    if (formValue.data.diagnosis_type !&#x3D;&#x3D; undefined &amp;&amp; formValue.data.diagnosis_type !&#x3D;&#x3D; null) {
+      if (formValue.data.diagnosis_type.length &#x3D;&#x3D;&#x3D; 0) {
+        delete formValue.data.diagnosis_type;
+      }
+    }
+    if (formValue.data.species !&#x3D;&#x3D; undefined &amp;&amp; formValue.data.species !&#x3D;&#x3D; null) {
+      if (formValue.data.species.length &#x3D;&#x3D;&#x3D; 0) {
+        delete formValue.data.species;
+      }
+    }
+    if (formValue.data.administrative_level_one !&#x3D;&#x3D; undefined &amp;&amp; formValue.data.administrative_level_one !&#x3D;&#x3D; null) {
+      if (formValue.data.administrative_level_one.length &#x3D;&#x3D;&#x3D; 0) {
+        delete formValue.data.administrative_level_one;
+      }
+    }
+    if (formValue.data.administrative_level_two !&#x3D;&#x3D; undefined &amp;&amp; formValue.data.administrative_level_two !&#x3D;&#x3D; null) {
+      if (formValue.data.administrative_level_two.length &#x3D;&#x3D;&#x3D; 0) {
+        delete formValue.data.administrative_level_two;
+      }
+    }
+
+    if (formValue.data.and_params) {
+      if (formValue.data.and_params.length &#x3D;&#x3D;&#x3D; 0) {
+        delete formValue.data.and_params;
+      }
+    }
+
+    this.submitLoading &#x3D; true;
+    this.searchService.create(formValue)
+      .subscribe(
+        (createdSearch) &#x3D;&gt; {
+          this.submitLoading &#x3D; false;
+          this.openSnackBar(&#x27;Search successfully saved&#x27;, &#x27;OK&#x27;, 5000);
+          this.dataUpdatedService.triggerRefresh();
+          this.saveSearchDialogRef.close();
+          gtag(&#x27;event&#x27;, &#x27;click&#x27;, { &#x27;event_category&#x27;: &#x27;Search&#x27;, &#x27;event_label&#x27;: &#x27;User Search Saved&#x27; });
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+          this.openSnackBar(&#x27;Error. Search not saved. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+        }
+      );
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;h1 mat-dialog-title&gt;
+  &lt;mat-icon *ngIf&#x3D;&quot;data.titleIcon !&#x3D;&#x3D; &#x27;&#x27;&quot;&gt;{{data.titleIcon}}&lt;/mat-icon&gt; {{data.title}}
+&lt;/h1&gt;
+
+&lt;mat-dialog-content&gt;
+
+  &lt;p class&#x3D;&quot;nomargin&quot;&gt;Save the current search to your user profile&lt;/p&gt;
+
+  &lt;form [formGroup]&#x3D;&quot;saveSearchForm&quot; autocomplete&#x3D;&quot;off&quot;&gt;
+    &lt;div class&#x3D;&quot;vertical-form-container&quot;&gt;
+
+      &lt;mat-form-field class&#x3D;&quot;form-control&quot;&gt;
+        &lt;input matInput placeholder&#x3D;&quot;Name&quot; formControlName&#x3D;&quot;name&quot;&gt;
+        &lt;mat-hint align&#x3D;&quot;start&quot;&gt;Reference name/alias for this search &lt;/mat-hint&gt;
+      &lt;/mat-form-field&gt;
+
+    &lt;/div&gt;
+  &lt;/form&gt;
+
+
+&lt;/mat-dialog-content&gt;
+&lt;mat-dialog-actions&gt;
+
+  &lt;button mat-button color&#x3D;&quot;warn&quot; (click)&#x3D;&quot;this.saveSearchDialogRef.close(&#x27;cancel&#x27;);&quot;&gt;
+    &lt;mat-icon&gt;cancel&lt;/mat-icon&gt;&amp;nbsp;Cancel
+  &lt;/button&gt;
+  &lt;button mat-button color&#x3D;&quot;primary&quot; type&#x3D;&quot;submit&quot; [disabled]&#x3D;&quot;saveSearchForm.invalid&quot; (click)&#x3D;&quot;onSubmit(saveSearchForm.value)&quot;&gt;
+    &lt;mat-icon&gt;{{data.actionButtonIcon}}&lt;/mat-icon&gt; {{data.action_button_text}}
+  &lt;/button&gt;
+  &lt;mat-progress-bar mode&#x3D;&quot;indeterminate&quot; *ngIf&#x3D;&quot;submitLoading&quot;&gt;&lt;/mat-progress-bar&gt;
+&lt;/mat-dialog-actions&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./save-search.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-control {
+    width: 18em;
+    margin: 10px;
+}
+
+.org-select {
+    width: 35em;
+}
+
+.alert{ 
+    width: 100%;
+    background-color: lightcoral;
+}
+
+.text-small {
+    font-size: small;
+}</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><h1 mat-dialog-title>  <mat-icon *ngIf="data.titleIcon !== \'\'">{{data.titleIcon}}</mat-icon> {{data.title}}</h1><mat-dialog-content>  <p class="nomargin">Save the current search to your user profile</p>  <form [formGroup]="saveSearchForm" autocomplete="off">    <div class="vertical-form-container">      <mat-form-field class="form-control">        <input matInput placeholder="Name" formControlName="name">        <mat-hint align="start">Reference name/alias for this search </mat-hint>      </mat-form-field>    </div>  </form></mat-dialog-content><mat-dialog-actions>  <button mat-button color="warn" (click)="this.saveSearchDialogRef.close(\'cancel\');">    <mat-icon>cancel</mat-icon>&nbsp;Cancel  </button>  <button mat-button color="primary" type="submit" [disabled]="saveSearchForm.invalid" (click)="onSubmit(saveSearchForm.value)">    <mat-icon>{{data.actionButtonIcon}}</mat-icon> {{data.action_button_text}}  </button>  <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar></mat-dialog-actions></div>'
+    var COMPONENTS = [{'name': 'AboutComponent', 'selector': 'app-about'},{'name': 'AddCommentComponent', 'selector': 'app-add-comment'},{'name': 'AddEventDiagnosisComponent', 'selector': 'app-add-event-diagnosis'},{'name': 'AddEventLocationComponent', 'selector': 'app-add-event-location'},{'name': 'AddEventLocationContactComponent', 'selector': 'app-add-event-location-contact'},{'name': 'AddEventOrganizationComponent', 'selector': 'app-add-event-organization'},{'name': 'AddServiceRequestComponent', 'selector': 'app-add-service-request'},{'name': 'AlertCollaboratorsComponent', 'selector': 'app-alert-collaborators'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AuthenticationComponent', 'selector': 'app-authentication'},{'name': 'BrowserWarningComponent', 'selector': 'app-browser-warning'},{'name': 'BulkUploadComponent', 'selector': 'app-bulk-upload'},{'name': 'CircleChooseComponent', 'selector': 'app-circle-choose'},{'name': 'CircleManagementComponent', 'selector': 'app-circle-management'},{'name': 'CirclesComponent', 'selector': 'app-circles'},{'name': 'CollaborationRequestComponent', 'selector': 'app-collaboration-request'},{'name': 'CommentsTableComponent', 'selector': 'app-comments-table'},{'name': 'ConfirmComponent', 'selector': 'app-confirm'},{'name': 'CreateContactComponent', 'selector': 'app-create-contact'},{'name': 'CustomNotificationComponent', 'selector': 'app-custom-notification'},{'name': 'DiagnosticInfoComponent', 'selector': 'app-diagnostic-info'},{'name': 'DiagnosticServicesComponent', 'selector': 'app-diagnostic-services'},{'name': 'EditEventComponent', 'selector': 'app-edit-event'},{'name': 'EditEventLocationComponent', 'selector': 'app-edit-event-location'},{'name': 'EditLocationSpeciesComponent', 'selector': 'app-edit-location-species'},{'name': 'EditSpeciesDiagnosisComponent', 'selector': 'app-edit-species-diagnosis'},{'name': 'EditUserComponent', 'selector': 'app-edit-user'},{'name': 'EventDetailsComponent', 'selector': 'app-event-details'},{'name': 'EventDetailsShareComponent', 'selector': 'app-event-details-share'},{'name': 'EventGroupComponent', 'selector': 'app-event-group'},{'name': 'EventGroupManagementComponent', 'selector': 'app-event-group-management'},{'name': 'EventPublicReportComponent', 'selector': 'app-event-public-report'},{'name': 'EventsComponent', 'selector': 'app-event-table'},{'name': 'EventSubmissionComponent', 'selector': 'app-event-submission'},{'name': 'EventSubmissionConfirmComponent', 'selector': 'app-event-submission-confirm'},{'name': 'GnisLookupComponent', 'selector': 'app-gnis-lookup'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'LocationSpeciesTableComponent', 'selector': 'app-location-species-table'},{'name': 'NewLookupRequestComponent', 'selector': 'app-new-lookup-request'},{'name': 'NotificationsComponent', 'selector': 'app-notifications'},{'name': 'SavedSearchesComponent', 'selector': 'app-saved-searches'},{'name': 'SaveSearchComponent', 'selector': 'app-save-search'},{'name': 'SearchDialogComponent', 'selector': 'app-search-dialog'},{'name': 'SearchResultsSummaryReportComponent', 'selector': 'app-search-results-summary-report'},{'name': 'UserDashboardComponent', 'selector': 'app-user-dashboard'},{'name': 'UserEventsComponent', 'selector': 'app-user-events'},{'name': 'UserRegistrationComponent', 'selector': 'app-user-registration'},{'name': 'ViewCommentDetailsComponent', 'selector': 'app-view-comment-details'},{'name': 'ViewContactDetailsComponent', 'selector': 'app-view-contact-details'},{'name': 'ViewNotificationDetailsComponent', 'selector': 'app-view-notification-details'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'SaveSearchComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'SaveSearchComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

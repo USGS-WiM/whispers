@@ -24,13 +24,13 @@ export class NotificationService {
   // uses the newer HttpClient method
   public getUserNotifications(): Observable<any> {
 
-    return this.http.get(APP_SETTINGS.NOTIFICATIONS_URL, {
+    return this.http.get(APP_SETTINGS.NOTIFICATIONS_URL  + '?no_page', {
       headers: APP_SETTINGS.HTTP_CLIENT_MIN_AUTH_JSON_HEADERS
     }).pipe(
       map((res: any) => {
 
         // establish unreadNotifications variable. first contains all notifications
-        const unreadNotifications: Notification[] = Array.from(res.results);
+        const unreadNotifications: Notification[] = Array.from(res);
 
         // splice out all the read notififcations
         for (let i = unreadNotifications.length - 1; i >= 0; i--) {
@@ -40,7 +40,7 @@ export class NotificationService {
         }
 
         this.resultsCountService.updateUnreadNotificationsCount(unreadNotifications.length);
-        return res.results;
+        return res;
       }));
   }
 

@@ -26,6 +26,7 @@ export interface EventDetail extends History {
     legal_number: string;
     quality_check: string;
     public: boolean;
+    is_privileged_user: boolean;
     eventgroups: EventGroup[];
     eventdiagnoses: EventDiagnosis[];
     eventlocations: EventLocation[];

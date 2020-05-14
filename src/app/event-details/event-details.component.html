@@ -26,7 +26,12 @@
             <i class="material-icons">unarchive</i> Export Event Data</button>
           <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadEventReport()">
             <i class="material-icons">list_alt</i> Generate Event Report</button>
-            <!-- <app-event-public-report></app-event-public-report> (click)="eventReportComponent.print()" -->
+          <button mat-button color="primary" class="event-detail-action-button"
+            *ngIf="currentUser.role !== 7 && currentUser.role !== undefined"
+            (click)="openCollaborationRequestDialog(eventData.id)">
+            <mat-icon>group</mat-icon> Request to Collaborate
+          </button>
+          <!-- <app-event-public-report></app-event-public-report> (click)="eventReportComponent.print()" -->
         </div>
       </div>
 
@@ -275,7 +280,7 @@
         <mat-divider style="margin: 25px auto;" [inset]="true"></mat-divider>
 
         <div class="event-detail-wrapper"
-          *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+          *ngIf="currentUser.role !== 7 && currentUser.role !== undefined && eventData.is_privileged_user">
 
           <h3 class="event-detail-label">Privileged Event Data</h3>
 
@@ -293,8 +298,7 @@
               <!-- <div class="permission" *ngIf="eventData.permissions.write === true">Create</div> -->
               <div class="permission red" *ngIf="eventData.permissions.destroy === true">Delete</div>
 
-              <button mat-button color="primary" class="event-detail-action-button" (click)="openCollaborationRequestDialog(eventData.id)">
-                <mat-icon>group</mat-icon> Request to Collaborate</button>
+
             </div>
             <span class="title"
               *ngIf="eventData.complete && (eventData.permissions.update === true || eventData.permissions.destroy === true)">Editing
@@ -315,7 +319,7 @@
         <!-- Meta - event details for privileged users -->
         <!-- Meta - event details for privileged users -->
         <div class="event-detail-wrapper"
-          *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+          *ngIf="currentUser.role !== 7 && currentUser.role != undefined">
 
           <div class="privileged-meta">
             <div class="item"
@@ -367,8 +371,9 @@
           </div>
         </div>
 
-        <mat-tab-group class="tab-bar"(selectedIndexChange)="_setDataSource($event)" [selectedIndex]="selectedTab" (selectedTabChange)="resetExpansionPanels()"
-          *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined" #eventDetailsTabs>
+        <mat-tab-group class="tab-bar" (selectedIndexChange)="_setDataSource($event)" [selectedIndex]="selectedTab"
+          (selectedTabChange)="resetExpansionPanels()"
+          *ngIf="currentUser.role !== 7 && currentUser.role != undefined" #eventDetailsTabs>
           <!-- (selectedIndexChange)="_setDataSource($event)" -->
           <!-- Events tab -->
 
@@ -383,7 +388,7 @@
                               Privileged Event Data
                            -->
                 <div id="privileged-event-data" class="privileged-event-data"
-                  *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+                  *ngIf="currentUser.role !== 7 && currentUser.role !== undefined">
 
 
                   <!--  
@@ -1025,7 +1030,7 @@
 
           <!-- Comments Tab -->
           <mat-tab label="Comment Timeline"
-            *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+            *ngIf="currentUser.role !== 7 && currentUser.role != undefined">
             <ng-template matTabContent>
               <mat-card class="overflow-auto">
                 <div class="app-comments-table">
@@ -1038,7 +1043,7 @@
 
           <!-- Alerts Tab -->
           <mat-tab label="Alert Collaborators"
-            *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+            *ngIf="currentUser.role !== 7 && currentUser.role != undefined">
             <ng-template matTabContent>
               <mat-card>
                 <div class="app-comments-table">

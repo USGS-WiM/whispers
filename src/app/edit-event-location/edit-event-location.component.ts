@@ -47,6 +47,9 @@ export class EditEventLocationComponent implements OnInit {
   submitLoading = false;
   startDateViolation = false;
 
+  adminLevelOnesLoading = false;
+  adminLevelTwosLoading = false;
+
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
 
   latitudePattern: RegExp = (/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/);
@@ -128,6 +131,11 @@ export class EditEventLocationComponent implements OnInit {
       .subscribe(
         countries => {
           this.countries = countries;
+          this.countries.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
         },
         error => {
           this.errorMessage = <any>error;
@@ -259,6 +267,7 @@ export class EditEventLocationComponent implements OnInit {
   editStandardizedLocationNameTooltip() { const string = FIELD_HELP_TEXT.editStandardizedLocationNameTooltip; return string; }
 
   updateAdminLevelOneOptions(selectedCountryID) {
+    this.adminLevelOnesLoading = true;
     const id = Number(selectedCountryID);
 
     this.editEventLocationForm.get('administrative_level_one').setValue(null);
@@ -270,9 +279,18 @@ export class EditEventLocationComponent implements OnInit {
       .subscribe(
         adminLevelOnes => {
           this.adminLevelOnes = adminLevelOnes;
+          this.adminLevelOnes.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
+
+          this.filteredAdminLevelOnes.next(adminLevelOnes);
+          this.adminLevelOnesLoading = false;
         },
         error => {
           this.errorMessage = <any>error;
+          this.adminLevelOnesLoading = false;
         }
       );
   }
@@ -286,6 +304,7 @@ export class EditEventLocationComponent implements OnInit {
 
   updateAdminLevelTwoOptions(selectedAdminLevelOneID) {
     const id = Number(selectedAdminLevelOneID);
+    this.adminLevelTwosLoading = true;
 
     // query the adminleveltwos endpoint for appropriate records
     // update the options for the adminLevelTwo select with the response
@@ -311,9 +330,12 @@ export class EditEventLocationComponent implements OnInit {
             .subscribe(() => {
               this.filterAdminLevelTwos();
             });
+
+          this.adminLevelTwosLoading = false;
         },
         error => {
           this.errorMessage = <any>error;
+          this.adminLevelTwosLoading = false;
         }
       );
   }

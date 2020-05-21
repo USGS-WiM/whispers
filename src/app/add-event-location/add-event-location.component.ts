@@ -2,10 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy } 
 import { Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
-import { Observable ,  ReplaySubject, Subject } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 
 import { MatDialog, MatDialogRef, MatSelect } from '@angular/material';
-import { map ,  take, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 
 import { MatSnackBar } from '@angular/material';
 // import { MAT_DIALOG_DATA } from '@angular/material';
@@ -121,6 +121,9 @@ export class AddEventLocationComponent implements OnInit {
 
   speciesDiagnosisViolation = false;
   nonCompliantSpeciesDiagnoses = [];
+
+  adminLevelOnesLoading = false;
+  adminLevelTwosLoading = false;
 
   /* numberAffectedViolation = true; */
 
@@ -260,7 +263,7 @@ export class AddEventLocationComponent implements OnInit {
         adminLevelOnes => {
           this.adminLevelOnes = adminLevelOnes;
 
-          // load the initial bank list
+          // load the initial admin level one list
           this.filteredAdminLevelOnes.next(this.adminLevelOnes);
 
           // listen for search field value changes
@@ -464,8 +467,8 @@ export class AddEventLocationComponent implements OnInit {
     // empty array to put in the corrected location contacts
     const contacts = [];
 
-     // check to see if there were blank contacts added and remove them if so
-     if (this.addEventLocationForm.get('new_location_contacts') != null) {
+    // check to see if there were blank contacts added and remove them if so
+    if (this.addEventLocationForm.get('new_location_contacts') != null) {
       const control = <FormArray>this.addEventLocationForm.get('new_location_contacts');
       this.addEventLocationForm.get('new_location_contacts').value.forEach(element => {
         if (element.contact === null) {
@@ -844,6 +847,7 @@ export class AddEventLocationComponent implements OnInit {
   }
 
   updateAdminLevelOneOptions(selectedCountryID) {
+    this.adminLevelOnesLoading = true;
     const id = Number(selectedCountryID);
 
     // query the adminlevelones endpoint for appropriate records
@@ -855,15 +859,25 @@ export class AddEventLocationComponent implements OnInit {
       .subscribe(
         adminLevelOnes => {
           this.adminLevelOnes = adminLevelOnes;
+          this.adminLevelOnes.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
+
+          this.filteredAdminLevelOnes.next(this.adminLevelOnes);
+          this.adminLevelOnesLoading = false;
         },
         error => {
           this.errorMessage = <any>error;
+          this.adminLevelOnesLoading = false;
         }
       );
   }
 
   updateAdminLevelTwoOptions(selectedAdminLevelOneID) {
     const id = Number(selectedAdminLevelOneID);
+    this.adminLevelTwosLoading = true;
 
     this.addEventLocationForm.get('administrative_level_two').setValue(null);
 
@@ -889,9 +903,11 @@ export class AddEventLocationComponent implements OnInit {
             .subscribe(() => {
               this.filterAdminLevelTwos();
             });
+          this.adminLevelTwosLoading = false;
         },
         error => {
           this.errorMessage = <any>error;
+          this.adminLevelTwosLoading = false;
         }
       );
   }

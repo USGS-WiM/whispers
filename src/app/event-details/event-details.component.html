@@ -1067,7 +1067,7 @@
       <div id="eventDetailsMap">
 
         <mat-card class="unmappable-warning" data-html2canvas-ignore
-          *ngIf="unMappables.length > 0 && currentUser.username != '' && currentUser.role !== 7"
+          *ngIf="unMappables.length > 0 && currentUser.username != '' && currentUser.role !== 7 && eventData.is_privileged_user"
           matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
           [matTooltipPosition]="'above'">
           <span>

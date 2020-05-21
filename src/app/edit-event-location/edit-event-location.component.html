@@ -64,6 +64,7 @@
 
       <!-------->
       <mat-form-field class="form-control">
+        <mat-spinner *ngIf="adminLevelOnesLoading" [diameter]="20"></mat-spinner>
         <mat-select formControlName="administrative_level_one" placeholder="State (or equivalent)" #adminLevelOneSelect
           required (ngModelChange)="updateAdminLevelTwoOptions($event)">
           <ngx-mat-select-search [formControl]="adminLevelOneFilterCtrl"
@@ -97,6 +98,7 @@
 
       <!-------->
       <mat-form-field class="form-control">
+        <mat-spinner *ngIf="adminLevelTwosLoading" [diameter]="20"></mat-spinner>
         <mat-select formControlName="administrative_level_two" placeholder="County (or equivalent)" #adminLevelTwoSelect
           required>
           <ngx-mat-select-search [formControl]="adminLevelTwoFilterCtrl"

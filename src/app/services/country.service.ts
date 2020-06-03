@@ -7,7 +7,7 @@ import { Observable ,  Subject ,  throwError } from 'rxjs';
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 
-import { Country } from '@interfaces/Country';
+import { Country } from '@interfaces/country';
 
 @Injectable()
 export class CountryService {

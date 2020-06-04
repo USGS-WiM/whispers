@@ -126,7 +126,7 @@ WIM has established a collaborative development process that aims to ensure the 
 
  5. it is recommended you commit and push changes to the branch at least nightly for safekeeping: `git push origin [branch name]`
  6. when work on your feature or bug is complete, commit changes and then **sync your local feature branch with the remote dev branch**: `git pull origin dev`. This is an important step because the remote dev branch may have been changed while you were working on your local feature branch. This will auto-merge unless you have conflicts. Resolve the conflicts manually if they exist.
- 7. push your feature branch, now synced with remote dev branch (see step 6 above) to the remote feature branch: `git push origin [branch name]`. Note this exactly the same command as step 5. This step is for when you have completed the feature/fix, and pulled/merged the remote dev branch. 
+ 7. push your feature branch, now synced with remote dev branch (see step 6 above) to the remote feature branch: `git push origin [branch name]`. Note this is exactly the same command as step 5. This step is for when you have completed the feature/fix, and pulled/merged the remote dev branch. 
  8. In Github, create a Pull Request from your feature branch to the **`dev` branch**. Your peers will review your changes, and comment, and/or approve and merge. You may also be asked to make a change. When all is well, your feature branch will be merged with `dev` and the feature branch deleted. 
 
 After going to `dev` and possibly combined with other commits, the work will be packaged as part of a release tag and distribution build and merged with `test` and published to the test server. 

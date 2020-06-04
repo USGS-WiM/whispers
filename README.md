@@ -102,6 +102,34 @@ Run `ng build --prod --base-href [relative path to web server root]` to build th
 
   
 Note: the main differences between these two configurations are 1) the API root (prod services/database vs test services/database) and 2) the inclusion of Google Analytics for the production configuration. 
+
+
+## Collaborative Development Process
+
+#### Merging changes into the WHISPers codebase
+
+WIM has established a collaborative development process that aims to ensure the integrity of the release process through stepwise and peer-reviewed code merges passing through a pipeline of protected branches.
+
+#### The branches
+
+-  **dev** is the branch where all developers merge all individual issue or feature branches.
+-  **test** is reserved for code that represents a version that is in test phase. The current state of the test branch is published to the test server for review by testers. 
+-  **master** is reserved for fully vetted code for tested and approved features that represents a version that is in production, i.e. published and live for active users.
+
+ #### Steps to contribute
+ 1.  clone the repository. This should automatically include the `master` branch.
+ 2.  create dev branch locally: `git checkout -b dev`
+ 3. pull and merge current dev branch : `git pull origin dev`
+ 4. create a branch for your work, checking out from `dev`. It is strongly suggested that the branch name be the repository issue number that you are working on: `git checkout -b [branch name]` 
+              
+       ***__Do work__***
+
+ 5. it is recommended you commit and push changes to the branch at least nightly for safekeeping: `git push origin [branch name]`
+ 6. when work on your feature or bug is complete, commit changes and then **sync your local feature branch with the remote dev branch**: `git pull origin dev`. This is an important step because the remote dev branch may have been changed while you were working on your local feature branch. This will auto-merge unless you have conflicts. Resolve the conflicts manually if they exist.
+ 7. push your feature branch, now synced with remote dev branch (see step 6 above) to the remote feature branch: `git push origin [branch name]`. Note this is exactly the same command as step 5. This step is for when you have completed the feature/fix, and pulled/merged the remote dev branch. 
+ 8. In Github, create a Pull Request from your feature branch to the **`dev` branch**. Your peers will review your changes, and comment, and/or approve and merge. You may also be asked to make a change. When all is well, your feature branch will be merged with `dev` and the feature branch deleted. 
+
+After going to `dev` and possibly combined with other commits, the work will be packaged as part of a release tag and distribution build and merged with `test` and published to the test server. 
   
 
 ## Authors
@@ -113,20 +141,11 @@ Note: the main differences between these two configurations are 1) the API root 
 *  **[Blake Draper](https://github.com/BlakeDraper)** - *Lead Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
 
   
-  
+*  **[Lauren Privette](https://github.com/lprivette)** - *Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/) 
   
 
 *  **[Nick Estes](https://github.com/njestes)** - *Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
 
-  
-
-  
-
-*  **[Lauren Privette](https://github.com/lprivette)** - *Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
-
-  
-  
-  
 
 *  **[Mitch Samuels](https://github.com/mitchas)** - *Designer/Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
 

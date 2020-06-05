@@ -412,7 +412,7 @@ mat-table>.mat-row:hover {
     //left: 15px;
     right: 10px;
     width:200px;
-    /*height:320px;*/
+    max-height:400px;
     z-index: 799;
     color: black;
     background-color: rgb(255, 255, 255);

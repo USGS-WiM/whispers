@@ -302,6 +302,10 @@ export class HomeComponent implements OnInit {
       this.currentSearchQuery.and_params.push('administrative_level_two');
     }
 
+    // needed hack to ensure scrolling remains present on legend
+    const elem = L.DomUtil.get('legend');
+    L.DomEvent.on(elem, 'mousewheel', L.DomEvent.stopPropagation);
+
     this.eventService.queryEventsCount(this.currentSearchQuery)
       .subscribe(
         count => {

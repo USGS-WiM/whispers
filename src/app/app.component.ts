@@ -25,6 +25,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 import * as $ from 'jquery';
 import * as search_api from 'usgs-search-api';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -60,7 +61,8 @@ export class AppComponent implements OnInit {
     public currentUserService: CurrentUserService,
     private authenticationService: AuthenticationService,
     private notificationService: NotificationService,
-    private resultsCountService: ResultsCountService
+    private resultsCountService: ResultsCountService,
+    private userService: UserService,
   ) {
 
     currentUserService.currentUser.subscribe(user => {
@@ -94,6 +96,16 @@ export class AppComponent implements OnInit {
     //     'username': ''
     //   });
     // }
+
+    this.route.queryParams.subscribe(params => {
+      // TODO: make constants
+      const userId = params['user-id'];
+      const emailToken = params['email-token'];
+
+      if (userId && emailToken) {
+        this.confirmEmailAddress(userId, emailToken);
+      }
+    })
 
     if (sessionStorage.getItem('currentUser')) {
       const currentUserObj = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -188,13 +200,14 @@ export class AppComponent implements OnInit {
     this.authenticationService.logout();
   }
 
-  openAuthenticationDialog() {
+  openAuthenticationDialog(data) {
     this.authenticationDialogRef = this.dialog.open(AuthenticationComponent, {
       // minWidth: '60%'
       // disableClose: true, data: {
       //   query: this.currentDisplayQuery
       // }
       // height: '75%'
+      data: data
     });
   }
 
@@ -233,5 +246,19 @@ export class AppComponent implements OnInit {
         window.clearInterval(scrollToTop);
       }
     }, 16);
+  }
+
+  confirmEmailAddress(userId:String, emailToken:String) {
+
+    this.userService.confirmEmail(userId, emailToken)
+      .subscribe(
+        (user) => {
+          this.openAuthenticationDialog({userEmailVerified: true});
+        },
+        error => {
+          // TODO: notify user of email confirmation error
+          this.errorMessage = <any>error;
+        }
+      );
   }
 }

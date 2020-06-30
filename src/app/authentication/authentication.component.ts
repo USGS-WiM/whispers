@@ -39,7 +39,8 @@ export class AuthenticationComponent implements OnInit {
     public currentUserService: CurrentUserService,
     public router: Router,
     private route: ActivatedRoute,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.loginForm = formBuilder.group({
       username: ['', Validators.required],

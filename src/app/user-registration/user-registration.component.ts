@@ -32,6 +32,7 @@ export class UserRegistrationComponent implements OnInit {
 
   errorMessage = '';
   submitLoading = false;
+  userRegistrationSuccessful = false;
 
   currentUser;
 
@@ -229,8 +230,7 @@ export class UserRegistrationComponent implements OnInit {
       .subscribe(
         (event) => {
           this.submitLoading = false;
-          this.openSnackBar('User Registration Successful', 'OK', 5000);
-          this.userRegistrationDialogRef.close();
+          this.userRegistrationSuccessful = true;
           // this.currentUserService.updateCurrentUser(event);
           // sessionStorage.first_name = event.first_name;
           // sessionStorage.last_name = event.last_name;

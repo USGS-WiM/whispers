@@ -4,6 +4,22 @@
   Professionals' : ''}}
 </h1>
 <mat-dialog-content>
+
+  <mat-card *ngIf="userRegistrationSuccessful; else formBlock">
+    <mat-card-header>
+      <mat-card-title>User Registration Request Successful</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        Thank you for registering. We've sent an email to
+        <b>{{userRegistrationForm.get('email').value}}</b>. Please click the
+        link in that email to confirm your email address and complete the
+        registration process. If you don't see the email in your inbox,
+        please also check your "Junk" or "Spam" folder.
+      </p>
+    </mat-card-content>
+  </mat-card>
+  <ng-template #formBlock>
   <form [formGroup]="userRegistrationForm" class="registration-form" autocomplete="off">
 
     <div class="vertical-form-container">
@@ -24,7 +40,7 @@
 
         <!-- Last Name -->
         <mat-form-field class="form-control">
-          <input matInput placeholder="Last Name" formControlName="last_name">          
+          <input matInput placeholder="Last Name" formControlName="last_name">
           <mat-hint align="start">{{regLastNameTooltip()}}</mat-hint>
         </mat-form-field>
 
@@ -35,7 +51,7 @@
         <!-- Email address -->
         <mat-form-field class="form-control">
           <input matInput placeholder="Email Address" formControlName="email" required>
-          <mat-icon class="hint-hover-text" matSuffix 
+          <mat-icon class="hint-hover-text" matSuffix
                 matTooltip={{regemailAddressTooltip()}} matTooltipClass="tooltip-breakline">
           help</mat-icon>
           <mat-error *ngIf="userRegistrationForm.get('email').invalid">{{getErrorMessage('email')}}</mat-error>
@@ -55,7 +71,7 @@
         <!-- Password -->
         <mat-form-field class="form-control">
           <input matInput type="password" placeholder="Password" formControlName="password" required>
-          <mat-icon class="hint-hover-text" matSuffix 
+          <mat-icon class="hint-hover-text" matSuffix
                 matTooltip={{regPasswordTooltip()}} matTooltipClass="tooltip-breakline">
           help</mat-icon>
         </mat-form-field>
@@ -101,7 +117,7 @@
             {{organization.name}}
           </mat-option>
         </mat-select>
-        <mat-icon class="hint-hover-text" matSuffix 
+        <mat-icon class="hint-hover-text" matSuffix
                   matTooltip={{regOrganizationTooltip()}} matTooltipClass="tooltip-breakline">
             help</mat-icon>
       </mat-form-field>
@@ -115,7 +131,7 @@
           <mat-option [value]="4">Partner Manager</mat-option>
           <mat-option [value]="3">Partner Administrator</mat-option>
         </mat-select>
-        <mat-icon class="hint-hover-text" matSuffix 
+        <mat-icon class="hint-hover-text" matSuffix
                   matTooltip={{regRoleTooltip()}} matTooltipClass="tooltip-breakline">
             help</mat-icon>
       </mat-form-field>
@@ -126,12 +142,12 @@
       <mat-form-field class="general-comment-text-area">
         <textarea matInput #requestComment maxlength="1000" minRows="3" placeholder="Comment"
           formControlName="comment"></textarea>
-          <mat-icon class="hint-hover-text" matSuffix 
+          <mat-icon class="hint-hover-text" matSuffix
                   matTooltip={{regCommentTooltip()}} matTooltipClass="tooltip-breakline">
             help</mat-icon>
         <mat-hint align="end">{{requestComment.value.length}} / 1000</mat-hint>
       </mat-form-field>
-  
+
         <div>
           <h3>Disclaimer</h3>
           <p class="text-smaller">The data on this website are provided for situational awareness of wildlife health
@@ -146,7 +162,7 @@
 
         <div *ngIf="data.registration_type === 'partner'" class="disclaimers">
             <div>
-              <h3>Terms of Use<mat-icon class="hint-hover-text" matSuffix 
+              <h3>Terms of Use<mat-icon class="hint-hover-text" matSuffix
                       matTooltip={{regTermsOfUseTooltip()}} matTooltipClass="tooltip-breakline">
                 help</mat-icon></h3>
               <p class="text-smaller">The USGS National Wildlife Health Center (NWHC) conducts wildlife disease
@@ -154,7 +170,7 @@
                 provides a collaborative web-based interface for data entry and communication about wildlife health events.
                 By using this site to request diagnostic assistance from NWHC, the user acknowledges that they maintain
                 appropriate federal or state authority for collection and shipment of wildlife specimens
-    
+
                 <p class="text-smaller">By default, basic summary information such as county location, species affected, and
                   diagnosis will be made
                   publicly available. We recognize the sensitive nature of aspects of these investigations, including but
@@ -163,13 +179,13 @@
                   registered natural resource management professionals entering data to WHISPers can choose to limit the
                   visibility of sensitive data. In order to maintain the integrity of the database and information served
                   through it, a limited number of staff at NWHC will be able to see all data entered.
-    
+
             </div>
-    
+
             <mat-checkbox formControlName="terms" appearance="outline">I agree to the terms of use</mat-checkbox>
-    
+
           </div>
-  
+
       </div>
 
       <mat-divider></mat-divider>
@@ -187,17 +203,24 @@
 
 
   </form>
+  </ng-template>
 </mat-dialog-content>
 
 <mat-dialog-actions>
   <div class="detail-section-buttons">
-    <button mat-button color="warn" (click)="this.userRegistrationDialogRef.close('cancel');">
-      <mat-icon>cancel</mat-icon>&nbsp;Cancel
+
+    <button *ngIf="userRegistrationSuccessful; else buttonsBlock" mat-button color="primary" mat-dialog-close>
+      OK
     </button>
-    <button mat-button color="primary" type="submit" [disabled]="userRegistrationForm.invalid"
-      (click)="onSubmit(userRegistrationForm.value)">
-      <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{data.action_button_text}}
-    </button>
-    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+    <ng-template #buttonsBlock>
+      <button mat-button color="warn" (click)="this.userRegistrationDialogRef.close('cancel');">
+        <mat-icon>cancel</mat-icon>&nbsp;Cancel
+      </button>
+      <button mat-button color="primary" type="submit" [disabled]="userRegistrationForm.invalid"
+        (click)="onSubmit(userRegistrationForm.value)">
+        <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{data.action_button_text}}
+      </button>
+      <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
+    </ng-template>
   </div>
 </mat-dialog-actions>

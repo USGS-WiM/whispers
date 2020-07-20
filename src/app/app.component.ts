@@ -26,6 +26,7 @@ import { isPlatformBrowser } from '@angular/common';
 import * as $ from 'jquery';
 import * as search_api from 'usgs-search-api';
 import { UserService } from './services/user.service';
+import { ConfirmComponent } from './confirm/confirm.component';
 
 @Component({
   selector: 'app-root',
@@ -253,11 +254,31 @@ export class AppComponent implements OnInit {
     this.userService.confirmEmail(userId, emailToken)
       .subscribe(
         (user) => {
-          this.openAuthenticationDialog({userEmailVerified: true});
+          // Route to /home/ to remove the verification query parameters
+          return this.router.navigate(['/home/'])
+          .then(() => {
+            this.openAuthenticationDialog({userEmailVerified: true});
+          })
         },
         error => {
-          // TODO: notify user of email confirmation error
-          this.errorMessage = <any>error;
+          let errorMessage = error;
+          try {
+            errorMessage = JSON.parse(error).status;
+          } catch (error) {
+            // Ignore JSON parsing error
+          }
+          const confirmDialogRef = this.dialog.open(ConfirmComponent,
+            {
+              disableClose: true,
+              data: {
+                title: 'Email Verification Failed',
+                titleIcon: 'warning',
+                message: 'Failed to verify your email address: ' + errorMessage,
+                confirmButtonText: 'OK',
+                showCancelButton: false
+              }
+            }
+          );
         }
       );
   }

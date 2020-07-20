@@ -200,7 +200,7 @@ export class AppComponent implements OnInit {
     this.authenticationService.logout();
   }
 
-  openAuthenticationDialog(data) {
+  openAuthenticationDialog(data = null) {
     this.authenticationDialogRef = this.dialog.open(AuthenticationComponent, {
       // minWidth: '60%'
       // disableClose: true, data: {

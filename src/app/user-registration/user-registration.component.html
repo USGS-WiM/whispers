@@ -4,22 +4,6 @@
   Professionals' : ''}}
 </h1>
 <mat-dialog-content>
-
-  <mat-card *ngIf="userRegistrationSuccessful; else formBlock">
-    <mat-card-header>
-      <mat-card-title>User Registration Request Successful</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <p>
-        Thank you for registering. We've sent an email to
-        <b>{{userRegistrationForm.get('email').value}}</b>. Please click the
-        link in that email to confirm your email address and complete the
-        registration process. If you don't see the email in your inbox,
-        please also check your "Junk" or "Spam" folder.
-      </p>
-    </mat-card-content>
-  </mat-card>
-  <ng-template #formBlock>
   <form [formGroup]="userRegistrationForm" class="registration-form" autocomplete="off">
 
     <div class="vertical-form-container">
@@ -203,24 +187,17 @@
 
 
   </form>
-  </ng-template>
 </mat-dialog-content>
 
 <mat-dialog-actions>
   <div class="detail-section-buttons">
-
-    <button *ngIf="userRegistrationSuccessful; else buttonsBlock" mat-button color="primary" mat-dialog-close>
-      OK
+    <button mat-button color="warn" (click)="this.userRegistrationDialogRef.close('cancel');">
+      <mat-icon>cancel</mat-icon>&nbsp;Cancel
     </button>
-    <ng-template #buttonsBlock>
-      <button mat-button color="warn" (click)="this.userRegistrationDialogRef.close('cancel');">
-        <mat-icon>cancel</mat-icon>&nbsp;Cancel
-      </button>
-      <button mat-button color="primary" type="submit" [disabled]="userRegistrationForm.invalid"
-        (click)="onSubmit(userRegistrationForm.value)">
-        <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{data.action_button_text}}
-      </button>
-      <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
-    </ng-template>
+    <button mat-button color="primary" type="submit" [disabled]="userRegistrationForm.invalid"
+      (click)="onSubmit(userRegistrationForm.value)">
+      <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{data.action_button_text}}
+    </button>
+    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
   </div>
 </mat-dialog-actions>

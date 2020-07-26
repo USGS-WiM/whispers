@@ -21,6 +21,7 @@ import { Role } from '@interfaces/role';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
+import { ConfirmComponent } from '@app/confirm/confirm.component';
 declare let gtag: Function;
 
 @Component({
@@ -32,7 +33,6 @@ export class UserRegistrationComponent implements OnInit {
 
   errorMessage = '';
   submitLoading = false;
-  userRegistrationSuccessful = false;
 
   currentUser;
 
@@ -109,6 +109,7 @@ export class UserRegistrationComponent implements OnInit {
     private organizationService: OrganizationService,
     private roleService: RoleService,
     private userService: UserService,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
 
@@ -230,7 +231,21 @@ export class UserRegistrationComponent implements OnInit {
       .subscribe(
         (event) => {
           this.submitLoading = false;
-          this.userRegistrationSuccessful = true;
+          this.userRegistrationDialogRef.close();
+          this.dialog.open(ConfirmComponent, {
+            data: {
+              title: "User Registration Request Successful",
+              titleIcon: "check",
+              message:
+              `Thank you for registering. We've sent an email to
+              ${this.userRegistrationForm.get('email').value}. Please click the
+              link in that email to confirm your email address and complete the
+              registration process. If you don't see the email in your inbox,
+              please also check your "Junk" or "Spam" folder.`,
+              confirmButtonText: "OK",
+              showCancelButton: false,
+            },
+          });
           // this.currentUserService.updateCurrentUser(event);
           // sessionStorage.first_name = event.first_name;
           // sessionStorage.last_name = event.last_name;

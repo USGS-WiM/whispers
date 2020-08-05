@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 
 import {
   MatAutocompleteModule,
@@ -234,7 +235,9 @@ import { ViewNotificationDetailsComponent } from '@notifications/view-notificati
     MatBadgeModule,
     NgxMatSelectSearchModule,
     NgxMatSelectSearchModule,
-    PapaParseModule
+    PapaParseModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
   ],
   providers: [
     AuthenticationService,

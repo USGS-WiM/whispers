@@ -5,4 +5,5 @@ export const environment = {
   ////////////// PROD /////////////////
   // API root for prod
   api_root: 'https://whispers.usgs.gov/whispersservices/',
+  recaptcha_site_key: '',
 };

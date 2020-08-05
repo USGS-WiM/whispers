@@ -9,4 +9,5 @@ export const environment = {
   // banner_text_color: '#FFFF00'
   // API root for test
   api_root: 'https://whisperstest.wim.usgs.gov/whispersservices/',
+  recaptcha_site_key: '',
 };

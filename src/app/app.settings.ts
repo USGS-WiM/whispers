@@ -171,6 +171,8 @@ export class APP_SETTINGS {
 
     public static get GO_USA_GOV_JSON_HEADERS() { return new Headers({}); }
 
+    public static get RECAPTCHA_SITE_KEY() { return environment.recaptcha_site_key; }
+
     public static get AUTH_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password)

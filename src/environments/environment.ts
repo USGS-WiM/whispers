@@ -9,5 +9,6 @@ export const environment = {
   api_root: 'https://whispersdev.wim.usgs.gov/whispersservices/',
   // api_root: 'https://whispers.usgs.gov/whispersservices/',
   banner_content: 'This website is under development and CONTAINS FICTICIOUS DATA. ',
-  banner_text_color: '#FFFF00'
+  banner_text_color: '#FFFF00',
+  recaptcha_site_key: '',
 };

@@ -170,6 +170,7 @@ export class UserRegistrationComponent implements OnInit {
         }
       );
 
+      this.recaptcha.siteKey = APP_SETTINGS.RECAPTCHA_SITE_KEY;
   }
 
   private filterOrganization() {

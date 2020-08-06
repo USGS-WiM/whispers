@@ -78,10 +78,6 @@
         </ul>
       </div>
 
-      <div class="form-control">
-        <re-captcha formControlName="recaptcha" required></re-captcha>
-      </div>
-
       <div *ngIf="data.registration_type == 'public'">
         <h3>Disclaimer</h3>
         <p class="text-smaller">The data on this website are provided for situational awareness of wildlife health
@@ -182,6 +178,10 @@
         Thank you for your interest in becoming a WHISPers Partner user. Your request will be reviewed and you will
         receive an email reply as soon as possible.
       </p>
+
+      <div class="form-control">
+        <re-captcha formControlName="recaptcha" required></re-captcha>
+      </div>
 
 
 

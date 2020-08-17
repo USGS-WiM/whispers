@@ -27,6 +27,7 @@ import * as $ from 'jquery';
 import * as search_api from 'usgs-search-api';
 import { UserService } from './services/user.service';
 import { ConfirmComponent } from './confirm/confirm.component';
+import { RequestPasswordResetComponent } from './request-password-reset/request-password-reset.component';
 
 @Component({
   selector: 'app-root',
@@ -209,6 +210,11 @@ export class AppComponent implements OnInit {
       // }
       // height: '75%'
       data: data
+    });
+    this.authenticationDialogRef.afterClosed().subscribe(result => {
+      if (result === "request-password-reset") {
+        this.dialog.open(RequestPasswordResetComponent);
+      }
     });
   }
 

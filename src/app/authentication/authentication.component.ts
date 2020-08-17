@@ -121,4 +121,8 @@ export class AuthenticationComponent implements OnInit {
     }
   }
 
+  forgotPassword() {
+    this.authenticationDialogRef.close("request-password-reset");
+  }
+
 }

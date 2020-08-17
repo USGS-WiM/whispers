@@ -132,6 +132,7 @@ import { PapaParseModule } from 'ngx-papaparse';
 import { EventPublicReportComponent } from '@event-public-report/event-public-report.component';
 import { SearchResultsSummaryReportComponent } from '@search-results-summary-report/search-results-summary-report.component';
 import { ViewNotificationDetailsComponent } from '@notifications/view-notification-details/view-notification-details.component';
+import { RequestPasswordResetComponent } from './request-password-reset/request-password-reset.component';
 
 
 @NgModule({
@@ -187,6 +188,7 @@ import { ViewNotificationDetailsComponent } from '@notifications/view-notificati
     EventPublicReportComponent,
     SearchResultsSummaryReportComponent,
     ViewNotificationDetailsComponent,
+    RequestPasswordResetComponent,
   ],
   imports: [
     BrowserModule,
@@ -312,7 +314,8 @@ import { ViewNotificationDetailsComponent } from '@notifications/view-notificati
     CollaborationRequestComponent,
     BrowserWarningComponent,
     BulkUploadComponent,
-    ViewNotificationDetailsComponent
+    ViewNotificationDetailsComponent,
+    RequestPasswordResetComponent,
   ]
 })
 export class AppModule { }

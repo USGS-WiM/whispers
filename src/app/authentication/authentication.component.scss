@@ -6,13 +6,10 @@
 .vertical-form-container {
     display: flex;
     flex-direction: column;
+    // Add additional room at bottom to show Forgot Password button
+    padding-bottom: 2em;
+    overflow: hidden;
 }
 .form-control {
-    width: 18em; 
-}
-.forgot-password-div {
-    width:20em;
-}
-.text-small {
-    font-size: small;
+    width: 18em;
 }

@@ -20,15 +20,11 @@
         <input matInput placeholder="Password" formControlName="password" required required [type]="hide ? 'password' : 'text'">
         <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
         <mat-error *ngIf="loginForm.get('password').invalid">{{getErrorMessage('password')}}</mat-error>
+        <mat-hint><button mat-button (click)="forgotPassword()">Forgot password?</button></mat-hint>
       </mat-form-field>
 	</div>
 
   </form>
-
-  <div class="forgot-password-div">
-    <span class="text-small">Forgot password? Please email <span class="text-bold">whispers@usgs.gov</span> for
-      assistance resetting.</span>
-  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
 

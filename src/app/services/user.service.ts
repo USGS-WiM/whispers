@@ -100,6 +100,16 @@ export class UserService {
       catchError(this.handleError),);
   }
 
+  public resetPassword(formValue): Observable<User | any> {
+
+    const options = new RequestOptions({
+      headers: APP_SETTINGS.MIN_JSON_HEADERS
+    });
+    return this._http.post(APP_SETTINGS.USERS_URL + 'reset_password/', formValue, options).pipe(
+      map((response: Response) => <any>response.json()),
+      catchError(this.handleError),);
+  }
+
   private handleError(error: Response) {
     console.error(error);
     return throwError(JSON.stringify(error.json()) || 'Server error');

@@ -13,7 +13,6 @@ import { AuthenticationService } from "@app/services/authentication.service";
 export class ResetPasswordComponent implements OnInit {
   resetPasswordForm: FormGroup;
   submitLoading = false;
-  passwordPattern: RegExp = /^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?\d)(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?\d)(?=.*?[^a-zA-Z0-9])).{12,}$/;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,42 +34,16 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   buildResetPasswordForm(userId:String, passwordResetToken:String) {
-    // TODO: factor out the password form into separate component
     this.resetPasswordForm = this.formBuilder.group(
       {
         id: [userId],
         token: [passwordResetToken],
-        password: [
-          "",
-          Validators.compose([
-            Validators.required,
-            Validators.pattern(this.passwordPattern),
-          ]),
-        ],
-        confirmPassword: [
-          "",
-          Validators.compose([
-            Validators.required,
-            Validators.pattern(this.passwordPattern),
-          ]),
-        ],
+        password: this.formBuilder.group({
+          password: [""],
+          confirmPassword: [""]
+        })
       },
-      {
-        validator: [this.matchPassword],
-      }
     );
-  }
-
-  matchPassword(AC: AbstractControl) {
-    const password = AC.get("password").value; // to get value in input tag
-    const confirmPassword = AC.get("confirmPassword").value; // to get value in input tag
-    if (password !== confirmPassword) {
-      AC.get("confirmPassword").setErrors({ matchPassword: true });
-    } else {
-      AC.get("confirmPassword").setErrors({ matchPassword: false });
-      AC.get("confirmPassword").updateValueAndValidity({onlySelf: true});
-      return null;
-    }
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -82,7 +55,10 @@ export class ResetPasswordComponent implements OnInit {
   onSubmit(formValue) {
 
     // delete the confirm fields for the actual submission
-    delete formValue.confirmPassword;
+    const password = formValue.password.password;
+    delete formValue.password;
+    formValue.password = password;
+
 
     this.submitLoading = true;
     this.userService.resetPassword(formValue)

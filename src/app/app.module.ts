@@ -134,6 +134,7 @@ import { SearchResultsSummaryReportComponent } from '@search-results-summary-rep
 import { ViewNotificationDetailsComponent } from '@notifications/view-notification-details/view-notification-details.component';
 import { RequestPasswordResetComponent } from './request-password-reset/request-password-reset.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { NewPasswordFormComponent } from './new-password-form/new-password-form.component';
 
 
 @NgModule({
@@ -191,6 +192,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     ViewNotificationDetailsComponent,
     RequestPasswordResetComponent,
     ResetPasswordComponent,
+    NewPasswordFormComponent,
   ],
   imports: [
     BrowserModule,

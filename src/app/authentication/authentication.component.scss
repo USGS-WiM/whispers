@@ -7,9 +7,18 @@
     display: flex;
     flex-direction: column;
     // Add additional room at bottom to show Forgot Password button
-    padding-bottom: 2em;
+    padding-bottom: 3em;
     overflow: hidden;
 }
 .form-control {
     width: 18em;
+}
+
+.button-forgot-password {
+    color: rgba(0,0,0,.54);
+    display: block;
+}
+
+.error-message + .button-forgot-password {
+    margin-top: 6px;
 }

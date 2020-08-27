@@ -19,8 +19,11 @@
       <mat-form-field class="form-control">
         <input matInput placeholder="Password" formControlName="password" required required [type]="hide ? 'password' : 'text'">
         <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
-        <mat-error *ngIf="loginForm.get('password').invalid">{{getErrorMessage('password')}}</mat-error>
-        <mat-hint><button mat-button (click)="forgotPassword()">Forgot password?</button></mat-hint>
+        <mat-error *ngIf="loginForm.get('password').invalid">
+          <span class="error-message">{{getErrorMessage('password')}}</span>
+          <button class="button-forgot-password" mat-stroked-button (click)="forgotPassword()">Forgot password?</button>
+        </mat-error>
+        <mat-hint><button class="button-forgot-password" mat-stroked-button (click)="forgotPassword()">Forgot password?</button></mat-hint>
       </mat-form-field>
 	</div>
 

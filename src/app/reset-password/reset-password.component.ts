@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from "@angular/fo
 import { UserService } from "@app/services/user.service";
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA, MatSnackBar } from "@angular/material";
 import { AuthenticationService } from "@app/services/authentication.service";
+import { ConfirmComponent } from "@app/confirm/confirm.component";
 
 @Component({
   selector: "app-reset-password",
@@ -76,7 +77,23 @@ export class ResetPasswordComponent implements OnInit {
         },
         error => {
           this.submitLoading = false;
-          this.openSnackBar('Error. Password reset failed. Error message: ' + error, 'OK', 8000);
+
+          let errorMessage = error;
+          try {
+            errorMessage = JSON.parse(error).status;
+          } catch (error) {
+            // Ignore JSON parsing error
+          }
+          this.dialog.open(ConfirmComponent, {
+            data: {
+              title: "Password Reset Failed",
+              titleIcon: "warning",
+              message: 'Failed to reset password: ' + errorMessage,
+              confirmButtonText: "OK",
+              showCancelButton: false,
+            },
+          });
+          this.resetPasswordDialogRef.close();
         }
       );
   }

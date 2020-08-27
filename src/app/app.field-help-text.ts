@@ -5,7 +5,7 @@ import { environment } from 'environments/environment';
 
 @Injectable()
 export class FIELD_HELP_TEXT {
-    
+
 // Tooltip config template:
 // public static get Tooltip(): string { return ''; }
 // The characters \n\n can be used to add a breakline to the tooltip
@@ -158,7 +158,7 @@ public static get regUsernameTooltip(): string { return 'Login username.'; }
 public static get regFirstNameTooltip(): string { return 'Can use full first name or nickname.'; }
 public static get regLastNameTooltip(): string { return 'Surname.'; }
 public static get regemailAddressTooltip(): string { return 'Email address, preferably work account for Natural Resources Management Professionals.'; }
-public static get regPasswordTooltip(): string { return 'Password must be at least 12 characters long and contain at least one:\n\nLowercase letter (a, b, c, ..., z) \n\n Number (0, 1, 2, ..., 3) \n\n Symbol (!, #, @, etc.)'; }
+public static get regPasswordTooltip(): string { return 'Password must be at least 12 characters long and contain at least one:\n\nLowercase letter (a, b, c, ..., z) \n\n Number (0, 1, 2, ..., 9) \n\n Symbol (!, #, @, etc.)'; }
 public static get regTermsOfUseTooltip(): string { return 'Natural Resource Management Professionals are required to check this box acknowledging the terms of use before becoming authorized WHISPers users.'; }
 public static get regOrganizationTooltip(): string { return 'Organization where user works. \n\n If correct organization is not in dropdown, enter free text in the "Comment" field.'; }
 public static get regRoleTooltip(): string { return 'Role being requested by registering user. \n\n Options are: "User" - can submit data, edit self-created data, and view non-public data within own organization; "Manager" - anything a "User" can do, plus can edit any data within own organization; "Administrator" - anything a "Manager" can do, plus can validate and delete users and user info within own organization.'; }

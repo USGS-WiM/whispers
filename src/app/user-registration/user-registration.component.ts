@@ -11,12 +11,10 @@ import { take, takeUntil } from 'rxjs/operators';
 
 import { User } from '@interfaces/user';
 import { UserService } from '@app/services/user.service';
-import { RoleService } from '@app/services/role.service';
 import { CurrentUserService } from '@services/current-user.service';
 import { OrganizationService } from '@services/organization.service';
 
 import { Organization } from '@interfaces/organization';
-import { Role } from '@interfaces/role';
 
 
 import { APP_SETTINGS } from '@app/app.settings';
@@ -37,7 +35,6 @@ export class UserRegistrationComponent implements OnInit {
   currentUser;
 
   organizations: Organization[];
-  roles: Role[];
 
   userRegistrationForm: FormGroup;
 
@@ -76,7 +73,6 @@ export class UserRegistrationComponent implements OnInit {
         confirmPassword: [""]
       }),
       organization: null,
-      role: null,
       comment: '',
       terms: [false, Validators.requiredTrue],
     }, {
@@ -91,7 +87,6 @@ export class UserRegistrationComponent implements OnInit {
     public snackBar: MatSnackBar,
     private currentUserService: CurrentUserService,
     private organizationService: OrganizationService,
-    private roleService: RoleService,
     private userService: UserService,
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -139,19 +134,6 @@ export class UserRegistrationComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
-
-
-    // get roles from the RoleService
-    this.roleService.getRoles()
-      .subscribe(
-        roles => {
-          this.roles = roles;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-
   }
 
   private filterOrganization() {
@@ -178,7 +160,6 @@ export class UserRegistrationComponent implements OnInit {
   regemailAddressTooltip() { const string = FIELD_HELP_TEXT.regemailAddressTooltip; return string; }
   regTermsOfUseTooltip() { const string = FIELD_HELP_TEXT.regTermsOfUseTooltip; return string; }
   regOrganizationTooltip() { const string = FIELD_HELP_TEXT.regOrganizationTooltip; return string; }
-  regRoleTooltip() { const string = FIELD_HELP_TEXT.regRoleTooltip; return string; }
   regCommentTooltip() { const string = FIELD_HELP_TEXT.regCommentTooltip; return string; }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -202,9 +183,15 @@ export class UserRegistrationComponent implements OnInit {
       formValue.organization = 1;
     }
 
-    if (this.data.registration_type === 'partner') {
+    if (this.data.registration_type === 'partner' || this.data.registration_type === 'affiliate') {
+      let roleRequested;
+      if (this.data.registration_type === 'partner') {
+        roleRequested = 5;
+      } else if (this.data.registration_type === 'affiliate') {
+        roleRequested = 6;
+      }
       formValue.new_user_change_request = {
-        'role_requested': formValue.role,
+        'role_requested': roleRequested,
         'organization_requested': formValue.organization,
         'comment': formValue.comment
       };

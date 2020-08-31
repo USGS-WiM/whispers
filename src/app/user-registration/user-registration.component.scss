@@ -31,7 +31,7 @@
 }
 
 .general-comment-text-area {
-    width: 45em;
+    width: calc(100% - 20px);
     margin-bottom: 2em;
 }
 
@@ -41,7 +41,6 @@
 
 .registration-form{
     display: block;
-    max-width: 500px;
 
     p{
         max-width: 500px !important;
@@ -59,6 +58,12 @@
         font-size: 16px;
         margin-top: 15px;
         margin-bottom: 8px;
+    }
+    .horizontal-form-container {
+      justify-content: space-between;
+      .vertical-form-container {
+        width: calc(50% - 20px);
+      }
     }
 }
 
@@ -82,7 +87,7 @@
 }
 
 .org-select {
-    width: 55em;
+    width: calc(100% - 20px);
 }
 
 

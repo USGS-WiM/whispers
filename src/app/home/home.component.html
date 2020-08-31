@@ -2,46 +2,6 @@
 
   <div class="controlsDiv">
 
-    <div id="welcome-panel-div">
-      <mat-expansion-panel expanded>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Welcome to WHISPers
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <p id="welcome-text">
-          This is the Wildlife Health Information Sharing Partnership event reporting system. It is a place to explore
-          wildlife mortality data submitted by partners across North America and verified by trained biologists.
-        </p>
-
-
-        <p *ngIf="currentUser.role != undefined">
-          <b>
-            You are logged in as
-            <span style="font-style: italic;">{{currentUser.first_name}}{{currentUser.last_name}}</span>
-            ({{currentUser.username}})
-          </b>
-        </p>
-
-        <!-- User Role -->
-        <div *ngIf="currentUser.role === undefined" id="userRoleSelector">
-          <h4>Looking to get started? Select the option that best describes you.</h4>
-          <button mat-stroked-button matTooltip="Select this if you are a person interested in wildlife mortality data"
-            (click)="register('public')">
-            General User
-          </button>
-          <button class="" mat-stroked-button
-            matTooltip="Select this if you are a current Natural Resource Management Professional"
-            (click)="register('partner')">
-            Natural Resource Management Professional
-          </button>
-        </div>
-
-
-      </mat-expansion-panel>
-    </div>
-
     <mat-expansion-panel expanded id="sidebarSearchTab">
       <mat-expansion-panel-header>
         <mat-panel-title>

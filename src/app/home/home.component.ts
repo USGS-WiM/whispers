@@ -46,7 +46,6 @@ declare let L: any;
 import 'leaflet';
 import 'leaflet-draw';
 import * as esri from 'esri-leaflet';
-import { UserRegistrationComponent } from '@app/user-registration/user-registration.component';
 import { DataUpdatedService } from '@services/data-updated.service';
 declare let gtag: Function;
 
@@ -69,7 +68,6 @@ export class HomeComponent implements OnInit {
 
   searchDialogRef: MatDialogRef<SearchDialogComponent>;
   saveSearchDialogRef: MatDialogRef<SaveSearchComponent>;
-  userRegistrationDialogRef: MatDialogRef<UserRegistrationComponent>;
 
   private searchQuerySubscription: Subscription;
 
@@ -1164,32 +1162,6 @@ export class HomeComponent implements OnInit {
     // use searchForm.value to build the web service query, send to searchDialogService
     this.searchDialogService.setSearchQuery(search);
     // this.router.navigate([`../home/`], { relativeTo: this.route });
-  }
-
-
-  register(type) {
-    this.userRegistrationDialogRef = this.dialog.open(UserRegistrationComponent, {
-      minWidth: '60em',
-      disableClose: true,
-      data: {
-        title: 'WHISPers Registration',
-        titleIcon: 'person',
-        showCancelButton: true,
-        action_button_text: 'Submit',
-        actionButtonIcon: 'send',
-        registration_type: type
-      }
-    });
-
-    // this block not currently in use
-    // this.userRegistrationDialogRef.afterClosed()
-    //   .subscribe(
-    //     () => {
-    //     },
-    //     error => {
-    //       this.errorMessage = <any>error;
-    //     }
-    //   );
   }
 
 

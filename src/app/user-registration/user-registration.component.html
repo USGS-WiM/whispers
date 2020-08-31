@@ -65,9 +65,9 @@
           the information.
       </div>
 
-    <div class="vertical-form-container" *ngIf="data.registration_type === 'partner'">
+    <div class="vertical-form-container" *ngIf="data.registration_type === 'partner' || data.registration_type === 'affiliate'">
 
-      <span class="reg-hint">Select the partner organization you would like to join</span>
+      <span class="reg-hint">Select your organization. If your organization is not listed, then enter it in the Comment section.</span>
       <mat-form-field class="form-control org-select">
         <mat-select formControlName="organization" placeholder="Organization" #organizationSelect>
           <ngx-mat-select-search [formControl]="organizationFilterCtrl" [placeholderLabel]="'Find organization...'"
@@ -78,20 +78,6 @@
         </mat-select>
         <mat-icon class="hint-hover-text" matSuffix
                   matTooltip={{regOrganizationTooltip()}} matTooltipClass="tooltip-breakline">
-            help</mat-icon>
-      </mat-form-field>
-
-
-      <span class="reg-hint">Select the role you would like within your chosen partner organization</span>
-
-      <mat-form-field class="form-control">
-        <mat-select placeholder="Role" formControlName="role">
-          <mat-option [value]="5">Partner User</mat-option>
-          <mat-option [value]="4">Partner Manager</mat-option>
-          <mat-option [value]="3">Partner Administrator</mat-option>
-        </mat-select>
-        <mat-icon class="hint-hover-text" matSuffix
-                  matTooltip={{regRoleTooltip()}} matTooltipClass="tooltip-breakline">
             help</mat-icon>
       </mat-form-field>
 
@@ -119,7 +105,7 @@
             the information.
         </div>
 
-        <div *ngIf="data.registration_type === 'partner'" class="disclaimers">
+        <div *ngIf="data.registration_type === 'partner' || data.registration_type === 'affiliate'" class="disclaimers">
             <div>
               <h3>Terms of Use<mat-icon class="hint-hover-text" matSuffix
                       matTooltip={{regTermsOfUseTooltip()}} matTooltipClass="tooltip-breakline">
@@ -148,11 +134,6 @@
       </div>
 
       <mat-divider></mat-divider>
-
-      <p *ngIf="data.registration_type === 'partner'">
-        Thank you for your interest in becoming a WHISPers Partner user. Your request will be reviewed and you will
-        receive an email reply as soon as possible.
-      </p>
 
 
 

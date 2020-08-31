@@ -29,6 +29,8 @@ import { UserService } from './services/user.service';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { RequestPasswordResetComponent } from './request-password-reset/request-password-reset.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { UserRegistrationRoleSelectionComponent } from './user-registration-role-selection/user-registration-role-selection.component';
+import { UserRegistrationComponent } from './user-registration/user-registration.component';
 
 @Component({
   selector: 'app-root',
@@ -54,6 +56,8 @@ export class AppComponent implements OnInit {
   aboutDialogRef: MatDialogRef<AboutComponent>;
   authenticationDialogRef: MatDialogRef<AuthenticationComponent>;
   browserWarningDialogRef: MatDialogRef<BrowserWarningComponent>;
+  userRegistrationRoleSelectionDialogRef: MatDialogRef<UserRegistrationRoleSelectionComponent>;
+  userRegistrationDialogRef: MatDialogRef<UserRegistrationComponent, any>;
 
   previewNotifications;
 
@@ -195,6 +199,37 @@ export class AppComponent implements OnInit {
 
   openBrowserWarningDialog() {
     this.browserWarningDialogRef = this.dialog.open(BrowserWarningComponent, {});
+  }
+
+  openUserRegistrationRoleSelectionDialog() {
+    this.userRegistrationRoleSelectionDialogRef = this.dialog.open(UserRegistrationRoleSelectionComponent, {
+      autoFocus: false
+    });
+    this.userRegistrationRoleSelectionDialogRef.afterClosed().subscribe(result => {
+      if (result === "partner") {
+        this.openUserRegistrationDialog("partner");
+      } else if (result === "affiliate") {
+        this.openUserRegistrationDialog("affiliate");
+      } else if (result === "public") {
+        this.openUserRegistrationDialog("public");
+      }
+    });
+  }
+
+  openUserRegistrationDialog(type) {
+
+    this.userRegistrationDialogRef = this.dialog.open(UserRegistrationComponent, {
+      minWidth: '60em',
+      disableClose: true,
+      data: {
+        title: 'WHISPers Registration',
+        titleIcon: 'person',
+        showCancelButton: true,
+        action_button_text: 'Submit',
+        actionButtonIcon: 'send',
+        registration_type: type
+      }
+    });
   }
 
   logout() {

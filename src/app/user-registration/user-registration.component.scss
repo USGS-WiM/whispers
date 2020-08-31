@@ -107,3 +107,10 @@ span.reg-hint{
 mat-checkbox[required]:after {
   content: " *";
 }
+
+button {
+  text-transform: uppercase;
+  &[mat-stroked-button] {
+    color: #999999;
+  }
+}

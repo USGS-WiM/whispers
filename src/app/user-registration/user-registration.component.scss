@@ -59,9 +59,9 @@
         margin-top: 15px;
         margin-bottom: 8px;
     }
-    .horizontal-form-container {
+    & > .horizontal-form-container {
       justify-content: space-between;
-      .vertical-form-container {
+      & > .vertical-form-container {
         width: calc(50% - 20px);
       }
     }
@@ -97,7 +97,8 @@ span.reg-hint{
     font-size: 13px;
     font-weight: 600;
     color: #313B57;
-    margin: 6px 0 3px 0;
+    // 10px left/right margin matches that of .form-control
+    margin: 6px 10px 0px 10px;
 }
 
 .disclaimers{

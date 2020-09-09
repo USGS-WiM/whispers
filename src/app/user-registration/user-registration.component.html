@@ -152,7 +152,7 @@
     </button>
     <button mat-raised-button color="primary" type="submit" [disabled]="userRegistrationForm.invalid"
       (click)="onSubmit(userRegistrationForm.value)">
-      <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{data.action_button_text}}
+      <mat-icon>{{data.actionButtonIcon}}</mat-icon> {{data.action_button_text}}
     </button>
     <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
   </div>

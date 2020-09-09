@@ -40,7 +40,13 @@
         Save filters
       </div>
 
-      <button mat-raised-button color="primary" (click)="this.dialogRef.close('partner')">Yes, that's me!</button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="this.dialogRef.close('partner')"
+      >
+        Yes, that's me!
+      </button>
     </div>
     <div class="role-option">
       <div class="role-option-description">
@@ -61,30 +67,38 @@
         <mat-icon>done</mat-icon>
         Save filters
       </div>
-      <button mat-raised-button color="primary" (click)="this.dialogRef.close('affiliate')">Sign me up!</button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="this.dialogRef.close('affiliate')"
+      >
+        Sign me up!
+      </button>
     </div>
     <div class="role-option">
       <div class="role-option-description">
-        I work for a federal, state, or tribal natural resource organization
-        with management authority over wild species or lands (state or tribal
-        wildlife agency, refuge, national park, etc.)
+        I have a general interest in wildlife health data and do NOT work for a
+        natural resource organization
       </div>
 
       <div class="role-option-feature">
         <mat-icon>done</mat-icon>
         Save filters
       </div>
-      <button mat-raised-button color="primary" (click)="this.dialogRef.close('public')">I go here!</button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="this.dialogRef.close('public')"
+      >
+        I go here!
+      </button>
     </div>
   </div>
 </mat-dialog-content>
 
 <mat-dialog-actions>
   <div class="form-buttons-flex center">
-    <button
-      mat-stroked-button
-      mat-dialog-close
-    >
+    <button mat-stroked-button mat-dialog-close>
       <mat-icon>close</mat-icon> Cancel
     </button>
   </div>

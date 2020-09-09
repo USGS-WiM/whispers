@@ -218,8 +218,10 @@ export class AppComponent implements OnInit {
 
   openUserRegistrationDialog(type) {
 
+    // Test screen size and for smaller screens, don't set a minWidth for the dialog
+    const mediaQueryList = window.matchMedia("(max-width: 400px)");
     this.userRegistrationDialogRef = this.dialog.open(UserRegistrationComponent, {
-      minWidth: '60em',
+      minWidth: (mediaQueryList.matches ? 'auto' : '60em'),
       disableClose: true,
       data: {
         title: 'WHISPers Registration',

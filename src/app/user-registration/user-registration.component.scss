@@ -2,6 +2,10 @@
 .horizontal-form-container {
     display: flex;
     flex-direction: row;
+    @media (max-width: 400px) {
+        flex-direction: column;
+    }
+
 }
 
 .vertical-form-container {
@@ -63,6 +67,9 @@
       justify-content: space-between;
       & > .vertical-form-container {
         width: calc(50% - 20px);
+        @media (max-width: 400px) {
+            width: 100%;
+        }
       }
     }
 }

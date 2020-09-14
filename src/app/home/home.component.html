@@ -186,17 +186,18 @@
         </mat-list>
       </div>
 
+      <app-search-form [query]="currentDisplayQuery"></app-search-form>
 
 
       <!-- Save search & Search button -->
       <mat-action-row class="search-button-row">
-        <button mat-button color="accent" (click)="saveSearch()"
-          matTooltip="Save the currently displayed search to your user profile" *ngIf="currentUser.role !== undefined">
-          <mat-icon>save</mat-icon> Save Search
+        <button mat-button color="accent" (click)="saveSearch()" [disabled]="searchFormComponent.invalid"
+          matTooltip="Save the currently displayed filter to your user profile" *ngIf="currentUser.role !== undefined">
+          <mat-icon>save</mat-icon> Save Filter
         </button>
 
-        <button mat-button color="accent" (click)="openSearchDialog()">
-          <mat-icon class="material-icons">search</mat-icon> {{(currentDisplayQuery) ? "Search" : "Search"}}
+        <button mat-button color="accent" (click)="applyFilter()" [disabled]="searchFormComponent.invalid">
+          <mat-icon class="material-icons">search</mat-icon> Apply Filter
         </button>
 
       </mat-action-row>

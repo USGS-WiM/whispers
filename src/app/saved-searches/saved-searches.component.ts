@@ -13,7 +13,6 @@ import { MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { APP_UTILITIES } from '@app/app.utilities';
-import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 import { DataUpdatedService } from '@app/services/data-updated.service';
 import { AdministrativeLevelOneService } from '@app/services/administrative-level-one.service';
 import { AdministrativeLevelTwoService } from '@app/services/administrative-level-two.service';
@@ -26,6 +25,7 @@ import { DisplayQuery } from '@interfaces/display-query';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
 import { DisplayValuePipe } from '../pipes/display-value.pipe';
+import { SearchFormService } from '@app/search-form/search-form.service';
 
 
 @Component({
@@ -73,7 +73,7 @@ export class SavedSearchesComponent implements OnInit {
     private _searchService: SearchService,
     private dialog: MatDialog,
     private displayValuePipe: DisplayValuePipe,
-    private searchDialogService: SearchDialogService,
+    private searchFormService: SearchFormService,
     private dataUpdatedService: DataUpdatedService,
     private adminLevelOneService: AdministrativeLevelOneService,
     private adminLevelTwoService: AdministrativeLevelTwoService,
@@ -356,10 +356,10 @@ export class SavedSearchesComponent implements OnInit {
 
       sessionStorage.setItem('currentDisplayQuery', JSON.stringify(displayQuery));
       // use displayQuery for display of current query in markup, send to searchDialogService
-      this.searchDialogService.setDisplayQuery(displayQuery);
+      this.searchFormService.setDisplayQuery(displayQuery);
 
       sessionStorage.setItem('currentSearch', JSON.stringify(search));
-      this.searchDialogService.setSearchQuery(search);
+      this.searchFormService.setSearchQuery(search);
       this.router.navigate([`../home/`], { relativeTo: this.route });
     } else {
       this.openSearchDeleteConfirm(search);

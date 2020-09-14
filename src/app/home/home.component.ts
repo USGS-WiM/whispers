@@ -12,7 +12,6 @@ import { MatSnackBar } from '@angular/material';
 import { DisplayValuePipe } from '../pipes/display-value.pipe';
 
 import { SearchDialogComponent } from '@search-dialog/search-dialog.component';
-import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -48,6 +47,7 @@ import 'leaflet-draw';
 import * as esri from 'esri-leaflet';
 import { UserRegistrationComponent } from '@app/user-registration/user-registration.component';
 import { DataUpdatedService } from '@services/data-updated.service';
+import { SearchFormService } from '@app/search-form/search-form.service';
 declare let gtag: Function;
 
 @Component({
@@ -133,7 +133,7 @@ export class HomeComponent implements OnInit {
     private eventService: EventService,
     private dialog: MatDialog,
     public snackBar: MatSnackBar,
-    private searchDialogService: SearchDialogService,
+    private searchFormService: SearchFormService,
     private dataUpdatedService: DataUpdatedService,
     private displayValuePipe: DisplayValuePipe,
     private adminLevelOneService: AdministrativeLevelOneService,
@@ -159,7 +159,7 @@ export class HomeComponent implements OnInit {
       this.currentUser = user;
     });
 
-    this.searchQuerySubscription = this.searchDialogService.getSearchQuery().subscribe(
+    this.searchQuerySubscription = this.searchFormService.getSearchQuery().subscribe(
       searchQuery => {
 
         this.searchResultsLoading = true;
@@ -244,7 +244,7 @@ export class HomeComponent implements OnInit {
 
       });
 
-    this.searchQuerySubscription = this.searchDialogService.getDisplayQuery()
+    this.searchQuerySubscription = this.searchFormService.getDisplayQuery()
       .subscribe(
         displayQuery => {
           this.currentDisplayQuery = displayQuery;
@@ -1159,10 +1159,10 @@ export class HomeComponent implements OnInit {
 
     sessionStorage.setItem('currentDisplayQuery', JSON.stringify(displayQuery));
     // use displayQuery for display of current query in markup, send to searchDialogService
-    this.searchDialogService.setDisplayQuery(displayQuery);
+    this.searchFormService.setDisplayQuery(displayQuery);
 
     // use searchForm.value to build the web service query, send to searchDialogService
-    this.searchDialogService.setSearchQuery(search);
+    this.searchFormService.setSearchQuery(search);
     // this.router.navigate([`../home/`], { relativeTo: this.route });
   }
 

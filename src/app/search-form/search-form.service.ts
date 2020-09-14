@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable ,  Subject } from 'rxjs';
 
 @Injectable()
-export class SearchDialogService {
+export class SearchFormService {
 
   private searchQuery = new Subject<any>();
   private displayQuery = new Subject<any>();

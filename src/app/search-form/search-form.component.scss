@@ -1,0 +1,41 @@
+
+.autocomplete-form {
+    // min-width: 300px;
+    // max-width: 500px;
+    width: 100%;
+  }
+
+  .autocomplete-input {
+    width:40%;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+.autocomplete-input{
+  display: inline-block;
+  margin-right: 2em;
+}
+
+.chiplist {
+  display: inline-block;
+}
+
+.search-type-radios {
+  display: inline-block;
+}
+
+.affected-count-operator-radios {
+
+}
+
+.form-control {
+  width: 18em;
+  margin: 10px;
+}
+
+.date-range-warning{
+  color: red;
+  font-weight: bold;
+}

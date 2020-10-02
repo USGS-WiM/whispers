@@ -42,168 +42,21 @@
       </mat-expansion-panel>
     </div>
 
-    <mat-expansion-panel expanded id="sidebarSearchTab">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <h3>Search</h3>
-        </mat-panel-title>
-        <mat-panel-description>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
+    <div id="sidebarSearchTab">
+      <h3>Search</h3>
 
-      <div *ngIf="!currentDisplayQuery">
-        <span>Please click Search to begin.</span>
-      </div>
-
-      <div *ngIf="currentDisplayQuery">
-
-        <mat-list>
-
-          <h3 mat-subheader>Current Search</h3>
-
-          <mat-list-item
-            *ngIf="(currentDisplayQuery.start_date !== null && currentDisplayQuery.start_date !== '') || (currentDisplayQuery.end_date !== null && currentDisplayQuery.end_date !== '')">
-            <h4 mat-line>
-              <strong>Date Range</strong>
-            </h4>
-            <p mat-line>
-              <span
-                *ngIf="currentDisplayQuery.start_date !== null || currentDisplayQuery.start_date !== ''">{{currentDisplayQuery.start_date | date:'mediumDate'}}</span>
-              <span style="color: lightcoral"
-                *ngIf="currentDisplayQuery.start_date == null || currentDisplayQuery.start_date == ''">[no event start
-                date entered]</span>
-              <span
-                *ngIf="(currentDisplayQuery.start_date !== null) || (currentDisplayQuery.end_date !== null) || (currentDisplayQuery.start_date !== '') || (currentDisplayQuery.end_date !== '')">&nbsp;thru&nbsp;</span>
-              <span
-                *ngIf="currentDisplayQuery.end_date !== null || currentDisplayQuery.end_date !== ''">{{currentDisplayQuery.end_date | date:'mediumDate'}}</span>
-              <span style="color: lightcoral"
-                *ngIf="currentDisplayQuery.end_date == null || currentDisplayQuery.end_date == ''">[no event end date
-                entered]</span>
-            </p>
-          </mat-list-item>
-
-          <mat-list-item *ngIf="currentDisplayQuery.affected_count !== null">
-            <h4 mat-line>
-              <strong>Number Affected</strong>
-            </h4>
-            <p mat-line>
-              <span> {{ currentDisplayQuery.affected_count_operator === '__gte' ? '&ge;' :
-                currentDisplayQuery.affected_count_operator === '__lte' ? '&le;' : '' }}</span>
-              <span>{{currentDisplayQuery.affected_count}}</span>
-            </p>
-          </mat-list-item>
-
-          <mat-list-item>
-            <h4 mat-line>
-              <strong>WHISPers Record Status</strong>
-            </h4>
-            <p mat-line>
-              <span>
-                {{ currentDisplayQuery.complete === true ? 'Complete Events Only' :
-                currentDisplayQuery.complete === false ? 'Incomplete Events Only' : 'Complete and incomplete events' }}</span>
-            </p>
-          </mat-list-item>
-
-          <mat-list-item *ngIf="currentDisplayQuery.event_type && currentDisplayQuery.event_type.length > 0">
-            <h4 mat-line>
-              <strong>Event Type</strong>
-            </h4>
-            <p mat-line>
-              <!-- <span>{{currentDisplayQuery.event_type}}</span> -->
-              <span *ngFor="let event_type of currentDisplayQuery.event_type">{{event_type}}
-                <span
-                  *ngIf="(currentDisplayQuery.event_type.indexOf(event_type)) < (currentDisplayQuery.event_type.length - 1)">or&nbsp;</span>
-              </span>
-            </p>
-          </mat-list-item>
-
-          <mat-list-item *ngIf="currentDisplayQuery.diagnosis_type && currentDisplayQuery.diagnosis_type.length > 0">
-            <h4 mat-line>
-              <strong>Diagnosis Type</strong>
-            </h4>
-            <p mat-line>
-              <span *ngFor="let diagnosis_type of currentDisplayQuery.diagnosis_type">{{diagnosis_type}}
-                <span
-                  *ngIf="(currentDisplayQuery.diagnosis_type.indexOf(diagnosis_type)) < (currentDisplayQuery.diagnosis_type.length - 1)">{{(currentDisplayQuery.diagnosis_type_includes_all)
-                  ? "and" : "or"}}&nbsp;</span>
-              </span>
-            </p>
-          </mat-list-item>
-
-          <mat-list-item *ngIf="currentDisplayQuery.diagnosis && currentDisplayQuery.diagnosis.length > 0">
-            <h4 mat-line>
-              <strong>Event Diagnosis</strong>
-            </h4>
-            <p mat-line>
-              <span *ngFor="let diagnosis of currentDisplayQuery.diagnosis">{{diagnosis}}
-                <span
-                  *ngIf="(currentDisplayQuery.diagnosis.indexOf(diagnosis)) < (currentDisplayQuery.diagnosis.length - 1)">{{(currentDisplayQuery.diagnosis_includes_all)
-                  ? "and" : "or"}}&nbsp;</span>
-              </span>
-            </p>
-          </mat-list-item>
-
-          <mat-list-item *ngIf="currentDisplayQuery.species && currentDisplayQuery.species.length > 0">
-            <h4 mat-line>
-              <strong>Species</strong>
-            </h4>
-            <p mat-line>
-              <span *ngFor="let species of currentDisplayQuery.species">{{species}}
-                <span *ngIf="(currentDisplayQuery.species.indexOf(species)) < (currentDisplayQuery.species.length - 1)">{{(currentDisplayQuery.species_includes_all)
-                  ? "and" : "or"}}&nbsp;</span>
-              </span>
-            </p>
-          </mat-list-item>
-
-          <mat-list-item
-            *ngIf="currentDisplayQuery.administrative_level_one && currentDisplayQuery.administrative_level_one.length > 0">
-            <h4 mat-line>
-              <strong>State</strong>
-            </h4>
-            <p mat-line>
-              <span *ngFor="let adminLevelOne of currentDisplayQuery.administrative_level_one">{{adminLevelOne}}
-                <span
-                  *ngIf="(currentDisplayQuery.administrative_level_one.indexOf(adminLevelOne)) < (currentDisplayQuery.administrative_level_one.length - 1)">{{(currentDisplayQuery.administrative_level_one_includes_all)
-                  ? "and" : "or"}}&nbsp;</span>
-              </span>
-            </p>
-          </mat-list-item>
-
-          <mat-list-item
-            *ngIf="currentDisplayQuery.administrative_level_two && currentDisplayQuery.administrative_level_two.length > 0">
-            <h4 mat-line>
-              <strong>County</strong>
-            </h4>
-            <p mat-line>
-              <span *ngFor="let adminLevelTwo of currentDisplayQuery.administrative_level_two">{{adminLevelTwo}}
-                <span
-                  *ngIf="(currentDisplayQuery.administrative_level_two.indexOf(adminLevelTwo)) < (currentDisplayQuery.administrative_level_two.length - 1)">{{(currentDisplayQuery.administrative_level_two_includes_all)
-                  ? "and" : "or"}}&nbsp;</span>
-              </span>
-            </p>
-          </mat-list-item>
-
-        </mat-list>
-      </div>
-
-      <app-search-form [query]="currentDisplayQuery"></app-search-form>
+      <app-search-form [query]="currentDisplayQuery" [narrow]="true"></app-search-form>
 
 
-      <!-- Save search & Search button -->
-      <mat-action-row class="search-button-row">
-        <button mat-button color="accent" (click)="saveSearch()" [disabled]="searchFormComponent.invalid"
-          matTooltip="Save the currently displayed filter to your user profile" *ngIf="currentUser.role !== undefined">
-          <mat-icon>save</mat-icon> Save Filter
-        </button>
+      <button mat-stroked-button color="accent" (click)="saveSearch()" [disabled]="searchFormComponent.invalid"
+        matTooltip="Save the currently displayed filter to your user profile" *ngIf="currentUser.role !== undefined">
+        <mat-icon>save</mat-icon> Save Filter
+      </button>
 
-        <button mat-button color="accent" (click)="applyFilter()" [disabled]="searchFormComponent.invalid">
-          <mat-icon class="material-icons">search</mat-icon> Apply Filter
-        </button>
-
-      </mat-action-row>
-
-
-    </mat-expansion-panel>
+      <button mat-raised-button color="accent" (click)="applyFilter()" [disabled]="searchFormComponent.invalid">
+        <mat-icon class="material-icons">search</mat-icon> Search
+      </button>
+    </div>
 
     <mat-expansion-panel>
       <mat-expansion-panel-header>

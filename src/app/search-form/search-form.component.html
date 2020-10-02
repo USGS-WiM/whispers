@@ -50,29 +50,23 @@
     <!--- end Event type expansion panel -->
 
     <!--- Diagnosis type expansion panel -->
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
+    <mat-expansion-panel #expansionPanel (opened)="diagnosisTypePanelOpenState = true" (closed)="diagnosisTypePanelOpenState = false">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedDiagnosisTypes.length > 2) ? '80px' : '48px'">
         <mat-panel-title>
           <b>Diagnosis Type</b>
         </mat-panel-title>
-        <mat-panel-description>
-          <span>
-            <div class="chiplist">
-              <mat-chip-list #diagnosisTypeChipList>
-                <span *ngFor="let diagnosisType of selectedDiagnosisTypes">
-                  <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
-                    (removed)="removeChip(diagnosisType, selectedDiagnosisTypes, 'diagnosisType')">{{diagnosisType.name}}
-                    <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
-                  </mat-chip>
-                  <span *ngIf="(selectedDiagnosisTypes.indexOf(diagnosisType)) < (selectedDiagnosisTypes.length - 1)">{{(searchForm.get('diagnosis_type_includes_all').value)
-                    ? "and" : "or"}}&nbsp;</span>
-                </span>
-              </mat-chip-list>
-            </div>
-          </span>
+        <mat-panel-description *ngIf="!narrow || !diagnosisTypePanelOpenState">
+          <app-chiplist [items]="selectedDiagnosisTypes" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedDiagnosisTypes, 'diagosisType')" (moreClicked)="expansionPanel.open()"
+            [join]="!narrow ? (searchForm.get('diagnosis_type_includes_all').value ? 'and' : 'or') : ''">
+          </app-chiplist>
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedDiagnosisTypes"
+          (removed)="removeChip($event, selectedDiagnosisTypes, 'diagosisType')"
+          [join]="searchForm.get('diagnosis_type_includes_all').value ? 'and' : 'or'">
+        </app-chiplist>
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
             <input type="text" matInput placeholder="Add Diagnosis Type" aria-label="Add Diagnosis Type"

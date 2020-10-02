@@ -133,6 +133,7 @@ import { SearchResultsSummaryReportComponent } from '@search-results-summary-rep
 import { ViewNotificationDetailsComponent } from '@notifications/view-notification-details/view-notification-details.component';
 import { SearchFormComponent } from './search-form/search-form.component';
 import { SearchFormService } from './search-form/search-form.service';
+import { ChiplistComponent } from './chiplist/chiplist.component';
 
 
 @NgModule({
@@ -189,6 +190,7 @@ import { SearchFormService } from './search-form/search-form.service';
     SearchResultsSummaryReportComponent,
     ViewNotificationDetailsComponent,
     SearchFormComponent,
+    ChiplistComponent,
   ],
   imports: [
     BrowserModule,

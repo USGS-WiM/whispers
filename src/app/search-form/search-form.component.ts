@@ -34,6 +34,7 @@ export class SearchFormComponent implements OnInit {
   addOnBlur = true;
 
   @Input('query') query: DisplayQuery;
+  @Input() narrow: boolean = false;
   defaultSearchQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
   defaultDisplayQuery = APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
 
@@ -73,6 +74,8 @@ export class SearchFormComponent implements OnInit {
   adminLevelTwosLoading = false;
   diagnosesLoading = false;
   speciesLoading = true;
+
+  diagnosisTypePanelOpenState = false;
 
   endDateBeforeStart(AC: AbstractControl) {
     AC.get('end_date').setErrors(null);
@@ -745,5 +748,4 @@ export class SearchFormComponent implements OnInit {
 
 
   }
-
 }

@@ -18,8 +18,8 @@
   margin-right: 2em;
 }
 
-.chiplist {
-  display: inline-block;
+app-chiplist + .autocomplete-input {
+  margin-top: 10px;
 }
 
 .search-type-radios {

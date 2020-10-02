@@ -101,7 +101,7 @@
 #map {
     height: 600px;
     position: relative;
-    
+
     #mapLocationNote{
         position: absolute;
         top: 11px;
@@ -346,35 +346,13 @@ mat-table>.mat-row:hover {
 
 #sidebarSearchTab{
 
-    .mat-list .mat-subheader{
-        padding: 0 0 6px 0;
-        height: auto;
+    h3 {
+      padding: 0px 15px;
     }
+}
 
-    .mat-list .mat-list-item.mat-2-line{
-        height: auto;
-    }
-
-    .mat-expansion-panel-body{
-        padding-bottom: 0;
-    }
-
-    .search-button-row{
-        padding-bottom: 0;
-
-        button{
-            background-color: white;
-            margin: 0 auto 10px auto !important;
-            display: block;
-            width: 100%;
-            border: 1px solid fade-out(#D5DCEA, 0.5);
-            border-radius: 4px;
-        }
-
-    }
-    
-
-
+button {
+  text-transform: uppercase;
 }
 
 
@@ -393,7 +371,7 @@ mat-table>.mat-row:hover {
         font-size: 14px;
         font-weight: 500;
         background-color: white;
-        
+
 
     }
 }

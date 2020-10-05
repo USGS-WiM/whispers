@@ -2550,7 +2550,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       });
       formValue.new_event_locations[i].new_location_contacts = contacts;
     }
-    // if lat/long fields are deleted to blank, update to null to be a valid number type on PATCH
+    // if lat/long fields are deleted to blank string, update to null to be a valid number type for submit
     for (const event_location of formValue.new_event_locations) {
       if (event_location.latitude === '') {
         event_location.latitude = null;

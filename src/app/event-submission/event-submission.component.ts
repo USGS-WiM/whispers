@@ -1,8 +1,8 @@
 import { Component, OnInit, ElementRef, AfterViewInit, ViewChild, OnDestroy, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl, Form } from '@angular/forms/';
-import { Observable ,  Subscription ,  ReplaySubject, Subject, observable } from 'rxjs';
+import { Observable, Subscription, ReplaySubject, Subject, observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
-import { map ,  take, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 import { CanDeactivateGuard } from './pending-changes.guard';
 import { HostListener } from '@angular/core';
 
@@ -2540,15 +2540,24 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     // check to see if there were blank contacts added and remove them if so
     for (let i = 0; i < this.eventSubmissionForm.get('new_event_locations').value.length; i++) {
       const contacts = [];
-      const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('new_location_contacts');
+      const contactsControl = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('new_location_contacts');
       this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('new_location_contacts').value.forEach(contact => {
         if (contact.contact === null) {
-          control.removeAt(contact);
+          contactsControl.removeAt(contact);
         } else {
           contacts.push(contact);
         }
       });
       formValue.new_event_locations[i].new_location_contacts = contacts;
+    }
+    // if lat/long fields are deleted to blank, update to null to be a valid number type on PATCH
+    for (const event_location of formValue.new_event_locations) {
+      if (event_location.latitude === '') {
+        event_location.latitude = null;
+      }
+      if (event_location.longitude === '') {
+        event_location.longitude = null;
+      }
     }
 
     // KEEP. Bring this back pending introduction of generic event location comment.
@@ -2575,13 +2584,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       }
     }
     formValue.new_organizations = new_orgs_array;
-    // if lat/long fields are deleted to blank, update to null to be a valid number type on PATCH
-    if (formValue.latitude === '') {
-      formValue.latitude = null;
-    }
-    if (formValue.longitude === '') {
-      formValue.longitude = null;
-    }
+
     // transform date for quality_check to the expected format
     formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');
     // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission

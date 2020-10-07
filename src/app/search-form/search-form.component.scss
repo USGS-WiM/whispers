@@ -3,15 +3,25 @@
     // min-width: 300px;
     // max-width: 500px;
     width: 100%;
-  }
+}
 
+.autocomplete-input {
+  width:40%;
+}
+
+.autocomplete-form.narrow {
   .autocomplete-input {
-    width:40%;
-  }
-
-  .full-width {
     width: 100%;
   }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.has-hint {
+  margin-bottom: 0.25em;
+}
 
 .autocomplete-input{
   display: inline-block;

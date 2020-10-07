@@ -1,32 +1,27 @@
-<form [formGroup]="searchForm" class="autocomplete-form" autocomplete="off">
+<form [formGroup]="searchForm" class="autocomplete-form" [class.narrow]="narrow" autocomplete="off">
 
   <mat-divider></mat-divider>
 
   <mat-accordion>
 
     <!-- Event type expansion panel -->
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
+    <mat-expansion-panel #eventTypeExpansionPanel (opened)="eventTypePanelOpenState = true" (closed)="eventTypePanelOpenState = false">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedEventTypes.length > 2) ? '80px' : '48px'">
         <mat-panel-title>
           <b>Event Type</b>
         </mat-panel-title>
-        <mat-panel-description>
-          <span>
-            <div class="chiplist">
-              <mat-chip-list #eventTypeChipList>
-                <span *ngFor="let eventType of selectedEventTypes">
-                  <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
-                    (removed)="removeChip(eventType, selectedEventTypes, 'eventType')">{{eventType.name}}
-                    <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
-                  </mat-chip>
-                  <span *ngIf="(selectedEventTypes.indexOf(eventType)) < (selectedEventTypes.length - 1)">or&nbsp;</span>
-                </span>
-              </mat-chip-list>
-            </div>
-          </span>
+        <mat-panel-description *ngIf="!narrow || !eventTypePanelOpenState">
+          <app-chiplist [items]="selectedEventTypes" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedEventTypes, 'eventType')" (moreClicked)="eventTypeExpansionPanel.open()"
+            [join]="or">
+          </app-chiplist>
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedEventTypes"
+          (removed)="removeChip($event, selectedEventTypes, 'eventType')"
+          [join]="or">
+        </app-chiplist>
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
             <input type="text" matInput placeholder="Add Event Type" aria-label="Add Event Type" [matAutocomplete]="eventTypeAutoComplete"
@@ -50,14 +45,14 @@
     <!--- end Event type expansion panel -->
 
     <!--- Diagnosis type expansion panel -->
-    <mat-expansion-panel #expansionPanel (opened)="diagnosisTypePanelOpenState = true" (closed)="diagnosisTypePanelOpenState = false">
+    <mat-expansion-panel #diagnosisTypeExpansionPanel (opened)="diagnosisTypePanelOpenState = true" (closed)="diagnosisTypePanelOpenState = false">
       <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedDiagnosisTypes.length > 2) ? '80px' : '48px'">
         <mat-panel-title>
           <b>Diagnosis Type</b>
         </mat-panel-title>
         <mat-panel-description *ngIf="!narrow || !diagnosisTypePanelOpenState">
           <app-chiplist [items]="selectedDiagnosisTypes" [maxItems]="narrow ? 3 : undefined"
-            (removed)="removeChip($event, selectedDiagnosisTypes, 'diagosisType')" (moreClicked)="expansionPanel.open()"
+            (removed)="removeChip($event, selectedDiagnosisTypes, 'diagosisType')" (moreClicked)="diagnosisTypeExpansionPanel.open()"
             [join]="!narrow ? (searchForm.get('diagnosis_type_includes_all').value ? 'and' : 'or') : ''">
           </app-chiplist>
         </mat-panel-description>
@@ -90,29 +85,23 @@
     <!--- end Diagnosis type expansion panel -->
 
     <!--- Diagnosis expansion panel -->
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
+    <mat-expansion-panel #diagnosisExpansionPanel (opened)="diagnosisPanelOpenState = true" (closed)="diagnosisPanelOpenState = false">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedDiagnoses.length > 2) ? '80px' : '48px'">
         <mat-panel-title>
           <b>Event Diagnosis</b>
         </mat-panel-title>
-        <mat-panel-description>
-          <span>
-            <div class="chiplist">
-              <mat-chip-list #diagnosisChipList>
-                <span *ngFor="let diagnosis of selectedDiagnoses">
-                  <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
-                    (removed)="removeChip(diagnosis, selectedDiagnoses, 'diagnosis')">{{diagnosis.name}}
-                    <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
-                  </mat-chip>
-                  <span *ngIf="(selectedDiagnoses.indexOf(diagnosis)) < (selectedDiagnoses.length - 1)">{{(searchForm.get('diagnosis_includes_all').value)
-                    ? "and" : "or"}}&nbsp;</span>
-                </span>
-              </mat-chip-list>
-            </div>
-          </span>
+        <mat-panel-description *ngIf="!narrow || !diagnosisPanelOpenState">
+          <app-chiplist [items]="selectedDiagnoses" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedDiagnoses, 'diagnosis')" (moreClicked)="diagnosisExpansionPanel.open()"
+            [join]="!narrow ? (searchForm.get('diagnosis_includes_all').value ? 'and' : 'or') : ''">
+          </app-chiplist>
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedDiagnoses"
+          (removed)="removeChip($event, selectedDiagnoses, 'diagnosis')"
+          [join]="searchForm.get('diagnosis_includes_all').value ? 'and' : 'or'">
+        </app-chiplist>
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
             <input type="text" matInput placeholder="Add Event Diagnosis" aria-label="Add Event Diagnosis" [matAutocomplete]="diagnosisAutoComplete"
@@ -136,29 +125,23 @@
     <!--- end Diagnosis expansion panel -->
 
     <!--- Species expansion panel -->
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
+    <mat-expansion-panel #speciesExpansionPanel (opened)="speciesPanelOpenState = true" (closed)="speciesPanelOpenState = false">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedSpecies.length > 2) ? '80px' : '48px'">
         <mat-panel-title>
           <b>Species</b>
         </mat-panel-title>
-        <mat-panel-description>
-          <span>
-            <div class="chiplist">
-              <mat-chip-list #speciesChipList>
-                <span *ngFor="let species of selectedSpecies">
-                  <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
-                    (removed)="removeChip(species, selectedSpecies, 'species')">{{species.name}}
-                    <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
-                  </mat-chip>
-                  <span *ngIf="(selectedSpecies.indexOf(species)) < (selectedSpecies.length - 1)">{{(searchForm.get('species_includes_all').value)
-                    ? "and" : "or"}}&nbsp;</span>
-                </span>
-              </mat-chip-list>
-            </div>
-          </span>
+        <mat-panel-description *ngIf="!narrow || !speciesPanelOpenState">
+          <app-chiplist [items]="selectedSpecies" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedSpecies, 'species')" (moreClicked)="speciesExpansionPanel.open()"
+            [join]="!narrow ? (searchForm.get('species_includes_all').value ? 'and' : 'or') : ''">
+          </app-chiplist>
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedSpecies"
+          (removed)="removeChip($event, selectedSpecies, 'species')"
+          [join]="searchForm.get('species_includes_all').value ? 'and' : 'or'">
+        </app-chiplist>
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
             <input type="text" matInput placeholder="Add Species" aria-label="Add Species" [matAutocomplete]="speciesAutoComplete"
@@ -183,29 +166,23 @@
     <!--- end Species expansion panel -->
 
     <!--- Admin Level One (State) expansion panel -->
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
+    <mat-expansion-panel #adminLevelOneExpansionPanel (opened)="adminLevelOnePanelOpenState = true" (closed)="adminLevelOnePanelOpenState = false">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedAdminLevelOnes.length > 2) ? '80px' : '48px'">
         <mat-panel-title>
           <b>State (or equivalent)</b>
         </mat-panel-title>
-        <mat-panel-description>
-          <span>
-            <div class="chiplist">
-              <mat-chip-list #adminLevelOneChipList>
-                <span *ngFor="let adminLevelOne of selectedAdminLevelOnes">
-                  <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
-                    (removed)="removeChip(adminLevelOne, selectedAdminLevelOnes, 'adminLevelOne')">{{adminLevelOne.name}}
-                    <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
-                  </mat-chip>
-                  <span *ngIf="(selectedAdminLevelOnes.indexOf(adminLevelOne)) < (selectedAdminLevelOnes.length - 1)">{{(searchForm.get('administrative_level_one_includes_all').value)
-                    ? "and" : "or"}}&nbsp;</span>
-                </span>
-              </mat-chip-list>
-            </div>
-          </span>
+        <mat-panel-description *ngIf="!narrow || !adminLevelOnePanelOpenState">
+          <app-chiplist [items]="selectedAdminLevelOnes" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedAdminLevelOnes, 'adminLevelOne')" (moreClicked)="adminLevelOneExpansionPanel.open()"
+            [join]="!narrow ? (searchForm.get('administrative_level_one_includes_all').value ? 'and' : 'or') : ''">
+          </app-chiplist>
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedAdminLevelOnes"
+          (removed)="removeChip($event, selectedAdminLevelOnes, 'adminLevelOne')"
+          [join]="searchForm.get('administrative_level_one_includes_all').value ? 'and' : 'or'">
+        </app-chiplist>
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
             <input type="text" matInput placeholder="Add State" aria-label="Add State" [matAutocomplete]="adminLevelOneAutoComplete"
@@ -229,31 +206,25 @@
     <!--- end Admin Level One (State) expansion panel -->
 
     <!--- Admin Level Two (County) expansion panel -->
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
+    <mat-expansion-panel #adminLevelTwoExpansionPanel (opened)="adminLevelTwoPanelOpenState = true" (closed)="adminLevelTwoPanelOpenState = false">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedAdminLevelTwos.length > 2) ? '80px' : '48px'">
         <mat-panel-title>
           <b>County (or equivalent)</b>
         </mat-panel-title>
-        <mat-panel-description>
-          <span>
-            <div class="chiplist">
-              <mat-chip-list #adminLevelTwoChipList>
-                <span *ngFor="let adminLevelTwo of selectedAdminLevelTwos">
-                  <mat-chip [selectable]="selectable" [removable]="removable" (click)="stopPropagation($event)"
-                    (removed)="removeChip(adminLevelTwo, selectedAdminLevelTwos, 'adminLevelTwo')">{{adminLevelTwo.name}}
-                    <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
-                  </mat-chip>
-                  <span *ngIf="(selectedAdminLevelTwos.indexOf(adminLevelTwo)) < (selectedAdminLevelTwos.length - 1)">{{(searchForm.get('administrative_level_two_includes_all').value)
-                    ? "and" : "or"}}&nbsp;</span>
-                </span>
-              </mat-chip-list>
-            </div>
-          </span>
+        <mat-panel-description *ngIf="!narrow || !adminLevelTwoPanelOpenState">
+          <app-chiplist [items]="selectedAdminLevelTwos" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedAdminLevelTwos, 'adminLevelTwo')" (moreClicked)="adminLevelTwoExpansionPanel.open()"
+            [join]="!narrow ? (searchForm.get('administrative_level_two_includes_all').value ? 'and' : 'or') : ''">
+          </app-chiplist>
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedAdminLevelTwos"
+          (removed)="removeChip($event, selectedAdminLevelTwos, 'adminLevelTwo')"
+          [join]="searchForm.get('administrative_level_two_includes_all').value ? 'and' : 'or'">
+        </app-chiplist>
         <div class="autocomplete-input">
-          <mat-form-field class="full-width">
+          <mat-form-field class="full-width has-hint">
             <input type="text" matInput placeholder="Add County" aria-label="Add County" [matAutocomplete]="adminLevelTwoAutoComplete"
               [formControl]="adminLevelTwoControl">
             <mat-spinner *ngIf="adminLevelTwosLoading" [diameter]="20"></mat-spinner>

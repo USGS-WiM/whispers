@@ -75,7 +75,12 @@ export class SearchFormComponent implements OnInit {
   diagnosesLoading = false;
   speciesLoading = true;
 
+  eventTypePanelOpenState = false;
   diagnosisTypePanelOpenState = false;
+  diagnosisPanelOpenState = false;
+  speciesPanelOpenState = false;
+  adminLevelOnePanelOpenState = false;
+  adminLevelTwoPanelOpenState = false;
 
   endDateBeforeStart(AC: AbstractControl) {
     AC.get('end_date').setErrors(null);

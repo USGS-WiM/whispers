@@ -6,8 +6,6 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class DataUpdatedService {
 
-
-  // TODO: make this work as a trigger
   private refreshTrigger = new BehaviorSubject('None');
   trigger = this.refreshTrigger.asObservable();
 

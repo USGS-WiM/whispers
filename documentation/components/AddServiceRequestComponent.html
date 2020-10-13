@@ -1,0 +1,1736 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>whispers documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">whispers documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>AddServiceRequestComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/add-service-request/add-service-request.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-add-service-request</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./add-service-request.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./add-service-request.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#action">action</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#addServiceRequestDialogRef">addServiceRequestDialogRef</a>
+                            </li>
+                            <li>
+                                <a href="#commentTypes">commentTypes</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#data">data</a>
+                            </li>
+                            <li>
+                                <a href="#diagnosticInfoDialogRef">diagnosticInfoDialogRef</a>
+                            </li>
+                            <li>
+                                <a href="#errorMessage">errorMessage</a>
+                            </li>
+                            <li>
+                                <a href="#event_id">event_id</a>
+                            </li>
+                            <li>
+                                <a href="#serviceRequestForm">serviceRequestForm</a>
+                            </li>
+                            <li>
+                                <a href="#serviceRequestResponses">serviceRequestResponses</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#snackBar">snackBar</a>
+                            </li>
+                            <li>
+                                <a href="#submitLoading">submitLoading</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#addComment">addComment</a>
+                            </li>
+                            <li>
+                                <a href="#buildServiceRequestForm">buildServiceRequestForm</a>
+                            </li>
+                            <li>
+                                <a href="#getComments">getComments</a>
+                            </li>
+                            <li>
+                                <a href="#initComment">initComment</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#nwhcCarcassSubApprovalTooltip">nwhcCarcassSubApprovalTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#onSubmit">onSubmit</a>
+                            </li>
+                            <li>
+                                <a href="#openDiagnosticInfoDialog">openDiagnosticInfoDialog</a>
+                            </li>
+                            <li>
+                                <a href="#openSnackBar">openSnackBar</a>
+                            </li>
+                            <li>
+                                <a href="#removeComment">removeComment</a>
+                            </li>
+                            <li>
+                                <a href="#serviceRequestCommentTooltip">serviceRequestCommentTooltip</a>
+                            </li>
+                            <li>
+                                <a href="#serviceRequestFullTooltip">serviceRequestFullTooltip</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(formBuilder: <a href="https://angular.io/api/forms/FormBuilder" target="_blank">FormBuilder</a>, dialog: MatDialog, addServiceRequestDialogRef: <a href="../components/AddServiceRequestComponent.html">MatDialogRef<AddServiceRequestComponent></a>, serviceRequestService: <a href="../injectables/ServiceRequestService.html">ServiceRequestService</a>, dataUpdatedService: <a href="../injectables/DataUpdatedService.html">DataUpdatedService</a>, snackBar: MatSnackBar, data: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:48</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>formBuilder</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/forms/FormBuilder" target="_blank" >FormBuilder</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dialog</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatDialog</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>addServiceRequestDialogRef</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../components/AddServiceRequestComponent.html" target="_self" >MatDialogRef&lt;AddServiceRequestComponent&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>serviceRequestService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ServiceRequestService.html" target="_self" >ServiceRequestService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dataUpdatedService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/DataUpdatedService.html" target="_self" >DataUpdatedService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>snackBar</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatSnackBar</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>data</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addComment"></a>
+                    <span class="name">
+                        <b>
+                            addComment
+                        </b>
+                        <a href="#addComment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addComment()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="101"
+                            class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:101</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildServiceRequestForm"></a>
+                    <span class="name">
+                        <b>
+                            buildServiceRequestForm
+                        </b>
+                        <a href="#buildServiceRequestForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>buildServiceRequestForm()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="40"
+                            class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:40</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getComments"></a>
+                    <span class="name">
+                        <b>
+                            getComments
+                        </b>
+                        <a href="#getComments"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getComments(form)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="113"
+                            class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:113</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>form</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initComment"></a>
+                    <span class="name">
+                        <b>
+                            initComment
+                        </b>
+                        <a href="#initComment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initComment()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="106"
+                            class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:106</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="63"
+                            class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:63</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="nwhcCarcassSubApprovalTooltip"></a>
+                    <span class="name">
+                        <b>
+                            nwhcCarcassSubApprovalTooltip
+                        </b>
+                        <a href="#nwhcCarcassSubApprovalTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>nwhcCarcassSubApprovalTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="131"
+                            class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:131</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onSubmit"></a>
+                    <span class="name">
+                        <b>
+                            onSubmit
+                        </b>
+                        <a href="#onSubmit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onSubmit(formValue)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="133"
+                            class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:133</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>formValue</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openDiagnosticInfoDialog"></a>
+                    <span class="name">
+                        <b>
+                            openDiagnosticInfoDialog
+                        </b>
+                        <a href="#openDiagnosticInfoDialog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openDiagnosticInfoDialog()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="97"
+                            class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:97</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openSnackBar"></a>
+                    <span class="name">
+                        <b>
+                            openSnackBar
+                        </b>
+                        <a href="#openSnackBar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openSnackBar(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, duration: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="122"
+                            class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:122</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>message</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>duration</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeComment"></a>
+                    <span class="name">
+                        <b>
+                            removeComment
+                        </b>
+                        <a href="#removeComment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>removeComment(commentIndex)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="117"
+                            class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:117</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>commentIndex</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serviceRequestCommentTooltip"></a>
+                    <span class="name">
+                        <b>
+                            serviceRequestCommentTooltip
+                        </b>
+                        <a href="#serviceRequestCommentTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>serviceRequestCommentTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="130"
+                            class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:130</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serviceRequestFullTooltip"></a>
+                    <span class="name">
+                        <b>
+                            serviceRequestFullTooltip
+                        </b>
+                        <a href="#serviceRequestFullTooltip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>serviceRequestFullTooltip()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="129"
+                            class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:129</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="action"></a>
+                        <span class="name">
+                            <b>
+                            action</b>
+                            <a href="#action"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:32</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="addServiceRequestDialogRef"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            addServiceRequestDialogRef</b>
+                            <a href="#addServiceRequestDialogRef"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../components/AddServiceRequestComponent.html" target="_self" >MatDialogRef&lt;AddServiceRequestComponent&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:54</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="commentTypes"></a>
+                        <span class="name">
+                            <b>
+                            commentTypes</b>
+                            <a href="#commentTypes"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>CommentType[]</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:36</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="data"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            data</b>
+                            <a href="#data"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @Inject(MAT_DIALOG_DATA)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:58</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="diagnosticInfoDialogRef"></a>
+                        <span class="name">
+                            <b>
+                            diagnosticInfoDialogRef</b>
+                            <a href="#diagnosticInfoDialogRef"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../components/DiagnosticInfoComponent.html" target="_self" >MatDialogRef&lt;DiagnosticInfoComponent&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:38</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="errorMessage"></a>
+                        <span class="name">
+                            <b>
+                            errorMessage</b>
+                            <a href="#errorMessage"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:28</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="event_id"></a>
+                        <span class="name">
+                            <b>
+                            event_id</b>
+                            <a href="#event_id"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:30</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="serviceRequestForm"></a>
+                        <span class="name">
+                            <b>
+                            serviceRequestForm</b>
+                            <a href="#serviceRequestForm"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:34</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="serviceRequestResponses"></a>
+                        <span class="name">
+                            <b>
+                            serviceRequestResponses</b>
+                            <a href="#serviceRequestResponses"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../interfaces/ServiceRequestResponse.html" target="_self" >ServiceRequestResponse[]</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:37</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="snackBar"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            snackBar</b>
+                            <a href="#snackBar"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>MatSnackBar</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:57</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="submitLoading"></a>
+                        <span class="name">
+                            <b>
+                            submitLoading</b>
+                            <a href="#submitLoading"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/add-service-request/add-service-request.component.ts:29</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, Input } from &#x27;@angular/core&#x27;;
+import { Inject } from &#x27;@angular/core&#x27;;
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from &#x27;@angular/forms/&#x27;;
+import { Observable } from &#x27;rxjs&#x27;;
+
+
+
+import { MatDialog, MatDialogRef } from &#x27;@angular/material&#x27;;
+import { MatSnackBar } from &#x27;@angular/material&#x27;;
+import { MAT_DIALOG_DATA } from &#x27;@angular/material&#x27;;
+
+import { CommentType } from &#x27;@interfaces/comment-type&#x27;;
+import { DiagnosticInfoComponent } from &#x27;@app/diagnostic-info/diagnostic-info.component&#x27;;
+
+import { DataUpdatedService } from &#x27;@app/services/data-updated.service&#x27;;
+import { ServiceRequestService } from &#x27;@services/service-request.service&#x27;;
+import { ServiceRequestResponse } from &#x27;@app/interfaces/service-request-response&#x27;;
+import { APP_SETTINGS } from &#x27;@app/app.settings&#x27;;
+import { FIELD_HELP_TEXT } from &#x27;@app/app.field-help-text&#x27;;
+declare let gtag: Function;
+
+@Component({
+  selector: &#x27;app-add-service-request&#x27;,
+  templateUrl: &#x27;./add-service-request.component.html&#x27;,
+  styleUrls: [&#x27;./add-service-request.component.scss&#x27;]
+})
+export class AddServiceRequestComponent implements OnInit {
+  errorMessage &#x3D; &#x27;&#x27;;
+  submitLoading &#x3D; false;
+  event_id;
+
+  action;
+
+  serviceRequestForm: FormGroup;
+
+  commentTypes: CommentType[];
+  serviceRequestResponses: ServiceRequestResponse[];
+  diagnosticInfoDialogRef: MatDialogRef&lt;DiagnosticInfoComponent&gt;;
+
+  buildServiceRequestForm() {
+    this.serviceRequestForm &#x3D; this.formBuilder.group({
+      id: null,
+      event: null,
+      request_type: null,
+      request_response: null,
+      new_comments: this.formBuilder.array([])
+    });
+  }
+
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
+    public addServiceRequestDialogRef: MatDialogRef&lt;AddServiceRequestComponent&gt;,
+    private serviceRequestService: ServiceRequestService,
+    private dataUpdatedService: DataUpdatedService,
+    public snackBar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.buildServiceRequestForm();
+  }
+
+  ngOnInit() {
+
+    this.commentTypes &#x3D; this.data.comment_types;
+
+    for (const type of APP_SETTINGS.SPECIAL_COMMENT_TYPES) {
+      for (const commentType of this.commentTypes) {
+        if (commentType.id &#x3D;&#x3D;&#x3D; type.id) {
+          this.commentTypes &#x3D; this.commentTypes.filter(commenttype &#x3D;&gt; commenttype.id !&#x3D;&#x3D; type.id);
+        }
+      }
+    }
+
+    this.serviceRequestForm.get(&#x27;event&#x27;).setValue(this.data.event_id);
+
+    if (this.data.action &#x3D;&#x3D;&#x3D; &#x27;respond&#x27;) {
+
+      this.serviceRequestForm.patchValue({
+        id: this.data.servicerequest.id,
+        event: this.data.event_id,
+        request_response: this.data.servicerequest.request_response,
+      });
+
+      this.serviceRequestService.getServiceRequestResponses()
+        .subscribe(
+          serviceRequestResponses &#x3D;&gt; {
+            this.serviceRequestResponses &#x3D; serviceRequestResponses;
+          },
+          error &#x3D;&gt; {
+            this.errorMessage &#x3D; &lt;any&gt;error;
+          }
+        );
+    }
+  }
+
+  openDiagnosticInfoDialog() {
+    this.diagnosticInfoDialogRef &#x3D; this.dialog.open(DiagnosticInfoComponent, {});
+  }
+
+  addComment() {
+    const control &#x3D; &lt;FormArray&gt;this.serviceRequestForm.get(&#x27;new_comments&#x27;);
+    control.push(this.initComment());
+  }
+
+  initComment() {
+    return this.formBuilder.group({
+      comment: &#x27;&#x27;,
+      comment_type: 10
+    });
+  }
+
+  getComments(form) {
+    return form.controls.new_comments.controls;
+  }
+
+  removeComment(commentIndex) {
+    const control &#x3D; &lt;FormArray&gt;this.serviceRequestForm.get(&#x27;new_comments&#x27;);
+    control.removeAt(commentIndex);
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+  // hover text
+  serviceRequestFullTooltip() { const string &#x3D; FIELD_HELP_TEXT.serviceRequestFullTooltip; return string; }
+  serviceRequestCommentTooltip() { const string &#x3D; FIELD_HELP_TEXT.serviceRequestCommentTooltip; return string; }
+  nwhcCarcassSubApprovalTooltip() { const string &#x3D; FIELD_HELP_TEXT.nwhcCarcassSubApprovalTooltip; return string; }
+
+  onSubmit(formValue) {
+
+    this.submitLoading &#x3D; true;
+
+    if (this.data.action &#x3D;&#x3D;&#x3D; &#x27;add&#x27;) {
+
+      // remove the request_response field entirely if this is a new request (&#x27;add&#x27;) so that value gets assigned default Pending
+      delete formValue.request_response;
+      // remove the id field entirely if this is a new request (&#x27;add&#x27;)
+      delete formValue.id;
+      this.serviceRequestService.create(formValue)
+        .subscribe(
+          (serviceRequest) &#x3D;&gt; {
+            this.submitLoading &#x3D; false;
+            this.openSnackBar(&#x27;Service request successfully submitted&#x27;, &#x27;OK&#x27;, 5000);
+            this.dataUpdatedService.triggerRefresh();
+            this.addServiceRequestDialogRef.close();
+            gtag(&#x27;event&#x27;, &#x27;click&#x27;, { &#x27;event_category&#x27;: &#x27;Event Details&#x27;, &#x27;event_label&#x27;: &#x27;Service Request Submitted&#x27; });
+          },
+          error &#x3D;&gt; {
+            this.errorMessage &#x3D; &lt;any&gt;error;
+            this.openSnackBar(&#x27;Error. Service request not submitted. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+
+          }
+        );
+    } else if (this.data.action &#x3D;&#x3D;&#x3D; &#x27;respond&#x27;) {
+
+      delete formValue.request_type;
+      delete formValue.new_comments;
+
+      this.serviceRequestService.update(formValue)
+        .subscribe(
+          (serviceRequest) &#x3D;&gt; {
+            this.submitLoading &#x3D; false;
+            this.openSnackBar(&#x27;Service request response successfully saved&#x27;, &#x27;OK&#x27;, 5000);
+            this.dataUpdatedService.triggerRefresh();
+            this.addServiceRequestDialogRef.close();
+          },
+          error &#x3D;&gt; {
+            this.errorMessage &#x3D; &lt;any&gt;error;
+            this.openSnackBar(&#x27;Error. Service request response not submitted. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+          }
+        );
+    }
+
+
+
+
+  }
+
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;h1 mat-dialog-title&gt;
+  &lt;mat-icon *ngIf&#x3D;&quot;data.titleIcon !&#x3D;&#x3D; &#x27;&#x27;&quot;&gt;{{data.titleIcon}}&lt;/mat-icon&gt; {{data.title}}
+  &lt;mat-icon class&#x3D;&quot;hint-hover-text&quot; matSuffix 
+  matTooltip&#x3D;{{serviceRequestFullTooltip()}} matTooltipClass&#x3D;&quot;tooltip-breakline&quot;&gt;
+  help&lt;/mat-icon&gt;
+&lt;/h1&gt;
+&lt;mat-dialog-content&gt;
+
+  &lt;div *ngIf&#x3D;&quot;data.action &#x3D;&#x3D; &#x27;respond&#x27;&quot;&gt;
+    {{data.servicerequest.request_type_string}} &lt;br&gt;
+    {{data.servicerequest.created_date | date:&#x27;mediumDate&#x27;}}
+  &lt;/div&gt;
+
+  &lt;form [formGroup]&#x3D;&quot;serviceRequestForm&quot; autocomplete&#x3D;&quot;off&quot;&gt;
+    &lt;div class&#x3D;&quot;vertical-form-container&quot;&gt;
+
+      &lt;mat-radio-group formControlName&#x3D;&quot;request_type&quot; *ngIf&#x3D;&quot;data.action &#x3D;&#x3D; &#x27;add&#x27;&quot;&gt;
+        &lt;mat-radio-button [value]&#x3D;&quot;1&quot;&gt;Request diagnostic and consultative services
+        &lt;/mat-radio-button&gt;
+        &lt;p&gt;
+          &lt;mat-radio-button [value]&#x3D;&quot;2&quot;&gt;Request consultative services ONLY &lt;/mat-radio-button&gt;
+      &lt;/mat-radio-group&gt;
+
+      &lt;mat-form-field class&#x3D;&quot;form-control&quot; *ngIf&#x3D;&quot;data.action &#x3D;&#x3D; &#x27;respond&#x27;&quot;&gt;
+        &lt;mat-select placeholder&#x3D;&quot;Response&quot; formControlName&#x3D;&quot;request_response&quot;&gt;
+          &lt;mat-option *ngFor&#x3D;&quot;let response of serviceRequestResponses&quot; [value]&#x3D;&quot;response.id&quot;&gt;{{response.name}}
+          &lt;/mat-option&gt;
+        &lt;/mat-select&gt;
+      &lt;/mat-form-field&gt;
+
+      &lt;div class&#x3D;&quot;text-bold text-larger diagnostic-info-text&quot;
+        *ngIf&#x3D;&quot;this.serviceRequestForm.get(&#x27;request_type&#x27;).value &#x3D;&#x3D;&#x3D; 1&quot;&gt;
+        For diagnostic services, indicate in comment A) species and numbers of FRESH carcasses
+        available to send, B) whether carcasses are chilled or frozen, and C) if
+        euthanized and how. See &lt;span class&#x3D;&quot;link&quot;&gt;&lt;a role&#x3D;&quot;button&quot; (click)&#x3D;&quot;openDiagnosticInfoDialog();&quot;&gt;Suitable
+            Specimen Criteria&lt;/a&gt;&lt;/span&gt; for
+        details on suitable specimens. Wait for NWHC approval
+        before shipping.
+      &lt;/div&gt;
+
+      &lt;div formArrayName&#x3D;&quot;new_comments&quot; *ngIf&#x3D;&quot;data.action &#x3D;&#x3D; &#x27;add&#x27;&quot;&gt;
+        &lt;div *ngFor&#x3D;&quot;let comment of getComments(serviceRequestForm); let commentIndex &#x3D; index&quot;
+          class&#x3D;&quot;add-service-request-form&quot;&gt;
+
+          &lt;div [formGroupName]&#x3D;&quot;commentIndex&quot;&gt;
+            &lt;mat-form-field class&#x3D;&quot;general-comment-text-area&quot;&gt;
+              &lt;textarea matInput maxlength&#x3D;&quot;5000&quot; #comment placeholder&#x3D;&quot;Comment&quot; formControlName&#x3D;&quot;comment&quot;&gt;&lt;/textarea&gt;
+              &lt;mat-hint align&#x3D;&quot;end&quot;&gt;{{comment.value.length}} / 5000&lt;/mat-hint&gt;
+            &lt;/mat-form-field&gt;
+
+            &lt;mat-form-field class&#x3D;&quot;form-control&quot;&gt;
+              &lt;mat-select placeholder&#x3D;&quot;Comment Type&quot; formControlName&#x3D;&quot;comment_type&quot;&gt;
+                &lt;mat-option *ngFor&#x3D;&quot;let commentType of commentTypes&quot; [value]&#x3D;&quot;commentType.id&quot;&gt;{{commentType.name}}
+                &lt;/mat-option&gt;
+              &lt;/mat-select&gt;
+            &lt;/mat-form-field&gt;
+
+            &lt;button mat-icon-button color&#x3D;&quot;warn&quot; aria-label&#x3D;&quot;Remove this comment&quot; (click)&#x3D;&quot;removeComment(commentIndex)&quot;
+              matTooltip&#x3D;&quot;Remove this comment&quot;&gt;
+              &lt;mat-icon&gt;remove_circle&lt;/mat-icon&gt;
+            &lt;/button&gt;
+          &lt;/div&gt;
+
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;detail-section-buttons centered&quot; *ngIf&#x3D;&quot;data.action &#x3D;&#x3D; &#x27;add&#x27;&quot;&gt;
+        &lt;button mat-button color&#x3D;&quot;primary&quot; matTooltip&#x3D;&quot;{{serviceRequestCommentTooltip()}}&quot; (click)&#x3D;&quot;addComment()&quot;&gt;
+          &lt;mat-icon&gt;add_comment&lt;/mat-icon&gt;
+          Add Comment 
+          &lt;!-- &lt;span style&#x3D;&quot;opacity: 0.5;&quot;&gt;(optional)&lt;/span&gt; --&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/form&gt;
+
+
+&lt;/mat-dialog-content&gt;
+&lt;mat-dialog-actions&gt;
+  &lt;div class&#x3D;&quot;detail-section-buttons&quot;&gt;
+
+    &lt;button mat-button color&#x3D;&quot;warn&quot; (click)&#x3D;&quot;this.addServiceRequestDialogRef.close(&#x27;cancel&#x27;);&quot;&gt;
+      &lt;mat-icon&gt;cancel&lt;/mat-icon&gt;&amp;nbsp;Cancel
+    &lt;/button&gt;
+    &lt;button mat-button color&#x3D;&quot;primary&quot; type&#x3D;&quot;submit&quot; [disabled]&#x3D;&quot;serviceRequestForm.invalid&quot;
+      (click)&#x3D;&quot;onSubmit(serviceRequestForm.value)&quot;&gt;
+      &lt;mat-icon&gt;{{data.actionButtonIcon}}&lt;/mat-icon&gt; {{data.action_button_text}}
+    &lt;/button&gt;
+    &lt;mat-progress-bar mode&#x3D;&quot;indeterminate&quot; *ngIf&#x3D;&quot;submitLoading&quot;&gt;&lt;/mat-progress-bar&gt;
+  &lt;/div&gt;
+&lt;/mat-dialog-actions&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./add-service-request.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.horizontal-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-control {
+    width: 8em;
+    margin: 5px;
+}
+
+.org-select {
+    width: 35em;
+}
+
+.alert {
+    width: 100%;
+    background-color: lightcoral;
+}
+
+.text-small {
+    font-size: small;
+}
+
+// Prev and next buttons
+.detail-section-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    &amp;.centered {
+        justify-content: center;
+    }
+    button {
+        position: relative;
+        top: -2px;
+        &amp;:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.add-service-request-form {
+    width: 40em;
+}
+
+.general-comment-text-area {
+    width: 40em;
+    margin-bottom: 2em;
+}
+
+.form-control {
+    width: 18em;
+    margin: 10px;
+}
+
+.diagnostic-info-text {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.text-bold {
+    font-style: bold;
+}
+
+.link {
+    color: blue;
+    text-decoration-line: underline;
+    cursor: pointer;
+}
+
+.diagnostic-info-text {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><h1 mat-dialog-title>  <mat-icon *ngIf="data.titleIcon !== \'\'">{{data.titleIcon}}</mat-icon> {{data.title}}  <mat-icon class="hint-hover-text" matSuffix   matTooltip={{serviceRequestFullTooltip()}} matTooltipClass="tooltip-breakline">  help</mat-icon></h1><mat-dialog-content>  <div *ngIf="data.action == \'respond\'">    {{data.servicerequest.request_type_string}} <br>    {{data.servicerequest.created_date | date:\'mediumDate\'}}  </div>  <form [formGroup]="serviceRequestForm" autocomplete="off">    <div class="vertical-form-container">      <mat-radio-group formControlName="request_type" *ngIf="data.action == \'add\'">        <mat-radio-button [value]="1">Request diagnostic and consultative services        </mat-radio-button>        <p>          <mat-radio-button [value]="2">Request consultative services ONLY </mat-radio-button>      </mat-radio-group>      <mat-form-field class="form-control" *ngIf="data.action == \'respond\'">        <mat-select placeholder="Response" formControlName="request_response">          <mat-option *ngFor="let response of serviceRequestResponses" [value]="response.id">{{response.name}}          </mat-option>        </mat-select>      </mat-form-field>      <div class="text-bold text-larger diagnostic-info-text"        *ngIf="this.serviceRequestForm.get(\'request_type\').value === 1">        For diagnostic services, indicate in comment A) species and numbers of FRESH carcasses        available to send, B) whether carcasses are chilled or frozen, and C) if        euthanized and how. See <span class="link"><a role="button" (click)="openDiagnosticInfoDialog();">Suitable            Specimen Criteria</a></span> for        details on suitable specimens. Wait for NWHC approval        before shipping.      </div>      <div formArrayName="new_comments" *ngIf="data.action == \'add\'">        <div *ngFor="let comment of getComments(serviceRequestForm); let commentIndex = index"          class="add-service-request-form">          <div [formGroupName]="commentIndex">            <mat-form-field class="general-comment-text-area">              <textarea matInput maxlength="5000" #comment placeholder="Comment" formControlName="comment"></textarea>              <mat-hint align="end">{{comment.value.length}} / 5000</mat-hint>            </mat-form-field>            <mat-form-field class="form-control">              <mat-select placeholder="Comment Type" formControlName="comment_type">                <mat-option *ngFor="let commentType of commentTypes" [value]="commentType.id">{{commentType.name}}                </mat-option>              </mat-select>            </mat-form-field>            <button mat-icon-button color="warn" aria-label="Remove this comment" (click)="removeComment(commentIndex)"              matTooltip="Remove this comment">              <mat-icon>remove_circle</mat-icon>            </button>          </div>        </div>      </div>      <div class="detail-section-buttons centered" *ngIf="data.action == \'add\'">        <button mat-button color="primary" matTooltip="{{serviceRequestCommentTooltip()}}" (click)="addComment()">          <mat-icon>add_comment</mat-icon>          Add Comment           <!-- <span style="opacity: 0.5;">(optional)</span> -->        </button>      </div>    </div>  </form></mat-dialog-content><mat-dialog-actions>  <div class="detail-section-buttons">    <button mat-button color="warn" (click)="this.addServiceRequestDialogRef.close(\'cancel\');">      <mat-icon>cancel</mat-icon>&nbsp;Cancel    </button>    <button mat-button color="primary" type="submit" [disabled]="serviceRequestForm.invalid"      (click)="onSubmit(serviceRequestForm.value)">      <mat-icon>{{data.actionButtonIcon}}</mat-icon> {{data.action_button_text}}    </button>    <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>  </div></mat-dialog-actions></div>'
+    var COMPONENTS = [{'name': 'AboutComponent', 'selector': 'app-about'},{'name': 'AddCommentComponent', 'selector': 'app-add-comment'},{'name': 'AddEventDiagnosisComponent', 'selector': 'app-add-event-diagnosis'},{'name': 'AddEventLocationComponent', 'selector': 'app-add-event-location'},{'name': 'AddEventLocationContactComponent', 'selector': 'app-add-event-location-contact'},{'name': 'AddEventOrganizationComponent', 'selector': 'app-add-event-organization'},{'name': 'AddServiceRequestComponent', 'selector': 'app-add-service-request'},{'name': 'AlertCollaboratorsComponent', 'selector': 'app-alert-collaborators'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AuthenticationComponent', 'selector': 'app-authentication'},{'name': 'BrowserWarningComponent', 'selector': 'app-browser-warning'},{'name': 'BulkUploadComponent', 'selector': 'app-bulk-upload'},{'name': 'CircleChooseComponent', 'selector': 'app-circle-choose'},{'name': 'CircleManagementComponent', 'selector': 'app-circle-management'},{'name': 'CirclesComponent', 'selector': 'app-circles'},{'name': 'CollaborationRequestComponent', 'selector': 'app-collaboration-request'},{'name': 'CommentsTableComponent', 'selector': 'app-comments-table'},{'name': 'ConfirmComponent', 'selector': 'app-confirm'},{'name': 'CreateContactComponent', 'selector': 'app-create-contact'},{'name': 'CustomNotificationComponent', 'selector': 'app-custom-notification'},{'name': 'DiagnosticInfoComponent', 'selector': 'app-diagnostic-info'},{'name': 'DiagnosticServicesComponent', 'selector': 'app-diagnostic-services'},{'name': 'EditEventComponent', 'selector': 'app-edit-event'},{'name': 'EditEventLocationComponent', 'selector': 'app-edit-event-location'},{'name': 'EditLocationSpeciesComponent', 'selector': 'app-edit-location-species'},{'name': 'EditSpeciesDiagnosisComponent', 'selector': 'app-edit-species-diagnosis'},{'name': 'EditUserComponent', 'selector': 'app-edit-user'},{'name': 'EventDetailsComponent', 'selector': 'app-event-details'},{'name': 'EventDetailsShareComponent', 'selector': 'app-event-details-share'},{'name': 'EventGroupComponent', 'selector': 'app-event-group'},{'name': 'EventGroupManagementComponent', 'selector': 'app-event-group-management'},{'name': 'EventPublicReportComponent', 'selector': 'app-event-public-report'},{'name': 'EventsComponent', 'selector': 'app-event-table'},{'name': 'EventSubmissionComponent', 'selector': 'app-event-submission'},{'name': 'EventSubmissionConfirmComponent', 'selector': 'app-event-submission-confirm'},{'name': 'GnisLookupComponent', 'selector': 'app-gnis-lookup'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'LocationSpeciesTableComponent', 'selector': 'app-location-species-table'},{'name': 'NewLookupRequestComponent', 'selector': 'app-new-lookup-request'},{'name': 'NotificationsComponent', 'selector': 'app-notifications'},{'name': 'SavedSearchesComponent', 'selector': 'app-saved-searches'},{'name': 'SaveSearchComponent', 'selector': 'app-save-search'},{'name': 'SearchDialogComponent', 'selector': 'app-search-dialog'},{'name': 'SearchResultsSummaryReportComponent', 'selector': 'app-search-results-summary-report'},{'name': 'UserDashboardComponent', 'selector': 'app-user-dashboard'},{'name': 'UserEventsComponent', 'selector': 'app-user-events'},{'name': 'UserRegistrationComponent', 'selector': 'app-user-registration'},{'name': 'ViewCommentDetailsComponent', 'selector': 'app-view-comment-details'},{'name': 'ViewContactDetailsComponent', 'selector': 'app-view-contact-details'},{'name': 'ViewNotificationDetailsComponent', 'selector': 'app-view-notification-details'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'AddServiceRequestComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'AddServiceRequestComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

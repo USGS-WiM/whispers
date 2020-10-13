@@ -58,7 +58,7 @@ export class UserEventsComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.dataSource = new UserEventsDataSource(this.eventService);
-    this.dataSource.loadEvents('', 1, 5);
+    this.dataSource.loadEvents('-start_date', 1, 5);
   }
 
   ngAfterViewInit() {

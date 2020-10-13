@@ -731,10 +731,13 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       contextMapDivIcons[i].style.marginLeft = mLeft[i] + 'px';
       contextMapDivIcons[i].style.marginTop = mTop[i] + 'px';
     }
+
+    // Not need lines of code for what we're doing but leaving in incase it's needed sometime in the future
     /* linesLayer.style.transform = 'translate(' + (linesX) + 'px,' + (linesY) + 'px)';
     linesLayer.setAttribute('viewBox', oldViewbox);
     linesLayer.setAttribute('width', oldLinesWidth);
     linesLayer.setAttribute('height', oldLinesHeight); */
+
     contextMapPane.style.transform = 'translate(' + (mapX) + 'px,' + (mapY) + 'px)';
     contextMapPane.style.left = '';
     contextMapPane.style.top = '';
@@ -874,17 +877,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         });
       }
 
-      /************
-       *
-       * Check with Lauren's code to see if she has any functions reformatting dates from YYYY-MM-DD format
-       * Lauren: Hi, yes I have a couple ways for formatting todays date in the app.utilities.ts file, function name: getReportDateTime or formatEventDates
-       * Nick: oh hai fren
-       * Lauren: hai fren
-       *
-       * Coordinate with her to use a common function to get it into the format NHWC requests
-       * Lauren: We put common functions like that in the app.utilites.ts file. There may be an existing one that will work, if not feel free to add one
-       */
-
       // Section with SEARCH RESULTS SUMMARY
       const number_events = result_data.length.toString();
 
@@ -913,6 +905,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       const multipleLongRunEvt = [];
       const eventsAndMostAffCounts = [];
       const multipleMostAffected = [];
+      const speciesTotal = [];
 
       result_data.forEach(element => {
         if (!element.hasOwnProperty('public')) {
@@ -940,8 +933,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
         // calc for Number of Animals Affected
         number_animals_affected += element.affected_count;
-        // calc for Number Species Affected
-        number_species_affected += element.species.length;
 
         // initial calc for Species Most Affected
         if (speciesArray.length === 0) {
@@ -999,6 +990,24 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         }
 
       });
+
+      // getting species affected count
+      // putting all species for each eventlocation into an array
+      result_data.forEach(rd => {
+        rd.species.forEach(sp => {
+          speciesTotal.push(sp.id);
+        });
+      });
+
+      // function for filtering out duplicates
+      const distinct = (value, index, self) => {
+        return self.indexOf(value) === index;
+      };
+      // filtering out the duplicates
+      const distinctSpecies = speciesTotal.filter(distinct);
+
+      // setting distinct species count
+      number_species_affected = distinctSpecies.length;
 
       const eventsAndlinksLongest = [];
       // check to see if there are multiple longest running events

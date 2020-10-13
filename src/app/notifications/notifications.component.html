@@ -1,0 +1,376 @@
+<div>
+  <mat-tab-group [selectedIndex]="selectedTab">
+
+    <mat-tab aria-selected>
+
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">list</mat-icon>&nbsp;
+        Notifications
+      </ng-template>
+
+      <!-- Notifications table-->
+      <mat-card>
+        <mat-card-title>
+          Notifications
+        </mat-card-title>
+        <mat-card-title>
+
+          <div class="results-card-title-row">
+            <span class="results-button-row">
+              <button mat-button color="accent" [disabled]="selection.selected.length === 0"
+                (click)="updateNotifications(selection.selected, 'set_read')">
+                <mat-icon>
+                  check_circle_outline
+                </mat-icon> Mark as Read
+              </button>
+              <button mat-button color="accent" [disabled]="selection.selected.length === 0"
+                (click)="updateNotifications(selection.selected, 'set_unread')">
+                <mat-icon>
+                  markunread
+                </mat-icon> Mark as Unread
+              </button>
+              <button mat-button color="warn" [disabled]="selection.selected.length === 0"
+                (click)="openNotificationDeleteConfirm(selection.selected)">
+                <mat-icon>delete</mat-icon> Delete
+              </button>
+            </span>
+
+          </div>
+        </mat-card-title>
+        <div class=" results-table-div">
+
+          <div class="spinner-container" *ngIf="notificationsLoading">
+            <mat-spinner></mat-spinner>
+          </div>
+
+          <mat-table [dataSource]="notificationsDataSource" matSort>
+
+            <!-- Selection column -->
+            <ng-container matColumnDef="select">
+              <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                  [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Event Column -->
+            <ng-container matColumnDef="event">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Event </mat-header-cell>
+              <mat-cell *matCellDef="let notification">
+                <button mat-stroked-button color="primary" (click)="$event.stopPropagation()"
+                  matTooltip="Click to go to event details page" *ngIf="notification.event !== null"
+                  routerLink="../event/{{notification.event}}">{{notification.event}}</button>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Message Column -->
+            <ng-container matColumnDef="subject">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Message </mat-header-cell>
+              <mat-cell *matCellDef="let notification">{{notification.subject}}
+              </mat-cell>
+            </ng-container>
+
+            <!-- Source -->
+            <ng-container matColumnDef="created_date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Date </mat-header-cell>
+              <mat-cell *matCellDef="let notification">{{notification.created_date | date:'mediumDate'}}</mat-cell>
+            </ng-container>
+
+            <!-- Date -->
+            <ng-container matColumnDef="source">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Source </mat-header-cell>
+              <mat-cell *matCellDef="let notification">{{notification.source}}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="notificationDisplayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let notification; columns: notificationDisplayedColumns;"
+              (click)="openNotification(notification)" matTooltip="Click to view full notification text"
+              [ngClass]="{'read' :notification.read === true, 'unread':notification.read === false}"></mat-row>
+          </mat-table>
+
+          <div *ngIf="notificationsDataSource && notificationsDataSource.data.length === 0 && notificationsLoading === false">
+            <h3>No notifications</h3>
+          </div>
+
+          <span [hidden]="notificationsDataSource && notificationsDataSource.data.length === 0 && notificationsLoading === false">
+            <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+          </span>
+        </div>
+      </mat-card>
+      <!-- end Notifications table-->
+    </mat-tab>
+
+    <mat-tab label="Manage Notification Preferences">
+
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">settings</mat-icon>&nbsp;
+        Manage Notification Preferences
+      </ng-template>
+
+      <mat-card>
+        <mat-card-title>
+          Standard Notifications
+        </mat-card-title>
+        <mat-card-content>
+          <form [formGroup]="standardNotificationSettingsForm" autocomplete="off">
+            <div class="results-table-div">
+              <div class="mat-table">
+                <div class="mat-header-row">
+                  <div class="mat-header-cell standard-cue-col"></div>
+                  <div class="mat-header-cell standard-receive-col" style="font-weight: bold;">
+                    <span class="row align-items-center">
+                      <span class="headerText" class="row align-items-center">
+                        <mat-icon>notifications</mat-icon>&nbsp;Receive when event is
+                      </span>
+                    </span>
+                  </div>
+                  <div class="mat-header-cell standard-email-col" id="headerWithIcon" style="font-weight: bold;">
+                    <span class="row align-items-center">
+                      <mat-checkbox (change)="emailAllToggle('standard')" [checked]="emailAllStandard">
+                      </mat-checkbox>
+                      <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                          {{emailAllStandard === true ? 'email' :
+                          emailAllStandard === false ?  'email' :  'email'}}
+                        </mat-icon>
+                        &nbsp;{{emailAllStandard === true ? 'Email on for all' :
+                        emailAllStandard === false ?  'Click to receive emails for all' :  'Click to receive emails for all'}}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="mat-row">
+                  <div class="mat-cell standard-cue-col">Your Events</div>
+                  <div class="mat-cell standard-receive-col">
+                    <mat-checkbox formControlName="yourEvents_new">new</mat-checkbox> &nbsp; &nbsp;
+                    <mat-checkbox formControlName="yourEvents_updated">updated</mat-checkbox>
+                  </div>
+                  <div class="mat-cell standard-email-col">
+                    <span class="row align-items-center">
+                      <mat-checkbox formControlName="yourEvents_email"
+                        [disabled]="standardNotificationSettingsForm.get('yourEvents_new').value === false && standardNotificationSettingsForm.get('yourEvents_updated').value === false">
+                      </mat-checkbox>
+
+                      <span class="row align-items-center"
+                        [ngClass]="{'disabled' : standardNotificationSettingsForm.get('yourEvents_new').value === false && standardNotificationSettingsForm.get('yourEvents_updated').value === false, '': standardNotificationSettingsForm.get('yourEvents_new').value === true || standardNotificationSettingsForm.get('yourEvents_updated').value === true}">&nbsp;&nbsp;
+                        <mat-icon class="icon">
+                          {{standardNotificationSettingsForm.get('yourEvents_email').value === true ? 'email' :
+                        standardNotificationSettingsForm.get('yourEvents_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+                        </mat-icon>
+                        &nbsp;{{standardNotificationSettingsForm.get('yourEvents_email').value === true ? ' Email ' :
+                        standardNotificationSettingsForm.get('yourEvents_email').value === false ?  '' :  ''}}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div class="mat-row">
+                  <div class="mat-cell standard-cue-col">Your Organization's Events</div>
+                  <div class="mat-cell standard-receive-col">
+                    <mat-checkbox formControlName="orgEvents_new">new</mat-checkbox> &nbsp; &nbsp;
+                    <mat-checkbox formControlName="orgEvents_updated">updated</mat-checkbox>
+                  </div>
+                  <div class="mat-cell standard-email-col">
+                    <span class="row align-items-center">
+                      <mat-checkbox formControlName="orgEvents_email"
+                        [disabled]="standardNotificationSettingsForm.get('orgEvents_new').value === false && standardNotificationSettingsForm.get('orgEvents_updated').value === false">
+                      </mat-checkbox>
+                      <span class="row align-items-center"
+                        [ngClass]="{'disabled' : standardNotificationSettingsForm.get('orgEvents_new').value === false && standardNotificationSettingsForm.get('orgEvents_updated').value === false, '': standardNotificationSettingsForm.get('orgEvents_new').value === true || standardNotificationSettingsForm.get('orgEvents_updated').value === true}">&nbsp;&nbsp;
+                        <mat-icon class="icon">
+                          {{standardNotificationSettingsForm.get('orgEvents_email').value === true ? 'email' :
+                        standardNotificationSettingsForm.get('orgEvents_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+                        </mat-icon>
+                        &nbsp;{{standardNotificationSettingsForm.get('orgEvents_email').value === true ? ' Email ' :
+                        standardNotificationSettingsForm.get('orgEvents_email').value === false ?  '' :  ''}}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div class="mat-row">
+                  <div class="mat-cell standard-cue-col">Your Collaboration Events</div>
+                  <div class="mat-cell standard-receive-col">
+                    <mat-checkbox formControlName="collabEvents_new">new</mat-checkbox> &nbsp; &nbsp;
+                    <mat-checkbox formControlName="collabEvents_updated">updated</mat-checkbox>
+                  </div>
+                  <div class="mat-cell standard-email-col">
+                    <span class="row align-items-center">
+                      <mat-checkbox formControlName="collabEvents_email"
+                        [disabled]="standardNotificationSettingsForm.get('collabEvents_new').value === false && standardNotificationSettingsForm.get('collabEvents_updated').value === false">
+                      </mat-checkbox>
+                      <span class="row align-items-center"
+                        [ngClass]="{'disabled' : standardNotificationSettingsForm.get('collabEvents_new').value === false && standardNotificationSettingsForm.get('collabEvents_updated').value === false, '': standardNotificationSettingsForm.get('collabEvents_new').value === true || standardNotificationSettingsForm.get('collabEvents_updated').value === true}">&nbsp;&nbsp;
+                        <mat-icon class="icon">
+                          {{standardNotificationSettingsForm.get('collabEvents_email').value === true ? 'email' :
+                        standardNotificationSettingsForm.get('collabEvents_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+                        </mat-icon>
+                        &nbsp;{{standardNotificationSettingsForm.get('collabEvents_email').value === true ? ' Email ' :
+                        standardNotificationSettingsForm.get('collabEvents_email').value === false ?  '' :  ''}}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                <div class="mat-row">
+                  <div class="mat-cell standard-cue-col">All Events &#8224;</div>
+                  <div class="mat-cell standard-receive-col">
+                    <mat-checkbox formControlName="allEvents_new">new</mat-checkbox> &nbsp; &nbsp;
+                    <mat-checkbox formControlName="allEvents_updated">updated</mat-checkbox>
+                  </div>
+                  <div class="mat-cell standard-email-col">
+                    <span class="row align-items-center">
+                      <mat-checkbox formControlName="allEvents_email"
+                        [disabled]="standardNotificationSettingsForm.get('allEvents_new').value === false && standardNotificationSettingsForm.get('allEvents_updated').value === false">
+                      </mat-checkbox>
+                      <span class="row align-items-center"
+                        [ngClass]="{'disabled' : standardNotificationSettingsForm.get('allEvents_new').value === false && standardNotificationSettingsForm.get('allEvents_updated').value === false, '': standardNotificationSettingsForm.get('allEvents_new').value === true || standardNotificationSettingsForm.get('allEvents_updated').value === true}">&nbsp;&nbsp;
+                        <mat-icon class="icon">
+                          {{standardNotificationSettingsForm.get('allEvents_email').value === true ? 'email' :
+                        standardNotificationSettingsForm.get('allEvents_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+                        </mat-icon>
+                        &nbsp;{{standardNotificationSettingsForm.get('allEvents_email').value === true ? ' Email ' :
+                        standardNotificationSettingsForm.get('allEvents_email').value === false ?  '' :  ''}}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="warning">
+                <p>&#8224; Beware that selecting this option will create notifications for all events that you have
+                  permission
+                  to view,
+                  regardless of ownership,
+                  diagnosis, species, location, or any other detail. Consider a Custom Notification (below) to
+                  specify
+                  events
+                  pertaining to your specific interest.</p>
+              </div>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+      <!--end Standard notifications settings -->
+
+      <!-- <mat-divider [inset]="true"></mat-divider> -->
+
+      <!--Custom notifications settings-->
+      <mat-card>
+        <mat-card-title>
+          Custom Notifications
+          <button mat-button color="accent" (click)="newCustomNotification()">
+            <mat-icon>add_alert</mat-icon>Add New Custom Notification
+          </button>
+        </mat-card-title>
+        <mat-card-content>
+          <!-- <form [formGroup]="customNotificationSettingsForm" class="event-submission-locations" autocomplete="off"> -->
+          <form [formGroup]="customNotificationSettingsForm" autocomplete="off">
+
+            <div *ngIf="customCueArray.length === 0">
+              <h4>No Custom Notifications</h4>
+            </div>
+
+            <!-- <div class="results-table-div" *ngIf="customCueFormReady"> -->
+            <div class="results-table-div">
+              <div class="mat-table">
+                <!--Begin header row-->
+                <div class="mat-header-row">
+                  <div class="mat-header-cell custom-cue-col" style="font-weight: bold;">Notification Trigger</div>
+                  <div class="mat-header-cell custom-receive-col" style="font-weight: bold;">
+                    <span class="row align-items-center">
+                      <span class="headerText" class="row align-items-center">
+                        <mat-icon>notifications</mat-icon>&nbsp;Receive when matching event is
+                      </span>
+                    </span>
+                  </div>
+                  <div class="mat-header-cell custom-email-col" id="headerWithIcon" style="font-weight: bold;">
+                    <span class="row align-items-center">
+                      <!--<mat-checkbox (change)="emailAllToggle('custom')" [checked]="emailAllCustom">
+                      </mat-checkbox>
+                       <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
+                          {{emailAllCustom === true ? 'email' :
+                        emailAllCustom=== false ?  'email' :  'email'}}
+                        </mat-icon>
+                        &nbsp;{{emailAllCustom === true ? 'Email on for all' :
+                      emailAllCustom === false ?  'Click to receive emails for all' :  'Click to receive emails for all'}}
+                      </span> -->
+                    </span>
+                  </div>
+                  <div class="mat-header-cell custom-delete-col" style="font-weight: bold;"><span
+                      class="headerText">Delete&nbsp;&#8225;</span>
+                  </div>
+                </div>
+                <!--End header row-->
+
+                <!-- Begin form array and table body-->
+
+                <div formArrayName="custom_cues">
+
+                  <!-- <div class="mat-row" *ngFor="let cue of dummy_custom_cues"> -->
+                  <div class="mat-row"
+                    *ngFor="let cue of getCustomCues(customNotificationSettingsForm); let customCueIndex = index">
+                    <div class="mat-cell custom-cue-col">
+
+                      <div *ngFor="let parameterString of cue.value.cue_strings">
+                        <span>{{parameterString}}</span><br>
+                      </div>
+                    </div>
+                    <div class="mat-cell custom-receive-col" [formGroupName]="customCueIndex">
+                      <mat-checkbox formControlName="create_when_new" #createWhenNew
+                        (change)="updateCustomNotificationSettings('create_when_new', $event, cue)"
+                        matTooltip="Click to receive when a matching event is new">new</mat-checkbox> &nbsp; &nbsp;
+                      <mat-checkbox formControlName="create_when_modified" #createWhenModified
+                        (change)="updateCustomNotificationSettings('create_when_modified', $event, cue)"
+                        matTooltip="Click to receive when a matching event is updated">updated</mat-checkbox>
+                    </div>
+                    <div class="mat-cell custom-email-col" [formGroupName]="customCueIndex">
+                      <span class="row align-items-center">
+                        <mat-checkbox formControlName="send_email"
+                          (change)="updateCustomNotificationSettings('send_email', $event, cue)"
+                          matTooltip="Click to have notification forwarded to your email"
+                          [disabled]="customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('create_when_new').value === false && customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('create_when_modified').value === false">
+                        </mat-checkbox>
+
+                        <span class="row align-items-center"
+                          [ngClass]="{'disabled' : customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('create_when_new').value === false && customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('create_when_modified').value === false, '': customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('create_when_new').value === true || customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('create_when_modified').value === true}">&nbsp;&nbsp;
+                          <mat-icon class="icon">
+                            {{customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('send_email').value === true ? 'email' :
+                                customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('send_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+                          </mat-icon>
+                          &nbsp;{{customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('send_email').value === true ? ' Email ' :
+                              customNotificationSettingsForm.get('custom_cues').controls[customCueIndex].get('send_email').value === false ?  '' :  ''}}
+                        </span>
+
+                      </span>
+                    </div>
+                    <div class="mat-cell custom-delete-col">
+                      <mat-icon class="icon" color="warn" (click)="deleteWarning(cue, customCueIndex)"
+                        matTooltip="Click to delete this notification cue">delete</mat-icon>
+                    </div>
+                  </div>
+                </div>
+                <!-- End form array and table body-->
+
+              </div>
+              <div class="warning">
+                <p>&#8225; Deleting a Custom Notification only deletes the notification trigger for you - it does
+                  not delete the
+                  event, a
+                  notification trigger for another user, or any
+                  other data.</p>
+              </div>
+            </div>
+
+          </form>
+        </mat-card-content>
+      </mat-card>
+      <!--end Custom notifications settings-->
+
+    </mat-tab>
+
+  </mat-tab-group>
+</div>

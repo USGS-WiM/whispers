@@ -33,11 +33,128 @@
       "@events/*": [
         "app/events/*"
       ],
+      "@comments-table/*": [
+        "app/comments-table/*"
+      ],
+      "@home/*": [
+        "app/home/*"
+      ],
+      "@event-details/*": [
+        "app/event-details/*"
+      ],
+      "@event-submission/*": [
+        "app/event-submission/*"
+      ],
+      "@user-dashboard/*": [
+        "app/user-dashboard/*"
+      ],
+      "@notifications/*": [
+        "app/notifications/*"
+      ],
+      "@add-comment/*": [
+        "app/add-comment/*"
+      ],
+      "@edit-user/*": [
+        "app/edit-user/*"
+      ],
+      "@create-contact*": [
+        "app/create-contact/*"
+      ],
+      "@add-event-diagnosis/*": [
+        "app/add-event-diagnosis/*"
+      ],
+      "@add-event-location/*": [
+        "app/add-event-location/*"
+      ],
+      "@add-event-location-contact/*": [
+        "app/add-event-location-contact/*"
+      ],
+      "@edit-location-species/*": [
+        "app/edit-location-species/*"
+      ],
+      "@edit-species-diagnosis/*": [
+        "app/edit-species-diagnosis/*"
+      ],
+      "@edit-event-location/*": [
+        "app/edit-event-location/*"
+      ],
+      "@diagnostic-services/*": [
+        "app/diagnostic-services/*"
+      ],
+      "@location-species-table/*": [
+        "app/location-species-table/*"
+      ],
+      "@add-service-request/*": [
+        "app/add-service-request/*"
+      ],
+      "@new-lookup-request/*": [
+        "app/new-lookup-request/*"
+      ],
+      "@save-search/*": [
+        "app/save-search/*"
+      ],
+      "@user-registration/*": [
+        "app/user-registration/*"
+      ],
+      "@view-contact-details/*": [
+        "app/view-contact-details/*"
+      ],
+      "@add-event-organization/*": [
+        "app/add-event-organization/*"
+      ],
+      "@user-events/*": [
+        "app/user-events/*"
+      ],
+      "@event-group/*": [
+        "app/event-group/*"
+      ],
+      "@event-group-management/*": [
+        "app/event-group-management/*"
+      ],
+      "@circle-management/*": [
+        "app/circle-management/*"
+      ],
+      "@circles/*": [
+        "app/circles/*"
+      ],
+      "@diagnostic-info/*": [
+        "app/diagnostic-info/*"
+      ],
+      "@view-comment-details/*": [
+        "app/view-comment-details/*"
+      ],
+      "@alert-collaborators/*": [
+        "app/alert-collaborators/*"
+      ],
+      "@custom-notification/*": [
+        "app/custom-notification/*"
+      ],
+      "@collaboration-request/*": [
+        "app/collaboration-request/*"
+      ],
+      "@bulk-upload/*": [
+        "app/bulk-upload/*"
+      ],
+      "@event-public-report/*": [
+        "app/event-public-report/*"
+      ],
+      "@search-results-summary-report/*": [
+        "app/search-results-summary-report/*"
+      ],
+      "@gnis-lookup/*": [
+        "app/gnis-lookup/*"
+      ],
       "@authentication/*": [
         "app/authentication/*"
       ],
       "@pipes/*": [
         "app/pipes/*"
+      ],
+      "@saved-searches/*": [
+        "app/saved-searches/*"
+      ],
+      "@edit-event/*": [
+        "app/edit-event/*"
       ],
       "@validators/*": [
         "app/validators/*"

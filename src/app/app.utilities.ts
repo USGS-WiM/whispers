@@ -4,6 +4,20 @@ import { DisplayQuery } from '@interfaces/display-query';
 
 import { APP_SETTINGS } from '@app/app.settings';
 
+export interface Notification {
+    id: number;
+    user: string;
+    source: string;
+    event: number;
+    read: boolean;
+    link: string;
+    message: string;
+    created_date: string;
+    created_by: string;
+    modified_date: string;
+    modified_by: string;
+}
+
 @Injectable()
 export class APP_UTILITIES {
 
@@ -12,7 +26,6 @@ export class APP_UTILITIES {
         const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
         const t = new Date(new Date().toDateString());
         return t;
-
     }
 
     // converts date string for use in date pickers (compensates for UTC)
@@ -43,9 +56,7 @@ export class APP_UTILITIES {
         } else {
             mm_string = mm.toString();
         }
-
         today_string = yyyy + '-' + mm_string + '-' + dd_string;
-
         return today_string;
     }
 
@@ -93,10 +104,8 @@ export class APP_UTILITIES {
         } else {
             mm_string = mm.toString();
         }
-
         // formatting the date
         today_string = mm_string + '/' + dd_string + '/' + yyyy + ' ' + hr_string + ':' + min_string + ' ' + ampm;
-
         return today_string;
     }
 
@@ -150,7 +159,6 @@ export class APP_UTILITIES {
 
         // formatting the date
         today_string = monthNames[today.getMonth()] + ' ' + dd_string + ', ' + yyyy + ' ' + hr_string + ':' + min_string + ' ' + ampm;
-
         return today_string;
     }
 
@@ -175,9 +183,7 @@ export class APP_UTILITIES {
         } else {
             mm_string = mm.toString();
         }
-
         today_string = yyyy + mm_string  + dd_string;
-
         return today_string;
     }
 
@@ -225,9 +231,7 @@ export class APP_UTILITIES {
         } else {
             mm_string = mm.toString();
         }
-
         previousDate_string = yyyy + '-' + mm_string + '-' + dd_string;
-
         return previousDate_string;
     }
 
@@ -240,10 +244,6 @@ export class APP_UTILITIES {
         // doing this quick and dirty to make quick progress now.
         return '30';
     }
-
-    // currently not in use because the conversion requires access to the full selected object (with name)
-    // from the search dialog form. an independent lookup of associated names may need to be developed.
-    // public static convertSearchQuerytoDisplayQuery(searchQuery): any {}
 
     public static checkDuplicateInObject(propertyName, inputArray): boolean {
         let seenDuplicate = false;
@@ -260,7 +260,6 @@ export class APP_UTILITIES {
                 delete item.duplicate;
             }
         });
-
         return seenDuplicate;
     }
 
@@ -344,5 +343,4 @@ export class APP_UTILITIES {
         }
         return parsedSearch;
     }
-
 }

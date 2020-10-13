@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatTabGroup } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { MatSnackBar } from '@angular/material';
@@ -51,7 +51,7 @@ export class UserDashboardComponent implements OnInit {
   selection;
   currentUser;
 
-  username = APP_SETTINGS.API_USERNAME;
+  selectedTab: number;
 
   contactDisplayedColumns = [
     'select',
@@ -84,6 +84,12 @@ export class UserDashboardComponent implements OnInit {
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
     });
+
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation.extras.state as { tab: number };
+    if (state !== undefined) {
+      this.selectedTab = state.tab;
+    }
 
   }
 
@@ -134,6 +140,9 @@ export class UserDashboardComponent implements OnInit {
       );
 
     this.contactsDataSource = new MatTableDataSource(this.contacts);
+
+    // set selected tab
+    // this.selectedTab = 0;
 
   }
 
@@ -282,7 +291,7 @@ export class UserDashboardComponent implements OnInit {
     this.newLookupRequestDialogRef.afterClosed()
       .subscribe(
         () => {
-          // do something after close
+
         },
         error => {
           this.errorMessage = <any>error;

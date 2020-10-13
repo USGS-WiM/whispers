@@ -39,11 +39,11 @@
         <button mat-icon-button (click)="navigateToHome()">
           <mat-icon class="icon">home</mat-icon>
         </button>
-        
+
         <!-- User Dashboard -->
-        <button mat-button aria-label="User Dashboard" *ngIf="currentUser.username != ''"(click)="openUserDashboard()">
-            <i class="material-icons">dashboard</i>
-            <span class="header-button-text">User Dashboard</span>
+        <button mat-button aria-label="User Dashboard" *ngIf="currentUser.username != ''" (click)="openUserDashboard()">
+          <i class="material-icons">dashboard</i>
+          <span class="header-button-text">User Dashboard</span>
         </button>
 
         <!-- Create Event -->
@@ -76,9 +76,33 @@
           </button>
         </span>
 
+        <!-- Notifications -->
+        <span *ngIf="currentUser.username !== '' && currentUser.role !== 7"
+          class="login-status signin-button">
+          <!--Button if there are no notifications-->
+          <button mat-button aria-label="notifications" *ngIf="unreadNotificationCount === 0"
+            (click)="navigateNotificationSelect()">
+            <mat-icon>notifications</mat-icon>&nbsp;Notifications&nbsp;
+          </button>
+
+          <!--Button if there are notifications-->
+          <button mat-button aria-label="notifications" *ngIf="unreadNotificationCount > 0"
+            matBadge="{{unreadNotificationCount > 99 ? '99+' : unreadNotificationCount}}" matBadgePosition="after" matBadgeColor="warn"
+            [matMenuTriggerFor]="menu">
+            <mat-icon>notifications</mat-icon>&nbsp;Notifications&nbsp;
+          </button>
+
+          <mat-menu #menu="matMenu" [overlapTrigger]="false">
+            <button *ngFor="let notification of previewNotifications" matTooltip="{{notification.subject}}"
+              (click)="navigateNotificationSelect(notification.event)" mat-menu-item><span class="text-bold">{{notification.subject}}</span></button>
+            <button class="navigateToDashboard" (click)="navigateNotificationSelect()" mat-menu-item>See all
+              notifications<mat-icon>arrow_forward</mat-icon></button>
+          </mat-menu>
+        </span>
+
         <span *ngIf="currentUser.username !== ''" class="login-status">{{currentUser.first_name}}
           {{currentUser.last_name}}
-          <button mat-button aria-label="Logout" id="logoutIcon" (click)="logout()"  matTooltip="Logout">
+          <button mat-button aria-label="Logout" id="logoutIcon" (click)="logout()" matTooltip="Logout">
             <mat-icon class="icon">exit_to_app</mat-icon> <!-- Could also use power_settings_new icon -->
           </button>
         </span>

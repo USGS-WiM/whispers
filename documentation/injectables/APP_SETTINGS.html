@@ -1,0 +1,2531 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>whispers documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">whispers documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Injectables</li>
+  <li>APP_SETTINGS</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/app.settings.ts</code>
+        </p>
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#_environment">_environment</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#API_ROOT">API_ROOT</a>
+                                </li>
+                                <li>
+                                    <a href="#environment">environment</a>
+                                </li>
+                                <li>
+                                    <a href="#IS_LOGGEDIN">IS_LOGGEDIN</a>
+                                </li>
+                                <li>
+                                    <a href="#APP_URL">APP_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#WHISPERS_METADATA_URL">WHISPERS_METADATA_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#DEFAULT_COUNTRY">DEFAULT_COUNTRY</a>
+                                </li>
+                                <li>
+                                    <a href="#VERSION">VERSION</a>
+                                </li>
+                                <li>
+                                    <a href="#QUERY_COUNT_LIMIT">QUERY_COUNT_LIMIT</a>
+                                </li>
+                                <li>
+                                    <a href="#UNDET_PENDING_DIAGNOSES">UNDET_PENDING_DIAGNOSES</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_COMPLETE_DIAGNOSIS_UNKNOWN">EVENT_COMPLETE_DIAGNOSIS_UNKNOWN</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN">EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN</a>
+                                </li>
+                                <li>
+                                    <a href="#SPECIAL_COMMENT_TYPES">SPECIAL_COMMENT_TYPES</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENTLOCATION_EXCLUDED_COMMENT_TYPES">EVENTLOCATION_EXCLUDED_COMMENT_TYPES</a>
+                                </li>
+                                <li>
+                                    <a href="#AUTH_URL">AUTH_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENTS_URL">EVENTS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_DETAILS_URL">EVENT_DETAILS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENTS_SUMMARIES_URL">EVENTS_SUMMARIES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#STAFF_URL">STAFF_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_TYPES_URL">EVENT_TYPES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_STATUSES_URL">EVENT_STATUSES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_ABSTRACTS_URL">EVENT_ABSTRACTS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_CASES_URL">EVENT_CASES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_LABSITES_URL">EVENT_LABSITES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_ORGANIZATIONS_URL">EVENT_ORGANIZATIONS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_CONTACTS_URL">EVENT_CONTACTS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_LOCATION_CONTACTS_URL">EVENT_LOCATION_CONTACTS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_LOCATIONS_URL">EVENT_LOCATIONS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#COUNTRIES_URL">COUNTRIES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#ADMINISTRATIVE_LEVEL_ONES_URL">ADMINISTRATIVE_LEVEL_ONES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#ADMINISTRATIVE_LEVEL_TWOS_URL">ADMINISTRATIVE_LEVEL_TWOS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#LAND_OWNERSHIPS_URL">LAND_OWNERSHIPS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#LEGAL_STATUS_URL">LEGAL_STATUS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#LOCATION_SPECIES_URL">LOCATION_SPECIES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#SPECIES_URL">SPECIES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#AGE_BIASES_URL">AGE_BIASES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#SEX_BIASES_URL">SEX_BIASES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#DIAGNOSES_URL">DIAGNOSES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#DIAGNOSIS_TYPES_URL">DIAGNOSIS_TYPES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#DIAGNOSIS_BASES_URL">DIAGNOSIS_BASES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#DIAGNOSIS_CAUSES_URL">DIAGNOSIS_CAUSES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_DIAGNOSES_URL">EVENT_DIAGNOSES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#LOCATION_SPECIES_DIAGNOSIS_URL">LOCATION_SPECIES_DIAGNOSIS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#PERMISSIONS_URL">PERMISSIONS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#PERMISSION_TYPES_URL">PERMISSION_TYPES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#FLYWAYS_URL">FLYWAYS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#COMMENTS_URL">COMMENTS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#ARTIFACTS_URL">ARTIFACTS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#USERS_URL">USERS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#ROLES_URL">ROLES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#ORGANIZATIONS_URL">ORGANIZATIONS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#CONTACTS_URL">CONTACTS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#CONTACT_TYPES_URL">CONTACT_TYPES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#COMMENT_TYPES_URL">COMMENT_TYPES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#GROUPS_URL">GROUPS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#CIRCLES_URL">CIRCLES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#SEARCH_URL">SEARCH_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#SERVICE_REQUEST_URL">SERVICE_REQUEST_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#SERVICE_REQUEST_TYPES_URL">SERVICE_REQUEST_TYPES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#SERVICE_REQUEST_RESPONSES_URL">SERVICE_REQUEST_RESPONSES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_GROUPS_URL">EVENT_GROUPS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_EVENT_GROUPS_URL">EVENT_EVENT_GROUPS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#EVENT_GROUP_CATEGORIES_URL">EVENT_GROUP_CATEGORIES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#NOTIFICATIONS_URL">NOTIFICATIONS_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#NOTIFICATION_CUE_CUSTOM_URL">NOTIFICATION_CUE_CUSTOM_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#NOTIFICATION_CUE_PREFERENCES_URL">NOTIFICATION_CUE_PREFERENCES_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#GO_USA_GOV_SHORTEN_URL">GO_USA_GOV_SHORTEN_URL</a>
+                                </li>
+                                <li>
+                                    <a href="#GO_USA_GOV_USER">GO_USA_GOV_USER</a>
+                                </li>
+                                <li>
+                                    <a href="#GO_USA_GOV_API_KEY">GO_USA_GOV_API_KEY</a>
+                                </li>
+                                <li>
+                                    <a href="#MIN_JSON_HEADERS">MIN_JSON_HEADERS</a>
+                                </li>
+                                <li>
+                                    <a href="#JSON_HEADERS">JSON_HEADERS</a>
+                                </li>
+                                <li>
+                                    <a href="#GO_USA_GOV_JSON_HEADERS">GO_USA_GOV_JSON_HEADERS</a>
+                                </li>
+                                <li>
+                                    <a href="#AUTH_HEADERS">AUTH_HEADERS</a>
+                                </li>
+                                <li>
+                                    <a href="#MIN_AUTH_JSON_HEADERS">MIN_AUTH_JSON_HEADERS</a>
+                                </li>
+                                <li>
+                                    <a href="#AUTH_JSON_HEADERS">AUTH_JSON_HEADERS</a>
+                                </li>
+                                <li>
+                                    <a href="#HTTP_CLIENT_MIN_AUTH_JSON_HEADERS">HTTP_CLIENT_MIN_AUTH_JSON_HEADERS</a>
+                                </li>
+                                <li>
+                                    <a href="#MIN_AUTH_TEXT_HEADERS">MIN_AUTH_TEXT_HEADERS</a>
+                                </li>
+                                <li>
+                                    <a href="#HTTP_CLIENT_MIN_AUTH_TEXT_HEADERS">HTTP_CLIENT_MIN_AUTH_TEXT_HEADERS</a>
+                                </li>
+                                <li>
+                                    <a href="#AUTH_REQUEST_HEADERS">AUTH_REQUEST_HEADERS</a>
+                                </li>
+                                <li>
+                                    <a href="#DEFAULT_SEARCH_QUERY">DEFAULT_SEARCH_QUERY</a>
+                                </li>
+                                <li>
+                                    <a href="#DEFAULT_DISPLAY_QUERY">DEFAULT_DISPLAY_QUERY</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+            <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="_environment"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                                <span class="modifier">Static</span>
+                            _environment</b>
+                            <a href="#_environment"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;development&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/app/app.settings.ts:11</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="API_ROOT"></a>
+                        <span class="name"><b>API_ROOT</b><a href="#API_ROOT"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>API_ROOT()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/app.settings.ts:16</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="environment"></a>
+                        <span class="name"><b>environment</b><a href="#environment"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>set</b><code>environment(env: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/app.settings.ts:20</a></div>
+                                </td>
+                            </tr>
+                    <tr>
+                        <td class="col-md-4">
+
+                                <div class="io-description">
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                        <td>Type</td>
+                                                    <td>Optional</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                            <td>env</td>
+                                                    
+                                                            <td>
+                                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                            </td>
+                                                    
+                                                        <td>
+                                                                No
+                                                        </td>
+                                                        
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="IS_LOGGEDIN"></a>
+                        <span class="name"><b>IS_LOGGEDIN</b><a href="#IS_LOGGEDIN"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>IS_LOGGEDIN()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/app.settings.ts:22</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="APP_URL"></a>
+                        <span class="name"><b>APP_URL</b><a href="#APP_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>APP_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/app.settings.ts:24</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="WHISPERS_METADATA_URL"></a>
+                        <span class="name"><b>WHISPERS_METADATA_URL</b><a href="#WHISPERS_METADATA_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>WHISPERS_METADATA_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/app.settings.ts:26</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="DEFAULT_COUNTRY"></a>
+                        <span class="name"><b>DEFAULT_COUNTRY</b><a href="#DEFAULT_COUNTRY"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>DEFAULT_COUNTRY()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/app.settings.ts:28</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="VERSION"></a>
+                        <span class="name"><b>VERSION</b><a href="#VERSION"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>VERSION()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/app.settings.ts:30</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="QUERY_COUNT_LIMIT"></a>
+                        <span class="name"><b>QUERY_COUNT_LIMIT</b><a href="#QUERY_COUNT_LIMIT"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>QUERY_COUNT_LIMIT()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/app.settings.ts:32</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="UNDET_PENDING_DIAGNOSES"></a>
+                        <span class="name"><b>UNDET_PENDING_DIAGNOSES</b><a href="#UNDET_PENDING_DIAGNOSES"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>UNDET_PENDING_DIAGNOSES()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/app.settings.ts:34</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_COMPLETE_DIAGNOSIS_UNKNOWN"></a>
+                        <span class="name"><b>EVENT_COMPLETE_DIAGNOSIS_UNKNOWN</b><a href="#EVENT_COMPLETE_DIAGNOSIS_UNKNOWN"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_COMPLETE_DIAGNOSIS_UNKNOWN()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/app.settings.ts:47</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN"></a>
+                        <span class="name"><b>EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN</b><a href="#EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/app.settings.ts:54</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="SPECIAL_COMMENT_TYPES"></a>
+                        <span class="name"><b>SPECIAL_COMMENT_TYPES</b><a href="#SPECIAL_COMMENT_TYPES"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>SPECIAL_COMMENT_TYPES()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/app.settings.ts:61</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENTLOCATION_EXCLUDED_COMMENT_TYPES"></a>
+                        <span class="name"><b>EVENTLOCATION_EXCLUDED_COMMENT_TYPES</b><a href="#EVENTLOCATION_EXCLUDED_COMMENT_TYPES"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENTLOCATION_EXCLUDED_COMMENT_TYPES()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="94" class="link-to-prism">src/app/app.settings.ts:94</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="AUTH_URL"></a>
+                        <span class="name"><b>AUTH_URL</b><a href="#AUTH_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>AUTH_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="111" class="link-to-prism">src/app/app.settings.ts:111</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENTS_URL"></a>
+                        <span class="name"><b>EVENTS_URL</b><a href="#EVENTS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENTS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="112" class="link-to-prism">src/app/app.settings.ts:112</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_DETAILS_URL"></a>
+                        <span class="name"><b>EVENT_DETAILS_URL</b><a href="#EVENT_DETAILS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_DETAILS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="113" class="link-to-prism">src/app/app.settings.ts:113</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENTS_SUMMARIES_URL"></a>
+                        <span class="name"><b>EVENTS_SUMMARIES_URL</b><a href="#EVENTS_SUMMARIES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENTS_SUMMARIES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="114" class="link-to-prism">src/app/app.settings.ts:114</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="STAFF_URL"></a>
+                        <span class="name"><b>STAFF_URL</b><a href="#STAFF_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>STAFF_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="115" class="link-to-prism">src/app/app.settings.ts:115</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_TYPES_URL"></a>
+                        <span class="name"><b>EVENT_TYPES_URL</b><a href="#EVENT_TYPES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_TYPES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="116" class="link-to-prism">src/app/app.settings.ts:116</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_STATUSES_URL"></a>
+                        <span class="name"><b>EVENT_STATUSES_URL</b><a href="#EVENT_STATUSES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_STATUSES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="117" class="link-to-prism">src/app/app.settings.ts:117</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_ABSTRACTS_URL"></a>
+                        <span class="name"><b>EVENT_ABSTRACTS_URL</b><a href="#EVENT_ABSTRACTS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_ABSTRACTS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="118" class="link-to-prism">src/app/app.settings.ts:118</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_CASES_URL"></a>
+                        <span class="name"><b>EVENT_CASES_URL</b><a href="#EVENT_CASES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_CASES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="119" class="link-to-prism">src/app/app.settings.ts:119</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_LABSITES_URL"></a>
+                        <span class="name"><b>EVENT_LABSITES_URL</b><a href="#EVENT_LABSITES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_LABSITES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="120" class="link-to-prism">src/app/app.settings.ts:120</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_ORGANIZATIONS_URL"></a>
+                        <span class="name"><b>EVENT_ORGANIZATIONS_URL</b><a href="#EVENT_ORGANIZATIONS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_ORGANIZATIONS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="121" class="link-to-prism">src/app/app.settings.ts:121</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_CONTACTS_URL"></a>
+                        <span class="name"><b>EVENT_CONTACTS_URL</b><a href="#EVENT_CONTACTS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_CONTACTS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="122" class="link-to-prism">src/app/app.settings.ts:122</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_LOCATION_CONTACTS_URL"></a>
+                        <span class="name"><b>EVENT_LOCATION_CONTACTS_URL</b><a href="#EVENT_LOCATION_CONTACTS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_LOCATION_CONTACTS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="123" class="link-to-prism">src/app/app.settings.ts:123</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_LOCATIONS_URL"></a>
+                        <span class="name"><b>EVENT_LOCATIONS_URL</b><a href="#EVENT_LOCATIONS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_LOCATIONS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="124" class="link-to-prism">src/app/app.settings.ts:124</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="COUNTRIES_URL"></a>
+                        <span class="name"><b>COUNTRIES_URL</b><a href="#COUNTRIES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>COUNTRIES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="125" class="link-to-prism">src/app/app.settings.ts:125</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="ADMINISTRATIVE_LEVEL_ONES_URL"></a>
+                        <span class="name"><b>ADMINISTRATIVE_LEVEL_ONES_URL</b><a href="#ADMINISTRATIVE_LEVEL_ONES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>ADMINISTRATIVE_LEVEL_ONES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="126" class="link-to-prism">src/app/app.settings.ts:126</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="ADMINISTRATIVE_LEVEL_TWOS_URL"></a>
+                        <span class="name"><b>ADMINISTRATIVE_LEVEL_TWOS_URL</b><a href="#ADMINISTRATIVE_LEVEL_TWOS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>ADMINISTRATIVE_LEVEL_TWOS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="127" class="link-to-prism">src/app/app.settings.ts:127</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="LAND_OWNERSHIPS_URL"></a>
+                        <span class="name"><b>LAND_OWNERSHIPS_URL</b><a href="#LAND_OWNERSHIPS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>LAND_OWNERSHIPS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="128" class="link-to-prism">src/app/app.settings.ts:128</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="LEGAL_STATUS_URL"></a>
+                        <span class="name"><b>LEGAL_STATUS_URL</b><a href="#LEGAL_STATUS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>LEGAL_STATUS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="129" class="link-to-prism">src/app/app.settings.ts:129</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="LOCATION_SPECIES_URL"></a>
+                        <span class="name"><b>LOCATION_SPECIES_URL</b><a href="#LOCATION_SPECIES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>LOCATION_SPECIES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="130" class="link-to-prism">src/app/app.settings.ts:130</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="SPECIES_URL"></a>
+                        <span class="name"><b>SPECIES_URL</b><a href="#SPECIES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>SPECIES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="131" class="link-to-prism">src/app/app.settings.ts:131</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="AGE_BIASES_URL"></a>
+                        <span class="name"><b>AGE_BIASES_URL</b><a href="#AGE_BIASES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>AGE_BIASES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="132" class="link-to-prism">src/app/app.settings.ts:132</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="SEX_BIASES_URL"></a>
+                        <span class="name"><b>SEX_BIASES_URL</b><a href="#SEX_BIASES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>SEX_BIASES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="133" class="link-to-prism">src/app/app.settings.ts:133</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="DIAGNOSES_URL"></a>
+                        <span class="name"><b>DIAGNOSES_URL</b><a href="#DIAGNOSES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>DIAGNOSES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="134" class="link-to-prism">src/app/app.settings.ts:134</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="DIAGNOSIS_TYPES_URL"></a>
+                        <span class="name"><b>DIAGNOSIS_TYPES_URL</b><a href="#DIAGNOSIS_TYPES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>DIAGNOSIS_TYPES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="135" class="link-to-prism">src/app/app.settings.ts:135</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="DIAGNOSIS_BASES_URL"></a>
+                        <span class="name"><b>DIAGNOSIS_BASES_URL</b><a href="#DIAGNOSIS_BASES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>DIAGNOSIS_BASES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="136" class="link-to-prism">src/app/app.settings.ts:136</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="DIAGNOSIS_CAUSES_URL"></a>
+                        <span class="name"><b>DIAGNOSIS_CAUSES_URL</b><a href="#DIAGNOSIS_CAUSES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>DIAGNOSIS_CAUSES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="137" class="link-to-prism">src/app/app.settings.ts:137</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_DIAGNOSES_URL"></a>
+                        <span class="name"><b>EVENT_DIAGNOSES_URL</b><a href="#EVENT_DIAGNOSES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_DIAGNOSES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="138" class="link-to-prism">src/app/app.settings.ts:138</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="LOCATION_SPECIES_DIAGNOSIS_URL"></a>
+                        <span class="name"><b>LOCATION_SPECIES_DIAGNOSIS_URL</b><a href="#LOCATION_SPECIES_DIAGNOSIS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>LOCATION_SPECIES_DIAGNOSIS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="139" class="link-to-prism">src/app/app.settings.ts:139</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="PERMISSIONS_URL"></a>
+                        <span class="name"><b>PERMISSIONS_URL</b><a href="#PERMISSIONS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>PERMISSIONS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="140" class="link-to-prism">src/app/app.settings.ts:140</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="PERMISSION_TYPES_URL"></a>
+                        <span class="name"><b>PERMISSION_TYPES_URL</b><a href="#PERMISSION_TYPES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>PERMISSION_TYPES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="141" class="link-to-prism">src/app/app.settings.ts:141</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="FLYWAYS_URL"></a>
+                        <span class="name"><b>FLYWAYS_URL</b><a href="#FLYWAYS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>FLYWAYS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="142" class="link-to-prism">src/app/app.settings.ts:142</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="COMMENTS_URL"></a>
+                        <span class="name"><b>COMMENTS_URL</b><a href="#COMMENTS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>COMMENTS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="143" class="link-to-prism">src/app/app.settings.ts:143</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="ARTIFACTS_URL"></a>
+                        <span class="name"><b>ARTIFACTS_URL</b><a href="#ARTIFACTS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>ARTIFACTS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="144" class="link-to-prism">src/app/app.settings.ts:144</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="USERS_URL"></a>
+                        <span class="name"><b>USERS_URL</b><a href="#USERS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>USERS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="145" class="link-to-prism">src/app/app.settings.ts:145</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="ROLES_URL"></a>
+                        <span class="name"><b>ROLES_URL</b><a href="#ROLES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>ROLES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="146" class="link-to-prism">src/app/app.settings.ts:146</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="ORGANIZATIONS_URL"></a>
+                        <span class="name"><b>ORGANIZATIONS_URL</b><a href="#ORGANIZATIONS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>ORGANIZATIONS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="147" class="link-to-prism">src/app/app.settings.ts:147</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="CONTACTS_URL"></a>
+                        <span class="name"><b>CONTACTS_URL</b><a href="#CONTACTS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>CONTACTS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="148" class="link-to-prism">src/app/app.settings.ts:148</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="CONTACT_TYPES_URL"></a>
+                        <span class="name"><b>CONTACT_TYPES_URL</b><a href="#CONTACT_TYPES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>CONTACT_TYPES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="149" class="link-to-prism">src/app/app.settings.ts:149</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="COMMENT_TYPES_URL"></a>
+                        <span class="name"><b>COMMENT_TYPES_URL</b><a href="#COMMENT_TYPES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>COMMENT_TYPES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="150" class="link-to-prism">src/app/app.settings.ts:150</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="GROUPS_URL"></a>
+                        <span class="name"><b>GROUPS_URL</b><a href="#GROUPS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>GROUPS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="151" class="link-to-prism">src/app/app.settings.ts:151</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="CIRCLES_URL"></a>
+                        <span class="name"><b>CIRCLES_URL</b><a href="#CIRCLES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>CIRCLES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="152" class="link-to-prism">src/app/app.settings.ts:152</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="SEARCH_URL"></a>
+                        <span class="name"><b>SEARCH_URL</b><a href="#SEARCH_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>SEARCH_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="153" class="link-to-prism">src/app/app.settings.ts:153</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="SERVICE_REQUEST_URL"></a>
+                        <span class="name"><b>SERVICE_REQUEST_URL</b><a href="#SERVICE_REQUEST_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>SERVICE_REQUEST_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="154" class="link-to-prism">src/app/app.settings.ts:154</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="SERVICE_REQUEST_TYPES_URL"></a>
+                        <span class="name"><b>SERVICE_REQUEST_TYPES_URL</b><a href="#SERVICE_REQUEST_TYPES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>SERVICE_REQUEST_TYPES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="155" class="link-to-prism">src/app/app.settings.ts:155</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="SERVICE_REQUEST_RESPONSES_URL"></a>
+                        <span class="name"><b>SERVICE_REQUEST_RESPONSES_URL</b><a href="#SERVICE_REQUEST_RESPONSES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>SERVICE_REQUEST_RESPONSES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="156" class="link-to-prism">src/app/app.settings.ts:156</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_GROUPS_URL"></a>
+                        <span class="name"><b>EVENT_GROUPS_URL</b><a href="#EVENT_GROUPS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_GROUPS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="157" class="link-to-prism">src/app/app.settings.ts:157</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_EVENT_GROUPS_URL"></a>
+                        <span class="name"><b>EVENT_EVENT_GROUPS_URL</b><a href="#EVENT_EVENT_GROUPS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_EVENT_GROUPS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="158" class="link-to-prism">src/app/app.settings.ts:158</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="EVENT_GROUP_CATEGORIES_URL"></a>
+                        <span class="name"><b>EVENT_GROUP_CATEGORIES_URL</b><a href="#EVENT_GROUP_CATEGORIES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>EVENT_GROUP_CATEGORIES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="159" class="link-to-prism">src/app/app.settings.ts:159</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="NOTIFICATIONS_URL"></a>
+                        <span class="name"><b>NOTIFICATIONS_URL</b><a href="#NOTIFICATIONS_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>NOTIFICATIONS_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="161" class="link-to-prism">src/app/app.settings.ts:161</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="NOTIFICATION_CUE_CUSTOM_URL"></a>
+                        <span class="name"><b>NOTIFICATION_CUE_CUSTOM_URL</b><a href="#NOTIFICATION_CUE_CUSTOM_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>NOTIFICATION_CUE_CUSTOM_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="162" class="link-to-prism">src/app/app.settings.ts:162</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="NOTIFICATION_CUE_PREFERENCES_URL"></a>
+                        <span class="name"><b>NOTIFICATION_CUE_PREFERENCES_URL</b><a href="#NOTIFICATION_CUE_PREFERENCES_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>NOTIFICATION_CUE_PREFERENCES_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="163" class="link-to-prism">src/app/app.settings.ts:163</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="GO_USA_GOV_SHORTEN_URL"></a>
+                        <span class="name"><b>GO_USA_GOV_SHORTEN_URL</b><a href="#GO_USA_GOV_SHORTEN_URL"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>GO_USA_GOV_SHORTEN_URL()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="165" class="link-to-prism">src/app/app.settings.ts:165</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="GO_USA_GOV_USER"></a>
+                        <span class="name"><b>GO_USA_GOV_USER</b><a href="#GO_USA_GOV_USER"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>GO_USA_GOV_USER()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="166" class="link-to-prism">src/app/app.settings.ts:166</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="GO_USA_GOV_API_KEY"></a>
+                        <span class="name"><b>GO_USA_GOV_API_KEY</b><a href="#GO_USA_GOV_API_KEY"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>GO_USA_GOV_API_KEY()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="167" class="link-to-prism">src/app/app.settings.ts:167</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="MIN_JSON_HEADERS"></a>
+                        <span class="name"><b>MIN_JSON_HEADERS</b><a href="#MIN_JSON_HEADERS"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>MIN_JSON_HEADERS()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="169" class="link-to-prism">src/app/app.settings.ts:169</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="JSON_HEADERS"></a>
+                        <span class="name"><b>JSON_HEADERS</b><a href="#JSON_HEADERS"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>JSON_HEADERS()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="170" class="link-to-prism">src/app/app.settings.ts:170</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="GO_USA_GOV_JSON_HEADERS"></a>
+                        <span class="name"><b>GO_USA_GOV_JSON_HEADERS</b><a href="#GO_USA_GOV_JSON_HEADERS"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>GO_USA_GOV_JSON_HEADERS()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="172" class="link-to-prism">src/app/app.settings.ts:172</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="AUTH_HEADERS"></a>
+                        <span class="name"><b>AUTH_HEADERS</b><a href="#AUTH_HEADERS"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>AUTH_HEADERS()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="174" class="link-to-prism">src/app/app.settings.ts:174</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="MIN_AUTH_JSON_HEADERS"></a>
+                        <span class="name"><b>MIN_AUTH_JSON_HEADERS</b><a href="#MIN_AUTH_JSON_HEADERS"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>MIN_AUTH_JSON_HEADERS()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="180" class="link-to-prism">src/app/app.settings.ts:180</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="AUTH_JSON_HEADERS"></a>
+                        <span class="name"><b>AUTH_JSON_HEADERS</b><a href="#AUTH_JSON_HEADERS"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>AUTH_JSON_HEADERS()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="188" class="link-to-prism">src/app/app.settings.ts:188</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="HTTP_CLIENT_MIN_AUTH_JSON_HEADERS"></a>
+                        <span class="name"><b>HTTP_CLIENT_MIN_AUTH_JSON_HEADERS</b><a href="#HTTP_CLIENT_MIN_AUTH_JSON_HEADERS"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>HTTP_CLIENT_MIN_AUTH_JSON_HEADERS()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="196" class="link-to-prism">src/app/app.settings.ts:196</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="MIN_AUTH_TEXT_HEADERS"></a>
+                        <span class="name"><b>MIN_AUTH_TEXT_HEADERS</b><a href="#MIN_AUTH_TEXT_HEADERS"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>MIN_AUTH_TEXT_HEADERS()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="203" class="link-to-prism">src/app/app.settings.ts:203</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="HTTP_CLIENT_MIN_AUTH_TEXT_HEADERS"></a>
+                        <span class="name"><b>HTTP_CLIENT_MIN_AUTH_TEXT_HEADERS</b><a href="#HTTP_CLIENT_MIN_AUTH_TEXT_HEADERS"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>HTTP_CLIENT_MIN_AUTH_TEXT_HEADERS()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="211" class="link-to-prism">src/app/app.settings.ts:211</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="AUTH_REQUEST_HEADERS"></a>
+                        <span class="name"><b>AUTH_REQUEST_HEADERS</b><a href="#AUTH_REQUEST_HEADERS"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>AUTH_REQUEST_HEADERS()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="220" class="link-to-prism">src/app/app.settings.ts:220</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="DEFAULT_SEARCH_QUERY"></a>
+                        <span class="name"><b>DEFAULT_SEARCH_QUERY</b><a href="#DEFAULT_SEARCH_QUERY"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>DEFAULT_SEARCH_QUERY()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="227" class="link-to-prism">src/app/app.settings.ts:227</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="DEFAULT_DISPLAY_QUERY"></a>
+                        <span class="name"><b>DEFAULT_DISPLAY_QUERY</b><a href="#DEFAULT_DISPLAY_QUERY"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>DEFAULT_DISPLAY_QUERY()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="250" class="link-to-prism">src/app/app.settings.ts:250</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { Headers } from &#x27;@angular/http&#x27;;
+import { HttpHeaders } from &#x27;@angular/common/http&#x27;;
+import { environment } from &#x27;environments/environment&#x27;;
+import { DisplayQuery } from &#x27;@interfaces/display-query&#x27;;
+import { APP_UTILITIES } from &#x27;@app/app.utilities&#x27;;
+
+@Injectable()
+export class APP_SETTINGS {
+
+    private static _environment &#x3D; &#x27;development&#x27;;
+    // tslint:disable-next-line:max-line-length
+    // private static API_ROOT: string &#x3D; APP_SETTINGS._environment &#x3D;&#x3D;&#x3D; &#x27;production&#x27; ? &#x27;https://whispersbeta.wim.usgs.gov/test/whispersservices/&#x27; : &#x27;https://whispersdev.wim.usgs.gov/whispersservices/&#x27;;
+
+    // default env is development
+    public static get API_ROOT() {
+        return environment.api_root;
+    }
+
+    public static set environment(env: string) { this._environment &#x3D; env; }
+
+    public static get IS_LOGGEDIN(): boolean { return (!!sessionStorage.getItem(&#x27;username&#x27;) &amp;&amp; !!sessionStorage.getItem(&#x27;password&#x27;)); }
+
+    public static get APP_URL(): string { return &#x27;https://whispers.usgs.gov&#x27;; }
+
+    public static get WHISPERS_METADATA_URL(): string { return &#x27;https://www.usgs.gov/centers/nwhc/science/whispers&#x27;; }
+
+    public static get DEFAULT_COUNTRY(): string { return &#x27;USA&#x27;; }
+
+    public static get VERSION() { return environment.version; }
+
+    public static get QUERY_COUNT_LIMIT() { return 500; }
+
+    public static get UNDET_PENDING_DIAGNOSES() {
+        return [
+            {
+                &#x27;diagnosis&#x27;: 469,
+                &#x27;diagnosis_string&#x27;: &#x27;Undetermined&#x27;,
+            },
+            {
+                &#x27;diagnosis&#x27;: 104,
+                &#x27;diagnosis_string&#x27;: &#x27;Pending&#x27;,
+            }
+        ];
+    }
+
+    public static get EVENT_COMPLETE_DIAGNOSIS_UNKNOWN() {
+        return {
+            &#x27;diagnosis&#x27;: 469,
+            &#x27;diagnosis_string&#x27;: &#x27;Undetermined&#x27;,
+        };
+    }
+
+    public static get EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN() {
+        return {
+            &#x27;diagnosis&#x27;: 104,
+            &#x27;diagnosis_string&#x27;: &#x27;Pending&#x27;,
+        };
+    }
+
+    public static get SPECIAL_COMMENT_TYPES() {
+        return [
+            {
+                &#x27;id&#x27;: 1,
+                &#x27;name&#x27;: &#x27;Site Description&#x27;,
+            },
+            {
+                &#x27;id&#x27;: 2,
+                &#x27;name&#x27;: &#x27;History&#x27;,
+            },
+            {
+                &#x27;id&#x27;: 3,
+                &#x27;name&#x27;: &#x27;Environmental factors&#x27;,
+            },
+            {
+                &#x27;id&#x27;: 4,
+                &#x27;name&#x27;: &#x27;Clinical signs&#x27;,
+            },
+            {
+                &#x27;id&#x27;: 8,
+                &#x27;name&#x27;: &#x27;NWHC&#x27;,
+            },
+            {
+                &#x27;id&#x27;: 11,
+                &#x27;name&#x27;: &#x27;Event Group&#x27;,
+            },
+            {
+                &#x27;id&#x27;: 12,
+                &#x27;name&#x27;: &#x27;Collaborator Alert&#x27;,
+            }
+        ];
+    }
+
+    public static get EVENTLOCATION_EXCLUDED_COMMENT_TYPES() {
+        return [
+            {
+                &#x27;id&#x27;: 8,
+                &#x27;name&#x27;: &#x27;NWHC&#x27;,
+            },
+            {
+                &#x27;id&#x27;: 11,
+                &#x27;name&#x27;: &#x27;Event Group&#x27;,
+            },
+            {
+                &#x27;id&#x27;: 12,
+                &#x27;name&#x27;: &#x27;Collaborator Alert&#x27;,
+            }
+        ];
+    }
+
+    public static get AUTH_URL(): string { return this.API_ROOT + &#x27;auth/&#x27;; }
+    public static get EVENTS_URL(): string { return this.API_ROOT + &#x27;events/&#x27;; }
+    public static get EVENT_DETAILS_URL(): string { return this.API_ROOT + &#x27;eventdetails/&#x27;; }
+    public static get EVENTS_SUMMARIES_URL(): string { return this.API_ROOT + &#x27;eventsummaries/&#x27;; }
+    public static get STAFF_URL(): string { return this.API_ROOT + &#x27;staff/&#x27;; }
+    public static get EVENT_TYPES_URL(): string { return this.API_ROOT + &#x27;eventtypes/&#x27;; }
+    public static get EVENT_STATUSES_URL(): string { return this.API_ROOT + &#x27;eventstatuses/&#x27;; }
+    public static get EVENT_ABSTRACTS_URL(): string { return this.API_ROOT + &#x27;eventabstracts/&#x27;; }
+    public static get EVENT_CASES_URL(): string { return this.API_ROOT + &#x27;eventcases/&#x27;; }
+    public static get EVENT_LABSITES_URL(): string { return this.API_ROOT + &#x27;eventlabsites/&#x27;; }
+    public static get EVENT_ORGANIZATIONS_URL(): string { return this.API_ROOT + &#x27;eventorganizations/&#x27;; }
+    public static get EVENT_CONTACTS_URL(): string { return this.API_ROOT + &#x27;eventcontacts/&#x27;; }
+    public static get EVENT_LOCATION_CONTACTS_URL(): string { return this.API_ROOT + &#x27;eventlocationcontacts/&#x27;; }
+    public static get EVENT_LOCATIONS_URL(): string { return this.API_ROOT + &#x27;eventlocations/&#x27;; }
+    public static get COUNTRIES_URL(): string { return this.API_ROOT + &#x27;countries/&#x27;; }
+    public static get ADMINISTRATIVE_LEVEL_ONES_URL(): string { return this.API_ROOT + &#x27;administrativelevelones/&#x27;; }
+    public static get ADMINISTRATIVE_LEVEL_TWOS_URL(): string { return this.API_ROOT + &#x27;administrativeleveltwos/&#x27;; }
+    public static get LAND_OWNERSHIPS_URL(): string { return this.API_ROOT + &#x27;landownerships/&#x27;; }
+    public static get LEGAL_STATUS_URL(): string { return this.API_ROOT + &#x27;legalstatuses/&#x27;; }
+    public static get LOCATION_SPECIES_URL(): string { return this.API_ROOT + &#x27;locationspecies/&#x27;; }
+    public static get SPECIES_URL(): string { return this.API_ROOT + &#x27;species/&#x27;; }
+    public static get AGE_BIASES_URL(): string { return this.API_ROOT + &#x27;agebiases/&#x27;; }
+    public static get SEX_BIASES_URL(): string { return this.API_ROOT + &#x27;sexbiases/&#x27;; }
+    public static get DIAGNOSES_URL(): string { return this.API_ROOT + &#x27;diagnoses/&#x27;; }
+    public static get DIAGNOSIS_TYPES_URL(): string { return this.API_ROOT + &#x27;diagnosistypes/&#x27;; }
+    public static get DIAGNOSIS_BASES_URL(): string { return this.API_ROOT + &#x27;diagnosisbases/&#x27;; }
+    public static get DIAGNOSIS_CAUSES_URL(): string { return this.API_ROOT + &#x27;diagnosiscauses/&#x27;; }
+    public static get EVENT_DIAGNOSES_URL(): string { return this.API_ROOT + &#x27;eventdiagnoses/&#x27;; }
+    public static get LOCATION_SPECIES_DIAGNOSIS_URL(): string { return this.API_ROOT + &#x27;speciesdiagnoses/&#x27;; }
+    public static get PERMISSIONS_URL(): string { return this.API_ROOT + &#x27;permissions/&#x27;; }
+    public static get PERMISSION_TYPES_URL(): string { return this.API_ROOT + &#x27;permissionstypes&#x27;; }
+    public static get FLYWAYS_URL(): string { return this.API_ROOT + &#x27;flyways/&#x27;; }
+    public static get COMMENTS_URL(): string { return this.API_ROOT + &#x27;comments/&#x27;; }
+    public static get ARTIFACTS_URL(): string { return this.API_ROOT + &#x27;artifacts/&#x27;; }
+    public static get USERS_URL(): string { return this.API_ROOT + &#x27;users/&#x27;; }
+    public static get ROLES_URL(): string { return this.API_ROOT + &#x27;roles/&#x27;; }
+    public static get ORGANIZATIONS_URL(): string { return this.API_ROOT + &#x27;organizations/&#x27;; }
+    public static get CONTACTS_URL(): string { return this.API_ROOT + &#x27;contacts/&#x27;; }
+    public static get CONTACT_TYPES_URL(): string { return this.API_ROOT + &#x27;contacttypes/&#x27;; }
+    public static get COMMENT_TYPES_URL(): string { return this.API_ROOT + &#x27;commenttypes/&#x27;; }
+    public static get GROUPS_URL(): string { return this.API_ROOT + &#x27;groups/&#x27;; }
+    public static get CIRCLES_URL(): string { return this.API_ROOT + &#x27;circles/&#x27;; }
+    public static get SEARCH_URL(): string { return this.API_ROOT + &#x27;searches/&#x27;; }
+    public static get SERVICE_REQUEST_URL(): string { return this.API_ROOT + &#x27;servicerequests/&#x27;; }
+    public static get SERVICE_REQUEST_TYPES_URL(): string { return this.API_ROOT + &#x27;servicerequesttypes/&#x27;; }
+    public static get SERVICE_REQUEST_RESPONSES_URL(): string { return this.API_ROOT + &#x27;servicerequestresponses/&#x27;; }
+    public static get EVENT_GROUPS_URL(): string { return this.API_ROOT + &#x27;eventgroups/&#x27;; }
+    public static get EVENT_EVENT_GROUPS_URL(): string { return this.API_ROOT + &#x27;eventeventgroups/&#x27;; }
+    public static get EVENT_GROUP_CATEGORIES_URL(): string { return this.API_ROOT + &#x27;eventgroupcategories/&#x27;; }
+
+    public static get NOTIFICATIONS_URL(): string { return this.API_ROOT + &#x27;notifications/&#x27;; }
+    public static get NOTIFICATION_CUE_CUSTOM_URL(): string { return this.API_ROOT + &#x27;notificationcuecustoms/&#x27;; }
+    public static get NOTIFICATION_CUE_PREFERENCES_URL(): string { return this.API_ROOT + &#x27;notificationcuepreferences/&#x27;; }
+
+    public static get GO_USA_GOV_SHORTEN_URL(): string { return &#x27;https://go.usa.gov/api/shorten.json&#x27;; }
+    public static get GO_USA_GOV_USER(): string { return &#x27;bdraper&#x27;; }
+    public static get GO_USA_GOV_API_KEY(): string { return &#x27;c9f06b2f3be4a9f764a4421df159a2e0&#x27;; }
+
+    public static get MIN_JSON_HEADERS() { return new Headers({ &#x27;Accept&#x27;: &#x27;application/json&#x27; }); }
+    public static get JSON_HEADERS() { return new Headers({ &#x27;Accept&#x27;: &#x27;application/json&#x27;, &#x27;Content-Type&#x27;: &#x27;application/json&#x27; }); }
+
+    public static get GO_USA_GOV_JSON_HEADERS() { return new Headers({}); }
+
+    public static get AUTH_HEADERS() {
+        return new Headers({
+            &#x27;Authorization&#x27;: &#x27;Basic &#x27; + btoa(sessionStorage.username + &#x27;:&#x27; + sessionStorage.password)
+        });
+    }
+
+    public static get MIN_AUTH_JSON_HEADERS() {
+        return new Headers({
+            &#x27;Authorization&#x27;: &#x27;Basic &#x27; + btoa(sessionStorage.username + &#x27;:&#x27; + sessionStorage.password),
+            &#x27;Accept&#x27;: &#x27;application/json&#x27;,
+            &#x27;Content-Type&#x27;: &#x27;application/json&#x27;
+        });
+    }
+
+    public static get AUTH_JSON_HEADERS() {
+        return new Headers({
+            &#x27;Authorization&#x27;: &#x27;Basic &#x27; + btoa(sessionStorage.username + &#x27;:&#x27; + sessionStorage.password),
+            &#x27;Accept&#x27;: &#x27;application/json&#x27;,
+            &#x27;Content-Type&#x27;: &#x27;application/json&#x27;
+        });
+    }
+
+    public static get HTTP_CLIENT_MIN_AUTH_JSON_HEADERS() {
+        return new HttpHeaders({
+            &#x27;Authorization&#x27;: &#x27;Basic &#x27; + btoa(sessionStorage.username + &#x27;:&#x27; + sessionStorage.password),
+            &#x27;Accept&#x27;: &#x27;application/json&#x27;
+        });
+    }
+
+    public static get MIN_AUTH_TEXT_HEADERS() {
+        return new Headers({
+            &#x27;Authorization&#x27;: &#x27;Basic &#x27; + btoa(sessionStorage.username + &#x27;:&#x27; + sessionStorage.password),
+            &#x27;Content-Type&#x27;: &#x27;text/plain&#x27;,
+            &#x27;Accept&#x27;: &#x27;application/json&#x27;
+        });
+    }
+
+    public static get HTTP_CLIENT_MIN_AUTH_TEXT_HEADERS() {
+        return new HttpHeaders({
+            &#x27;Authorization&#x27;: &#x27;Basic &#x27; + btoa(sessionStorage.username + &#x27;:&#x27; + sessionStorage.password),
+            &#x27;Content-Type&#x27;: &#x27;text/plain&#x27;,
+            &#x27;Accept&#x27;: &#x27;application/json&#x27;
+        });
+    }
+
+
+    public static get AUTH_REQUEST_HEADERS() {
+        return new Headers({
+            &#x27;Authorization&#x27;: &#x27;Basic &#x27; + btoa(sessionStorage.username + &#x27;:&#x27; + sessionStorage.password)
+        });
+    }
+
+    // default search query for initial load of home page (may eventually come from some other source)
+    public static get DEFAULT_SEARCH_QUERY() {
+        return {
+            &#x27;event_type&#x27;: [],
+            &#x27;diagnosis&#x27;: [],
+            &#x27;diagnosis_type&#x27;: [],
+            &#x27;species&#x27;: [],
+            &#x27;administrative_level_one&#x27;: [],
+            &#x27;administrative_level_two&#x27;: [],
+            &#x27;affected_count&#x27;: null,
+            &#x27;affected_count_operator&#x27;: &#x27;&#x27;,
+            &#x27;start_date&#x27;: APP_UTILITIES.getDaysPreviousDate,
+            &#x27;end_date&#x27;: APP_UTILITIES.getTodayDate,
+            &#x27;diagnosis_type_includes_all&#x27;: false,
+            &#x27;diagnosis_includes_all&#x27;: false,
+            &#x27;species_includes_all&#x27;: false,
+            &#x27;administrative_level_one_includes_all&#x27;: false,
+            &#x27;administrative_level_two_includes_all&#x27;: false,
+            &#x27;and_params&#x27;: [],
+            // &#x27;complete&#x27;: false
+        };
+    }
+
+    // default display query (display verison of search query above) for initial load of home page
+    public static get DEFAULT_DISPLAY_QUERY(): DisplayQuery {
+        return {
+            &#x27;event_type&#x27;: [],
+            &#x27;diagnosis&#x27;: [],
+            &#x27;diagnosis_type&#x27;: [],
+            &#x27;species&#x27;: [],
+            &#x27;administrative_level_one&#x27;: [],
+            &#x27;administrative_level_two&#x27;: [],
+            &#x27;affected_count&#x27;: null,
+            &#x27;affected_count_operator&#x27;: &#x27;&#x27;,
+            &#x27;start_date&#x27;: APP_UTILITIES.getDaysPreviousDate,
+            &#x27;end_date&#x27;: APP_UTILITIES.getTodayDate,
+            &#x27;diagnosis_type_includes_all&#x27;: false,
+            &#x27;diagnosis_includes_all&#x27;: false,
+            &#x27;species_includes_all&#x27;: false,
+            &#x27;administrative_level_one_includes_all&#x27;: false,
+            &#x27;administrative_level_two_includes_all&#x27;: false,
+            &#x27;and_params&#x27;: [],
+            // &#x27;complete&#x27;: false
+        };
+    }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'APP_SETTINGS.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

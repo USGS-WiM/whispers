@@ -1,0 +1,2526 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>whispers documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">whispers documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>BulkUploadComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/bulk-upload/bulk-upload.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-bulk-upload</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./bulk-upload.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./bulk-upload.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#adminLevelOnes">adminLevelOnes</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#bulkUploadDialogRef">bulkUploadDialogRef</a>
+                            </li>
+                            <li>
+                                <a href="#bulkUploadProcessing">bulkUploadProcessing</a>
+                            </li>
+                            <li>
+                                <a href="#confirmDialogRef">confirmDialogRef</a>
+                            </li>
+                            <li>
+                                <a href="#countries">countries</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#data">data</a>
+                            </li>
+                            <li>
+                                <a href="#errorMessage">errorMessage</a>
+                            </li>
+                            <li>
+                                <a href="#eventCount">eventCount</a>
+                            </li>
+                            <li>
+                                <a href="#newEventsArray">newEventsArray</a>
+                            </li>
+                            <li>
+                                <a href="#parsedData">parsedData</a>
+                            </li>
+                            <li>
+                                <a href="#rawData">rawData</a>
+                            </li>
+                            <li>
+                                <a href="#responseCount">responseCount</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#snackBar">snackBar</a>
+                            </li>
+                            <li>
+                                <a href="#speciesDiagnosisArray">speciesDiagnosisArray</a>
+                            </li>
+                            <li>
+                                <a href="#submitLoading">submitLoading</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#addDiagnosisOrganizations">addDiagnosisOrganizations</a>
+                            </li>
+                            <li>
+                                <a href="#addeventLocation">addeventLocation</a>
+                            </li>
+                            <li>
+                                <a href="#addLocationSpecies">addLocationSpecies</a>
+                            </li>
+                            <li>
+                                <a href="#addSpeciesDiagnosis">addSpeciesDiagnosis</a>
+                            </li>
+                            <li>
+                                <a href="#buildDiagnosisLabArray">buildDiagnosisLabArray</a>
+                            </li>
+                            <li>
+                                <a href="#buildEventDiagnosisArray">buildEventDiagnosisArray</a>
+                            </li>
+                            <li>
+                                <a href="#buildEventRecord">buildEventRecord</a>
+                            </li>
+                            <li>
+                                <a href="#downloadGuidance">downloadGuidance</a>
+                            </li>
+                            <li>
+                                <a href="#downloadTemplate">downloadTemplate</a>
+                            </li>
+                            <li>
+                                <a href="#iterateEventCount">iterateEventCount</a>
+                            </li>
+                            <li>
+                                <a href="#lookupAdminLevelOneID">lookupAdminLevelOneID</a>
+                            </li>
+                            <li>
+                                <a href="#lookupCountryID">lookupCountryID</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onFileSelected">onFileSelected</a>
+                            </li>
+                            <li>
+                                <a href="#openSnackBar">openSnackBar</a>
+                            </li>
+                            <li>
+                                <a href="#parseSpeciesDiagnosisArray">parseSpeciesDiagnosisArray</a>
+                            </li>
+                            <li>
+                                <a href="#submitData">submitData</a>
+                            </li>
+                            <li>
+                                <a href="#submitEvent">submitEvent</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(bulkUploadDialogRef: <a href="../components/BulkUploadComponent.html">MatDialogRef<BulkUploadComponent></a>, snackBar: MatSnackBar, countryService: <a href="../injectables/CountryService.html">CountryService</a>, adminLevelOneService: <a href="../injectables/AdministrativeLevelOneService.html">AdministrativeLevelOneService</a>, adminLevelTwoService: <a href="../injectables/AdministrativeLevelTwoService.html">AdministrativeLevelTwoService</a>, eventService: <a href="../injectables/EventService.html">EventService</a>, datePipe: <a href="https://angular.io/api/common/DatePipe" target="_blank">DatePipe</a>, papa: Papa, dialog: MatDialog, data: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:46</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>bulkUploadDialogRef</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../components/BulkUploadComponent.html" target="_self" >MatDialogRef&lt;BulkUploadComponent&gt;</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>snackBar</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatSnackBar</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>countryService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CountryService.html" target="_self" >CountryService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>adminLevelOneService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AdministrativeLevelOneService.html" target="_self" >AdministrativeLevelOneService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>adminLevelTwoService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AdministrativeLevelTwoService.html" target="_self" >AdministrativeLevelTwoService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>eventService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/EventService.html" target="_self" >EventService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>datePipe</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/common/DatePipe" target="_blank" >DatePipe</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>papa</td>
+                                                  
+                                                        <td>
+                                                                    <code>Papa</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dialog</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatDialog</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>data</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addDiagnosisOrganizations"></a>
+                    <span class="name">
+                        <b>
+                            addDiagnosisOrganizations
+                        </b>
+                        <a href="#addDiagnosisOrganizations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addDiagnosisOrganizations(organizationsInput)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="159"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:159</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>organizationsInput</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addeventLocation"></a>
+                    <span class="name">
+                        <b>
+                            addeventLocation
+                        </b>
+                        <a href="#addeventLocation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addeventLocation(eventLocation: <a href="../interfaces/NewEventLocation.html">NewEventLocation</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="151"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:151</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>eventLocation</td>
+                                    <td>
+                                                <code><a href="../interfaces/NewEventLocation.html" target="_self" >NewEventLocation</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addLocationSpecies"></a>
+                    <span class="name">
+                        <b>
+                            addLocationSpecies
+                        </b>
+                        <a href="#addLocationSpecies"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addLocationSpecies(locationSpecies: <a href="../interfaces/NewLocationSpecies.html">NewLocationSpecies</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="155"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:155</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>locationSpecies</td>
+                                    <td>
+                                                <code><a href="../interfaces/NewLocationSpecies.html" target="_self" >NewLocationSpecies</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addSpeciesDiagnosis"></a>
+                    <span class="name">
+                        <b>
+                            addSpeciesDiagnosis
+                        </b>
+                        <a href="#addSpeciesDiagnosis"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addSpeciesDiagnosis(speciesDiagnosis: <a href="../interfaces/NewSpeciesDiagnosis.html">NewSpeciesDiagnosis</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="157"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:157</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>speciesDiagnosis</td>
+                                    <td>
+                                                <code><a href="../interfaces/NewSpeciesDiagnosis.html" target="_self" >NewSpeciesDiagnosis</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildDiagnosisLabArray"></a>
+                    <span class="name">
+                        <b>
+                            buildDiagnosisLabArray
+                        </b>
+                        <a href="#buildDiagnosisLabArray"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>buildDiagnosisLabArray(orgIDArray)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="146"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:146</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>orgIDArray</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildEventDiagnosisArray"></a>
+                    <span class="name">
+                        <b>
+                            buildEventDiagnosisArray
+                        </b>
+                        <a href="#buildEventDiagnosisArray"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>buildEventDiagnosisArray(diagnosisIDArray)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="123"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:123</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>diagnosisIDArray</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildEventRecord"></a>
+                    <span class="name">
+                        <b>
+                            buildEventRecord
+                        </b>
+                        <a href="#buildEventRecord"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>buildEventRecord(eventObj: <a href="../interfaces/EventSubmission.html">EventSubmission</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="121"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:121</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>eventObj</td>
+                                    <td>
+                                                <code><a href="../interfaces/EventSubmission.html" target="_self" >EventSubmission</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="downloadGuidance"></a>
+                    <span class="name">
+                        <b>
+                            downloadGuidance
+                        </b>
+                        <a href="#downloadGuidance"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>downloadGuidance()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="433"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:433</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="downloadTemplate"></a>
+                    <span class="name">
+                        <b>
+                            downloadTemplate
+                        </b>
+                        <a href="#downloadTemplate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>downloadTemplate()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="436"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:436</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="iterateEventCount"></a>
+                    <span class="name">
+                        <b>
+                            iterateEventCount
+                        </b>
+                        <a href="#iterateEventCount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>iterateEventCount()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="425"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:425</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="lookupAdminLevelOneID"></a>
+                    <span class="name">
+                        <b>
+                            lookupAdminLevelOneID
+                        </b>
+                        <a href="#lookupAdminLevelOneID"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>lookupAdminLevelOneID(adminLevelOneAbbreviation)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="139"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:139</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>adminLevelOneAbbreviation</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="lookupCountryID"></a>
+                    <span class="name">
+                        <b>
+                            lookupCountryID
+                        </b>
+                        <a href="#lookupCountryID"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>lookupCountryID(countryAbbreviation)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="132"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:132</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>countryAbbreviation</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="61"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:61</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onFileSelected"></a>
+                    <span class="name">
+                        <b>
+                            onFileSelected
+                        </b>
+                        <a href="#onFileSelected"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onFileSelected()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="92"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:92</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openSnackBar"></a>
+                    <span class="name">
+                        <b>
+                            openSnackBar
+                        </b>
+                        <a href="#openSnackBar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openSnackBar(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, action: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, duration: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="440"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:440</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>message</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>action</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>duration</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseSpeciesDiagnosisArray"></a>
+                    <span class="name">
+                        <b>
+                            parseSpeciesDiagnosisArray
+                        </b>
+                        <a href="#parseSpeciesDiagnosisArray"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>parseSpeciesDiagnosisArray(dataArray)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="172"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:172</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>dataArray</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="submitData"></a>
+                    <span class="name">
+                        <b>
+                            submitData
+                        </b>
+                        <a href="#submitData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>submitData(newEventsArray)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="415"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:415</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>newEventsArray</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="submitEvent"></a>
+                    <span class="name">
+                        <b>
+                            submitEvent
+                        </b>
+                        <a href="#submitEvent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>submitEvent(eventSubmission)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="371"
+                            class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:371</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>eventSubmission</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="adminLevelOnes"></a>
+                        <span class="name">
+                            <b>
+                            adminLevelOnes</b>
+                            <a href="#adminLevelOnes"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:40</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="bulkUploadDialogRef"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            bulkUploadDialogRef</b>
+                            <a href="#bulkUploadDialogRef"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../components/BulkUploadComponent.html" target="_self" >MatDialogRef&lt;BulkUploadComponent&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:49</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="bulkUploadProcessing"></a>
+                        <span class="name">
+                            <b>
+                            bulkUploadProcessing</b>
+                            <a href="#bulkUploadProcessing"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:46</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="confirmDialogRef"></a>
+                        <span class="name">
+                            <b>
+                            confirmDialogRef</b>
+                            <a href="#confirmDialogRef"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../components/ConfirmComponent.html" target="_self" >MatDialogRef&lt;ConfirmComponent&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:41</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="countries"></a>
+                        <span class="name">
+                            <b>
+                            countries</b>
+                            <a href="#countries"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:39</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="data"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            data</b>
+                            <a href="#data"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @Inject(MAT_DIALOG_DATA)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:58</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="errorMessage"></a>
+                        <span class="name">
+                            <b>
+                            errorMessage</b>
+                            <a href="#errorMessage"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:31</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="eventCount"></a>
+                        <span class="name">
+                            <b>
+                            eventCount</b>
+                            <a href="#eventCount"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:43</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="newEventsArray"></a>
+                        <span class="name">
+                            <b>
+                            newEventsArray</b>
+                            <a href="#newEventsArray"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>EventSubmission[]</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:37</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="parsedData"></a>
+                        <span class="name">
+                            <b>
+                            parsedData</b>
+                            <a href="#parsedData"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:35</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="rawData"></a>
+                        <span class="name">
+                            <b>
+                            rawData</b>
+                            <a href="#rawData"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:34</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="responseCount"></a>
+                        <span class="name">
+                            <b>
+                            responseCount</b>
+                            <a href="#responseCount"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:44</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="snackBar"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            snackBar</b>
+                            <a href="#snackBar"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>MatSnackBar</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:50</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="speciesDiagnosisArray"></a>
+                        <span class="name">
+                            <b>
+                            speciesDiagnosisArray</b>
+                            <a href="#speciesDiagnosisArray"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:36</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="submitLoading"></a>
+                        <span class="name">
+                            <b>
+                            submitLoading</b>
+                            <a href="#submitLoading"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>false</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/bulk-upload/bulk-upload.component.ts:32</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { Inject } from &#x27;@angular/core&#x27;;
+import { DatePipe } from &#x27;@angular/common&#x27;;
+
+
+import { MatDialog, MatDialogRef } from &#x27;@angular/material&#x27;;
+import { MAT_DIALOG_DATA } from &#x27;@angular/material&#x27;;
+import { MatSnackBar } from &#x27;@angular/material&#x27;;
+import { Papa } from &#x27;ngx-papaparse&#x27;;
+
+import { BulkUploadRecord } from &#x27;@interfaces/bulk-upload-record&#x27;;
+import { EventSubmission } from &#x27;@interfaces/event-submission&#x27;;
+import { EventDiagnosisSubmission } from &#x27;@interfaces/event-submission&#x27;;
+import { NewEventLocation } from &#x27;@interfaces/event-submission&#x27;;
+import { NewLocationSpecies } from &#x27;@interfaces/event-submission&#x27;;
+import { NewSpeciesDiagnosis } from &#x27;@interfaces/event-submission&#x27;;
+
+import { CountryService } from &#x27;@services/country.service&#x27;;
+import { AdministrativeLevelOneService } from &#x27;@services/administrative-level-one.service&#x27;;
+import { AdministrativeLevelTwoService } from &#x27;@services/administrative-level-two.service&#x27;;
+import { EventService } from &#x27;@services/event.service&#x27;;
+import { ConfirmComponent } from &#x27;@confirm/confirm.component&#x27;;
+
+@Component({
+  selector: &#x27;app-bulk-upload&#x27;,
+  templateUrl: &#x27;./bulk-upload.component.html&#x27;,
+  styleUrls: [&#x27;./bulk-upload.component.scss&#x27;]
+})
+export class BulkUploadComponent implements OnInit {
+
+  errorMessage &#x3D; &#x27;&#x27;;
+  submitLoading &#x3D; false;
+
+  rawData;
+  parsedData;
+  speciesDiagnosisArray;
+  newEventsArray: EventSubmission[];
+
+  countries;
+  adminLevelOnes;
+  confirmDialogRef: MatDialogRef&lt;ConfirmComponent&gt;;
+
+  eventCount;
+  responseCount;
+
+  bulkUploadProcessing &#x3D; false;
+
+  constructor(
+    public bulkUploadDialogRef: MatDialogRef&lt;BulkUploadComponent&gt;,
+    public snackBar: MatSnackBar,
+    private countryService: CountryService,
+    private adminLevelOneService: AdministrativeLevelOneService,
+    private adminLevelTwoService: AdministrativeLevelTwoService,
+    private eventService: EventService,
+    private datePipe: DatePipe,
+    private papa: Papa,
+    private dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { }
+
+  ngOnInit() {
+
+    // get countries from the countryService
+    this.countryService.getCountries()
+      .subscribe(
+        countries &#x3D;&gt; {
+          this.countries &#x3D; countries;
+          this.countries.sort(function (a, b) {
+            if (a.name &lt; b.name) { return -1; }
+            if (a.name &gt; b.name) { return 1; }
+            return 0;
+          });
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+    // get adminLevelOnes from the adminLevelOne service
+    this.adminLevelOneService.getAdminLevelOnes()
+      .subscribe(
+        (administrative_level_one) &#x3D;&gt; {
+          this.adminLevelOnes &#x3D; administrative_level_one;
+        },
+        error &#x3D;&gt; {
+          this.errorMessage &#x3D; &lt;any&gt;error;
+        }
+      );
+
+  }
+
+  onFileSelected() {
+    const inputNode: any &#x3D; document.querySelector(&#x27;#file&#x27;);
+
+    const options &#x3D; {
+      complete: (results, file) &#x3D;&gt; {
+        console.log(&#x27;CSV Data Parsed: &#x27;, results, file);
+        this.parsedData &#x3D; results;
+        this.speciesDiagnosisArray &#x3D; results.data;
+        this.parseSpeciesDiagnosisArray(this.speciesDiagnosisArray);
+      },
+      error: (error, file) &#x3D;&gt; {
+        console.log(&#x27;There was an error parsing your CSV file: &#x27;, error, file);
+      },
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true
+    };
+
+    if (typeof (FileReader) !&#x3D;&#x3D; &#x27;undefined&#x27;) {
+      const reader &#x3D; new FileReader();
+
+      reader.onload &#x3D; (e: any) &#x3D;&gt; {
+        this.rawData &#x3D; e.target.result;
+        this.papa.parse(this.rawData, options);
+      };
+      reader.readAsText(inputNode.files[0]);
+    }
+  }
+
+  buildEventRecord(eventObj: EventSubmission) { return eventObj; }
+
+  buildEventDiagnosisArray(diagnosisIDArray) {
+    const array &#x3D; [];
+    const stringArray &#x3D; JSON.parse(&#x27;[&#x27; + diagnosisIDArray + &#x27;]&#x27;);
+    for (const item of stringArray) {
+      array.push({ &#x27;diagnosis&#x27;: item });
+    }
+    return array;
+  }
+
+  lookupCountryID(countryAbbreviation) {
+    const result &#x3D; this.countries.filter(function (country) {
+      return country.abbreviation &#x3D;&#x3D;&#x3D; countryAbbreviation;
+    });
+    return result[0].id;
+  }
+
+  lookupAdminLevelOneID(adminLevelOneAbbreviation) {
+    const result &#x3D; this.adminLevelOnes.filter(function (adminLevelOne) {
+      return adminLevelOne.abbreviation &#x3D;&#x3D;&#x3D; adminLevelOneAbbreviation;
+    });
+    return result[0].id;
+  }
+
+  buildDiagnosisLabArray(orgIDArray) {
+    const array &#x3D; JSON.parse(&#x27;[&#x27; + orgIDArray + &#x27;]&#x27;);
+    return array;
+  }
+
+  addeventLocation(eventLocation: NewEventLocation) {
+    return eventLocation;
+  }
+
+  addLocationSpecies(locationSpecies: NewLocationSpecies) { return locationSpecies; }
+
+  addSpeciesDiagnosis(speciesDiagnosis: NewSpeciesDiagnosis) { return speciesDiagnosis; }
+
+  addDiagnosisOrganizations(organizationsInput) {
+    if (organizationsInput &#x3D;&#x3D;&#x3D; null) {
+      return [];
+    } else {
+      if (typeof organizationsInput &#x3D;&#x3D;&#x3D; &#x27;number&#x27;) {
+        return [organizationsInput];
+      } else if (typeof organizationsInput &#x3D;&#x3D;&#x3D; &#x27;string&#x27;) {
+        const array &#x3D; JSON.parse(&#x27;[&#x27; + organizationsInput + &#x27;]&#x27;);
+        return array;
+      }
+    }
+  }
+
+  parseSpeciesDiagnosisArray(dataArray) {
+
+    this.newEventsArray &#x3D; [];
+
+    // loop through the parsed data array to build event(s) submission that is properly nested
+    // for (let i &#x3D; 0; i &lt; dataArray.length; i++) { }
+
+    let currentEventOrdinal &#x3D; 0;
+    let currentLocationOrdinal &#x3D; 1;
+    let currentLocationSpeciesOrdinal &#x3D; 1;
+
+    let currentEventIndex;
+    let currentLocationIndex;
+    let currentLocationSpeciesIndex;
+
+    for (const item of dataArray as Array&lt;BulkUploadRecord&gt;) {
+
+      if (item.event_ordinal &gt; currentEventOrdinal) {
+        // since the item&#x27;s event_ordinal is larger than the currentEventOrdinal,
+        // event record does not exist.
+        // create new event record with all the child data from the CSV line
+        // Note: the new_species_diagnosis field population below includes a ternary operator to catch undefined and null values and insert a blank array to satisfy serializer on the server/
+        let newEvent: EventSubmission;
+        newEvent &#x3D; this.buildEventRecord({
+          event_reference: item.event_reference,
+          event_type: item.event_type,
+          public: item.public,
+          complete: item.complete,
+          new_event_diagnoses: this.buildEventDiagnosisArray(item.eventdiagnoses),
+          new_event_locations: [
+            {
+              name: item.name,
+              start_date: this.datePipe.transform(item.start_date, &#x27;yyyy-MM-dd&#x27;),
+              end_date: this.datePipe.transform(item.end_date, &#x27;yyyy-MM-dd&#x27;),
+              country: this.lookupCountryID(item.country),
+              administrative_level_one: this.lookupAdminLevelOneID(item.administrative_level_one),
+              administrative_level_two: item.administrative_level_two,
+              latitude: item.latitude,
+              longitude: item.longitude,
+              land_ownership: item.land_ownership,
+              history: &#x27;This event location was added using the bulk upload process.&#x27;,
+              new_location_species: [
+                {
+                  species: item.species,
+                  population_count: item.population_count,
+                  sick_count: item.sick_count,
+                  dead_count: item.dead_count,
+                  sick_count_estimated: item.sick_count_estimated,
+                  dead_count_estimated: item.dead_count_estimated,
+                  captive: item.captive,
+                  new_species_diagnoses: item.diagnosis &#x3D;&#x3D;&#x3D; undefined || item.diagnosis &#x3D;&#x3D;&#x3D; null ? [] : [
+                    {
+                      diagnosis: item.diagnosis,
+                      cause: item.cause,
+                      basis: item.basis,
+                      suspect: item.suspect,
+                      tested_count: item.tested_count,
+                      diagnosis_count: item.diagnosis_count,
+                      new_species_diagnosis_organizations: this.addDiagnosisOrganizations(item.organizations)
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        });
+        // push the new event record to the newEventsArray
+        this.newEventsArray.push(newEvent);
+        // update the currentEventOrdinal to the event_ordinal of the item just processed
+        currentEventOrdinal &#x3D; item.event_ordinal;
+      } else {
+        // since the item&#x27;s event_ordinal is not larger than the currentEventOrdinal
+        // the event record already exists.
+        // Next step:
+        // check location ordinal
+        if (item.location_ordinal &gt; currentLocationOrdinal) {
+          // since the item&#x27;s location_ordinal is larger than currentLocationOrdinal,
+          // eventlocation record does not exist.
+          // create new eventLocation record with all the child data from the CSV line
+          let newEventLocation: NewEventLocation;
+          newEventLocation &#x3D; this.addeventLocation({
+            name: item.name,
+            start_date: this.datePipe.transform(item.start_date, &#x27;yyyy-MM-dd&#x27;),
+            end_date: this.datePipe.transform(item.end_date, &#x27;yyyy-MM-dd&#x27;),
+            country: this.lookupCountryID(item.country),
+            administrative_level_one: this.lookupAdminLevelOneID(item.administrative_level_one),
+            administrative_level_two: item.administrative_level_two,
+            latitude: item.latitude,
+            longitude: item.longitude,
+            land_ownership: item.land_ownership,
+            history: &#x27;This event location was added using the bulk upload process.&#x27;,
+            new_location_species: [
+              {
+                species: item.species,
+                population_count: item.population_count,
+                sick_count: item.sick_count,
+                dead_count: item.dead_count,
+                sick_count_estimated: item.sick_count_estimated,
+                dead_count_estimated: item.dead_count_estimated,
+                captive: item.captive,
+                new_species_diagnoses: item.diagnosis &#x3D;&#x3D;&#x3D; undefined || item.diagnosis &#x3D;&#x3D;&#x3D; null ? [] : [
+                  {
+                    diagnosis: item.diagnosis,
+                    cause: item.cause,
+                    basis: item.basis,
+                    suspect: item.suspect,
+                    tested_count: item.tested_count,
+                    diagnosis_count: item.diagnosis_count,
+                    new_species_diagnosis_organizations: this.addDiagnosisOrganizations(item.organizations)
+                  }
+                ]
+              }
+            ]
+          });
+          // get the array index for the current event record
+          currentEventIndex &#x3D; currentEventOrdinal - 1;
+          // add the new event location to the current event record
+          this.newEventsArray[currentEventIndex].new_event_locations.push(newEventLocation);
+          // update the currentLocationOrdinal to the location_ordinal of the item just processed
+          currentLocationOrdinal &#x3D; item.location_ordinal;
+          // update the currentLocationSpeciesOrdinal back to 1(starting position) since this is a new eventLocation
+          currentLocationSpeciesOrdinal &#x3D; 1;
+        } else {
+          // since the item&#x27;s location_ordinal is not larger than the currentLocationOrdinal
+          // the eventLocation record already exists.
+          // Next step:
+          // check location species ordinal
+          if (item.location_species_ordinal &gt; currentLocationSpeciesOrdinal) {
+            // since the item&#x27;s location_species_ordinal is larger than currentLocationSpeciesOrdinal,
+            // locationSpecies record does not exist.
+            // create new locationSpecies record with all the child data from the CSV line
+            let newLocationSpecies: NewLocationSpecies;
+            newLocationSpecies &#x3D; this.addLocationSpecies({
+              species: item.species,
+              population_count: item.population_count,
+              sick_count: item.sick_count,
+              dead_count: item.dead_count,
+              sick_count_estimated: item.sick_count_estimated,
+              dead_count_estimated: item.dead_count_estimated,
+              captive: item.captive,
+              new_species_diagnoses: item.diagnosis &#x3D;&#x3D;&#x3D; undefined || item.diagnosis &#x3D;&#x3D;&#x3D; null ? [] : [
+                {
+                  diagnosis: item.diagnosis,
+                  cause: item.cause,
+                  basis: item.basis,
+                  suspect: item.suspect,
+                  tested_count: item.tested_count,
+                  diagnosis_count: item.diagnosis_count,
+                  new_species_diagnosis_organizations: this.addDiagnosisOrganizations(item.organizations)
+                }
+              ]
+            });
+            // get the array index for the current location species
+            currentLocationIndex &#x3D; currentLocationOrdinal - 1;
+            // get the array index for the current event record
+            currentEventIndex &#x3D; currentEventOrdinal - 1;
+            // add the new location species to the currnent eventLocation record
+            this.newEventsArray[currentEventIndex].new_event_locations[currentLocationIndex].new_location_species.push(newLocationSpecies);
+            // update the currentLocationSpeciesOrdinal to the location_species_ordinal of the item just processed
+            currentLocationSpeciesOrdinal &#x3D; item.location_species_ordinal;
+          } else {
+            // since the item&#x27;s location_species_ordinal is not larger than the currentLocationSpeciesOrdinal
+            // (and must be equal)
+            // the locationSpecies already exists.
+            // Next step:
+            // add the speciesDiagnosis
+            // the only reason for a location species to appear more than once is to include an addtional species diagnosis, so there should be no case
+            // where there is an undefined or null diagnosis value at this part of the logic tree, negating need for the ternary operator used above.
+            let newSpeciesDiagnosis: NewSpeciesDiagnosis;
+            newSpeciesDiagnosis &#x3D; this.addSpeciesDiagnosis(
+              {
+                diagnosis: item.diagnosis,
+                cause: item.cause,
+                basis: item.basis,
+                suspect: item.suspect,
+                tested_count: item.tested_count,
+                diagnosis_count: item.diagnosis_count,
+                new_species_diagnosis_organizations: this.addDiagnosisOrganizations(item.organizations)
+              }
+            );
+            // get the array index for the current event record
+            currentEventIndex &#x3D; currentEventOrdinal - 1;
+            // get the array index for the current location species
+            currentLocationIndex &#x3D; currentLocationOrdinal - 1;
+            // get the array index for the current location species
+            currentLocationSpeciesIndex &#x3D; currentLocationSpeciesOrdinal - 1;
+            // add the new event location to the current event record
+            this.newEventsArray[currentEventIndex].new_event_locations[currentLocationIndex].new_location_species[currentLocationSpeciesIndex].new_species_diagnoses.push(newSpeciesDiagnosis);
+            // update the currentLocationOrdinal to the location_ordinal of the item just processed
+            // currentSpeciesDiagnosisOrdinal &#x3D; item.species_diagnosis_ordinal;
+          }
+        }
+      }
+    } // end of parsing loop
+    console.log(this.newEventsArray);
+    // send this.newEventsArray to the submitData function that sends it to the server
+    this.submitData(this.newEventsArray);
+  }
+
+  submitEvent(eventSubmission) {
+    this.eventService.create(eventSubmission)
+      .subscribe(
+        (event) &#x3D;&gt; {
+          this.submitLoading &#x3D; false;
+
+          this.confirmDialogRef &#x3D; this.dialog.open(ConfirmComponent,
+            {
+              disableClose: true,
+              data: {
+                title: &#x27;Event Saved&#x27;,
+                titleIcon: &#x27;check&#x27;,
+                message: &#x27;The event with the event reference &quot;&#x27; + event.event_reference + &#x27;&quot; was successfully saved. The Event ID is &#x27; + event.id,
+                confirmButtonText: &#x27;OK&#x27;,
+                showCancelButton: false
+              }
+            }
+          );
+          this.iterateEventCount();
+          return { success: true, event: event, error: null };
+
+        },
+        error &#x3D;&gt; {
+          // this.submitLoading &#x3D; false;
+          // this.openSnackBar(&#x27;Error. Event not Submitted. Error message: &#x27; + error, &#x27;OK&#x27;, 8000);
+          this.confirmDialogRef &#x3D; this.dialog.open(ConfirmComponent,
+            {
+              disableClose: true,
+              data: {
+                title: &#x27;Event Save Failed&#x27;,
+                titleIcon: &#x27;warning&#x27;,
+                message: &#x27;The event with the event reference &quot;&#x27; + eventSubmission.event_reference + &#x27;&quot; failed to save. The error is: &#x27; + error,
+                confirmButtonText: &#x27;OK&#x27;,
+                showCancelButton: false
+              }
+            }
+          );
+          this.iterateEventCount();
+          return { success: false, event: null, error: error };
+        }
+      );
+  }
+
+
+  submitData(newEventsArray) {
+    this.bulkUploadProcessing &#x3D; true;
+    this.responseCount &#x3D; 0;
+    this.eventCount &#x3D; newEventsArray.length;
+    const responseArray &#x3D; [];
+    for (const eventSubmission of newEventsArray) {
+      responseArray.push(this.submitEvent(eventSubmission));
+    }
+  }
+
+  iterateEventCount() {
+    this.responseCount++;
+    if (this.responseCount &#x3D;&#x3D;&#x3D; this.eventCount) {
+      this.bulkUploadProcessing &#x3D; false;
+      this.bulkUploadDialogRef.close();
+    }
+  }
+
+  downloadGuidance() {
+  }
+
+  downloadTemplate() {
+
+  }
+
+  openSnackBar(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
+}
+
+// export interface Response {
+//   success: boolean;
+//   event: Object;
+// }
+
+
+
+
+
+
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;h1 mat-dialog-title&gt;
+  &lt;mat-icon *ngIf&#x3D;&quot;data.titleIcon !&#x3D;&#x3D; &#x27;&#x27;&quot;&gt;{{data.titleIcon}}&lt;/mat-icon&gt; {{data.title}}
+&lt;/h1&gt;
+&lt;mat-dialog-content&gt;
+
+  &lt;p&gt;This tool allows you to upload WHISPers event data in bulk, using a spreadsheet template in comma seperated
+    (.csv) format. The data must conform to this structure and must refer to WHISPers ID numbers for all &#x27;lookup&#x27; values
+    (diagnosis, species, organization, etc.). The guidance document and template are available at the &lt;a target&#x3D;&quot;_blank&quot;
+      href&#x3D;&quot;https://www.usgs.gov/centers/nwhc/science/whispers?qt-science_center_objects&#x3D;0#qt-science_center_objects&quot;&gt;
+      National Wildlife Health Center&#x27;s WHISPers homepage&lt;/a&gt;.
+  &lt;/p&gt;
+
+  &lt;p&gt;For any questions regarding data or help with this bulk upload tool, contact WHISPers staff at &lt;span
+      class&#x3D;&quot;text-bold&quot;&gt;whispers@usgs.gov&lt;/span&gt;&lt;/p&gt;
+
+  &lt;!-- &lt;p&gt;
+    &lt;button mat-raised-button color&#x3D;&quot;primary&quot; (click)&#x3D;&quot;downloadGuidance()&quot;&gt;
+      &lt;mat-icon&gt;cloud_download&lt;/mat-icon&gt; Download Guidance
+    &lt;/button&gt;
+    &lt;span&gt;&amp;nbsp;&lt;/span&gt;
+    &lt;button mat-raised-button color&#x3D;&quot;primary&quot; (click)&#x3D;&quot;downloadTemplate()&quot;&gt;
+      &lt;mat-icon&gt;cloud_download&lt;/mat-icon&gt; Download Data Template
+    &lt;/button&gt;
+  &lt;/p&gt; --&gt;
+
+  &lt;!-- &lt;p&gt;
+    &lt;button mat-raised-button color&#x3D;&quot;primary&quot; (click)&#x3D;&quot;downloadTemplate()&quot;&gt;
+      &lt;mat-icon&gt;cloud_download&lt;/mat-icon&gt; Download Data Template
+    &lt;/button&gt;
+  &lt;/p&gt; --&gt;
+
+  &lt;p&gt;
+    &lt;button type&#x3D;&quot;button&quot; mat-raised-button color&#x3D;&quot;primary&quot; (click)&#x3D;&quot;fileInput.click()&quot;&gt;
+      &lt;mat-icon&gt;insert_drive_file&lt;/mat-icon&gt; Choose File
+    &lt;/button&gt;
+    &lt;input hidden (change)&#x3D;&quot;onFileSelected()&quot; #fileInput type&#x3D;&quot;file&quot; id&#x3D;&quot;file&quot;&gt;
+  &lt;/p&gt;
+
+&lt;/mat-dialog-content&gt;
+
+&lt;mat-dialog-actions&gt;
+  &lt;button mat-button color&#x3D;&quot;warn&quot; (click)&#x3D;&quot;this.bulkUploadDialogRef.close(&#x27;cancel&#x27;);&quot;&gt;
+    &lt;mat-icon&gt;cancel&lt;/mat-icon&gt;&amp;nbsp;Cancel
+  &lt;/button&gt;
+  &lt;!-- &lt;button mat-button color&#x3D;&quot;primary&quot; type&#x3D;&quot;submit&quot;&gt;
+    &lt;mat-icon&gt;{{data.actionButtonIcon}}&lt;/mat-icon&gt;{{data.action_button_text}}
+  &lt;/button&gt; --&gt;
+  &lt;span *ngIf&#x3D;&quot;bulkUploadProcessing&quot;&gt;{{responseCount}} of {{eventCount}} events processed&lt;/span&gt;
+  &lt;mat-progress-bar mode&#x3D;&quot;indeterminate&quot; *ngIf&#x3D;&quot;bulkUploadProcessing&quot;&gt;&lt;/mat-progress-bar&gt;
+&lt;/mat-dialog-actions&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./bulk-upload.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss"></code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><h1 mat-dialog-title>  <mat-icon *ngIf="data.titleIcon !== \'\'">{{data.titleIcon}}</mat-icon> {{data.title}}</h1><mat-dialog-content>  <p>This tool allows you to upload WHISPers event data in bulk, using a spreadsheet template in comma seperated    (.csv) format. The data must conform to this structure and must refer to WHISPers ID numbers for all \'lookup\' values    (diagnosis, species, organization, etc.). The guidance document and template are available at the <a target="_blank"      href="https://www.usgs.gov/centers/nwhc/science/whispers?qt-science_center_objects=0#qt-science_center_objects">      National Wildlife Health Center\'s WHISPers homepage</a>.  </p>  <p>For any questions regarding data or help with this bulk upload tool, contact WHISPers staff at <span      class="text-bold">whispers@usgs.gov</span></p>  <!-- <p>    <button mat-raised-button color="primary" (click)="downloadGuidance()">      <mat-icon>cloud_download</mat-icon> Download Guidance    </button>    <span>&nbsp;</span>    <button mat-raised-button color="primary" (click)="downloadTemplate()">      <mat-icon>cloud_download</mat-icon> Download Data Template    </button>  </p> -->  <!-- <p>    <button mat-raised-button color="primary" (click)="downloadTemplate()">      <mat-icon>cloud_download</mat-icon> Download Data Template    </button>  </p> -->  <p>    <button type="button" mat-raised-button color="primary" (click)="fileInput.click()">      <mat-icon>insert_drive_file</mat-icon> Choose File    </button>    <input hidden (change)="onFileSelected()" #fileInput type="file" id="file">  </p></mat-dialog-content><mat-dialog-actions>  <button mat-button color="warn" (click)="this.bulkUploadDialogRef.close(\'cancel\');">    <mat-icon>cancel</mat-icon>&nbsp;Cancel  </button>  <!-- <button mat-button color="primary" type="submit">    <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{data.action_button_text}}  </button> -->  <span *ngIf="bulkUploadProcessing">{{responseCount}} of {{eventCount}} events processed</span>  <mat-progress-bar mode="indeterminate" *ngIf="bulkUploadProcessing"></mat-progress-bar></mat-dialog-actions></div>'
+    var COMPONENTS = [{'name': 'AboutComponent', 'selector': 'app-about'},{'name': 'AddCommentComponent', 'selector': 'app-add-comment'},{'name': 'AddEventDiagnosisComponent', 'selector': 'app-add-event-diagnosis'},{'name': 'AddEventLocationComponent', 'selector': 'app-add-event-location'},{'name': 'AddEventLocationContactComponent', 'selector': 'app-add-event-location-contact'},{'name': 'AddEventOrganizationComponent', 'selector': 'app-add-event-organization'},{'name': 'AddServiceRequestComponent', 'selector': 'app-add-service-request'},{'name': 'AlertCollaboratorsComponent', 'selector': 'app-alert-collaborators'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AuthenticationComponent', 'selector': 'app-authentication'},{'name': 'BrowserWarningComponent', 'selector': 'app-browser-warning'},{'name': 'BulkUploadComponent', 'selector': 'app-bulk-upload'},{'name': 'CircleChooseComponent', 'selector': 'app-circle-choose'},{'name': 'CircleManagementComponent', 'selector': 'app-circle-management'},{'name': 'CirclesComponent', 'selector': 'app-circles'},{'name': 'CollaborationRequestComponent', 'selector': 'app-collaboration-request'},{'name': 'CommentsTableComponent', 'selector': 'app-comments-table'},{'name': 'ConfirmComponent', 'selector': 'app-confirm'},{'name': 'CreateContactComponent', 'selector': 'app-create-contact'},{'name': 'CustomNotificationComponent', 'selector': 'app-custom-notification'},{'name': 'DiagnosticInfoComponent', 'selector': 'app-diagnostic-info'},{'name': 'DiagnosticServicesComponent', 'selector': 'app-diagnostic-services'},{'name': 'EditEventComponent', 'selector': 'app-edit-event'},{'name': 'EditEventLocationComponent', 'selector': 'app-edit-event-location'},{'name': 'EditLocationSpeciesComponent', 'selector': 'app-edit-location-species'},{'name': 'EditSpeciesDiagnosisComponent', 'selector': 'app-edit-species-diagnosis'},{'name': 'EditUserComponent', 'selector': 'app-edit-user'},{'name': 'EventDetailsComponent', 'selector': 'app-event-details'},{'name': 'EventDetailsShareComponent', 'selector': 'app-event-details-share'},{'name': 'EventGroupComponent', 'selector': 'app-event-group'},{'name': 'EventGroupManagementComponent', 'selector': 'app-event-group-management'},{'name': 'EventPublicReportComponent', 'selector': 'app-event-public-report'},{'name': 'EventsComponent', 'selector': 'app-event-table'},{'name': 'EventSubmissionComponent', 'selector': 'app-event-submission'},{'name': 'EventSubmissionConfirmComponent', 'selector': 'app-event-submission-confirm'},{'name': 'GnisLookupComponent', 'selector': 'app-gnis-lookup'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'LocationSpeciesTableComponent', 'selector': 'app-location-species-table'},{'name': 'NewLookupRequestComponent', 'selector': 'app-new-lookup-request'},{'name': 'NotificationsComponent', 'selector': 'app-notifications'},{'name': 'SavedSearchesComponent', 'selector': 'app-saved-searches'},{'name': 'SaveSearchComponent', 'selector': 'app-save-search'},{'name': 'SearchDialogComponent', 'selector': 'app-search-dialog'},{'name': 'SearchResultsSummaryReportComponent', 'selector': 'app-search-results-summary-report'},{'name': 'UserDashboardComponent', 'selector': 'app-user-dashboard'},{'name': 'UserEventsComponent', 'selector': 'app-user-events'},{'name': 'UserRegistrationComponent', 'selector': 'app-user-registration'},{'name': 'ViewCommentDetailsComponent', 'selector': 'app-view-comment-details'},{'name': 'ViewContactDetailsComponent', 'selector': 'app-view-contact-details'},{'name': 'ViewNotificationDetailsComponent', 'selector': 'app-view-notification-details'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'BulkUploadComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'BulkUploadComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

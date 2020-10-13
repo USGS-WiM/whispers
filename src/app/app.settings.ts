@@ -2,11 +2,8 @@ import { Injectable } from '@angular/core';
 import { Headers } from '@angular/http';
 import { HttpHeaders } from '@angular/common/http';
 import { environment } from 'environments/environment';
-
 import { DisplayQuery } from '@interfaces/display-query';
-
 import { APP_UTILITIES } from '@app/app.utilities';
-
 
 @Injectable()
 export class APP_SETTINGS {
@@ -20,29 +17,19 @@ export class APP_SETTINGS {
         return environment.api_root;
     }
 
-    // public static get BANNER_WARNING() {
-    //     return environment.banner_content;
-    // }
-
-    // public static get BANNER_TEXT_COLOR() {
-    //     return environment.banner_text_color;
-    // }
-
     public static set environment(env: string) { this._environment = env; }
-    public static get API_USERNAME(): string { return 'admin'; }
-    public static get API_PASSWORD(): string { return 'whispersadmin'; }
 
     public static get IS_LOGGEDIN(): boolean { return (!!sessionStorage.getItem('username') && !!sessionStorage.getItem('password')); }
 
-    public static get APP_URL(): string { return 'https://test.wim.usgs.gov/whispersdev'; }
+    public static get APP_URL(): string { return 'https://whispers.usgs.gov'; }
 
     public static get WHISPERS_METADATA_URL(): string { return 'https://www.usgs.gov/centers/nwhc/science/whispers'; }
 
     public static get DEFAULT_COUNTRY(): string { return 'USA'; }
 
-    public static get VERSION() {
-        return environment.version;
-    }
+    public static get VERSION() { return environment.version; }
+
+    public static get QUERY_COUNT_LIMIT() { return 500; }
 
     public static get UNDET_PENDING_DIAGNOSES() {
         return [
@@ -61,14 +48,14 @@ export class APP_SETTINGS {
         return {
             'diagnosis': 469,
             'diagnosis_string': 'Undetermined',
-        }
+        };
     }
 
     public static get EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN() {
         return {
             'diagnosis': 104,
             'diagnosis_string': 'Pending',
-        }
+        };
     }
 
     public static get SPECIAL_COMMENT_TYPES() {
@@ -96,6 +83,27 @@ export class APP_SETTINGS {
             {
                 'id': 11,
                 'name': 'Event Group',
+            },
+            {
+                'id': 12,
+                'name': 'Collaborator Alert',
+            }
+        ];
+    }
+
+    public static get EVENTLOCATION_EXCLUDED_COMMENT_TYPES() {
+        return [
+            {
+                'id': 8,
+                'name': 'NWHC',
+            },
+            {
+                'id': 11,
+                'name': 'Event Group',
+            },
+            {
+                'id': 12,
+                'name': 'Collaborator Alert',
             }
         ];
     }
@@ -146,40 +154,22 @@ export class APP_SETTINGS {
     public static get SERVICE_REQUEST_URL(): string { return this.API_ROOT + 'servicerequests/'; }
     public static get SERVICE_REQUEST_TYPES_URL(): string { return this.API_ROOT + 'servicerequesttypes/'; }
     public static get SERVICE_REQUEST_RESPONSES_URL(): string { return this.API_ROOT + 'servicerequestresponses/'; }
-
     public static get EVENT_GROUPS_URL(): string { return this.API_ROOT + 'eventgroups/'; }
     public static get EVENT_EVENT_GROUPS_URL(): string { return this.API_ROOT + 'eventeventgroups/'; }
     public static get EVENT_GROUP_CATEGORIES_URL(): string { return this.API_ROOT + 'eventgroupcategories/'; }
+
+    public static get NOTIFICATIONS_URL(): string { return this.API_ROOT + 'notifications/'; }
+    public static get NOTIFICATION_CUE_CUSTOM_URL(): string { return this.API_ROOT + 'notificationcuecustoms/'; }
+    public static get NOTIFICATION_CUE_PREFERENCES_URL(): string { return this.API_ROOT + 'notificationcuepreferences/'; }
 
     public static get GO_USA_GOV_SHORTEN_URL(): string { return 'https://go.usa.gov/api/shorten.json'; }
     public static get GO_USA_GOV_USER(): string { return 'bdraper'; }
     public static get GO_USA_GOV_API_KEY(): string { return 'c9f06b2f3be4a9f764a4421df159a2e0'; }
 
-
     public static get MIN_JSON_HEADERS() { return new Headers({ 'Accept': 'application/json' }); }
     public static get JSON_HEADERS() { return new Headers({ 'Accept': 'application/json', 'Content-Type': 'application/json' }); }
 
-    // tslint:disable-next-line:max-line-length
     public static get GO_USA_GOV_JSON_HEADERS() { return new Headers({}); }
-
-    // line below is for headers stored in local storage. todo: revisit and implement this
-    // public static get AUTH_HEADERS() { return new Headers({ 'Authorization': 'Basic ' + btoa(sessionStorage.getItem('username') + ':' + sessionStorage.getItem('password'))}) }
-
-    /*public static get AUTH_HEADERS() { return new Headers({ 'Authorization': 'Basic ' + btoa(this.API_USERNAME + ':' + this.API_PASSWORD) }); }
-    public static get MIN_AUTH_JSON_HEADERS() {
-        return new Headers({
-            'Authorization': 'Basic ' + btoa(this.API_USERNAME + ':' + this.API_PASSWORD),
-            'Accept': 'application/json'
-        }
-        );
-    }
-    public static get AUTH_JSON_HEADERS() {
-        return new Headers({
-            'Authorization': 'Basic ' + btoa(this.API_USERNAME + ':' + this.API_PASSWORD),
-            'Accept': 'application/json', 'Content-Type': 'application/json'
-        }
-        );
-    }*/
 
     public static get AUTH_HEADERS() {
         return new Headers({
@@ -213,14 +203,23 @@ export class APP_SETTINGS {
     public static get MIN_AUTH_TEXT_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
-            'Content-Type': 'text/plain', 'Accept': 'application/json'
+            'Content-Type': 'text/plain',
+            'Accept': 'application/json'
         });
     }
+
+    public static get HTTP_CLIENT_MIN_AUTH_TEXT_HEADERS() {
+        return new HttpHeaders({
+            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+            'Content-Type': 'text/plain',
+            'Accept': 'application/json'
+        });
+    }
+
 
     public static get AUTH_REQUEST_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password)
-            // ,'X-Requested-With': 'XMLHttpRequest'
         });
     }
 
@@ -269,5 +268,4 @@ export class APP_SETTINGS {
             // 'complete': false
         };
     }
-
 }

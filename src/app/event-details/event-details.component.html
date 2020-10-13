@@ -26,7 +26,12 @@
             <i class="material-icons">unarchive</i> Export Event Data</button>
           <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadEventReport()">
             <i class="material-icons">list_alt</i> Generate Event Report</button>
-            <!-- <app-event-public-report></app-event-public-report> (click)="eventReportComponent.print()" -->
+          <button mat-button color="primary" class="event-detail-action-button"
+            *ngIf="currentUser.role !== 7 && currentUser.role !== undefined"
+            (click)="openCollaborationRequestDialog(eventData.id)">
+            <mat-icon>group</mat-icon> Request to Collaborate
+          </button>
+          <!-- <app-event-public-report></app-event-public-report> (click)="eventReportComponent.print()" -->
         </div>
       </div>
 
@@ -274,320 +279,581 @@
         </div> <!-- End Public Info-->
         <mat-divider style="margin: 25px auto;" [inset]="true"></mat-divider>
 
-        <div class="event-detail-wrapper"
-          *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
+        <!-- Begin privileged data section -->
+        <div class="event-detail-wrapper" *ngIf="currentUser.role !== 7 && currentUser.role !== undefined && eventData.is_privileged_user">
 
-          <h3 class="event-detail-label">Privileged Event Data</h3>
+          <div class="event-detail-wrapper">
 
-          <div class="privileged-permissions">
-            <span class="title">
-              You are logged in as <b>{{currentUser.first_name}} {{currentUser.last_name}}</b>
-              ({{currentUser.username}})
-            </span>
-            <small>
-              You have these permissions for this event:
-            </small>
-            <div class="permissions">
-              <div class="permission" *ngIf="eventData.permissions.read === true">Read</div>
-              <div class="permission" *ngIf="eventData.permissions.update === true">Update</div>
-              <!-- <div class="permission" *ngIf="eventData.permissions.write === true">Create</div> -->
-              <div class="permission red" *ngIf="eventData.permissions.destroy === true">Delete</div>
+            <h3 class="event-detail-label">Privileged Event Data</h3>
+
+            <div class="privileged-permissions">
+              <span class="title">
+                You are logged in as <b>{{currentUser.first_name}} {{currentUser.last_name}}</b>
+                ({{currentUser.username}})
+              </span>
+              <small>
+                You have these permissions for this event:
+              </small>
+              <div class="permissions">
+                <div class="permission" *ngIf="eventData.permissions.read === true">Read</div>
+                <div class="permission" *ngIf="eventData.permissions.update === true">Update</div>
+                <!-- <div class="permission" *ngIf="eventData.permissions.write === true">Create</div> -->
+                <div class="permission red" *ngIf="eventData.permissions.destroy === true">Delete</div>
+
+
+              </div>
+              <span class="title"
+                *ngIf="eventData.complete && (eventData.permissions.update === true || eventData.permissions.destroy === true)">Editing
+                is locked because event is marked Complete. Change WHISPers Record Status (Edit Event) to
+                Incomplete to
+                unlock editing.
+              </span>
             </div>
-            <span class="title"
-              *ngIf="eventData.complete && (eventData.permissions.update === true || eventData.permissions.destroy === true)">Editing
-              is locked because event is marked Complete. Change WHISPers Record Status (Edit Event) to
-              Incomplete to
-              unlock editing.
-            </span>
+
+            <div class="public">
+              <span>This event is </span><span *ngIf="eventData.public === true" class="public-status green">Visible to
+                Public</span><span *ngIf="eventData.public !== true" class="public-status red">Not Visible to
+                Public&nbsp;<mat-icon>visibility_off</mat-icon></span>
+            </div>
           </div>
 
-          <div class="public">
-            <span>This event is </span><span *ngIf="eventData.public === true" class="public-status green">Visible to
-              Public</span><span *ngIf="eventData.public !== true" class="public-status red">Not Visible to
-              Public&nbsp;<mat-icon>visibility_off</mat-icon></span>
-          </div>
-        </div>
+          <!-- Meta - event details for privileged users -->
+          <!-- Meta - event details for privileged users -->
+          <!-- Meta - event details for privileged users -->
+          <div class="event-detail-wrapper">
 
-        <!-- Meta - event details for privileged users -->
-        <!-- Meta - event details for privileged users -->
-        <!-- Meta - event details for privileged users -->
-        <div class="event-detail-wrapper"
-          *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
-
-          <div class="privileged-meta">
-            <div class="item"
-              *ngIf="currentUser.role === 1 || currentUser.role === 2 || currentUser.role === 3 || currentUser.role === 4 || currentUser.role === 5">
-              <div class="label">Event Owner</div>
-              <div class="value">
-                <span>{{eventData.created_by_first_name}} {{eventData.created_by_last_name}}
-                  ({{eventData.created_by_organization_string}})</span>
-                <span *ngIf="!eventOwner">&nbsp;</span>
+            <div class="privileged-meta">
+              <div class="item"
+                *ngIf="currentUser.role === 1 || currentUser.role === 2 || currentUser.role === 3 || currentUser.role === 4 || currentUser.role === 5">
+                <div class="label">Event Owner</div>
+                <div class="value">
+                  <span>{{eventData.created_by_first_name}} {{eventData.created_by_last_name}}
+                    ({{eventData.created_by_organization_string}})</span>
+                  <span *ngIf="!eventOwner">&nbsp;</span>
+                </div>
+              </div>
+              <div class="item">
+                <div class="label">Event Reference</div>
+                <div class="value">{{eventData.event_reference || " "}}</div>
+              </div>
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
+                <div class="label">Process Status</div>
+                <div class="value">{{eventData.event_status_string || " "}}</div>
+              </div>
+              <div class="item">
+                <div class="label">Created Date</div>
+                <div class="value">{{eventData.created_date || " "}}</div>
+              </div>
+              <div class="item">
+                <div class="label">Last Modified Date</div>
+                <div class="value">{{eventData.modified_date || " "}}</div>
+              </div>
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
+                <div class="label">Staff</div>
+                <div class="value">{{eventData.staff_string}}</div>
+              </div>
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
+                <div class="label">Quality Check</div>
+                <div class="value">{{eventData.quality_check === null ? 'Not Done' : eventData.quality_check !== null ?
+                            (eventData.quality_check | date:'shortDate') : 'Not Done' }}</div>
+              </div>
+              <div class="item">
+                <div class="label">WHISPers Record Status</div>
+                <div class="value">{{eventData.complete ? 'Complete' : 'Incomplete'}}</div>
+              </div>
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
+                <div class="label">Legal Status</div>
+                <div class="value">{{eventData.legal_status_string || " "}}</div>
+              </div>
+              <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
+                <div class="label">Legal Number</div>
+                <div class="value">{{eventData.legal_number || " "}}</div>
               </div>
             </div>
-            <div class="item">
-              <div class="label">Event Reference</div>
-              <div class="value">{{eventData.event_reference || " "}}</div>
-            </div>
-            <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
-              <div class="label">Process Status</div>
-              <div class="value">{{eventData.event_status_string || " "}}</div>
-            </div>
-            <div class="item">
-              <div class="label">Created Date</div>
-              <div class="value">{{eventData.created_date || " "}}</div>
-            </div>
-            <div class="item">
-              <div class="label">Last Modified Date</div>
-              <div class="value">{{eventData.modified_date || " "}}</div>
-            </div>
-            <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
-              <div class="label">Staff</div>
-              <div class="value">{{eventData.staff_string}}</div>
-            </div>
-            <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
-              <div class="label">Quality Check</div>
-              <div class="value">{{eventData.quality_check === null ? 'Not Done' : eventData.quality_check !== null ?
-                            (eventData.quality_check | date:'shortDate') : 'Not Done' }}</div>
-            </div>
-            <div class="item">
-              <div class="label">WHISPers Record Status</div>
-              <div class="value">{{eventData.complete ? 'Complete' : 'Incomplete'}}</div>
-            </div>
-            <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
-              <div class="label">Legal Status</div>
-              <div class="value">{{eventData.legal_status_string || " "}}</div>
-            </div>
-            <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
-              <div class="label">Legal Number</div>
-              <div class="value">{{eventData.legal_number || " "}}</div>
-            </div>
           </div>
-        </div>
 
-        <mat-tab-group class="tab-bar"(selectedIndexChange)="_setDataSource($event)" [selectedIndex]="selectedTab" (selectedTabChange)="resetExpansionPanels()"
-          *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined" #eventDetailsTabs>
-          <!-- (selectedIndexChange)="_setDataSource($event)" -->
-          <!-- Events tab -->
+          <mat-tab-group class="tab-bar" (selectedIndexChange)="_setDataSource($event)" [selectedIndex]="selectedTab"
+            (selectedTabChange)="resetExpansionPanels()" #eventDetailsTabs>
+            <!-- (selectedIndexChange)="_setDataSource($event)" -->
+            <!-- Events tab -->
 
-          <mat-tab label="Event Data" class="event-details-tab-label">
-            <ng-template matTabContent>
-              <mat-card>
-
-
-                <!-- 
+            <mat-tab label="Event Data" class="event-details-tab-label">
+              <ng-template matTabContent>
+                <mat-card>
+                  <!-- 
                               Privileged Event Data
                               Privileged Event Data
                               Privileged Event Data
                            -->
-                <div id="privileged-event-data" class="privileged-event-data"
-                  *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
-
-
-                  <!--  
+                  <div id="privileged-event-data" class="privileged-event-data">
+                    <!--  
                                 Event Diagnosis
                                 Event Organizations
                                -->
-                  <div class="event-detail-wrapper">
+                    <div class="event-detail-wrapper">
 
-                    <div class="detail-section-buttons">
-                      <button mat-button color="primary" class="event-detail-action-button"
-                        (click)="editEvent(eventData.id)" [disabled]="!eventData.permissions.update">
-                        <mat-icon>edit</mat-icon> Edit Event
-                      </button>
-                      <button mat-button color="primary" class="event-detail-action-button"
-                        [disabled]="eventData.complete || !eventData.permissions.update"
-                        (click)="addEventDiagnosis(eventData.id)">
-                        <mat-icon>add</mat-icon> Add Event Diagnosis
-                      </button>
-                      <button mat-button color="primary" class="event-detail-action-button"
-                        [disabled]="eventData.complete || !eventData.permissions.update"
-                        (click)="addEventOrganization(eventData.id)">
-                        <mat-icon>add</mat-icon> Add Event Organization
-                      </button>
-                      <!-- <button mat-stroked-button color="primary" class="event-detail-action-button"
+                      <div class="detail-section-buttons">
+                        <button mat-button color="primary" class="event-detail-action-button"
+                          (click)="editEvent(eventData.id)" [disabled]="!eventData.permissions.update">
+                          <mat-icon>edit</mat-icon> Edit Event
+                        </button>
+                        <button mat-button color="primary" class="event-detail-action-button"
+                          [disabled]="eventData.complete || !eventData.permissions.update"
+                          (click)="addEventDiagnosis(eventData.id)">
+                          <mat-icon>add</mat-icon> Add Event Diagnosis
+                        </button>
+                        <button mat-button color="primary" class="event-detail-action-button"
+                          [disabled]="eventData.complete || !eventData.permissions.update"
+                          (click)="addEventOrganization(eventData.id)">
+                          <mat-icon>add</mat-icon> Add Event Organization
+                        </button>
+                        <!-- <button mat-stroked-button color="primary" class="event-detail-action-button"
                                   *ngIf="currentUser.role === 1 || currentUser.role === 2"
                                   [disabled]="eventData.complete || !eventData.permissions.update"
                                   (click)="addToEventGroup(eventData.id)">
                                   <mat-icon>group_work</mat-icon> Add to Event Group
                                 </button> -->
-                    </div>
+                      </div>
 
-                    <div class="event-page-group">
-                      <div class="event-table-header">Event Diagnoses</div>
+                      <div class="event-page-group">
+                        <div class="event-table-header">Event Diagnoses</div>
 
 
-                      <div *ngIf="eventData.eventdiagnoses.length > 0">
+                        <div *ngIf="eventData.eventdiagnoses.length > 0">
 
-                        <table id="speciesList">
-                          <tr>
-                            <th>Event Diagnosis</th>
-                            <!--<th>Diagnosis Type</th>
+                          <table id="speciesList">
+                            <tr>
+                              <th>Event Diagnosis</th>
+                              <!--<th>Diagnosis Type</th>
                                       <th>Suspect</th>-->
-                            <th>Delete</th>
-                          </tr>
+                              <th>Delete</th>
+                            </tr>
 
-                          <tr *ngFor="let eventdiagnosis of eventData.eventdiagnoses">
-                            <td>{{eventdiagnosis.diagnosis_string}}</td>
-                            <td>
-                              <button mat-icon-button aria-label="delete event diagnosis" color="warn"
-                                [disabled]="!eventData.permissions.destroy || eventData.complete"
-                                (click)="openEventDiagnosisDeleteConfirm(eventdiagnosis.id)">
-                                <mat-icon>remove_circle</mat-icon>
-                              </button>
-                            </td>
+                            <tr *ngFor="let eventdiagnosis of eventData.eventdiagnoses">
+                              <td>{{eventdiagnosis.diagnosis_string}}</td>
+                              <td>
+                                <button mat-icon-button aria-label="delete event diagnosis" color="warn"
+                                  [disabled]="!eventData.permissions.destroy || eventData.complete"
+                                  (click)="openEventDiagnosisDeleteConfirm(eventdiagnosis.id)">
+                                  <mat-icon>remove_circle</mat-icon>
+                                </button>
+                              </td>
 
-                          </tr>
-                        </table>
+                            </tr>
+                          </table>
 
+                        </div>
                       </div>
-                    </div>
 
-                    <div class="event-page-group">
-                      <div class="event-table-header">Event Organizations</div>
+                      <div class="event-page-group">
+                        <div class="event-table-header">Event Organizations</div>
 
-                      <div *ngIf="eventData.eventdiagnoses.length > 0">
-                        <table id="speciesList">
-                          <tr>
-                            <th>Organization</th>
-                            <th>Location</th>
-                            <th>Delete</th>
-                          </tr>
-                          <tr *ngFor="let eventOrganization of eventData.organizations">
-                            <td>{{eventOrganization.organization.name}}</td>
-                            <td> {{eventOrganization.organization.city}} {{eventOrganization.organization.administrative_level_one |
+                        <div *ngIf="eventData.eventdiagnoses.length > 0">
+                          <table id="speciesList">
+                            <tr>
+                              <th>Organization</th>
+                              <th>Location</th>
+                              <th>Delete</th>
+                            </tr>
+                            <tr *ngFor="let eventOrganization of eventData.organizations">
+                              <td>{{eventOrganization.organization.name}}</td>
+                              <td> {{eventOrganization.organization.city}} {{eventOrganization.organization.administrative_level_one |
                                         displayValue:'abbreviation':this.administrative_level_one }} </td>
-                            <td>
-                              <!--eventOrganization.id will need to be updated (unless service response is updated - currently this is the org ID, not eventOrg ID-->
-                              <button mat-icon-button aria-label="delete event organization" color="warn"
-                                [disabled]="!eventData.permissions.destroy || eventData.complete"
-                                (click)="openEventOrganizationDeleteConfirm(eventOrganization.id)">
-                                <mat-icon>remove_circle</mat-icon>
-                              </button>
-                            </td>
-                          </tr>
-                        </table>
+                              <td>
+                                <!--eventOrganization.id will need to be updated (unless service response is updated - currently this is the org ID, not eventOrg ID-->
+                                <button mat-icon-button aria-label="delete event organization" color="warn"
+                                  [disabled]="!eventData.permissions.destroy || eventData.complete"
+                                  (click)="openEventOrganizationDeleteConfirm(eventOrganization.id)">
+                                  <mat-icon>remove_circle</mat-icon>
+                                </button>
+                              </td>
+                            </tr>
+                          </table>
 
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <!-- 
+                    <!-- 
                               Comments
                               Comments
                               Comments
                              -->
-                  <div class="event-detail-wrapper" *ngIf="eventData.comments">
+                    <div class="event-detail-wrapper" *ngIf="eventData.comments">
 
-                    <div class="event-page-group">
+                      <div class="event-page-group">
 
-                      <mat-expansion-panel (opened)="eventCommentsPanelOpen = true"
-                        (closed)="eventCommentsPanelOpen = false">
-                        <mat-expansion-panel-header>
-                          <mat-panel-title>
-                            <mat-icon>comment</mat-icon>
-                            &nbsp;{{eventCommentsPanelOpen ? 'Hide Event Comments' : 'View Event Comments'}}
-                          </mat-panel-title>
-                        </mat-expansion-panel-header>
+                        <mat-expansion-panel (opened)="eventCommentsPanelOpen = true"
+                          (closed)="eventCommentsPanelOpen = false">
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                              <mat-icon>comment</mat-icon>
+                              &nbsp;{{eventCommentsPanelOpen ? 'Hide Event Comments' : 'View Event Comments'}}
+                            </mat-panel-title>
+                          </mat-expansion-panel-header>
 
-                        <div class="event-group-no-data" *ngIf="eventData.comments.length === 0">No comments to show
-                        </div>
+                          <div class="event-group-no-data" *ngIf="eventData.comments.length === 0">No comments to show
+                          </div>
 
-                        <ul *ngIf="eventData.comments.length > 0" class="eventDetailCommentsList">
-                          <li *ngFor="let comment of eventData.comments">
+                          <ul *ngIf="eventData.comments.length > 0" class="eventDetailCommentsList">
+                            <li *ngFor="let comment of eventData.comments">
 
-                            <div class="comment-meta">
-                              <span class="type">
-                                <b>{{comment.comment_type | displayValue:'name':this.commentTypes}}</b>
-                              </span>
-                              <span class="date">{{comment.created_date | date:'shortDate' }}</span>
-                              <span class="identifier">{{comment.created_by_first_name}}
-                                {{comment.created_by_last_name}} | {{comment.created_by_organization_string}}</span>
-                              <button mat-icon-button aria-label="delete event comment" color="warn"
-                                [disabled]="!eventData.permissions.destroy || eventData.complete"
-                                (click)="openCommentDeleteConfirm(comment.id)">
-                                Delete
-                              </button>
-                            </div>
+                              <div class="comment-meta">
+                                <span class="type">
+                                  <b>{{comment.comment_type | displayValue:'name':this.commentTypes}}</b>
+                                </span>
+                                <span class="date">{{comment.created_date | date:'shortDate' }}</span>
+                                <span class="identifier">{{comment.created_by_first_name}}
+                                  {{comment.created_by_last_name}} | {{comment.created_by_organization_string}}</span>
+                                <button mat-icon-button aria-label="delete event comment" color="warn"
+                                  [disabled]="!eventData.permissions.destroy || eventData.complete"
+                                  (click)="openCommentDeleteConfirm(comment.id)">
+                                  Delete
+                                </button>
+                              </div>
 
-                            <div class="comment-text">
-                              {{comment.comment}}
-                            </div>
+                              <div class="comment-text">
+                                {{comment.comment}}
+                              </div>
 
-                          </li>
-                        </ul>
+                            </li>
+                          </ul>
 
-                        <div class="detail-section-buttons">
-                          <button mat-button color="primary" class="event-detail-action-button"
-                            (click)="addEventComment(eventData.id)" [disabled]="!eventData.permissions.update">
-                            <mat-icon>add_comment</mat-icon> Add Comment
-                          </button>
-                        </div>
-                      </mat-expansion-panel>
+                          <div class="detail-section-buttons">
+                            <button mat-button color="primary" class="event-detail-action-button"
+                              (click)="addEventComment(eventData.id)" [disabled]="!eventData.permissions.update">
+                              <mat-icon>add_comment</mat-icon> Add Comment
+                            </button>
+                          </div>
+                        </mat-expansion-panel>
+                      </div>
                     </div>
-                  </div>
-                  <!-- End Event Comments Section -->
+                    <!-- End Event Comments Section -->
 
 
-                  <!-- 
+                    <!-- 
                               Service Requests
                               Service Requests
                               Service Requests
                              -->
-                  <div class="event-detail-wrapper" *ngIf="eventData.servicerequests">
+                    <div class="event-detail-wrapper" *ngIf="eventData.servicerequests">
 
-                    <div class="event-page-group">
+                      <div class="event-page-group">
 
-                      <mat-expansion-panel (opened)="serviceRequestPanelOpen = true"
-                        (closed)="serviceRequestPanelOpen = false">
-                        <mat-expansion-panel-header>
-                          <mat-panel-title>
-                            <mat-icon>question_answer</mat-icon>
-                            &nbsp;{{serviceRequestPanelOpen ? 'Hide Service Requests' : 'View Service Requests'}}
-                          </mat-panel-title>
-                        </mat-expansion-panel-header>
+                        <mat-expansion-panel (opened)="serviceRequestPanelOpen = true"
+                          (closed)="serviceRequestPanelOpen = false">
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                              <mat-icon>question_answer</mat-icon>
+                              &nbsp;{{serviceRequestPanelOpen ? 'Hide Service Requests' : 'View Service Requests'}}
+                            </mat-panel-title>
+                          </mat-expansion-panel-header>
 
-                        <div class="event-group-no-data" *ngIf="eventData.servicerequests.length === 0">No service
-                          requests to
-                          show</div>
+                          <div class="event-group-no-data" *ngIf="eventData.servicerequests.length === 0">No service
+                            requests to
+                            show</div>
 
-                        <!-- <ul *ngIf="eventData.servicerequests.length > 0" class="eventDetailCommentsList has-sub-comments"> -->
-                        <ul *ngIf="eventData.servicerequests.length > 0" class="eventDetailCommentsList">
-                          <li *ngFor="let servicerequest of eventData.servicerequests; last as last">
-                            <div class="comment-meta">
-                              Request:&nbsp;
-                              <span class="text-bold">
-                                {{servicerequest.request_type_string}}&nbsp;&nbsp;
-                              </span>
-                              <span class="date">{{servicerequest.created_date | date:'mediumDate'}}</span>
-                              <span class="identifier">{{servicerequest.created_by_first_name}}
-                                {{servicerequest.created_by_last_name}} |
-                                {{servicerequest.created_by_organization_string}}</span>
-                              <span class="response">Response: {{servicerequest.request_response_string}}</span>
+                          <!-- <ul *ngIf="eventData.servicerequests.length > 0" class="eventDetailCommentsList has-sub-comments"> -->
+                          <ul *ngIf="eventData.servicerequests.length > 0" class="eventDetailCommentsList">
+                            <li *ngFor="let servicerequest of eventData.servicerequests; last as last">
+                              <div class="comment-meta">
+                                Request:&nbsp;
+                                <span class="text-bold">
+                                  {{servicerequest.request_type_string}}&nbsp;&nbsp;
+                                </span>
+                                <span class="date">{{servicerequest.created_date | date:'mediumDate'}}</span>
+                                <span class="identifier">{{servicerequest.created_by_first_name}}
+                                  {{servicerequest.created_by_last_name}} |
+                                  {{servicerequest.created_by_organization_string}}</span>
+                                <span class="response">Response: {{servicerequest.request_response_string}}</span>
+                              </div>
+                              <div class="comment-text">
+                                <!-- Request: {{servicerequest.request_type_string}} <br> -->
+
+                                <label>Comments:</label><br>
+                                <!-- <span *ngIf="servicerequest.comments.length > 0"> -->
+
+                                <ul *ngIf="servicerequest.comments.length > 0" class="eventDetailCommentsList">
+                                  <li *ngFor="let comment of servicerequest.comments">
+
+                                    <div class="comment-meta">
+                                      <span class="type">
+                                        <b>{{comment.comment_type | displayValue:'name':this.commentTypes}}</b>
+                                      </span>
+                                      <span class="date">{{comment.created_date | date:'shortDate' }}</span>
+                                      <span class="identifier">{{comment.created_by_first_name}}
+                                        {{comment.created_by_last_name}} |
+                                        {{comment.created_by_organization_string}}</span>
+                                      <button mat-icon-button aria-label="delete event comment" color="warn"
+                                        [disabled]="!eventData.permissions.destroy || eventData.complete"
+                                        (click)="openCommentDeleteConfirm(comment.id)">
+                                        Delete
+                                      </button>
+                                    </div>
+
+                                    <div class="comment-text">
+                                      {{comment.comment}}
+                                    </div>
+
+                                  </li>
+                                </ul>
+
+
+                                <!-- <div class="comment-response eventDetailCommentsList"
+                                          *ngFor="let comment of servicerequest.comments">
+                                        </div> -->
+                                <!-- </span> -->
+                              </div>
+
+                              <button mat-icon-button aria-label="add comment to service request" color="primary"
+                                [disabled]="!eventData.permissions.update || eventData.complete"
+                                (click)="addServiceRequestComment(servicerequest.id)">
+                                <mat-icon>add_comment</mat-icon>
+                                Add Comment
+                              </button><br>
+                              <button mat-icon-button aria-label="respond to service request" color="primary"
+                                [disabled]="!eventData.permissions.update || eventData.complete"
+                                (click)="addServiceRequestResponse(servicerequest)"
+                                *ngIf="currentUser.role === 1 || currentUser.role === 2">
+                                <mat-icon>assignment_turned_in</mat-icon>
+                                Respond
+                              </button>
+                              <mat-icon style="margin-left: 40px;" class="hint-hover-text" matSuffix
+                                matTooltip={{nwhcCarcassSubApprovalTooltip()}} matTooltipClass="tooltip-breakline">
+                                help</mat-icon>
+                              <mat-divider [inset]="true" *ngIf="!last" class="request-divider"></mat-divider>
+                            </li>
+                          </ul>
+
+                          <div class="detail-section-buttons">
+                            <button mat-button color="primary" class="event-detail-action-button"
+                              (click)="addServiceRequest(eventData.id)"
+                              [disabled]="!eventData.permissions.update || eventData.complete">
+                              <mat-icon>question_answer</mat-icon> Add Service Request
+                            </button>
+                          </div>
+                        </mat-expansion-panel>
+                      </div>
+                    </div>
+                    <!-- End Service Requests Section -->
+
+                    <!-- 
+                              Collaborators
+                              Collaborators
+                              Collaborators
+                             -->
+                    <div class="event-detail-wrapper">
+
+                      <div class="event-page-group">
+
+                        <mat-expansion-panel (opened)="collaboratorsPanelOpen = true"
+                          (closed)="collaboratorsPanelOpen = false">
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                              <mat-icon>group</mat-icon>
+                              &nbsp;{{collaboratorsPanelOpen ? 'Hide Collaborators' : 'View Collaborators'}}
+                            </mat-panel-title>
+                          </mat-expansion-panel-header>
+
+                          <!-- <div class="event-group-no-data" *ngIf="">No collaborators</div> -->
+
+                          <!-- <h3>
+                                    <mat-icon>group</mat-icon> Collaborators
+                                  </h3> -->
+                          <span class="text-smaller">Collaborators on this event with read or write access. These are
+                            Users beyond
+                            your own
+                            organization who are granted these permissions for this specific event.</span>
+                          <p>
+                            <mat-card>
+                              <mat-card-content>
+
+                                <!-- <form [formGroup]="eventSubmissionForm" autocomplete="off"> -->
+                                <div>
+
+                                  <div>
+                                    <h4>
+                                      <mat-icon>lock</mat-icon>Read Only Access
+                                    </h4>
+                                    <mat-list role="list" *ngIf="readCollaboratorArray">
+                                      <mat-list-item *ngIf="readCollaboratorArray.length === 0">No Read Only
+                                        Collaborators
+                                      </mat-list-item>
+                                      <mat-list-item *ngFor="let user of readCollaboratorArray" role="listitem">
+                                        {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
+                                        <button mat-icon-button aria-label="remove collaborator" color="warn"
+                                          (click)="removeCollaborator(user.id, 'read')">
+                                          <mat-icon>remove_circle</mat-icon>
+                                        </button></mat-list-item>
+                                    </mat-list>
+                                    <div class="button-row">
+                                      <button mat-button color="primary"
+                                        matTooltip="{{collaboratorsAddIndividualTooltip()}}"
+                                        (click)="addCollaborator('read')">
+                                        <mat-icon>person_add</mat-icon> Add Individual
+                                      </button>
+                                      <button mat-button color="primary"
+                                        matTooltip="{{collaboratorsAddCircleTooltip()}}"
+                                        (click)="openCircleChooseDialog('read')">
+                                        <mat-icon>group_add</mat-icon> Add Circle
+                                      </button>
+                                    </div>
+                                  </div>
+
+                                  <div>
+                                    <h4>
+                                      <mat-icon>lock_open</mat-icon>Read and Write Access
+                                    </h4>
+                                    <mat-list role="list" *ngIf="writeCollaboratorArray">
+                                      <mat-list-item *ngIf="writeCollaboratorArray.length === 0">No Read and Write
+                                        Collaborators
+                                      </mat-list-item>
+                                      <mat-list-item *ngFor="let user of writeCollaboratorArray" role="listitem">
+                                        {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
+                                        <button mat-icon-button aria-label="remove collaborator" color="warn"
+                                          (click)="removeCollaborator(user.id, 'write')">
+                                          <mat-icon>remove_circle</mat-icon>
+                                        </button></mat-list-item>
+                                    </mat-list>
+                                    <div class="button-row">
+                                      <button mat-button color="primary"
+                                        matTooltip="{{collaboratorsAddIndividualTooltip()}}"
+                                        (click)="addCollaborator('write')">
+                                        <mat-icon>person_add</mat-icon> Add Individual
+                                      </button>
+                                      <button mat-button color="primary"
+                                        matTooltip="{{collaboratorsAddCircleTooltip()}}"
+                                        (click)="openCircleChooseDialog('write')">
+                                        <mat-icon>group_add</mat-icon> Add Circle
+                                      </button>
+                                    </div>
+                                  </div>
+
+                                </div>
+                                <!-- </form> -->
+                              </mat-card-content>
+                            </mat-card>
+
+
+                            <!-- <div class="detail-section-buttons">
+                                    <button mat-button color="primary" class="event-detail-action-button"
+                                      (click)="addServiceRequest(eventData.id)"
+                                      [disabled]="!eventData.permissions.update || eventData.complete">
+                                      <mat-icon>question_answer</mat-icon> Add Service Request
+                                    </button>
+                                  </div> -->
+                        </mat-expansion-panel>
+                      </div>
+                    </div>
+                    <!-- End Collaborators Section -->
+
+                    <!-- 
+                              Location Details
+                              Location Details
+                              Location Details
+                             -->
+                    <div class="event-detail-wrapper">
+                      <div class="event-page-group" id="locationDetails">
+                        <div class="event-table-header">Event Location Details</div>
+
+                        <mat-expansion-panel *ngFor="let eventLocation of eventData.eventlocations; let i = index"
+                          [attr.data-index]="i" class="event-location-detail-wrapper">
+                          <!-- [attr.data-index]="i" (change)="panelDataChange()" class="event-location-detail-wrapper"> -->
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                              <mat-icon>location_on</mat-icon> {{determineLocationName(eventLocation.name,i+1)}}
+                            </mat-panel-title>
+                          </mat-expansion-panel-header>
+
+                          <!--Begin new event location mark up-->
+                          <div class="details-info">
+
+                            <span class="text-larger text-bold">
+                              {{eventLocation.administrative_level_two_string}},
+                              {{eventLocation.administrative_level_one_string}},
+                              {{eventLocation.country_string}}
+                            </span>
+
+                            <div style="margin-bottom: 6px;">
+                              {{eventLocation.start_date | date:'mediumDate'}}
+                              <em>&nbsp;thru&nbsp;</em>
+                              {{eventLocation.end_date | date:'mediumDate'}}
                             </div>
-                            <div class="comment-text">
-                              <!-- Request: {{servicerequest.request_type_string}} <br> -->
 
-                              <label>Comments:</label><br>
-                              <!-- <span *ngIf="servicerequest.comments.length > 0"> -->
+                            <div class="privileged-meta">
+                              <div class="item">
+                                <div class="label">Land ownership
+                                </div>
+                                <div class="value">
+                                  {{eventLocation.land_ownership | displayValue:'name':this.landownerships}}
+                                </div>
+                              </div>
+                              <div class="item">
+                                <div class="label">GNIS Feature Name
+                                </div>
+                                <div class="value">{{eventLocation.gnis_name}}</div>
+                              </div>
+                              <div class="item">
+                                <div class="label">GNIS Feature ID</div>
+                                <div class="value">{{eventLocation.gnis_id}}</div>
+                              </div>
+                              <div class="item">
+                                <div class="label" matTooltip={{flywayTooltip()}}>Flyways
+                                </div>
+                                <div class="value"><span
+                                    *ngFor="let flyway of eventLocation.flyways">{{flyway.name}}</span>
+                                </div>
+                              </div>
+                              <div class="item">
+                                <div class="label">Latitude</div>
+                                <div class="value">{{eventLocation.latitude}}</div>
+                              </div>
+                              <div class="item">
+                                <div class="label">Longitude
+                                </div>
+                                <div class="value">{{eventLocation.longitude}}</div>
+                              </div>
+                            </div>
 
-                              <ul *ngIf="servicerequest.comments.length > 0" class="eventDetailCommentsList">
-                                <li *ngFor="let comment of servicerequest.comments">
+                          </div>
 
+
+                          <!-- Begin Event Location Comments section -->
+                          <mat-expansion-panel (opened)="eventLocation.commentsOpen = true"
+                            (closed)="eventLocation.commentsOpen = false" style="margin: 18px 0;">
+                            <!-- <mat-expansion-panel (opened)="setOpened(i)" (closed)="setClosed(i)"> -->
+                            <!-- <mat-expansion-panel (opened)="setOpened(i)" (closed)="setClosed(i)" *ngFor="let locationComment of"> -->
+                            <mat-expansion-panel-header>
+                              <!-- <mat-panel-title>
+                              {{ currentlyOpenedItemIndex === i ? 'Hide Location Comments' : 'View Location Comments' }}
+                            </mat-panel-title> -->
+                              <mat-panel-title>
+                                {{ eventLocation.commentsOpen ? 'Hide Location Comments' : 'View Location Comments' }}
+                              </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <div class="event-group-no-data"
+                              *ngIf="eventLocation.comments && eventLocation.comments.length === 0">No
+                              comments to show</div>
+
+                            <div *ngIf="eventLocation.comments && eventLocation.comments.length > 0">
+
+                              <ul *ngIf="eventLocation.comments.length > 0" class="eventDetailCommentsList">
+                                <li *ngFor="let comment of eventLocation.comments">
                                   <div class="comment-meta">
                                     <span class="type">
                                       <b>{{comment.comment_type | displayValue:'name':this.commentTypes}}</b>
                                     </span>
-                                    <span class="date">{{comment.created_date | date:'shortDate' }}</span>
-                                    <span class="identifier">{{comment.created_by_first_name}}
+                                    <span class="date">{{comment.created_date | date:'shortDate' }}</span><span
+                                      class="identifier">{{comment.created_by_first_name}}
                                       {{comment.created_by_last_name}} |
                                       {{comment.created_by_organization_string}}</span>
                                     <button mat-icon-button aria-label="delete event comment" color="warn"
-                                      [disabled]="!eventData.permissions.destroy || eventData.complete"
-                                      (click)="openCommentDeleteConfirm(comment.id)">
+                                      [disabled]="!eventData.permissions.destroy"
+                                      (click)="openEventLocationCommentDeleteConfirm(comment.id)">
                                       Delete
                                     </button>
                                   </div>
-
                                   <div class="comment-text">
                                     {{comment.comment}}
                                   </div>
@@ -595,454 +861,213 @@
                                 </li>
                               </ul>
 
-
-                              <!-- <div class="comment-response eventDetailCommentsList"
-                                          *ngFor="let comment of servicerequest.comments">
-                                        </div> -->
-                              <!-- </span> -->
                             </div>
 
-                            <button mat-icon-button aria-label="add comment to service request" color="primary"
-                              [disabled]="!eventData.permissions.destroy || eventData.complete"
-                              (click)="addServiceRequestComment(servicerequest.id)">
-                              <mat-icon>add_comment</mat-icon>
-                              Add Comment
-                            </button><br>
-                            <button mat-icon-button aria-label="respond to service request" color="primary"
-                              [disabled]="!eventData.permissions.destroy || eventData.complete"
-                              (click)="addServiceRequestResponse(servicerequest)"
-                              *ngIf="currentUser.role === 1 || currentUser.role === 2">
-                              <mat-icon>assignment_turned_in</mat-icon>
-                              Respond
-                            </button>
-                            <mat-icon style="margin-left: 40px;" class="hint-hover-text" matSuffix
-                              matTooltip={{nwhcCarcassSubApprovalTooltip()}} matTooltipClass="tooltip-breakline">
-                              help</mat-icon>
-                            <mat-divider [inset]="true" *ngIf="!last" class="request-divider"></mat-divider>
-                          </li>
-                        </ul>
+                            <div class="detail-section-buttons">
+                              <button mat-button color="primary" class="event-detail-action-button"
+                                (click)="addEventLocationComment(eventLocation.id)"
+                                [disabled]="!eventData.permissions.update">
+                                <mat-icon>add_comment</mat-icon> Add Comment
+                              </button>
+                            </div>
+                          </mat-expansion-panel>
+                          <!-- End Event Location Comments section -->
 
-                        <div class="detail-section-buttons">
-                          <button mat-button color="primary" class="event-detail-action-button"
-                            (click)="addServiceRequest(eventData.id)"
-                            [disabled]="!eventData.permissions.update || eventData.complete">
-                            <mat-icon>question_answer</mat-icon> Add Service Request
-                          </button>
-                        </div>
-                      </mat-expansion-panel>
-                    </div>
-                  </div>
-                  <!-- End Service Requests Section -->
 
-                  <!-- 
-                              Collaborators
-                              Collaborators
-                              Collaborators
-                             -->
-                  <div class="event-detail-wrapper">
+                          <!-- Begin Event Location Contacts section -->
+                          <mat-expansion-panel (opened)="eventLocation.contactsOpen = true"
+                            (closed)="eventLocation.contactsOpen  = false" style="margin: 18px 0;">
+                            <mat-expansion-panel-header>
+                              <mat-panel-title>
+                                {{eventLocation.contactsOpen  ? 'Hide Location Contacts' : 'View Location Contacts'}}
+                              </mat-panel-title>
+                            </mat-expansion-panel-header>
 
-                    <div class="event-page-group">
+                            <div class="event-group-no-data"
+                              *ngIf="eventLocation.eventlocationcontacts && eventLocation.eventlocationcontacts.length === 0">
+                              No
+                              contacts to show</div>
 
-                      <mat-expansion-panel (opened)="collaboratorsPanelOpen = true"
-                        (closed)="collaboratorsPanelOpen = false">
-                        <mat-expansion-panel-header>
-                          <mat-panel-title>
-                            <mat-icon>group</mat-icon>
-                            &nbsp;{{collaboratorsPanelOpen ? 'Hide Collaborators' : 'View Collaborators'}}
-                          </mat-panel-title>
-                        </mat-expansion-panel-header>
+                            <div
+                              *ngIf="eventLocation.eventlocationcontacts && eventLocation.eventlocationcontacts.length > 0">
 
-                        <!-- <div class="event-group-no-data" *ngIf="">No collaborators</div> -->
+                              <table>
+                                <tr>
+                                  <th>Name</th>
+                                  <th>Contact Type</th>
+                                  <th>Organization</th>
+                                  <th>Title</th>
+                                  <th>Position</th>
+                                  <th>Email</th>
+                                  <th>Phone</th>
+                                  <th>Remove</th>
+                                </tr>
 
-                        <!-- <h3>
-                                    <mat-icon>group</mat-icon> Collaborators
-                                  </h3> -->
-                        <span class="text-smaller">Collaborators on this event with read or write access. These are
-                          Users beyond
-                          your own
-                          organization who are granted these permissions for this specific event.</span>
-                        <p>
-                          <mat-card>
-                            <mat-card-content>
-
-                              <!-- <form [formGroup]="eventSubmissionForm" autocomplete="off"> -->
-                              <div>
-
-                                <div>
-                                  <h4>
-                                    <mat-icon>lock</mat-icon>Read Only Access
-                                  </h4>
-                                  <mat-list role="list" *ngIf="readCollaboratorArray">
-                                    <mat-list-item *ngIf="readCollaboratorArray.length === 0">No Read Only Collaborators
-                                    </mat-list-item>
-                                    <mat-list-item *ngFor="let user of readCollaboratorArray" role="listitem">
-                                      {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
-                                      <button mat-icon-button aria-label="remove collaborator" color="warn"
-                                        (click)="removeCollaborator(user.id, 'read')">
-                                        <mat-icon>remove_circle</mat-icon>
-                                      </button></mat-list-item>
-                                  </mat-list>
-                                  <div class="button-row">
-                                    <button mat-button color="primary"
-                                      matTooltip="{{collaboratorsAddIndividualTooltip()}}"
-                                      (click)="addCollaborator('read')">
-                                      <mat-icon>person_add</mat-icon> Add Individual
+                                <tr *ngFor="let eventlocationcontact of eventLocation.eventlocationcontacts ">
+                                  <td>{{eventlocationcontact.first_name}}&nbsp;{{eventlocationcontact.last_name}}</td>
+                                  <td>{{eventlocationcontact.contact_type_string}}</td>
+                                  <td>{{eventlocationcontact.organization_string}}</td>
+                                  <td>{{eventlocationcontact.title}}</td>
+                                  <td>{{eventlocationcontact.position}}</td>
+                                  <td>{{eventlocationcontact.email}}</td>
+                                  <td>{{eventlocationcontact.phone}}</td>
+                                  <td>
+                                    <button mat-icon-button aria-label="remove contact" color="warn"
+                                      [disabled]="!eventData.permissions.destroy || eventData.complete"
+                                      (click)="openLocationContactRemoveConfirm(eventlocationcontact.id)"
+                                      matTooltip="Disassociate contact from this event location">
+                                      <mat-icon>remove_circle</mat-icon>
                                     </button>
-                                    <button mat-button color="primary" matTooltip="{{collaboratorsAddCircleTooltip()}}"
-                                      (click)="openCircleChooseDialog('read')">
-                                      <mat-icon>group_add</mat-icon> Add Circle
-                                    </button>
-                                  </div>
-                                </div>
+                                  </td>
+                                </tr>
+                              </table>
 
-                                <div>
-                                  <h4>
-                                    <mat-icon>lock_open</mat-icon>Read and Write Access
-                                  </h4>
-                                  <mat-list role="list" *ngIf="writeCollaboratorArray">
-                                    <mat-list-item *ngIf="writeCollaboratorArray.length === 0">No Read and Write
-                                      Collaborators
-                                    </mat-list-item>
-                                    <mat-list-item *ngFor="let user of writeCollaboratorArray" role="listitem">
-                                      {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
-                                      <button mat-icon-button aria-label="remove collaborator" color="warn"
-                                        (click)="removeCollaborator(user.id, 'write')">
-                                        <mat-icon>remove_circle</mat-icon>
-                                      </button></mat-list-item>
-                                  </mat-list>
-                                  <div class="button-row">
-                                    <button mat-button color="primary"
-                                      matTooltip="{{collaboratorsAddIndividualTooltip()}}"
-                                      (click)="addCollaborator('write')">
-                                      <mat-icon>person_add</mat-icon> Add Individual
-                                    </button>
-                                    <button mat-button color="primary" matTooltip="{{collaboratorsAddCircleTooltip()}}"
-                                      (click)="openCircleChooseDialog('write')">
-                                      <mat-icon>group_add</mat-icon> Add Circle
-                                    </button>
-                                  </div>
-                                </div>
-
-                              </div>
-                              <!-- </form> -->
-                            </mat-card-content>
-                          </mat-card>
-
-
-                          <!-- <div class="detail-section-buttons">
-                                    <button mat-button color="primary" class="event-detail-action-button"
-                                      (click)="addServiceRequest(eventData.id)"
-                                      [disabled]="!eventData.permissions.update || eventData.complete">
-                                      <mat-icon>question_answer</mat-icon> Add Service Request
-                                    </button>
-                                  </div> -->
-                      </mat-expansion-panel>
-                    </div>
-                  </div>
-                  <!-- End Collaborators Section -->
-
-                  <!-- 
-                              Location Details
-                              Location Details
-                              Location Details
-                             -->
-                  <div class="event-detail-wrapper">
-                    <div class="event-page-group" id="locationDetails">
-                      <div class="event-table-header">Event Location Details</div>
-
-                      <mat-expansion-panel *ngFor="let eventLocation of eventData.eventlocations; let i = index"
-                        [attr.data-index]="i" class="event-location-detail-wrapper">
-                        <!-- [attr.data-index]="i" (change)="panelDataChange()" class="event-location-detail-wrapper"> -->
-                        <mat-expansion-panel-header>
-                          <mat-panel-title>
-                            <mat-icon>location_on</mat-icon> {{determineLocationName(eventLocation.name,i+1)}}
-                          </mat-panel-title>
-                        </mat-expansion-panel-header>
-
-                        <!--Begin new event location mark up-->
-                        <div class="details-info">
-
-                          <span class="text-larger text-bold">
-                            {{eventLocation.administrative_level_two_string}},
-                            {{eventLocation.administrative_level_one_string}},
-                            {{eventLocation.country_string}}
-                          </span>
-
-                          <div style="margin-bottom: 6px;">
-                            {{eventLocation.start_date | date:'mediumDate'}}
-                            <em>&nbsp;thru&nbsp;</em>
-                            {{eventLocation.end_date | date:'mediumDate'}}
-                          </div>
-
-                          <div class="privileged-meta">
-                            <div class="item">
-                              <div class="label">Land ownership
-                              </div>
-                              <div class="value">
-                                {{eventLocation.land_ownership | displayValue:'name':this.landownerships}}
-                              </div>
                             </div>
-                            <div class="item">
-                              <div class="label">GNIS Feature Name
-                              </div>
-                              <div class="value">{{eventLocation.gnis_name}}</div>
-                            </div>
-                            <div class="item">
-                              <div class="label">GNIS Feature ID</div>
-                              <div class="value">{{eventLocation.gnis_id}}</div>
-                            </div>
-                            <div class="item">
-                              <div class="label" matTooltip={{flywayTooltip()}}>Flyways
-                              </div>
-                              <div class="value"><span
-                                  *ngFor="let flyway of eventLocation.flyways">{{flyway.name}}</span>
-                              </div>
-                            </div>
-                            <div class="item">
-                              <div class="label">Latitude</div>
-                              <div class="value">{{eventLocation.latitude}}</div>
-                            </div>
-                            <div class="item">
-                              <div class="label">Longitude
-                              </div>
-                              <div class="value">{{eventLocation.longitude}}</div>
-                            </div>
-                          </div>
-
-                        </div>
 
 
-                        <!-- Begin Event Location Comments section -->
-                        <mat-expansion-panel (opened)="eventLocation.commentsOpen = true"
-                          (closed)="eventLocation.commentsOpen = false" style="margin: 18px 0;">
-                          <!-- <mat-expansion-panel (opened)="setOpened(i)" (closed)="setClosed(i)"> -->
-                          <!-- <mat-expansion-panel (opened)="setOpened(i)" (closed)="setClosed(i)" *ngFor="let locationComment of"> -->
-                          <mat-expansion-panel-header>
-                            <!-- <mat-panel-title>
-                              {{ currentlyOpenedItemIndex === i ? 'Hide Location Comments' : 'View Location Comments' }}
-                            </mat-panel-title> -->
-                            <mat-panel-title>
-                              {{ eventLocation.commentsOpen ? 'Hide Location Comments' : 'View Location Comments' }}
-                            </mat-panel-title>
-                          </mat-expansion-panel-header>
-
-                          <div class="event-group-no-data"
-                            *ngIf="eventLocation.comments && eventLocation.comments.length === 0">No
-                            comments to show</div>
-
-                          <div *ngIf="eventLocation.comments && eventLocation.comments.length > 0">
-
-                            <ul *ngIf="eventLocation.comments.length > 0" class="eventDetailCommentsList">
-                              <li *ngFor="let comment of eventLocation.comments">
-                                <div class="comment-meta">
-                                  <span class="type">
-                                    <b>{{comment.comment_type | displayValue:'name':this.commentTypes}}</b>
-                                  </span>
-                                  <span class="date">{{comment.created_date | date:'shortDate' }}</span><span
-                                    class="identifier">{{comment.created_by_first_name}}
-                                    {{comment.created_by_last_name}} | {{comment.created_by_organization_string}}</span>
-                                  <button mat-icon-button aria-label="delete event comment" color="warn"
-                                    [disabled]="!eventData.permissions.destroy"
-                                    (click)="openEventLocationCommentDeleteConfirm(comment.id)">
-                                    Delete
-                                  </button>
-                                </div>
-                                <div class="comment-text">
-                                  {{comment.comment}}
-                                </div>
-
-                              </li>
-                            </ul>
-
-                          </div>
-
-                          <div class="detail-section-buttons">
-                            <button mat-button color="primary" class="event-detail-action-button"
-                              (click)="addEventLocationComment(eventLocation.id)"
-                              [disabled]="!eventData.permissions.update">
-                              <mat-icon>add_comment</mat-icon> Add Comment
-                            </button>
-                          </div>
-                        </mat-expansion-panel>
-                        <!-- End Event Location Comments section -->
-
-
-                        <!-- Begin Event Location Contacts section -->
-                        <mat-expansion-panel (opened)="eventLocation.contactsOpen = true"
-                          (closed)="eventLocation.contactsOpen  = false" style="margin: 18px 0;">
-                          <mat-expansion-panel-header>
-                            <mat-panel-title>
-                              {{eventLocation.contactsOpen  ? 'Hide Location Contacts' : 'View Location Contacts'}}
-                            </mat-panel-title>
-                          </mat-expansion-panel-header>
-
-                          <div class="event-group-no-data"
-                            *ngIf="eventLocation.eventlocationcontacts && eventLocation.eventlocationcontacts.length === 0">
-                            No
-                            contacts to show</div>
-
-                          <div
-                            *ngIf="eventLocation.eventlocationcontacts && eventLocation.eventlocationcontacts.length > 0">
-
-                            <table>
-                              <tr>
-                                <th>Name</th>
-                                <th>Contact Type</th>
-                                <th>Organization</th>
-                                <th>Title</th>
-                                <th>Position</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Remove</th>
-                              </tr>
-
-                              <tr *ngFor="let eventlocationcontact of eventLocation.eventlocationcontacts ">
-                                <td>{{eventlocationcontact.first_name}}&nbsp;{{eventlocationcontact.last_name}}</td>
-                                <td>{{eventlocationcontact.contact_type_string}}</td>
-                                <td>{{eventlocationcontact.organization_string}}</td>
-                                <td>{{eventlocationcontact.title}}</td>
-                                <td>{{eventlocationcontact.position}}</td>
-                                <td>{{eventlocationcontact.email}}</td>
-                                <td>{{eventlocationcontact.phone}}</td>
-                                <td>
-                                  <button mat-icon-button aria-label="remove contact" color="warn"
-                                    [disabled]="!eventData.permissions.destroy || eventData.complete"
-                                    (click)="openLocationContactRemoveConfirm(eventlocationcontact.id)"
-                                    matTooltip="Disassociate contact from this event location">
-                                    <mat-icon>remove_circle</mat-icon>
-                                  </button>
-                                </td>
-                              </tr>
-                            </table>
-
-                          </div>
-
-
-                          <!--
+                            <!--
                                         Loading contacts
                                         Loading contacts
                                         Loading contacts
                                       -->
-                          <div class="detail-section-buttons">
-                            <span *ngIf="userContactsLoading" class="event-group-no-data">
-                              <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
-                              <span>Loading contacts...</span>
-                            </span>
-                          </div>
-                          <!-- 
+                            <div class="detail-section-buttons">
+                              <span *ngIf="userContactsLoading" class="event-group-no-data">
+                                <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
+                                <span>Loading contacts...</span>
+                              </span>
+                            </div>
+                            <!-- 
                                         Add Contact
                                         Add Contact
                                         Add Contact
                                       -->
+                            <div class="detail-section-buttons">
+                              <button mat-button color="primary" class="event-detail-action-button"
+                                (click)="addEventLocationContact(eventLocation.id)"
+                                [disabled]="!eventData.permissions.update || userContactsLoading || eventData.complete"
+                                matTooltip="{{contactPersonTooltip()}}" matTooltipClass="tooltip-breakline">
+                                <mat-icon>add_circle</mat-icon>
+                                Add Contact
+                              </button>
+                            </div>
+                            <div class="detail-section-buttons">
+                              <button mat-button color="primary" class="event-detail-action-button"
+                                [disabled]="eventData.complete" (click)="openCreateContactDialog()"
+                                matTooltip="{{contactPersonTooltip()}}" matTooltipClass="tooltip-breakline">
+                                <mat-icon>person_add</mat-icon> Create New Contact
+                              </button>
+                            </div>
+                          </mat-expansion-panel>
+
+                          <!-- End Event Location Contacts section -->
+
                           <div class="detail-section-buttons">
                             <button mat-button color="primary" class="event-detail-action-button"
-                              (click)="addEventLocationContact(eventLocation.id)"
-                              [disabled]="!eventData.permissions.update || userContactsLoading || eventData.complete"
-                              matTooltip="{{contactPersonTooltip()}}" matTooltipClass="tooltip-breakline">
-                              <mat-icon>add_circle</mat-icon>
-                              Add Contact
+                              (click)="editEventLocation(eventData.eventlocations[i])"
+                              [disabled]="!eventData.permissions.update || eventData.complete">
+                              <mat-icon>edit_location</mat-icon> Edit Event Location Details
+                            </button>
+                            <button mat-button color="warn" class="event-detail-action-button"
+                              (click)="openEventLocationDeleteConfirm(eventData.eventlocations[i].id)"
+                              [disabled]="!eventData.permissions.destroy || eventData.complete">
+                              <mat-icon>delete</mat-icon> Delete Event Location
                             </button>
                           </div>
-                          <div class="detail-section-buttons">
-                            <button mat-button color="primary" class="event-detail-action-button"
-                              [disabled]="eventData.complete" (click)="openCreateContactDialog()"
-                              matTooltip="{{contactPersonTooltip()}}" matTooltipClass="tooltip-breakline">
-                              <mat-icon>person_add</mat-icon> Create New Contact
-                            </button>
+
+                          <div>
+                            <div *ngIf="eventLocation.locationspecies" class="event-table-header">Species at this
+                              location
+                            </div>
+
+                            <app-location-species-table [eventData]="eventData" [laboratories]="laboratories"
+                              [locationspecies]="eventLocation.locationspecies" [permissions]="eventData.permissions"
+                              [ageBiases]="ageBiases" [sexBiases]="sexBiases"></app-location-species-table>
+
+                            <div class="detail-section-buttons">
+                              <span *ngIf="speciesLoading" class="event-group-no-data">
+                                <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
+                                <span>Loading species...</span>
+                              </span>
+                            </div>
+                            <div class="detail-section-buttons">
+                              <button mat-button color="primary" class="event-detail-action-button"
+                                (click)="addLocationSpecies(eventLocation)"
+                                [disabled]="!eventData.permissions.update || speciesLoading || eventData.complete">
+                                <mat-icon>add</mat-icon> Add species to this location
+                              </button>
+                            </div>
                           </div>
                         </mat-expansion-panel>
-
-                        <!-- End Event Location Contacts section -->
-
-                        <div class="detail-section-buttons">
-                          <button mat-button color="primary" class="event-detail-action-button"
-                            (click)="editEventLocation(eventData.eventlocations[i])"
-                            [disabled]="!eventData.permissions.update || eventData.complete">
-                            <mat-icon>edit_location</mat-icon> Edit Event Location Details
-                          </button>
-                          <button mat-button color="warn" class="event-detail-action-button"
-                            (click)="openEventLocationDeleteConfirm(eventData.eventlocations[i].id)"
-                            [disabled]="!eventData.permissions.destroy || eventData.complete">
-                            <mat-icon>delete</mat-icon> Delete Event Location
-                          </button>
-                        </div>
-
-                        <div>
-                          <div *ngIf="eventLocation.locationspecies" class="event-table-header">Species at this location
-                          </div>
-
-                          <app-location-species-table [eventData]="eventData" [laboratories]="laboratories"
-                            [locationspecies]="eventLocation.locationspecies" [permissions]="eventData.permissions"
-                            [ageBiases]="ageBiases" [sexBiases]="sexBiases"></app-location-species-table>
-
-                          <div class="detail-section-buttons">
-                            <span *ngIf="speciesLoading" class="event-group-no-data">
-                              <mat-spinner [diameter]=20 style="margin: 0 auto;"></mat-spinner>
-                              <span>Loading species...</span>
-                            </span>
-                          </div>
-                          <div class="detail-section-buttons">
-                            <button mat-button color="primary" class="event-detail-action-button"
-                              (click)="addLocationSpecies(eventLocation)"
-                              [disabled]="!eventData.permissions.update || speciesLoading || eventData.complete">
-                              <mat-icon>add</mat-icon> Add species to this location
-                            </button>
-                          </div>
-                        </div>
-                      </mat-expansion-panel>
+                      </div>
                     </div>
-                  </div>
 
-                  <!-- 
+                    <!-- 
                               Add new event location
                               Add new event location
                               Add new event location
                                -->
-                  <div class="event-detail-wrapper">
+                    <div class="event-detail-wrapper">
 
-                    <button mat-raised-button color="primary" class="event-detail-action-button"
-                      (click)="addEventLocation()" [disabled]="!eventData.permissions.update || eventData.complete">
-                      <mat-icon>add_location</mat-icon> Add New Event Location
-                    </button>
-                    <button mat-raised-button color="warn" *ngIf="showAddEventLocation"
-                      class="event-detail-action-button" (click)="showAddEventLocation = false;">
-                      <mat-icon>remove_circle</mat-icon> Cancel
-                    </button>
+                      <button mat-raised-button color="primary" class="event-detail-action-button"
+                        (click)="addEventLocation()" [disabled]="!eventData.permissions.update || eventData.complete">
+                        <mat-icon>add_location</mat-icon> Add New Event Location
+                      </button>
+                      <button mat-raised-button color="warn" *ngIf="showAddEventLocation"
+                        class="event-detail-action-button" (click)="showAddEventLocation = false;">
+                        <mat-icon>remove_circle</mat-icon> Cancel
+                      </button>
 
-                    <app-add-event-location *ngIf="showAddEventLocation" [eventData]="eventData"
-                      [eventTypeID]="eventData.event_type">
-                    </app-add-event-location>
+                      <app-add-event-location *ngIf="showAddEventLocation" [eventData]="eventData"
+                        [eventTypeID]="eventData.event_type">
+                      </app-add-event-location>
+
+                    </div>
 
                   </div>
+                </mat-card>
+              </ng-template>
+            </mat-tab>
 
-                </div>
-              </mat-card>
-            </ng-template>
-          </mat-tab>
+            <!-- Comments Tab -->
+            <mat-tab label="Comment Timeline">
+              <ng-template matTabContent>
+                <mat-card class="overflow-auto">
+                  <div class="app-comments-table">
+                    <app-comments-table [eventData]="eventData" [commentTypes]="commentTypes"></app-comments-table>
+                  </div>
+                </mat-card>
+              </ng-template>
+            </mat-tab>
+            <!-- End Comments Tab -->
 
-          <!-- Comments Tab -->
-          <mat-tab label="Comment Timeline"
-            *ngIf="currentUser.role !== 7 && currentUser.role !== 6 && currentUser.role != undefined">
-            <ng-template matTabContent>
-              <mat-card>
-                <div class="app-comments-table">
-                  <app-comments-table [eventData]="eventData" [commentTypes]="commentTypes"></app-comments-table>
-                </div>
-              </mat-card>
-            </ng-template>
-          </mat-tab>
-        </mat-tab-group>
-        <!-- End Comments Tab -->
+            <!-- Alerts Tab -->
+            <mat-tab label="Alert Collaborators">
+              <ng-template matTabContent>
+                <mat-card>
+                  <div class="app-comments-table">
+                    <app-alert-collaborators></app-alert-collaborators>
+                  </div>
+                </mat-card>
+              </ng-template>
+            </mat-tab>
+            <!-- Alerts Tab -->
+
+          </mat-tab-group>
+          <!-- End Tabs -->
+        </div>
+
+        <!-- End privileged data section -->
+
       </mat-card-content>
     </mat-card>
   </div>
 
   <div class="mapDiv">
     <mat-card>
-      <div id="map">
+      <div id="eventDetailsMap">
 
         <mat-card class="unmappable-warning" data-html2canvas-ignore
-          *ngIf="unMappables.length > 0 && currentUser.username != '' && currentUser.role !== 7"
+          *ngIf="unMappables.length > 0 && currentUser.username != '' && currentUser.role !== 7 && eventData.is_privileged_user"
           matTooltip="Exact latitude and longitude for the listed locations are absent in the WHISPers database."
           [matTooltipPosition]="'above'">
           <span>

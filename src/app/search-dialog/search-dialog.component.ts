@@ -1,5 +1,5 @@
 
-import {map, startWith} from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
@@ -162,7 +162,7 @@ export class SearchDialogComponent implements OnInit {
           this.eventTypes = eventTypes;
           this.filteredEventTypes = this.eventTypeControl.valueChanges.pipe(
             startWith(null),
-            map(val => this.filter(val, this.eventTypes, 'name')),);
+            map(val => this.filter(val, this.eventTypes, 'name')));
 
           if (this.data.query && this.data.query['event_type'] && this.data.query['event_type'].length > 0) {
             for (const index in eventTypes) {
@@ -189,7 +189,7 @@ export class SearchDialogComponent implements OnInit {
           });
           this.filteredDiagnosisTypes = this.diagnosisTypeControl.valueChanges.pipe(
             startWith(null),
-            map(val => this.filter(val, this.diagnosisTypes, 'name')),);
+            map(val => this.filter(val, this.diagnosisTypes, 'name')));
 
           if (this.data.query && this.data.query['diagnosis_type'] && this.data.query['diagnosis_type'].length > 0) {
             /*for (const index in diagnosisTypes) {
@@ -235,7 +235,7 @@ export class SearchDialogComponent implements OnInit {
           });
           this.filteredDiagnoses = this.diagnosisControl.valueChanges.pipe(
             startWith(null),
-            map(val => this.filter(val, this.diagnoses, 'name')),);
+            map(val => this.filter(val, this.diagnoses, 'name')));
 
           if (this.data.query && this.data.query['diagnosis'] && this.data.query['diagnosis'].length > 0) {
             for (const index in diagnoses) {
@@ -270,13 +270,13 @@ export class SearchDialogComponent implements OnInit {
           this.administrative_level_one = adminLevelOnes;
           this.filteredAdminLevelOnes = this.adminLevelOneControl.valueChanges.pipe(
             startWith(null),
-            map(val => this.filter(val, this.administrative_level_one, 'name')),);
+            map(val => this.filter(val, this.administrative_level_one, 'name')));
 
           if (this.data.query && this.data.query['administrative_level_one'].length > 0) {
             for (const index in adminLevelOnes) {
               if (this.data.query['administrative_level_one'].some(
                 function (el) {
-                  console.log(el);
+                  console.log('variable el: ' + el);
                   let match = false;
                   if (typeof el === 'number') {
                     if (el === adminLevelOnes[index].id) {
@@ -331,7 +331,7 @@ export class SearchDialogComponent implements OnInit {
           });
           this.filteredSpecies = this.speciesControl.valueChanges.pipe(
             startWith(null),
-            map(val => this.filter(val, this.species, 'name')),);
+            map(val => this.filter(val, this.species, 'name')));
 
           if (this.data.query && this.data.query['species'] && this.data.query['species'].length > 0) {
             /*for (const index in species) {
@@ -516,7 +516,7 @@ export class SearchDialogComponent implements OnInit {
             this.diagnosesLoading = false;
             this.filteredDiagnoses = this.diagnosisControl.valueChanges.pipe(
               startWith(null),
-              map(val => this.filter(val, this.diagnoses, 'name')),);
+              map(val => this.filter(val, this.diagnoses, 'name')));
           },
           error => {
             this.errorMessage = <any>error;
@@ -546,7 +546,7 @@ export class SearchDialogComponent implements OnInit {
             this.adminLevelTwosLoading = false;
             this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges.pipe(
               startWith(null),
-              map(val => this.filter(val, self.administrative_level_two, 'name')),);
+              map(val => this.filter(val, self.administrative_level_two, 'name')));
           },
           error => {
             this.errorMessage = <any>error;
@@ -588,7 +588,7 @@ export class SearchDialogComponent implements OnInit {
           this.administrative_level_two = this.administrative_level_two.concat(adminLevelTwos);
           this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges.pipe(
             startWith(null),
-            map(val => this.filter(val, this.administrative_level_two, 'name')),);
+            map(val => this.filter(val, this.administrative_level_two, 'name')));
 
           if (this.data.query && this.data.query['administrative_level_two'].length > 0) {
             for (const index in adminLevelTwos) {

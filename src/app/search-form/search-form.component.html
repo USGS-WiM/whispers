@@ -254,9 +254,15 @@
           <b>Number Affected</b>
         </mat-panel-title>
         <mat-panel-description>
-          <span> {{ searchForm.get('affected_count_operator').value === '__gte' && searchForm.get('affected_count').value != null ? '&ge;' :
-            searchForm.get('affected_count_operator').value === '__lte' && searchForm.get('affected_count').value != null ? '&le;' : '' }}
-            {{searchForm.get('affected_count').value}}</span>
+          <mat-chip-list *ngIf="searchForm.get('affected_count').value != null">
+            <mat-chip [selectable]="true" [removable]="true" (click)="$event.stopPropagation()"
+              (removed)="searchForm.get('affected_count').setValue(null)">
+              <span> {{ searchForm.get('affected_count_operator').value === '__gte' && searchForm.get('affected_count').value != null ? '&ge;' :
+                searchForm.get('affected_count_operator').value === '__lte' && searchForm.get('affected_count').value != null ? '&le;' : '' }}
+                {{searchForm.get('affected_count').value}}</span>
+              <mat-icon matChipRemove (click)="$event.stopPropagation()">cancel</mat-icon>
+            </mat-chip>
+          </mat-chip-list>
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div>
@@ -281,9 +287,17 @@
           <b>Date Range</b>
         </mat-panel-title>
         <mat-panel-description>
-          <span>{{searchForm.get('start_date').value | date:'mediumDate'}}</span>
-          <span *ngIf="(searchForm.get('start_date').value !== null) || (searchForm.get('end_date').value !== null)">&nbsp;thru&nbsp;</span>
-          <span>{{searchForm.get('end_date').value | date:'mediumDate'}}</span>
+          <mat-chip-list *ngIf="!searchForm.get('end_date').hasError('endDateBeforeStart') && (searchForm.get('start_date').value !== null || searchForm.get('end_date').value !== null)">
+            <mat-chip [selectable]="true" [removable]="true" (click)="$event.stopPropagation()"
+              (removed)="clearDates()">
+              <span style="white-space: nowrap;">
+                <span>{{searchForm.get('start_date').value | date:'mediumDate'}}</span>
+                <span *ngIf="(searchForm.get('start_date').value !== null) || (searchForm.get('end_date').value !== null)"> - </span>
+                <span>{{searchForm.get('end_date').value | date:'mediumDate'}}</span>
+              </span>
+              <mat-icon matChipRemove (click)="$event.stopPropagation()">cancel</mat-icon>
+            </mat-chip>
+          </mat-chip-list>
           <span *ngIf="searchForm.get('end_date').hasError('endDateBeforeStart')" class="date-range-warning"><mat-icon>warning</mat-icon>&nbsp;Invalid date range</span>
         </mat-panel-description>
       </mat-expansion-panel-header>
@@ -312,10 +326,16 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <b>Event Completion</b>
+          <b>Record Status</b>
         </mat-panel-title>
         <mat-panel-description>
-            <span> {{ searchForm.get('complete').value == null ? 'Complete and incomplete events' : searchForm.get('complete').value == true ? 'Complete events only' :  searchForm.get('complete').value == false ? 'Incomplete events only' : 'Complete and incomplete events' }}</span>
+          <mat-chip-list *ngIf="searchForm.get('complete').value != null">
+            <mat-chip [selectable]="true" [removable]="true" (click)="$event.stopPropagation()"
+              (removed)="searchForm.get('complete').setValue(null)">
+              <span>{{ searchForm.get('complete').value == true ? 'Complete events only' : 'Incomplete events only' }}</span>
+              <mat-icon matChipRemove (click)="$event.stopPropagation()">cancel</mat-icon>
+            </mat-chip>
+          </mat-chip-list>
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div>

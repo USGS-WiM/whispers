@@ -216,6 +216,11 @@ export class APP_SETTINGS {
         });
     }
 
+    public static get HTTP_CLIENT_MIN_JSON_HEADERS() {
+        return new HttpHeaders({
+            'Accept': 'application/json'
+        });
+    }
 
     public static get AUTH_REQUEST_HEADERS() {
         return new Headers({

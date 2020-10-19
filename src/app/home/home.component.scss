@@ -20,7 +20,7 @@
             padding: 10px;
             justify-content: center;
             button {
-                min-width: 50%;
+                // min-width: 50%;
                 margin: 0 auto;
             }
         }
@@ -473,4 +473,10 @@ button {
 
 .red-highlight {
     background-color: rgb(252, 199, 199) !important;
+}
+
+app-search-form {
+  max-height: 60vh;
+  display: block;
+  overflow-y: auto;
 }

@@ -48,13 +48,22 @@
       <app-search-form [query]="currentDisplayQuery" [narrow]="true"></app-search-form>
 
 
+      <div class="search-button-row">
+        <button mat-stroked-button color="accent" (click)="resetToDefault()">
+          <mat-icon class="material-icons">undo</mat-icon>
+          Default
+        </button>
+        <button mat-stroked-button color="accent" (click)="clearSearchForm()">
+          <mat-icon class="material-icons">clear_all</mat-icon>
+          Clear
+        </button>
+        <button mat-raised-button color="accent" (click)="applyFilter()" [disabled]="searchFormComponent.invalid">
+          <mat-icon class="material-icons">search</mat-icon> Search
+        </button>
+      </div>
       <button mat-stroked-button color="accent" (click)="saveSearch()" [disabled]="searchFormComponent.invalid"
         matTooltip="Save the currently displayed filter to your user profile" *ngIf="currentUser.role !== undefined">
         <mat-icon>save</mat-icon> Save Filter
-      </button>
-
-      <button mat-raised-button color="accent" (click)="applyFilter()" [disabled]="searchFormComponent.invalid">
-        <mat-icon class="material-icons">search</mat-icon> Search
       </button>
     </div>
 

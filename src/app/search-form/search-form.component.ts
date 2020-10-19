@@ -81,6 +81,7 @@ export class SearchFormComponent implements OnInit {
   speciesPanelOpenState = false;
   adminLevelOnePanelOpenState = false;
   adminLevelTwoPanelOpenState = false;
+  initialValues: any;
 
   endDateBeforeStart(AC: AbstractControl) {
     AC.get('end_date').setErrors(null);
@@ -116,6 +117,7 @@ export class SearchFormComponent implements OnInit {
       {
         validator: [this.endDateBeforeStart]
       });
+    this.initialValues = this.searchForm.value;
   }
 
   constructor(
@@ -607,12 +609,36 @@ export class SearchFormComponent implements OnInit {
     //this.searchDialogService.setSearchQuery(this.defaultSearchQuery);
 
     this.clearDates();
-    this.searchForm.reset();
+    this.searchForm.reset(this.initialValues);
   }
 
   clearDates() {
     this.searchForm.get('start_date').setValue(null);
     this.searchForm.get('end_date').setValue(null);
+  }
+
+  resetToDefault() {
+
+    this.searchFormService.setDisplayQuery(this.defaultDisplayQuery);
+    this.searchFormService.setSearchQuery(this.defaultSearchQuery);
+    this.clearSelection();
+
+    // Assumes only start_date and end_date defined in defaultDisplayQuery
+    if (this.defaultDisplayQuery['start_date']) {
+      const startDate = APP_UTILITIES.timeZoneAdjust(this.defaultDisplayQuery['start_date']);
+      this.searchForm.controls['start_date'].setValue(startDate);
+    }
+
+    if (this.defaultDisplayQuery['end_date']) {
+      const endDate = APP_UTILITIES.timeZoneAdjust(this.defaultDisplayQuery['end_date']);
+      this.searchForm.controls['end_date'].setValue(endDate);
+    }
+  }
+
+  clearSearchForm() {
+    // Note: we won't submit the search since the user needs to pick some
+    // criteria before submitting the search
+    this.clearSelection();
   }
 
   get invalid() {

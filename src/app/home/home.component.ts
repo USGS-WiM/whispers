@@ -261,6 +261,16 @@ export class HomeComponent implements OnInit {
     this.searchFormComponent.submitSearch();
   }
 
+  resetToDefault() {
+    this.searchFormComponent.resetToDefault();
+  }
+
+  clearSearchForm() {
+    // Note: this won't trigger a submission of the search since the user needs
+    // to pick some criteria before submitting the search
+    this.searchFormComponent.clearSelection();
+  }
+
 
   ngOnInit() {
 

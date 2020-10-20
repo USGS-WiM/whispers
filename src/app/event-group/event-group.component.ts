@@ -43,7 +43,7 @@ export class EventGroupComponent implements AfterViewInit, OnInit {
     'select',
     'id',
     'category',
-    'comment',
+    'comments',
     'events'
   ];
 

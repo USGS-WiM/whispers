@@ -629,6 +629,11 @@ mat-progress-bar .mat-progress-bar-buffer {
     }
 }
 
+button {
+  // Apply standard Material Design styling on buttons by making label uppercase
+  text-transform: uppercase;
+}
+
 // Change spacing between form elements
 .form-control{
 	margin: 6px 10px !important;

@@ -773,8 +773,6 @@ export class SearchFormComponent implements OnInit {
     // use searchForm.value to build the web service query, send to searchFormService
     this.searchFormService.setSearchQuery(searchQuery);
 
-    sessionStorage.setItem('currentSearch', JSON.stringify(searchQuery));
-
     gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'Search submitted, date range: ' + searchQuery.start_date + ' - ' + searchQuery.end_date });
 
 

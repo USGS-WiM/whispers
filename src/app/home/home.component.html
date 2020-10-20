@@ -61,10 +61,31 @@
           <mat-icon class="material-icons">search</mat-icon> Search
         </button>
       </div>
-      <button mat-stroked-button color="accent" (click)="saveSearch()" [disabled]="searchFormComponent.invalid"
-        matTooltip="Save the currently displayed filter to your user profile" *ngIf="currentUser.role !== undefined">
-        <mat-icon>save</mat-icon> Save Filter
-      </button>
+      <div class="search-button-row" *ngIf="currentUser.role !== undefined">
+        <button mat-stroked-button color="accent" (click)="saveSearch()" [disabled]="searchFormComponent.invalid"
+          matTooltip="Save the currently displayed filter to your user profile">
+          <mat-icon>save</mat-icon> Save Search Criteria
+        </button>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="search-button-row" *ngIf="this.currentResults">
+        <strong class="mat-body-strong">Export Search Results</strong>
+        <button mat-stroked-button color="accent" [disabled]="this.currentResults.length < 1"
+          (click)="exportEventSummaries()"
+          matTooltip="Click to generate a CSV export of your results. Disabled when no results available.">
+          <mat-icon>
+            unarchive
+          </mat-icon> Data
+        </button>
+        <button mat-stroked-button color="accent" [disabled]="this.currentResults.length < 1"
+          (click)="generateResultsSummaryReport()"
+          matTooltip="Click to generate a printable summary report of your results. Disabled when no results available.">
+          <mat-icon>
+            picture_as_pdf
+          </mat-icon> Report
+        </button>
+      </div>
+      <mat-divider></mat-divider>
     </div>
 
     <mat-expansion-panel>
@@ -371,20 +392,6 @@
           <span class="spacer"></span>
 
           <span class="results-button-row" *ngIf="this.currentResults">
-            <button mat-button color="accent" [disabled]="this.currentResults.length < 1"
-              (click)="generateResultsSummaryReport()"
-              matTooltip="Click to generate a printable summary report of your results. Disabled when no results available.">
-              <mat-icon>
-                list_alt
-              </mat-icon> Generate Search Results Report
-            </button>
-            <button mat-button color="accent" [disabled]="this.currentResults.length < 1"
-              (click)="exportEventSummaries()"
-              matTooltip="Click to generate a CSV export of your results. Disabled when no results available.">
-              <mat-icon>
-                unarchive
-              </mat-icon> Export Data
-            </button>
             <button mat-button color="accent" (click)="openMetadataLink()"
               matTooltip="Click to open the WHISPers informational site, including metadata (external link).">
               <mat-icon>list</mat-icon> Metadata

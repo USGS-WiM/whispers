@@ -1099,8 +1099,6 @@ export class HomeComponent implements OnInit {
   }
 
   implementSearch(search) {
-    sessionStorage.setItem('currentSearch', JSON.stringify(search));
-
     // TODO: currentDiplayQuery needs to be parsed from the search object
     const displayQuery: DisplayQuery = {
       event_type: [],

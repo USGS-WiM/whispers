@@ -9,6 +9,7 @@ export class SearchFormService {
 
   setSearchQuery(query: any) {
     this.searchQuery.next(query);
+    sessionStorage.setItem('currentSearch', JSON.stringify(query));
   }
 
   getSearchQuery(): Observable<any> {

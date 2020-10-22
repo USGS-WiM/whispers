@@ -49,3 +49,7 @@ app-chiplist + .autocomplete-input {
   color: red;
   font-weight: bold;
 }
+
+.mat-expansion-panel-header.mat-expanded {
+  border-bottom: none;
+}

@@ -24,7 +24,7 @@
         </app-chiplist>
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
-            <input type="text" matInput placeholder="Add Event Type" aria-label="Add Event Type" [matAutocomplete]="eventTypeAutoComplete"
+            <input type="text" matInput placeholder="Select Event Type" aria-label="Select Event Type" [matAutocomplete]="eventTypeAutoComplete"
               [formControl]="eventTypeControl" (valueChanges)="addChip($event, selectedEventTypes, 'eventType')" (blur)="resetFormControl('eventType')">
             <mat-autocomplete #eventTypeAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedEventTypes, 'eventType')">
               <mat-option *ngFor="let eventType of filteredEventTypes | async" [value]="eventType">
@@ -64,7 +64,7 @@
         </app-chiplist>
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
-            <input type="text" matInput placeholder="Add Diagnosis Type" aria-label="Add Diagnosis Type"
+            <input type="text" matInput placeholder="Select Diagnosis Type" aria-label="Select Diagnosis Type"
               [matAutocomplete]="diagnosisTypeAutoComplete" [formControl]="diagnosisTypeControl" (blur)="resetFormControl('diagnosisType')">
             <mat-autocomplete #diagnosisTypeAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedDiagnosisTypes, 'diagnosisType')">
               <mat-option *ngFor="let diagnosisType of filteredDiagnosisTypes | async" [value]="diagnosisType">
@@ -104,7 +104,7 @@
         </app-chiplist>
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
-            <input type="text" matInput placeholder="Add Event Diagnosis" aria-label="Add Event Diagnosis" [matAutocomplete]="diagnosisAutoComplete"
+            <input type="text" matInput placeholder="Select Event Diagnosis" aria-label="Select Event Diagnosis" [matAutocomplete]="diagnosisAutoComplete"
               [formControl]="diagnosisControl" (blur)="resetFormControl('diagnosis')">
             <mat-autocomplete #diagnosisAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedDiagnoses, 'diagnosis')">
               <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis">
@@ -144,7 +144,7 @@
         </app-chiplist>
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
-            <input type="text" matInput placeholder="Add Species" aria-label="Add Species" [matAutocomplete]="speciesAutoComplete"
+            <input type="text" matInput placeholder="Select Species" aria-label="Select Species" [matAutocomplete]="speciesAutoComplete"
               [formControl]="speciesControl" (blur)="resetFormControl('species')">
             <mat-spinner *ngIf="speciesLoading" [diameter]="20"></mat-spinner>
             <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedSpecies, 'species')">
@@ -185,7 +185,7 @@
         </app-chiplist>
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
-            <input type="text" matInput placeholder="Add State" aria-label="Add State" [matAutocomplete]="adminLevelOneAutoComplete"
+            <input type="text" matInput placeholder="Select State" aria-label="Select State" [matAutocomplete]="adminLevelOneAutoComplete"
               [formControl]="adminLevelOneControl" (blur)="resetFormControl('adminLevelOne')">
             <mat-autocomplete #adminLevelOneAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedAdminLevelOnes, 'adminLevelOne')">
               <mat-option *ngFor="let adminLevelOne of filteredAdminLevelOnes | async" [value]="adminLevelOne">
@@ -225,7 +225,7 @@
         </app-chiplist>
         <div class="autocomplete-input">
           <mat-form-field class="full-width has-hint">
-            <input type="text" matInput placeholder="Add County" aria-label="Add County" [matAutocomplete]="adminLevelTwoAutoComplete"
+            <input type="text" matInput placeholder="Select County" aria-label="Select County" [matAutocomplete]="adminLevelTwoAutoComplete"
               [formControl]="adminLevelTwoControl" (blur)="resetFormControl('adminLevelTwo')">
             <mat-spinner *ngIf="adminLevelTwosLoading" [diameter]="20"></mat-spinner>
             <mat-autocomplete #adminLevelTwoAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedAdminLevelTwos, 'adminLevelTwo')">

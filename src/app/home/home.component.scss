@@ -16,13 +16,12 @@
         .search-button-row {
             display: flex;
             flex-direction: row;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             padding: 10px;
-            justify-content: center;
+            justify-content: space-between;
             align-items: baseline;
-            button {
-                // min-width: 50%;
-                margin: 0 auto;
+            button + button {
+              margin-left: 5px;
             }
         }
     } // Right side

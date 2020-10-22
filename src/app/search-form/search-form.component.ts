@@ -15,7 +15,7 @@ import { DiagnosisTypeService } from '@app/services/diagnosis-type.service';
 import { DiagnosisService } from '@app/services/diagnosis.service';
 import { EventTypeService } from '@app/services/event-type.service';
 import { SpeciesService } from '@app/services/species.service';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { SearchFormService } from './search-form.service';
 declare let gtag: Function;
@@ -145,30 +145,23 @@ export class SearchFormComponent implements OnInit {
 
   ngOnInit() {
 
+
     // get event types from the eventType service
-    this._eventTypeService.getEventTypes()
-      .subscribe(
+    const eventTypes$ = this._eventTypeService.getEventTypes();
+    eventTypes$.subscribe(
         eventTypes => {
           this.eventTypes = eventTypes;
           this.filteredEventTypes = this.eventTypeControl.valueChanges.pipe(
             startWith(null),
             map(val => this.filter(val, this.eventTypes, 'name')));
-
-          if (this.query && this.query['event_type'] && this.query['event_type'].length > 0) {
-            for (const index in eventTypes) {
-              if (this.query['event_type'].some(function (el) { return el === eventTypes[index].name; })) {
-                this.dropdownSetup(this.eventTypeControl, this.selectedEventTypes, eventTypes[index]);
-              }
-            }
-          }
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
     // get diagnosis types from the diagnosisType service
-    this._diagnosisTypeService.getDiagnosisTypes()
-      .subscribe(
+    const diagnosisTypes$ = this._diagnosisTypeService.getDiagnosisTypes();
+    diagnosisTypes$.subscribe(
         (diagnosisTypes) => {
           this.diagnosisTypes = diagnosisTypes;
           // alphabetize the diagnosis type options list
@@ -181,40 +174,14 @@ export class SearchFormComponent implements OnInit {
             startWith(null),
             map(val => this.filter(val, this.diagnosisTypes, 'name')));
 
-          if (this.query && this.query['diagnosis_type'] && this.query['diagnosis_type'].length > 0) {
-            /*for (const index in diagnosisTypes) {
-              if (this.data.query['diagnosis_type'].some(function (el) { return el === diagnosisTypes[index].name; })) {
-                this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, diagnosisTypes[index]);
-              }
-            }*/
-            for (const index in diagnosisTypes) {
-              if (this.query['diagnosis_type'].some(
-                function (el) {
-                  console.log(el);
-                  let match = false;
-                  if (typeof el == 'number') {
-                    if (el === diagnosisTypes[index].id) {
-                      match = true;
-                    }
-                  } else {
-                    if (el === diagnosisTypes[index].name) {
-                      match = true;
-                    }
-                  }
-                  return match;
-                })) {
-                this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, diagnosisTypes[index]);
-              }
-            }
-          }
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
     // get diagnoses from the diagnoses service
-    this.diagnosisService.getDiagnoses()
-      .subscribe(
+    const diagnoses$ = this.diagnosisService.getDiagnoses();
+    diagnoses$.subscribe(
         (diagnoses) => {
           this.diagnoses = diagnoses;
           // alphabetize the diagnosis options list
@@ -227,63 +194,19 @@ export class SearchFormComponent implements OnInit {
             startWith(null),
             map(val => this.filter(val, this.diagnoses, 'name')));
 
-          if (this.query && this.query['diagnosis'] && this.query['diagnosis'].length > 0) {
-            for (const index in diagnoses) {
-              if (this.query['diagnosis'].some(
-                function (el) {
-                  // console.log(el);
-                  let match = false;
-                  if (typeof el === 'number') {
-                    if (el === diagnoses[index].id) {
-                      match = true;
-                    }
-                  } else {
-                    if (el === diagnoses[index].name) {
-                      match = true;
-                    }
-                  }
-                  return match;
-                })) {
-                this.dropdownSetup(this.diagnosisControl, this.selectedDiagnoses, diagnoses[index]);
-              }
-            }
-          }
         },
         error => {
           this.errorMessage = <any>error;
         }
       );
     // get adminLevelOnes from the adminLevelOne service
-    this.adminLevelOneService.getAdminLevelOnes()
-      .subscribe(
+    const adminLevelOnes$ = this.adminLevelOneService.getAdminLevelOnes();
+    adminLevelOnes$.subscribe(
         (adminLevelOnes) => {
           this.administrative_level_one = adminLevelOnes;
           this.filteredAdminLevelOnes = this.adminLevelOneControl.valueChanges.pipe(
             startWith(null),
             map(val => this.filter(val, this.administrative_level_one, 'name')));
-
-          if (this.query && this.query['administrative_level_one'].length > 0) {
-            for (const index in adminLevelOnes) {
-              if (this.query['administrative_level_one'].some(
-                function (el) {
-                  console.log('variable el: ' + el);
-                  let match = false;
-                  if (typeof el === 'number') {
-                    if (el === adminLevelOnes[index].id) {
-                      match = true;
-                    }
-                  } else {
-                    if (el === adminLevelOnes[index].name) {
-                      match = true;
-                    }
-                  }
-                  return match;
-                })) {
-                this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, adminLevelOnes[index]);
-                this.updateAdminLevelTwoOptions(adminLevelOnes[index].id);
-              }
-            }
-          }
 
         },
         error => {
@@ -309,8 +232,8 @@ export class SearchFormComponent implements OnInit {
         ); */
 
     // get species from the species service
-    this._speciesService.getSpecies()
-      .subscribe(
+    const species$ = this._speciesService.getSpecies();
+    species$.subscribe(
         (species) => {
           this.species = species;
           // alphabetize the species options list
@@ -323,31 +246,6 @@ export class SearchFormComponent implements OnInit {
             startWith(null),
             map(val => this.filter(val, this.species, 'name')));
 
-          if (this.query && this.query['species'] && this.query['species'].length > 0) {
-            /*for (const index in species) {
-              if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
-                this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
-              }
-            }*/
-            for (const index in species) {
-              if (this.query['species'].some(
-                function (el) {
-                  let match = false;
-                  if (typeof el == 'number') {
-                    if (el === species[index].id) {
-                      match = true;
-                    }
-                  } else {
-                    if (el === species[index].name) {
-                      match = true;
-                    }
-                  }
-                  return match;
-                })) {
-                this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
-              }
-            }
-          }
           this.speciesLoading = false;
           this.speciesControl.enable();
         },
@@ -356,7 +254,151 @@ export class SearchFormComponent implements OnInit {
         }
       );
 
-    const query: SearchQuery = <any>this.query;
+    forkJoin([eventTypes$, diagnosisTypes$, diagnoses$, adminLevelOnes$, species$]).subscribe(
+      () => {
+          this.setCurrentSearch(this.query);
+          this.searchFormService.getDisplayQuery().subscribe(query => {
+            this.setCurrentSearch(query);
+          })
+      },
+      error => {
+        this.errorMessage = <any>error;
+      }
+    );
+  }
+
+  setCurrentSearch(query:DisplayQuery) {
+    this.clearSelection();
+    this.setCurrentEventTypes(query);
+    this.setCurrentDiagnosisTypes(query);
+    this.setCurrentDiagnoses(query);
+    this.setCurrentAdminLevelOne(query);
+    this.setCurrentSpecies(query);
+    this.setNonLookupFormControls(query);
+  }
+
+  setCurrentEventTypes(query:DisplayQuery) {
+
+    if (query && query['event_type'] && query['event_type'].length > 0) {
+      for (const index in this.eventTypes) {
+        if (query['event_type'].some(el => el === this.eventTypes[index].name)) {
+          this.dropdownSetup(this.eventTypeControl, this.selectedEventTypes, this.eventTypes[index]);
+        }
+      }
+    }
+  }
+
+  setCurrentDiagnosisTypes(query:DisplayQuery) {
+
+    if (query && query['diagnosis_type'] && query['diagnosis_type'].length > 0) {
+      /*for (const index in diagnosisTypes) {
+        if (this.data.query['diagnosis_type'].some(function (el) { return el === diagnosisTypes[index].name; })) {
+          this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, diagnosisTypes[index]);
+        }
+      }*/
+      for (const index in this.diagnosisTypes) {
+        if (query['diagnosis_type'].some(
+          el => {
+            console.log(el);
+            let match = false;
+            if (typeof el == 'number') {
+              if (el === this.diagnosisTypes[index].id) {
+                match = true;
+              }
+            } else {
+              if (el === this.diagnosisTypes[index].name) {
+                match = true;
+              }
+            }
+            return match;
+          })) {
+          this.dropdownSetup(this.diagnosisTypeControl, this.selectedDiagnosisTypes, this.diagnosisTypes[index]);
+        }
+      }
+    }
+  }
+
+  setCurrentDiagnoses(query:DisplayQuery) {
+
+    if (query && query['diagnosis'] && query['diagnosis'].length > 0) {
+      for (const index in this.diagnoses) {
+        if (query['diagnosis'].some(
+          el => {
+            // console.log(el);
+            let match = false;
+            if (typeof el === 'number') {
+              if (el === this.diagnoses[index].id) {
+                match = true;
+              }
+            } else {
+              if (el === this.diagnoses[index].name) {
+                match = true;
+              }
+            }
+            return match;
+          })) {
+          this.dropdownSetup(this.diagnosisControl, this.selectedDiagnoses, this.diagnoses[index]);
+        }
+      }
+    }
+  }
+
+  setCurrentAdminLevelOne(query:DisplayQuery) {
+
+    if (query && query['administrative_level_one'].length > 0) {
+      for (const index in this.administrative_level_one) {
+        if (query['administrative_level_one'].some(
+          el => {
+            console.log('variable el: ' + el);
+            let match = false;
+            if (typeof el === 'number') {
+              if (el === this.administrative_level_one[index].id) {
+                match = true;
+              }
+            } else {
+              if (el === this.administrative_level_one[index].name) {
+                match = true;
+              }
+            }
+            return match;
+          })) {
+          this.dropdownSetup(this.adminLevelOneControl, this.selectedAdminLevelOnes, this.administrative_level_one[index]);
+          this.updateAdminLevelTwoOptions(this.administrative_level_one[index].id);
+        }
+      }
+    }
+  }
+
+  setCurrentSpecies(query:DisplayQuery) {
+
+    if (query && query['species'] && query['species'].length > 0) {
+      /*for (const index in species) {
+        if (this.data.query['species'].some(function (el) { return el === species[index].name; })) {
+          this.dropdownSetup(this.speciesControl, this.selectedSpecies, species[index]);
+        }
+      }*/
+      for (const index in this.species) {
+        if (query['species'].some(
+          el => {
+            let match = false;
+            if (typeof el == 'number') {
+              if (el === this.species[index].id) {
+                match = true;
+              }
+            } else {
+              if (el === this.species[index].name) {
+                match = true;
+              }
+            }
+            return match;
+          })) {
+          this.dropdownSetup(this.speciesControl, this.selectedSpecies, this.species[index]);
+        }
+      }
+    }
+  }
+
+  setNonLookupFormControls(query:DisplayQuery) {
 
     if (query && query['affected_count']) {
       this.searchForm.controls['affected_count'].setValue(query['affected_count']);
@@ -399,8 +441,8 @@ export class SearchFormComponent implements OnInit {
     if (query && query['administrative_level_two_includes_all'] === true) {
       this.searchForm.controls['administrative_level_two_includes_all'].setValue(true);
     }
-
   }
+
 
   dropdownSetup(formControl: FormControl, selectedValues: any, value: any) {
     selectedValues.push(value);

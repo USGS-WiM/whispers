@@ -274,8 +274,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
 
-    const defaultEventQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
-
     this.speciesLoading = true;
 
     this.searchResultsLoading = true;

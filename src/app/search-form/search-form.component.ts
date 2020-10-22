@@ -486,6 +486,8 @@ export class SearchFormComponent implements OnInit {
         break;
       case 'diagnosis': this.diagnosisControl.reset();
         break;
+      case 'species': this.speciesControl.reset();
+        break;
       case 'adminLevelOne': this.adminLevelOneControl.reset();
         break;
       case 'adminLevelTwo': this.adminLevelTwoControl.reset();

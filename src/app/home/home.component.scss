@@ -17,7 +17,7 @@
             display: flex;
             flex-direction: row;
             flex-wrap: nowrap;
-            padding: 10px;
+            padding: 10px 15px;
             justify-content: space-between;
             align-items: baseline;
             button + button {
@@ -475,4 +475,10 @@ app-search-form {
   max-height: 60vh;
   display: block;
   overflow-y: auto;
+}
+
+.search-form-error-message {
+  color: red;
+  font-weight: bold;
+  padding: 10px 15px;
 }

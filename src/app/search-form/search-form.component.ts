@@ -94,29 +94,55 @@ export class SearchFormComponent implements OnInit {
     return null;
   }
 
+  noCriteriaSelected(AC: AbstractControl) {
+
+    if (
+      this.selectedEventTypes.length === 0 &&
+      this.selectedDiagnoses.length === 0 &&
+      this.selectedDiagnosisTypes.length === 0 &&
+      this.selectedSpecies.length === 0 &&
+      this.selectedAdminLevelOnes.length === 0 &&
+      this.selectedAdminLevelTwos.length === 0 &&
+      this.searchForm &&
+      !this.searchForm.get("affected_count").value &&
+      !this.searchForm.get("start_date").value &&
+      !this.searchForm.get("end_date").value &&
+      this.searchForm.get("complete").value === null
+    ) {
+      return { noCriteriaSelected: true };
+    } else {
+      return null;
+    }
+  }
+
   buildSearchForm() {
-    this.searchForm = this.formBuilder.group({
-      event_type: null,
-      diagnosis: null,
-      diagnosis_type: null,
-      species: null,
-      administrative_level_one: null,
-      administrative_level_two: null,
-      affected_count: null,
-      affected_count_operator: '__gte',
-      start_date: null,
-      end_date: null,
-      diagnosis_type_includes_all: false,
-      diagnosis_includes_all: false,
-      species_includes_all: false,
-      administrative_level_one_includes_all: false,
-      administrative_level_two_includes_all: false,
-      and_params: [],
-      complete: null
-    },
+    this.searchForm = this.formBuilder.group(
       {
-        validator: [this.endDateBeforeStart]
-      });
+        event_type: null,
+        diagnosis: null,
+        diagnosis_type: null,
+        species: null,
+        administrative_level_one: null,
+        administrative_level_two: null,
+        affected_count: null,
+        affected_count_operator: "__gte",
+        start_date: null,
+        end_date: null,
+        diagnosis_type_includes_all: false,
+        diagnosis_includes_all: false,
+        species_includes_all: false,
+        administrative_level_one_includes_all: false,
+        administrative_level_two_includes_all: false,
+        and_params: [],
+        complete: null,
+      },
+      {
+        validator: [
+          this.endDateBeforeStart,
+          (ac) => this.noCriteriaSelected(ac),
+        ],
+      }
+    );
     this.initialValues = this.searchForm.value;
   }
 
@@ -589,6 +615,9 @@ export class SearchFormComponent implements OnInit {
         );
 
     }
+
+    // Form validity must consider the 'selectedValuesArray' so manually trigger revalidation
+    this.searchForm.updateValueAndValidity();
   }
 
   removeChip(chip: any, selectedValuesArray: any): void {
@@ -599,6 +628,9 @@ export class SearchFormComponent implements OnInit {
       // Remove key from selectedValuesArray array
       selectedValuesArray.splice(index, 1);
     }
+
+    // Form validity must consider the 'selectedValuesArray' so manually trigger revalidation
+    this.searchForm.updateValueAndValidity();
   }
 
   extractIDs(objectArray) {

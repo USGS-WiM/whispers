@@ -27,6 +27,9 @@
       <button mat-raised-button color="primary" (click)="searchFormComponent.submitSearch()" [disabled]="searchFormComponent.invalid">
         <mat-icon class="material-icons">search</mat-icon> Search
       </button>
+      <div *ngIf="searchFormComponent.errors?.noCriteriaSelected && searchFormComponent.touched" class="text-small error-message">
+        Select at least one search value.
+      </div>
     </div>
   </div>
 

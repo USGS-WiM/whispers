@@ -686,6 +686,7 @@ export class SearchFormComponent implements OnInit {
 
     this.clearDates();
     this.searchForm.reset(this.initialValues);
+    this.searchForm.markAsTouched();
   }
 
   clearDates() {
@@ -719,6 +720,14 @@ export class SearchFormComponent implements OnInit {
 
   get invalid() {
     return this.searchForm.invalid;
+  }
+
+  get touched() {
+    return this.searchForm.touched;
+  }
+
+  get errors() {
+    return this.searchForm.errors;
   }
 
   submitSearch() {

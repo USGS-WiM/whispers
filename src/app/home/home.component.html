@@ -48,7 +48,7 @@
       <app-search-form [query]="currentDisplayQuery" [narrow]="true"></app-search-form>
 
 
-      <div *ngIf="searchFormComponent.searchForm.errors?.noCriteriaSelected" class="search-form-error-message">
+      <div *ngIf="searchFormComponent.errors?.noCriteriaSelected && searchFormComponent.touched" class="search-form-error-message">
         Select at least one search value.
       </div>
       <div class="search-button-row">

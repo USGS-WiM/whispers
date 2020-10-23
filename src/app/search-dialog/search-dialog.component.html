@@ -15,10 +15,10 @@
 
   <div class="form-buttons-flex">
     <div>
-      <button mat-button (click)="searchFormComponent.clearSelection()">
+      <button mat-stroked-button (click)="searchFormComponent.clearSelection()">
         <mat-icon class="material-icons">clear_all</mat-icon> Clear Selection
       </button>
-      <button mat-button (click)="this.searchDialogRef.close('cancel');">
+      <button mat-stroked-button (click)="this.searchDialogRef.close('cancel');">
         <mat-icon class="material-icons">cancel</mat-icon> Cancel
       </button>
     </div>

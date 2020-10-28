@@ -127,6 +127,7 @@ export class HomeComponent implements OnInit {
     'species',
     'eventdiagnoses'
   ];
+  searchQuerySizeTooLargeErrorMessage: string = null;
 
   constructor(
     private eventService: EventService,
@@ -162,6 +163,7 @@ export class HomeComponent implements OnInit {
       searchQuery => {
 
         this.searchResultsLoading = true;
+        this.searchQuerySizeTooLargeErrorMessage = null;
 
         // this is the listener for a new search query
 
@@ -170,7 +172,7 @@ export class HomeComponent implements OnInit {
             count => {
               if (count.count >= APP_SETTINGS.QUERY_COUNT_LIMIT) {
                 // this.sampleQuerySizeErrorFlag = true;
-                this.openSnackBar('Your Query result is too large. Please narrow your search and try again', 'OK', 60000);
+                this.searchQuerySizeTooLargeErrorMessage = "Your search result is too large. Please narrow your search and try again.";
                 this.searchResultsLoading = false;
               } else if (count.count < APP_SETTINGS.QUERY_COUNT_LIMIT) {
 
@@ -278,6 +280,8 @@ export class HomeComponent implements OnInit {
 
     this.searchResultsLoading = true;
 
+    this.searchQuerySizeTooLargeErrorMessage = null;
+
     this.currentSearchQuery.and_params = [];
 
     //if (sessionStorage.getItem('currentSearch')) {
@@ -309,7 +313,7 @@ export class HomeComponent implements OnInit {
         count => {
           if (count.count >= APP_SETTINGS.QUERY_COUNT_LIMIT) {
             // this.sampleQuerySizeErrorFlag = true;
-            this.openSnackBar('Your Query result is too large. Please narrow your search and try again', 'OK', 60000);
+            this.searchQuerySizeTooLargeErrorMessage = "Your search result is too large. Please narrow your search and try again.";
             this.searchResultsLoading = false;
           } else if (count.count < APP_SETTINGS.QUERY_COUNT_LIMIT) {
 

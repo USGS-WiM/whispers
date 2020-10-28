@@ -51,6 +51,9 @@
       <div *ngIf="searchFormComponent.errors?.noCriteriaSelected && searchFormComponent.touched" class="search-form-error-message">
         Select at least one search value.
       </div>
+      <div *ngIf="searchQuerySizeTooLargeErrorMessage && !searchFormComponent.errors?.noCriteriaSelected" class="search-form-error-message">
+        {{ searchQuerySizeTooLargeErrorMessage }}
+      </div>
       <div class="search-button-row">
         <button mat-stroked-button color="accent" (click)="resetToDefault()">
           <mat-icon class="material-icons">undo</mat-icon>

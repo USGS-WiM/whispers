@@ -291,9 +291,9 @@
             <mat-chip [selectable]="true" [removable]="true" (click)="$event.stopPropagation()"
               (removed)="clearDates()">
               <span style="white-space: nowrap;">
-                <span>{{searchForm.get('start_date').value | date:'mediumDate'}}</span>
-                <span *ngIf="(searchForm.get('start_date').value !== null) || (searchForm.get('end_date').value !== null)"> - </span>
-                <span>{{searchForm.get('end_date').value | date:'mediumDate'}}</span>
+                <span class="chip-date-display">{{searchForm.get('start_date').value | date:'mediumDate'}}</span>
+                <span *ngIf="(searchForm.get('start_date').value !== null) || (searchForm.get('end_date').value !== null)"> &ndash; </span>
+                <span class="chip-date-display">{{searchForm.get('end_date').value | date:'mediumDate'}}</span>
               </span>
               <mat-icon matChipRemove (click)="$event.stopPropagation()">cancel</mat-icon>
             </mat-chip>

@@ -53,3 +53,10 @@ app-chiplist + .autocomplete-input {
 .mat-expansion-panel-header.mat-expanded {
   border-bottom: none;
 }
+
+.chip-date-display {
+  // min-width creates a visual placeholder for when start or end date are not
+  // specified
+  min-width: 9ch;
+  display: inline-block;
+}

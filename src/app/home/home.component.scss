@@ -23,6 +23,9 @@
             button + button {
               margin-left: 5px;
             }
+            &.center {
+              justify-content: center;
+            }
         }
     } // Right side
     .resultsDiv {

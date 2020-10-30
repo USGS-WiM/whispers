@@ -58,7 +58,7 @@ export class UserDashboardComponent implements OnInit {
     'last_name',
     'first_name',
     'phone_number',
-    'email_address',
+    'email',
     'organization',
     'permission_source'
   ];
@@ -90,7 +90,6 @@ export class UserDashboardComponent implements OnInit {
     if (state !== undefined) {
       this.selectedTab = state.tab;
     }
-
   }
 
   ngOnInit() {
@@ -139,21 +138,23 @@ export class UserDashboardComponent implements OnInit {
         }
       );
 
-    this.contactsDataSource = new MatTableDataSource(this.contacts);
-
+    // this.contactsDataSource = new MatTableDataSource(this.contacts);
     // set selected tab
     // this.selectedTab = 0;
-
   }
 
+  // this function used to force the contacts table to be sortable once the contacts tab is activated.
   _setDataSource(indexNumber) {
-    setTimeout(() => {
-      switch (indexNumber) {
-        case 0:
-          !this.contactsDataSource.paginator ? this.contactsDataSource.paginator = this.contactPaginator : null;
-          break;
-      }
-    });
+    switch (indexNumber) {
+      // if it is the contacts tab
+      case 2:
+        //!this.contactsDataSource.paginator ? this.contactsDataSource.paginator = this.contactPaginator : null;
+        this.contactsDataSource = new MatTableDataSource(this.contacts);
+        this.contactsDataSource.paginator = this.contactPaginator;
+        this.contactsDataSource.sort = this.contactSort;
+        this.contactsLoading = false;
+        break;
+    }
   }
 
   openSnackBar(message: string, action: string, duration: number) {

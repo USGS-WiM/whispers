@@ -1,9 +1,9 @@
 
-import {catchError,  map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable ,  throwError ,  Subject } from 'rxjs';
+import { Observable, throwError, Subject } from 'rxjs';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -26,6 +26,8 @@ export class CircleService {
     private resultsCountService: ResultsCountService
   ) { }
 
+  isloggedIn = APP_SETTINGS.IS_LOGGEDIN;
+
   public getCircles(orderParams = '', pageNumber = 1, pageSize = 10): Observable<any> {
 
     return this.http.get(APP_SETTINGS.CIRCLES_URL, {
@@ -41,13 +43,20 @@ export class CircleService {
   }
 
   public getAllUserCircles(): Observable<Circle[]> {
-    const options = new RequestOptions({
-      headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
-    });
 
+    let options;
+    if (this.isloggedIn) {
+      options = new RequestOptions({
+        headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
+      });
+    } else {
+      options = new RequestOptions({
+        headers: APP_SETTINGS.MIN_JSON_HEADERS
+      });
+    }
     return this._http.get(APP_SETTINGS.CIRCLES_URL + '?no_page', options).pipe(
       map((response: Response) => <Circle[]>response.json()),
-      catchError(this.handleError),);
+      catchError(this.handleError));
   }
 
   public create(formValue): Observable<Event> {
@@ -58,7 +67,7 @@ export class CircleService {
 
     return this._http.post(APP_SETTINGS.CIRCLES_URL, formValue, options).pipe(
       map((response: Response) => <Event>response.json()),
-      catchError(this.handleError),);
+      catchError(this.handleError));
 
   }
 
@@ -70,7 +79,7 @@ export class CircleService {
 
     return this._http.put(APP_SETTINGS.CIRCLES_URL + formValue.id + '/', formValue, options).pipe(
       map((response: Response) => <Event>response.json()),
-      catchError(this.handleError),);
+      catchError(this.handleError));
 
   }
 
@@ -82,7 +91,7 @@ export class CircleService {
 
     return this._http.delete(APP_SETTINGS.CIRCLES_URL + id + '/', options).pipe(
       map((response: Response) => <any>response.json()),
-      catchError(this.handleError),);
+      catchError(this.handleError));
   }
 
   private handleError(error: Response) {

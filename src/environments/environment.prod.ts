@@ -4,6 +4,6 @@ export const environment = {
   version: require('../../package.json').version,
   ////////////// PROD /////////////////
   // API root for prod
-  api_root: 'https://whispers.usgs.gov/whispersservices/',
   recaptcha_site_key: '',
+  api_root: 'https://whispersprod.cr.usgs.gov/api/',
 };

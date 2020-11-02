@@ -60,8 +60,10 @@ export class EventService {
       };
       xhr.responseType = 'blob';
       xhr.open('GET', APP_SETTINGS.EVENT_DETAILS_URL + eventID + '/flat/?format=csv', true);
-      xhr.setRequestHeader('Authorization',
-        'Basic ' + btoa(sessionStorage.getItem('username') + ':' + sessionStorage.getItem('password')));
+      if (this.isloggedIn) {
+        xhr.setRequestHeader('Authorization',
+          'Basic ' + btoa(sessionStorage.getItem('username') + ':' + sessionStorage.getItem('password')));
+      }
       xhr.send();
     });
   }
@@ -158,8 +160,10 @@ export class EventService {
       };
       xhr.responseType = 'blob';
       xhr.open('GET', APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString, true);
-      xhr.setRequestHeader('Authorization',
-        'Basic ' + btoa(sessionStorage.getItem('username') + ':' + sessionStorage.getItem('password')));
+      if (this.isloggedIn) {
+        xhr.setRequestHeader('Authorization',
+          'Basic ' + btoa(sessionStorage.getItem('username') + ':' + sessionStorage.getItem('password')));
+      }
       xhr.send();
     });
   }

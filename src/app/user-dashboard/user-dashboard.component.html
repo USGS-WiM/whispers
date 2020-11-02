@@ -165,12 +165,12 @@
 
             <!-- Phone Number Column -->
             <ng-container matColumnDef="phone_number">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Phone Number </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef> Phone Number </mat-header-cell>
               <mat-cell *matCellDef="let contact"> {{formatPhone(contact.phone)}} </mat-cell>
             </ng-container>
 
             <!-- Email Address Column -->
-            <ng-container matColumnDef="email_address">
+            <ng-container matColumnDef="email">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Email Address </mat-header-cell>
               <mat-cell *matCellDef="let contact"> {{contact.email}} </mat-cell>
             </ng-container>

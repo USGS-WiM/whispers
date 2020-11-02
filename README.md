@@ -134,9 +134,7 @@ After going to `dev` and possibly combined with other commits, the work will be 
 
 ## Authors
 
-  
-
-  
+    
 
 *  **[Blake Draper](https://github.com/BlakeDraper)** - *Lead Developer* - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
 

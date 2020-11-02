@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
   public whispersVersion = '';
   public bannerWarning = '';
   public bannerTextColor = '';
-  // public isLoggedIn;
+  public isLoggedIn;
   allNotificationCount;
   unreadNotificationCount;
   firstTenNotifications = [];
@@ -77,7 +77,10 @@ export class AppComponent implements OnInit {
 
         // }
         this.unreadNotificationCount = count;
-        this.getUserNotifications();
+
+        if (this.isLoggedIn) {
+          this.getUserNotifications();
+        }
       }
     });
   }
@@ -90,7 +93,7 @@ export class AppComponent implements OnInit {
 
     // this.bannerTextColor = APP_SETTINGS.BANNER_TEXT_COLOR;
 
-    // this.isLoggedIn = APP_SETTINGS.IS_LOGGEDIN;
+    this.isLoggedIn = APP_SETTINGS.IS_LOGGEDIN;
 
     // if (sessionStorage.getItem('username') === '' || sessionStorage.getItem('username') === undefined) {
     //   this.currentUserService.updateCurrentUser({
@@ -124,7 +127,9 @@ export class AppComponent implements OnInit {
       this.openBrowserWarningDialog();
     }
 
-    this.getUserNotifications();
+    if (this.isLoggedIn) {
+      this.getUserNotifications();
+    }
 
     // if ((!!sessionStorage.getItem('username') && !!sessionStorage.getItem('password'))) {
 

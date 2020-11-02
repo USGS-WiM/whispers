@@ -1103,6 +1103,7 @@ export class HomeComponent implements OnInit {
   implementSearch(search) {
     // TODO: currentDiplayQuery needs to be parsed from the search object
     const displayQuery: DisplayQuery = {
+      event_id: [],
       event_type: [],
       diagnosis: [],
       diagnosis_type: [],

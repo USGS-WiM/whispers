@@ -4,6 +4,33 @@
 
   <mat-accordion>
 
+    <!-- Event ID expansion panel -->
+    <mat-expansion-panel #eventIDExpansionPanel (opened)="eventIDPanelOpenState = true" (closed)="eventIDPanelOpenState = false">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedEventIDs.length > 2) ? '80px' : '48px'">
+        <mat-panel-title>
+          <b>Event ID</b>
+        </mat-panel-title>
+        <mat-panel-description *ngIf="!narrow || !eventIDPanelOpenState">
+          <app-chiplist [items]="selectedEventIDs" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedEventIDs, 'eventID')" (moreClicked)="eventIDExpansionPanel.open()">
+          </app-chiplist>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedEventIDs"
+          (removed)="removeChip($event, selectedEventIDs, 'eventID')" >
+        </app-chiplist>
+        <mat-form-field class="full-width">
+          <input type="text" matInput #eventIDInput placeholder="Add Event ID" aria-label="Add Event ID"
+            formControlName="event_id" (keyup.enter)="addEventIDs(eventIDInput.value)" (blur)="resetFormControl('eventID')">
+          <mat-error *ngIf="searchForm.controls.event_id.errors?.pattern">
+            Only numbers are valid for event IDs. Multiple event IDs can be entered by separating them with commas.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </mat-expansion-panel>
+    <!-- end Event ID expansion panel -->
+
     <!-- Event type expansion panel -->
     <mat-expansion-panel #eventTypeExpansionPanel (opened)="eventTypePanelOpenState = true" (closed)="eventTypePanelOpenState = false">
       <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedEventTypes.length > 2) ? '80px' : '48px'">

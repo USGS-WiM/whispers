@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormControl, AbstractControl, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar, MatAutocompleteSelectedEvent } from '@angular/material';
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -47,6 +47,8 @@ export class SearchFormComponent implements OnInit {
   adminLevelTwoControl: FormControl;
   speciesControl: FormControl;
 
+  selectedEventIDs = [];
+
   eventTypes: EventType[];
   filteredEventTypes: Observable<any[]>;
   selectedEventTypes = [];
@@ -75,6 +77,7 @@ export class SearchFormComponent implements OnInit {
   diagnosesLoading = false;
   speciesLoading = true;
 
+  eventIDPanelOpenState = false;
   eventTypePanelOpenState = false;
   diagnosisTypePanelOpenState = false;
   diagnosisPanelOpenState = false;
@@ -97,6 +100,7 @@ export class SearchFormComponent implements OnInit {
   noCriteriaSelected(AC: AbstractControl) {
 
     if (
+      this.selectedEventIDs.length === 0 &&
       this.selectedEventTypes.length === 0 &&
       this.selectedDiagnoses.length === 0 &&
       this.selectedDiagnosisTypes.length === 0 &&
@@ -118,6 +122,7 @@ export class SearchFormComponent implements OnInit {
   buildSearchForm() {
     this.searchForm = this.formBuilder.group(
       {
+        event_id: [null, Validators.pattern(/^\d+(, *\d+)*$/)],
         event_type: null,
         diagnosis: null,
         diagnosis_type: null,
@@ -506,6 +511,8 @@ export class SearchFormComponent implements OnInit {
 
   resetFormControl(control) {
     switch (control) {
+      case 'eventID': this.searchForm.controls['event_id'].reset();
+        break;
       case 'eventType': this.eventTypeControl.reset();
         break;
       case 'diagnosisType': this.diagnosisTypeControl.reset();
@@ -518,6 +525,18 @@ export class SearchFormComponent implements OnInit {
         break;
       case 'adminLevelTwo': this.adminLevelTwoControl.reset();
     }
+  }
+
+  addEventIDs(value: string): void {
+    if (this.searchForm.controls.event_id.invalid) {
+      return;
+    }
+    const values = value.split(/, */);
+    for (const value of values) {
+      const id = parseInt(value);
+      this.selectedEventIDs.push({id: id, name: value});
+    }
+    this.resetFormControl('eventID');
   }
 
   addChip(event: MatAutocompleteSelectedEvent, selectedValuesArray: any, control: string): void {
@@ -672,6 +691,7 @@ export class SearchFormComponent implements OnInit {
 
   clearSelection() {
 
+    this.selectedEventIDs = [];
     this.selectedEventTypes = [];
     this.selectedDiagnosisTypes = [];
     this.selectedDiagnoses = [];
@@ -734,6 +754,7 @@ export class SearchFormComponent implements OnInit {
 
     const formValue = this.searchForm.value;
     const searchQuery: SearchQuery = {
+      event_id: [],
       event_type: [],
       diagnosis: [],
       diagnosis_type: [],
@@ -754,6 +775,7 @@ export class SearchFormComponent implements OnInit {
     };
 
     const displayQuery: DisplayQuery = {
+      event_id: [],
       event_type: [],
       diagnosis: [],
       diagnosis_type: [],
@@ -792,6 +814,7 @@ export class SearchFormComponent implements OnInit {
     }
 
     // update the formValue array with full selection objects
+    formValue.event_id = this.selectedEventIDs;
     formValue.event_type = this.selectedEventTypes;
     formValue.diagnosis = this.selectedDiagnoses;
     formValue.diagnosis_type = this.selectedDiagnosisTypes;
@@ -833,6 +856,7 @@ export class SearchFormComponent implements OnInit {
     //   administrative_level_two: this.extractIDs(this.selectedAdminLevelTwos)
     // });
 
+    searchQuery.event_id = this.extractIDs(this.selectedEventIDs);
     searchQuery.event_type = this.extractIDs(this.selectedEventTypes);
     searchQuery.diagnosis = this.extractIDs(this.selectedDiagnoses);
     searchQuery.diagnosis_type = this.extractIDs(this.selectedDiagnosisTypes);

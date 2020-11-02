@@ -268,6 +268,7 @@ export class APP_UTILITIES {
         const parsedSearch: SearchQuery = {
             id: null,
             name: '',
+            event_id: null,
             event_type: null,
             diagnosis: null,
             diagnosis_type: null,

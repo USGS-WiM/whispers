@@ -314,12 +314,13 @@ export class SearchFormComponent implements OnInit {
     if (query && query['event_id'] && query['event_id'].length > 0) {
       this.selectedEventIDs = query['event_id'].map(e => {
         return {
-          id: e,
+          id: parseInt(e),
           name: e.toString()
         };
       });
     }
   }
+
   setCurrentEventTypes(query:DisplayQuery) {
 
     if (query && query['event_type'] && query['event_type'].length > 0) {
@@ -546,7 +547,11 @@ export class SearchFormComponent implements OnInit {
     const values = value.split(/, */);
     for (const value of values) {
       const id = parseInt(value);
-      this.selectedEventIDs.push({id: id, name: value});
+      if (!this.selectedEventIDs.find(e => e.id === id)) {
+        this.selectedEventIDs.push({id: id, name: value});
+      } else {
+        this.openSnackBar('Already Added Event ' + value, 'OK');
+      }
     }
     this.resetFormControl('eventID');
   }

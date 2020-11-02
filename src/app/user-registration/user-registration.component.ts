@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
 
@@ -22,6 +22,7 @@ import { Role } from '@interfaces/role';
 import { APP_SETTINGS } from '@app/app.settings';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 import { ConfirmComponent } from '@app/confirm/confirm.component';
+import { RecaptchaComponent } from 'ng-recaptcha';
 declare let gtag: Function;
 
 @Component({
@@ -45,6 +46,8 @@ export class UserRegistrationComponent implements OnInit {
 
   public filteredOrganizations: ReplaySubject<Organization[]> = new ReplaySubject<Organization[]>(1);
   organizationFilterCtrl: FormControl = new FormControl();
+
+  @ViewChild(RecaptchaComponent) recaptcha: RecaptchaComponent;
 
   /** Subject that emits when the component has been destroyed. */
   private _onDestroy = new Subject<void>();
@@ -95,6 +98,7 @@ export class UserRegistrationComponent implements OnInit {
       role: null,
       comment: '',
       terms: [false, Validators.requiredTrue],
+      recaptcha: null
     }, {
       validator: [this.matchPassword, this.matchEmail]
     });
@@ -168,6 +172,7 @@ export class UserRegistrationComponent implements OnInit {
         }
       );
 
+      this.recaptcha.siteKey = APP_SETTINGS.RECAPTCHA_SITE_KEY;
   }
 
   private filterOrganization() {
@@ -253,6 +258,18 @@ export class UserRegistrationComponent implements OnInit {
           gtag('event', 'click', { 'event_category': 'Users', 'event_label': 'New User Created' });
         },
         error => {
+
+          let parsedError = null;
+          try {
+            parsedError = JSON.parse(error);
+          } catch (error) {
+            // Ignore JSON parsing error
+          }
+          if (parsedError && parsedError.recaptcha) {
+            // If the reCAPTCHA failed to validate, reset the reCAPTCHA checkbox
+            // so that the user needs to regenerate a reCAPTCHA code
+            this.recaptcha.reset();
+          }
           this.submitLoading = false;
           this.openSnackBar('Error. User registration failed. Error message: ' + error, 'OK', 8000);
         }

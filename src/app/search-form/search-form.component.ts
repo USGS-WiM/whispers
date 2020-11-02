@@ -300,6 +300,7 @@ export class SearchFormComponent implements OnInit {
 
   setCurrentSearch(query:DisplayQuery) {
     this.clearSelection();
+    this.setCurrentEventIds(query);
     this.setCurrentEventTypes(query);
     this.setCurrentDiagnosisTypes(query);
     this.setCurrentDiagnoses(query);
@@ -308,6 +309,17 @@ export class SearchFormComponent implements OnInit {
     this.setNonLookupFormControls(query);
   }
 
+  setCurrentEventIds(query:DisplayQuery) {
+
+    if (query && query['event_id'] && query['event_id'].length > 0) {
+      this.selectedEventIDs = query['event_id'].map(e => {
+        return {
+          id: e,
+          name: e.toString()
+        };
+      });
+    }
+  }
   setCurrentEventTypes(query:DisplayQuery) {
 
     if (query && query['event_type'] && query['event_type'].length > 0) {
@@ -827,6 +839,9 @@ export class SearchFormComponent implements OnInit {
     // const displayQuery = APP_UTILITIES.convertSearchQuerytoDisplayQuery(formValue);
 
     // use formValue to populate the Current Search panel
+    for (const event_id of formValue.event_id) {
+      displayQuery.event_id.push(event_id.name);
+    }
     for (const event_type of formValue.event_type) {
       displayQuery.event_type.push(event_type.name);
     }

@@ -320,6 +320,12 @@ export class SavedSearchesComponent implements OnInit {
         complete: search.complete
       };
 
+      if (search.event_id) {
+        for (const event_id of search.event_id) {
+          displayQuery.event_id.push(event_id);
+        }
+      }
+
       if (search.event_type) {
         for (const event_type of search.event_type) {
           displayQuery.event_type.push(this.displayValuePipe.transform(event_type, 'name', this.eventTypes));

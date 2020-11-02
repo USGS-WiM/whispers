@@ -306,6 +306,9 @@ export class APP_UTILITIES {
         if (search.data.affected_count_operator) {
             parsedSearch.affected_count_operator = search.data.affected_count_operator;
         }
+        if (search.data.event_id) {
+            parsedSearch.event_id = JSON.parse('[' + search.data.event_id + ']');
+        }
         if (search.data.event_type) {
             parsedSearch.event_type = JSON.parse('[' + search.data.event_type + ']');
         }

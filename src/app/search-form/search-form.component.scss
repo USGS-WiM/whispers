@@ -28,7 +28,7 @@
   margin-right: 2em;
 }
 
-app-chiplist + .autocomplete-input {
+app-chiplist + .autocomplete-input, app-chiplist + mat-form-field {
   margin-top: 10px;
 }
 
@@ -59,4 +59,9 @@ app-chiplist + .autocomplete-input {
   // specified
   min-width: 9ch;
   display: inline-block;
+}
+
+.event-id-control {
+  display: flex;
+  flex-direction: row;
 }

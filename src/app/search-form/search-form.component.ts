@@ -541,7 +541,7 @@ export class SearchFormComponent implements OnInit {
   }
 
   addEventIDs(value: string): void {
-    if (this.searchForm.controls.event_id.invalid) {
+    if (this.searchForm.controls.event_id.invalid || value.trim() === '') {
       return;
     }
     const values = value.split(/, */);

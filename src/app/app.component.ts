@@ -25,8 +25,8 @@ import { isPlatformBrowser } from '@angular/common';
 
 import * as $ from 'jquery';
 import * as search_api from 'usgs-search-api';
-import { UserService } from './services/user.service';
-import { ConfirmComponent } from './confirm/confirm.component';
+import { UserService } from '@services/user.service';
+import { ConfirmComponent } from '@confirm/confirm.component';
 
 @Component({
   selector: 'app-root',
@@ -102,9 +102,8 @@ export class AppComponent implements OnInit {
     // }
 
     this.route.queryParams.subscribe(params => {
-      // TODO: make constants
-      const userId = params['user-id'];
-      const emailToken = params['email-token'];
+      const userId = params[APP_SETTINGS.EMAIL_VERIFICATION_USER_ID_QUERY_PARAM];
+      const emailToken = params[APP_SETTINGS.EMAIL_VERIFICATION_EMAIL_TOKEN_QUERY_PARAM];
 
       if (userId && emailToken) {
         this.confirmEmailAddress(userId, emailToken);

@@ -171,6 +171,9 @@ export class APP_SETTINGS {
 
     public static get GO_USA_GOV_JSON_HEADERS() { return new Headers({}); }
 
+    public static get EMAIL_VERIFICATION_USER_ID_QUERY_PARAM() { return "user-id"; }
+    public static get EMAIL_VERIFICATION_EMAIL_TOKEN_QUERY_PARAM() { return "email-token"; }
+
     public static get AUTH_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password)

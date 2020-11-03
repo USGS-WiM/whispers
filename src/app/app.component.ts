@@ -25,10 +25,10 @@ import { isPlatformBrowser } from '@angular/common';
 
 import * as $ from 'jquery';
 import * as search_api from 'usgs-search-api';
-import { UserService } from './services/user.service';
-import { ConfirmComponent } from './confirm/confirm.component';
-import { RequestPasswordResetComponent } from './request-password-reset/request-password-reset.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { UserService } from '@services/user.service';
+import { ConfirmComponent } from '@confirm/confirm.component';
+import { RequestPasswordResetComponent } from '@request-password-reset/request-password-reset.component';
+import { ResetPasswordComponent } from '@reset-password/reset-password.component';
 
 @Component({
   selector: 'app-root',

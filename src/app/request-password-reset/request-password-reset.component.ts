@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '@app/services/user.service';
 import { MatDialogRef, MatDialog } from '@angular/material';
-import { ConfirmComponent } from '@app/confirm/confirm.component';
+import { ConfirmComponent } from '@confirm/confirm.component';
 
 @Component({
   selector: 'app-request-password-reset',

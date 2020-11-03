@@ -15,7 +15,7 @@ import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { User } from '@interfaces/user';
-import { ConfirmComponent } from '@app/confirm/confirm.component';
+import { ConfirmComponent } from '@confirm/confirm.component';
 
 
 @Component({

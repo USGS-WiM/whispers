@@ -21,7 +21,7 @@ import { Role } from '@interfaces/role';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
-import { ConfirmComponent } from '@app/confirm/confirm.component';
+import { ConfirmComponent } from '@confirm/confirm.component';
 import { RecaptchaComponent } from 'ng-recaptcha';
 declare let gtag: Function;
 

@@ -64,7 +64,7 @@
     </ng-container>
 
     <!-- Comment/'Justification' Column -->
-    <ng-container matColumnDef="comment">
+    <ng-container matColumnDef="comments">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Justification for Event Grouping </mat-header-cell>
       <mat-cell *matCellDef="let eventGroup"> <span
           *ngIf="eventGroup.comments.length > 0">{{eventGroup.comments[0].comment}} </span></mat-cell>

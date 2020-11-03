@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 
 import {
   MatAutocompleteModule,
@@ -240,7 +241,9 @@ import { NewPasswordFormComponent } from './new-password-form/new-password-form.
     MatBadgeModule,
     NgxMatSelectSearchModule,
     NgxMatSelectSearchModule,
-    PapaParseModule
+    PapaParseModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
   ],
   providers: [
     AuthenticationService,

@@ -161,7 +161,13 @@
       ],
       "@browser-warning/*": [
         "app/browser-warning/*"
-      ]
+      ],
+      "@search-form/*": [
+        "app/search-form/*"
+      ],
+      "@chiplist/*": [
+        "app/chiplist/*"
+      ],
     },
     "target": "es5",
     "typeRoots": [

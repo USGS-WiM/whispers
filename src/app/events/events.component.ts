@@ -28,7 +28,7 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 import { EventGroupManagementComponent } from '@app/event-group-management/event-group-management.component';
 import { EventGroupManagementService } from '@services/event-group-management.service';
 import { CurrentUserService } from '@services/current-user.service';
-import { SearchFormService } from '@app/search-form/search-form.service';
+import { SearchFormService } from '@search-form/search-form.service';
 
 
 @Component({

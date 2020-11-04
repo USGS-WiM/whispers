@@ -131,9 +131,9 @@ import { PapaParseModule } from 'ngx-papaparse';
 import { EventPublicReportComponent } from '@event-public-report/event-public-report.component';
 import { SearchResultsSummaryReportComponent } from '@search-results-summary-report/search-results-summary-report.component';
 import { ViewNotificationDetailsComponent } from '@notifications/view-notification-details/view-notification-details.component';
-import { SearchFormComponent } from './search-form/search-form.component';
-import { SearchFormService } from './search-form/search-form.service';
-import { ChiplistComponent } from './chiplist/chiplist.component';
+import { SearchFormComponent } from '@search-form/search-form.component';
+import { SearchFormService } from '@search-form/search-form.service';
+import { ChiplistComponent } from '@chiplist/chiplist.component';
 
 
 @NgModule({

@@ -25,7 +25,7 @@ import { DisplayQuery } from '@interfaces/display-query';
 
 import { ConfirmComponent } from '@confirm/confirm.component';
 import { DisplayValuePipe } from '../pipes/display-value.pipe';
-import { SearchFormService } from '@app/search-form/search-form.service';
+import { SearchFormService } from '@search-form/search-form.service';
 
 
 @Component({

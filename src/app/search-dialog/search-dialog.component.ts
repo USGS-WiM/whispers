@@ -1,7 +1,7 @@
 
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { SearchFormComponent } from '@app/search-form/search-form.component';
+import { SearchFormComponent } from '@search-form/search-form.component';
 
 @Component({
   selector: 'app-search-dialog',

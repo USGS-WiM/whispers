@@ -45,8 +45,8 @@ import 'leaflet-draw';
 import * as esri from 'esri-leaflet';
 import { UserRegistrationComponent } from '@app/user-registration/user-registration.component';
 import { DataUpdatedService } from '@services/data-updated.service';
-import { SearchFormService } from '@app/search-form/search-form.service';
-import { SearchFormComponent } from '@app/search-form/search-form.component';
+import { SearchFormService } from '@search-form/search-form.service';
+import { SearchFormComponent } from '@search-form/search-form.component';
 declare let gtag: Function;
 
 @Component({

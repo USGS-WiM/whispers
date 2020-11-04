@@ -1528,28 +1528,28 @@ export class EventDetailsComponent implements OnInit {
     });
 
     this.circleChooseDialogRef.afterClosed().subscribe(result => {
-
       if (result !== 'cancel') {
-
         if (accessType === 'read') {
-          // add the users array to the new_read_collaborators array
+          // adds the newly added users to the readCollaboratorArray
           this.readCollaboratorArray = this.readCollaboratorArray.concat(result.users);
-          const readCollaboratorIDArray = [];
-          for (const user of this.readCollaboratorArray) {
-            readCollaboratorIDArray.push(user.id);
-          }
-          this.updateCollaboratorList('read', readCollaboratorIDArray);
-
         } else if (accessType === 'write') {
+          // adds the newly added users to the writeCollaboratorArray
           this.writeCollaboratorArray = this.writeCollaboratorArray.concat(result.users);
-          const writeCollaboratorIDArray = [];
-          for (const user of this.writeCollaboratorArray) {
-            writeCollaboratorIDArray.push(user.id);
-          }
-          this.updateCollaboratorList('write', writeCollaboratorIDArray);
-
         }
-
+        // establishes an array to hold the user IDs for read collaborators
+        const readCollaboratorIDArray = [];
+        // populates readCollaboratorIDArray by simple loop on the whole object array
+        for (const user of this.readCollaboratorArray) {
+          readCollaboratorIDArray.push(user.id);
+        }
+        // establishes an array to hold the user IDs for write collaborators
+        const writeCollaboratorIDArray = [];
+        // populates writeCollaboratorIDArray by simple loop on the whole object array
+        for (const user of this.writeCollaboratorArray) {
+          writeCollaboratorIDArray.push(user.id);
+        }
+        // push the two arrays to the update function, with newly added and existing for each type included.
+        this.updateCollaboratorList(readCollaboratorIDArray, writeCollaboratorIDArray);
       }
     });
 
@@ -1557,14 +1557,12 @@ export class EventDetailsComponent implements OnInit {
 
   updateCollaboratorList(readCollaboratorArray, writeCollaboratorArray) {
 
-    // tslint:disable-next-line:max-line-length
-    const update = { 'id': this.eventData.id, 'event_type': this.eventData.event_type, 'new_read_collaborators': readCollaboratorArray, 'new_write_collaborators': writeCollaboratorArray };
-    // if (accessType === 'read') {
-    //   update = { 'id': this.eventData.id, 'event_type': this.eventData.event_type, 'new_read_collaborators': userArray };
-    // } else if (accessType === 'write') {
-    //   update = { 'id': this.eventData.id, 'event_type': this.eventData.event_type, 'new_write_collaborators': userArray };
-    // }
-
+    const update = {
+      'id': this.eventData.id,
+      'event_type': this.eventData.event_type,
+      'new_read_collaborators': readCollaboratorArray,
+      'new_write_collaborators': writeCollaboratorArray
+    };
     this._eventService.update(update)
       .subscribe(
         (event) => {

@@ -606,13 +606,13 @@
                               </div>
 
                               <button mat-icon-button aria-label="add comment to service request" color="primary"
-                                [disabled]="!eventData.permissions.destroy || eventData.complete"
+                                [disabled]="!eventData.permissions.update || eventData.complete"
                                 (click)="addServiceRequestComment(servicerequest.id)">
                                 <mat-icon>add_comment</mat-icon>
                                 Add Comment
                               </button><br>
                               <button mat-icon-button aria-label="respond to service request" color="primary"
-                                [disabled]="!eventData.permissions.destroy || eventData.complete"
+                                [disabled]="!eventData.permissions.update || eventData.complete"
                                 (click)="addServiceRequestResponse(servicerequest)"
                                 *ngIf="currentUser.role === 1 || currentUser.role === 2">
                                 <mat-icon>assignment_turned_in</mat-icon>

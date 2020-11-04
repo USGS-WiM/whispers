@@ -171,6 +171,9 @@
       "@new-password-form/*": [
         "app/new-password-form/*"
       ],
+      "@user-registration-role-selection/*": [
+        "app/user-registration-role-selection/*"
+      ],
     },
     "target": "es5",
     "typeRoots": [

@@ -29,8 +29,8 @@ import { UserService } from '@services/user.service';
 import { ConfirmComponent } from '@confirm/confirm.component';
 import { RequestPasswordResetComponent } from '@request-password-reset/request-password-reset.component';
 import { ResetPasswordComponent } from '@reset-password/reset-password.component';
-import { UserRegistrationRoleSelectionComponent } from './user-registration-role-selection/user-registration-role-selection.component';
-import { UserRegistrationComponent } from './user-registration/user-registration.component';
+import { UserRegistrationRoleSelectionComponent } from '@user-registration-role-selection/user-registration-role-selection.component';
+import { UserRegistrationComponent } from '@user-registration/user-registration.component';
 
 @Component({
   selector: 'app-root',

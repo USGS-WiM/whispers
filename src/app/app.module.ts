@@ -136,7 +136,7 @@ import { ViewNotificationDetailsComponent } from '@notifications/view-notificati
 import { RequestPasswordResetComponent } from '@request-password-reset/request-password-reset.component';
 import { ResetPasswordComponent } from '@reset-password/reset-password.component';
 import { NewPasswordFormComponent } from '@new-password-form/new-password-form.component';
-import { UserRegistrationRoleSelectionComponent } from './user-registration-role-selection/user-registration-role-selection.component';
+import { UserRegistrationRoleSelectionComponent } from '@user-registration-role-selection/user-registration-role-selection.component';
 
 
 @NgModule({

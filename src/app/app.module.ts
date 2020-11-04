@@ -133,9 +133,9 @@ import { PapaParseModule } from 'ngx-papaparse';
 import { EventPublicReportComponent } from '@event-public-report/event-public-report.component';
 import { SearchResultsSummaryReportComponent } from '@search-results-summary-report/search-results-summary-report.component';
 import { ViewNotificationDetailsComponent } from '@notifications/view-notification-details/view-notification-details.component';
-import { RequestPasswordResetComponent } from './request-password-reset/request-password-reset.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { NewPasswordFormComponent } from './new-password-form/new-password-form.component';
+import { RequestPasswordResetComponent } from '@request-password-reset/request-password-reset.component';
+import { ResetPasswordComponent } from '@reset-password/reset-password.component';
+import { NewPasswordFormComponent } from '@new-password-form/new-password-form.component';
 import { UserRegistrationRoleSelectionComponent } from './user-registration-role-selection/user-registration-role-selection.component';
 
 

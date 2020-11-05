@@ -400,7 +400,6 @@ export class HomeComponent implements OnInit {
                 this.errorMessage = <any>error;
               }
             );
-          console.log('Popular searches: ' + this.parsedPopularSearches);
 
         },
         error => {

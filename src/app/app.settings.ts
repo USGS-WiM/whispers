@@ -171,6 +171,9 @@ export class APP_SETTINGS {
 
     public static get GO_USA_GOV_JSON_HEADERS() { return new Headers({}); }
 
+    public static get EMAIL_VERIFICATION_USER_ID_QUERY_PARAM() { return "user-id"; }
+    public static get EMAIL_VERIFICATION_EMAIL_TOKEN_QUERY_PARAM() { return "email-token"; }
+
     public static get RECAPTCHA_SITE_KEY() { return environment.recaptcha_site_key; }
 
     public static get AUTH_HEADERS() {

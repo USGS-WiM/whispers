@@ -25,6 +25,8 @@ import { isPlatformBrowser } from '@angular/common';
 
 import * as $ from 'jquery';
 import * as search_api from 'usgs-search-api';
+import { UserService } from '@services/user.service';
+import { ConfirmComponent } from '@confirm/confirm.component';
 
 @Component({
   selector: 'app-root',
@@ -60,7 +62,8 @@ export class AppComponent implements OnInit {
     public currentUserService: CurrentUserService,
     private authenticationService: AuthenticationService,
     private notificationService: NotificationService,
-    private resultsCountService: ResultsCountService
+    private resultsCountService: ResultsCountService,
+    private userService: UserService,
   ) {
 
     currentUserService.currentUser.subscribe(user => {
@@ -97,6 +100,15 @@ export class AppComponent implements OnInit {
     //     'username': ''
     //   });
     // }
+
+    this.route.queryParams.subscribe(params => {
+      const userId = params[APP_SETTINGS.EMAIL_VERIFICATION_USER_ID_QUERY_PARAM];
+      const emailToken = params[APP_SETTINGS.EMAIL_VERIFICATION_EMAIL_TOKEN_QUERY_PARAM];
+
+      if (userId && emailToken) {
+        this.confirmEmailAddress(userId, emailToken);
+      }
+    })
 
     if (sessionStorage.getItem('currentUser')) {
       const currentUserObj = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -193,13 +205,14 @@ export class AppComponent implements OnInit {
     this.authenticationService.logout();
   }
 
-  openAuthenticationDialog() {
+  openAuthenticationDialog(data = null) {
     this.authenticationDialogRef = this.dialog.open(AuthenticationComponent, {
       // minWidth: '60%'
       // disableClose: true, data: {
       //   query: this.currentDisplayQuery
       // }
       // height: '75%'
+      data: data
     });
   }
 
@@ -238,5 +251,39 @@ export class AppComponent implements OnInit {
         window.clearInterval(scrollToTop);
       }
     }, 16);
+  }
+
+  confirmEmailAddress(userId:String, emailToken:String) {
+
+    this.userService.confirmEmail(userId, emailToken)
+      .subscribe(
+        (user) => {
+          // Route to /home/ to remove the verification query parameters
+          return this.router.navigate(['/home/'])
+          .then(() => {
+            this.openAuthenticationDialog({userEmailVerified: true});
+          })
+        },
+        error => {
+          let errorMessage = error;
+          try {
+            errorMessage = JSON.parse(error).status;
+          } catch (error) {
+            // Ignore JSON parsing error
+          }
+          const confirmDialogRef = this.dialog.open(ConfirmComponent,
+            {
+              disableClose: true,
+              data: {
+                title: 'Email Verification Failed',
+                titleIcon: 'warning',
+                message: 'Failed to verify your email address: ' + errorMessage,
+                confirmButtonText: 'OK',
+                showCancelButton: false
+              }
+            }
+          );
+        }
+      );
   }
 }

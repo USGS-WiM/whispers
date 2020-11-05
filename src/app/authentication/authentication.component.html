@@ -6,6 +6,10 @@
   <form [formGroup]="loginForm" id="loginForm">
 
     <div class="vertical-form-container">
+      <p *ngIf="data && data.userEmailVerified">
+        <mat-icon color="accent">check</mat-icon>
+        Your email address was successfully verified! You can login now.
+      </p>
 
       <mat-form-field class="form-control">
         <input matInput placeholder="Username" formControlName="username">
@@ -18,7 +22,7 @@
         <mat-error *ngIf="loginForm.get('password').invalid">{{getErrorMessage('password')}}</mat-error>
       </mat-form-field>
 	</div>
-	
+
   </form>
 
   <div class="forgot-password-div">

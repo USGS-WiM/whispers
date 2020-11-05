@@ -372,9 +372,9 @@
             </div>
           </div>
 
-          <mat-tab-group class="tab-bar" [selectedIndex]="selectedTab"
+          <mat-tab-group class="tab-bar" (selectedIndexChange)="_setDataSource($event)" [selectedIndex]="selectedTab"
             (selectedTabChange)="resetExpansionPanels()" #eventDetailsTabs>
-
+            <!-- (selectedIndexChange)="_setDataSource($event)" -->
             <!-- Events tab -->
 
             <mat-tab label="Event Data" class="event-details-tab-label">

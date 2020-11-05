@@ -35,7 +35,7 @@ export class CirclesDataSource implements DataSource<Circle> {
     }
 
     connect(collectionViewer: CollectionViewer): Observable<Circle[]> {
-        console.log('Connecting Circles data source');
+        console.log('Connecting data source');
         return this.circlesSubject.asObservable();
     }
 

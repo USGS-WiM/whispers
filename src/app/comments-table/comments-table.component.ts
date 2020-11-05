@@ -130,11 +130,9 @@ export class CommentsTableComponent implements OnInit, AfterViewInit {
   getlocations() {
     // getting the locations that eventlocations
     this.eventData.eventlocations.forEach(e => {
-      if (e.comments){
-        e.comments.forEach(s => {
-          this.locationIdArray.push(s);
-        });
-      }
+      e.comments.forEach(s => {
+        this.locationIdArray.push(s);
+      });
     });
 
     // stripping the objects that have duplicate object_ids so that the count is i++.

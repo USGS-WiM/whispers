@@ -35,13 +35,13 @@ import { DisplayValuePipe } from '../pipes/display-value.pipe';
 })
 export class SavedSearchesComponent implements OnInit {
 
-  // savedSearchesDataSource: MatTableDataSource<Search>;
+  savedSearchesDataSource: MatTableDataSource<Search>;
 
   searchDialogRef: MatDialogRef<SearchDialogComponent>;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
 
   errorMessage;
-  searches = [];
+  searches;
   parsedSearches = [];
 
   eventTypes = [];
@@ -84,12 +84,8 @@ export class SavedSearchesComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
 
-    //TODO: figure why this is causing duplication of searches list
-    this.dataUpdatedService.trigger.subscribe((action) => {
+    dataUpdatedService.trigger.subscribe((action) => {
       if (action === 'refresh') {
-        this.searches = [];
-        this.parsedSearches = [];
-        // this.resetTableDataSource();
         this.loadSavedSearches();
       }
     });
@@ -97,12 +93,13 @@ export class SavedSearchesComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.speciesLoading = true;
     this.searchesLoading = true;
 
-    // const initialSelection = [];
-    // const allowMultiSelect = true;
-    // this.selection = new SelectionModel<any>(allowMultiSelect, initialSelection);
+    const initialSelection = [];
+    const allowMultiSelect = true;
+    this.selection = new SelectionModel<any>(allowMultiSelect, initialSelection);
 
     this.loadSavedSearches();
 
@@ -160,20 +157,16 @@ export class SavedSearchesComponent implements OnInit {
       );
   }
 
-
   loadSavedSearches() {
     this.searchesLoading = true;
 
-    this.searches = [];
     this.parsedSearches = [];
-
     this._searchService.getUserDashboardSearches()
       .subscribe(
-        (result) => {
-          this.searches = result;
+        (searches) => {
+          this.searches = searches;
 
           this.searches.reverse();
-          this.parsedSearches = [];
 
           for (const search of this.searches) {
             const parsedSearch = APP_UTILITIES.parseSearch(search);
@@ -205,7 +198,9 @@ export class SavedSearchesComponent implements OnInit {
               }
             );
 
-          // this.resetTableDataSource();
+          this.savedSearchesDataSource = new MatTableDataSource(this.parsedSearches);
+          this.savedSearchesDataSource.paginator = this.searchPaginator;
+          this.savedSearchesDataSource.sort = this.searchSort;
           this.searchesLoading = false;
         },
         error => {
@@ -248,21 +243,21 @@ export class SavedSearchesComponent implements OnInit {
     this.deleteModeOn = !this.deleteModeOn;
 
     const element = document.getElementById('searchList');
-    element.classList.toggle('deleteModeIndicator');
+   element.classList.toggle('deleteModeIndicator');
   }
 
   deleteSearch(id) {
     this._searchService.delete(id)
-      .subscribe(
-        () => {
-          this.openSnackBar('Search successfully deleted', 'OK', 5000);
-          this.loadSavedSearches();
-        },
-        error => {
-          this.errorMessage = <any>error;
-          this.openSnackBar('Error. Search not deleted. Error message: ' + error, 'OK', 8000);
-        }
-      );
+          .subscribe(
+            () => {
+              this.openSnackBar('Search successfully deleted', 'OK', 5000);
+              this.loadSavedSearches();
+            },
+            error => {
+              this.errorMessage = <any>error;
+              this.openSnackBar('Error. Search not deleted. Error message: ' + error, 'OK', 8000);
+            }
+          );
   }
 
   /* deleteSearch() {
@@ -380,17 +375,17 @@ export class SavedSearchesComponent implements OnInit {
 
   // From angular material table sample on material api reference site
   /** Whether the number of selected elements matches the total number of rows. */
-  // isAllSelected() {
-  //   const numSelected = this.selection.selected.length;
-  //   const numRows = this.savedSearchesDataSource.data.length;
-  //   return numSelected === numRows;
-  // }
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.savedSearchesDataSource.data.length;
+    return numSelected === numRows;
+  }
 
-  // /** Selects all rows if they are not all selected; otherwise clear selection. */
-  // masterToggle() {
-  //   this.isAllSelected() ?
-  //     this.selection.clear() :
-  //     this.savedSearchesDataSource.data.forEach(row => this.selection.select(row));
-  // }
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.savedSearchesDataSource.data.forEach(row => this.selection.select(row));
+  }
 
 }

@@ -1,0 +1,67 @@
+
+.autocomplete-form {
+    // min-width: 300px;
+    // max-width: 500px;
+    width: 100%;
+}
+
+.autocomplete-input {
+  width:40%;
+}
+
+.autocomplete-form.narrow {
+  .autocomplete-input {
+    width: 100%;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.has-hint {
+  margin-bottom: 0.25em;
+}
+
+.autocomplete-input{
+  display: inline-block;
+  margin-right: 2em;
+}
+
+app-chiplist + .autocomplete-input, app-chiplist + mat-form-field {
+  margin-top: 10px;
+}
+
+.search-type-radios {
+  display: inline-block;
+}
+
+.affected-count-operator-radios {
+
+}
+
+.form-control {
+  width: 18em;
+  margin: 10px;
+}
+
+.date-range-warning{
+  color: red;
+  font-weight: bold;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+  border-bottom: none;
+}
+
+.chip-date-display {
+  // min-width creates a visual placeholder for when start or end date are not
+  // specified
+  min-width: 9ch;
+  display: inline-block;
+}
+
+.event-id-control {
+  display: flex;
+  flex-direction: row;
+}

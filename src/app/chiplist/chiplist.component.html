@@ -1,0 +1,14 @@
+<div class="chiplist">
+  <mat-chip-list>
+    <ng-template ngFor let-item [ngForOf]="items.slice(0, maxItems ? maxItems : undefined)">
+      <mat-chip [selectable]="true" [removable]="true" (click)="$event.stopPropagation()"
+        (removed)="removed.emit(item)" [matTooltip]="item[nameProp]"><span class="chip-value">{{item[nameProp]}}</span>
+        <mat-icon matChipRemove (click)="$event.stopPropagation()">cancel</mat-icon>
+      </mat-chip>
+      <span *ngIf="join && (items.indexOf(item)) < ((maxItems || items.length) - 1)">
+        {{ join }}
+      </span>
+    </ng-template>
+    <mat-chip *ngIf="maxItems && items.length > maxItems" (click)="moreClicked.emit()">and {{items.length - maxItems}} more</mat-chip>
+  </mat-chip-list>
+</div>

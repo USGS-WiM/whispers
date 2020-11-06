@@ -11,7 +11,7 @@
 @import "./assets/styles/markers.css";
 
 
-body { 
+body {
     margin: 0px !important;
     color: $black;
 }
@@ -73,6 +73,7 @@ body {
         .mat-expansion-panel-header-title{
             color: fade-out($black, 0.2);
             transition: $transition;
+            align-self: center;
 
             .mat-icon{
                 height: 18px;
@@ -81,11 +82,11 @@ body {
                 text-decoration: none !important;
             }
         }
-    
+
         &:not([aria-disabled=true]){
             border-bottom: 1px solid $border-color;
         }
-    
+
         .mat-expansion-indicator{
             display: flex;
             flex-direction: column;
@@ -95,24 +96,23 @@ body {
         }
 
         &:hover{
-            text-decoration: underline;
             color: $black;
             transition: $transition;
             background-color: white !important;
             padding-right: 18px;
 
             .mat-expansion-panel-header-title{
+                text-decoration: underline;
                 color: $black;
                 transition: $transition;
             }
         }
-    
+
         // Expanded
         &.mat-expanded{
             color: $black;
             &:hover{
                 color: fade-out($black, 0.2);
-                text-decoration: underline;
             }
         }
     }
@@ -132,7 +132,7 @@ body {
             margin: 5px auto;
             color: $text;
 
-            // Welcome text 
+            // Welcome text
             &#welcome-text{
                 line-height: 24px;
             }
@@ -391,7 +391,7 @@ mat-progress-bar .mat-progress-bar-buffer {
         }
         .panel{
             box-sizing: border-box;
-            padding: 0 10px 0 15px;            
+            padding: 0 10px 0 15px;
         }
     }
 }
@@ -629,7 +629,12 @@ mat-progress-bar .mat-progress-bar-buffer {
     }
 }
 
-// Change spacing between form elements 
+button {
+  // Apply standard Material Design styling on buttons by making label uppercase
+  text-transform: uppercase;
+}
+
+// Change spacing between form elements
 .form-control{
 	margin: 6px 10px !important;
 }
@@ -706,7 +711,7 @@ mat-progress-bar .mat-progress-bar-buffer {
     &:hover {
         cursor: default;
         opacity: 0.9;
-        transition: 0.125s; 
+        transition: 0.125s;
     }
 }
 
@@ -720,7 +725,7 @@ mat-progress-bar .mat-progress-bar-buffer {
     &:hover {
         cursor: default;
         opacity: 0.9;
-        transition: 0.125s; 
+        transition: 0.125s;
     }
 }
 

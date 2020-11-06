@@ -236,6 +236,7 @@ export class APP_SETTINGS {
     // default search query for initial load of home page (may eventually come from some other source)
     public static get DEFAULT_SEARCH_QUERY() {
         return {
+            'event_id': [],
             'event_type': [],
             'diagnosis': [],
             'diagnosis_type': [],
@@ -259,6 +260,7 @@ export class APP_SETTINGS {
     // default display query (display verison of search query above) for initial load of home page
     public static get DEFAULT_DISPLAY_QUERY(): DisplayQuery {
         return {
+            'event_id': [],
             'event_type': [],
             'diagnosis': [],
             'diagnosis_type': [],

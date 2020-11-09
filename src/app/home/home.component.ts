@@ -48,6 +48,7 @@ import 'leaflet-draw';
 import * as esri from 'esri-leaflet';
 import { UserRegistrationComponent } from '@app/user-registration/user-registration.component';
 import { DataUpdatedService } from '@services/data-updated.service';
+import { getAnimalTypes } from '@app/interfaces/species';
 declare let gtag: Function;
 
 @Component({
@@ -993,30 +994,10 @@ export class HomeComponent implements OnInit {
    * @param events
    */
   convertClassNamesToAnimalTypes(events:EventSummary[]) {
-    const speciesClassNames = [];
+    const animalTypes = [];
     for (const event of events) {
-      for (const species of event.species) {
-        speciesClassNames.push(species.class_name);
-      }
+      Array.prototype.push.apply(animalTypes, getAnimalTypes(event.species));
     }
-    const animalTypeNameMap = {
-      "Mammalia": "Mammal",
-      "Aves": "Bird",
-      "Reptilia": "Reptile/Amphibian",
-      "Amphibia": "Reptile/Amphibian",
-      "Actinopterygii": "Fish",
-      "Chondrichthyes": "Fish",
-      "Osteichthyes": "Fish",
-      "Teleostei": "Fish",
-    }
-    const animalTypes = speciesClassNames.map(className => {
-      const animalType = animalTypeNameMap[className];
-      if (animalType) {
-        return animalType;
-      } else {
-        return "Other";
-      }
-    });
     // Return just unique values
     return Array.from(new Set(animalTypes));
   }

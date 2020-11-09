@@ -11,7 +11,7 @@
 @import "./assets/styles/markers.css";
 
 
-body { 
+body {
     margin: 0px !important;
     color: $black;
 }
@@ -81,11 +81,11 @@ body {
                 text-decoration: none !important;
             }
         }
-    
+
         &:not([aria-disabled=true]){
             border-bottom: 1px solid $border-color;
         }
-    
+
         .mat-expansion-indicator{
             display: flex;
             flex-direction: column;
@@ -106,7 +106,7 @@ body {
                 transition: $transition;
             }
         }
-    
+
         // Expanded
         &.mat-expanded{
             color: $black;
@@ -132,7 +132,7 @@ body {
             margin: 5px auto;
             color: $text;
 
-            // Welcome text 
+            // Welcome text
             &#welcome-text{
                 line-height: 24px;
             }
@@ -391,7 +391,7 @@ mat-progress-bar .mat-progress-bar-buffer {
         }
         .panel{
             box-sizing: border-box;
-            padding: 0 10px 0 15px;            
+            padding: 0 10px 0 15px;
         }
     }
 }
@@ -629,7 +629,7 @@ mat-progress-bar .mat-progress-bar-buffer {
     }
 }
 
-// Change spacing between form elements 
+// Change spacing between form elements
 .form-control{
 	margin: 6px 10px !important;
 }
@@ -657,6 +657,7 @@ mat-progress-bar .mat-progress-bar-buffer {
 
     .mat-expansion-panel-body{
         overflow: auto !important;
+        border-bottom: none;
     }
 
     .legend-icon{
@@ -706,7 +707,7 @@ mat-progress-bar .mat-progress-bar-buffer {
     &:hover {
         cursor: default;
         opacity: 0.9;
-        transition: 0.125s; 
+        transition: 0.125s;
     }
 }
 
@@ -720,7 +721,7 @@ mat-progress-bar .mat-progress-bar-buffer {
     &:hover {
         cursor: default;
         opacity: 0.9;
-        transition: 0.125s; 
+        transition: 0.125s;
     }
 }
 

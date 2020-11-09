@@ -162,6 +162,12 @@
       "@browser-warning/*": [
         "app/browser-warning/*"
       ],
+      "@search-form/*": [
+        "app/search-form/*"
+      ],
+      "@chiplist/*": [
+        "app/chiplist/*"
+      ],
       "@request-password-reset/*": [
         "app/request-password-reset/*"
       ],

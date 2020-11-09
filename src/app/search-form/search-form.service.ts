@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observable ,  Subject } from 'rxjs';
 
 @Injectable()
-export class SearchDialogService {
+export class SearchFormService {
 
   private searchQuery = new Subject<any>();
   private displayQuery = new Subject<any>();
 
   setSearchQuery(query: any) {
     this.searchQuery.next(query);
+    sessionStorage.setItem('currentSearch', JSON.stringify(query));
   }
 
   getSearchQuery(): Observable<any> {

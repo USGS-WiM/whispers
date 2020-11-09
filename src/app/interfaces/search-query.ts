@@ -1,6 +1,7 @@
 export interface SearchQuery {
     id?: number;
     name?: string;
+    event_id: number[];
     event_type: number[];
     diagnosis: number[];
     diagnosis_type: number[];

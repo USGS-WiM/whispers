@@ -104,10 +104,9 @@ export class AppComponent implements OnInit {
     // }
 
     this.route.queryParams.subscribe(params => {
-      // TODO: make constants
-      const userId = params['user-id'];
-      const emailToken = params['email-token'];
-      const passwordResetToken = params['password-reset-token'];
+      const userId = params[APP_SETTINGS.EMAIL_VERIFICATION_USER_ID_QUERY_PARAM];
+      const emailToken = params[APP_SETTINGS.EMAIL_VERIFICATION_EMAIL_TOKEN_QUERY_PARAM];
+      const passwordResetToken = params[APP_SETTINGS.PASSWORD_RESET_TOKEN_QUERY_PARAM];
 
       if (userId && emailToken) {
         this.confirmEmailAddress(userId, emailToken);

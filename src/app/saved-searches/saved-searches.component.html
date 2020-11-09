@@ -44,6 +44,14 @@
           search.complete === false ? 'Incomplete Events Only' : 'Complete and incomplete events' }}</span>
       </span>
 
+      <!-- Event ID -->
+      <span class="search-param" *ngIf="search.event_id">
+        <b>EVENT ID</b>
+        <div class="value-list">
+          <span class="value">{{ search.event_id.join(", ") }}</span>
+        </div>
+      </span>
+
       <!-- Event Type -->
       <span class="search-param" *ngIf="search.event_type">
         <b>EVENT TYPE</b>
@@ -149,13 +157,13 @@
           </mat-cell>
         </ng-container>
 
- 
+
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="search-select"> Name </mat-header-cell>
           <mat-cell *matCellDef="let search" [ngClass]="search-select">{{search.name}}</mat-cell>
         </ng-container>
 
-      
+
         <ng-container matColumnDef="search">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Search </mat-header-cell>
           <mat-cell *matCellDef="let search">

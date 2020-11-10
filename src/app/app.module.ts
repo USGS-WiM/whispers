@@ -75,7 +75,6 @@ import { ContactService } from '@services/contact.service';
 import { AboutComponent } from '@about/about.component';
 import { ConfirmComponent } from '@confirm/confirm.component';
 import { CreateContactService } from '@app/create-contact/create-contact.service';
-import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 import { SearchService } from '@services/search.service';
 import { SavedSearchesComponent } from '@saved-searches/saved-searches.component';
 import { DatePipe } from '@angular/common';
@@ -137,6 +136,9 @@ import { RequestPasswordResetComponent } from '@request-password-reset/request-p
 import { ResetPasswordComponent } from '@reset-password/reset-password.component';
 import { NewPasswordFormComponent } from '@new-password-form/new-password-form.component';
 import { UserRegistrationRoleSelectionComponent } from '@user-registration-role-selection/user-registration-role-selection.component';
+import { SearchFormComponent } from '@search-form/search-form.component';
+import { SearchFormService } from '@search-form/search-form.service';
+import { ChiplistComponent } from '@chiplist/chiplist.component';
 
 
 @NgModule({
@@ -196,6 +198,8 @@ import { UserRegistrationRoleSelectionComponent } from '@user-registration-role-
     ResetPasswordComponent,
     NewPasswordFormComponent,
     UserRegistrationRoleSelectionComponent,
+    SearchFormComponent,
+    ChiplistComponent,
   ],
   imports: [
     BrowserModule,
@@ -273,7 +277,7 @@ import { UserRegistrationRoleSelectionComponent } from '@user-registration-role-
     OrganizationService,
     RoleService,
     SearchService,
-    SearchDialogService,
+    SearchFormService,
     UserService,
     LocationSpeciesDiagnosisService,
     SpeciesDiagnosisService,

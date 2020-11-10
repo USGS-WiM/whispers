@@ -91,6 +91,10 @@ export class EventService {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
 
+    if (eventQuery.event_id && eventQuery.event_id.length > 0) {
+      queryString = queryString + '&id=' + eventQuery.event_id;
+    }
+
     if (eventQuery.event_type && eventQuery.event_type.length > 0) {
       queryString = queryString + '&event_type=' + eventQuery.event_type;
     }
@@ -184,6 +188,10 @@ export class EventService {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
     }
 
+    if (eventQuery.event_id && eventQuery.event_id.length > 0) {
+      queryString = queryString + '&id=' + eventQuery.event_id;
+    }
+
     if (eventQuery.event_type && eventQuery.event_type.length > 0) {
       queryString = queryString + '&event_type=' + eventQuery.event_type;
     }
@@ -243,6 +251,10 @@ export class EventService {
     }
     if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
+    }
+
+    if (eventQuery.event_id && eventQuery.event_id.length > 0) {
+      queryString = queryString + '&id=' + eventQuery.event_id;
     }
 
     if (eventQuery.event_type && eventQuery.event_type.length > 0) {
@@ -412,6 +424,10 @@ export class EventService {
     }
     if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
+    }
+
+    if (eventQuery.event_id && eventQuery.event_id.length > 0) {
+      queryString = queryString + '&id=' + eventQuery.event_id;
     }
 
     if (eventQuery.event_type && eventQuery.event_type.length > 0) {

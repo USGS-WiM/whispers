@@ -356,10 +356,6 @@
 
       <div id="map">
 
-        <!-- Warning about map center -->
-        <div id="mapLocationNote"><b>Note:</b> Map shows centroid of county where event occured</div>
-
-
         <div id="latLngScale" class="latLngScale">
           <span class="hover-content"> <b>Map scale </b></span>
           1:<span id="scale">{{mapScale}}</span> | <span class="hover-content"> <b>Zoom level </b></span> <span
@@ -373,7 +369,7 @@
         </div>
 
 
-        <mat-expansion-panel id="legend" class="legend legend-home">
+        <mat-expansion-panel id="legend" class="legend legend-home" [expanded]="true">
           <mat-expansion-panel-header>
             <!-- <mat-icon matTooltip="Map shows centroid of county where event occured." _ngcontent-c5="" class="material-icons mat-icon" style="color: #e8c900; font-size: 18px; width: 100%;" role="img" aria-hidden="true">warning</mat-icon> -->
             <mat-panel-title>
@@ -383,7 +379,9 @@
 
           <div class="legend-panel-content">
 
-            <label class="legend-label" style="margin-top: 0 !important; padding-top: 0 !important;">Event Type</label>
+            <div id="mapLocationNote"><b>Note:</b> Map shows centroid of county where event occured</div>
+
+            <label class="legend-label">Event Type</label>
             <label class="legend-hint">Indicated by shape</label>
 
             <div class='legend-icon'>
@@ -394,6 +392,21 @@
               <div class='wmm-diamond wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
               <label>Surveillance</label>
             </div>
+
+            <label class="legend-label">Event Record Status</label>
+            <label class="legend-hint">Indicated by white center</label>
+
+            <div class='legend-icon'>
+              <div class='wmm-circle wmm-black wmm-icon-circle wmm-icon-white wmm-size-20'></div>
+              <label>Incomplete</label>
+            </div>
+            <div class='legend-icon'>
+              <div class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+              <label>Complete</label>
+            </div>
+
+            <label class="legend-label">Event Count in County</label>
+            <label class="legend-hint">Indicated by number</label>
 
             <label class="legend-label">Animal Type</label>
             <label class="legend-hint">Indicated by color</label>
@@ -443,7 +456,7 @@
 
               <div class='legend-icon'>
                 <div class='wmm-square wmm-28995b wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-                <label>Atlantic Flyways</label>
+                <label>Atlantic Flyway</label>
               </div>
 
               <div class='legend-icon'>
@@ -467,7 +480,7 @@
 
               <div class='legend-icon'>
                 <div class='wmm-square wmm-white wmm-icon-circle wmm-icon-white wmm-size-20 huc-icon'></div>
-                <label>HUC 2</label>
+                <label>Hydrologic Unit Code (HUC)</label>
               </div>
 
             </div>

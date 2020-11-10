@@ -160,6 +160,13 @@ export class SavedSearchesComponent implements OnInit {
       );
   }
 
+  // checkForDuplicateDiagnosis(array) {
+  //   const unique = array.filter(function (elem, index, self) {
+  //     return index === self.indexOf(elem);
+  //   });
+  //   return unique.join(';\n');
+  // }
+
 
   loadSavedSearches() {
     this.searchesLoading = true;
@@ -185,7 +192,12 @@ export class SavedSearchesComponent implements OnInit {
           for (const parsedSearch of this.parsedSearches) {
             if (parsedSearch.administrative_level_one) {
               for (const adminLevelOne of parsedSearch.administrative_level_one) {
-                adminLevelOnes.push(adminLevelOne);
+                if (adminLevelOnes.includes(adminLevelOne)) {
+                  break;
+                } else {
+                  adminLevelOnes.push(adminLevelOne);
+                }
+
               }
             }
           }

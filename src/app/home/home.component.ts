@@ -560,7 +560,7 @@ export class HomeComponent implements OnInit {
 
     const overlays = {
       'Flyways': flyways,
-      'Watersheds (HUC 2)': watersheds
+      'Watersheds': watersheds
     };
 
     const drawnItems = L.featureGroup().addTo(this.map);
@@ -702,7 +702,7 @@ export class HomeComponent implements OnInit {
       console.log('overlayadd');
       if (e.name === 'Flyways') {
         this.flywaysVisible = true;
-      } else if (e.name === 'Watersheds (HUC 2)') {
+      } else if (e.name === 'Watersheds') {
         this.watershedsVisible = true;
       }
     });
@@ -711,7 +711,7 @@ export class HomeComponent implements OnInit {
       console.log('overlayremove');
       if (e.name === 'Flyways') {
         this.flywaysVisible = false;
-      } else if (e.name === 'Watersheds (HUC 2)') {
+      } else if (e.name === 'Watersheds') {
         this.watershedsVisible = false;
       }
     });

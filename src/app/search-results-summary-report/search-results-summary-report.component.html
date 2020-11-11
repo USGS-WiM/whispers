@@ -7,8 +7,6 @@
     <div class="map">
       <h4>Geographic Context:</h4>
       <div id="resultsMap">
-        <!-- Warning about map center -->
-        <div id="mapLocationNote"><b>Note:</b> Map shows centroid of county where event occured</div>
       </div>
       <mat-progress-bar mode="determinate" [value]="value" id="bar"></mat-progress-bar>
       <span *ngIf="loadingData">
@@ -21,17 +19,34 @@
 
     <div class="legend" id="legendImage">
       <div>
-        <label class="legend-label" style="margin-top: 0 !important; padding-top: 0 !important;">Event Type</label>
+        <div id="mapLocationNote"><b>Note:</b> Map shows centroid of county where event occured</div>
+
+        <label class="legend-label">Event Type</label>
         <label class="legend-hint">Indicated by shape</label>
 
         <div class='legend-icon'>
-            <div style='margin-left: -3px !important;' class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
+          <div style='margin-left: 0px !important;' class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
           <label>Mortality/Morbidity</label>
         </div>
-        <div class='legend-icon' style="padding-top: 3px; padding-bottom: 3px;">
-            <div style='margin-left: 0px !important;' class='wmm-diamond wmm-black wmm-icon-noicon wmm-icon-white wmm-size-14'></div>
+        <div class='legend-icon'>
+          <div style='margin-left: 3px !important;' class='wmm-diamond wmm-black wmm-icon-noicon wmm-icon-white wmm-size-14'></div>
           <label>Surveillance</label>
         </div>
+
+        <label class="legend-label">Event Record Status</label>
+        <label class="legend-hint">Indicated by white center</label>
+
+        <div class='legend-icon'>
+          <div style='margin-left: 0px !important;' class='wmm-circle wmm-black wmm-icon-circle wmm-icon-white wmm-size-15'></div>
+          <label>Incomplete</label>
+        </div>
+        <div class='legend-icon'>
+          <div style='margin-left: 0px !important;' class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
+          <label>Complete</label>
+        </div>
+
+        <label class="legend-label">Event Count in County</label>
+        <label class="legend-hint">Indicated by number</label>
 
         <label class="legend-label">Animal Type</label>
         <label class="legend-hint">Indicated by color</label>

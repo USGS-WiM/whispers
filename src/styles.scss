@@ -73,6 +73,7 @@ body {
         .mat-expansion-panel-header-title{
             color: fade-out($black, 0.2);
             transition: $transition;
+            align-self: center;
 
             .mat-icon{
                 height: 18px;
@@ -95,13 +96,13 @@ body {
         }
 
         &:hover{
-            text-decoration: underline;
             color: $black;
             transition: $transition;
             background-color: white !important;
             padding-right: 18px;
 
             .mat-expansion-panel-header-title{
+                text-decoration: underline;
                 color: $black;
                 transition: $transition;
             }
@@ -112,7 +113,6 @@ body {
             color: $black;
             &:hover{
                 color: fade-out($black, 0.2);
-                text-decoration: underline;
             }
         }
     }
@@ -627,6 +627,11 @@ mat-progress-bar .mat-progress-bar-buffer {
     &.center{
         justify-content: center;
     }
+}
+
+button {
+  // Apply standard Material Design styling on buttons by making label uppercase
+  text-transform: uppercase;
 }
 
 // Change spacing between form elements

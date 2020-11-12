@@ -25,7 +25,7 @@
           <button mat-raised-button color="primary" class="event-detail-action-button" (click)="exportEventDetails()">
             <i class="material-icons">unarchive</i> Export Event Data</button>
           <button mat-raised-button color="primary" class="event-detail-action-button" (click)="downloadEventReport()">
-            <i class="material-icons">list_alt</i> Generate Event Report</button>
+            <i class="material-icons">picture_as_pdf</i> Generate Event Report</button>
           <button mat-button color="primary" class="event-detail-action-button"
             *ngIf="currentUser.role !== 7 && currentUser.role !== undefined"
             (click)="openCollaborationRequestDialog(eventData.id)">

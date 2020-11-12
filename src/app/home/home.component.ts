@@ -11,9 +11,6 @@ import { MatSnackBar } from '@angular/material';
 
 import { DisplayValuePipe } from '../pipes/display-value.pipe';
 
-import { SearchDialogComponent } from '@search-dialog/search-dialog.component';
-import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
-
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -48,7 +45,9 @@ import 'leaflet-draw';
 import * as esri from 'esri-leaflet';
 import { UserRegistrationComponent } from '@app/user-registration/user-registration.component';
 import { DataUpdatedService } from '@services/data-updated.service';
-import { getAnimalTypes } from '@app/interfaces/species';
+import { getAnimalTypes } from '@interfaces/species';
+import { SearchFormService } from '@search-form/search-form.service';
+import { SearchFormComponent } from '@search-form/search-form.component';
 declare let gtag: Function;
 
 @Component({
@@ -60,6 +59,7 @@ export class HomeComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(SearchResultsSummaryReportComponent) eventReresultsSummaryReportDialogRefportComponent: SearchResultsSummaryReportComponent;
+  @ViewChild(SearchFormComponent) searchFormComponent: SearchFormComponent;
 
   errorMessage: string;
 
@@ -68,7 +68,6 @@ export class HomeComponent implements OnInit {
 
   currentUser;
 
-  searchDialogRef: MatDialogRef<SearchDialogComponent>;
   saveSearchDialogRef: MatDialogRef<SaveSearchComponent>;
   userRegistrationDialogRef: MatDialogRef<UserRegistrationComponent>;
 
@@ -129,12 +128,13 @@ export class HomeComponent implements OnInit {
     'species',
     'eventdiagnoses'
   ];
+  searchQuerySizeTooLargeErrorMessage: string = null;
 
   constructor(
     private eventService: EventService,
     private dialog: MatDialog,
     public snackBar: MatSnackBar,
-    private searchDialogService: SearchDialogService,
+    private searchFormService: SearchFormService,
     private dataUpdatedService: DataUpdatedService,
     private displayValuePipe: DisplayValuePipe,
     private adminLevelOneService: AdministrativeLevelOneService,
@@ -160,10 +160,11 @@ export class HomeComponent implements OnInit {
       this.currentUser = user;
     });
 
-    this.searchQuerySubscription = this.searchDialogService.getSearchQuery().subscribe(
+    this.searchQuerySubscription = this.searchFormService.getSearchQuery().subscribe(
       searchQuery => {
 
         this.searchResultsLoading = true;
+        this.searchQuerySizeTooLargeErrorMessage = null;
 
         // this is the listener for a new search query
 
@@ -172,7 +173,7 @@ export class HomeComponent implements OnInit {
             count => {
               if (count.count >= APP_SETTINGS.QUERY_COUNT_LIMIT) {
                 // this.sampleQuerySizeErrorFlag = true;
-                this.openSnackBar('Your Query result is too large. Please narrow your search and try again', 'OK', 60000);
+                this.searchQuerySizeTooLargeErrorMessage = "Your search result is too large. Please narrow your search and try again.";
                 this.searchResultsLoading = false;
               } else if (count.count < APP_SETTINGS.QUERY_COUNT_LIMIT) {
 
@@ -229,10 +230,6 @@ export class HomeComponent implements OnInit {
                 // this.testDataSource = new EventSearchResultsDataSource(this.eventService);
                 // this.testDataSource.loadResults(searchQuery);
 
-                if (this.searchDialogRef) {
-                  this.searchDialogRef.close();
-                }
-
               }
 
             },
@@ -245,7 +242,7 @@ export class HomeComponent implements OnInit {
 
       });
 
-    this.searchQuerySubscription = this.searchDialogService.getDisplayQuery()
+    this.searchQuerySubscription = this.searchFormService.getDisplayQuery()
       .subscribe(
         displayQuery => {
           this.currentDisplayQuery = displayQuery;
@@ -263,23 +260,28 @@ export class HomeComponent implements OnInit {
     //this.searchDialogService.setSearchQuery(APP_SETTINGS.DEFAULT_SEARCH_QUERY);
   }
 
-  openSearchDialog() {
-    this.searchDialogRef = this.dialog.open(SearchDialogComponent, {
-      minWidth: '60%',
-      data: {
-        query: this.currentDisplayQuery
-      }
-    });
+  applyFilter() {
+    this.searchFormComponent.submitSearch();
+  }
+
+  resetToDefault() {
+    this.searchFormComponent.resetToDefault();
+  }
+
+  clearSearchForm() {
+    // Note: this won't trigger a submission of the search since the user needs
+    // to pick some criteria before submitting the search
+    this.searchFormComponent.clearSelection();
   }
 
 
   ngOnInit() {
 
-    const defaultEventQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
-
     this.speciesLoading = true;
 
     this.searchResultsLoading = true;
+
+    this.searchQuerySizeTooLargeErrorMessage = null;
 
     this.currentSearchQuery.and_params = [];
 
@@ -312,7 +314,7 @@ export class HomeComponent implements OnInit {
         count => {
           if (count.count >= APP_SETTINGS.QUERY_COUNT_LIMIT) {
             // this.sampleQuerySizeErrorFlag = true;
-            this.openSnackBar('Your Query result is too large. Please narrow your search and try again', 'OK', 60000);
+            this.searchQuerySizeTooLargeErrorMessage = "Your search result is too large. Please narrow your search and try again.";
             this.searchResultsLoading = false;
           } else if (count.count < APP_SETTINGS.QUERY_COUNT_LIMIT) {
 
@@ -1100,10 +1102,9 @@ export class HomeComponent implements OnInit {
   }
 
   implementSearch(search) {
-    sessionStorage.setItem('currentSearch', JSON.stringify(search));
-
     // TODO: currentDiplayQuery needs to be parsed from the search object
     const displayQuery: DisplayQuery = {
+      event_id: [],
       event_type: [],
       diagnosis: [],
       diagnosis_type: [],
@@ -1122,6 +1123,12 @@ export class HomeComponent implements OnInit {
       and_params: [],
       complete: search.complete
     };
+
+    if (search.event_id) {
+      for (const event_id of search.event_id) {
+        displayQuery.event_id.push(event_id);
+      }
+    }
 
     if (search.event_type) {
       for (const event_type of search.event_type) {
@@ -1160,10 +1167,10 @@ export class HomeComponent implements OnInit {
 
     sessionStorage.setItem('currentDisplayQuery', JSON.stringify(displayQuery));
     // use displayQuery for display of current query in markup, send to searchDialogService
-    this.searchDialogService.setDisplayQuery(displayQuery);
+    this.searchFormService.setDisplayQuery(displayQuery);
 
     // use searchForm.value to build the web service query, send to searchDialogService
-    this.searchDialogService.setSearchQuery(search);
+    this.searchFormService.setSearchQuery(search);
     // this.router.navigate([`../home/`], { relativeTo: this.route });
   }
 

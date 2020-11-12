@@ -135,6 +135,7 @@ import { ViewNotificationDetailsComponent } from '@notifications/view-notificati
 import { RequestPasswordResetComponent } from '@request-password-reset/request-password-reset.component';
 import { ResetPasswordComponent } from '@reset-password/reset-password.component';
 import { NewPasswordFormComponent } from '@new-password-form/new-password-form.component';
+import { UserRegistrationRoleSelectionComponent } from '@user-registration-role-selection/user-registration-role-selection.component';
 import { SearchFormComponent } from '@search-form/search-form.component';
 import { SearchFormService } from '@search-form/search-form.service';
 import { ChiplistComponent } from '@chiplist/chiplist.component';
@@ -196,6 +197,7 @@ import { ChiplistComponent } from '@chiplist/chiplist.component';
     RequestPasswordResetComponent,
     ResetPasswordComponent,
     NewPasswordFormComponent,
+    UserRegistrationRoleSelectionComponent,
     SearchFormComponent,
     ChiplistComponent,
   ],
@@ -328,6 +330,7 @@ import { ChiplistComponent } from '@chiplist/chiplist.component';
     ViewNotificationDetailsComponent,
     RequestPasswordResetComponent,
     ResetPasswordComponent,
+    UserRegistrationRoleSelectionComponent,
   ]
 })
 export class AppModule { }

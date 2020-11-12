@@ -32,8 +32,8 @@
 <mat-dialog-actions>
 
   <div class="form-buttons-flex">
-    <button mat-button (click)="this.authenticationDialogRef.close('cancel');">Cancel</button>
-    <button mat-button type="submit" [disabled]="loginForm.invalid" (click)="onSubmit(loginForm.value)" form="loginForm">Login</button>
+    <button mat-stroked-button (click)="this.authenticationDialogRef.close('cancel');">Cancel</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid" (click)="onSubmit(loginForm.value)" form="loginForm"><mat-icon>send</mat-icon> Login</button>
   </div>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 

@@ -132,6 +132,9 @@ import { PapaParseModule } from 'ngx-papaparse';
 import { EventPublicReportComponent } from '@event-public-report/event-public-report.component';
 import { SearchResultsSummaryReportComponent } from '@search-results-summary-report/search-results-summary-report.component';
 import { ViewNotificationDetailsComponent } from '@notifications/view-notification-details/view-notification-details.component';
+import { RequestPasswordResetComponent } from '@request-password-reset/request-password-reset.component';
+import { ResetPasswordComponent } from '@reset-password/reset-password.component';
+import { NewPasswordFormComponent } from '@new-password-form/new-password-form.component';
 import { SearchFormComponent } from '@search-form/search-form.component';
 import { SearchFormService } from '@search-form/search-form.service';
 import { ChiplistComponent } from '@chiplist/chiplist.component';
@@ -190,6 +193,9 @@ import { ChiplistComponent } from '@chiplist/chiplist.component';
     EventPublicReportComponent,
     SearchResultsSummaryReportComponent,
     ViewNotificationDetailsComponent,
+    RequestPasswordResetComponent,
+    ResetPasswordComponent,
+    NewPasswordFormComponent,
     SearchFormComponent,
     ChiplistComponent,
   ],
@@ -319,7 +325,9 @@ import { ChiplistComponent } from '@chiplist/chiplist.component';
     CollaborationRequestComponent,
     BrowserWarningComponent,
     BulkUploadComponent,
-    ViewNotificationDetailsComponent
+    ViewNotificationDetailsComponent,
+    RequestPasswordResetComponent,
+    ResetPasswordComponent,
   ]
 })
 export class AppModule { }

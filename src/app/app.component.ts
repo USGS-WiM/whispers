@@ -27,6 +27,8 @@ import * as $ from 'jquery';
 import * as search_api from 'usgs-search-api';
 import { UserService } from '@services/user.service';
 import { ConfirmComponent } from '@confirm/confirm.component';
+import { RequestPasswordResetComponent } from '@request-password-reset/request-password-reset.component';
+import { ResetPasswordComponent } from '@reset-password/reset-password.component';
 
 @Component({
   selector: 'app-root',
@@ -104,9 +106,12 @@ export class AppComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       const userId = params[APP_SETTINGS.EMAIL_VERIFICATION_USER_ID_QUERY_PARAM];
       const emailToken = params[APP_SETTINGS.EMAIL_VERIFICATION_EMAIL_TOKEN_QUERY_PARAM];
+      const passwordResetToken = params[APP_SETTINGS.PASSWORD_RESET_TOKEN_QUERY_PARAM];
 
       if (userId && emailToken) {
         this.confirmEmailAddress(userId, emailToken);
+      } else if (userId && passwordResetToken) {
+        this.resetPassword(userId, passwordResetToken);
       }
     })
 
@@ -214,6 +219,11 @@ export class AppComponent implements OnInit {
       // height: '75%'
       data: data
     });
+    this.authenticationDialogRef.afterClosed().subscribe(result => {
+      if (result === "request-password-reset") {
+        this.dialog.open(RequestPasswordResetComponent);
+      }
+    });
   }
 
   navigateToHome() {
@@ -285,5 +295,19 @@ export class AppComponent implements OnInit {
           );
         }
       );
+  }
+
+  resetPassword(userId: String, passwordResetToken: String) {
+
+    // Route to /home/ to remove the password reset token query parameters
+    return this.router.navigate(['/home/'])
+    .then(() => {
+      this.dialog.open(ResetPasswordComponent, {
+        data: {
+          userId: userId,
+          passwordResetToken: passwordResetToken
+        }
+      });
+    });
   }
 }

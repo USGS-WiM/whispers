@@ -173,6 +173,7 @@ export class APP_SETTINGS {
 
     public static get EMAIL_VERIFICATION_USER_ID_QUERY_PARAM() { return "user-id"; }
     public static get EMAIL_VERIFICATION_EMAIL_TOKEN_QUERY_PARAM() { return "email-token"; }
+    public static get PASSWORD_RESET_TOKEN_QUERY_PARAM() { return "password-reset-token"; }
 
     public static get RECAPTCHA_SITE_KEY() { return environment.recaptcha_site_key; }
 

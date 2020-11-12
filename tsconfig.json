@@ -168,6 +168,15 @@
       "@chiplist/*": [
         "app/chiplist/*"
       ],
+      "@request-password-reset/*": [
+        "app/request-password-reset/*"
+      ],
+      "@reset-password/*": [
+        "app/reset-password/*"
+      ],
+      "@new-password-form/*": [
+        "app/new-password-form/*"
+      ],
     },
     "target": "es5",
     "typeRoots": [

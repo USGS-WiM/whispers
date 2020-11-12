@@ -44,6 +44,7 @@ import 'leaflet';
 import 'leaflet-draw';
 import * as esri from 'esri-leaflet';
 import { DataUpdatedService } from '@services/data-updated.service';
+import { getAnimalTypes } from '@interfaces/species';
 import { SearchFormService } from '@search-form/search-form.service';
 import { SearchFormComponent } from '@search-form/search-form.component';
 declare let gtag: Function;
@@ -400,7 +401,6 @@ export class HomeComponent implements OnInit {
                 this.errorMessage = <any>error;
               }
             );
-          console.log('Popular searches: ' + this.parsedPopularSearches);
 
         },
         error => {
@@ -560,7 +560,7 @@ export class HomeComponent implements OnInit {
 
     const overlays = {
       'Flyways': flyways,
-      'Watersheds (HUC 2)': watersheds
+      'Watersheds': watersheds
     };
 
     const drawnItems = L.featureGroup().addTo(this.map);
@@ -702,7 +702,7 @@ export class HomeComponent implements OnInit {
       console.log('overlayadd');
       if (e.name === 'Flyways') {
         this.flywaysVisible = true;
-      } else if (e.name === 'Watersheds (HUC 2)') {
+      } else if (e.name === 'Watersheds') {
         this.watershedsVisible = true;
       }
     });
@@ -711,7 +711,7 @@ export class HomeComponent implements OnInit {
       console.log('overlayremove');
       if (e.name === 'Flyways') {
         this.flywaysVisible = false;
-      } else if (e.name === 'Watersheds (HUC 2)') {
+      } else if (e.name === 'Watersheds') {
         this.watershedsVisible = false;
       }
     });
@@ -771,41 +771,27 @@ export class HomeComponent implements OnInit {
       let shapeClass = 'wmm-circle ';
       let iconClasses = ' wmm-icon-circle wmm-icon-white ';
       let sizeClass = 'wmm-size-25';
-      if (marker['eventdiagnoses'][0] !== undefined) {
-        // set color of marker based on diagnosis type
-        switch (marker['eventdiagnoses'][0].diagnosis_type) {
-          case 1: {
-            colorClass = 'wmm-green';
-            break;
-          }
-          case 2: {
-            colorClass = 'wmm-blue';
-            break;
-          }
-          case 3: {
+      let animalTypes = this.convertClassNamesToAnimalTypes(marker.events);
+      if (animalTypes.length > 1) {
+        // grey for multiple animal types
+        colorClass = 'wmm-mutedblue';
+      } else {
+        switch (animalTypes[0]) {
+          case "Mammal":
             colorClass = 'wmm-red';
             break;
-          }
-          case 4: {
-            colorClass = 'wmm-orange';
-            break;
-          }
-          case 5: {
+          case "Bird":
             colorClass = 'wmm-yellow';
             break;
-          }
-          case 6: {
-            colorClass = 'wmm-purple';
+          case "Reptile/Amphibian":
+            colorClass = 'wmm-green';
             break;
-          }
-          case 7: {
+          case "Fish":
             colorClass = 'wmm-sky';
             break;
-          }
-          case 8: {
-            colorClass = 'wmm-mutedpink';
+          case "Other":
+            colorClass = 'wmm-purple';
             break;
-          }
         }
       }
 
@@ -839,7 +825,6 @@ export class HomeComponent implements OnInit {
         // for location with multiple events, show event count on symbol, make larger and gray
         eventCount = marker.events.length;
         // iconClasses = ' wmm-icon-circle wmm-icon-white ';
-        colorClass = 'wmm-mutedblue';
         sizeClass = 'wmm-size-35';
 
       } else {
@@ -999,6 +984,22 @@ export class HomeComponent implements OnInit {
       this.openSnackBar('No events match your selected criteria. Please try again.', 'OK', 8000);
 
     }
+  }
+
+  /**
+   * Return unique animal types for class names of the species identified in
+   * the given events. Animal types are a more user-friendly general
+   * classification of related species that will be displayed in the map and is
+   * meant to be used for color-coded categorization of events.
+   * @param events
+   */
+  convertClassNamesToAnimalTypes(events:EventSummary[]) {
+    const animalTypes = [];
+    for (const event of events) {
+      Array.prototype.push.apply(animalTypes, getAnimalTypes(event.species));
+    }
+    // Return just unique values
+    return Array.from(new Set(animalTypes));
   }
 
   testForUndefined(value: any, property?: any) {

@@ -106,25 +106,13 @@
     position: relative;
 
     #mapLocationNote{
-        position: absolute;
-        top: 11px;
-        left: 50px;
-        background-color: white;
-        font-size: 12px;
-        z-index: 401;
-        box-sizing: border-box;
-        padding: 5px;
-        border-radius: 3px;
-        color: #313B57;
-        width: 164px;
-        line-height: 12px;
-        border: 1px solid rgba(160, 175, 205, 0.4);
-
-        b{
-            color: rgb(7, 7, 7);
-            font-weight: 700;
-            text-decoration: underline;
-        }
+        background-color: #050921;
+        color: white;
+        font-weight: bold;
+        padding: 6px 4px;
+        font-size: 14px;
+        border-radius: 4px;
+        margin-left: -4px;
     }
 }
 
@@ -254,25 +242,6 @@ mat-table>.mat-row:hover {
     cursor: pointer;
 }
 
-.legend {
-    position: absolute;
-    padding: 4px;
-    // bottom: 60px !important;
-    top: 10px;
-    //left: 15px;
-    right: 10px;
-    width:200px;
-    /*height:320px;*/
-    z-index: 799;
-    color: black;
-    background-color: rgb(255, 255, 255);
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
-    border-radius: 4px;
-    cursor: pointer;
-    opacity: 0.87;
-}
-
 .latLngScale:hover .hover-content {
     display: inline-block;
 }
@@ -305,10 +274,6 @@ mat-table>.mat-row:hover {
     border: 3px solid #b57dcf;
 }
 
-.legend-label {
-    padding-top: 1em;
-}
-
 .legend-icon{
     box-sizing: border-box;
 }
@@ -317,6 +282,7 @@ mat-table>.mat-row:hover {
     box-sizing: border-box;
     padding-left: 15px;
     padding-top: 10px;
+    padding-bottom: 10px;
 
     .wmm-circle,
     .wmm-diamond{
@@ -388,7 +354,7 @@ mat-table>.mat-row:hover {
     top: 10px;
     //left: 15px;
     right: 10px;
-    width:200px;
+    width:230px;
     max-height:400px;
     z-index: 799;
     color: black;
@@ -396,7 +362,8 @@ mat-table>.mat-row:hover {
     background-color: rgba(255, 255, 255, 0.8);
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
     border-radius: 4px;
-    cursor: pointer;
+    // override leaflet's 'cursor: grab'
+    cursor: auto;
     opacity: 0.87;
 }
 
@@ -405,14 +372,13 @@ mat-table>.mat-row:hover {
     font-weight: 600;
     text-align: left;
     display: block;
-    margin: 5px 0 1px 0;
+    margin: 8px 0 1px 0;
     padding-top: 0;
 }
 .legend-hint{
     display: block;
     font-size: 11px;
     font-style: italic;
-    opacity: 0.5;
     font-weight: 500;
     margin: 1px 0 6px 0;
     line-height: 10px;
@@ -420,10 +386,6 @@ mat-table>.mat-row:hover {
 
 .legendIcon {
     display: inline-block;
-}
-
-.legend-label {
-    padding-top: 1em;
 }
 
 // styles for flyways

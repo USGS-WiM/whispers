@@ -661,7 +661,7 @@ button {
     padding: 0;
 
     .mat-expansion-panel-body{
-        overflow: auto !important;
+        border-bottom: none;
     }
 
     .legend-icon{

@@ -206,10 +206,6 @@
 
       <div id="map">
 
-        <!-- Warning about map center -->
-        <div id="mapLocationNote"><b>Note:</b> Map shows centroid of county where event occured</div>
-
-
         <div id="latLngScale" class="latLngScale">
           <span class="hover-content"> <b>Map scale </b></span>
           1:<span id="scale">{{mapScale}}</span> | <span class="hover-content"> <b>Zoom level </b></span> <span
@@ -223,7 +219,7 @@
         </div>
 
 
-        <mat-expansion-panel id="legend" class="legend legend-home">
+        <mat-expansion-panel id="legend" class="legend legend-home" [expanded]="true">
           <mat-expansion-panel-header>
             <!-- <mat-icon matTooltip="Map shows centroid of county where event occured." _ngcontent-c5="" class="material-icons mat-icon" style="color: #e8c900; font-size: 18px; width: 100%;" role="img" aria-hidden="true">warning</mat-icon> -->
             <mat-panel-title>
@@ -233,7 +229,9 @@
 
           <div class="legend-panel-content">
 
-            <label class="legend-label" style="margin-top: 0 !important; padding-top: 0 !important;">Event Type</label>
+            <div id="mapLocationNote">Events Mapped to Center of County</div>
+
+            <label class="legend-label">Event Type</label>
             <label class="legend-hint">Indicated by shape</label>
 
             <div class='legend-icon'>
@@ -245,50 +243,53 @@
               <label>Surveillance</label>
             </div>
 
-            <label class="legend-label">Diagnosis Type</label>
+            <label class="legend-label">Event Record Status</label>
+            <label class="legend-hint">Indicated by white center</label>
+
+            <div class='legend-icon'>
+              <div class='wmm-circle wmm-black wmm-icon-circle wmm-icon-white wmm-size-20'></div>
+              <label>Incomplete</label>
+            </div>
+            <div class='legend-icon'>
+              <div class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
+              <label>Complete</label>
+            </div>
+
+            <label class="legend-label">Event Count in County</label>
+            <label class="legend-hint">Indicated by number</label>
+
+            <label class="legend-label">Animal Type</label>
             <label class="legend-hint">Indicated by color</label>
 
             <div class='legend-icon'>
-              <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-              <label>Bacteria</label>
-            </div>
-
-            <div class='legend-icon'>
-              <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-              <label>Fungus</label>
-            </div>
-
-            <div class='legend-icon'>
               <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-              <label>Nut/Met/Dev</label>
-            </div>
-
-            <div class='legend-icon'>
-              <div class='wmm-square wmm-orange wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-              <label>Other</label>
+              <label>Mammal</label>
             </div>
 
             <div class='legend-icon'>
               <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-              <label>Parasite</label>
+              <label>Bird</label>
             </div>
 
             <div class='legend-icon'>
-              <div class='wmm-square wmm-purple wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-              <label>Toxin</label>
-            </div>
-
-            <div class='legend-icon'>
-              <div class='wmm-square wmm-mutedpink wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-              <label>Trauma</label>
+              <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+              <label>Reptile/Amphibian</label>
             </div>
 
             <div class='legend-icon'>
               <div class='wmm-square wmm-sky wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-              <label>Virus</label>
+              <label>Fish</label>
             </div>
 
-            <label class="legend-hint">White center indicates incomplete event</label>
+            <div class='legend-icon'>
+              <div class='wmm-square wmm-purple wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+              <label>Other</label>
+            </div>
+
+            <div class='legend-icon'>
+              <div class='wmm-square wmm-mutedblue wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+              <label>Multiple Types</label>
+            </div>
 
             <!-- <div class='legend-icon'>
               <div class='wmm-square wmm-mutedblue wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
@@ -299,21 +300,13 @@
             <!-- <label class="legend-hint">Number indicates event count</label>
             <label class="legend-hint">White center indicates incomplete event</label> -->
 
-            <label class="legend-label">Multiple Events in One County (or equivalent)</label>
-            <div class='legend-icon' style="padding-bottom: 5px;">
-              <div class='wmm-square wmm-mutedblue wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-              <label style="font-size: 13px">Multiple Diagnosis Types</label>
-            </div>
-            <label class="legend-hint">Number indicates event count</label>
-
-
 
             <div id="flywaysLegend" *ngIf="flywaysVisible">
               <label class="legend-label">Flyways</label>
 
               <div class='legend-icon'>
                 <div class='wmm-square wmm-28995b wmm-icon-noicon wmm-icon-white wmm-size-20'></div>
-                <label>Atlantic Flyways</label>
+                <label>Atlantic Flyway</label>
               </div>
 
               <div class='legend-icon'>
@@ -337,7 +330,7 @@
 
               <div class='legend-icon'>
                 <div class='wmm-square wmm-white wmm-icon-circle wmm-icon-white wmm-size-20 huc-icon'></div>
-                <label>HUC 2</label>
+                <label>Hydrologic Unit Code (HUC)</label>
               </div>
 
             </div>

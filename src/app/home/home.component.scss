@@ -103,15 +103,13 @@
     position: relative;
 
     #mapLocationNote{
-        font-size: 12px;
-        line-height: 12px;
-        margin: 1px 0px 6px 0px;
-
-        b{
-            color: rgb(7, 7, 7);
-            font-weight: 700;
-            text-decoration: underline;
-        }
+        background-color: #050921;
+        color: white;
+        font-weight: bold;
+        padding: 6px 4px;
+        font-size: 14px;
+        border-radius: 4px;
+        margin-left: -4px;
     }
 }
 

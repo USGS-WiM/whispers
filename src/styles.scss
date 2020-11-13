@@ -393,6 +393,22 @@ mat-progress-bar .mat-progress-bar-buffer {
             box-sizing: border-box;
             padding: 0 10px 0 15px;
         }
+
+        .not-public-icon {
+          vertical-align: bottom;
+          height: 15px;
+          margin-right: 4px;
+          padding-left: 12px;
+        }
+
+        .event-details-link {
+          padding-left: 12px;
+          font-size: 14px;
+        }
+
+        .not-public-icon + .event-details-link {
+          padding-left: 0px;
+        }
     }
 }
 .leaflet-popup-close-button {

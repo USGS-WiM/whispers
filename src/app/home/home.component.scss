@@ -124,6 +124,10 @@ mat-table>.mat-row:hover {
 .results-table-div {
     background-color: white;
     min-width: 500px;
+    .wmm-circle {
+      position: static !important;
+      margin-right: 5px;
+    }
 }
 
 .text-bold {

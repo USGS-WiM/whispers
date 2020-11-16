@@ -371,44 +371,61 @@ mat-progress-bar .mat-progress-bar-buffer {
             font-size: 12px;
         }
 
-        .accButton{
-            padding: 10px;
-            background-color: transparent;
-            font-size: 14px;
-            font-weight: 700;
-            transition: $transition;
 
-            &:hover{
-                cursor: pointer;
-                transition: $transition;
-                background-color: $bg;
-            }
-
-            &:after{
-                position: refive;
-                top: -3px;
-            }
+        .popup-event-details {
+          position: relative;
         }
-        .panel{
-            box-sizing: border-box;
-            padding: 0 10px 0 15px;
-        }
-
-        .not-public-icon {
-          vertical-align: bottom;
-          height: 15px;
-          margin-right: 4px;
-          padding-left: 12px;
-        }
-
-        .event-details-link {
-          padding-left: 12px;
+        .popup-event-details-header {
+          // leave room for the absolutely positioned .popup-event-details-toggle
+          padding-right: calc(16px + 4px);
+          // leave room for absolutely positioned marker (wmm-size-20)
+          padding-left: calc(20px + 4px);
           font-size: 14px;
+          height: 24px;
+          line-height: 24px;
+
+          .marker-icon {
+            left: calc(20px / 2); // half the width of the marker (wmm-size-20)
+            top: 2px; // vertically center up the marker with the event link
+          }
+
+          .not-public-icon {
+            vertical-align: text-bottom;
+            height: 18px;
+            width: 18px;
+            margin-right: 4px;
+          }
+        }
+        .popup-event-details-toggle {
+            position: absolute;
+            right: 0px;
+            top: calc(24px / 2 - 16px / 2); // center vertically (half height of parent - half height of self)
+            border: none;
+            background: none;
+            font-size: 13px;
+            padding: 0px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            color: rgba(0, 0, 0, 0.54);
+            &:after {
+              display: block;
+              transition: 0.4s;
+              content: "\276F"; // Unicode for "❯ Heavy Right-Pointing Angle Quotation Mark Ornament"
+              transform: rotate(90deg);
+            }
+            &.active:after {
+              transform: rotate(270deg);
+            }
         }
 
-        .not-public-icon + .event-details-link {
-          padding-left: 0px;
+        .popup-event-details-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            padding-left: 24px;
         }
+
     }
 }
 .leaflet-popup-close-button {

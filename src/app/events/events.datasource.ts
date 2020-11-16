@@ -52,7 +52,7 @@ export class EventsDataSource implements DataSource<EventSummary> {
     // }
 
     connect(collectionViewer: CollectionViewer): Observable<EventSummary[]> {
-        console.log('Connecting data source');
+        console.log('Connecting Events data source');
         return this.eventsSubject.asObservable();
     }
 

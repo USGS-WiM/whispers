@@ -847,7 +847,8 @@ export class HomeComponent implements OnInit {
         const eventMarkerClasses = [eventIconClasses, eventColorClass, eventShapeClass, eventSizeClass].join(" ");
         popupContent = popupContent + '<div class="popup-event-details">';
         popupContent = popupContent + '<div class="popup-event-details-header">';
-        popupContent = popupContent + '<div class="marker-icon ' + eventMarkerClasses + '"></div>';
+        popupContent = popupContent + '<div class="marker-icon ' + eventMarkerClasses +
+          '" title="' + this.getUniqueAnimalTypes([event]).join(", ") + '"></div>';
         if (event.public === false) {
           popupContent = popupContent + '<img class="not-public-icon" src="./assets/icons/visibility_off.png" alt="Not Public">';
         }
@@ -934,7 +935,7 @@ export class HomeComponent implements OnInit {
    * meant to be used for color-coded categorization of events.
    * @param events
    */
-  convertClassNamesToAnimalTypes(events:EventSummary[]) {
+  getUniqueAnimalTypes(events:EventSummary[]) {
     const animalTypes = [];
     for (const event of events) {
       Array.prototype.push.apply(animalTypes, getAnimalTypes(event.species));
@@ -946,7 +947,7 @@ export class HomeComponent implements OnInit {
   getMarkerColorClass(events:EventSummary[]) {
 
       let colorClass;
-      let animalTypes = this.convertClassNamesToAnimalTypes(events);
+      let animalTypes = this.getUniqueAnimalTypes(events);
       if (animalTypes.length > 1) {
         // grey for multiple animal types
         colorClass = 'wmm-mutedblue';

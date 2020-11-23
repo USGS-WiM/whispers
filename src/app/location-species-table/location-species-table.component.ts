@@ -86,8 +86,6 @@ export class LocationSpeciesTableComponent implements OnInit {
 
     const rows = [];
     data.forEach(element => rows.push(element, { detailRow: true, element }));
-    console.log(rows);
-
     this.dataSource = new MatTableDataSource(rows);
   }
 

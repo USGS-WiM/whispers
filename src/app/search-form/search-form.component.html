@@ -77,6 +77,48 @@
     </mat-expansion-panel>
     <!--- end Event type expansion panel -->
 
+    <!-- Date Range expansion panel -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <b>Date Range</b>
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-chip-list *ngIf="!searchForm.get('end_date').hasError('endDateBeforeStart') && (searchForm.get('start_date').value !== null || searchForm.get('end_date').value !== null)">
+            <mat-chip [selectable]="true" [removable]="true" (click)="$event.stopPropagation()"
+              (removed)="clearDates()">
+              <span style="white-space: nowrap;">
+                <span class="chip-date-display">{{searchForm.get('start_date').value | date:'mediumDate'}}</span>
+                <span *ngIf="(searchForm.get('start_date').value !== null) || (searchForm.get('end_date').value !== null)"> &ndash; </span>
+                <span class="chip-date-display">{{searchForm.get('end_date').value | date:'mediumDate'}}</span>
+              </span>
+              <mat-icon matChipRemove (click)="$event.stopPropagation()">cancel</mat-icon>
+            </mat-chip>
+          </mat-chip-list>
+          <span *ngIf="searchForm.get('end_date').hasError('endDateBeforeStart')" class="date-range-warning"><mat-icon>warning</mat-icon>&nbsp;Invalid date range</span>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <mat-form-field class="form-control">
+          <input matInput [matDatepicker]="startDate" placeholder="Start Date" formControlName="start_date">
+          <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+          <mat-datepicker #startDate></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="form-control">
+          <input matInput [matDatepicker]="endDate" placeholder="End Date" formControlName="end_date">
+          <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+          <mat-datepicker #endDate></mat-datepicker>
+          <mat-error *ngIf="searchForm.get('end_date').hasError('endDateBeforeStart')">Cannot precede start date</mat-error>
+        </mat-form-field>
+        <button mat-icon-button color="accent" matTooltip="Clear dates">
+          <mat-icon aria-label="Clear dates" (click)="clearDates()">clear_all</mat-icon>
+        </button>
+
+      </div>
+    </mat-expansion-panel>
+    <!--- end Date Range expansion panel -->
+
     <!--- Diagnosis type expansion panel -->
     <mat-expansion-panel #diagnosisTypeExpansionPanel (opened)="diagnosisTypePanelOpenState = true" (closed)="diagnosisTypePanelOpenState = false">
       <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedDiagnosisTypes.length > 2) ? '80px' : '48px'">
@@ -312,48 +354,6 @@
       </div>
     </mat-expansion-panel>
     <!--- end Number Affected expansion panel -->
-
-    <!-- Date Range expansion panel -->
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <b>Date Range</b>
-        </mat-panel-title>
-        <mat-panel-description>
-          <mat-chip-list *ngIf="!searchForm.get('end_date').hasError('endDateBeforeStart') && (searchForm.get('start_date').value !== null || searchForm.get('end_date').value !== null)">
-            <mat-chip [selectable]="true" [removable]="true" (click)="$event.stopPropagation()"
-              (removed)="clearDates()">
-              <span style="white-space: nowrap;">
-                <span class="chip-date-display">{{searchForm.get('start_date').value | date:'mediumDate'}}</span>
-                <span *ngIf="(searchForm.get('start_date').value !== null) || (searchForm.get('end_date').value !== null)"> &ndash; </span>
-                <span class="chip-date-display">{{searchForm.get('end_date').value | date:'mediumDate'}}</span>
-              </span>
-              <mat-icon matChipRemove (click)="$event.stopPropagation()">cancel</mat-icon>
-            </mat-chip>
-          </mat-chip-list>
-          <span *ngIf="searchForm.get('end_date').hasError('endDateBeforeStart')" class="date-range-warning"><mat-icon>warning</mat-icon>&nbsp;Invalid date range</span>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <div>
-        <mat-form-field class="form-control">
-          <input matInput [matDatepicker]="startDate" placeholder="Start Date" formControlName="start_date">
-          <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-          <mat-datepicker #startDate></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field class="form-control">
-          <input matInput [matDatepicker]="endDate" placeholder="End Date" formControlName="end_date">
-          <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-          <mat-datepicker #endDate></mat-datepicker>
-          <mat-error *ngIf="searchForm.get('end_date').hasError('endDateBeforeStart')">Cannot precede start date</mat-error>
-        </mat-form-field>
-        <button mat-icon-button color="accent" matTooltip="Clear dates">
-          <mat-icon aria-label="Clear dates" (click)="clearDates()">clear_all</mat-icon>
-        </button>
-
-      </div>
-    </mat-expansion-panel>
-    <!--- end Date Range expansion panel -->
 
     <!-- Event state expansion panel -->
     <mat-expansion-panel>

@@ -275,7 +275,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       let shapeClass = 'wmm-circle ';
       let iconClasses = ' wmm-icon-circle wmm-icon-white ';
       let sizeClass = 'wmm-size-25';
-      let animalTypes = this.convertClassNamesToAnimalTypes(marker.events);
+      let animalTypes = this.getUniqueAnimalTypes(marker.events);
       if (animalTypes.length > 1) {
         // grey for multiple animal types
         colorClass = 'wmm-mutedblue';
@@ -366,7 +366,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
    * meant to be used for color-coded categorization of events.
    * @param events
    */
-  convertClassNamesToAnimalTypes(events:EventSummary[]) {
+  getUniqueAnimalTypes(events:EventSummary[]) {
     const animalTypes = [];
     for (const event of events) {
       Array.prototype.push.apply(animalTypes, getAnimalTypes(event.species));

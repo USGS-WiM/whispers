@@ -716,6 +716,14 @@ export class HomeComponent implements OnInit {
       }
     });
 
+    // add a click handler here to listen for popup event details links and programmatically handle the route
+    document.getElementById("map").addEventListener("click", (e) => {
+      const el = e.target as Element;
+      if (el && el.hasAttribute("href") && el.matches("[data-router-link]")) {
+        this.router.navigate([el.getAttribute("href")]);
+        e.preventDefault();
+      }
+    });
   }
 
   mapResults(currentResults: any) {
@@ -767,34 +775,10 @@ export class HomeComponent implements OnInit {
     for (const marker of currentResultsMarkers) {
 
       // set vars for classes that will define the marker icons, per WIM markermaker CSS
-      let colorClass;
+      let colorClass = this.getMarkerColorClass(marker.events);
       let shapeClass = 'wmm-circle ';
       let iconClasses = ' wmm-icon-circle wmm-icon-white ';
       let sizeClass = 'wmm-size-25';
-      let animalTypes = this.convertClassNamesToAnimalTypes(marker.events);
-      if (animalTypes.length > 1) {
-        // grey for multiple animal types
-        colorClass = 'wmm-mutedblue';
-      } else {
-        switch (animalTypes[0]) {
-          case "Mammal":
-            colorClass = 'wmm-red';
-            break;
-          case "Bird":
-            colorClass = 'wmm-yellow';
-            break;
-          case "Reptile/Amphibian":
-            colorClass = 'wmm-green';
-            break;
-          case "Fish":
-            colorClass = 'wmm-sky';
-            break;
-          case "Other":
-            colorClass = 'wmm-purple';
-            break;
-        }
-      }
-
 
       if (marker.events.length === 1) {
         // if event is complete, remove the white center to indicate closed/complete
@@ -845,96 +829,54 @@ export class HomeComponent implements OnInit {
 
       // establish an empty string as the variable for the popup HTML markup content
       let popupContent = '';
+      let adminLevelTwo = marker.events[0].administrativeleveltwos.find(levelTwo => levelTwo.id === marker.adminleveltwo);
+      let markerLocationContent = adminLevelTwo.name + ", " +
+        this.displayValuePipe.transform(adminLevelTwo.administrative_level_one, "name", this.adminLevelOnes);
 
 
+      popupContent = '<h3>' + markerLocationContent + '</h3>';
       // loop through the events that are part of each single marker
       for (const event of marker.events) {
 
-
-        // establish an empty string as the variable for the location list HTML markup content
-        let locationContent = '';
-        // establish an empty string as the variable for the species list HTML markup content
-        let speciesContent = '';
-
-        // loop through the adminleveltwos (counties) for location display, attaching it's related adminlevelone (state)
-        for (const administrativeleveltwo of event.administrativeleveltwos) {
-          locationContent = locationContent + administrativeleveltwo['name'] + ', ' +
-            this.displayValuePipe.transform(administrativeleveltwo['administrative_level_one'], 'name', this.adminLevelOnes) + '</br>';
+        const eventIconClasses = event.complete ? 'wmm-icon-noicon wmm-icon-white' : 'wmm-icon-circle wmm-icon-white';
+        const eventColorClass = this.getMarkerColorClass([event]);
+        const eventShapeClass = 'wmm-circle';
+        const eventSizeClass = 'wmm-size-20';
+        const eventMarkerClasses = [eventIconClasses, eventColorClass, eventShapeClass, eventSizeClass].join(" ");
+        popupContent = popupContent + '<div class="popup-event-details">';
+        popupContent = popupContent + '<div class="popup-event-details-header">';
+        popupContent = popupContent + '<div class="marker-icon ' + eventMarkerClasses +
+          '" title="' + this.getUniqueAnimalTypes([event]).join(", ") + '"></div>';
+        if (event.public === false) {
+          popupContent = popupContent + '<img class="not-public-icon" src="./assets/icons/visibility_off.png" alt="Not Public">';
         }
+        popupContent = popupContent + '<a class="event-details-link" data-router-link href="./event/' + this.testForUndefined(event['id']) + '">Event ' + this.testForUndefined(event['id']) + '</a>';
+        popupContent = popupContent + '</div>'; // close popup-event-details-header
 
-        // loop through the species for location display
-        for (const species of event.species) {
-          speciesContent = speciesContent + species['name'] + '</br>';
+        if (event.administrativeleveltwos.length > 1) {
+          let locationContent = '<strong>Other Counties:</strong><br/>';
+          // loop through the adminleveltwos (counties) for location display, attaching it's related adminlevelone (state)
+          for (const administrativeleveltwo of event.administrativeleveltwos) {
+            // skip the location for this marker
+            if (administrativeleveltwo.id === marker.adminleveltwo) {
+              continue;
+            }
+            locationContent =
+              locationContent +
+              administrativeleveltwo["name"] +
+              ", " +
+              this.displayValuePipe.transform(
+                administrativeleveltwo["administrative_level_one"],
+                "name",
+                this.adminLevelOnes
+              ) +
+              "<br/>";
+          }
+          popupContent = popupContent + '<button class="popup-event-details-toggle"></button>';
+          popupContent =
+            popupContent + '<div class="popup-event-details-panel">' + locationContent + "</div>";
         }
-
-
-        // if one event represented by marker, do a simple display. If multiple, display in collapsing panels
-        if (marker.events.length === 1) {
-
-          // create a string with all the event diagnoses
-          let eventDiagnosesString = '';
-          for (const eventdiagnosis of event.eventdiagnoses) {
-            eventDiagnosesString = eventDiagnosesString + eventdiagnosis['diagnosis_string'] + ',';
-          }
-          // removes the trailing comma
-          eventDiagnosesString = eventDiagnosesString.slice(0, -1);
-
-          // if event is not public, begin the markup with the not public icon
-          if (event.public === false) {
-            popupContent = popupContent + '<h3><img src="./assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</h3>';
-          } else {
-            popupContent = popupContent + '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>';
-          }
-
-          // else if (event.public === true) {
-          //   popupContent = '';
-          // }
-
-          // tslint:disable-next-line:max-line-length
-          popupContent = popupContent +
-            // '<h3>Event ' + this.testForUndefined(event['id']) + '</h3>' +
-            '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Incomplete') + '</span><br/>' +
-            '<span class="popupLabel">Type:</span> ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
-            '<span class="popupLabel">Dates:</span> ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
-            '<span class="popupLabel">Location:</span> ' + locationContent +
-            '<span class="popupLabel">Species:</span> ' + speciesContent +
-            '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-            // '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
-            '<span class="popupLabel">Diagnosis:</span> ' + eventDiagnosesString + '<br/>' +
-            '<a href="./event/' + this.testForUndefined(event['id']) + '">View Event Details </a>';
-
-        } else if (marker.events.length > 1) {
-
-          // create a string with all the event diagnoses
-          let eventDiagnosesString = '';
-          for (const eventdiagnosis of event.eventdiagnoses) {
-            eventDiagnosesString = eventDiagnosesString + eventdiagnosis['diagnosis_string'] + ',';
-          }
-          // removes the trailing comma
-          eventDiagnosesString = eventDiagnosesString.slice(0, -1);
-
-
-          // if event is not public, begin the markup with the not public icon
-          if (event.public === false) {
-            popupContent = popupContent + '<button class="accordion accButton"> <img src="./assets/icons/visibility_off.png" alt="Not Public"> Event ' + this.testForUndefined(event['id']) + '</button>';
-          } else {
-            popupContent = popupContent + '<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>';
-          }
-
-          popupContent = popupContent +
-            //'<button class="accordion accButton">Event ' + this.testForUndefined(event['id']) + '</button>' +
-            // '<h4>Event ' + this.testForUndefined(event['id']) + '</h4>' +
-            '<div class="panel">' +
-            '<span class="popupLabel text-larger">' + (this.testForUndefined(event['complete']) ? 'Complete' : 'Incomplete') + '</span><br/>' +
-            '<span class="popupLabel">Type:</span> ' + this.testForUndefined(event['event_type_string']) + '<br/>' +
-            '<span class="popupLabel">Dates:</span> ' + this.testForUndefined(event['start_date']) + ' to ' + event['end_date'] + '<br/>' +
-            '<span class="popupLabel">Location:</span> ' + locationContent +
-            '<span class="popupLabel">Species:</span> ' + speciesContent +
-            '<span class="popupLabel">Affected:</span> ' + this.testForUndefined(event['affected_count']) + '<br/>' +
-            // '<span class="popupLabel">Diagnosis:</span> ' + this.testForUndefined(event['eventdiagnoses'][0], 'diagnosis_string') + '<br/>' +
-            '<span class="popupLabel">Diagnosis:</span> ' + eventDiagnosesString + '<br/>' +
-            '<span class="popupLabel"><a href="./event/' + this.testForUndefined(event['id']) + '">View Event Details </a> </span><p></div>';
-        }
+        popupContent = popupContent + '</div>'; // closes popup-event-details
       }
 
       // establish leaflet popup var for binding to marker (include check for mapPanel height, to set max popup height)
@@ -948,33 +890,31 @@ export class HomeComponent implements OnInit {
         .bindPopup(popup, { maxHeight: 300, autoPan: true, autoPanPadding: [20, 20], keepInView: true })
         .on('popupopen', function (popup) {
 
-          const acc = Array.from(document.querySelectorAll('button.accordion'));
+          const acc = Array.from(document.querySelectorAll('.popup-event-details-toggle'));
 
-          acc.forEach(function (button, i) {
-            acc[i].addEventListener('click', function (evt) {
-              this.classList.toggle('active');
-              const panel = this.nextElementSibling;
-              if (panel.style.maxHeight) {
-                panel.style.maxHeight = null;
-              } else {
-                panel.style.maxHeight = panel.scrollHeight + 'px';
-              }
-              // let acc = document.getElementsByClassName('accordion');
-              let j;
-              for (j = 0; j < acc.length; j++) {
-                if (i !== j) {
-                  const panel: HTMLElement = acc[j].nextElementSibling as HTMLElement;
-                  if (panel.style.maxHeight) {
-                    acc[j].classList.toggle('active');
-                    panel.style.maxHeight = null;
+          if (acc.length > 0) {
+            acc.forEach(function (button, i) {
+              acc[i].addEventListener('click', function (evt) {
+                this.classList.toggle('active');
+                const panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                  panel.style.maxHeight = null;
+                } else {
+                  panel.style.maxHeight = panel.scrollHeight + 'px';
+                }
+                let j;
+                for (j = 0; j < acc.length; j++) {
+                  if (i !== j) {
+                    const panel: HTMLElement = acc[j].nextElementSibling as HTMLElement;
+                    if (panel.style.maxHeight) {
+                      acc[j].classList.toggle('active');
+                      panel.style.maxHeight = null;
+                    }
                   }
                 }
-              }
+              });
             });
-          });
-          acc[0].classList.toggle('active');
-          const panel: HTMLElement = acc[0].nextElementSibling as HTMLElement;
-          panel.style.maxHeight = panel.scrollHeight + 'px';
+          }
         });
     }
 
@@ -993,13 +933,42 @@ export class HomeComponent implements OnInit {
    * meant to be used for color-coded categorization of events.
    * @param events
    */
-  convertClassNamesToAnimalTypes(events:EventSummary[]) {
+  getUniqueAnimalTypes(events:EventSummary[]) {
     const animalTypes = [];
     for (const event of events) {
       Array.prototype.push.apply(animalTypes, getAnimalTypes(event.species));
     }
     // Return just unique values
     return Array.from(new Set(animalTypes));
+  }
+
+  getMarkerColorClass(events:EventSummary[]) {
+
+      let colorClass;
+      let animalTypes = this.getUniqueAnimalTypes(events);
+      if (animalTypes.length > 1) {
+        // grey for multiple animal types
+        colorClass = 'wmm-mutedblue';
+      } else {
+        switch (animalTypes[0]) {
+          case "Mammal":
+            colorClass = 'wmm-red';
+            break;
+          case "Bird":
+            colorClass = 'wmm-yellow';
+            break;
+          case "Reptile/Amphibian":
+            colorClass = 'wmm-green';
+            break;
+          case "Fish":
+            colorClass = 'wmm-sky';
+            break;
+          case "Other":
+            colorClass = 'wmm-purple';
+            break;
+        }
+      }
+      return colorClass;
   }
 
   testForUndefined(value: any, property?: any) {

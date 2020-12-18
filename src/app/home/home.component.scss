@@ -359,7 +359,7 @@ mat-table>.mat-row:hover {
     //left: 15px;
     right: 10px;
     width:230px;
-    max-height:400px;
+    max-height: calc(100% - 80px); // 80px to allow room below legend for scale and attribution
     z-index: 799;
     color: black;
     background-color: rgb(255, 255, 255);

@@ -6,7 +6,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from '@angular/material';
 import { debounceTime, distinctUntilChanged, startWith, tap, delay } from 'rxjs/operators';
-import { merge ,  Subscription } from 'rxjs';
+import { merge, Subscription } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar } from '@angular/material';
 import { EventService } from '@services/event.service';
@@ -239,7 +239,12 @@ export class EventsComponent implements AfterViewInit, OnInit {
 
   loadEventsPage() {
 
-    this.orderParams = this.sort.active;
+    if (this.sort.active) {
+      this.orderParams = this.sort.active;
+    } else {
+      this.orderParams = '-start_date';
+    }
+
     if (this.sort.direction === 'desc') {
       this.orderParams = '-' + this.sort.active;
     }

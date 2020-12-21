@@ -90,7 +90,12 @@ export class UserEventsComponent implements AfterViewInit, OnInit {
 
   loadEventsPage() {
 
-    this.orderParams = this.sort.active;
+    if (this.sort.active) {
+      this.orderParams = this.sort.active;
+    } else {
+      this.orderParams = '-start_date';
+    }
+
     if (this.sort.direction === 'desc') {
       this.orderParams = '-' + this.sort.active;
     }

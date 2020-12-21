@@ -4,7 +4,7 @@
 
 <div *ngIf="dataSource" class="results-table-div">
 
-  <mat-table class="user-events-table" [dataSource]="dataSource" matSort matSortDirection="asc" matSortDisableClear>
+  <mat-table class="user-events-table" [dataSource]="dataSource" matSort matSortActive="start_date" matSortDirection="desc" matSortDisableClear>
 
     <!-- ID Column -->
     <ng-container matColumnDef="id">

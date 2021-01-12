@@ -42,6 +42,7 @@ import { User } from '@interfaces/user';
 declare let L: any;
 import 'leaflet';
 import 'leaflet-draw';
+import { GestureHandling } from "leaflet-gesture-handling";
 import * as esri from 'esri-leaflet';
 import { DataUpdatedService } from '@services/data-updated.service';
 import { getAnimalTypes } from '@interfaces/species';
@@ -520,6 +521,8 @@ export class HomeComponent implements OnInit {
         zoom: 4,
         layers: [streets]
       });
+      this.map.addHandler("gestureHandling", GestureHandling);
+      this.map.gestureHandling.enable();
 
     }
 

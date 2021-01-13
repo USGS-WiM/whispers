@@ -75,6 +75,7 @@ import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
 import { CollaborationRequestComponent } from '@app/collaboration-request/collaboration-request.component';
 import { buildMapFromList } from '@angular/flex-layout/extended/typings/style/style-transforms';
+import { GestureHandling } from 'leaflet-gesture-handling';
 declare let gtag: Function;
 
 export interface AssociatedEvents {
@@ -510,6 +511,8 @@ export class EventDetailsComponent implements OnInit {
       zoom: 4,
       layers: [streets]
     });
+    this.map.addHandler("gestureHandling", GestureHandling);
+    this.map.gestureHandling.enable();
 
     this.locationMarkers = L.featureGroup().addTo(this.map);
 

@@ -25,6 +25,12 @@ import { isPlatformBrowser } from '@angular/common';
 
 import * as $ from 'jquery';
 import * as search_api from 'usgs-search-api';
+import { UserService } from '@services/user.service';
+import { ConfirmComponent } from '@confirm/confirm.component';
+import { RequestPasswordResetComponent } from '@request-password-reset/request-password-reset.component';
+import { ResetPasswordComponent } from '@reset-password/reset-password.component';
+import { UserRegistrationRoleSelectionComponent } from '@user-registration-role-selection/user-registration-role-selection.component';
+import { UserRegistrationComponent } from '@user-registration/user-registration.component';
 
 @Component({
   selector: 'app-root',
@@ -50,6 +56,8 @@ export class AppComponent implements OnInit {
   aboutDialogRef: MatDialogRef<AboutComponent>;
   authenticationDialogRef: MatDialogRef<AuthenticationComponent>;
   browserWarningDialogRef: MatDialogRef<BrowserWarningComponent>;
+  userRegistrationRoleSelectionDialogRef: MatDialogRef<UserRegistrationRoleSelectionComponent>;
+  userRegistrationDialogRef: MatDialogRef<UserRegistrationComponent, any>;
 
   previewNotifications;
 
@@ -60,7 +68,8 @@ export class AppComponent implements OnInit {
     public currentUserService: CurrentUserService,
     private authenticationService: AuthenticationService,
     private notificationService: NotificationService,
-    private resultsCountService: ResultsCountService
+    private resultsCountService: ResultsCountService,
+    private userService: UserService,
   ) {
 
     currentUserService.currentUser.subscribe(user => {
@@ -97,6 +106,18 @@ export class AppComponent implements OnInit {
     //     'username': ''
     //   });
     // }
+
+    this.route.queryParams.subscribe(params => {
+      const userId = params[APP_SETTINGS.EMAIL_VERIFICATION_USER_ID_QUERY_PARAM];
+      const emailToken = params[APP_SETTINGS.EMAIL_VERIFICATION_EMAIL_TOKEN_QUERY_PARAM];
+      const passwordResetToken = params[APP_SETTINGS.PASSWORD_RESET_TOKEN_QUERY_PARAM];
+
+      if (userId && emailToken) {
+        this.confirmEmailAddress(userId, emailToken);
+      } else if (userId && passwordResetToken) {
+        this.resetPassword(userId, passwordResetToken);
+      }
+    })
 
     if (sessionStorage.getItem('currentUser')) {
       const currentUserObj = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -184,6 +205,39 @@ export class AppComponent implements OnInit {
     this.browserWarningDialogRef = this.dialog.open(BrowserWarningComponent, {});
   }
 
+  openUserRegistrationRoleSelectionDialog() {
+    this.userRegistrationRoleSelectionDialogRef = this.dialog.open(UserRegistrationRoleSelectionComponent, {
+      autoFocus: false
+    });
+    this.userRegistrationRoleSelectionDialogRef.afterClosed().subscribe(result => {
+      if (result === "partner") {
+        this.openUserRegistrationDialog("partner");
+      } else if (result === "affiliate") {
+        this.openUserRegistrationDialog("affiliate");
+      } else if (result === "public") {
+        this.openUserRegistrationDialog("public");
+      }
+    });
+  }
+
+  openUserRegistrationDialog(type) {
+
+    // Test screen size and for smaller screens, don't set a minWidth for the dialog
+    const mediaQueryList = window.matchMedia("(max-width: 400px)");
+    this.userRegistrationDialogRef = this.dialog.open(UserRegistrationComponent, {
+      minWidth: (mediaQueryList.matches ? 'auto' : '60em'),
+      disableClose: true,
+      data: {
+        title: 'WHISPers Registration',
+        titleIcon: 'person',
+        showCancelButton: true,
+        action_button_text: 'Submit',
+        actionButtonIcon: 'send',
+        registration_type: type
+      }
+    });
+  }
+
   logout() {
     if (this.router.url === '/home') {
       location.reload();
@@ -193,13 +247,19 @@ export class AppComponent implements OnInit {
     this.authenticationService.logout();
   }
 
-  openAuthenticationDialog() {
+  openAuthenticationDialog(data = null) {
     this.authenticationDialogRef = this.dialog.open(AuthenticationComponent, {
       // minWidth: '60%'
       // disableClose: true, data: {
       //   query: this.currentDisplayQuery
       // }
       // height: '75%'
+      data: data
+    });
+    this.authenticationDialogRef.afterClosed().subscribe(result => {
+      if (result === "request-password-reset") {
+        this.dialog.open(RequestPasswordResetComponent);
+      }
     });
   }
 
@@ -238,5 +298,53 @@ export class AppComponent implements OnInit {
         window.clearInterval(scrollToTop);
       }
     }, 16);
+  }
+
+  confirmEmailAddress(userId:String, emailToken:String) {
+
+    this.userService.confirmEmail(userId, emailToken)
+      .subscribe(
+        (user) => {
+          // Route to /home/ to remove the verification query parameters
+          return this.router.navigate(['/home/'])
+          .then(() => {
+            this.openAuthenticationDialog({userEmailVerified: true});
+          })
+        },
+        error => {
+          let errorMessage = error;
+          try {
+            errorMessage = JSON.parse(error).status;
+          } catch (error) {
+            // Ignore JSON parsing error
+          }
+          const confirmDialogRef = this.dialog.open(ConfirmComponent,
+            {
+              disableClose: true,
+              data: {
+                title: 'Email Verification Failed',
+                titleIcon: 'warning',
+                message: 'Failed to verify your email address: ' + errorMessage,
+                confirmButtonText: 'OK',
+                showCancelButton: false
+              }
+            }
+          );
+        }
+      );
+  }
+
+  resetPassword(userId: String, passwordResetToken: String) {
+
+    // Route to /home/ to remove the password reset token query parameters
+    return this.router.navigate(['/home/'])
+    .then(() => {
+      this.dialog.open(ResetPasswordComponent, {
+        data: {
+          userId: userId,
+          passwordResetToken: passwordResetToken
+        }
+      });
+    });
   }
 }

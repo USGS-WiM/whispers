@@ -72,6 +72,10 @@
                 box-sizing: border-box;
                 padding-top: 2px;
 
+                @media (max-width: 400px) {
+                    display: none;
+                }
+
                 span{
 
                 }
@@ -220,9 +224,9 @@
 }
 
 
-// App Footer 
-// App Footer 
-// App Footer 
+// App Footer
+// App Footer
+// App Footer
 .whispers-footer{
     display: flex;
     justify-content: space-between;

@@ -2,6 +2,10 @@
 .horizontal-form-container {
     display: flex;
     flex-direction: row;
+    @media (max-width: 400px) {
+        flex-direction: column;
+    }
+
 }
 
 .vertical-form-container {
@@ -31,7 +35,7 @@
 }
 
 .general-comment-text-area {
-    width: 45em;
+    width: calc(100% - 20px);
     margin-bottom: 2em;
 }
 
@@ -41,7 +45,6 @@
 
 .registration-form{
     display: block;
-    max-width: 500px;
 
     p{
         max-width: 500px !important;
@@ -59,6 +62,15 @@
         font-size: 16px;
         margin-top: 15px;
         margin-bottom: 8px;
+    }
+    & > .horizontal-form-container {
+      justify-content: space-between;
+      & > .vertical-form-container {
+        width: calc(50% - 20px);
+        @media (max-width: 400px) {
+            width: 100%;
+        }
+      }
     }
 }
 
@@ -82,7 +94,7 @@
 }
 
 .org-select {
-    width: 55em;
+    width: calc(100% - 20px);
 }
 
 
@@ -92,9 +104,18 @@ span.reg-hint{
     font-size: 13px;
     font-weight: 600;
     color: #313B57;
-    margin: 6px 0 3px 0;
+    // 10px left/right margin matches that of .form-control
+    margin: 6px 10px 0px 10px;
 }
 
 .disclaimers{
     padding-bottom: 10px;
+}
+
+mat-checkbox[required]:after {
+  content: " *";
+}
+
+button {
+  text-transform: uppercase;
 }

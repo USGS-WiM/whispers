@@ -1,4 +1,5 @@
 export interface DisplayQuery {
+    event_id: string[];
     event_type: string[];
     diagnosis: string[];
     diagnosis_type: string[];

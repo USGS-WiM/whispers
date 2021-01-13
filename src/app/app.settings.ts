@@ -171,6 +171,12 @@ export class APP_SETTINGS {
 
     public static get GO_USA_GOV_JSON_HEADERS() { return new Headers({}); }
 
+    public static get EMAIL_VERIFICATION_USER_ID_QUERY_PARAM() { return "user-id"; }
+    public static get EMAIL_VERIFICATION_EMAIL_TOKEN_QUERY_PARAM() { return "email-token"; }
+    public static get PASSWORD_RESET_TOKEN_QUERY_PARAM() { return "password-reset-token"; }
+
+    public static get RECAPTCHA_SITE_KEY() { return environment.recaptcha_site_key; }
+
     public static get AUTH_HEADERS() {
         return new Headers({
             'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password)
@@ -231,6 +237,7 @@ export class APP_SETTINGS {
     // default search query for initial load of home page (may eventually come from some other source)
     public static get DEFAULT_SEARCH_QUERY() {
         return {
+            'event_id': [],
             'event_type': [],
             'diagnosis': [],
             'diagnosis_type': [],
@@ -254,6 +261,7 @@ export class APP_SETTINGS {
     // default display query (display verison of search query above) for initial load of home page
     public static get DEFAULT_DISPLAY_QUERY(): DisplayQuery {
         return {
+            'event_id': [],
             'event_type': [],
             'diagnosis': [],
             'diagnosis_type': [],

@@ -18,7 +18,7 @@ export class ResetPasswordComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private resetPasswordDialogRef: MatDialogRef<ResetPasswordComponent>,
+    public resetPasswordDialogRef: MatDialogRef<ResetPasswordComponent>,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private authenticationService: AuthenticationService,

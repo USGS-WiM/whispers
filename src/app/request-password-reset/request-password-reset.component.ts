@@ -18,7 +18,7 @@ export class RequestPasswordResetComponent implements OnInit {
 
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private requestPasswordResetDialogRef: MatDialogRef<RequestPasswordResetComponent>,
+    public requestPasswordResetDialogRef: MatDialogRef<RequestPasswordResetComponent>,
     private dialog: MatDialog,
   ) {
     this.requestPasswordResetForm = formBuilder.group({

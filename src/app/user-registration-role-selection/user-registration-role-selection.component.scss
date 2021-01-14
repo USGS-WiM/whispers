@@ -1,0 +1,41 @@
+.role-options {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  @media (max-width: 400px) {
+    flex-direction: column;
+  }
+}
+.role-option {
+  background-color: #eaeef7;
+  border-radius: 20px;
+  padding: 20px;
+  width: calc(33.33% - 10px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  button {
+    width: 100%;
+    margin-top: auto;
+  }
+  @media (max-width: 400px) {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+.role-option-description {
+  font-weight: bold;
+  margin-bottom: 10px;
+  // Line up descriptions and feature lists
+  flex: 0 0 25%;
+}
+.role-option-feature {
+  margin-bottom: 10px;
+  mat-icon {
+    color: #7eac54;
+    vertical-align: bottom;
+  }
+}
+button {
+  text-transform: uppercase;
+}

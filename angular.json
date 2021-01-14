@@ -24,7 +24,8 @@
               "src/styles.scss",
               "node_modules/leaflet-draw/dist/leaflet.draw-src.css",
               "node_modules/leaflet/dist/leaflet.css",
-              "node_modules/usgs-search-api/dist/search_api.css"
+              "node_modules/usgs-search-api/dist/search_api.css",
+              "node_modules/leaflet-gesture-handling/dist/leaflet-gesture-handling.css"
             ],
             "scripts": [
               "node_modules/leaflet/dist/leaflet.js",

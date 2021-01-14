@@ -1,0 +1,384 @@
+<form [formGroup]="searchForm" class="autocomplete-form" [class.narrow]="narrow" autocomplete="off">
+
+  <mat-divider></mat-divider>
+
+  <mat-accordion>
+
+    <!-- Event ID expansion panel -->
+    <mat-expansion-panel #eventIDExpansionPanel (opened)="eventIDPanelOpenState = true" (closed)="eventIDPanelOpenState = false; resetFormControl('eventID')">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedEventIDs.length > 2) ? '80px' : '48px'">
+        <mat-panel-title>
+          <b>Event ID</b>
+        </mat-panel-title>
+        <mat-panel-description *ngIf="!narrow || !eventIDPanelOpenState">
+          <app-chiplist [items]="selectedEventIDs" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedEventIDs, 'eventID')" (moreClicked)="eventIDExpansionPanel.open()">
+          </app-chiplist>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedEventIDs"
+          (removed)="removeChip($event, selectedEventIDs, 'eventID')" >
+        </app-chiplist>
+        <div class="event-id-control">
+          <mat-form-field class="full-width">
+            <input type="text" matInput #eventIDInput placeholder="Add Event ID" aria-label="Add Event ID"
+              formControlName="event_id" (keyup.enter)="addEventIDs(eventIDInput.value)">
+            <mat-error *ngIf="searchForm.controls.event_id.errors?.pattern">
+              Only numbers are valid for event IDs. Multiple event IDs can be entered by separating them with commas.
+            </mat-error>
+          </mat-form-field>
+          <button mat-icon-button color="accent" matTooltip="Add Event IDs"
+              [disabled]="searchForm.controls.event_id.invalid" (click)="addEventIDs(eventIDInput.value)">
+            <mat-icon aria-label="Add Event IDs">add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- end Event ID expansion panel -->
+
+    <!-- Event type expansion panel -->
+    <mat-expansion-panel #eventTypeExpansionPanel (opened)="eventTypePanelOpenState = true" (closed)="eventTypePanelOpenState = false">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedEventTypes.length > 2) ? '80px' : '48px'">
+        <mat-panel-title>
+          <b>Event Type</b>
+        </mat-panel-title>
+        <mat-panel-description *ngIf="!narrow || !eventTypePanelOpenState">
+          <app-chiplist [items]="selectedEventTypes" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedEventTypes, 'eventType')" (moreClicked)="eventTypeExpansionPanel.open()"
+            [join]="or">
+          </app-chiplist>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedEventTypes"
+          (removed)="removeChip($event, selectedEventTypes, 'eventType')"
+          [join]="or">
+        </app-chiplist>
+        <div class="autocomplete-input">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="Select Event Type" aria-label="Select Event Type" [matAutocomplete]="eventTypeAutoComplete"
+              [formControl]="eventTypeControl" (valueChanges)="addChip($event, selectedEventTypes, 'eventType')" (blur)="resetFormControl('eventType')">
+            <mat-autocomplete #eventTypeAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedEventTypes, 'eventType')">
+              <mat-option *ngFor="let eventType of filteredEventTypes | async" [value]="eventType" [matTooltip]="eventType.name">
+                <span>{{ eventType.name }}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <!-- <div class="search-type-radios">
+          <label>Search type </label>
+          <mat-radio-group formControlName="event_type_includes_all">
+            <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>&nbsp;&nbsp;
+            <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
+          </mat-radio-group>
+        </div> -->
+      </div>
+    </mat-expansion-panel>
+    <!--- end Event type expansion panel -->
+
+    <!-- Date Range expansion panel -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <b>Date Range</b>
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-chip-list *ngIf="!searchForm.get('end_date').hasError('endDateBeforeStart') && (searchForm.get('start_date').value !== null || searchForm.get('end_date').value !== null)">
+            <mat-chip [selectable]="true" [removable]="true" (click)="$event.stopPropagation()"
+              (removed)="clearDates()">
+              <span style="white-space: nowrap;">
+                <span class="chip-date-display">{{searchForm.get('start_date').value | date:'mediumDate'}}</span>
+                <span *ngIf="(searchForm.get('start_date').value !== null) || (searchForm.get('end_date').value !== null)"> &ndash; </span>
+                <span class="chip-date-display">{{searchForm.get('end_date').value | date:'mediumDate'}}</span>
+              </span>
+              <mat-icon matChipRemove (click)="$event.stopPropagation()">cancel</mat-icon>
+            </mat-chip>
+          </mat-chip-list>
+          <span *ngIf="searchForm.get('end_date').hasError('endDateBeforeStart')" class="date-range-warning"><mat-icon>warning</mat-icon>&nbsp;Invalid date range</span>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <mat-form-field class="form-control">
+          <input matInput [matDatepicker]="startDate" placeholder="Start Date" formControlName="start_date">
+          <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+          <mat-datepicker #startDate></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="form-control">
+          <input matInput [matDatepicker]="endDate" placeholder="End Date" formControlName="end_date">
+          <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+          <mat-datepicker #endDate></mat-datepicker>
+          <mat-error *ngIf="searchForm.get('end_date').hasError('endDateBeforeStart')">Cannot precede start date</mat-error>
+        </mat-form-field>
+        <button mat-icon-button color="accent" matTooltip="Clear dates">
+          <mat-icon aria-label="Clear dates" (click)="clearDates()">clear_all</mat-icon>
+        </button>
+
+      </div>
+    </mat-expansion-panel>
+    <!--- end Date Range expansion panel -->
+
+    <!--- Diagnosis type expansion panel -->
+    <mat-expansion-panel #diagnosisTypeExpansionPanel (opened)="diagnosisTypePanelOpenState = true" (closed)="diagnosisTypePanelOpenState = false">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedDiagnosisTypes.length > 2) ? '80px' : '48px'">
+        <mat-panel-title>
+          <b>Diagnosis Type</b>
+        </mat-panel-title>
+        <mat-panel-description *ngIf="!narrow || !diagnosisTypePanelOpenState">
+          <app-chiplist [items]="selectedDiagnosisTypes" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedDiagnosisTypes, 'diagosisType')" (moreClicked)="diagnosisTypeExpansionPanel.open()"
+            [join]="!narrow ? (searchForm.get('diagnosis_type_includes_all').value ? 'and' : 'or') : ''">
+          </app-chiplist>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedDiagnosisTypes"
+          (removed)="removeChip($event, selectedDiagnosisTypes, 'diagosisType')"
+          [join]="searchForm.get('diagnosis_type_includes_all').value ? 'and' : 'or'">
+        </app-chiplist>
+        <div class="autocomplete-input">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="Select Diagnosis Type" aria-label="Select Diagnosis Type"
+              [matAutocomplete]="diagnosisTypeAutoComplete" [formControl]="diagnosisTypeControl" (blur)="resetFormControl('diagnosisType')">
+            <mat-autocomplete #diagnosisTypeAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedDiagnosisTypes, 'diagnosisType')">
+              <mat-option *ngFor="let diagnosisType of filteredDiagnosisTypes | async" [value]="diagnosisType" [matTooltip]="diagnosisType.name">
+                <span>{{ diagnosisType.name }}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="search-type-radios">
+          <label>Search type </label>
+          <mat-radio-group formControlName="diagnosis_type_includes_all">
+            <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>&nbsp;&nbsp;
+            <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <!--- end Diagnosis type expansion panel -->
+
+    <!--- Diagnosis expansion panel -->
+    <mat-expansion-panel #diagnosisExpansionPanel (opened)="diagnosisPanelOpenState = true" (closed)="diagnosisPanelOpenState = false">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedDiagnoses.length > 2) ? '80px' : '48px'">
+        <mat-panel-title>
+          <b>Event Diagnosis</b>
+        </mat-panel-title>
+        <mat-panel-description *ngIf="!narrow || !diagnosisPanelOpenState">
+          <app-chiplist [items]="selectedDiagnoses" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedDiagnoses, 'diagnosis')" (moreClicked)="diagnosisExpansionPanel.open()"
+            [join]="!narrow ? (searchForm.get('diagnosis_includes_all').value ? 'and' : 'or') : ''">
+          </app-chiplist>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedDiagnoses"
+          (removed)="removeChip($event, selectedDiagnoses, 'diagnosis')"
+          [join]="searchForm.get('diagnosis_includes_all').value ? 'and' : 'or'">
+        </app-chiplist>
+        <div class="autocomplete-input">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="Select Event Diagnosis" aria-label="Select Event Diagnosis" [matAutocomplete]="diagnosisAutoComplete"
+              [formControl]="diagnosisControl" (blur)="resetFormControl('diagnosis')">
+            <mat-autocomplete #diagnosisAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedDiagnoses, 'diagnosis')">
+              <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis" [matTooltip]="diagnosis.name">
+                <span>{{ diagnosis.name }}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="search-type-radios">
+          <label>Search type </label>
+          <mat-radio-group formControlName="diagnosis_includes_all">
+            <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>&nbsp;&nbsp;
+            <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <!--- end Diagnosis expansion panel -->
+
+    <!--- Species expansion panel -->
+    <mat-expansion-panel #speciesExpansionPanel (opened)="speciesPanelOpenState = true" (closed)="speciesPanelOpenState = false">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedSpecies.length > 2) ? '80px' : '48px'">
+        <mat-panel-title>
+          <b>Species</b>
+        </mat-panel-title>
+        <mat-panel-description *ngIf="!narrow || !speciesPanelOpenState">
+          <app-chiplist [items]="selectedSpecies" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedSpecies, 'species')" (moreClicked)="speciesExpansionPanel.open()"
+            [join]="!narrow ? (searchForm.get('species_includes_all').value ? 'and' : 'or') : ''">
+          </app-chiplist>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedSpecies"
+          (removed)="removeChip($event, selectedSpecies, 'species')"
+          [join]="searchForm.get('species_includes_all').value ? 'and' : 'or'">
+        </app-chiplist>
+        <div class="autocomplete-input">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="Select Species" aria-label="Select Species" [matAutocomplete]="speciesAutoComplete"
+              [formControl]="speciesControl" (blur)="resetFormControl('species')">
+            <mat-spinner *ngIf="speciesLoading" [diameter]="20"></mat-spinner>
+            <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedSpecies, 'species')">
+              <mat-option *ngFor="let species of filteredSpecies | async" [value]="species" [matTooltip]="species.name">
+                <span>{{ species.name }}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="search-type-radios">
+          <label>Search type </label>
+          <mat-radio-group formControlName="species_includes_all">
+            <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>&nbsp;&nbsp;
+            <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <!--- end Species expansion panel -->
+
+    <!--- Admin Level One (State) expansion panel -->
+    <mat-expansion-panel #adminLevelOneExpansionPanel (opened)="adminLevelOnePanelOpenState = true" (closed)="adminLevelOnePanelOpenState = false">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedAdminLevelOnes.length > 2) ? '80px' : '48px'">
+        <mat-panel-title>
+          <b>State (or equivalent)</b>
+        </mat-panel-title>
+        <mat-panel-description *ngIf="!narrow || !adminLevelOnePanelOpenState">
+          <app-chiplist [items]="selectedAdminLevelOnes" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedAdminLevelOnes, 'adminLevelOne')" (moreClicked)="adminLevelOneExpansionPanel.open()"
+            [join]="!narrow ? (searchForm.get('administrative_level_one_includes_all').value ? 'and' : 'or') : ''">
+          </app-chiplist>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedAdminLevelOnes"
+          (removed)="removeChip($event, selectedAdminLevelOnes, 'adminLevelOne')"
+          [join]="searchForm.get('administrative_level_one_includes_all').value ? 'and' : 'or'">
+        </app-chiplist>
+        <div class="autocomplete-input">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="Select State" aria-label="Select State" [matAutocomplete]="adminLevelOneAutoComplete"
+              [formControl]="adminLevelOneControl" (blur)="resetFormControl('adminLevelOne')">
+            <mat-autocomplete #adminLevelOneAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedAdminLevelOnes, 'adminLevelOne')">
+              <mat-option *ngFor="let adminLevelOne of filteredAdminLevelOnes | async" [value]="adminLevelOne" [matTooltip]="adminLevelOne.name">
+                <span>{{ adminLevelOne.name }}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="search-type-radios">
+          <label>Search type </label>
+          <mat-radio-group formControlName="administrative_level_one_includes_all">
+            <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>&nbsp;&nbsp;
+            <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <!--- end Admin Level One (State) expansion panel -->
+
+    <!--- Admin Level Two (County) expansion panel -->
+    <mat-expansion-panel #adminLevelTwoExpansionPanel (opened)="adminLevelTwoPanelOpenState = true" (closed)="adminLevelTwoPanelOpenState = false">
+      <mat-expansion-panel-header [collapsedHeight]="(narrow && selectedAdminLevelTwos.length > 2) ? '80px' : '48px'">
+        <mat-panel-title>
+          <b>County (or equivalent)</b>
+        </mat-panel-title>
+        <mat-panel-description *ngIf="!narrow || !adminLevelTwoPanelOpenState">
+          <app-chiplist [items]="selectedAdminLevelTwos" [maxItems]="narrow ? 3 : undefined"
+            (removed)="removeChip($event, selectedAdminLevelTwos, 'adminLevelTwo')" (moreClicked)="adminLevelTwoExpansionPanel.open()"
+            [join]="!narrow ? (searchForm.get('administrative_level_two_includes_all').value ? 'and' : 'or') : ''">
+          </app-chiplist>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <app-chiplist *ngIf="narrow" [items]="selectedAdminLevelTwos"
+          (removed)="removeChip($event, selectedAdminLevelTwos, 'adminLevelTwo')"
+          [join]="searchForm.get('administrative_level_two_includes_all').value ? 'and' : 'or'">
+        </app-chiplist>
+        <div class="autocomplete-input">
+          <mat-form-field class="full-width has-hint">
+            <input type="text" matInput placeholder="Select County" aria-label="Select County" [matAutocomplete]="adminLevelTwoAutoComplete"
+              [formControl]="adminLevelTwoControl" (blur)="resetFormControl('adminLevelTwo')">
+            <mat-spinner *ngIf="adminLevelTwosLoading" [diameter]="20"></mat-spinner>
+            <mat-autocomplete #adminLevelTwoAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedAdminLevelTwos, 'adminLevelTwo')">
+              <mat-option *ngFor="let adminLevelTwo of filteredAdminLevelTwos | async" [value]="adminLevelTwo" [matTooltip]="adminLevelTwo.name">
+                <span>{{ adminLevelTwo.name }}</span>
+              </mat-option>
+            </mat-autocomplete>
+            <mat-hint align="start">Select a state to populate/update county list </mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="search-type-radios">
+          <label>Search type </label>
+          <mat-radio-group formControlName="administrative_level_two_includes_all">
+            <mat-radio-button [value]="false" matTooltip="ANY of the selected options">OR</mat-radio-button>&nbsp;&nbsp;
+            <mat-radio-button [value]="true" matTooltip="ALL of the selected options">AND</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <!--- end Admin Level Two (County) expansion panel -->
+
+    <!-- Number Affected expansion panel -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <b>Number Affected</b>
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-chip-list *ngIf="searchForm.get('affected_count').value != null">
+            <mat-chip [selectable]="true" [removable]="true" (click)="$event.stopPropagation()"
+              (removed)="searchForm.get('affected_count').setValue(null)">
+              <span> {{ searchForm.get('affected_count_operator').value === '__gte' && searchForm.get('affected_count').value != null ? '&ge;' :
+                searchForm.get('affected_count_operator').value === '__lte' && searchForm.get('affected_count').value != null ? '&le;' : '' }}
+                {{searchForm.get('affected_count').value}}</span>
+              <mat-icon matChipRemove (click)="$event.stopPropagation()">cancel</mat-icon>
+            </mat-chip>
+          </mat-chip-list>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <div class="affected-count-operator-radios">
+          <mat-radio-group formControlName="affected_count_operator">
+            <mat-radio-button [value]="'__gte'" matTooltip="Greater than or equal to">Greater than or equal to ( &ge;
+              )</mat-radio-button>&nbsp;&nbsp;
+            <mat-radio-button [value]="'__lte'" matTooltip="Less than or equal to">Less than or equal to ( &le; )</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <mat-form-field>
+          <input matInput type="number" min="0"  placeholder="Number Affected" formControlName="affected_count">
+        </mat-form-field>
+      </div>
+    </mat-expansion-panel>
+    <!--- end Number Affected expansion panel -->
+
+    <!-- Event state expansion panel -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <b>Record Status</b>
+        </mat-panel-title>
+        <mat-panel-description>
+          <mat-chip-list *ngIf="searchForm.get('complete').value != null">
+            <mat-chip [selectable]="true" [removable]="true" (click)="$event.stopPropagation()"
+              (removed)="searchForm.get('complete').setValue(null)">
+              <span>{{ searchForm.get('complete').value == true ? 'Complete events only' : 'Incomplete events only' }}</span>
+              <mat-icon matChipRemove (click)="$event.stopPropagation()">cancel</mat-icon>
+            </mat-chip>
+          </mat-chip-list>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <mat-radio-group formControlName="complete">
+          <mat-radio-button [value]="null">Complete and incomplete events</mat-radio-button>&nbsp;&nbsp;
+          <mat-radio-button [value]="true">Complete events only</mat-radio-button>&nbsp;&nbsp;
+          <mat-radio-button [value]="false">Incomplete events only</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</form>

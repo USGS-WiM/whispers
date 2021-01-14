@@ -7,8 +7,6 @@
     <div class="map">
       <h4>Geographic Context:</h4>
       <div id="resultsMap">
-        <!-- Warning about map center -->
-        <div id="mapLocationNote"><b>Note:</b> Map shows centroid of county where event occured</div>
       </div>
       <mat-progress-bar mode="determinate" [value]="value" id="bar"></mat-progress-bar>
       <span *ngIf="loadingData">
@@ -21,63 +19,67 @@
 
     <div class="legend" id="legendImage">
       <div>
-        <label class="legend-label" style="margin-top: 0 !important; padding-top: 0 !important;">Event Type</label>
+        <div id="mapLocationNote">Events Mapped to Center of County</div>
+
+        <label class="legend-label">Event Type</label>
         <label class="legend-hint">Indicated by shape</label>
 
         <div class='legend-icon'>
-            <div style='margin-left: -3px !important;' class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
+          <div style='margin-left: 0px !important;' class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
           <label>Mortality/Morbidity</label>
         </div>
-        <div class='legend-icon' style="padding-top: 3px; padding-bottom: 3px;">
-            <div style='margin-left: 0px !important;' class='wmm-diamond wmm-black wmm-icon-noicon wmm-icon-white wmm-size-14'></div>
+        <div class='legend-icon'>
+          <div style='margin-left: 3px !important;' class='wmm-diamond wmm-black wmm-icon-noicon wmm-icon-white wmm-size-14'></div>
           <label>Surveillance</label>
         </div>
 
-        <label class="legend-label">Diagnosis Type</label>
+        <label class="legend-label">Event Record Status</label>
+        <label class="legend-hint">Indicated by white center</label>
+
+        <div class='legend-icon'>
+          <div style='margin-left: 0px !important;' class='wmm-circle wmm-black wmm-icon-circle wmm-icon-white wmm-size-15'></div>
+          <label>Incomplete</label>
+        </div>
+        <div class='legend-icon'>
+          <div style='margin-left: 0px !important;' class='wmm-circle wmm-black wmm-icon-noicon wmm-icon-white wmm-size-15'></div>
+          <label>Complete</label>
+        </div>
+
+        <label class="legend-label">Event Count in County</label>
+        <label class="legend-hint">Indicated by number</label>
+
+        <label class="legend-label">Animal Type</label>
         <label class="legend-hint">Indicated by color</label>
 
         <div class='legend-icon'>
-          <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-          <label>Bacteria</label>
-        </div>
-
-        <div class='legend-icon'>
-          <div class='wmm-square wmm-blue wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-          <label>Fungus</label>
-        </div>
-
-        <div class='legend-icon'>
           <div class='wmm-square wmm-red wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-          <label>Nut/Met/Dev</label>
-        </div>
-
-        <div class='legend-icon'>
-          <div class='wmm-square wmm-orange wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-          <label>Other</label>
+          <label>Mammal</label>
         </div>
 
         <div class='legend-icon'>
           <div class='wmm-square wmm-yellow wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-          <label>Parasite</label>
+          <label>Bird</label>
         </div>
 
         <div class='legend-icon'>
-          <div class='wmm-square wmm-purple wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-          <label>Toxin</label>
-        </div>
-
-        <div class='legend-icon'>
-          <div class='wmm-square wmm-mutedpink wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-          <label>Trauma</label>
+          <div class='wmm-square wmm-green wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+          <label>Reptile/Amphibian</label>
         </div>
 
         <div class='legend-icon'>
           <div class='wmm-square wmm-sky wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-          <label>Virus</label>
+          <label>Fish</label>
         </div>
 
-        <label class="legend-hint">White center indicates incomplete event</label>
+        <div class='legend-icon'>
+          <div class='wmm-square wmm-purple wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+          <label>Other</label>
+        </div>
 
+        <div class='legend-icon'>
+          <div class='wmm-square wmm-mutedblue wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
+          <label>Multiple Types</label>
+        </div>
         <!-- <div class='legend-icon'>
               <div class='wmm-square wmm-mutedblue wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
               <label style="font-style: italic;">Multiple</label>
@@ -86,13 +88,6 @@
 
         <!-- <label class="legend-hint">Number indicates event count</label>
             <label class="legend-hint">White center indicates incomplete event</label> -->
-
-        <label class="legend-label">Multiple Events in One County (or equivalent)</label>
-        <div class='legend-icon' style="padding-bottom: 5px;">
-          <div class='wmm-square wmm-mutedblue wmm-icon-noicon wmm-icon-white wmm-size-20 wmm-borderless'></div>
-          <label style="font-size: 13px">Multiple Diagnosis Types</label>
-        </div>
-        <label class="legend-hint">Number indicates event count</label>
 
       </div>
     </div>

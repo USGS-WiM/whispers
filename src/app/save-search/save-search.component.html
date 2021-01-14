@@ -1,17 +1,14 @@
-<h1 mat-dialog-title>
-  <mat-icon *ngIf="data.titleIcon !== ''">{{data.titleIcon}}</mat-icon> {{data.title}}
-</h1>
 
 <mat-dialog-content>
 
-  <p class="nomargin">Save the current search to your user profile</p>
+  <p class="nomargin">Save the current search criteria</p>
 
   <form [formGroup]="saveSearchForm" autocomplete="off">
     <div class="vertical-form-container">
 
       <mat-form-field class="form-control">
         <input matInput placeholder="Name" formControlName="name">
-        <mat-hint align="start">Reference name/alias for this search </mat-hint>
+        <mat-hint align="start">Reference name for this search </mat-hint>
       </mat-form-field>
 
     </div>
@@ -21,11 +18,13 @@
 </mat-dialog-content>
 <mat-dialog-actions>
 
-  <button mat-button color="warn" (click)="this.saveSearchDialogRef.close('cancel');">
-    <mat-icon>cancel</mat-icon>&nbsp;Cancel
-  </button>
-  <button mat-button color="primary" type="submit" [disabled]="saveSearchForm.invalid" (click)="onSubmit(saveSearchForm.value)">
-    <mat-icon>{{data.actionButtonIcon}}</mat-icon> {{data.action_button_text}}
-  </button>
+  <div class="form-buttons-flex">
+    <button mat-stroked-button color="accent" (click)="this.saveSearchDialogRef.close('cancel');">
+      Cancel
+    </button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="saveSearchForm.invalid" (click)="onSubmit(saveSearchForm.value)">
+      <mat-icon>{{data.actionButtonIcon}}</mat-icon> {{data.action_button_text}}
+    </button>
+  </div>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 </mat-dialog-actions>

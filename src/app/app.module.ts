@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 
 import {
   MatAutocompleteModule,
@@ -74,7 +75,6 @@ import { ContactService } from '@services/contact.service';
 import { AboutComponent } from '@about/about.component';
 import { ConfirmComponent } from '@confirm/confirm.component';
 import { CreateContactService } from '@app/create-contact/create-contact.service';
-import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 import { SearchService } from '@services/search.service';
 import { SavedSearchesComponent } from '@saved-searches/saved-searches.component';
 import { DatePipe } from '@angular/common';
@@ -132,6 +132,13 @@ import { PapaParseModule } from 'ngx-papaparse';
 import { EventPublicReportComponent } from '@event-public-report/event-public-report.component';
 import { SearchResultsSummaryReportComponent } from '@search-results-summary-report/search-results-summary-report.component';
 import { ViewNotificationDetailsComponent } from '@notifications/view-notification-details/view-notification-details.component';
+import { RequestPasswordResetComponent } from '@request-password-reset/request-password-reset.component';
+import { ResetPasswordComponent } from '@reset-password/reset-password.component';
+import { NewPasswordFormComponent } from '@new-password-form/new-password-form.component';
+import { UserRegistrationRoleSelectionComponent } from '@user-registration-role-selection/user-registration-role-selection.component';
+import { SearchFormComponent } from '@search-form/search-form.component';
+import { SearchFormService } from '@search-form/search-form.service';
+import { ChiplistComponent } from '@chiplist/chiplist.component';
 
 
 @NgModule({
@@ -187,6 +194,12 @@ import { ViewNotificationDetailsComponent } from '@notifications/view-notificati
     EventPublicReportComponent,
     SearchResultsSummaryReportComponent,
     ViewNotificationDetailsComponent,
+    RequestPasswordResetComponent,
+    ResetPasswordComponent,
+    NewPasswordFormComponent,
+    UserRegistrationRoleSelectionComponent,
+    SearchFormComponent,
+    ChiplistComponent,
   ],
   imports: [
     BrowserModule,
@@ -234,7 +247,9 @@ import { ViewNotificationDetailsComponent } from '@notifications/view-notificati
     MatBadgeModule,
     NgxMatSelectSearchModule,
     NgxMatSelectSearchModule,
-    PapaParseModule
+    PapaParseModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
   ],
   providers: [
     AuthenticationService,
@@ -262,7 +277,7 @@ import { ViewNotificationDetailsComponent } from '@notifications/view-notificati
     OrganizationService,
     RoleService,
     SearchService,
-    SearchDialogService,
+    SearchFormService,
     UserService,
     LocationSpeciesDiagnosisService,
     SpeciesDiagnosisService,
@@ -312,7 +327,10 @@ import { ViewNotificationDetailsComponent } from '@notifications/view-notificati
     CollaborationRequestComponent,
     BrowserWarningComponent,
     BulkUploadComponent,
-    ViewNotificationDetailsComponent
+    ViewNotificationDetailsComponent,
+    RequestPasswordResetComponent,
+    ResetPasswordComponent,
+    UserRegistrationRoleSelectionComponent,
   ]
 })
 export class AppModule { }

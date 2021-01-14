@@ -25,6 +25,8 @@ import { EventDetail } from '@interfaces/event-detail';
 import { forEach } from '@angular/router/src/utils/collection';
 import { DiagnosisTypeService } from '@app/services/diagnosis-type.service';
 import { DiagnosisService } from '@app/services/diagnosis.service';
+import { EventSummary } from '@app/interfaces/event-summary';
+import { getAnimalTypes } from '@app/interfaces/species';
 declare let gtag: Function;
 
 @Component({
@@ -273,41 +275,27 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       let shapeClass = 'wmm-circle ';
       let iconClasses = ' wmm-icon-circle wmm-icon-white ';
       let sizeClass = 'wmm-size-25';
-      if (marker['eventdiagnoses'][0] !== undefined) {
-        // set color of marker based on diagnosis type
-        switch (marker['eventdiagnoses'][0].diagnosis_type) {
-          case 1: {
-            colorClass = 'wmm-green';
-            break;
-          }
-          case 2: {
-            colorClass = 'wmm-blue';
-            break;
-          }
-          case 3: {
+      let animalTypes = this.getUniqueAnimalTypes(marker.events);
+      if (animalTypes.length > 1) {
+        // grey for multiple animal types
+        colorClass = 'wmm-mutedblue';
+      } else {
+        switch (animalTypes[0]) {
+          case "Mammal":
             colorClass = 'wmm-red';
             break;
-          }
-          case 4: {
-            colorClass = 'wmm-orange';
-            break;
-          }
-          case 5: {
+          case "Bird":
             colorClass = 'wmm-yellow';
             break;
-          }
-          case 6: {
-            colorClass = 'wmm-purple';
+          case "Reptile/Amphibian":
+            colorClass = 'wmm-green';
             break;
-          }
-          case 7: {
+          case "Fish":
             colorClass = 'wmm-sky';
             break;
-          }
-          case 8: {
-            colorClass = 'wmm-mutedpink';
+          case "Other":
+            colorClass = 'wmm-purple';
             break;
-          }
         }
       }
 
@@ -341,7 +329,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         // for location with multiple events, show event count on symbol, make larger and gray
         eventCount = marker.events.length;
         // iconClasses = ' wmm-icon-circle wmm-icon-white ';
-        colorClass = 'wmm-mutedblue';
         sizeClass = 'wmm-size-35';
 
       } else {
@@ -370,6 +357,22 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       this.resultsMap.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50], maxZoom: 10 });
     }
 
+  }
+
+  /**
+   * Return unique animal types for class names of the species identified in
+   * the given events. Animal types are a more user-friendly general
+   * classification of related species that will be displayed in the map and is
+   * meant to be used for color-coded categorization of events.
+   * @param events
+   */
+  getUniqueAnimalTypes(events:EventSummary[]) {
+    const animalTypes = [];
+    for (const event of events) {
+      Array.prototype.push.apply(animalTypes, getAnimalTypes(event.species));
+    }
+    // Return just unique values
+    return Array.from(new Set(animalTypes));
   }
 
   // START defining event location table

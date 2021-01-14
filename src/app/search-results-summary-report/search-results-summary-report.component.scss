@@ -1,27 +1,16 @@
 #resultsMap {
-    width: 400px;
-    height: 350px;
-    #mapLocationNote{
-      position: absolute;
-      top: 11px;
-      left: 21px;
-      background-color: white;
-      font-size: 11px;
-      z-index: 401;
-      box-sizing: border-box;
-      padding: 3px;
-      border-radius: 3px;
-      color: #313B57;
-      width: 155px;
-      line-height: 12px;
-      border: 1px solid rgba(160, 175, 205, 0.4);
+  width: 400px;
+  height: 350px;
+}
 
-      b{
-          color: rgb(7, 7, 7);
-          font-weight: 700;
-          text-decoration: underline;
-      }
-  }
+#mapLocationNote{
+    background-color: #050921;
+    color: white;
+    font-weight: bold;
+    padding: 6px 4px;
+    font-size: 12px;
+    border-radius: 4px;
+    margin-left: -4px;
 }
 
 .leaflet-marker-icon {
@@ -44,7 +33,7 @@
 
 .legend {
     margin-left: 20px;
-    overflow: hidden;
+    overflow: auto;
     padding-left: 10px;
 }
 
@@ -75,7 +64,8 @@
     background-color: rgba(255, 255, 255, 0.8);
     //box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
     border-radius: 4px;
-    cursor: pointer;
+    // override leaflet's 'cursor: grab'
+    cursor: auto;
     opacity: 0.87;
 }
 
@@ -83,9 +73,9 @@
   font-size: 12px;
   font-weight: 600;
   text-align: left;
-  //display: block;
+  display: block;
   //margin: 5px 0 1px 0;
-  padding-top: 0;
+  padding-top: 8px;
 }
 .legend-hint{
   display: block;
@@ -95,10 +85,6 @@
   font-weight: 500;
   //margin: 1px 0 6px 0;
   line-height: 10px;
-}
-
-.legend-label {
-  padding-top: 1em;
 }
 
 .legendIcon {
@@ -133,13 +119,11 @@
     border: 3px solid #b57dcf;
 }
 
-.legend-label {
-    padding-top: 1em;
-}
-
 .legend-icon{
     box-sizing: border-box;
     font-size: 12px;
+    display: flex;
+    align-items: center;
 }
 
 .wmm-size-14 {
@@ -182,7 +166,7 @@
       border-bottom: 7px solid white;
       margin-top: 3px;
       margin-left: 4px; }
-  
+
 
 // customizing size of diamond because it was getting cut off in the print out
 /* .wmm-size-14 {

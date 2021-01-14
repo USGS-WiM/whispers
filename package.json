@@ -1,6 +1,6 @@
 {
   "name": "whispers",
-  "version": "2.15.13",
+  "version": "2.16.0",
   "description": "Wildlife Health Information Sharing Partnership event reporting system (WHISPers)",
   "scripts": {
     "ng": "ng",
@@ -38,6 +38,8 @@
     "jquery": "^3.4.1",
     "leaflet": "^1.6.0",
     "leaflet-draw": "^1.0.4",
+    "leaflet-gesture-handling": "^1.2.1",
+    "ng-recaptcha": "^5.0.0",
     "ngx-mat-select-search": "^1.8.0",
     "ngx-papaparse": "^3.0.4",
     "papaparse": "^5.1.0",
@@ -68,6 +70,7 @@
     "karma-coverage-istanbul-reporter": "^1.4.3",
     "karma-jasmine": "^1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "node-sass": "^4.14.1",
     "protractor": "~5.1.2",
     "ts-node": "~3.2.0",
     "tslint": "5.20.1",

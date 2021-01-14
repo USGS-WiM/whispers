@@ -75,6 +75,7 @@ import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
 import { CollaborationRequestComponent } from '@app/collaboration-request/collaboration-request.component';
 import { buildMapFromList } from '@angular/flex-layout/extended/typings/style/style-transforms';
+import { GestureHandling } from 'leaflet-gesture-handling';
 declare let gtag: Function;
 
 export interface AssociatedEvents {
@@ -515,6 +516,8 @@ export class EventDetailsComponent implements OnInit {
       zoom: 4,
       layers: [streets]
     });
+    this.map.addHandler("gestureHandling", GestureHandling);
+    this.map.gestureHandling.enable();
 
     this.locationMarkers = L.featureGroup().addTo(this.map);
 
@@ -554,7 +557,7 @@ export class EventDetailsComponent implements OnInit {
 
     const overlays = {
       'Flyways': flyways,
-      'Watersheds (HUC 2)': watersheds,
+      'Watersheds': watersheds,
       'Land Use': landUse
     };
 
@@ -570,7 +573,7 @@ export class EventDetailsComponent implements OnInit {
     this.map.on('overlayadd', (e) => {
       if (e.name === 'Flyways') {
         this.flywaysVisible = true;
-      } else if (e.name === 'Watersheds (HUC 2)') {
+      } else if (e.name === 'Watersheds') {
         this.watershedsVisible = true;
       }
     });
@@ -578,7 +581,7 @@ export class EventDetailsComponent implements OnInit {
     this.map.on('overlayremove', (e) => {
       if (e.name === 'Flyways') {
         this.flywaysVisible = false;
-      } else if (e.name === 'Watersheds (HUC 2)') {
+      } else if (e.name === 'Watersheds') {
         this.watershedsVisible = false;
       }
     });

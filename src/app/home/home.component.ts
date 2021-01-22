@@ -499,19 +499,11 @@ export class HomeComponent implements OnInit {
 
   buildMap() {
 
-    const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a> contributors.',
-      // tslint:disable-next-line:max-line-length
-      mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
-
     const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors.'
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors.'});
 
-    });
-
-    const grayscale = L.tileLayer(mbUrl, { id: 'mapbox.light', attribution: mbAttr });
-    const streets = L.tileLayer(mbUrl, { id: 'mapbox.streets', attribution: mbAttr });
+    const grayscale = esri.basemapLayer('Gray');
+    const streets = esri.basemapLayer('Streets');
 
     if (this.map === undefined) {
       this.map = new L.Map('map', {

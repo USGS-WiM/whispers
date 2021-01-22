@@ -4,5 +4,5 @@ export const environment = {
   version: require('../../package.json').version,
   ////////////// PROD /////////////////
   // API root for prod
-  api_root: 'https://whispersprod.cr.usgs.gov/api/',
+  api_root: 'https://whispers.usgs.gov/api/',
 };

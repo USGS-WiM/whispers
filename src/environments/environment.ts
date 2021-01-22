@@ -6,10 +6,9 @@ export const environment = {
   production: false,
   hmr: false,
   version: require("../../package.json").version,
-  api_root: "https://whispersdev.wim.usgs.gov/whispersservices/",
-  // api_root: 'https://whispers.usgs.gov/whispersservices/',
-  // api_root: "https://whisperstest.wim.usgs.gov/api/",
-  // api_root: "https://whispersprod.cr.usgs.gov/api/",
+  // api_root: "https://whispersdev.wim.usgs.gov/api",
+  // api_root: 'https://whispers.usgs.gov/api/',
+  api_root: "https://whisperstest.wim.usgs.gov/api/",
   banner_content:
     "This website is under development and CONTAINS FICTICIOUS DATA. ",
   banner_text_color: "#FFFF00",

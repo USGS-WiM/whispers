@@ -8,6 +8,6 @@ export const environment = {
   // banner color for test
   // banner_text_color: '#FFFF00'
   // API root for test
-  recaptcha_site_key: '',
-  api_root: 'https://whisperstest.usgs.gov/api/',
+  recaptcha_site_key: '6Lc43c4ZAAAAAO3zFzGMumcVHiPN6vChVPvJqc9N',
+  api_root: 'https://whisperstest.wim.usgs.gov/api/',
 };

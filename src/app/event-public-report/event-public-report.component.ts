@@ -136,19 +136,15 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         }
       );
 
-    const Attr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      // tslint:disable-next-line:max-line-length
-      Url = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
-    const streets = L.tileLayer(Url, { id: 'mapbox.streets', attribution: Attr });
-    const streets2 = L.tileLayer(Url, { id: 'mapbox.streets', attribution: Attr, noWrap: true });
+    // Code for maps with results to produce map images for report
+    const streets = esri.basemapLayer('Streets');
+    const streets2 = esri.basemapLayer('Streets');
 
     this.natMap = new L.Map('hiddenNatMap', {
       center: new L.LatLng(39.8283, -98.5795),
       zoomControl: false,
       zoom: 3,
-      attributionControl: false,
+      attributionControl: true,
       layers: [streets]
     });
 
@@ -156,7 +152,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       center: new L.LatLng(39.8283, -98.5795),
       zoom: 5,
       zoomControl: false,
-      attributionControl: false,
+      attributionControl: true,
       layers: [streets2]
     });
 

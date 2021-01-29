@@ -9,6 +9,7 @@ import { APP_SETTINGS } from '../app.settings';
 import { User } from '@interfaces/user';
 import { EventEmitter } from 'events';
 import { CurrentUserService } from '@services/current-user.service';
+import clientStorage from '@app/client-storage';
 
 @Injectable()
 
@@ -36,21 +37,21 @@ export class AuthenticationService {
       map((res: any) => {
         self.user = res.json();
         // if (self.user.is_staff || self.user.username == 'testuser') {
-        sessionStorage.setItem('username', username);
-        sessionStorage.setItem('password', password);
-        sessionStorage.setItem('first_name', self.user.first_name);
-        sessionStorage.setItem('last_name', self.user.last_name);
-        sessionStorage.setItem('email', self.user.email);
-        sessionStorage.setItem('is_staff', self.user.is_staff.toString());
-        sessionStorage.setItem('is_superuser', self.user.is_superuser.toString());
-        sessionStorage.setItem('is_active', self.user.is_active.toString());
-        sessionStorage.setItem('role', self.user.role.toString());
-        sessionStorage.setItem('organization', self.user.organization.toString());
-        sessionStorage.setItem('last_login', self.user.last_login);
-        sessionStorage.setItem('active_key', self.user.active_key);
-        sessionStorage.setItem('user_status', self.user.user_status);
+        clientStorage.setItem('username', username);
+        clientStorage.setItem('password', password);
+        clientStorage.setItem('first_name', self.user.first_name);
+        clientStorage.setItem('last_name', self.user.last_name);
+        clientStorage.setItem('email', self.user.email);
+        clientStorage.setItem('is_staff', self.user.is_staff.toString());
+        clientStorage.setItem('is_superuser', self.user.is_superuser.toString());
+        clientStorage.setItem('is_active', self.user.is_active.toString());
+        clientStorage.setItem('role', self.user.role.toString());
+        clientStorage.setItem('organization', self.user.organization.toString());
+        clientStorage.setItem('last_login', self.user.last_login);
+        clientStorage.setItem('active_key', self.user.active_key);
+        clientStorage.setItem('user_status', self.user.user_status);
 
-        sessionStorage.setItem('currentUser', JSON.stringify(self.user));
+        clientStorage.setItem('currentUser', JSON.stringify(self.user));
 
         // self.userLoggedIn$.emit(res);
         // this.currentUser.emit(res);
@@ -69,21 +70,21 @@ export class AuthenticationService {
     // this.router.navigateByUrl('login');
     this.user = undefined;
     this.currentUserService.updateCurrentUser({ 'username': '' });
-    sessionStorage.removeItem('username');
-    sessionStorage.removeItem('password');
-    sessionStorage.removeItem('first_name');
-    sessionStorage.removeItem('last_name');
-    sessionStorage.removeItem('email');
-    sessionStorage.removeItem('is_staff');
-    sessionStorage.removeItem('is_superuser');
-    sessionStorage.removeItem('is_active');
-    sessionStorage.removeItem('role');
-    sessionStorage.removeItem('organization');
-    sessionStorage.removeItem('last_login');
-    sessionStorage.removeItem('active_key');
-    sessionStorage.removeItem('user_status');
+    clientStorage.removeItem('username');
+    clientStorage.removeItem('password');
+    clientStorage.removeItem('first_name');
+    clientStorage.removeItem('last_name');
+    clientStorage.removeItem('email');
+    clientStorage.removeItem('is_staff');
+    clientStorage.removeItem('is_superuser');
+    clientStorage.removeItem('is_active');
+    clientStorage.removeItem('role');
+    clientStorage.removeItem('organization');
+    clientStorage.removeItem('last_login');
+    clientStorage.removeItem('active_key');
+    clientStorage.removeItem('user_status');
 
-    sessionStorage.removeItem('currentUser');
+    clientStorage.removeItem('currentUser');
 
     return of(true);
 

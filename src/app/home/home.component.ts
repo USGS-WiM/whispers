@@ -48,6 +48,7 @@ import { DataUpdatedService } from '@services/data-updated.service';
 import { getAnimalTypes } from '@interfaces/species';
 import { SearchFormService } from '@search-form/search-form.service';
 import { SearchFormComponent } from '@search-form/search-form.component';
+import clientStorage from '@app/client-storage';
 declare let gtag: Function;
 
 @Component({
@@ -77,8 +78,8 @@ export class HomeComponent implements OnInit {
 
   isloggedIn = APP_SETTINGS.IS_LOGGEDIN;
 
-  currentSearchQuery = sessionStorage.getItem('currentSearch') ? JSON.parse(sessionStorage.getItem('currentSearch')) : APP_SETTINGS.DEFAULT_SEARCH_QUERY;
-  currentDisplayQuery: DisplayQuery = sessionStorage.getItem('currentDisplayQuery') ? JSON.parse(sessionStorage.getItem('currentDisplayQuery')) : APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
+  currentSearchQuery = clientStorage.getItem('currentSearch') ? JSON.parse(clientStorage.getItem('currentSearch')) : APP_SETTINGS.DEFAULT_SEARCH_QUERY;
+  currentDisplayQuery: DisplayQuery = clientStorage.getItem('currentDisplayQuery') ? JSON.parse(clientStorage.getItem('currentDisplayQuery')) : APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
 
   currentResults: EventSummary[];
 
@@ -1127,7 +1128,7 @@ export class HomeComponent implements OnInit {
       }
     }
 
-    sessionStorage.setItem('currentDisplayQuery', JSON.stringify(displayQuery));
+    clientStorage.setItem('currentDisplayQuery', JSON.stringify(displayQuery));
     // use displayQuery for display of current query in markup, send to searchDialogService
     this.searchFormService.setDisplayQuery(displayQuery);
 

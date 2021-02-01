@@ -16,6 +16,7 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { User } from '@interfaces/user';
 import { ConfirmComponent } from '@confirm/confirm.component';
+import clientStorage from '@app/client-storage';
 
 
 @Component({
@@ -74,7 +75,7 @@ export class AuthenticationComponent implements OnInit {
 
   onSubmit(formValue: any) {
     this.submitLoading = true;
-    if (sessionStorage.getItem('username')) {
+    if (clientStorage.getItem('username')) {
       this.authenticationService.logout();
     }
 

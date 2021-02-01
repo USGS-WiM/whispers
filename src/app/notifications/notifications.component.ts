@@ -17,6 +17,7 @@ import { NotificationService } from '@services/notification.service';
 import { DataUpdatedService } from '@services/data-updated.service';
 import { ViewNotificationDetailsComponent } from '@app/notifications/view-notification-details/view-notification-details.component';
 import { CustomNotificationCue } from '@interfaces/custom-notification-cue'
+import clientStorage from '@app/client-storage';
 
 @Component({
   selector: 'app-notifications',
@@ -582,8 +583,8 @@ export class NotificationsComponent implements OnInit, AfterViewInit {
         (response) => {
           // update cuurentUser service  with updated user object containing updated settings object
           this.currentUserService.updateCurrentUser(response);
-          // update sessionStorage with updated user object containing updated settings object
-          sessionStorage.setItem('currentUser', JSON.stringify(response));
+          // update clientStorage with updated user object containing updated settings object
+          clientStorage.setItem('currentUser', JSON.stringify(response));
           // since the update succeeded, update the previous form value var to be able to compare to next change
           this.previousValueStandardNotificationSettingsForm = this.standardNotificationSettingsForm.value;
           // display success message

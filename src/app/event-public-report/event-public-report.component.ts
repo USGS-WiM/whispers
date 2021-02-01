@@ -260,13 +260,15 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
       setTimeout(() => {
-        this.combinedComments = this.data.event_data.combined_comments;
-        for (const comment of this.combinedComments) {
-          // set the comment type string for each comment
-          comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
-          // set the source string for each comment
-          comment.source = this.eventLocationName(comment);
-        }
+        if (this.data.event_data.combined_comments) {
+          this.combinedComments = this.data.event_data.combined_comments;
+          for (const comment of this.combinedComments) {
+            // set the comment type string for each comment
+            comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
+            // set the source string for each comment
+            comment.source = this.eventLocationName(comment);
+          }
+        }  
       }, 1000);
     }
     if (this.data.user.username) {
@@ -344,9 +346,11 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   getlocations() {
     // getting the locations that eventlocations
     this.data.event_data.eventlocations.forEach(e => {
-      e.comments.forEach(s => {
-        this.locationIdArray.push(s);
-      });
+      if (e.comments) {
+        e.comments.forEach(s => {
+          this.locationIdArray.push(s);
+        });
+      }
     });
 
     // stripping the objects that have duplicate object_ids so that the count is i++.
@@ -581,7 +585,10 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
   makeCommentsTable() {
     let commentTable;
+
+    if (this.combinedComments) {
     this.combinedComments = this.combinedComments.sort((a, b) => a.date_sort - b.date_sort);
+    }
 
     // START defining comment table
     const commentHeaders = {
@@ -1754,7 +1761,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         docDefinition.content.push(this.makeLocationTable(loc));
       }
 
-      if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
+      if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined && this.data.event_data.combined_comments) {
         docDefinition.content.push(this.makeCommentsTitle());
         docDefinition.content.push(this.makeCommentsTable());
       }

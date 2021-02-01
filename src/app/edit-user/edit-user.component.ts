@@ -10,6 +10,7 @@ import { MatRadioModule } from '@angular/material';
 import { User } from '@interfaces/user';
 import { UserService } from '@services/user.service';
 import { CurrentUserService } from '@services/current-user.service';
+import clientStorage from '@app/client-storage';
 
 @Component({
   selector: 'app-edit-user',
@@ -87,10 +88,10 @@ export class EditUserComponent implements OnInit {
     // if no value present in password, delete that from the object for patching
     if (formValue.password === '' || this.showChangePassword === false) {
       //delete userUpdates.password;
-      userUpdates.password = sessionStorage.password;
-      sessionStorage.new_password = sessionStorage.password;
+      userUpdates.password = clientStorage.password;
+      clientStorage.new_password = clientStorage.password;
     } else {
-      sessionStorage.new_password = formValue.password;
+      clientStorage.new_password = formValue.password;
     }
 
     this.userService.updateUser(userUpdates)
@@ -100,9 +101,9 @@ export class EditUserComponent implements OnInit {
           this.openSnackBar('Your user details were updated', 'OK', 5000);
           this.editUserDialogRef.close();
           this.currentUserService.updateCurrentUser(event);
-          sessionStorage.first_name = event.first_name;
-          sessionStorage.last_name = event.last_name;
-          sessionStorage.password = sessionStorage.new_password;
+          clientStorage.first_name = event.first_name;
+          clientStorage.last_name = event.last_name;
+          clientStorage.password = clientStorage.new_password;
         },
         error => {
           this.submitLoading = false;

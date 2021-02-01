@@ -100,6 +100,7 @@ import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
 import { User } from '@interfaces/user';
 import { fromPromise } from 'rxjs/internal-compatibility';
+import clientStorage from '@app/client-storage';
 declare let gtag: Function;
 
 declare const search_api: search_api;
@@ -841,7 +842,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       'tooltip': 'Type to search GNIS database',
       'on_result': function (event) {
         // do something with the result
-        // o.result is a geojson point feature object with location information set as properties 
+        // o.result is a geojson point feature object with location information set as properties
         console.warn(event.result);
 
       }
@@ -2051,7 +2052,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       'tooltip': 'Type to search GNIS database',
       'on_result': function (event) {
         // do something with the result
-        // o.result is a geojson point feature object with location information set as properties 
+        // o.result is a geojson point feature object with location information set as properties
         console.warn(event.result);
       }
     });
@@ -2596,7 +2597,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       delete event_location.event_type;
     }
 
-    sessionStorage.setItem('eventSubmission', formValue);
+    clientStorage.setItem('eventSubmission', formValue);
 
     this.eventService.create(formValue)
       .subscribe(
@@ -2620,7 +2621,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
           this.confirmDialogRef.afterClosed().subscribe(result => {
             if (result === true) {
               // temporarily disabling the resetStepper function in favor of full page reload.
-              // tons of issues with resetting this form because of its complexity. full page reload works for now. 
+              // tons of issues with resetting this form because of its complexity. full page reload works for now.
               //this.resetStepper();
               location.reload();
             }

@@ -31,6 +31,7 @@ import { RequestPasswordResetComponent } from '@request-password-reset/request-p
 import { ResetPasswordComponent } from '@reset-password/reset-password.component';
 import { UserRegistrationRoleSelectionComponent } from '@user-registration-role-selection/user-registration-role-selection.component';
 import { UserRegistrationComponent } from '@user-registration/user-registration.component';
+import clientStorage from '@app/client-storage';
 
 @Component({
   selector: 'app-root',
@@ -119,8 +120,8 @@ export class AppComponent implements OnInit {
       }
     })
 
-    if (sessionStorage.getItem('currentUser')) {
-      const currentUserObj = JSON.parse(sessionStorage.getItem('currentUser'));
+    if (clientStorage.getItem('currentUser')) {
+      const currentUserObj = JSON.parse(clientStorage.getItem('currentUser'));
       this.currentUserService.updateCurrentUser(currentUserObj);
     } else {
       this.currentUserService.updateCurrentUser({

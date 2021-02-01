@@ -4,6 +4,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { DisplayQuery } from '@interfaces/display-query';
 import { APP_UTILITIES } from '@app/app.utilities';
+import clientStorage from '@app/client-storage';
 
 @Injectable()
 export class APP_SETTINGS {
@@ -19,7 +20,7 @@ export class APP_SETTINGS {
 
     public static set environment(env: string) { this._environment = env; }
 
-    public static get IS_LOGGEDIN(): boolean { return (!!sessionStorage.getItem('username') && !!sessionStorage.getItem('password')); }
+    public static get IS_LOGGEDIN(): boolean { return (!!clientStorage.getItem('username') && !!clientStorage.getItem('password')); }
 
     public static get APP_URL(): string { return 'https://whispers.usgs.gov'; }
 
@@ -179,13 +180,13 @@ export class APP_SETTINGS {
 
     public static get AUTH_HEADERS() {
         return new Headers({
-            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password)
+            'Authorization': 'Basic ' + btoa(clientStorage.username + ':' + clientStorage.password)
         });
     }
 
     public static get MIN_AUTH_JSON_HEADERS() {
         return new Headers({
-            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+            'Authorization': 'Basic ' + btoa(clientStorage.username + ':' + clientStorage.password),
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         });
@@ -193,7 +194,7 @@ export class APP_SETTINGS {
 
     public static get AUTH_JSON_HEADERS() {
         return new Headers({
-            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+            'Authorization': 'Basic ' + btoa(clientStorage.username + ':' + clientStorage.password),
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         });
@@ -201,14 +202,14 @@ export class APP_SETTINGS {
 
     public static get HTTP_CLIENT_MIN_AUTH_JSON_HEADERS() {
         return new HttpHeaders({
-            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+            'Authorization': 'Basic ' + btoa(clientStorage.username + ':' + clientStorage.password),
             'Accept': 'application/json'
         });
     }
 
     public static get MIN_AUTH_TEXT_HEADERS() {
         return new Headers({
-            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+            'Authorization': 'Basic ' + btoa(clientStorage.username + ':' + clientStorage.password),
             'Content-Type': 'text/plain',
             'Accept': 'application/json'
         });
@@ -216,7 +217,7 @@ export class APP_SETTINGS {
 
     public static get HTTP_CLIENT_MIN_AUTH_TEXT_HEADERS() {
         return new HttpHeaders({
-            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password),
+            'Authorization': 'Basic ' + btoa(clientStorage.username + ':' + clientStorage.password),
             'Content-Type': 'text/plain',
             'Accept': 'application/json'
         });
@@ -230,7 +231,7 @@ export class APP_SETTINGS {
 
     public static get AUTH_REQUEST_HEADERS() {
         return new Headers({
-            'Authorization': 'Basic ' + btoa(sessionStorage.username + ':' + sessionStorage.password)
+            'Authorization': 'Basic ' + btoa(clientStorage.username + ':' + clientStorage.password)
         });
     }
 

@@ -29,6 +29,7 @@ import { EventGroupManagementComponent } from '@app/event-group-management/event
 import { EventGroupManagementService } from '@services/event-group-management.service';
 import { CurrentUserService } from '@services/current-user.service';
 import { SearchFormService } from '@search-form/search-form.service';
+import clientStorage from '@app/client-storage';
 
 
 @Component({
@@ -85,8 +86,8 @@ export class EventsComponent implements AfterViewInit, OnInit {
   ];
 
   // tslint:disable-next-line:max-line-length
-  currentSearchQuery = sessionStorage.getItem('currentSearch') ? JSON.parse(sessionStorage.getItem('currentSearch')) : APP_SETTINGS.DEFAULT_SEARCH_QUERY;
-  currentDisplayQuery: DisplayQuery = sessionStorage.getItem('currentDisplayQuery') ? JSON.parse(sessionStorage.getItem('currentDisplayQuery')) : APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
+  currentSearchQuery = clientStorage.getItem('currentSearch') ? JSON.parse(clientStorage.getItem('currentSearch')) : APP_SETTINGS.DEFAULT_SEARCH_QUERY;
+  currentDisplayQuery: DisplayQuery = clientStorage.getItem('currentDisplayQuery') ? JSON.parse(clientStorage.getItem('currentDisplayQuery')) : APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

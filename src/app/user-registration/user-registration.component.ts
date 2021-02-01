@@ -138,6 +138,8 @@ export class UserRegistrationComponent implements OnInit {
           this.errorMessage = <any>error;
         }
       );
+
+    this.recaptcha.siteKey = APP_SETTINGS.RECAPTCHA_SITE_KEY;
   }
 
   private filterOrganization() {

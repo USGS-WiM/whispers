@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import clientStorage from '@app/client-storage';
 import { Observable ,  Subject } from 'rxjs';
 
 @Injectable()
@@ -9,7 +10,7 @@ export class SearchFormService {
 
   setSearchQuery(query: any) {
     this.searchQuery.next(query);
-    sessionStorage.setItem('currentSearch', JSON.stringify(query));
+    clientStorage.setItem('currentSearch', JSON.stringify(query));
   }
 
   getSearchQuery(): Observable<any> {
@@ -18,7 +19,7 @@ export class SearchFormService {
 
   setDisplayQuery(query: any) {
     this.displayQuery.next(query);
-    sessionStorage.setItem('currentDisplayQuery', JSON.stringify(query));
+    clientStorage.setItem('currentDisplayQuery', JSON.stringify(query));
   }
 
   getDisplayQuery(): Observable<any> {

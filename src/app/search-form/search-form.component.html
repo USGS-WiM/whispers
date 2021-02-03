@@ -58,7 +58,7 @@
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
             <input type="text" matInput placeholder="Select Event Type" aria-label="Select Event Type" [matAutocomplete]="eventTypeAutoComplete"
-              [formControl]="eventTypeControl" (valueChanges)="addChip($event, selectedEventTypes, 'eventType')" (blur)="resetFormControl('eventType')">
+              [formControl]="eventTypeControl" (valueChanges)="addChip($event, selectedEventTypes, 'eventType')" (blur)="onBlurAutocomplete($event, 'eventType')">
             <mat-autocomplete #eventTypeAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedEventTypes, 'eventType')">
               <mat-option *ngFor="let eventType of filteredEventTypes | async" [value]="eventType" [matTooltip]="eventType.name">
                 <span>{{ eventType.name }}</span>
@@ -140,7 +140,7 @@
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
             <input type="text" matInput placeholder="Select Diagnosis Type" aria-label="Select Diagnosis Type"
-              [matAutocomplete]="diagnosisTypeAutoComplete" [formControl]="diagnosisTypeControl" (blur)="resetFormControl('diagnosisType')">
+              [matAutocomplete]="diagnosisTypeAutoComplete" [formControl]="diagnosisTypeControl" (blur)="onBlurAutocomplete($event, 'diagnosisType')">
             <mat-autocomplete #diagnosisTypeAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedDiagnosisTypes, 'diagnosisType')">
               <mat-option *ngFor="let diagnosisType of filteredDiagnosisTypes | async" [value]="diagnosisType" [matTooltip]="diagnosisType.name">
                 <span>{{ diagnosisType.name }}</span>
@@ -180,7 +180,7 @@
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
             <input type="text" matInput placeholder="Select Event Diagnosis" aria-label="Select Event Diagnosis" [matAutocomplete]="diagnosisAutoComplete"
-              [formControl]="diagnosisControl" (blur)="resetFormControl('diagnosis')">
+              [formControl]="diagnosisControl" (blur)="onBlurAutocomplete($event, 'diagnosis')">
             <mat-autocomplete #diagnosisAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedDiagnoses, 'diagnosis')">
               <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis" [matTooltip]="diagnosis.name">
                 <span>{{ diagnosis.name }}</span>
@@ -220,7 +220,7 @@
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
             <input type="text" matInput placeholder="Select Species" aria-label="Select Species" [matAutocomplete]="speciesAutoComplete"
-              [formControl]="speciesControl" (blur)="resetFormControl('species')">
+              [formControl]="speciesControl" (blur)="onBlurAutocomplete($event, 'species')">
             <mat-spinner *ngIf="speciesLoading" [diameter]="20"></mat-spinner>
             <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedSpecies, 'species')">
               <mat-option *ngFor="let species of filteredSpecies | async" [value]="species" [matTooltip]="species.name">
@@ -261,7 +261,7 @@
         <div class="autocomplete-input">
           <mat-form-field class="full-width">
             <input type="text" matInput placeholder="Select State" aria-label="Select State" [matAutocomplete]="adminLevelOneAutoComplete"
-              [formControl]="adminLevelOneControl" (blur)="resetFormControl('adminLevelOne')">
+              [formControl]="adminLevelOneControl" (blur)="onBlurAutocomplete($event, 'adminLevelOne')">
             <mat-autocomplete #adminLevelOneAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedAdminLevelOnes, 'adminLevelOne')">
               <mat-option *ngFor="let adminLevelOne of filteredAdminLevelOnes | async" [value]="adminLevelOne" [matTooltip]="adminLevelOne.name">
                 <span>{{ adminLevelOne.name }}</span>
@@ -301,7 +301,7 @@
         <div class="autocomplete-input">
           <mat-form-field class="full-width has-hint">
             <input type="text" matInput placeholder="Select County" aria-label="Select County" [matAutocomplete]="adminLevelTwoAutoComplete"
-              [formControl]="adminLevelTwoControl" (blur)="resetFormControl('adminLevelTwo')">
+              [formControl]="adminLevelTwoControl" (blur)="onBlurAutocomplete($event, 'adminLevelTwo')">
             <mat-spinner *ngIf="adminLevelTwosLoading" [diameter]="20"></mat-spinner>
             <mat-autocomplete #adminLevelTwoAutoComplete="matAutocomplete" [displayWith]="displayFn" (optionSelected)="addChip($event, selectedAdminLevelTwos, 'adminLevelTwo')">
               <mat-option *ngFor="let adminLevelTwo of filteredAdminLevelTwos | async" [value]="adminLevelTwo" [matTooltip]="adminLevelTwo.name">

@@ -9,7 +9,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
-import pdfMake from 'pdfmake/build/pdfMake';
+import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import html2canvas from 'html2canvas';
@@ -504,7 +504,7 @@ export class EventDetailsComponent implements OnInit {
 
     const grayscale = esri.basemapLayer('Gray');
     const streets = esri.basemapLayer('Streets');
-    
+
     this.map = new L.Map('eventDetailsMap', {
       center: new L.LatLng(39.8283, -98.5795),
       zoom: 4,

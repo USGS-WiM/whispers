@@ -522,6 +522,16 @@ export class SearchFormComponent implements OnInit {
     });
   }
 
+  onBlurAutocomplete(event, control) {
+    if (event.relatedTarget && event.relatedTarget.tagName === 'MAT-OPTION') {
+      // the input was blurred, but the user is still interacting with the component, they've simply
+      // selected a mat-option
+      return;
+    }
+
+    this.resetFormControl(control);
+  }
+
   resetFormControl(control) {
     switch (control) {
       case 'eventID': this.searchForm.controls['event_id'].reset();

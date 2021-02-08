@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { Inject } from '@angular/core';
-import pdfMake from 'pdfmake/build/pdfMake';
+import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
@@ -268,7 +268,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
             // set the source string for each comment
             comment.source = this.eventLocationName(comment);
           }
-        }  
+        }
       }, 1000);
     }
     if (this.data.user.username) {

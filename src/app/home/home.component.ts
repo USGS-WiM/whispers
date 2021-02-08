@@ -883,7 +883,7 @@ export class HomeComponent implements OnInit {
       L.marker([marker.lat, marker.long],
         { icon: this.icon })
         .addTo(this.locationMarkers)
-        .bindPopup(popup, { maxHeight: 300, autoPan: true, autoPanPadding: [20, 20], keepInView: true })
+        .bindPopup(popup, { maxHeight: 300, minWidth: 200, autoPan: true, autoPanPadding: [20, 20], keepInView: true })
         .on('popupopen', function (popup) {
 
           const acc = Array.from(document.querySelectorAll('.popup-event-details-toggle'));

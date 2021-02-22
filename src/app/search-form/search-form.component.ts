@@ -564,6 +564,8 @@ export class SearchFormComponent implements OnInit {
       }
     }
     this.resetFormControl('eventID');
+    // Mark form as dirty - form has been changed but search hasn't been submitted yet
+    this.searchForm.markAsDirty();
   }
 
   addChip(event: MatAutocompleteSelectedEvent, selectedValuesArray: any, control: string): void {
@@ -585,12 +587,16 @@ export class SearchFormComponent implements OnInit {
         selectedValuesArray.push(selection);
         // reset the form
         this.resetFormControl(control);
+        // Mark form as dirty - form has been changed but search hasn't been submitted yet
+        this.searchForm.markAsDirty();
       }
     } else {
       // Add selected item to selected array, which will show as a chip
       selectedValuesArray.push(selection);
       // reset the form
       this.resetFormControl(control);
+      // Mark form as dirty - form has been changed but search hasn't been submitted yet
+      this.searchForm.markAsDirty();
     }
 
 
@@ -673,6 +679,8 @@ export class SearchFormComponent implements OnInit {
     if (index >= 0) {
       // Remove key from selectedValuesArray array
       selectedValuesArray.splice(index, 1);
+      // Mark form as dirty - form has been changed but search hasn't been submitted yet
+      this.searchForm.markAsDirty();
     }
 
     // Form validity must consider the 'selectedValuesArray' so manually trigger revalidation
@@ -775,6 +783,10 @@ export class SearchFormComponent implements OnInit {
 
   get errors() {
     return this.searchForm.errors;
+  }
+
+  get dirty() {
+    return this.searchForm.dirty;
   }
 
   submitSearch() {

@@ -68,6 +68,11 @@ export class SaveSearchComponent implements OnInit {
     if (formValue.data.end_date === null || formValue.data.end_date === '' || formValue.data.end_date === undefined) {
       delete formValue.data.end_date;
     }
+    if (formValue.data.event_id !== undefined && formValue.data.event_id !== null) {
+      if (formValue.data.event_id.length === 0) {
+        delete formValue.data.event_id;
+      }
+    }
     if (formValue.data.event_type !== undefined && formValue.data.event_type !== null) {
       if (formValue.data.event_type.length === 0) {
         delete formValue.data.event_type;

@@ -662,7 +662,7 @@ mat-progress-bar .mat-progress-bar-buffer {
     }
 }
 
-button {
+button[mat-stroked-button], button[mat-raised-button] {
   // Apply standard Material Design styling on buttons by making label uppercase
   text-transform: uppercase;
 }

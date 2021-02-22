@@ -666,13 +666,26 @@ export class SearchFormComponent implements OnInit {
     this.searchForm.updateValueAndValidity();
   }
 
-  removeChip(chip: any, selectedValuesArray: any): void {
+  removeChip(chip: any, selectedValuesArray: any, control: string = null): void {
     // Find key of object in selectedValuesArray
     const index = selectedValuesArray.indexOf(chip);
     // If key exists
     if (index >= 0) {
       // Remove key from selectedValuesArray array
       selectedValuesArray.splice(index, 1);
+    }
+
+    if (control === "adminLevelOne") {
+      // Remove adminLevelTwo items matching the removed adminLevelOne
+      this.administrative_level_two = this.administrative_level_two.filter(levelTwo =>
+        levelTwo.administrative_level_one !== chip.id
+      );
+      this.selectedAdminLevelTwos = this.selectedAdminLevelTwos.filter(levelTwo =>
+        levelTwo.administrative_level_one !== chip.id
+      );
+      this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges.pipe(
+        startWith(null),
+        map(val => this.filter(val, this.administrative_level_two, 'name')));
     }
 
     // Form validity must consider the 'selectedValuesArray' so manually trigger revalidation

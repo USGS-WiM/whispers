@@ -22,7 +22,12 @@ export class AdministrativeLevelTwoService {
     });
 
     return this._http.get(APP_SETTINGS.ADMINISTRATIVE_LEVEL_TWOS_URL + '?no_page&slim&administrativelevelone=' + adminLevelOneID, options).pipe(
-      map((response: Response) => <AdministrativeLevelTwo[]>response.json()),
+      map((response: Response) => {
+        const levelTwos = <AdministrativeLevelTwo[]>response.json()
+        // Add adminLevelOneID to each adminLevelTwo
+        levelTwos.forEach(levelTwo => levelTwo.administrative_level_one = adminLevelOneID)
+        return levelTwos;
+      }),
       // .do(data => console.log('Samples data: ' + JSON.stringify(data)))
       catchError(this.handleError),);
   }

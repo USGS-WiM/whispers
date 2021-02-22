@@ -915,7 +915,8 @@ export class HomeComponent implements OnInit {
     }
 
     if (this.locationMarkers.getBounds().isValid() === true) {
-      this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50], maxZoom: 10 });
+      // The legend on the right is 230px wide
+      this.map.fitBounds(this.locationMarkers.getBounds(), { paddingTopLeft: [50, 50], paddingBottomRight: [230,50], maxZoom: 10 });
     } else {
       this.openSnackBar('No events match your selected criteria. Please try again.', 'OK', 8000);
 

@@ -17,23 +17,22 @@
       </mat-form-field>
 
       <mat-form-field class="form-control">
-        <input matInput placeholder="Password" formControlName="password" required required [type]="hide ? 'password' : 'text'">
+        <input matInput placeholder="Password" formControlName="password" [type]="hide ? 'password' : 'text'">
         <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
         <mat-error *ngIf="loginForm.get('password').invalid">
           <span class="error-message">{{getErrorMessage('password')}}</span>
-          <button class="button-forgot-password" mat-stroked-button (click)="forgotPassword()">Forgot password?</button>
         </mat-error>
-        <mat-hint><button class="button-forgot-password" mat-stroked-button (click)="forgotPassword()">Forgot password?</button></mat-hint>
       </mat-form-field>
 	</div>
 
   </form>
+  <button type="button" color="accent" class="button-forgot-password" mat-stroked-button (click)="forgotPassword()">Forgot password?</button>
 </mat-dialog-content>
 <mat-dialog-actions>
 
   <div class="form-buttons-flex">
-    <button mat-stroked-button (click)="this.authenticationDialogRef.close('cancel');">Cancel</button>
-    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid" (click)="onSubmit(loginForm.value)" form="loginForm"><mat-icon>send</mat-icon> Login</button>
+    <button mat-stroked-button color="accent" (click)="this.authenticationDialogRef.close('cancel');">Cancel</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid" (click)="onSubmit(loginForm.value)" form="loginForm"><mat-icon>send</mat-icon> Log in</button>
   </div>
   <mat-progress-bar mode="indeterminate" *ngIf="submitLoading"></mat-progress-bar>
 

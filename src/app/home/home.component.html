@@ -28,8 +28,8 @@
         </button>
       </div>
       <div class="search-button-row center" *ngIf="currentUser.role !== undefined">
-        <button mat-stroked-button color="accent" (click)="saveSearch()" [disabled]="searchFormComponent.invalid"
-          matTooltip="Save the currently displayed filter to your user profile">
+        <button mat-stroked-button color="accent" (click)="saveSearch()" [disabled]="searchFormComponent.invalid || searchFormComponent.dirty"
+          [matTooltip]="searchFormComponent.dirty ? 'First run the search and then you can save it' : 'Save the currently displayed search to your user profile'">
           <mat-icon>save</mat-icon> Save Search Criteria
         </button>
       </div>
@@ -351,7 +351,7 @@
           <span class="spacer"></span>
 
           <span class="results-button-row" *ngIf="this.currentResults">
-            <button mat-button color="accent" (click)="openMetadataLink()"
+            <button mat-stroked-button color="accent" (click)="openMetadataLink()"
               matTooltip="Click to open the WHISPers informational site, including metadata (external link).">
               <mat-icon>list</mat-icon> Metadata
             </button>

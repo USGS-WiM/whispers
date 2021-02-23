@@ -175,29 +175,21 @@ export class HomeComponent implements OnInit {
                 // this.sampleQuerySizeErrorFlag = true;
                 this.searchQuerySizeTooLargeErrorMessage = "Your search result is too large. Please narrow your search and try again.";
                 this.searchResultsLoading = false;
+                this.currentResults = [];
+                this.displayCurrentResults();
               } else if (count.count < APP_SETTINGS.QUERY_COUNT_LIMIT) {
 
                 if (searchQuery) {
                   this.eventService.queryEvents(searchQuery)
                     .subscribe(
                       eventSummaries => {
+                        this.searchResultsLoading = false;
                         this.currentResults = eventSummaries;
+                        this.displayCurrentResults();
 
-                        setTimeout(() => {
-                          this.dataSource = new MatTableDataSource(this.currentResults);
-                          this.dataSource.paginator = this.paginator;
-                          this.dataSource.sort = this.sort;
-                          this.searchResultsLoading = false;
-
-                          if (this.map === undefined) {
-                            this.buildMap();
-                          } else {
-                            this.mapResults(this.currentResults);
-                          }
-
-
-                        }, 500);
-
+                        if (!eventSummaries || eventSummaries.length === 0) {
+                          this.openSnackBar('No events match your selected criteria. Please try again.', 'OK', 8000);
+                        }
                       },
                       error => {
                         this.searchResultsLoading = false;
@@ -316,26 +308,23 @@ export class HomeComponent implements OnInit {
             // this.sampleQuerySizeErrorFlag = true;
             this.searchQuerySizeTooLargeErrorMessage = "Your search result is too large. Please narrow your search and try again.";
             this.searchResultsLoading = false;
+            this.currentResults = [];
+            // Refresh display, which will remove any previous displayed result
+            // so the current search criteria are in sync with the map
+            this.displayCurrentResults();
           } else if (count.count < APP_SETTINGS.QUERY_COUNT_LIMIT) {
 
             this.eventService.queryEvents(this.currentSearchQuery)
               .subscribe(
                 eventSummaries => {
 
+                  this.searchResultsLoading = false;
                   this.currentResults = eventSummaries;
+                  this.displayCurrentResults();
 
-                  setTimeout(() => {
-                    this.dataSource = new MatTableDataSource(eventSummaries);
-                    this.dataSource.paginator = this.paginator;
-                    this.dataSource.sort = this.sort;
-                    this.searchResultsLoading = false;
-                    if (this.map === undefined) {
-                      this.buildMap();
-                    } else {
-                      this.mapResults(this.currentResults);
-                    }
-                  }, 500);
-
+                  if (!eventSummaries || eventSummaries.length === 0) {
+                    this.openSnackBar('No events match your selected criteria. Please try again.', 'OK', 8000);
+                  }
                 },
                 error => {
                   this.errorMessage = <any>error;
@@ -464,6 +453,20 @@ export class HomeComponent implements OnInit {
       );
 
 
+  }
+
+  displayCurrentResults() {
+
+    setTimeout(() => {
+      this.dataSource = new MatTableDataSource(this.currentResults);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      if (this.map === undefined) {
+        this.buildMap();
+      } else {
+        this.mapResults(this.currentResults);
+      }
+    }, 500);
   }
 
   scaleLookup(mapZoom) {
@@ -883,7 +886,7 @@ export class HomeComponent implements OnInit {
       L.marker([marker.lat, marker.long],
         { icon: this.icon })
         .addTo(this.locationMarkers)
-        .bindPopup(popup, { maxHeight: 300, autoPan: true, autoPanPadding: [20, 20], keepInView: true })
+        .bindPopup(popup, { maxHeight: 300, minWidth: 200, autoPan: true, autoPanPadding: [20, 20], keepInView: true })
         .on('popupopen', function (popup) {
 
           const acc = Array.from(document.querySelectorAll('.popup-event-details-toggle'));
@@ -915,10 +918,8 @@ export class HomeComponent implements OnInit {
     }
 
     if (this.locationMarkers.getBounds().isValid() === true) {
-      this.map.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50], maxZoom: 10 });
-    } else {
-      this.openSnackBar('No events match your selected criteria. Please try again.', 'OK', 8000);
-
+      // The legend on the right is 230px wide
+      this.map.fitBounds(this.locationMarkers.getBounds(), { paddingTopLeft: [50, 50], paddingBottomRight: [230,50], maxZoom: 10 });
     }
   }
 

@@ -564,6 +564,8 @@ export class SearchFormComponent implements OnInit {
       }
     }
     this.resetFormControl('eventID');
+    // Mark form as dirty - form has been changed but search hasn't been submitted yet
+    this.searchForm.markAsDirty();
   }
 
   addChip(event: MatAutocompleteSelectedEvent, selectedValuesArray: any, control: string): void {
@@ -585,12 +587,16 @@ export class SearchFormComponent implements OnInit {
         selectedValuesArray.push(selection);
         // reset the form
         this.resetFormControl(control);
+        // Mark form as dirty - form has been changed but search hasn't been submitted yet
+        this.searchForm.markAsDirty();
       }
     } else {
       // Add selected item to selected array, which will show as a chip
       selectedValuesArray.push(selection);
       // reset the form
       this.resetFormControl(control);
+      // Mark form as dirty - form has been changed but search hasn't been submitted yet
+      this.searchForm.markAsDirty();
     }
 
 
@@ -666,13 +672,28 @@ export class SearchFormComponent implements OnInit {
     this.searchForm.updateValueAndValidity();
   }
 
-  removeChip(chip: any, selectedValuesArray: any): void {
+  removeChip(chip: any, selectedValuesArray: any, control: string = null): void {
     // Find key of object in selectedValuesArray
     const index = selectedValuesArray.indexOf(chip);
     // If key exists
     if (index >= 0) {
       // Remove key from selectedValuesArray array
       selectedValuesArray.splice(index, 1);
+      // Mark form as dirty - form has been changed but search hasn't been submitted yet
+      this.searchForm.markAsDirty();
+    }
+
+    if (control === "adminLevelOne") {
+      // Remove adminLevelTwo items matching the removed adminLevelOne
+      this.administrative_level_two = this.administrative_level_two.filter(levelTwo =>
+        levelTwo.administrative_level_one !== chip.id
+      );
+      this.selectedAdminLevelTwos = this.selectedAdminLevelTwos.filter(levelTwo =>
+        levelTwo.administrative_level_one !== chip.id
+      );
+      this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges.pipe(
+        startWith(null),
+        map(val => this.filter(val, this.administrative_level_two, 'name')));
     }
 
     // Form validity must consider the 'selectedValuesArray' so manually trigger revalidation
@@ -775,6 +796,10 @@ export class SearchFormComponent implements OnInit {
 
   get errors() {
     return this.searchForm.errors;
+  }
+
+  get dirty() {
+    return this.searchForm.dirty;
   }
 
   submitSearch() {

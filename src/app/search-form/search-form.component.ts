@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { MatSnackBar, MatAutocompleteSelectedEvent } from '@angular/material';
+import { MatSnackBar, MatAutocompleteSelectedEvent, MatAccordion } from '@angular/material';
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
 import { Diagnosis } from '@app/interfaces/diagnosis';
@@ -37,6 +37,8 @@ export class SearchFormComponent implements OnInit {
   @Input() narrow: boolean = false;
   defaultSearchQuery = APP_SETTINGS.DEFAULT_SEARCH_QUERY;
   defaultDisplayQuery = APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
+
+  @ViewChild(MatAccordion) accordion: MatAccordion;
 
   searchForm: FormGroup;
   // independent controls - values do not persist - used to select the value and add to a selection array
@@ -290,6 +292,12 @@ export class SearchFormComponent implements OnInit {
           this.setCurrentSearch(this.query);
           this.searchFormService.getDisplayQuery().subscribe(query => {
             this.setCurrentSearch(query);
+            // When the current search is committed, collapse the search form to
+            // show a complete summary of the current search
+            // closeAll only works with multi=true, see https://github.com/angular/components/issues/22003
+            this.accordion.multi = true;
+            this.accordion.closeAll();
+            this.accordion.multi = false;
           })
       },
       error => {

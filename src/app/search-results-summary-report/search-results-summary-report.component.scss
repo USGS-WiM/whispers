@@ -23,17 +23,18 @@
 }
 
 .wrapper {
-    overflow: hidden;
+    display: flex;
+    flex-direction: row;
 }
 
 .map {
-    float: left;
     padding-right: 30px;
 }
 
 .legend {
     margin-left: 20px;
-    overflow: auto;
+    // If legend scrolls, part of it could get cut off in the final report
+    overflow: visible;
     padding-left: 10px;
 }
 
@@ -59,6 +60,7 @@
     right: 10px;
     width:200px;
     /*height:320px;*/
+    max-height: none;
     color: black;
     background-color: rgb(255, 255, 255);
     background-color: rgba(255, 255, 255, 0.8);

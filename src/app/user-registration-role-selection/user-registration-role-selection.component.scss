@@ -1,26 +1,43 @@
-.role-options {
+.role-options, .register-buttons-row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+.role-options {
   @media (max-width: 400px) {
     flex-direction: column;
   }
+}
+.register-buttons-row {
+  width: 100%;
+  @media (max-width: 400px) {
+    // On small screens, remove the bottom buttons row and show them inline
+    display: none;
+  }
+}
+.role-option, .register-buttons-row button {
+  // Size registration options and buttons the same so they line up
+  width: calc(33.33% - 10px);
 }
 .role-option {
   background-color: #eaeef7;
   border-radius: 20px;
   padding: 20px;
-  width: calc(33.33% - 10px);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   button {
-    width: 100%;
-    margin-top: auto;
+    // will only display button in column on smaller screens
+    display: none;
   }
   @media (max-width: 400px) {
     width: 100%;
     margin-bottom: 10px;
+    button {
+      display: block;
+      width: 100%;
+      margin-top: auto;
+    }
   }
 }
 .role-option-description {
@@ -35,7 +52,4 @@
     color: #7eac54;
     vertical-align: bottom;
   }
-}
-button {
-  text-transform: uppercase;
 }

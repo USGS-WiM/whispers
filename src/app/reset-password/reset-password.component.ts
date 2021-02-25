@@ -80,7 +80,12 @@ export class ResetPasswordComponent implements OnInit {
 
           let errorMessage = error;
           try {
-            errorMessage = JSON.parse(error).status;
+            const parsedResponse = JSON.parse(error);
+            if ('status' in parsedResponse) {
+              errorMessage = parsedResponse.status;
+            } else if ('non_field_errors' in parsedResponse) {
+              errorMessage = parsedResponse.non_field_errors.join(", ");
+            }
           } catch (error) {
             // Ignore JSON parsing error
           }

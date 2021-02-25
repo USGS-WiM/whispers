@@ -264,6 +264,9 @@ export class HomeComponent implements OnInit {
     // Note: this won't trigger a submission of the search since the user needs
     // to pick some criteria before submitting the search
     this.searchFormComponent.clearSelection();
+    // Clear the map too
+    this.currentResults = [];
+    this.displayCurrentResults();
   }
 
 
@@ -1007,7 +1010,8 @@ export class HomeComponent implements OnInit {
   generateResultsSummaryReport() {
 
     this.resultsSummaryReportDialogRef = this.dialog.open(SearchResultsSummaryReportComponent, {
-      minHeight: '75%',
+      // Needs to be tall enough to display the entire legend
+      minHeight: '600px',
       data: {
         user: this.currentUser,
         current_results: this.currentResults,

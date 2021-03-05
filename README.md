@@ -80,7 +80,9 @@ The Angular CLI offers a generate tool that makes the creation of some common co
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate`  `directive`|`pipe`|`service`|`class`|`guard`|`interface`|`enum`|`module`.
 
-  
+## User Interface Style Guide
+
+For styling consistency, please refer to the UI Guidelines at [UI_GUIDELINES.md](UI_GUIDELINES.md).
 
 ## Distribution build for test and production
 

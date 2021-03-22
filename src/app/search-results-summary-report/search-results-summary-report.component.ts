@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
-import pdfMake from 'pdfmake/build/pdfMake';
+import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { timer } from 'rxjs';
 import * as L from 'leaflet';
@@ -25,6 +25,8 @@ import { EventDetail } from '@interfaces/event-detail';
 import { forEach } from '@angular/router/src/utils/collection';
 import { DiagnosisTypeService } from '@app/services/diagnosis-type.service';
 import { DiagnosisService } from '@app/services/diagnosis.service';
+import { EventSummary } from '@app/interfaces/event-summary';
+import { getAnimalTypes } from '@app/interfaces/species';
 declare let gtag: Function;
 
 @Component({
@@ -123,18 +125,13 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     this.pngURL = this.canvas.toDataURL();
 
     // Code for map with results to produce map image for report
-    let Attr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      // tslint:disable-next-line:max-line-length
-      Url = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
-    const streets = L.tileLayer(Url, { id: 'mapbox.streets', attribution: Attr });
+    const streets = esri.basemapLayer('Streets');
 
     this.resultsMap = new L.Map('resultsMap', {
       center: new L.LatLng(39.8283, -98.5795),
       zoom: 4,
       zoomControl: false,
-      attributionControl: false,
+      attributionControl: true,
       layers: [streets]
     });
 
@@ -273,41 +270,27 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       let shapeClass = 'wmm-circle ';
       let iconClasses = ' wmm-icon-circle wmm-icon-white ';
       let sizeClass = 'wmm-size-25';
-      if (marker['eventdiagnoses'][0] !== undefined) {
-        // set color of marker based on diagnosis type
-        switch (marker['eventdiagnoses'][0].diagnosis_type) {
-          case 1: {
-            colorClass = 'wmm-green';
-            break;
-          }
-          case 2: {
-            colorClass = 'wmm-blue';
-            break;
-          }
-          case 3: {
+      let animalTypes = this.getUniqueAnimalTypes(marker.events);
+      if (animalTypes.length > 1) {
+        // grey for multiple animal types
+        colorClass = 'wmm-mutedblue';
+      } else {
+        switch (animalTypes[0]) {
+          case "Mammal":
             colorClass = 'wmm-red';
             break;
-          }
-          case 4: {
-            colorClass = 'wmm-orange';
-            break;
-          }
-          case 5: {
+          case "Bird":
             colorClass = 'wmm-yellow';
             break;
-          }
-          case 6: {
-            colorClass = 'wmm-purple';
+          case "Reptile/Amphibian":
+            colorClass = 'wmm-green';
             break;
-          }
-          case 7: {
+          case "Fish":
             colorClass = 'wmm-sky';
             break;
-          }
-          case 8: {
-            colorClass = 'wmm-mutedpink';
+          case "Other":
+            colorClass = 'wmm-purple';
             break;
-          }
         }
       }
 
@@ -341,7 +324,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         // for location with multiple events, show event count on symbol, make larger and gray
         eventCount = marker.events.length;
         // iconClasses = ' wmm-icon-circle wmm-icon-white ';
-        colorClass = 'wmm-mutedblue';
         sizeClass = 'wmm-size-35';
 
       } else {
@@ -370,6 +352,22 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       this.resultsMap.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50], maxZoom: 10 });
     }
 
+  }
+
+  /**
+   * Return unique animal types for class names of the species identified in
+   * the given events. Animal types are a more user-friendly general
+   * classification of related species that will be displayed in the map and is
+   * meant to be used for color-coded categorization of events.
+   * @param events
+   */
+  getUniqueAnimalTypes(events:EventSummary[]) {
+    const animalTypes = [];
+    for (const event of events) {
+      Array.prototype.push.apply(animalTypes, getAnimalTypes(event.species));
+    }
+    // Return just unique values
+    return Array.from(new Set(animalTypes));
   }
 
   // START defining event location table

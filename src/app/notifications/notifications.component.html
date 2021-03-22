@@ -43,7 +43,7 @@
             <mat-spinner></mat-spinner>
           </div>
 
-          <mat-table [dataSource]="notificationsDataSource" matSort>
+          <mat-table [dataSource]="notificationsDataSource" matSort matSortActive="created_date" matSortDirection="desc" matSortDisableClear>
 
             <!-- Selection column -->
             <ng-container matColumnDef="select">

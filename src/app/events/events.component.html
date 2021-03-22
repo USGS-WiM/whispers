@@ -129,7 +129,7 @@
 
 <div *ngIf="dataSource" class="results-table-div">
 
-  <mat-table class="user-events-table" [dataSource]="dataSource" matSort matSortDisableClear>
+  <mat-table class="user-events-table" [dataSource]="dataSource" matSort matSortDisableClear matSortActive="start_date" matSortDirection="desc" matSortDisableClear>
 
     <!-- Checkbox column -->
     <ng-container matColumnDef="select">

@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild, ViewChildren, QueryList, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, NavigationEnd } from '@angular/router';
 import { MatDialog, MatDialogRef, MatExpansionPanel, MatTabGroup } from '@angular/material';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
@@ -9,7 +9,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
-import pdfMake from 'pdfmake/build/pdfMake';
+import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import html2canvas from 'html2canvas';
@@ -75,6 +75,7 @@ import { CircleService } from '@services/circle.service';
 import { Circle } from '@interfaces/circle';
 import { CollaborationRequestComponent } from '@app/collaboration-request/collaboration-request.component';
 import { buildMapFromList } from '@angular/flex-layout/extended/typings/style/style-transforms';
+import { GestureHandling } from 'leaflet-gesture-handling';
 declare let gtag: Function;
 
 export interface AssociatedEvents {
@@ -235,6 +236,11 @@ export class EventDetailsComponent implements OnInit {
     private router: Router
   ) {
     this.eventLocationSpecies = [];
+
+    // ensures that navigation to an event via notifications click refreshes all event data
+    router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) { this.refreshEvent(); }
+    });
 
     currentUserService.currentUser.subscribe(user => {
       this.currentUser = user;
@@ -504,6 +510,8 @@ export class EventDetailsComponent implements OnInit {
       zoom: 4,
       layers: [streets]
     });
+    this.map.addHandler("gestureHandling", GestureHandling);
+    this.map.gestureHandling.enable();
 
     this.locationMarkers = L.featureGroup().addTo(this.map);
 
@@ -543,7 +551,7 @@ export class EventDetailsComponent implements OnInit {
 
     const overlays = {
       'Flyways': flyways,
-      'Watersheds (HUC 2)': watersheds,
+      'Watersheds': watersheds,
       'Land Use': landUse
     };
 
@@ -557,19 +565,17 @@ export class EventDetailsComponent implements OnInit {
     this.mapEvent(this.eventData);
 
     this.map.on('overlayadd', (e) => {
-      console.log('overlayadd');
       if (e.name === 'Flyways') {
         this.flywaysVisible = true;
-      } else if (e.name === 'Watersheds (HUC 2)') {
+      } else if (e.name === 'Watersheds') {
         this.watershedsVisible = true;
       }
     });
 
     this.map.on('overlayremove', (e) => {
-      console.log('overlayremove');
       if (e.name === 'Flyways') {
         this.flywaysVisible = false;
-      } else if (e.name === 'Watersheds (HUC 2)') {
+      } else if (e.name === 'Watersheds') {
         this.watershedsVisible = false;
       }
     });
@@ -601,7 +607,7 @@ export class EventDetailsComponent implements OnInit {
         countyPolys.push(JSON.parse(eventlocation.administrative_level_two_points.replace('Y', '')));
       }
     }
-    console.log('mapevents ' + this.locationMarkers);
+    // console.log('mapevents ' + this.locationMarkers);
     // let eventPolys;
     if (countyPolys.length > 0) {
       if (this.eventPolys) {
@@ -1292,77 +1298,80 @@ export class EventDetailsComponent implements OnInit {
     // this.getViewPanelState(this.viewPanels);
     this.selectedTab = 0;
 
-    console.log('Event Location Species list at start of refresh: ', this.eventLocationSpecies);
+    // console.log('Event Location Species list at start of refresh: ', this.eventLocationSpecies);
 
     this.eventLocationSpecies = [];
-    console.log('Event Location Species list after set to blank array: ', this.eventLocationSpecies);
+    // console.log('Event Location Species list after set to blank array: ', this.eventLocationSpecies);
 
     this.possibleEventDiagnoses = [];
 
-    this._eventService.getEventDetails(this.eventID)
-      .subscribe(
-        (eventdetails) => {
-          this.eventData = eventdetails;
+    if (this.eventID) {
 
-          this.eventLocationSpecies = [];
+      this._eventService.getEventDetails(this.eventID)
+        .subscribe(
+          (eventdetails) => {
+            this.eventData = eventdetails;
 
-          // this.possibleEventDiagnoses = [];
-          for (const event_location of this.eventData.eventlocations) {
-            for (const locationspecies of event_location.locationspecies) {
-              locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
-              locationspecies.administrative_level_one_string = event_location.administrative_level_one_string;
-              locationspecies.country_string = event_location.country_string;
-              this.eventLocationSpecies.push(locationspecies);
+            this.eventLocationSpecies = [];
 
-              for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
-                if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
-                  this.possibleEventDiagnoses.push(speciesdiagnosis);
-                } else {
-                  // it is in there already:
-                  // check if this one's suspect field is false
-                  if (speciesdiagnosis.suspect === false) {
-                    // if it is, then we need to remove the previously added one and add this one which is suspect = false
-                    // loop thru possibleEventDiagnoses, if match, remove
-                    for (let i = 0; i < this.possibleEventDiagnoses.length; i++) {
-                      if (this.possibleEventDiagnoses[i].diagnosis === speciesdiagnosis.diagnosis) {
-                        this.possibleEventDiagnoses.splice(i, 1);
-                      }
-                    }
-                    // then add the non suspect one
+            // this.possibleEventDiagnoses = [];
+            for (const event_location of this.eventData.eventlocations) {
+              for (const locationspecies of event_location.locationspecies) {
+                locationspecies.administrative_level_two_string = event_location.administrative_level_two_string;
+                locationspecies.administrative_level_one_string = event_location.administrative_level_one_string;
+                locationspecies.country_string = event_location.country_string;
+                this.eventLocationSpecies.push(locationspecies);
+
+                for (const speciesdiagnosis of locationspecies.speciesdiagnoses) {
+                  if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', speciesdiagnosis.diagnosis)) {
                     this.possibleEventDiagnoses.push(speciesdiagnosis);
+                  } else {
+                    // it is in there already:
+                    // check if this one's suspect field is false
+                    if (speciesdiagnosis.suspect === false) {
+                      // if it is, then we need to remove the previously added one and add this one which is suspect = false
+                      // loop thru possibleEventDiagnoses, if match, remove
+                      for (let i = 0; i < this.possibleEventDiagnoses.length; i++) {
+                        if (this.possibleEventDiagnoses[i].diagnosis === speciesdiagnosis.diagnosis) {
+                          this.possibleEventDiagnoses.splice(i, 1);
+                        }
+                      }
+                      // then add the non suspect one
+                      this.possibleEventDiagnoses.push(speciesdiagnosis);
 
+                    }
                   }
                 }
+
               }
-
             }
+
+            // console.log('Event Location Species list after populated: ', this.eventLocationSpecies);
+
+            // add the "Undetermined" diagnosis to possibleDiagnoses, only if not already in the list
+            if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis)) {
+              this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
+            }
+            // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of "Pending".
+            // else if (eventdetails.complete === false) {
+            //   this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
+            // }
+
+            this.readCollaboratorArray = eventdetails.read_collaborators;
+            this.writeCollaboratorArray = eventdetails.write_collaborators;
+
+            this.eventDataLoading = false;
+
+            // see comment on line 182
+            // setTimeout(() => {
+            //   this.setViewPanelState(this.viewPanels);
+            // });
+          },
+          error => {
+            this.errorMessage = <any>error;
           }
-
-          console.log('Event Location Species list after populated: ', this.eventLocationSpecies);
-
-          // add the "Undetermined" diagnosis to possibleDiagnoses, only if not already in the list
-          if (!this.searchInArray(this.possibleEventDiagnoses, 'diagnosis', APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis)) {
-            this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN);
-          }
-          // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of "Pending".
-          // else if (eventdetails.complete === false) {
-          //   this.possibleEventDiagnoses.push(APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN);
-          // }
-
-          this.readCollaboratorArray = eventdetails.read_collaborators;
-          this.writeCollaboratorArray = eventdetails.write_collaborators;
-
-          this.eventDataLoading = false;
-
-          // see comment on line 182
-          // setTimeout(() => {
-          //   this.setViewPanelState(this.viewPanels);
-          // });
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+        );
+    }
   }
 
   // below deprecated. see comment on line 182

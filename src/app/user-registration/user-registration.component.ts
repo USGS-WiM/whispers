@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
 
@@ -11,16 +11,16 @@ import { take, takeUntil } from 'rxjs/operators';
 
 import { User } from '@interfaces/user';
 import { UserService } from '@app/services/user.service';
-import { RoleService } from '@app/services/role.service';
 import { CurrentUserService } from '@services/current-user.service';
 import { OrganizationService } from '@services/organization.service';
 
 import { Organization } from '@interfaces/organization';
-import { Role } from '@interfaces/role';
 
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
+import { ConfirmComponent } from '@confirm/confirm.component';
+import { RecaptchaComponent } from 'ng-recaptcha';
 declare let gtag: Function;
 
 @Component({
@@ -36,14 +36,13 @@ export class UserRegistrationComponent implements OnInit {
   currentUser;
 
   organizations: Organization[];
-  roles: Role[];
-
-  passwordPattern: RegExp = (/^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?\d)(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?\d)(?=.*?[^a-zA-Z0-9])).{12,}$/);
 
   userRegistrationForm: FormGroup;
 
   public filteredOrganizations: ReplaySubject<Organization[]> = new ReplaySubject<Organization[]>(1);
   organizationFilterCtrl: FormControl = new FormControl();
+
+  @ViewChild(RecaptchaComponent) recaptcha: RecaptchaComponent;
 
   /** Subject that emits when the component has been destroyed. */
   private _onDestroy = new Subject<void>();
@@ -53,16 +52,6 @@ export class UserRegistrationComponent implements OnInit {
     const confirmEmail = AC.get('confirmEmail').value; // to get value in input tag
     if (email !== confirmEmail) {
       AC.get('confirmEmail').setErrors({ matchEmail: true });
-    } else {
-      return null;
-    }
-  }
-
-  matchPassword(AC: AbstractControl) {
-    const password = AC.get('password').value; // to get value in input tag
-    const confirmPassword = AC.get('confirmPassword').value; // to get value in input tag
-    if (password !== confirmPassword) {
-      AC.get('confirmPassword').setErrors({ matchPassword: true });
     } else {
       return null;
     }
@@ -82,20 +71,16 @@ export class UserRegistrationComponent implements OnInit {
       last_name: '',
       email: ['', [Validators.required, Validators.email]],
       confirmEmail: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.compose([
-        Validators.required, Validators.pattern(this.passwordPattern)
-      ])
-      ],
-      confirmPassword: ['', Validators.compose([
-        Validators.required, Validators.pattern(this.passwordPattern)
-      ])
-      ],
+      password: this.formBuilder.group({
+        password: [""],
+        confirmPassword: [""]
+      }),
       organization: null,
-      role: null,
       comment: '',
       terms: [false, Validators.requiredTrue],
+      recaptcha: null
     }, {
-      validator: [this.matchPassword, this.matchEmail]
+      validator: [this.matchEmail]
     });
 
   }
@@ -106,8 +91,8 @@ export class UserRegistrationComponent implements OnInit {
     public snackBar: MatSnackBar,
     private currentUserService: CurrentUserService,
     private organizationService: OrganizationService,
-    private roleService: RoleService,
     private userService: UserService,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
 
@@ -154,18 +139,7 @@ export class UserRegistrationComponent implements OnInit {
         }
       );
 
-
-    // get roles from the RoleService
-    this.roleService.getRoles()
-      .subscribe(
-        roles => {
-          this.roles = roles;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-
+    this.recaptcha.siteKey = APP_SETTINGS.RECAPTCHA_SITE_KEY;
   }
 
   private filterOrganization() {
@@ -190,10 +164,8 @@ export class UserRegistrationComponent implements OnInit {
   regFirstNameTooltip() { const string = FIELD_HELP_TEXT.regFirstNameTooltip; return string; }
   regLastNameTooltip() { const string = FIELD_HELP_TEXT.regLastNameTooltip; return string; }
   regemailAddressTooltip() { const string = FIELD_HELP_TEXT.regemailAddressTooltip; return string; }
-  regPasswordTooltip() { const string = FIELD_HELP_TEXT.regPasswordTooltip; return string; }
   regTermsOfUseTooltip() { const string = FIELD_HELP_TEXT.regTermsOfUseTooltip; return string; }
   regOrganizationTooltip() { const string = FIELD_HELP_TEXT.regOrganizationTooltip; return string; }
-  regRoleTooltip() { const string = FIELD_HELP_TEXT.regRoleTooltip; return string; }
   regCommentTooltip() { const string = FIELD_HELP_TEXT.regCommentTooltip; return string; }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -206,17 +178,26 @@ export class UserRegistrationComponent implements OnInit {
 
     // delete the confirm fields for the actual submission
     delete formValue.confirmEmail;
-    delete formValue.confirmPassword;
     delete formValue.terms;
+    // Copy password to top level
+    const password = formValue.password.password;
+    delete formValue.password;
+    formValue.password = password;
 
     if (this.data.registration_type === 'public') {
       formValue.role = 7;
       formValue.organization = 1;
     }
 
-    if (this.data.registration_type === 'partner') {
+    if (this.data.registration_type === 'partner' || this.data.registration_type === 'affiliate') {
+      let roleRequested;
+      if (this.data.registration_type === 'partner') {
+        roleRequested = 5;
+      } else if (this.data.registration_type === 'affiliate') {
+        roleRequested = 6;
+      }
       formValue.new_user_change_request = {
-        'role_requested': formValue.role,
+        'role_requested': roleRequested,
         'organization_requested': formValue.organization,
         'comment': formValue.comment
       };
@@ -229,8 +210,21 @@ export class UserRegistrationComponent implements OnInit {
       .subscribe(
         (event) => {
           this.submitLoading = false;
-          this.openSnackBar('User Registration Successful', 'OK', 5000);
           this.userRegistrationDialogRef.close();
+          this.dialog.open(ConfirmComponent, {
+            data: {
+              title: "User Registration Request Successful",
+              titleIcon: "check",
+              message:
+              `Thank you for registering. We've sent an email to
+              ${this.userRegistrationForm.get('email').value}. Please click the
+              link in that email to confirm your email address and complete the
+              registration process. If you don't see the email in your inbox,
+              please also check your "Junk" or "Spam" folder.`,
+              confirmButtonText: "OK",
+              showCancelButton: false,
+            },
+          });
           // this.currentUserService.updateCurrentUser(event);
           // sessionStorage.first_name = event.first_name;
           // sessionStorage.last_name = event.last_name;
@@ -238,6 +232,18 @@ export class UserRegistrationComponent implements OnInit {
           gtag('event', 'click', { 'event_category': 'Users', 'event_label': 'New User Created' });
         },
         error => {
+
+          let parsedError = null;
+          try {
+            parsedError = JSON.parse(error);
+          } catch (error) {
+            // Ignore JSON parsing error
+          }
+          if (parsedError && parsedError.recaptcha) {
+            // If the reCAPTCHA failed to validate, reset the reCAPTCHA checkbox
+            // so that the user needs to regenerate a reCAPTCHA code
+            this.recaptcha.reset();
+          }
           this.submitLoading = false;
           this.openSnackBar('Error. User registration failed. Error message: ' + error, 'OK', 8000);
         }

@@ -15,6 +15,7 @@ import { PageData } from '@interfaces/page-data';
 import { ResultsCountService } from '@services/results-count.service';
 import { HttpHeaders } from '@angular/common/http';
 import * as FileSaver from 'file-saver';
+import clientStorage from '@app/client-storage';
 
 @Injectable()
 export class EventService {
@@ -62,7 +63,7 @@ export class EventService {
       xhr.open('GET', APP_SETTINGS.EVENT_DETAILS_URL + eventID + '/flat/?format=csv', true);
       if (this.isloggedIn) {
         xhr.setRequestHeader('Authorization',
-          'Basic ' + btoa(sessionStorage.getItem('username') + ':' + sessionStorage.getItem('password')));
+          'Basic ' + btoa(clientStorage.getItem('username') + ':' + clientStorage.getItem('password')));
       }
       xhr.send();
     });
@@ -89,6 +90,10 @@ export class EventService {
     }
     if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
+    }
+
+    if (eventQuery.event_id && eventQuery.event_id.length > 0) {
+      queryString = queryString + '&id=' + eventQuery.event_id;
     }
 
     if (eventQuery.event_type && eventQuery.event_type.length > 0) {
@@ -162,7 +167,7 @@ export class EventService {
       xhr.open('GET', APP_SETTINGS.EVENTS_SUMMARIES_URL + queryString, true);
       if (this.isloggedIn) {
         xhr.setRequestHeader('Authorization',
-          'Basic ' + btoa(sessionStorage.getItem('username') + ':' + sessionStorage.getItem('password')));
+          'Basic ' + btoa(clientStorage.getItem('username') + ':' + clientStorage.getItem('password')));
       }
       xhr.send();
     });
@@ -182,6 +187,10 @@ export class EventService {
     }
     if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
+    }
+
+    if (eventQuery.event_id && eventQuery.event_id.length > 0) {
+      queryString = queryString + '&id=' + eventQuery.event_id;
     }
 
     if (eventQuery.event_type && eventQuery.event_type.length > 0) {
@@ -243,6 +252,10 @@ export class EventService {
     }
     if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
+    }
+
+    if (eventQuery.event_id && eventQuery.event_id.length > 0) {
+      queryString = queryString + '&id=' + eventQuery.event_id;
     }
 
     if (eventQuery.event_type && eventQuery.event_type.length > 0) {
@@ -331,7 +344,7 @@ export class EventService {
     ////////////////////////////////////////
 
     let options;
-    if (sessionStorage.username !== undefined) {
+    if (clientStorage.username !== undefined) {
       options = new RequestOptions({
         headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
       });
@@ -350,7 +363,7 @@ export class EventService {
   public getEventSummary(eventID): Observable<EventSummary> {
 
     let options;
-    if (sessionStorage.username !== undefined) {
+    if (clientStorage.username !== undefined) {
       options = new RequestOptions({
         headers: APP_SETTINGS.MIN_AUTH_JSON_HEADERS
       });
@@ -412,6 +425,10 @@ export class EventService {
     }
     if (eventQuery.end_date !== null && eventQuery.end_date !== '' && eventQuery.end_date !== undefined) {
       queryString = queryString + '&end_date=' + eventQuery.end_date.toString();
+    }
+
+    if (eventQuery.event_id && eventQuery.event_id.length > 0) {
+      queryString = queryString + '&id=' + eventQuery.event_id;
     }
 
     if (eventQuery.event_type && eventQuery.event_type.length > 0) {

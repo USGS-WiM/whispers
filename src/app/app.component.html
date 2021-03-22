@@ -8,19 +8,28 @@
           <div class="whispers-logo">
             <img src="./assets/w-logo.png" />
           </div>
-          <span>HISPers</span>
+          <span class="whispers-logo-text">HISPers</span>
+          <span class="whispers-subtitle">
+            <span>Wildlife Health Information Sharing Partnership</span>
+            <small>event reporting system</small>
+          </span>
         </a>
-        <span class="whispers-subtitle">
-          <span>Wildlife Health Information Sharing Partnership</span>
-          <small>event reporting system</small>
-        </span>
       </div>
 
       <div class="nav-buttons">
         <span class="about-button-span">
           <button mat-button (click)="openAboutDialog()" aria-label="About this application">
-            <mat-icon class="icon">info_outline</mat-icon>
-            <span class="header-button-text">About</span>
+            About
+          </button>
+        </span>
+        <span *ngIf="currentUser.username == ''">
+          <button mat-button aria-label="Login" (click)="openAuthenticationDialog()">
+            Log In
+          </button>
+        </span>
+        <span *ngIf="currentUser.role == undefined">
+          <button mat-button aria-label="Register" (click)="openUserRegistrationRoleSelectionDialog()">
+            Register
           </button>
         </span>
       </div>
@@ -30,7 +39,7 @@
 
 
     <!-- Bottom Header Bar -->
-    <mat-toolbar-row class="toolbar-bottom-row">
+    <mat-toolbar-row class="toolbar-bottom-row" *ngIf="currentUser.username != ''">
 
       <!-- Left Side of bottom toolbar -->
       <div class="left">
@@ -67,14 +76,6 @@
 
       <!-- Right side of bottom toolbar -->
       <div class="right">
-
-        <!-- Login Status -->
-        <span *ngIf="currentUser.username == ''" class="login-status signin-button">
-          <button mat-button aria-label="Login" (click)="openAuthenticationDialog()" *ngIf="currentUser.username == ''">
-            Log In&nbsp;
-            <mat-icon>account_box</mat-icon>
-          </button>
-        </span>
 
         <!-- Notifications -->
         <span *ngIf="currentUser.username !== '' && currentUser.role !== 7"

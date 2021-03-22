@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { Inject } from '@angular/core';
-import pdfMake from 'pdfmake/build/pdfMake';
+import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
@@ -136,19 +136,15 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         }
       );
 
-    const Attr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      // tslint:disable-next-line:max-line-length
-      Url = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
-    const streets = L.tileLayer(Url, { id: 'mapbox.streets', attribution: Attr });
-    const streets2 = L.tileLayer(Url, { id: 'mapbox.streets', attribution: Attr, noWrap: true });
+    // Code for maps with results to produce map images for report
+    const streets = esri.basemapLayer('Streets');
+    const streets2 = esri.basemapLayer('Streets');
 
     this.natMap = new L.Map('hiddenNatMap', {
       center: new L.LatLng(39.8283, -98.5795),
       zoomControl: false,
       zoom: 3,
-      attributionControl: false,
+      attributionControl: true,
       layers: [streets]
     });
 
@@ -156,7 +152,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
       center: new L.LatLng(39.8283, -98.5795),
       zoom: 5,
       zoomControl: false,
-      attributionControl: false,
+      attributionControl: true,
       layers: [streets2]
     });
 
@@ -264,12 +260,14 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
     if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
       setTimeout(() => {
-        this.combinedComments = this.data.event_data.combined_comments;
-        for (const comment of this.combinedComments) {
-          // set the comment type string for each comment
-          comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
-          // set the source string for each comment
-          comment.source = this.eventLocationName(comment);
+        if (this.data.event_data.combined_comments) {
+          this.combinedComments = this.data.event_data.combined_comments;
+          for (const comment of this.combinedComments) {
+            // set the comment type string for each comment
+            comment.comment_type_string = this.displayValuePipe.transform(comment.comment_type, 'name', this.commentTypes);
+            // set the source string for each comment
+            comment.source = this.eventLocationName(comment);
+          }
         }
       }, 1000);
     }
@@ -348,9 +346,11 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
   getlocations() {
     // getting the locations that eventlocations
     this.data.event_data.eventlocations.forEach(e => {
-      e.comments.forEach(s => {
-        this.locationIdArray.push(s);
-      });
+      if (e.comments) {
+        e.comments.forEach(s => {
+          this.locationIdArray.push(s);
+        });
+      }
     });
 
     // stripping the objects that have duplicate object_ids so that the count is i++.
@@ -585,7 +585,10 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
 
   makeCommentsTable() {
     let commentTable;
+
+    if (this.combinedComments) {
     this.combinedComments = this.combinedComments.sort((a, b) => a.date_sort - b.date_sort);
+    }
 
     // START defining comment table
     const commentHeaders = {
@@ -1758,7 +1761,7 @@ export class EventPublicReportComponent implements OnInit, AfterViewInit {
         docDefinition.content.push(this.makeLocationTable(loc));
       }
 
-      if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined) {
+      if (this.data.user.role !== 7 && this.data.user.role !== 6 && this.data.user.role !== undefined && this.data.event_data.combined_comments) {
         docDefinition.content.push(this.makeCommentsTitle());
         docDefinition.content.push(this.makeCommentsTable());
       }

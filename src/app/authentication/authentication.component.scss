@@ -6,13 +6,8 @@
 .vertical-form-container {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 .form-control {
-    width: 18em; 
-}
-.forgot-password-div {
-    width:20em;
-}
-.text-small {
-    font-size: small;
+    width: 18em;
 }

@@ -6,7 +6,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from '@angular/material';
 import { debounceTime, distinctUntilChanged, startWith, tap, delay } from 'rxjs/operators';
-import { merge ,  Subscription } from 'rxjs';
+import { merge, Subscription } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar } from '@angular/material';
 import { EventService } from '@services/event.service';
@@ -14,7 +14,6 @@ import { EventService } from '@services/event.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { SearchDialogComponent } from '@search-dialog/search-dialog.component';
-import { SearchDialogService } from '@app/search-dialog/search-dialog.service';
 
 import { DisplayQuery } from '@interfaces/display-query';
 
@@ -29,6 +28,8 @@ import { ConfirmComponent } from '@confirm/confirm.component';
 import { EventGroupManagementComponent } from '@app/event-group-management/event-group-management.component';
 import { EventGroupManagementService } from '@services/event-group-management.service';
 import { CurrentUserService } from '@services/current-user.service';
+import { SearchFormService } from '@search-form/search-form.service';
+import clientStorage from '@app/client-storage';
 
 
 @Component({
@@ -85,8 +86,8 @@ export class EventsComponent implements AfterViewInit, OnInit {
   ];
 
   // tslint:disable-next-line:max-line-length
-  currentSearchQuery = sessionStorage.getItem('currentSearch') ? JSON.parse(sessionStorage.getItem('currentSearch')) : APP_SETTINGS.DEFAULT_SEARCH_QUERY;
-  currentDisplayQuery: DisplayQuery = sessionStorage.getItem('currentDisplayQuery') ? JSON.parse(sessionStorage.getItem('currentDisplayQuery')) : APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
+  currentSearchQuery = clientStorage.getItem('currentSearch') ? JSON.parse(clientStorage.getItem('currentSearch')) : APP_SETTINGS.DEFAULT_SEARCH_QUERY;
+  currentDisplayQuery: DisplayQuery = clientStorage.getItem('currentDisplayQuery') ? JSON.parse(clientStorage.getItem('currentDisplayQuery')) : APP_SETTINGS.DEFAULT_DISPLAY_QUERY;
 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -96,7 +97,7 @@ export class EventsComponent implements AfterViewInit, OnInit {
     public snackBar: MatSnackBar,
     private eventService: EventService,
     private resultsCountService: ResultsCountService,
-    private searchDialogService: SearchDialogService,
+    private searchFormService: SearchFormService,
     private currentUserService: CurrentUserService,
     private eventGroupManagementService: EventGroupManagementService,
     private router: Router,
@@ -112,7 +113,7 @@ export class EventsComponent implements AfterViewInit, OnInit {
       this.eventCount = count;
     });
 
-    this.searchQuerySubscription = this.searchDialogService.getSearchQuery().subscribe(
+    this.searchQuerySubscription = this.searchFormService.getSearchQuery().subscribe(
       searchQuery => {
 
         // this.resultsLoading = true;
@@ -151,7 +152,7 @@ export class EventsComponent implements AfterViewInit, OnInit {
         this.selectedEventGroup = selectedEventGroup;
       });
 
-    this.searchQuerySubscription = this.searchDialogService.getDisplayQuery().subscribe(
+    this.searchQuerySubscription = this.searchFormService.getDisplayQuery().subscribe(
       displayQuery => {
         this.currentDisplayQuery = displayQuery;
         console.log('New display query: ' + this.currentDisplayQuery);
@@ -239,7 +240,12 @@ export class EventsComponent implements AfterViewInit, OnInit {
 
   loadEventsPage() {
 
-    this.orderParams = this.sort.active;
+    if (this.sort.active) {
+      this.orderParams = this.sort.active;
+    } else {
+      this.orderParams = '-start_date';
+    }
+
     if (this.sort.direction === 'desc') {
       this.orderParams = '-' + this.sort.active;
     }

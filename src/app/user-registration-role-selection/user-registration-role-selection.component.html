@@ -1,0 +1,126 @@
+<h1 mat-dialog-title><mat-icon>person</mat-icon> WHISPers Registration</h1>
+
+<mat-dialog-content>
+  <p>
+    <strong>
+      Looking to go beyond the basics? Select the option that best describes
+      you.
+    </strong>
+  </p>
+  <div class="role-options">
+    <div class="role-option">
+      <div class="role-option-description">
+        I work for a federal, state, or tribal natural resource organization
+        with management authority over wild species or lands (state or tribal
+        wildlife agency, refuge, national park, etc.)
+      </div>
+
+      <div class="role-option-feature">
+        <mat-icon>done</mat-icon>
+        Request assistance from the USGS National Wildlife Health Center
+      </div>
+      <div class="role-option-feature">
+        <mat-icon>done</mat-icon>
+        Put a dot on the map!
+      </div>
+      <div class="role-option-feature">
+        <mat-icon>done</mat-icon>
+        Control data privacy settings
+      </div>
+      <div class="role-option-feature">
+        <mat-icon>done</mat-icon>
+        Collaborate on events with external colleagues
+      </div>
+      <div class="role-option-feature">
+        <mat-icon>done</mat-icon>
+        Get notified about disease events of interest
+      </div>
+      <div class="role-option-feature">
+        <mat-icon>done</mat-icon>
+        Save searches
+      </div>
+
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="this.dialogRef.close('partner')"
+      >
+        Yes, that's me!
+      </button>
+    </div>
+    <div class="role-option">
+      <div class="role-option-description">
+        I work for a natural resource organization that does NOT have management
+        authority over wild species or lands (university, conservation
+        nonprofit, zoo, etc.)
+      </div>
+
+      <div class="role-option-feature">
+        <mat-icon>done</mat-icon>
+        Collaborate on events with management partners
+      </div>
+      <div class="role-option-feature">
+        <mat-icon>done</mat-icon>
+        Get notified about disease events of interest
+      </div>
+      <div class="role-option-feature">
+        <mat-icon>done</mat-icon>
+        Save searches
+      </div>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="this.dialogRef.close('affiliate')"
+      >
+        Sign me up!
+      </button>
+    </div>
+    <div class="role-option">
+      <div class="role-option-description">
+        I have a general interest in wildlife health data and do NOT work for a
+        natural resource organization
+      </div>
+
+      <div class="role-option-feature">
+        <mat-icon>done</mat-icon>
+        Save searches
+      </div>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="this.dialogRef.close('public')"
+      >
+        I go here!
+      </button>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="register-buttons-row">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="this.dialogRef.close('partner')"
+    >
+      Yes, that's me!
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="this.dialogRef.close('affiliate')"
+    >
+      Sign me up!
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="this.dialogRef.close('public')"
+    >
+      I go here!
+    </button>
+  </div>
+  <div class="form-buttons-flex center">
+    <button mat-stroked-button mat-dialog-close>Cancel</button>
+  </div>
+</mat-dialog-actions>

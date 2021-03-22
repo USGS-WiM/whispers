@@ -161,7 +161,25 @@
       ],
       "@browser-warning/*": [
         "app/browser-warning/*"
-      ]
+      ],
+      "@search-form/*": [
+        "app/search-form/*"
+      ],
+      "@chiplist/*": [
+        "app/chiplist/*"
+      ],
+      "@request-password-reset/*": [
+        "app/request-password-reset/*"
+      ],
+      "@reset-password/*": [
+        "app/reset-password/*"
+      ],
+      "@new-password-form/*": [
+        "app/new-password-form/*"
+      ],
+      "@user-registration-role-selection/*": [
+        "app/user-registration-role-selection/*"
+      ],
     },
     "target": "es5",
     "typeRoots": [

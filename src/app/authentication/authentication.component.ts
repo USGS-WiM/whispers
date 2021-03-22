@@ -15,6 +15,8 @@ import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { User } from '@interfaces/user';
+import { ConfirmComponent } from '@confirm/confirm.component';
+import clientStorage from '@app/client-storage';
 
 
 @Component({
@@ -32,6 +34,8 @@ export class AuthenticationComponent implements OnInit {
 
   submitLoading = false;
 
+  invalidPassword = false;
+
   constructor(
     formBuilder: FormBuilder,
     public authenticationService: AuthenticationService,
@@ -39,7 +43,9 @@ export class AuthenticationComponent implements OnInit {
     public currentUserService: CurrentUserService,
     public router: Router,
     private route: ActivatedRoute,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.loginForm = formBuilder.group({
       username: ['', Validators.required],
@@ -69,7 +75,7 @@ export class AuthenticationComponent implements OnInit {
 
   onSubmit(formValue: any) {
     this.submitLoading = true;
-    if (sessionStorage.getItem('username')) {
+    if (clientStorage.getItem('username')) {
       this.authenticationService.logout();
     }
 
@@ -85,7 +91,21 @@ export class AuthenticationComponent implements OnInit {
           this.submitLoading = false;
           this.authenticationErrorFlag = true;
           if (error.status === 403) {
-            this.openSnackBar('Invalid username and/or password. Please try again.', 'OK', 8000);
+            const errorData = error.json();
+            if (errorData.type === 'unverified_email') {
+              this.dialog.open(ConfirmComponent, {
+                data: {
+                  title: "User Email Not Verified",
+                  titleIcon: "warning",
+                  message:
+                    "Please verify your email address by clicking the link in the email we sent. Once your email is verified you will be able to log in.",
+                  confirmButtonText: "OK",
+                  showCancelButton: false,
+                },
+              });
+            } else {
+              this.openSnackBar('Invalid username and/or password. Please try again.', 'OK', 8000);
+            }
           } else {
             this.openSnackBar('Error. Failed to login. Error message: ' + error, 'OK', 8000);
           }
@@ -100,6 +120,10 @@ export class AuthenticationComponent implements OnInit {
     } else {
       this.router.navigate([`../home/`], { relativeTo: this.route });
     }
+  }
+
+  forgotPassword() {
+    this.authenticationDialogRef.close("request-password-reset");
   }
 
 }

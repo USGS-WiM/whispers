@@ -349,7 +349,10 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     }
 
     if (this.locationMarkers.getBounds().isValid() === true) {
-      this.resultsMap.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50], maxZoom: 10 });
+      this.resultsMap.fitBounds(this.locationMarkers.getBounds(), { padding: [0, 0], maxZoom: 10 });
+      setTimeout(() => {
+        this.resultsMap.zoomOut(1);
+      }, 500);
     }
 
   }

@@ -127,14 +127,14 @@
         </mat-panel-title>
         <mat-panel-description *ngIf="!narrow || !diagnosisTypePanelOpenState">
           <app-chiplist [items]="selectedDiagnosisTypes" [maxItems]="narrow ? 3 : undefined"
-            (removed)="removeChip($event, selectedDiagnosisTypes, 'diagosisType')" (moreClicked)="diagnosisTypeExpansionPanel.open()"
+            (removed)="removeChip($event, selectedDiagnosisTypes, 'diagnosisType')" (moreClicked)="diagnosisTypeExpansionPanel.open()"
             [join]="!narrow ? (searchForm.get('diagnosis_type_includes_all').value ? 'and' : 'or') : ''">
           </app-chiplist>
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div>
         <app-chiplist *ngIf="narrow" [items]="selectedDiagnosisTypes"
-          (removed)="removeChip($event, selectedDiagnosisTypes, 'diagosisType')"
+          (removed)="removeChip($event, selectedDiagnosisTypes, 'diagnosisType')"
           [join]="searchForm.get('diagnosis_type_includes_all').value ? 'and' : 'or'">
         </app-chiplist>
         <div class="autocomplete-input">

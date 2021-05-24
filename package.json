@@ -29,6 +29,7 @@
     "@types/geojson": "^7946.0.7",
     "@types/leaflet": "^1.5.5",
     "core-js": "2.5.7",
+    "dom-to-image": "^2.6.0",
     "esri-leaflet": "^2.3.2",
     "esri-leaflet-legend": "^2.0.1",
     "file-saver": "^2.0.2",

@@ -10,6 +10,7 @@ import { MatDialog, MatDialogRef, MatChipRemove } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import html2canvas from 'html2canvas';
+import domtoimage from 'dom-to-image';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -93,6 +94,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
   resultsMap;
   resultsMapUrl;
+  mapurl;
   clicked = false;
   icon;
   locationMarkers;
@@ -125,15 +127,20 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     this.pngURL = this.canvas.toDataURL();
 
     // Code for map with results to produce map image for report
-    const streets = esri.basemapLayer('Streets');
+    //const streets = esri.basemapLayer('Streets');
 
     this.resultsMap = new L.Map('resultsMap', {
       center: new L.LatLng(39.8283, -98.5795),
       zoom: 4,
       zoomControl: false,
-      attributionControl: true,
-      layers: [streets]
+      attributionControl: false,
+      fadeAnimation: false,
+      zoomAnimation: false
     });
+    
+    // testing dom to image
+    const tileLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+    .addTo(this.resultsMap);
 
     this.locationMarkers = L.featureGroup().addTo(this.resultsMap);
     L.control.scale({ position: 'bottomright' }).addTo(this.resultsMap);
@@ -143,6 +150,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     this.resultsMap.touchZoom.disable();
     this.resultsMap.doubleClickZoom.disable();
     this.resultsMap.scrollWheelZoom.disable();
+
     // End code for map with results to produce map image for report
 
     this.adminLevelOnes = this.data.adminLevelOnes;
@@ -599,166 +607,46 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
   downloadResultsSummaryReport() {
     this.loadingReport = true;
-    gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'Downloaded Summary Report' });
-    let mapurl;
-    // using html2Canvas to capture leaflet map for reports
-    // solution found here: https://github.com/niklasvh/html2canvas/issues/567
-    const contextMapPane = $('.leaflet-map-pane')[0];
-    const mapTransform = contextMapPane.style.transform.split(',');
-    // const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
-    let mapX;
-
-    // fix for firefox
-    if ((mapTransform[0] === undefined) || (mapTransform[0] === '')) {
-      mapX = '';
-    } else {
-      mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
-    }
-    let mapY;
-    // fix for firefox
-    if ((mapTransform[1] === undefined) || (mapTransform[1] === '')) {
-      mapY = '';
-    } else {
-      mapY = parseFloat(mapTransform[1].replace('px', ''));
-    }
-    contextMapPane.style.transform = '';
-    contextMapPane.style.left = mapX + 'px';
-    contextMapPane.style.top = mapY + 'px';
-
-    const contextMapTiles = $('img.leaflet-tile');
-    const tilesLeft = [];
-    const tilesTop = [];
-    const tileMethod = [];
-    for (let i = 0; i < contextMapTiles.length; i++) {
-      if (contextMapTiles[i].style.left !== '') {
-        tilesLeft.push(parseFloat(contextMapTiles[i].style.left.replace('px', '')));
-        tilesTop.push(parseFloat(contextMapTiles[i].style.top.replace('px', '')));
-        tileMethod[i] = 'left';
-      } else if (contextMapTiles[i].style.transform !== '') {
-        const tileTransform = contextMapTiles[i].style.transform.split(',');
-        tilesLeft[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
-        tilesTop[i] = parseFloat(tileTransform[1].replace('px', ''));
-        contextMapTiles[i].style.transform = '';
-        tileMethod[i] = 'transform';
-      } else {
-        tilesLeft[i] = 0;
-        // tilesRight[i] = 0;
-        tileMethod[i] = 'neither';
-      }
-      contextMapTiles[i].style.left = (tilesLeft[i]) + 'px';
-      contextMapTiles[i].style.top = (tilesTop[i]) + 'px';
-    }
-
-    const contextMapDivIcons = $('.leaflet-marker-icon');
-    const dx = [];
-    const dy = [];
-    const mLeft = [];
-    const mTop = [];
-    for (let i = 0; i < contextMapDivIcons.length; i++) {
-      const curTransform = contextMapDivIcons[i].style.transform;
-      const splitTransform = curTransform.split(',');
-      if (splitTransform[0] === '') {
-
-      } else {
-        dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
-      }
-      if (splitTransform[0] === '') {
-
-        // when printing without reloading the style.transform property is blank
-        // but the values we need are in the style.cssText string
-        // so with the code below I'm manipulating those strings to get the values we need
-
-        dx.push(contextMapDivIcons[i].style.cssText.split(' left: ')[1].split('px')[0]);
-        dy.push(contextMapDivIcons[i].style.cssText.split('top')[1].replace('px;', ''));
-      } else {
-        dy.push(parseFloat(splitTransform[1].replace('px', '')));
-      }
-      // dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
-      // dy.push(parseFloat(splitTransform[1].replace('px', '')));
-      contextMapDivIcons[i].style.transform = '';
-      contextMapDivIcons[i].style.left = dx[i] + 'px';
-      contextMapDivIcons[i].style.top = dy[i] + 'px';
-    }
-
-    const mapWidth = parseFloat($('#map').css('width').replace('px', ''));
-    const mapHeight = parseFloat($('#map').css('height').replace('px', ''));
-
-    /* const linesLayer = $('svg.leaflet-zoom-animated')[0];
-    let oldLinesWidth;
-    if (oldLinesWidth === undefined) {
-      oldLinesWidth = '';
-    } else {
-      oldLinesWidth = linesLayer.getAttribute('width');
-    }
-    const oldLinesHeight = linesLayer.getAttribute('height');
-    const oldViewbox = linesLayer.getAttribute('viewBox');
-    linesLayer.setAttribute('width', mapWidth.toString());
-    linesLayer.setAttribute('height', mapHeight.toString());
-    linesLayer.setAttribute('viewBox', '0 0 ' + mapWidth + ' ' + mapHeight);
-    const linesTransform = linesLayer.style.transform.split(',');
-    const linesX = parseFloat(linesTransform[0].split('(')[1].replace('px', ''));
-    const linesY = parseFloat(linesTransform[1].replace('px', ''));
-    linesLayer.style.transform = '';
-    linesLayer.style.left = '';
-    linesLayer.style.top = ''; */
-
+    let event;
     const options = {
       useCORS: true,
     };
+    // commenting out since I'm hitting it so much
+    //gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'Downloaded Summary Report' });
 
-    /* this.resultsMapUrl = html2canvas(document.getElementById('resultsMap'), options).then((canvas) => {
-      url = canvas.toDataURL('image/png');
-      console.log('results map url returned');
-      this.mapImageProcessed = true;
-      return url;
-    }); */
+    // setting up the map element
+    let mapElement = document.querySelector("#resultsMap");
 
-    for (let i = 0; i < contextMapTiles.length; i++) {
-      if (tileMethod[i] === 'left') {
-        contextMapTiles[i].style.left = (tilesLeft[i]) + 'px';
-        contextMapTiles[i].style.top = (tilesTop[i]) + 'px';
-      } else if (tileMethod[i] === 'transform') {
-        contextMapTiles[i].style.left = '';
-        contextMapTiles[i].style.top = '';
-        contextMapTiles[i].style.transform = 'translate(' + tilesLeft[i] + 'px, ' + tilesTop[i] + 'px)';
-      } else {
-        contextMapTiles[i].style.left = '0px';
-        contextMapTiles[i].style.top = '0px';
-        contextMapTiles[i].style.transform = 'translate(0px, 0px)';
-      }
-    }
-    for (let i = 0; i < contextMapDivIcons.length; i++) {
-      contextMapDivIcons[i].style.transform = 'translate(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
-      contextMapDivIcons[i].style.marginLeft = mLeft[i] + 'px';
-      contextMapDivIcons[i].style.marginTop = mTop[i] + 'px';
-    }
+    // height and width of the map
+    let width = 400;
+    let height = 350;
 
-    // Not need lines of code for what we're doing but leaving in incase it's needed sometime in the future
-    /* linesLayer.style.transform = 'translate(' + (linesX) + 'px,' + (linesY) + 'px)';
-    linesLayer.setAttribute('viewBox', oldViewbox);
-    linesLayer.setAttribute('width', oldLinesWidth);
-    linesLayer.setAttribute('height', oldLinesHeight); */
+    // need to get this working
+    /* mapElement.style.width = `${width}px`;
+    mapElement.style.height = `${height}px`; */
 
-    contextMapPane.style.transform = 'translate(' + (mapX) + 'px,' + (mapY) + 'px)';
-    contextMapPane.style.left = '';
-    contextMapPane.style.top = '';
+    // downloads as jpg; just testing to see how it looked; won't be the same as converting it to a dataurl
+    domtoimage.toJpeg(document.getElementById('resultsMap'), { quality: 0.95 })
+    .then(function (dataUrl) {
+        var link = document.createElement('a');
+        link.download = 'my-image-name.jpeg';
+        link.href = dataUrl;
+        link.click();
+    });
+
+    const dataURL = domtoimage.toPng(mapElement, { width, height });
+    console.log(dataURL);
+    const imgElement = document.createElement("img");
+    imgElement.src = dataURL;
+    document.body.appendChild(imgElement);
+    
+    window.dispatchEvent(event); // Dispatching an event for when the image is done rendering
     // placeholder for google analytics event
     let legendURL;
-    let event;
+    
     html2canvas(document.getElementById('legendImage'), options).then(function (canvas) {
       legendURL = canvas.toDataURL('image/png');
     });
-    // Getting date/time for timestamp
-    html2canvas(document.getElementById('resultsMap'), options)
-      .then(function (canvas) {
-        event = new Event('image_ready');
-        mapurl = canvas.toDataURL('image/png');
-        window.dispatchEvent(event); // Dispatching an event for when the image is done rendering
-        console.log('canvas success');
-      })
-      .catch(err => {
-        console.log('error canvas', err);
-      });
 
     window.addEventListener('image_ready', () => {
       const mortEvents = [];
@@ -1237,7 +1125,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               },
               {
                 alignment: 'justify',
-                image: mapurl,
+                image: this.mapurl,
                 width: 320,
                 height: 270
               },
@@ -1378,7 +1266,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         ],
         images: {
           logo: this.pngURL,
-          nationalMap: mapurl,
+          nationalMap: this.mapurl,
           legend: legendURL
         },
         styles: {

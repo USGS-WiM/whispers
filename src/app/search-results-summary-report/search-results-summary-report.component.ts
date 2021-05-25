@@ -93,8 +93,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   pngURL;
 
   resultsMap;
-  resultsMapUrl;
-  mapurl;
   clicked = false;
   icon;
   locationMarkers;
@@ -127,20 +125,17 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     this.pngURL = this.canvas.toDataURL();
 
     // Code for map with results to produce map image for report
-    //const streets = esri.basemapLayer('Streets');
+    const streets = esri.basemapLayer('Streets');
 
     this.resultsMap = new L.Map('resultsMap', {
       center: new L.LatLng(39.8283, -98.5795),
       zoom: 4,
       zoomControl: false,
-      attributionControl: false,
+      attributionControl: true,
       fadeAnimation: false,
-      zoomAnimation: false
+      zoomAnimation: false,
+      layers: [streets]
     });
-    
-    // testing dom to image
-    const tileLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
-    .addTo(this.resultsMap);
 
     this.locationMarkers = L.featureGroup().addTo(this.resultsMap);
     L.control.scale({ position: 'bottomright' }).addTo(this.resultsMap);
@@ -608,42 +603,28 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   downloadResultsSummaryReport() {
     this.loadingReport = true;
     let event;
+    let mapUrl;
     const options = {
       useCORS: true,
     };
-    // commenting out since I'm hitting it so much
-    //gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'Downloaded Summary Report' });
 
-    // setting up the map element
-    let mapElement = document.querySelector("#resultsMap");
+    // google analytics event
+    gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'Downloaded Summary Report' });
 
-    // height and width of the map
-    let width = 400;
-    let height = 350;
-
-    // need to get this working
-    /* mapElement.style.width = `${width}px`;
-    mapElement.style.height = `${height}px`; */
-
-    // downloads as jpg; just testing to see how it looked; won't be the same as converting it to a dataurl
-    domtoimage.toJpeg(document.getElementById('resultsMap'), { quality: 0.95 })
-    .then(function (dataUrl) {
+    // converting map div to png and dataurl for use in pdfmake
+    domtoimage.toPng(document.getElementById('resultsMap'), { quality: 0.95, width: 320, height: 270 })
+      .then(function (dataUrl) {
         var link = document.createElement('a');
         link.download = 'my-image-name.jpeg';
         link.href = dataUrl;
-        link.click();
+        mapUrl = link.href;
+        event = new Event('image_ready');
+        window.dispatchEvent(event); // Dispatching an event for when the image is done rendering
     });
 
-    const dataURL = domtoimage.toPng(mapElement, { width, height });
-    console.log(dataURL);
-    const imgElement = document.createElement("img");
-    imgElement.src = dataURL;
-    document.body.appendChild(imgElement);
-    
-    window.dispatchEvent(event); // Dispatching an event for when the image is done rendering
-    // placeholder for google analytics event
     let legendURL;
     
+    // converting legend to image
     html2canvas(document.getElementById('legendImage'), options).then(function (canvas) {
       legendURL = canvas.toDataURL('image/png');
     });
@@ -1125,7 +1106,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               },
               {
                 alignment: 'justify',
-                image: this.mapurl,
+                image: mapUrl,
                 width: 320,
                 height: 270
               },
@@ -1266,7 +1247,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         ],
         images: {
           logo: this.pngURL,
-          nationalMap: this.mapurl,
+          nationalMap: mapUrl,
           legend: legendURL
         },
         styles: {

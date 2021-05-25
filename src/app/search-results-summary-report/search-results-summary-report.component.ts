@@ -9,7 +9,6 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import { MatDialog, MatDialogRef, MatChipRemove } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
-import html2canvas from 'html2canvas';
 import domtoimage from 'dom-to-image';
 
 import { APP_SETTINGS } from '@app/app.settings';
@@ -604,6 +603,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     this.loadingReport = true;
     let event;
     let mapUrl;
+    let legendURL;
     const options = {
       useCORS: true,
     };
@@ -615,20 +615,21 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     domtoimage.toPng(document.getElementById('resultsMap'), { quality: 0.95, width: 320, height: 270 })
       .then(function (dataUrl) {
         var link = document.createElement('a');
-        link.download = 'my-image-name.jpeg';
         link.href = dataUrl;
         mapUrl = link.href;
         event = new Event('image_ready');
         window.dispatchEvent(event); // Dispatching an event for when the image is done rendering
     });
 
-    let legendURL;
-    
-    // converting legend to image
-    html2canvas(document.getElementById('legendImage'), options).then(function (canvas) {
-      legendURL = canvas.toDataURL('image/png');
+    // converting legend div to png and dataurl for use in pdfmake
+    domtoimage.toPng(document.getElementById('legendImage'), { quality: 0.95 })
+      .then(function (dataUrl) {
+        var legendlink = document.createElement('a');
+        legendlink.href = dataUrl;
+        legendURL = legendlink.href;
     });
 
+    // Image is rendered and prepping the data for pdfmake template
     window.addEventListener('image_ready', () => {
       const mortEvents = [];
       const survEvents = [];

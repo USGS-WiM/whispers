@@ -576,6 +576,44 @@ export class SearchFormComponent implements OnInit {
     this.searchForm.markAsDirty();
   }
 
+  retrieveFilteredDiagnosisList(diagnosisTypesArray) {
+
+    const self = this;
+    this.diagnosesLoading = true;
+
+    const diagnosisTypeIDArray = [];
+    for (const diagnosisType of diagnosisTypesArray) {
+      diagnosisTypeIDArray.push(diagnosisType.id);
+    }
+
+    const diagnosisTypeQueryString = 'diagnosis_type=' + diagnosisTypeIDArray.toString();
+
+    this.diagnosisService.queryDiagnoses(diagnosisTypeQueryString)
+      .subscribe(
+        diagnoses => {
+
+          // needed to use the 'self' proxy for 'this' because of a not fully understood scoping issue
+          self.diagnoses = diagnoses;
+          // alphabetize the admmin level twos list
+          self.diagnoses.sort(function (a, b) {
+            if (a.name < b.name) { return -1; }
+            if (a.name > b.name) { return 1; }
+            return 0;
+          });
+
+          this.diagnosesLoading = false;
+          this.filteredDiagnoses = this.diagnosisControl.valueChanges.pipe(
+            startWith(null),
+            map(val => this.filter(val, this.diagnoses, 'name')));
+        },
+        error => {
+          this.errorMessage = <any>error;
+          this.diagnosesLoading = false;
+        }
+      );
+
+  }
+
   addChip(event: MatAutocompleteSelectedEvent, selectedValuesArray: any, control: string): void {
 
     const self = this;
@@ -611,39 +649,7 @@ export class SearchFormComponent implements OnInit {
     ///////////////
 
     if (control === 'diagnosisType') {
-
-      this.diagnosesLoading = true;
-
-      const diagnosisTypeIDArray = [];
-      for (const diagnosisType of selectedValuesArray) {
-        diagnosisTypeIDArray.push(diagnosisType.id);
-      }
-      const diagnosisTypeQueryString = 'diagnosis_type=' + diagnosisTypeIDArray.toString();
-
-      this.diagnosisService.queryDiagnoses(diagnosisTypeQueryString)
-        .subscribe(
-          diagnoses => {
-
-            // needed to use the 'self' proxy for 'this' because of a not fully understood scoping issue
-            self.diagnoses = diagnoses;
-            // alphabetize the admmin level twos list
-            self.diagnoses.sort(function (a, b) {
-              if (a.name < b.name) { return -1; }
-              if (a.name > b.name) { return 1; }
-              return 0;
-            });
-
-            this.diagnosesLoading = false;
-            this.filteredDiagnoses = this.diagnosisControl.valueChanges.pipe(
-              startWith(null),
-              map(val => this.filter(val, this.diagnoses, 'name')));
-          },
-          error => {
-            this.errorMessage = <any>error;
-            this.diagnosesLoading = false;
-          }
-        );
-
+        this.retrieveFilteredDiagnosisList(selectedValuesArray);
     }
 
     //////////////
@@ -702,6 +708,10 @@ export class SearchFormComponent implements OnInit {
       this.filteredAdminLevelTwos = this.adminLevelTwoControl.valueChanges.pipe(
         startWith(null),
         map(val => this.filter(val, this.administrative_level_two, 'name')));
+    }
+
+    if (control === 'diagnosisType') {
+      this.retrieveFilteredDiagnosisList(selectedValuesArray);
     }
 
     // Form validity must consider the 'selectedValuesArray' so manually trigger revalidation

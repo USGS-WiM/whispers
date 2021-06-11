@@ -124,7 +124,7 @@ export class BulkUploadComponent implements OnInit {
     const array = [];
     const stringArray = JSON.parse('[' + diagnosisIDArray + ']');
     for (const item of stringArray) {
-      array.push({ 'diagnosis': item });
+      if (item !== undefined && item !== null ) {array.push({ 'diagnosis': item })};
     }
     return array;
   }

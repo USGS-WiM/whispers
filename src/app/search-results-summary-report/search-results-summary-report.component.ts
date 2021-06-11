@@ -805,7 +805,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         // calc for Number of Animals Affected
         number_animals_affected += element.affected_count;
 
-        // initial calc for Species Most Affected
+        // initial calc for Most Frequent Species
         if (speciesArray.length === 0) {
           element.species.forEach(species => {
             speciesArray.push({ name: species.name, count: 1 });
@@ -1092,7 +1092,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                     [{ border: [false, false, true, false], text: 'Most Frequent Event Diagnosis', bold: true, alignment: 'right' }, { text: most_frequent_diagnosis, alignment: 'left' }],
                     [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, number_animals_affected],
                     [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, number_species_affected],
-                    [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, { text: species_most_affected, alignment: 'left' }],
+                    [{ border: [false, false, true, false], text: 'Most Frequent Species', bold: true, alignment: 'right' }, { text: species_most_affected, alignment: 'left' }],
                     [{ border: [false, false, true, false], text: 'Average Event Time Span', bold: true, alignment: 'right' }, average_event_time_span.toFixed(0).toString() + ' days'],
                     [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [{ text: eventsAndlinksAffected, alignment: 'left' }]],
                     [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [{ text: eventsAndlinksLongest, alignment: 'left' }]],
@@ -1180,7 +1180,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                 [{ text: 'Most Frequent Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.mostFrequentEvtDiag, border: [false, false, false, false] }],
                 [{ text: '# of Animals Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numAnimalsAffectedDefinition, border: [false, false, false, false] }],
                 [{ text: '# of Species Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numSpeciesAffectedDefinition, border: [false, false, false, false] }],
-                [{ text: 'Species Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesMostAffectedDefinition, border: [false, false, false, false] }],
+                [{ text: 'Most Frequent Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesMostAffectedDefinition, border: [false, false, false, false] }],
                 [{ text: 'Average Event Time Span', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.avgEventTimeSpan, border: [false, false, false, false] }],
                 [{ text: 'Event with Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventWithMostAffected, border: [false, false, false, false] }],
                 [{ text: 'Longest Running Event', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.longestRunningEvent, border: [false, false, false, false] }],

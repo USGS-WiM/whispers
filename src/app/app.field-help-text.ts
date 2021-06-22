@@ -173,10 +173,10 @@ public static get circleNameTooltip(): string { return 'Short name for the user 
 public static get circleDiscriptionTooltip(): string { return 'Description of the user circle.'; }
 // END DASHBOARD
 
-// PDF Defnitions
+// PDF Definitions
 public static get numberOfLocationsDefinition(): string { return 'Number of locations (e.g., town or lake) that each represents a distinct spatial cluster of animal observations within a county.'; }
 public static get numberOfSpeciesDefinition(): string { return 'Total number of species affected.'; }
-public static get speciesMostAffectedDefinition(): string { return 'Top species affected based on sick and dead numbers reported.'; }
+public static get speciesMostAffectedDefinition(): string { return 'Top species based on the number of events with that species reported.'; }
 public static get eventVisibility(): string { return 'Indicates whether event is visible to the public or not.'; }
 public static get startEndDatesDefinition(): string { return 'Beginning date of the event (considering all locations). Ending date of the event (considering all locations).'; }
 public static get associatedEventDefinition(): string { return 'Events that are biologically equivalent and were grouped together by wildlife disease specialists at the USGS National Wildlife Health Center.'; }
@@ -187,8 +187,6 @@ public static get mostFrequentEvtDiag(): string { return 'Top event diagnosis or
 public static get avgEventTimeSpan(): string { return 'Mean number of days between start and end dates across all events. If no end date provided for an event, date of report generation was used.'; }
 public static get eventWithMostAffected(): string { return 'WHISPers event(s) with the highest number of animals affected.'; }
 public static get longestRunningEvent(): string { return 'WHISPers event(s) with the longest time span in days. If no end date provided for an event, date of report generation was used.'; }
-
-
-// PDF Defnition
+// END PDF Definitions
 
 }

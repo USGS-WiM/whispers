@@ -12,7 +12,6 @@ import * as esri from 'esri-leaflet';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-import html2canvas from 'html2canvas';
 // import * as esrilegend from 'esri-leaflet-legend';
 
 import { MatSnackBar } from '@angular/material';

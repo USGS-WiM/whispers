@@ -9,7 +9,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import { MatDialog, MatDialogRef, MatChipRemove } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
-import html2canvas from 'html2canvas';
+import domtoimage from 'dom-to-image';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -92,7 +92,6 @@ export class SearchResultsSummaryReportComponent implements OnInit {
   pngURL;
 
   resultsMap;
-  resultsMapUrl;
   clicked = false;
   icon;
   locationMarkers;
@@ -132,6 +131,8 @@ export class SearchResultsSummaryReportComponent implements OnInit {
       zoom: 4,
       zoomControl: false,
       attributionControl: true,
+      fadeAnimation: false,
+      zoomAnimation: false,
       layers: [streets]
     });
 
@@ -143,6 +144,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     this.resultsMap.touchZoom.disable();
     this.resultsMap.doubleClickZoom.disable();
     this.resultsMap.scrollWheelZoom.disable();
+
     // End code for map with results to produce map image for report
 
     this.adminLevelOnes = this.data.adminLevelOnes;
@@ -349,7 +351,10 @@ export class SearchResultsSummaryReportComponent implements OnInit {
     }
 
     if (this.locationMarkers.getBounds().isValid() === true) {
-      this.resultsMap.fitBounds(this.locationMarkers.getBounds(), { padding: [50, 50], maxZoom: 10 });
+      this.resultsMap.fitBounds(this.locationMarkers.getBounds(), { padding: [0, 0], maxZoom: 10 });
+      setTimeout(() => {
+        this.resultsMap.zoomOut(1);
+      }, 500);
     }
 
   }
@@ -596,167 +601,35 @@ export class SearchResultsSummaryReportComponent implements OnInit {
 
   downloadResultsSummaryReport() {
     this.loadingReport = true;
-    gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'Downloaded Summary Report' });
-    let mapurl;
-    // using html2Canvas to capture leaflet map for reports
-    // solution found here: https://github.com/niklasvh/html2canvas/issues/567
-    const contextMapPane = $('.leaflet-map-pane')[0];
-    const mapTransform = contextMapPane.style.transform.split(',');
-    // const mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
-    let mapX;
-
-    // fix for firefox
-    if ((mapTransform[0] === undefined) || (mapTransform[0] === '')) {
-      mapX = '';
-    } else {
-      mapX = parseFloat(mapTransform[0].split('(')[1].replace('px', ''));
-    }
-    let mapY;
-    // fix for firefox
-    if ((mapTransform[1] === undefined) || (mapTransform[1] === '')) {
-      mapY = '';
-    } else {
-      mapY = parseFloat(mapTransform[1].replace('px', ''));
-    }
-    contextMapPane.style.transform = '';
-    contextMapPane.style.left = mapX + 'px';
-    contextMapPane.style.top = mapY + 'px';
-
-    const contextMapTiles = $('img.leaflet-tile');
-    const tilesLeft = [];
-    const tilesTop = [];
-    const tileMethod = [];
-    for (let i = 0; i < contextMapTiles.length; i++) {
-      if (contextMapTiles[i].style.left !== '') {
-        tilesLeft.push(parseFloat(contextMapTiles[i].style.left.replace('px', '')));
-        tilesTop.push(parseFloat(contextMapTiles[i].style.top.replace('px', '')));
-        tileMethod[i] = 'left';
-      } else if (contextMapTiles[i].style.transform !== '') {
-        const tileTransform = contextMapTiles[i].style.transform.split(',');
-        tilesLeft[i] = parseFloat(tileTransform[0].split('(')[1].replace('px', ''));
-        tilesTop[i] = parseFloat(tileTransform[1].replace('px', ''));
-        contextMapTiles[i].style.transform = '';
-        tileMethod[i] = 'transform';
-      } else {
-        tilesLeft[i] = 0;
-        // tilesRight[i] = 0;
-        tileMethod[i] = 'neither';
-      }
-      contextMapTiles[i].style.left = (tilesLeft[i]) + 'px';
-      contextMapTiles[i].style.top = (tilesTop[i]) + 'px';
-    }
-
-    const contextMapDivIcons = $('.leaflet-marker-icon');
-    const dx = [];
-    const dy = [];
-    const mLeft = [];
-    const mTop = [];
-    for (let i = 0; i < contextMapDivIcons.length; i++) {
-      const curTransform = contextMapDivIcons[i].style.transform;
-      const splitTransform = curTransform.split(',');
-      if (splitTransform[0] === '') {
-
-      } else {
-        dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
-      }
-      if (splitTransform[0] === '') {
-
-        // when printing without reloading the style.transform property is blank
-        // but the values we need are in the style.cssText string
-        // so with the code below I'm manipulating those strings to get the values we need
-
-        dx.push(contextMapDivIcons[i].style.cssText.split(' left: ')[1].split('px')[0]);
-        dy.push(contextMapDivIcons[i].style.cssText.split('top')[1].replace('px;', ''));
-      } else {
-        dy.push(parseFloat(splitTransform[1].replace('px', '')));
-      }
-      // dx.push(parseFloat(splitTransform[0].split('(')[1].replace('px', '')));
-      // dy.push(parseFloat(splitTransform[1].replace('px', '')));
-      contextMapDivIcons[i].style.transform = '';
-      contextMapDivIcons[i].style.left = dx[i] + 'px';
-      contextMapDivIcons[i].style.top = dy[i] + 'px';
-    }
-
-    const mapWidth = parseFloat($('#map').css('width').replace('px', ''));
-    const mapHeight = parseFloat($('#map').css('height').replace('px', ''));
-
-    /* const linesLayer = $('svg.leaflet-zoom-animated')[0];
-    let oldLinesWidth;
-    if (oldLinesWidth === undefined) {
-      oldLinesWidth = '';
-    } else {
-      oldLinesWidth = linesLayer.getAttribute('width');
-    }
-    const oldLinesHeight = linesLayer.getAttribute('height');
-    const oldViewbox = linesLayer.getAttribute('viewBox');
-    linesLayer.setAttribute('width', mapWidth.toString());
-    linesLayer.setAttribute('height', mapHeight.toString());
-    linesLayer.setAttribute('viewBox', '0 0 ' + mapWidth + ' ' + mapHeight);
-    const linesTransform = linesLayer.style.transform.split(',');
-    const linesX = parseFloat(linesTransform[0].split('(')[1].replace('px', ''));
-    const linesY = parseFloat(linesTransform[1].replace('px', ''));
-    linesLayer.style.transform = '';
-    linesLayer.style.left = '';
-    linesLayer.style.top = ''; */
-
+    let event;
+    let mapUrl;
+    let legendURL;
     const options = {
       useCORS: true,
     };
 
-    /* this.resultsMapUrl = html2canvas(document.getElementById('resultsMap'), options).then((canvas) => {
-      url = canvas.toDataURL('image/png');
-      console.log('results map url returned');
-      this.mapImageProcessed = true;
-      return url;
-    }); */
+    // google analytics event
+    gtag('event', 'click', { 'event_category': 'Search', 'event_label': 'Downloaded Summary Report' });
 
-    for (let i = 0; i < contextMapTiles.length; i++) {
-      if (tileMethod[i] === 'left') {
-        contextMapTiles[i].style.left = (tilesLeft[i]) + 'px';
-        contextMapTiles[i].style.top = (tilesTop[i]) + 'px';
-      } else if (tileMethod[i] === 'transform') {
-        contextMapTiles[i].style.left = '';
-        contextMapTiles[i].style.top = '';
-        contextMapTiles[i].style.transform = 'translate(' + tilesLeft[i] + 'px, ' + tilesTop[i] + 'px)';
-      } else {
-        contextMapTiles[i].style.left = '0px';
-        contextMapTiles[i].style.top = '0px';
-        contextMapTiles[i].style.transform = 'translate(0px, 0px)';
-      }
-    }
-    for (let i = 0; i < contextMapDivIcons.length; i++) {
-      contextMapDivIcons[i].style.transform = 'translate(' + dx[i] + 'px, ' + dy[i] + 'px, 0)';
-      contextMapDivIcons[i].style.marginLeft = mLeft[i] + 'px';
-      contextMapDivIcons[i].style.marginTop = mTop[i] + 'px';
-    }
-
-    // Not need lines of code for what we're doing but leaving in incase it's needed sometime in the future
-    /* linesLayer.style.transform = 'translate(' + (linesX) + 'px,' + (linesY) + 'px)';
-    linesLayer.setAttribute('viewBox', oldViewbox);
-    linesLayer.setAttribute('width', oldLinesWidth);
-    linesLayer.setAttribute('height', oldLinesHeight); */
-
-    contextMapPane.style.transform = 'translate(' + (mapX) + 'px,' + (mapY) + 'px)';
-    contextMapPane.style.left = '';
-    contextMapPane.style.top = '';
-    // placeholder for google analytics event
-    let legendURL;
-    let event;
-    html2canvas(document.getElementById('legendImage'), options).then(function (canvas) {
-      legendURL = canvas.toDataURL('image/png');
-    });
-    // Getting date/time for timestamp
-    html2canvas(document.getElementById('resultsMap'), options)
-      .then(function (canvas) {
+    // converting map div to png and dataurl for use in pdfmake
+    domtoimage.toPng(document.getElementById('resultsMap'), { quality: 0.95, width: 320, height: 270 })
+      .then(function (dataUrl) {
+        var link = document.createElement('a');
+        link.href = dataUrl;
+        mapUrl = link.href;
         event = new Event('image_ready');
-        mapurl = canvas.toDataURL('image/png');
         window.dispatchEvent(event); // Dispatching an event for when the image is done rendering
-        console.log('canvas success');
-      })
-      .catch(err => {
-        console.log('error canvas', err);
-      });
+    });
 
+    // converting legend div to png and dataurl for use in pdfmake
+    domtoimage.toPng(document.getElementById('legendImage'), { quality: 0.95 })
+      .then(function (dataUrl) {
+        var legendlink = document.createElement('a');
+        legendlink.href = dataUrl;
+        legendURL = legendlink.href;
+    });
+
+    // Image is rendered and prepping the data for pdfmake template
     window.addEventListener('image_ready', () => {
       const mortEvents = [];
       const survEvents = [];
@@ -932,7 +805,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         // calc for Number of Animals Affected
         number_animals_affected += element.affected_count;
 
-        // initial calc for Species Most Affected
+        // initial calc for Most Frequent Species
         if (speciesArray.length === 0) {
           element.species.forEach(species => {
             speciesArray.push({ name: species.name, count: 1 });
@@ -1219,7 +1092,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                     [{ border: [false, false, true, false], text: 'Most Frequent Event Diagnosis', bold: true, alignment: 'right' }, { text: most_frequent_diagnosis, alignment: 'left' }],
                     [{ border: [false, false, true, false], text: '# of Animals Affected', bold: true, alignment: 'right' }, number_animals_affected],
                     [{ border: [false, false, true, false], text: '# of Species Affected', bold: true, alignment: 'right' }, number_species_affected],
-                    [{ border: [false, false, true, false], text: 'Species Most Affected', bold: true, alignment: 'right' }, { text: species_most_affected, alignment: 'left' }],
+                    [{ border: [false, false, true, false], text: 'Most Frequent Species', bold: true, alignment: 'right' }, { text: species_most_affected, alignment: 'left' }],
                     [{ border: [false, false, true, false], text: 'Average Event Time Span', bold: true, alignment: 'right' }, average_event_time_span.toFixed(0).toString() + ' days'],
                     [{ border: [false, false, true, false], text: 'Event with Most Affected', bold: true, alignment: 'right' }, [{ text: eventsAndlinksAffected, alignment: 'left' }]],
                     [{ border: [false, false, true, false], text: 'Longest Running Event', bold: true, alignment: 'right' }, [{ text: eventsAndlinksLongest, alignment: 'left' }]],
@@ -1234,7 +1107,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
               },
               {
                 alignment: 'justify',
-                image: mapurl,
+                image: mapUrl,
                 width: 320,
                 height: 270
               },
@@ -1307,7 +1180,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
                 [{ text: 'Most Frequent Event Diagnosis', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.mostFrequentEvtDiag, border: [false, false, false, false] }],
                 [{ text: '# of Animals Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numAnimalsAffectedDefinition, border: [false, false, false, false] }],
                 [{ text: '# of Species Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.numSpeciesAffectedDefinition, border: [false, false, false, false] }],
-                [{ text: 'Species Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesMostAffectedDefinition, border: [false, false, false, false] }],
+                [{ text: 'Most Frequent Species', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.speciesMostAffectedDefinition, border: [false, false, false, false] }],
                 [{ text: 'Average Event Time Span', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.avgEventTimeSpan, border: [false, false, false, false] }],
                 [{ text: 'Event with Most Affected', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.eventWithMostAffected, border: [false, false, false, false] }],
                 [{ text: 'Longest Running Event', border: [false, false, true, false], alignment: 'right', bold: true }, { text: this.longestRunningEvent, border: [false, false, false, false] }],
@@ -1375,7 +1248,7 @@ export class SearchResultsSummaryReportComponent implements OnInit {
         ],
         images: {
           logo: this.pngURL,
-          nationalMap: mapurl,
+          nationalMap: mapUrl,
           legend: legendURL
         },
         styles: {

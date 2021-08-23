@@ -42,7 +42,7 @@
     "ng-recaptcha": "^5.0.0",
     "ngx-mat-select-search": "^1.8.0",
     "ngx-papaparse": "^3.0.4",
-    "papaparse": "^5.1.0",
+    "papaparse": "^5.2.0",
     "pdfmake": "0.1.62",
     "rxjs": "6.5.3",
     "search_api": "https://github.com/usgs/search_api.git",

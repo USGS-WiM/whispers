@@ -910,6 +910,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
           //     this.availableDiagnoses.push(diagnosis);
           //   }
           // }
+
+          // add the "Undetermined" diagnosis to possibleDiagnoses
+          this.availableDiagnoses.push({ "id" : APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis,"name" : APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis_string});
+
         },
         error => {
           this.errorMessage = <any>error;

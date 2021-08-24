@@ -259,7 +259,7 @@
                           </span>
                           <br>
                           <span *ngIf="speciesdiagnosis.organizations_string.length > 0">Tested by
-                            <span *ngFor="let org of speciesdiagnosis.organizations_string">{{org}} </span>
+                            <span *ngFor="let org of speciesdiagnosis.organizations_string; last as isLast"><span *ngIf=!isLast>{{org}},&nbsp;&nbsp;</span><span *ngIf=isLast>{{org}}</span></span>
                           </span><br />
                         </span>
                       </span>

@@ -150,7 +150,8 @@
               <td>{{speciesdiagnosis.tested_count}}</td>
               <td>{{speciesdiagnosis.diagnosis_count}}</td>
               <td>{{speciesdiagnosis.suspect ? 'Yes' : 'No'}}</td>
-              <td>{{speciesdiagnosis.organizations_string}}</td>
+              <!-- <td>{{speciesdiagnosis.organizations_string}}</td> -->
+              <td><span *ngFor="let org of speciesdiagnosis.organizations_string; last as isLast"><span *ngIf=!isLast>{{org}},&nbsp;&nbsp;</span><span *ngIf=isLast>{{org}}</span></span></td>
               <td>
                 <button mat-icon-button aria-label="Edit species diagnosis" color="accent" [disabled]="!permissions.update || eventData.complete"
                   (click)="editSpeciesDiagnosis(speciesdiagnosis, detail.element)">

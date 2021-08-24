@@ -611,16 +611,17 @@
                                 <mat-icon>add_comment</mat-icon>
                                 Add Comment
                               </button><br>
+                              <span  *ngIf="currentUser.role === 1 || currentUser.role === 2">
                               <button mat-icon-button aria-label="respond to service request" color="primary"
                                 [disabled]="!eventData.permissions.update || eventData.complete"
-                                (click)="addServiceRequestResponse(servicerequest)"
-                                *ngIf="currentUser.role === 1 || currentUser.role === 2">
+                                (click)="addServiceRequestResponse(servicerequest)">
                                 <mat-icon>assignment_turned_in</mat-icon>
                                 Respond
                               </button>
                               <mat-icon style="margin-left: 40px;" class="hint-hover-text" matSuffix
                                 matTooltip={{nwhcCarcassSubApprovalTooltip()}} matTooltipClass="tooltip-breakline">
                                 help</mat-icon>
+                              </span>
                               <mat-divider [inset]="true" *ngIf="!last" class="request-divider"></mat-divider>
                             </li>
                           </ul>

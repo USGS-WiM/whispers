@@ -600,10 +600,16 @@ export class EventDetailsComponent implements OnInit {
     const markers = [];
     const countyPolys = [];
     this.unMappables = [];
+    // establish a temp array to store the admin level twos added in the loop, to prevent duplicates.
+    let adminLevelTwos = [];
     for (const eventlocation of eventData.eventlocations) {
+      // add the eventocation to the markers array
       markers.push(eventlocation);
-      if (eventlocation.administrative_level_two_points !== null) {
+      
+      if (eventlocation.administrative_level_two_points !== null && !adminLevelTwos.includes(eventlocation.administrative_level_two)) {
         countyPolys.push(JSON.parse(eventlocation.administrative_level_two_points.replace('Y', '')));
+        // push the AL2 of the current event location to the temp array
+        adminLevelTwos.push(eventlocation.administrative_level_two);
       }
     }
     // console.log('mapevents ' + this.locationMarkers);

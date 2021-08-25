@@ -605,7 +605,6 @@ export class EventDetailsComponent implements OnInit {
     for (const eventlocation of eventData.eventlocations) {
       // add the eventocation to the markers array
       markers.push(eventlocation);
-      
       if (eventlocation.administrative_level_two_points !== null && !adminLevelTwos.includes(eventlocation.administrative_level_two)) {
         countyPolys.push(JSON.parse(eventlocation.administrative_level_two_points.replace('Y', '')));
         // push the AL2 of the current event location to the temp array

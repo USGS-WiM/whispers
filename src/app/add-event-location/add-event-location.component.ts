@@ -185,6 +185,7 @@ export class AddEventLocationComponent implements OnInit {
     private dialog: MatDialog,
     private datePipe: DatePipe,
     // public addEventLocationDialogRef: MatDialogRef<AddEventLocationComponent>,
+    private eventService: EventService,
     private landOwnershipService: LandOwnershipService,
     private countryService: CountryService,
     private adminLevelOneService: AdministrativeLevelOneService,
@@ -747,6 +748,49 @@ export class AddEventLocationComponent implements OnInit {
   }
   getLocationSpecies() {
     return this.addEventLocationForm.controls.new_location_species['controls'];
+  }
+
+
+  enforceCaptiveRule(selected_captive_value) {
+    if (selected_captive_value) {
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Location species captive',
+            titleIcon: 'warning',
+            message: 'Setting this species as captive will set the event record to private (Not Visible to Public). Select "Cancel" to maintain current event visibility. Select "OK" to change to private.',
+            confirmButtonText: 'OK',
+            showCancelButton: true
+          }
+        }
+      );
+
+      this.confirmDialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          // update the event record to public = false
+          const update = {
+            'id': this.eventData.id,
+            'event_type': this.eventData.event_type,
+            'public': false
+          };
+          this.eventService.update(update)
+            .subscribe(
+              (event) => {
+                // this.submitLoading = false;
+                this.openSnackBar('Event updated to Not Visible to Public in database. Will show on next refresh.', 'OK', 5000);
+                // excluding this line below because it would trigger a whole page refresh, losing the user's form progress.
+                // this.dataUpdatedService.triggerRefresh();
+              },
+              error => {
+                // this.submitLoading = false;
+                this.openSnackBar('Error. Event visibility not updated. Error message: ' + error, 'OK', 15000);
+              } 
+            )
+        }
+      });
+
+    }
   }
 
   // location contacts

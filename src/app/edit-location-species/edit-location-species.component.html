@@ -130,7 +130,8 @@
       </mat-form-field>
 
       <mat-form-field class="form-control">
-        <mat-select placeholder="Captive" formControlName="captive">
+        <mat-select placeholder="Captive" formControlName="captive" 
+        (ngModelChange)="enforceCaptiveRule($event)">
           <mat-option [value]="true">Captive > 72 hours</mat-option>
           <mat-option [value]="false">Wild and/or free-ranging</mat-option>
         </mat-select>

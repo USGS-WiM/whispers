@@ -55,6 +55,7 @@ import { DiagnosisService } from '@services/diagnosis.service';
 import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
 import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
 import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
+import { DataUpdatedService } from '@app/services/data-updated.service';
 
 import { APP_SETTINGS } from '@app/app.settings';
 import { APP_UTILITIES } from '@app/app.utilities';
@@ -202,6 +203,7 @@ export class AddEventLocationComponent implements OnInit {
     private contactService: ContactService,
     private createContactSevice: CreateContactService,
     private eventLocationService: EventLocationService,
+    private dataUpdatedService: DataUpdatedService,
     private displayValuePipe: DisplayValuePipe,
     public snackBar: MatSnackBar,
     // @Inject(MAT_DIALOG_DATA) public data: any
@@ -778,9 +780,9 @@ export class AddEventLocationComponent implements OnInit {
             .subscribe(
               (event) => {
                 // this.submitLoading = false;
-                this.openSnackBar('Event updated to Not Visible to Public in database. Will show on next refresh.', 'OK', 5000);
+                this.openSnackBar('Event updated to Not Visible to Public.', 'OK', 5000);
                 // excluding this line below because it would trigger a whole page refresh, losing the user's form progress.
-                // this.dataUpdatedService.triggerRefresh();
+                this.dataUpdatedService.triggerRefresh();
               },
               error => {
                 // this.submitLoading = false;

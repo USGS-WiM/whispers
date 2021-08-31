@@ -506,7 +506,7 @@
                                 <span class="identifier">{{comment.created_by_first_name}}
                                   {{comment.created_by_last_name}} | {{comment.created_by_organization_string}}</span>
                                 <button mat-icon-button aria-label="delete event comment" color="warn"
-                                  [disabled]="!eventData.permissions.destroy || eventData.complete"
+                                  [disabled]="!eventData.permissions.destroy"
                                   (click)="openCommentDeleteConfirm(comment.id)">
                                   Delete
                                 </button>

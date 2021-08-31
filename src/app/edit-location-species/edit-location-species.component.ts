@@ -453,7 +453,7 @@ export class EditLocationSpeciesComponent implements OnInit {
             .subscribe(
               (event) => {
                 // this.submitLoading = false;
-                this.openSnackBar('Event updated to Not Visible to Public in database. Will show on next refresh.', 'OK', 5000);
+                this.openSnackBar('Event updated to Not Visible to Public.', 'OK', 5000);
                 // excluding this line below because it would trigger a whole page refresh, losing the user's form progress.
                 // this.dataUpdatedService.triggerRefresh();
               },

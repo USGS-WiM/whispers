@@ -463,7 +463,7 @@
                                 <!--eventOrganization.id will need to be updated (unless service response is updated - currently this is the org ID, not eventOrg ID-->
                                 <button mat-icon-button aria-label="delete event organization" color="warn"
                                   [disabled]="!eventData.permissions.destroy || eventData.complete"
-                                  (click)="openEventOrganizationDeleteConfirm(eventOrganization.id)">
+                                  (click)="deleteEventOrg(eventOrganization.id, eventOrganization.organization.name)">
                                   <mat-icon>remove_circle</mat-icon>
                                 </button>
                               </td>

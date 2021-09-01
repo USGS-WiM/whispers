@@ -259,7 +259,7 @@
                           </span>
                           <br>
                           <span *ngIf="speciesdiagnosis.organizations_string.length > 0">Tested by
-                            <span *ngFor="let org of speciesdiagnosis.organizations_string">{{org}} </span>
+                            <span *ngFor="let org of speciesdiagnosis.organizations_string; last as isLast"><span *ngIf=!isLast>{{org}},&nbsp;&nbsp;</span><span *ngIf=isLast>{{org}}</span></span>
                           </span><br />
                         </span>
                       </span>
@@ -463,7 +463,7 @@
                                 <!--eventOrganization.id will need to be updated (unless service response is updated - currently this is the org ID, not eventOrg ID-->
                                 <button mat-icon-button aria-label="delete event organization" color="warn"
                                   [disabled]="!eventData.permissions.destroy || eventData.complete"
-                                  (click)="openEventOrganizationDeleteConfirm(eventOrganization.id)">
+                                  (click)="deleteEventOrg(eventOrganization.id, eventOrganization.organization.name)">
                                   <mat-icon>remove_circle</mat-icon>
                                 </button>
                               </td>
@@ -506,7 +506,7 @@
                                 <span class="identifier">{{comment.created_by_first_name}}
                                   {{comment.created_by_last_name}} | {{comment.created_by_organization_string}}</span>
                                 <button mat-icon-button aria-label="delete event comment" color="warn"
-                                  [disabled]="!eventData.permissions.destroy || eventData.complete"
+                                  [disabled]="!eventData.permissions.destroy"
                                   (click)="openCommentDeleteConfirm(comment.id)">
                                   Delete
                                 </button>
@@ -611,16 +611,17 @@
                                 <mat-icon>add_comment</mat-icon>
                                 Add Comment
                               </button><br>
+                              <span  *ngIf="currentUser.role === 1 || currentUser.role === 2">
                               <button mat-icon-button aria-label="respond to service request" color="primary"
                                 [disabled]="!eventData.permissions.update || eventData.complete"
-                                (click)="addServiceRequestResponse(servicerequest)"
-                                *ngIf="currentUser.role === 1 || currentUser.role === 2">
+                                (click)="addServiceRequestResponse(servicerequest)">
                                 <mat-icon>assignment_turned_in</mat-icon>
                                 Respond
                               </button>
                               <mat-icon style="margin-left: 40px;" class="hint-hover-text" matSuffix
                                 matTooltip={{nwhcCarcassSubApprovalTooltip()}} matTooltipClass="tooltip-breakline">
                                 help</mat-icon>
+                              </span>
                               <mat-divider [inset]="true" *ngIf="!last" class="request-divider"></mat-divider>
                             </li>
                           </ul>

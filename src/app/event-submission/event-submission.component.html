@@ -1122,7 +1122,7 @@
                               <mat-select placeholder="Event Diagnosis" formControlName="diagnosis">
                                 <mat-option *ngFor="let diagnosis of availableDiagnoses" value="{{diagnosis.id}}"
                                   [disabled]="checkForDuplicateEventDiagnosis(diagnosis.id)">
-                                  {{diagnosis.name}}<span *ngIf="diagnosis.suspect"> (suspect)</span></mat-option>
+                                  {{diagnosis.name}}<span *ngIf="diagnosis.suspect"> suspect</span></mat-option>
                               </mat-select>
                               <mat-icon class="hint-hover-text" matSuffix matTooltip={{eventDiagnosisTooltip()}}
                                 matTooltipClass="tooltip-breakline">

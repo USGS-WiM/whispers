@@ -18,6 +18,10 @@ import { LocationSpeciesService } from '@services/location-species.service';
 import { AgeBiasService } from '@app/services/age-bias.service';
 import { SexBiasService } from '@app/services/sex-bias.service';
 
+import { EventService } from '@app/services/event.service';
+
+import { ConfirmComponent } from '@confirm/confirm.component';
+
 import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
 
 import { DataUpdatedService } from '@app/services/data-updated.service';
@@ -31,6 +35,7 @@ declare let gtag: Function;
 export class EditLocationSpeciesComponent implements OnInit {
   @ViewChild('speciesSelect') speciesSelect: MatSelect;
   locationSpeciesForm: FormGroup;
+  confirmDialogRef: MatDialogRef<ConfirmComponent>;
 
   species: Species[];
   // filteredSpecies: Observable<any[]>;
@@ -109,10 +114,12 @@ export class EditLocationSpeciesComponent implements OnInit {
     private formBuilder: FormBuilder,
     public editLocationSpeciesDialogRef: MatDialogRef<EditLocationSpeciesComponent>,
     private locationSpeciesService: LocationSpeciesService,
+    private eventService: EventService,
     private ageBiasService: AgeBiasService,
     private sexBiasService: SexBiasService,
     private dataUpdatedService: DataUpdatedService,
     public snackBar: MatSnackBar,
+    private dialog: MatDialog,
     private speciesService: SpeciesService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -418,4 +425,47 @@ export class EditLocationSpeciesComponent implements OnInit {
     }
     return species_id_match;
   }
+
+  enforceCaptiveRule(selected_captive_value) {
+    if (selected_captive_value) {
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Location species captive',
+            titleIcon: 'warning',
+            message: 'Setting this species as captive will set the event record to private (Not Visible to Public). Select "Cancel" to maintain current event visibility. Select "OK" to change to private.',
+            confirmButtonText: 'OK',
+            showCancelButton: true
+          }
+        }
+      );
+
+      this.confirmDialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          // update the event record to public = false
+          const update = {
+            'id': this.data.eventData.id,
+            'event_type': this.data.eventData.event_type,
+            'public': false
+          };
+          this.eventService.update(update)
+            .subscribe(
+              (event) => {
+                // this.submitLoading = false;
+                this.openSnackBar('Event updated to Not Visible to Public.', 'OK', 5000);
+                // excluding this line below because it would trigger a whole page refresh, losing the user's form progress.
+                // this.dataUpdatedService.triggerRefresh();
+              },
+              error => {
+                // this.submitLoading = false;
+                this.openSnackBar('Error. Event visibility not updated. Error message: ' + error, 'OK', 15000);
+              } 
+            )
+        }
+      });
+
+    }
+  }
+
 }

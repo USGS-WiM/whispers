@@ -600,10 +600,15 @@ export class EventDetailsComponent implements OnInit {
     const markers = [];
     const countyPolys = [];
     this.unMappables = [];
+    // establish a temp array to store the admin level twos added in the loop, to prevent duplicates.
+    let adminLevelTwos = [];
     for (const eventlocation of eventData.eventlocations) {
+      // add the eventocation to the markers array
       markers.push(eventlocation);
-      if (eventlocation.administrative_level_two_points !== null) {
+      if (eventlocation.administrative_level_two_points !== null && !adminLevelTwos.includes(eventlocation.administrative_level_two)) {
         countyPolys.push(JSON.parse(eventlocation.administrative_level_two_points.replace('Y', '')));
+        // push the AL2 of the current event location to the temp array
+        adminLevelTwos.push(eventlocation.administrative_level_two);
       }
     }
     // console.log('mapevents ' + this.locationMarkers);
@@ -1226,15 +1231,38 @@ export class EventDetailsComponent implements OnInit {
       );
   }
 
-  openEventOrganizationDeleteConfirm(id) {
+  deleteEventOrg(id, name){
+    // TODO: run enforceEventOrgRule to ensure the org can be deleted
+    // if it can, direct to openEventOrganizationDeleteConfirm
+    if(this.eventData.organizations.length < 2) {
+      // pop up a warning dialog here, and do nothing further (dont delete the org)
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
+        {
+          disableClose: true,
+          data: {
+            title: 'Event Organization Required',
+            titleIcon: 'warning',
+            message: 'An event organization is required for all events. You are attempting to delete the only associated event organization. ' +
+            'Please add an additional event organization before deleting ' + name + '.',
+            confirmButtonText: 'OK',
+            showCancelButton: false
+          }
+        }
+      )
+    } else {
+      this.openEventOrganizationDeleteConfirm(id, name);
+    }
+  }
+
+  openEventOrganizationDeleteConfirm(id, name) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent,
       {
         data: {
           title: 'Delete Event Organization Confirm',
           titleIcon: 'delete_forever',
           // tslint:disable-next-line:max-line-length
-          message: 'Are you sure you want to delete this event organization? This action cannot be undone.',
-          confirmButtonText: 'Yes, Delete Event Organization',
+          message: 'Are you sure you want to delete ' + name + ' as an event organization for this event?',
+          confirmButtonText: 'Yes, Delete',
           messageIcon: '',
           showCancelButton: true
         }
@@ -1246,6 +1274,10 @@ export class EventDetailsComponent implements OnInit {
         this.deleteEventOrganization(id);
       }
     });
+  }
+
+  enforceEventOrgRule(){
+
   }
 
   deleteEventOrganization(id: number) {
@@ -1292,7 +1324,6 @@ export class EventDetailsComponent implements OnInit {
   }
 
   refreshEvent() {
-    // see comment on line 182
     // this.viewPanelStates = new Object();
     // this.getViewPanelState(this.viewPanels);
     this.selectedTab = 0;

@@ -23,7 +23,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 
 
-import * as $ from 'jquery';
+// import * as $ from 'jquery';
 import * as search_api from 'usgs-search-api';
 import { UserService } from '@services/user.service';
 import { ConfirmComponent } from '@confirm/confirm.component';

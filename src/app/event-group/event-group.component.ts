@@ -84,7 +84,6 @@ export class EventGroupComponent implements AfterViewInit, OnInit {
   ) {
     this.resultsCountService.eventGroupResultsCount.subscribe((count) => {
       this.eventGroupCount = count;
-      console.log("event group count count: " + this.eventGroupCount);
       // this.refreshTable();
     });
   }

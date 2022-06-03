@@ -89,7 +89,6 @@ export class CirclesComponent implements AfterViewInit, OnInit {
   ) {
     this.resultsCountService.circlesResultsCount.subscribe((count) => {
       this.circlesCount = count;
-      console.log("Circles count: " + this.circlesCount);
     });
   }
 

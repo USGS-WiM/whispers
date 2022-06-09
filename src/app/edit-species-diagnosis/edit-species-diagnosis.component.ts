@@ -57,6 +57,7 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
   diagnosisSuspectViolation = false;
   duplicateDiagnosisViolation = false;
   labViolation = false;
+  minViolation = false;
 
   diagnoses: Diagnosis[];
   species: Species[];
@@ -101,21 +102,18 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
         cause: null,
         basis: null,
         suspect: true,
-        // tested_count: [null, Validators.min(5)],
-        // diagnosis_count: [null, Validators.min(1)],
-        tested_count: null,
-        diagnosis_count: null,
+        tested_count: [null, Validators.min(1)],
+        diagnosis_count: [null, Validators.min(1)],
         positive_count: null,
         suspect_count: null,
         pooled: false,
         new_species_diagnosis_organizations: this.formBuilder.array([
-          // this.initDiagnosisOrganization()
+          this.initDiagnosisOrganization(),
         ]),
       },
       {
         validator: [
           this.integer,
-          this.minimum,
           this.integerTestedCount,
           this.integerDiagnosisCount,
           this.diagnosisCount,
@@ -159,18 +157,18 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       this.existingDiagnoses = this.data.existing_diagnoses;
     }
 
-    // add mode
     if (this.data.species_diagnosis_action === "add") {
       this.action_text = "Add";
       this.action_button_text = "Submit";
       this.speciesDiagnosisForm
         .get("location_species")
         .setValue(this.data.locationspecies.id);
+      this.speciesDiagnosisForm.get("tested_count").markAsTouched();
+      this.speciesDiagnosisForm.get("diagnosis_count").markAsTouched();
       // add to event submission formArray mode
     } else if (this.data.species_diagnosis_action === "addToFormArray") {
       this.action_text = "Add";
       this.action_button_text = "Add";
-      // edit mode
     } else if (this.data.species_diagnosis_action === "editInFormArray") {
       this.action_text = "Edit";
       this.action_button_text = "Save Changes";
@@ -183,7 +181,6 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       // Access the form here and set the value to the objects property/value
       this.speciesDiagnosisForm.patchValue({
         id: this.data.speciesdiagnosis.id,
-        // location_species: this.data.speciesdiagnosis.location_species,
         diagnosis: [this.data.speciesdiagnosis.diagnosis, Validators.required],
         cause: this.data.speciesdiagnosis.cause,
         basis: this.data.speciesdiagnosis.basis,
@@ -191,9 +188,6 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
         tested_count: this.data.speciesdiagnosis.tested_count,
         diagnosis_count: this.data.speciesdiagnosis.diagnosis_count,
         positive_count: this.data.speciesdiagnosis.positive_count,
-        // suspect_count: this.data.speciesdiagnosis.suspect_count,
-        // pooled: this.data.speciesdiagnosis.pooled,
-        // new_species_diagnosis_organizations: this.data.speciesdiagnosis.organizations
       });
 
       if (
@@ -222,6 +216,9 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
             );
         }
       }
+
+      this.speciesDiagnosisForm.get("tested_count").markAsTouched();
+      this.speciesDiagnosisForm.get("diagnosis_count").markAsTouched();
     } else if (this.data.species_diagnosis_action === "edit") {
       this.action_text = "Edit";
       this.action_button_text = "Save Changes";
@@ -245,9 +242,6 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
         tested_count: this.data.speciesdiagnosis.tested_count,
         diagnosis_count: this.data.speciesdiagnosis.diagnosis_count,
         positive_count: this.data.speciesdiagnosis.positive_count,
-        // suspect_count: this.data.speciesdiagnosis.suspect_count,
-        // pooled: this.data.speciesdiagnosis.pooled,
-        // new_species_diagnosis_organizations: this.data.speciesdiagnosis.organizations
       });
 
       // this line had to be added because the patchValue function above was causing the diagnosis to be an array instead of a simple integer value,
@@ -607,6 +601,14 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
       this.speciesDiagnosisForm.get("basis").value === 3
     ) {
       this.labViolation = true;
+    }
+  }
+
+  checkMinimum(value) {
+    this.minViolation = false;
+    // console.log("input changed");
+    if (value < 1) {
+      this.minViolation = true;
     }
   }
 

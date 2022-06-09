@@ -99,14 +99,15 @@
       </mat-form-field>
 
       <mat-form-field class="form control species-number-control">
-        <input matInput placeholder="Number Assessed" type="number" min="1" formControlName="tested_count">
+        <input matInput placeholder="Number Assessed" type="number" min="1" formControlName="tested_count"
+          [ngModel]="tested_count" (ngModelChange)="checkMinimum($event)">
         <mat-icon class="hint-hover-text" matSuffix matTooltip={{numberAssessedTooltip()}}
           matTooltipClass="tooltip-breakline">
           help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
-        <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('minimum')">Minimum value is 1
+        <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('min')">Minimum value is 1
         </mat-error>
         <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('integerTestedCount')">Must be an
           integer
@@ -114,15 +115,15 @@
       </mat-form-field>
 
       <mat-form-field class="form control species-number-control">
-        <input matInput placeholder="Number with this Diagnosis" type="number" min="1"
-          oninput="this.value = Math.abs(this.value)" formControlName="diagnosis_count">
+        <input matInput placeholder="Number with this Diagnosis" type="number" min="1" formControlName="diagnosis_count"
+          [ngModel]="tested_count" (ngModelChange)="checkMinimum($event)">
         <mat-icon class="hint-hover-text" matSuffix matTooltip={{numberWithDiagnosisTooltip()}}
           matTooltipClass="tooltip-breakline">
           help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
-        <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('minimum')">Minimum value is 1
+        <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('min')">Minimum value is 1
         </mat-error>
         <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('diagnosisCount')">Cannot be higher
           than Number Assessed</mat-error>
@@ -216,6 +217,12 @@
         <span class="alert-text">The selected diagnosis has already been selected for this species at this
           location.</span>
       </mat-error>
+
+      <mat-error color="warn" *ngIf="minViolation">
+        <mat-icon class="icon">error</mat-icon>
+        <span class="alert-text">A species diagnosis record should not exist if no specimens were confirmed to have the
+          diagnosis after assessment. Please enter a number greater than zero to save this record.</span>
+      </mat-error>
     </div>
 
   </form>
@@ -228,7 +235,7 @@
       <mat-icon>cancel</mat-icon>&nbsp;Cancel
     </button>
     <button mat-button color="primary" type="submit"
-      [disabled]="speciesDiagnosisForm.invalid || labSuspectViolation || labViolation || diagnosisSuspectViolation || duplicateDiagnosisViolation"
+      [disabled]="speciesDiagnosisForm.invalid || labSuspectViolation || labViolation || diagnosisSuspectViolation || duplicateDiagnosisViolation || minViolation"
       (click)="onSubmit(speciesDiagnosisForm.value)">
       <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{action_button_text}}
     </button>

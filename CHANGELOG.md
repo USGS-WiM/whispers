@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
--
+- adds automplete functionality to the CircleChooseComponent so user can type to search options for selection (#1268)
 
 ### Changed
 

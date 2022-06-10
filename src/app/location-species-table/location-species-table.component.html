@@ -121,19 +121,11 @@
             [disabled]="!permissions.update || eventData.complete">
             <mat-icon>edit</mat-icon> Edit Species
           </button>
-          <button mat-button color="warn" (click)="openDeleteLocationSpeciesConfirm(detail.element)"
-            [disabled]="!permissions.destroy || eventData.complete || locationSpeciesCount <= 1">
+          <button mat-button color="warn" (click)="removeLocationSpecies(detail.element)"
+            [disabled]="!permissions.destroy || eventData.complete">
             <mat-icon>delete_forever</mat-icon> Delete Species
           </button>
-          <!-- <mat-error *ngIf="locationSpeciesCount <= 1">An event location must have at least one species associated.
-            You may not delete this without adding another.
-          </mat-error> -->
 
-          <mat-error color="warn" *ngIf="locationSpeciesCount <= 1">
-            <mat-icon class="icon">error</mat-icon>
-            <span class="alert-text">An event location must have at least one species associated.
-              You may not delete this without adding another.</span>
-          </mat-error>
         </div>
 
         <div *ngIf="detail.element.speciesdiagnoses.length === 0" class="event-group-no-data">No diagnosis for this

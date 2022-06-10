@@ -137,13 +137,36 @@ export class LocationSpeciesTableComponent implements OnInit {
     );
   }
 
+  removeLocationSpecies(locationspecies) {
+    if (this.locationSpeciesCount <= 1) {
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent, {
+        disableClose: true,
+        data: {
+          title: "Species Required",
+          titleIcon: "warning",
+          message:
+            "At least one species is required for all locations. You are attempting to delete the only associated species. Please add an additional species before deleting " +
+            locationspecies.species_string +
+            ".",
+          confirmButtonText: "OK",
+          showCancelButton: false,
+        },
+      });
+    } else {
+      this.openDeleteLocationSpeciesConfirm(locationspecies);
+    }
+  }
+
   openDeleteLocationSpeciesConfirm(locationspecies) {
     this.confirmDialogRef = this.dialog.open(ConfirmComponent, {
       disableClose: true,
       data: {
         title: "Delete species from this location",
         titleIcon: "delete_forever",
-        message: "Are you sure you want to delete this species?",
+        message:
+          "Are you sure you want to delete this species, " +
+          locationspecies.species_string +
+          "?",
         messageIcon: "",
         confirmButtonText: "Delete",
         showCancelButton: true,

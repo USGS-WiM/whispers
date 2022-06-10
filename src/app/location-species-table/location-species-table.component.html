@@ -22,8 +22,8 @@
     <!-- Population Column -->
     <ng-container matColumnDef="population">
       <mat-header-cell *matHeaderCellDef> Population <mat-icon class="hint-table-hover-text" matSuffix
-        matTooltip={{populationTooltip()}} matTooltipClass="tooltip-breakline">
-        help</mat-icon>
+          matTooltip={{populationTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
       </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.population_count}} </mat-cell>
     </ng-container>
@@ -31,17 +31,17 @@
     <!-- Sick Count Column -->
     <ng-container matColumnDef="sick">
       <mat-header-cell *matHeaderCellDef> Sick <mat-icon class="hint-table-hover-text" matSuffix
-        matTooltip={{editKnownSickTooltip()}} matTooltipClass="tooltip-breakline">
-        help</mat-icon>
-    </mat-header-cell>
+          matTooltip={{editKnownSickTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
+      </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.sick_count}} </mat-cell>
     </ng-container>
 
     <!-- Dead Count Column -->
     <ng-container matColumnDef="dead">
       <mat-header-cell *matHeaderCellDef> Dead <mat-icon class="hint-table-hover-text" matSuffix
-        matTooltip={{editKnownDeadTooltip()}} matTooltipClass="tooltip-breakline">
-        help</mat-icon>
+          matTooltip={{editKnownDeadTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
       </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.dead_count}} </mat-cell>
     </ng-container>
@@ -49,8 +49,8 @@
     <!-- Sick Count Estimated Column -->
     <ng-container matColumnDef="sick_estimated">
       <mat-header-cell *matHeaderCellDef> Sick Estimate <mat-icon class="hint-table-hover-text" matSuffix
-        matTooltip={{editEstimatedSickTooltip()}} matTooltipClass="tooltip-breakline">
-        help</mat-icon>
+          matTooltip={{editEstimatedSickTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
       </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.sick_count_estimated}}
       </mat-cell>
@@ -59,8 +59,8 @@
     <!-- Dead Count Estimated Column -->
     <ng-container matColumnDef="dead_estimated">
       <mat-header-cell *matHeaderCellDef> Dead Estimate <mat-icon class="hint-table-hover-text" matSuffix
-        matTooltip={{editEstimatedDeadTooltip()}} matTooltipClass="tooltip-breakline">
-        help</mat-icon>
+          matTooltip={{editEstimatedDeadTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
       </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.dead_count_estimated}}
       </mat-cell>
@@ -69,8 +69,8 @@
     <!-- Captive Column -->
     <ng-container matColumnDef="captive">
       <mat-header-cell *matHeaderCellDef> Captive <mat-icon class="hint-table-hover-text" matSuffix
-        matTooltip={{editCaptiveTooltip()}} matTooltipClass="tooltip-breakline">
-        help</mat-icon>
+          matTooltip={{editCaptiveTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
       </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.captive ? 'Yes': 'No'}}
       </mat-cell>
@@ -79,8 +79,8 @@
     <!-- Age Bias Column -->
     <ng-container matColumnDef="age_bias">
       <mat-header-cell *matHeaderCellDef> Age Bias <mat-icon class="hint-table-hover-text" matSuffix
-        matTooltip={{editAgeBiasTooltip()}} matTooltipClass="tooltip-breakline">
-        help</mat-icon>
+          matTooltip={{editAgeBiasTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
       </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.age_bias | displayValue:'name':this.ageBiases}}
       </mat-cell>
@@ -89,8 +89,8 @@
     <!-- Sex Bias Column -->
     <ng-container matColumnDef="sex_bias">
       <mat-header-cell *matHeaderCellDef> Sex Bias <mat-icon class="hint-table-hover-text" matSuffix
-        matTooltip={{editSexBiasTooltip()}} matTooltipClass="tooltip-breakline">
-        help</mat-icon>
+          matTooltip={{editSexBiasTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
       </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.sex_bias | displayValue:'name':this.sexBiases}}
       </mat-cell>
@@ -99,8 +99,8 @@
     <!-- Diagnosis Column -->
     <ng-container matColumnDef="diagnosis">
       <mat-header-cell *matHeaderCellDef> Diagnosis <mat-icon class="hint-table-hover-text" matSuffix
-        matTooltip={{editSpeciesDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
-        help</mat-icon>
+          matTooltip={{editSpeciesDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
+          help</mat-icon>
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <span *ngIf="element.speciesdiagnoses">
@@ -122,12 +122,22 @@
             <mat-icon>edit</mat-icon> Edit Species
           </button>
           <button mat-button color="warn" (click)="openDeleteLocationSpeciesConfirm(detail.element)"
-            [disabled]="!permissions.destroy || eventData.complete">
+            [disabled]="!permissions.destroy || eventData.complete || locationSpeciesCount <= 1">
             <mat-icon>delete_forever</mat-icon> Delete Species
           </button>
+          <!-- <mat-error *ngIf="locationSpeciesCount <= 1">An event location must have at least one species associated.
+            You may not delete this without adding another.
+          </mat-error> -->
+
+          <mat-error color="warn" *ngIf="locationSpeciesCount <= 1">
+            <mat-icon class="icon">error</mat-icon>
+            <span class="alert-text">An event location must have at least one species associated.
+              You may not delete this without adding another.</span>
+          </mat-error>
         </div>
 
-        <div *ngIf="detail.element.speciesdiagnoses.length === 0" class="event-group-no-data">No diagnosis for this species at this location</div>
+        <div *ngIf="detail.element.speciesdiagnoses.length === 0" class="event-group-no-data">No diagnosis for this
+          species at this location</div>
         <div *ngIf="detail.element.speciesdiagnoses.length > 0">
           <label class="text-larger text-bold">Species Diagnoses</label>
           <table class="species-diagnosis-table">
@@ -151,15 +161,18 @@
               <td>{{speciesdiagnosis.diagnosis_count}}</td>
               <td>{{speciesdiagnosis.suspect ? 'Yes' : 'No'}}</td>
               <!-- <td>{{speciesdiagnosis.organizations_string}}</td> -->
-              <td><span *ngFor="let org of speciesdiagnosis.organizations_string; last as isLast"><span *ngIf=!isLast>{{org}},&nbsp;&nbsp;</span><span *ngIf=isLast>{{org}}</span></span></td>
+              <td><span *ngFor="let org of speciesdiagnosis.organizations_string; last as isLast"><span
+                    *ngIf=!isLast>{{org}},&nbsp;&nbsp;</span><span *ngIf=isLast>{{org}}</span></span></td>
               <td>
-                <button mat-icon-button aria-label="Edit species diagnosis" color="accent" [disabled]="!permissions.update || eventData.complete"
+                <button mat-icon-button aria-label="Edit species diagnosis" color="accent"
+                  [disabled]="!permissions.update || eventData.complete"
                   (click)="editSpeciesDiagnosis(speciesdiagnosis, detail.element)">
                   <mat-icon>edit</mat-icon>
                 </button>
               </td>
               <td>
-                <button mat-icon-button aria-label="delete species diagnosis" color="warn" [disabled]="!permissions.destroy || eventData.complete"
+                <button mat-icon-button aria-label="delete species diagnosis" color="warn"
+                  [disabled]="!permissions.destroy || eventData.complete"
                   (click)="openDeleteSpeciesDiagnosisConfirm(speciesdiagnosis)">
                   <mat-icon>remove_circle</mat-icon>
                 </button>
@@ -169,8 +182,8 @@
         </div>
 
         <div class="species-detail-action-bar-left">
-          <button mat-button color="primary" class="species-detail-action-button" (click)="addSpeciesDiagnosis(detail.element)"
-            [disabled]="!permissions.update || eventData.complete">
+          <button mat-button color="primary" class="species-detail-action-button"
+            (click)="addSpeciesDiagnosis(detail.element)" [disabled]="!permissions.update || eventData.complete">
             <mat-icon>add</mat-icon> Add Species Diagnosis
           </button>
         </div>
@@ -179,10 +192,10 @@
 
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row"
-      (click)="expandedElement = row"></mat-row>
-    <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.element == expandedElement ? 'expanded' : 'collapsed'"
-      style="overflow: hidden">
+    <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row"
+      [class.expanded]="expandedElement == row" (click)="expandedElement = row"></mat-row>
+    <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
+      [@detailExpand]="row.element == expandedElement ? 'expanded' : 'collapsed'" style="overflow: hidden">
     </mat-row>
   </mat-table>
 </div>

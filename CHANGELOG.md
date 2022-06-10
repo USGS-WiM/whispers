@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - adds autocomplete functionality to the CircleChooseComponent so user can type to search options for selection (#1268)
+- adds a check against the user deleting the sole location species from an event location (#1238)
 
 ### Changed
 

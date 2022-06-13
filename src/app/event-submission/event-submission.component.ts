@@ -1,118 +1,148 @@
-import { Component, OnInit, ElementRef, AfterViewInit, ViewChild, OnDestroy, OnChanges, ChangeDetectorRef } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl, Form } from '@angular/forms/';
-import { Observable, Subscription, ReplaySubject, Subject, observable } from 'rxjs';
-import { DatePipe } from '@angular/common';
-import { map, take, takeUntil } from 'rxjs/operators';
-import { CanDeactivateGuard } from './pending-changes.guard';
-import { HostListener } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  AfterViewInit,
+  ViewChild,
+  OnDestroy,
+  OnChanges,
+  ChangeDetectorRef,
+} from "@angular/core";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormArray,
+  Validators,
+  PatternValidator,
+  AbstractControl,
+  Form,
+} from "@angular/forms/";
+import {
+  Observable,
+  Subscription,
+  ReplaySubject,
+  Subject,
+  observable,
+} from "rxjs";
+import { DatePipe } from "@angular/common";
+import { map, take, takeUntil } from "rxjs/operators";
+import { CanDeactivateGuard } from "./pending-changes.guard";
+import { HostListener } from "@angular/core";
 
-import { DisplayValuePipe } from '../pipes/display-value.pipe';
+import { DisplayValuePipe } from "../pipes/display-value.pipe";
 
-import { MatDialog, MatDialogRef, MatSelect } from '@angular/material';
-import { MatBottomSheetModule, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSelect } from "@angular/material";
+import {
+  MatBottomSheetModule,
+  MatBottomSheet,
+  MatBottomSheetRef,
+} from "@angular/material";
 
-import { MatStepperModule, MatStepper } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from "@angular/material/stepper";
 
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from "@angular/material";
 
-import { APP_SETTINGS } from '@app/app.settings';
-import { APP_UTILITIES } from '@app/app.utilities';
-import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
+import { APP_SETTINGS } from "@app/app.settings";
+import { APP_UTILITIES } from "@app/app.utilities";
+import { FIELD_HELP_TEXT } from "@app/app.field-help-text";
 
-import { CurrentUserService } from '@services/current-user.service';
+import { CurrentUserService } from "@services/current-user.service";
 
-import { EventType } from '@interfaces/event-type';
-import { EventTypeService } from '@app/services/event-type.service';
+import { EventType } from "@interfaces/event-type";
+import { EventTypeService } from "@app/services/event-type.service";
 
-import { LegalStatus } from '@interfaces/legal-status';
-import { LegalStatusService } from '@app/services/legal-status.service';
+import { LegalStatus } from "@interfaces/legal-status";
+import { LegalStatusService } from "@app/services/legal-status.service";
 
-import { Diagnosis } from '@interfaces/diagnosis';
-import { DiagnosisService } from '@services/diagnosis.service';
+import { Diagnosis } from "@interfaces/diagnosis";
+import { DiagnosisService } from "@services/diagnosis.service";
 
-import { DiagnosisType } from '@interfaces/diagnosis-type';
-import { DiagnosisTypeService } from '@services/diagnosis-type.service';
+import { DiagnosisType } from "@interfaces/diagnosis-type";
+import { DiagnosisTypeService } from "@services/diagnosis-type.service";
 
-import { Species } from '@interfaces/species';
-import { SpeciesService } from '@services/species.service';
+import { Species } from "@interfaces/species";
+import { SpeciesService } from "@services/species.service";
 
-import { Country } from '@interfaces/country';
-import { CountryService } from '@app/services/country.service';
+import { Country } from "@interfaces/country";
+import { CountryService } from "@app/services/country.service";
 
-import { AdministrativeLevelOne } from '@interfaces/administrative-level-one';
-import { AdministrativeLevelOneService } from '@services/administrative-level-one.service';
+import { AdministrativeLevelOne } from "@interfaces/administrative-level-one";
+import { AdministrativeLevelOneService } from "@services/administrative-level-one.service";
 
-import { AdministrativeLevelTwo } from '@interfaces/administrative-level-two';
-import { AdministrativeLevelTwoService } from '@services/administrative-level-two.service';
+import { AdministrativeLevelTwo } from "@interfaces/administrative-level-two";
+import { AdministrativeLevelTwoService } from "@services/administrative-level-two.service";
 
-import { LandOwnership } from '@interfaces/land-ownership';
-import { LandOwnershipService } from '@services/land-ownership.service';
+import { LandOwnership } from "@interfaces/land-ownership";
+import { LandOwnershipService } from "@services/land-ownership.service";
 
-import { SexBias } from '@interfaces/sex-bias';
-import { SexBiasService } from '@services/sex-bias.service';
+import { SexBias } from "@interfaces/sex-bias";
+import { SexBiasService } from "@services/sex-bias.service";
 
-import { AgeBias } from '@interfaces/age-bias';
-import { AgeBiasService } from '@services/age-bias.service';
+import { AgeBias } from "@interfaces/age-bias";
+import { AgeBiasService } from "@services/age-bias.service";
 
-import { Contact } from '@interfaces/contact';
-import { ContactService } from '@services/contact.service';
+import { Contact } from "@interfaces/contact";
+import { ContactService } from "@services/contact.service";
 
-import { ContactType } from '@interfaces/contact-type';
-import { ContactTypeService } from '@services/contact-type.service';
+import { ContactType } from "@interfaces/contact-type";
+import { ContactTypeService } from "@services/contact-type.service";
 
-import { CommentType } from '@interfaces/comment-type';
-import { CommentTypeService } from '@services/comment-type.service';
+import { CommentType } from "@interfaces/comment-type";
+import { CommentTypeService } from "@services/comment-type.service";
 
-import { Organization } from '@interfaces/organization';
-import { OrganizationService } from '@services/organization.service';
+import { Organization } from "@interfaces/organization";
+import { OrganizationService } from "@services/organization.service";
 
-import { Staff } from '@interfaces/staff';
-import { StaffService } from '@services/staff.service';
+import { Staff } from "@interfaces/staff";
+import { StaffService } from "@services/staff.service";
 
-import { EventService } from '@app/services/event.service';
+import { EventService } from "@app/services/event.service";
 
-import { EventStatus } from '@interfaces/event-status';
-import { EventStatusService } from '@services/event-status.service';
+import { EventStatus } from "@interfaces/event-status";
+import { EventStatusService } from "@services/event-status.service";
 
-import { CreateContactComponent } from '@create-contact/create-contact.component';
-import { CreateContactService } from '@create-contact/create-contact.service';
+import { CreateContactComponent } from "@create-contact/create-contact.component";
+import { CreateContactService } from "@create-contact/create-contact.service";
 
-import { ViewContactDetailsComponent } from '@app/view-contact-details/view-contact-details.component';
+import { ViewContactDetailsComponent } from "@app/view-contact-details/view-contact-details.component";
 
-import { ConfirmComponent } from '@confirm/confirm.component';
+import { ConfirmComponent } from "@confirm/confirm.component";
 
-import { EditSpeciesDiagnosisComponent } from '@app/edit-species-diagnosis/edit-species-diagnosis.component';
-import { DiagnosticInfoComponent } from '@app/diagnostic-info/diagnostic-info.component';
+import { EditSpeciesDiagnosisComponent } from "@app/edit-species-diagnosis/edit-species-diagnosis.component";
+import { DiagnosticInfoComponent } from "@app/diagnostic-info/diagnostic-info.component";
 
-import { DiagnosisBasisService } from '@app/services/diagnosis-basis.service';
-import { DiagnosisCauseService } from '@app/services/diagnosis-cause.service';
-import { EventSubmissionConfirmComponent } from '@app/event-submission/event-submission-confirm/event-submission-confirm.component';
-import { GnisLookupComponent } from '@app/gnis-lookup/gnis-lookup.component';
-import { Router, ActivatedRoute } from '@angular/router';
-import { DateValidators } from '@validators/date.validator';
+import { DiagnosisBasisService } from "@app/services/diagnosis-basis.service";
+import { DiagnosisCauseService } from "@app/services/diagnosis-cause.service";
+import { EventSubmissionConfirmComponent } from "@app/event-submission/event-submission-confirm/event-submission-confirm.component";
+import { GnisLookupComponent } from "@app/gnis-lookup/gnis-lookup.component";
+import { Router, ActivatedRoute } from "@angular/router";
+import { DateValidators } from "@validators/date.validator";
 
-import * as search_api from 'usgs-search-api';
-import { getTreeMultipleDefaultNodeDefsError } from '@angular/cdk/tree';
-import { CircleManagementComponent } from '@app/circle-management/circle-management.component';
-import { CircleChooseComponent } from '@app/circle-management/circle-choose/circle-choose.component';
-import { CircleService } from '@services/circle.service';
+import * as search_api from "usgs-search-api";
+import { getTreeMultipleDefaultNodeDefsError } from "@angular/cdk/tree";
+import { CircleManagementComponent } from "@app/circle-management/circle-management.component";
+import { CircleChooseComponent } from "@app/circle-management/circle-choose/circle-choose.component";
+import { CircleService } from "@services/circle.service";
 // beware possible collision with Circle class from leaflet
-import { Circle } from '@interfaces/circle';
-import { User } from '@interfaces/user';
-import { fromPromise } from 'rxjs/internal-compatibility';
-import clientStorage from '@app/client-storage';
+import { Circle } from "@interfaces/circle";
+import { User } from "@interfaces/user";
+import { fromPromise } from "rxjs/internal-compatibility";
+import clientStorage from "@app/client-storage";
 declare let gtag: Function;
 
 declare const search_api: search_api;
 
 @Component({
-  selector: 'app-event-submission',
-  templateUrl: './event-submission.component.html',
-  styleUrls: ['./event-submission.component.scss']
+  selector: "app-event-submission",
+  templateUrl: "./event-submission.component.html",
+  styleUrls: ["./event-submission.component.scss"],
 })
-export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivateGuard, AfterViewInit {
-  @ViewChild('stepper') stepper: MatStepper;
-  @ViewChild('eventTypeRef') eventTypeRef: MatSelect;
+export class EventSubmissionComponent
+  implements OnInit, OnDestroy, CanDeactivateGuard, AfterViewInit
+{
+  @ViewChild("stepper") stepper: MatStepper;
+  @ViewChild("eventTypeRef") eventTypeRef: MatSelect;
 
   gnisLookupDialogRef: MatDialogRef<GnisLookupComponent>;
   createContactDialogRef: MatDialogRef<CreateContactComponent>;
@@ -189,12 +219,14 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   adminLevelOnesLoading = false;
   adminLevelTwosLoading = false;
 
-  latitudePattern: RegExp = (/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/);
-  longitudePattern: RegExp = (/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/);
+  latitudePattern: RegExp =
+    /^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/;
+  longitudePattern: RegExp =
+    /^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/;
 
   commonEventData = {
     species: [],
-    contacts: []
+    contacts: [],
   };
 
   usgsSearch;
@@ -227,13 +259,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   /** Subject that emits when the component has been destroyed. */
   private _onDestroy = new Subject<void>();
 
-  @ViewChild('adminLevelOneSelect') adminLevelOneSelect: MatSelect;
-  @ViewChild('adminLevelTwoSelect') adminLevelTwoSelect: MatSelect;
-  @ViewChild('speciesSelect') speciesSelect: MatSelect;
-  @ViewChild('contactSelect') contactSelect: MatSelect;
+  @ViewChild("adminLevelOneSelect") adminLevelOneSelect: MatSelect;
+  @ViewChild("adminLevelTwoSelect") adminLevelTwoSelect: MatSelect;
+  @ViewChild("speciesSelect") speciesSelect: MatSelect;
+  @ViewChild("contactSelect") contactSelect: MatSelect;
 
-  @ViewChild('organizationSelect') organizationSelect: MatSelect;
-
+  @ViewChild("organizationSelect") organizationSelect: MatSelect;
 
   /** controls for the MatSelect filter keyword */
   adminLevelOneFilterCtrl: FormControl = new FormControl();
@@ -247,7 +278,7 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   // filteredContacts: ReplaySubject<Contact[]> = new ReplaySubject<Contact[]>();
 
   // @HostListener guards against refresh, close, etc.
-  @HostListener('window:beforeunload')
+  @HostListener("window:beforeunload")
 
   // canDeactivate passess back a boolean based on whether the form has been touched or not
   canDeactivate(): Observable<boolean> | boolean {
@@ -263,42 +294,48 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   buildEventSubmissionForm() {
     this.eventSubmissionForm = this.formBuilder.group({
-      event_reference: '',
+      event_reference: "",
       event_type: [null, Validators.required],
       complete: false,
       public: [true, Validators.required],
       // NWHC only
       staff: null,
-      event_status: '1',
+      event_status: "1",
       quality_check: { value: null, disabled: true },
       legal_status: 1,
-      legal_number: '',
+      legal_number: "",
       // end NWHC only
-      new_organizations: this.formBuilder.array([
-        this.initEventOrganization()
-      ]),
+      new_organizations: this.formBuilder.array([this.initEventOrganization()]),
       new_service_request: this.formBuilder.group({
         request_type: 0,
-        new_comments: this.formBuilder.array([])
+        new_comments: this.formBuilder.array([]),
       }),
       new_event_diagnoses: this.formBuilder.array([]),
       new_comments: this.formBuilder.array([]),
       new_eventgroups: this.formBuilder.array([]),
-      new_event_locations: this.formBuilder.array([
-        this.initEventLocation()
-      ]),
+      new_event_locations: this.formBuilder.array([this.initEventLocation()]),
       new_read_collaborators: [],
-      new_write_collaborators: []
+      new_write_collaborators: [],
     });
 
-    this.eventLocationArray = this.eventSubmissionForm.get('new_event_locations') as FormArray;
+    this.eventLocationArray = this.eventSubmissionForm.get(
+      "new_event_locations"
+    ) as FormArray;
 
-    this.filteredAdminLevelOnes = new Array<ReplaySubject<AdministrativeLevelOne[]>>();
-    this.filteredAdminLevelOnes.push(new ReplaySubject<AdministrativeLevelOne[]>());
+    this.filteredAdminLevelOnes = new Array<
+      ReplaySubject<AdministrativeLevelOne[]>
+    >();
+    this.filteredAdminLevelOnes.push(
+      new ReplaySubject<AdministrativeLevelOne[]>()
+    );
     this.ManageAdminLevelOneControl(0);
 
-    this.filteredAdminLevelTwos = new Array<ReplaySubject<AdministrativeLevelTwo[]>>();
-    this.filteredAdminLevelTwos.push(new ReplaySubject<AdministrativeLevelOne[]>());
+    this.filteredAdminLevelTwos = new Array<
+      ReplaySubject<AdministrativeLevelTwo[]>
+    >();
+    this.filteredAdminLevelTwos.push(
+      new ReplaySubject<AdministrativeLevelOne[]>()
+    );
     this.ManageAdminLevelTwoControl(0);
 
     const eventLocationSpecies = new Array<ReplaySubject<Species[]>>();
@@ -325,7 +362,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
     //this.filteredAdminLevelTwos = new Array<Observable<any>>();
     //this.ManageAdminLevelTwoControl(0);
-
 
     //const eventLocationSpecies = new Array<Observable<any>>();
     //this.filteredSpecies.push(eventLocationSpecies);
@@ -373,20 +409,26 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   ) {
     this.buildEventSubmissionForm();
 
-    currentUserService.currentUser.subscribe(user => {
+    currentUserService.currentUser.subscribe((user) => {
       this.currentUser = user;
-      this.eventSubmissionForm.get('new_organizations')['controls'][0].get('org').setValue(this.currentUser.organization);
+      this.eventSubmissionForm
+        .get("new_organizations")
+        ["controls"][0].get("org")
+        .setValue(this.currentUser.organization);
     });
 
-    createContactSevice.getCreatedContact().subscribe(
-      createdContact => {
-        this.userContacts.push(createdContact);
-        this.userContacts.sort(function (a, b) {
-          if (a.last_name < b.last_name) { return -1; }
-          if (a.last_name > b.last_name) { return 1; }
-          return 0;
-        });
+    createContactSevice.getCreatedContact().subscribe((createdContact) => {
+      this.userContacts.push(createdContact);
+      this.userContacts.sort(function (a, b) {
+        if (a.last_name < b.last_name) {
+          return -1;
+        }
+        if (a.last_name > b.last_name) {
+          return 1;
+        }
+        return 0;
       });
+    });
   }
 
   ngOnDestroy() {
@@ -407,45 +449,52 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
         organizations: this.organizations,
         adminLevelOnes: this.adminLevelOnes,
         adminLevelTwos: this.adminLevelTwos,
-        landOwnerships: this.landOwnerships
-      }
+        landOwnerships: this.landOwnerships,
+      },
     });
   }
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-      minWidth: '75%',
+      minWidth: "75%",
       disableClose: true,
       data: {
-        contact_action: 'create'
-      }
+        contact_action: "create",
+      },
     });
   }
 
   openCircleChooseDialog(accessType) {
     this.circleChooseDialogRef = this.dialog.open(CircleChooseComponent, {
-      minWidth: '60em',
+      minWidth: "60em",
       data: {
-        userCircles: this.userCircles
-      }
+        userCircles: this.userCircles,
+      },
     });
 
-    this.circleChooseDialogRef.afterClosed().subscribe(result => {
-
-      if (result !== 'cancel') {
-        if (accessType === 'read') {
+    this.circleChooseDialogRef.afterClosed().subscribe((result) => {
+      if (result !== "cancel") {
+        if (accessType === "read") {
           // add the users array to the new_read_collaborators array
-          this.readCollaboratorArray = this.readCollaboratorArray.concat(result.users);
-        } else if (accessType === 'write') {
-          this.writeCollaboratorArray = this.writeCollaboratorArray.concat(result.users);
+          this.readCollaboratorArray = this.readCollaboratorArray.concat(
+            result.users
+          );
+        } else if (accessType === "write") {
+          this.writeCollaboratorArray = this.writeCollaboratorArray.concat(
+            result.users
+          );
         }
       }
     });
-
   }
 
-  editSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex, speciesdiagnosis, locationspecies) {
-
+  editSpeciesDiagnosis(
+    eventLocationIndex,
+    locationSpeciesIndex,
+    speciesDiagnosisIndex,
+    speciesdiagnosis,
+    locationspecies
+  ) {
     // NOTE: do not need the block below for editing a species diagnosis - the ability to edit the diagnosis selection has been removed.
     // // create local array of selected diagnoses to feed to the dialog
     // const existingSpeciesDiagnoses = [];
@@ -461,158 +510,190 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     //   }
     // }
 
-    this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
-      minWidth: '40em',
-      disableClose: true,
-      data: {
-        locationspecies: locationspecies.value,
-        speciesdiagnosis: speciesdiagnosis.value,
-        laboratories: this.laboratories,
-        diagnosisBases: this.diagnosisBases,
-        diagnosisCauses: this.diagnosisCauses,
-        diagnoses: this.allDiagnoses,
-        species: this.species,
-        eventlocationIndex: eventLocationIndex,
-        locationspeciesIndex: locationSpeciesIndex,
-        // existing_diagnoses: existingSpeciesDiagnoses,
-        species_diagnosis_action: 'editInFormArray',
-        title: 'Edit Species Diagnosis',
-        titleIcon: 'edit',
-        actionButtonIcon: 'save',
-        action_button_text: 'Save'
+    this.editSpeciesDiagnosisDialogRef = this.dialog.open(
+      EditSpeciesDiagnosisComponent,
+      {
+        minWidth: "40em",
+        disableClose: true,
+        data: {
+          locationspecies: locationspecies.value,
+          speciesdiagnosis: speciesdiagnosis.value,
+          laboratories: this.laboratories,
+          diagnosisBases: this.diagnosisBases,
+          diagnosisCauses: this.diagnosisCauses,
+          diagnoses: this.allDiagnoses,
+          species: this.species,
+          eventlocationIndex: eventLocationIndex,
+          locationspeciesIndex: locationSpeciesIndex,
+          // existing_diagnoses: existingSpeciesDiagnoses,
+          species_diagnosis_action: "editInFormArray",
+          title: "Edit Species Diagnosis",
+          titleIcon: "edit",
+          actionButtonIcon: "save",
+          action_button_text: "Save",
+        },
       }
-    });
+    );
 
     const originalDiagnosisID = speciesdiagnosis.value.diagnosis;
 
-    this.editSpeciesDiagnosisDialogRef.afterClosed()
-      .subscribe(
-        (speciesDiagnosisObj) => {
+    this.editSpeciesDiagnosisDialogRef.afterClosed().subscribe(
+      (speciesDiagnosisObj) => {
+        if (speciesDiagnosisObj.action === "cancel") {
+          // remove last species diagnosis added
+          // tslint:disable-next-line:max-line-length
+          // this.removeSpeciesDiagnosis(speciesDiagnosisObj.eventlocationIndex, speciesDiagnosisObj.locationspeciesIndex, speciesDiagnosisIndex);
+          return;
+        } else if (speciesDiagnosisObj.action === "editInFormArray") {
+          this.eventSubmissionForm
+            .get("new_event_locations")
+            ["controls"][speciesDiagnosisObj.eventlocationIndex].get(
+              "new_location_species"
+            )
+            ["controls"][speciesDiagnosisObj.locationspeciesIndex].get(
+              "new_species_diagnoses"
+            )
+            ["controls"][speciesDiagnosisIndex].setValue({
+              diagnosis: speciesDiagnosisObj.formValue.diagnosis,
+              cause: speciesDiagnosisObj.formValue.cause,
+              basis: speciesDiagnosisObj.formValue.basis,
+              suspect: speciesDiagnosisObj.formValue.suspect,
+              tested_count: speciesDiagnosisObj.formValue.tested_count,
+              diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
+              positive_count: speciesDiagnosisObj.formValue.positive_count,
+              suspect_count: speciesDiagnosisObj.formValue.suspect_count,
+              pooled: speciesDiagnosisObj.formValue.pooled,
+              new_species_diagnosis_organizations:
+                speciesDiagnosisObj.formValue
+                  .new_species_diagnosis_organizations,
+            });
 
-          if (speciesDiagnosisObj.action === 'cancel') {
-            // remove last species diagnosis added
-            // tslint:disable-next-line:max-line-length
-            // this.removeSpeciesDiagnosis(speciesDiagnosisObj.eventlocationIndex, speciesDiagnosisObj.locationspeciesIndex, speciesDiagnosisIndex);
-            return;
-          } else if (speciesDiagnosisObj.action === 'editInFormArray') {
-
-            this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventlocationIndex]
-              .get('new_location_species')['controls'][speciesDiagnosisObj.locationspeciesIndex]
-              .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
-                diagnosis: speciesDiagnosisObj.formValue.diagnosis,
-                cause: speciesDiagnosisObj.formValue.cause,
-                basis: speciesDiagnosisObj.formValue.basis,
-                suspect: speciesDiagnosisObj.formValue.suspect,
-                tested_count: speciesDiagnosisObj.formValue.tested_count,
-                diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
-                positive_count: speciesDiagnosisObj.formValue.positive_count,
-                suspect_count: speciesDiagnosisObj.formValue.suspect_count,
-                pooled: speciesDiagnosisObj.formValue.pooled,
-                new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
-              });
-
-            // if the diagnosis ID has changed, remove the outgoing one from the availableDiagnoses array
-            if (originalDiagnosisID !== Number(speciesDiagnosisObj.formValue.diagnosis)) {
-              // delete from availableDiagnoses unless count > 1
-              for (const availableDiagnosis of this.availableDiagnoses) {
-                if (availableDiagnosis.id === originalDiagnosisID) {
-                  if (availableDiagnosis.count > 1) {
-                    // decrement the count
-                    availableDiagnosis.count--;
-                    break;
-                  } else if (availableDiagnosis.count === 1) {
-                    // remove it
-                    // tslint:disable-next-line:max-line-length
-                    this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== originalDiagnosisID);
-                  }
+          // if the diagnosis ID has changed, remove the outgoing one from the availableDiagnoses array
+          if (
+            originalDiagnosisID !==
+            Number(speciesDiagnosisObj.formValue.diagnosis)
+          ) {
+            // delete from availableDiagnoses unless count > 1
+            for (const availableDiagnosis of this.availableDiagnoses) {
+              if (availableDiagnosis.id === originalDiagnosisID) {
+                if (availableDiagnosis.count > 1) {
+                  // decrement the count
+                  availableDiagnosis.count--;
+                  break;
+                } else if (availableDiagnosis.count === 1) {
+                  // remove it
+                  // tslint:disable-next-line:max-line-length
+                  this.availableDiagnoses = this.availableDiagnoses.filter(
+                    (diagnosis) => diagnosis.id !== originalDiagnosisID
+                  );
                 }
               }
             }
-
-            for (const diagnosis of this.allDiagnoses) {
-              if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
-
-                let diagnosisFound = false;
-                // check to see if the diagnosis just added already exists in the availableDiagnoses array
-                for (const availableDiagnosis of this.availableDiagnoses) {
-                  if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
-                    // if found, increment the count for that diagnosis
-                    // only increment count if this diagnosis has changed
-                    if (originalDiagnosisID !== Number(speciesDiagnosisObj.formValue.diagnosis)) {
-                      availableDiagnosis.count++;
-                    }
-                    // also if found, set local var found to true
-                    diagnosisFound = true;
-                    // also if found, update the suspect value to whatever it is now (though it may not have changed)
-                    availableDiagnosis.suspect = speciesDiagnosisObj.formValue.suspect;
-                    // if found, stop. do not add to availableDiagnoses array
-                    break;
-                  }
-                }
-                // if diagnosis is not found to already exist in the availableDiagnoses array, add it
-                if (!diagnosisFound) {
-                  diagnosis.suspect = speciesDiagnosisObj.formValue.suspect;
-                  // set diagnosis count to 1
-                  diagnosis.count = 1;
-                  this.availableDiagnoses.push(diagnosis);
-                }
-
-              }
-            }
-
-            this.checkSpeciesDiagnoses();
           }
 
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+          for (const diagnosis of this.allDiagnoses) {
+            if (
+              diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)
+            ) {
+              let diagnosisFound = false;
+              // check to see if the diagnosis just added already exists in the availableDiagnoses array
+              for (const availableDiagnosis of this.availableDiagnoses) {
+                if (
+                  availableDiagnosis.id ===
+                  Number(speciesDiagnosisObj.formValue.diagnosis)
+                ) {
+                  // if found, increment the count for that diagnosis
+                  // only increment count if this diagnosis has changed
+                  if (
+                    originalDiagnosisID !==
+                    Number(speciesDiagnosisObj.formValue.diagnosis)
+                  ) {
+                    availableDiagnosis.count++;
+                  }
+                  // also if found, set local var found to true
+                  diagnosisFound = true;
+                  // also if found, update the suspect value to whatever it is now (though it may not have changed)
+                  availableDiagnosis.suspect =
+                    speciesDiagnosisObj.formValue.suspect;
+                  // if found, stop. do not add to availableDiagnoses array
+                  break;
+                }
+              }
+              // if diagnosis is not found to already exist in the availableDiagnoses array, add it
+              if (!diagnosisFound) {
+                diagnosis.suspect = speciesDiagnosisObj.formValue.suspect;
+                // set diagnosis count to 1
+                diagnosis.count = 1;
+                this.availableDiagnoses.push(diagnosis);
+              }
+            }
+          }
 
+          this.checkSpeciesDiagnoses();
+        }
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
   }
 
   openGNISLookupDialog(eventLocationIndex) {
     this.gnisLookupDialogRef = this.dialog.open(GnisLookupComponent, {
       data: {
-        event_location_index: eventLocationIndex
-      }
+        event_location_index: eventLocationIndex,
+      },
     });
 
-    this.gnisLookupDialogRef.afterClosed().subscribe(result => {
+    this.gnisLookupDialogRef.afterClosed().subscribe((result) => {
       console.log(result);
-      this.eventSubmissionForm.get('new_event_locations')['controls'][result.event_location_index].get('gnis_id').setValue(result.id);
-      this.eventSubmissionForm.get('new_event_locations')['controls'][result.event_location_index].get('gnis_name').setValue(result.name);
-
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][result.event_location_index].get("gnis_id")
+        .setValue(result.id);
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][result.event_location_index].get("gnis_name")
+        .setValue(result.name);
     });
   }
 
   clearGNISEntry(eventLocationIndex) {
-    this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].controls['gnis_id'].setValue('');
-    this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].controls['gnis_name'].setValue('');
+    this.eventSubmissionForm
+      .get("new_event_locations")
+      ["controls"][eventLocationIndex].controls["gnis_id"].setValue("");
+    this.eventSubmissionForm
+      .get("new_event_locations")
+      ["controls"][eventLocationIndex].controls["gnis_name"].setValue("");
   }
 
+  openSpeciesDiagnosisRemoveConfirm(
+    eventLocationIndex,
+    locationSpeciesIndex,
+    speciesDiagnosisIndex
+  ) {
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent, {
+      data: {
+        title: "Remove Species Diagnosis",
+        titleIcon: "remove_circle",
+        // tslint:disable-next-line:max-line-length
+        message:
+          "Are you sure you want to remove this species diagnosis? If it is the only species in the form with this diagnosis, removing it will remove it from the list of available diagnoses for event diagnosis.",
+        messageIcon: "",
+        confirmButtonText: "Remove",
+        showCancelButton: true,
+      },
+    });
 
-  openSpeciesDiagnosisRemoveConfirm(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex) {
-    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-      {
-        data: {
-          title: 'Remove Species Diagnosis',
-          titleIcon: 'remove_circle',
-          // tslint:disable-next-line:max-line-length
-          message: 'Are you sure you want to remove this species diagnosis? If it is the only species in the form with this diagnosis, removing it will remove it from the list of available diagnoses for event diagnosis.',
-          messageIcon: '',
-          confirmButtonText: 'Remove',
-          showCancelButton: true
-        }
-      }
-    );
-
-    this.confirmDialogRef.afterClosed().subscribe(result => {
+    this.confirmDialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-
         // remove the diagnosis from the available diagnoses unless another species has it
         // tslint:disable-next-line:max-line-length
-        const diagnosisID = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].get('diagnosis').value;
+        const diagnosisID = this.eventSubmissionForm
+          .get("new_event_locations")
+          ["controls"][eventLocationIndex].get("new_location_species")
+          ["controls"][locationSpeciesIndex].get("new_species_diagnoses")
+          ["controls"][speciesDiagnosisIndex].get("diagnosis").value;
 
         // delete from availableDiagnoses unless count > 1
         for (const availableDiagnosis of this.availableDiagnoses) {
@@ -623,31 +704,35 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
               break;
             } else if (availableDiagnosis.count === 1) {
               // remove it
-              this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== diagnosisID);
+              this.availableDiagnoses = this.availableDiagnoses.filter(
+                (diagnosis) => diagnosis.id !== diagnosisID
+              );
             }
           }
         }
         // remove the speciesdiagnosis form array instance
-        this.removeSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex);
+        this.removeSpeciesDiagnosis(
+          eventLocationIndex,
+          locationSpeciesIndex,
+          speciesDiagnosisIndex
+        );
       }
     });
   }
 
   openEventLocationRemoveConfirm(eventLocationIndex) {
-    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-      {
-        data: {
-          title: 'Remove Event Location',
-          titleIcon: 'remove_circle',
-          message: 'Are you sure you want to remove the event location?',
-          messageIcon: '',
-          confirmButtonText: 'Remove',
-          showCancelButton: true
-        }
-      }
-    );
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent, {
+      data: {
+        title: "Remove Event Location",
+        titleIcon: "remove_circle",
+        message: "Are you sure you want to remove the event location?",
+        messageIcon: "",
+        confirmButtonText: "Remove",
+        showCancelButton: true,
+      },
+    });
 
-    this.confirmDialogRef.afterClosed().subscribe(result => {
+    this.confirmDialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
         this.removeEventLocation(eventLocationIndex);
       }
@@ -656,9 +741,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   displayFn(speciesId?: Species): string | undefined {
     let species_id_match;
-    for (let i = 0; i < this['options']._results.length - 1; i++) {
-      if (this['options']._results[i].value === speciesId) {
-        species_id_match = this['options']._results[i].viewValue;
+    for (let i = 0; i < this["options"]._results.length - 1; i++) {
+      if (this["options"]._results[i].value === speciesId) {
+        species_id_match = this["options"]._results[i].viewValue;
       }
     }
     return species_id_match;
@@ -666,9 +751,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   displayFnContact(contactId?: Contact): string | undefined {
     let contact_id_match;
-    for (let i = 0; i < this['options']._results.length; i++) {
-      if (this['options']._results[i].value === contactId) {
-        contact_id_match = this['options']._results[i].viewValue;
+    for (let i = 0; i < this["options"]._results.length; i++) {
+      if (this["options"]._results[i].value === contactId) {
+        contact_id_match = this["options"]._results[i].viewValue;
       }
     }
     return contact_id_match;
@@ -676,10 +761,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   displayFnAdminLevelOne(adminLevelOneId?: number): string | undefined {
     let admin_level_one;
-    if (this['options'] !== undefined) {
-      for (let i = 0; i < this['options']._results.length; i++) {
-        if (this['options']._results[i].value === adminLevelOneId) {
-          admin_level_one = this['options']._results[i].viewValue;
+    if (this["options"] !== undefined) {
+      for (let i = 0; i < this["options"]._results.length; i++) {
+        if (this["options"]._results[i].value === adminLevelOneId) {
+          admin_level_one = this["options"]._results[i].viewValue;
         }
       }
     }
@@ -688,10 +773,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   displayFnAdminLevelTwo(adminLevelTwoId?: number): string | undefined {
     let admin_level_two;
-    if (this['options'] !== undefined) {
-      for (let i = 0; i < this['options']._results.length; i++) {
-        if (this['options']._results[i].value === adminLevelTwoId) {
-          admin_level_two = this['options']._results[i].viewValue;
+    if (this["options"] !== undefined) {
+      for (let i = 0; i < this["options"]._results.length; i++) {
+        if (this["options"]._results[i].value === adminLevelTwoId) {
+          admin_level_two = this["options"]._results[i].viewValue;
         }
       }
     }
@@ -701,10 +786,15 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   // no longer in use?
   private _filter(name: string): Species[] {
     const filterValue = name.toLowerCase();
-    return this.species.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    return this.species.filter(
+      (option) => option.name.toLowerCase().indexOf(filterValue) === 0
+    );
   }
 
-  ManageSpeciesControl(eventLocationIndex: number, locationSpeciesIndex: number) {
+  ManageSpeciesControl(
+    eventLocationIndex: number,
+    locationSpeciesIndex: number
+  ) {
     // tslint:disable-next-line:max-line-length
     // const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species') as FormArray;
     // this.filteredSpecies[eventLocationIndex][locationSpeciesIndex] = arrayControl.at(locationSpeciesIndex).get('species').valueChanges
@@ -712,7 +802,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     //   .map(val => this.filter(val, this.species, ['name']));
 
     // populate the species options list for the specific control
-    this.filteredSpecies[eventLocationIndex][locationSpeciesIndex].next(this.species);
+    this.filteredSpecies[eventLocationIndex][locationSpeciesIndex].next(
+      this.species
+    );
 
     // listen for search field value changes
     this.speciesFilterCtrl.valueChanges
@@ -722,7 +814,10 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       });
   }
 
-  ManageContactControl(eventLocationIndex: number, locationContactIndex: number) {
+  ManageContactControl(
+    eventLocationIndex: number,
+    locationContactIndex: number
+  ) {
     // tslint:disable-next-line:max-line-length
     // const arrayControl = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts') as FormArray;
     // this.filteredContacts[eventLocationIndex][locationContactIndex] = arrayControl.at(locationContactIndex).get('contact').valueChanges
@@ -730,7 +825,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     //   .map(val => this.filter(val, this.userContacts, ['first_name', 'last_name', 'organization_string']));
 
     // populate the species options list for the specific control
-    this.filteredContacts[eventLocationIndex][locationContactIndex].next(this.userContacts);
+    this.filteredContacts[eventLocationIndex][locationContactIndex].next(
+      this.userContacts
+    );
 
     // listen for search field value changes
     this.contactFilterCtrl.valueChanges
@@ -741,7 +838,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   }
 
   ManageAdminLevelOneControl(eventLocationIndex: number) {
-
     // populate the adminLevelOnes options list for the specific control
     this.filteredAdminLevelOnes[eventLocationIndex].next(this.adminLevelOnes);
 
@@ -754,7 +850,6 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   }
 
   ManageAdminLevelTwoControl(eventLocationIndex: number) {
-
     // populate the adminLevelTwos options list for the specific control
     this.filteredAdminLevelTwos[eventLocationIndex].next(this.adminLevelTwos);
 
@@ -764,11 +859,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       .subscribe(() => {
         this.filterAdminLevelTwos(eventLocationIndex);
       });
-
   }
 
   ManageOrganizationControl(organizationIndex: number) {
-
     // populate the organizations options list for the specific control
     this.filteredOrganizations[organizationIndex].next(this.organizations);
 
@@ -787,34 +880,45 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     // get the search keyword
     let search = this.organizationFilterCtrl.value;
     if (!search) {
-      this.filteredOrganizations[organizationIndex].next(this.organizations.slice());
+      this.filteredOrganizations[organizationIndex].next(
+        this.organizations.slice()
+      );
       return;
     } else {
       search = search.toLowerCase();
     }
     // filter the organizations
     this.filteredOrganizations[organizationIndex].next(
-      this.organizations.filter(organization => organization.name.toLowerCase().indexOf(search) > -1)
+      this.organizations.filter(
+        (organization) => organization.name.toLowerCase().indexOf(search) > -1
+      )
     );
   }
 
   inputChangeTrigger(event) {
-    event.currentTarget.dispatchEvent(new Event('input'));
+    event.currentTarget.dispatchEvent(new Event("input"));
   }
 
   filter(val: any, searchArray: any, searchProperties: string[]): string[] {
     let result = [];
-    if (val === '') {
+    if (val === "") {
       result = searchArray;
     } else {
       for (const searchProperty of searchProperties) {
         if (isNaN(val)) {
-          const realval = val && typeof val === 'object' ? val[searchProperty] : val;
+          const realval =
+            val && typeof val === "object" ? val[searchProperty] : val;
           let lastOption = null;
           if (searchArray !== undefined) {
             for (let i = 0; i < searchArray.length; i++) {
               // tslint:disable-next-line:max-line-length
-              if (searchArray[i][searchProperty] != null && (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase()))) {
+              if (
+                searchArray[i][searchProperty] != null &&
+                (!realval ||
+                  searchArray[i][searchProperty]
+                    .toLowerCase()
+                    .includes(realval.toLowerCase()))
+              ) {
                 if (searchArray[i][searchProperty] !== lastOption) {
                   lastOption = searchArray[i][searchProperty];
                   result.push(searchArray[i]);
@@ -831,154 +935,155 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   }
 
   ngAfterViewInit() {
-
     this.eventTypeRef.focus();
     this.cd.detectChanges();
 
     const self = this;
-    this.usgsSearch = search_api.create('search-api-div', {
-      'verbose': true,
-      'placeholder': 'Search for GNIS place name',
-      'tooltip': 'Type to search GNIS database',
-      'on_result': function (event) {
+    this.usgsSearch = search_api.create("search-api-div", {
+      verbose: true,
+      placeholder: "Search for GNIS place name",
+      tooltip: "Type to search GNIS database",
+      on_result: function (event) {
         // do something with the result
         // o.result is a geojson point feature object with location information set as properties
         console.warn(event.result);
-
-      }
+      },
     });
 
     window.scrollTo(0, 0);
-
-
   }
 
   ngOnInit() {
-
-    this.eventSubmissionForm.get('new_read_collaborators').setValue([]);
-    this.eventSubmissionForm.get('new_write_collaborators').setValue([]);
+    this.eventSubmissionForm.get("new_read_collaborators").setValue([]);
+    this.eventSubmissionForm.get("new_write_collaborators").setValue([]);
 
     // get event types from the EventTypeService
-    this.eventTypeService.getEventTypes()
-      .subscribe(
-        eventTypes => {
-          this.eventTypes = eventTypes;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.eventTypeService.getEventTypes().subscribe(
+      (eventTypes) => {
+        this.eventTypes = eventTypes;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // get legal statuses from the LegalStatusService
-    this.legalStatusService.getLegalStatuses()
-      .subscribe(
-        legalStatuses => {
-          this.legalStatuses = legalStatuses;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.legalStatusService.getLegalStatuses().subscribe(
+      (legalStatuses) => {
+        this.legalStatuses = legalStatuses;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // get event record statuses from the EventStatusService
-    this.eventStatusService.getEventStatuses()
-      .subscribe(
-        eventStatuses => {
-          this.eventStatuses = eventStatuses;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-
+    this.eventStatusService.getEventStatuses().subscribe(
+      (eventStatuses) => {
+        this.eventStatuses = eventStatuses;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // get diagnoses from the diagnoses service
-    this.diagnosisService.getDiagnoses()
-      .subscribe(
-        (diagnoses) => {
-          this.allDiagnoses = diagnoses;
-          this.allDiagnoses.sort(function (a, b) {
-            if (a.name < b.name) { return -1; }
-            if (a.name > b.name) { return 1; }
-            return 0;
-          });
+    this.diagnosisService.getDiagnoses().subscribe(
+      (diagnoses) => {
+        this.allDiagnoses = diagnoses;
+        this.allDiagnoses.sort(function (a, b) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
 
-          // adds the "Pending" diagnosis (unknown, incomplete) to availableDiagnoses list
-          // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of "Pending".
-          // for (const diagnosis of this.allDiagnoses) {
-          //   if (diagnosis.id === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
-          //     this.availableDiagnoses.push(diagnosis);
-          //   }
-          // }
+        // adds the "Pending" diagnosis (unknown, incomplete) to availableDiagnoses list
+        // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of "Pending".
+        // for (const diagnosis of this.allDiagnoses) {
+        //   if (diagnosis.id === APP_SETTINGS.EVENT_INCOMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
+        //     this.availableDiagnoses.push(diagnosis);
+        //   }
+        // }
 
-          // add the "Undetermined" diagnosis to possibleDiagnoses
-          this.availableDiagnoses.push({ "id" : APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis,"name" : APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis_string});
-
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+        // add the "Undetermined" diagnosis to possibleDiagnoses
+        this.availableDiagnoses.push({
+          id: APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis,
+          name: APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis_string,
+        });
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // get landOwnerships from the LandOwnerShipService
-    this.landOwnershipService.getLandOwnerships()
-      .subscribe(
-        landOwnerships => {
-          this.landOwnerships = landOwnerships;
-          this.landOwnerships.sort(function (a, b) {
-            if (a.name < b.name) { return -1; }
-            if (a.name > b.name) { return 1; }
-            return 0;
-          });
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.landOwnershipService.getLandOwnerships().subscribe(
+      (landOwnerships) => {
+        this.landOwnerships = landOwnerships;
+        this.landOwnerships.sort(function (a, b) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // get countries from the countryService
-    this.countryService.getCountries()
-      .subscribe(
-        countries => {
-          this.countries = countries;
-          this.countries.sort(function (a, b) {
-            if (a.name < b.name) { return -1; }
-            if (a.name > b.name) { return 1; }
-            return 0;
-          });
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.countryService.getCountries().subscribe(
+      (countries) => {
+        this.countries = countries;
+        this.countries.sort(function (a, b) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // get staff members from the staffService
-    this.staffService.getStaff()
-      .subscribe(
-        staff => {
-          this.staff = staff;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.staffService.getStaff().subscribe(
+      (staff) => {
+        this.staff = staff;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // get 'laboratories' from the organizations service
     // aliases the subset of organization records where laboratory = true to an array called 'laboratories'
-    this.organizationService.getLaboratories()
-      .subscribe(
-        (laboratories) => {
-          this.laboratories = laboratories;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.organizationService.getLaboratories().subscribe(
+      (laboratories) => {
+        this.laboratories = laboratories;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // query adminLevelOnes from the adminLevelOneService using default country
-    this.adminLevelOneService.queryAdminLevelOnes(APP_UTILITIES.DEFAULT_COUNTRY_ID)
+    this.adminLevelOneService
+      .queryAdminLevelOnes(APP_UTILITIES.DEFAULT_COUNTRY_ID)
       .subscribe(
-        adminLevelOnes => {
+        (adminLevelOnes) => {
           this.adminLevelOnes = adminLevelOnes;
 
           // load the options list for intial control
@@ -991,196 +1096,201 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
           //     this.filterAdminLevelOnes(0);
           //   });
         },
-        error => {
+        (error) => {
           this.errorMessage = <any>error;
         }
       );
 
     // get species from the speciesService
-    this.speciesService.getSpecies()
-      .subscribe(
-        species => {
-          this.species = species;
-          this.species.sort(function (a, b) {
-            if (a.name < b.name) { return -1; }
-            if (a.name > b.name) { return 1; }
-            return 0;
-          });
+    this.speciesService.getSpecies().subscribe(
+      (species) => {
+        this.species = species;
+        this.species.sort(function (a, b) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
 
-          // populate the search select options for the initial control
-          this.filteredSpecies[0][0].next(this.species);
+        // populate the search select options for the initial control
+        this.filteredSpecies[0][0].next(this.species);
 
-          // listen for search field value changes
-          // this.speciesFilterCtrl.valueChanges
-          //   .pipe(takeUntil(this._onDestroy))
-          //   .subscribe(() => {
-          //     this.filterSpecies();
-          //   });
-
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+        // listen for search field value changes
+        // this.speciesFilterCtrl.valueChanges
+        //   .pipe(takeUntil(this._onDestroy))
+        //   .subscribe(() => {
+        //     this.filterSpecies();
+        //   });
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // get sexBiases from the sexBias service
-    this.sexBiasService.getSexBiases()
-      .subscribe(
-        sexBiases => {
-          this.sexBiases = sexBiases;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.sexBiasService.getSexBiases().subscribe(
+      (sexBiases) => {
+        this.sexBiases = sexBiases;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // get ageBiases from the ageBias service
-    this.ageBiasService.getAgeBiases()
-      .subscribe(
-        ageBiases => {
-          this.ageBiases = ageBiases;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.ageBiasService.getAgeBiases().subscribe(
+      (ageBiases) => {
+        this.ageBiases = ageBiases;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // get contact types from the ContactTypeService
-    this.contactTypeService.getContactTypes()
-      .subscribe(
-        contactTypes => {
-          this.contactTypes = contactTypes;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.contactTypeService.getContactTypes().subscribe(
+      (contactTypes) => {
+        this.contactTypes = contactTypes;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // get comment types from the CommentTypeService
-    this.commentTypeService.getCommentTypes()
-      .subscribe(
-        commentTypes => {
-          this.commentTypes = commentTypes;
-          // remove the 'special' comment types, as they should not be available for general event comments
-          for (const type of APP_SETTINGS.SPECIAL_COMMENT_TYPES) {
-            for (const commentType of this.commentTypes) {
-              if (commentType.id === type.id) {
-                this.commentTypes = this.commentTypes.filter(commenttype => commenttype.id !== type.id);
-              }
+    this.commentTypeService.getCommentTypes().subscribe(
+      (commentTypes) => {
+        this.commentTypes = commentTypes;
+        // remove the 'special' comment types, as they should not be available for general event comments
+        for (const type of APP_SETTINGS.SPECIAL_COMMENT_TYPES) {
+          for (const commentType of this.commentTypes) {
+            if (commentType.id === type.id) {
+              this.commentTypes = this.commentTypes.filter(
+                (commenttype) => commenttype.id !== type.id
+              );
             }
           }
-        },
-        error => {
-          this.errorMessage = <any>error;
         }
-      );
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // get organizations from the OrganizationService
-    this.organizationService.getOrganizations()
-      .subscribe(
-        organizations => {
-          this.organizations = organizations;
-          this.filteredOrganizations[0].next(this.organizations);
-          // set the default starting org to user's org after loading the options list
-          this.eventSubmissionForm.get('new_organizations')['controls'][0].get('org').setValue(this.currentUser.organization);
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.organizationService.getOrganizations().subscribe(
+      (organizations) => {
+        this.organizations = organizations;
+        this.filteredOrganizations[0].next(this.organizations);
+        // set the default starting org to user's org after loading the options list
+        this.eventSubmissionForm
+          .get("new_organizations")
+          ["controls"][0].get("org")
+          .setValue(this.currentUser.organization);
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // get diagnosisBases from the diagnosisBasis service
-    this.diagnosisBasisService.getDiagnosisBases()
-      .subscribe(
-        (diagnosisBases) => {
-          this.diagnosisBases = diagnosisBases;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.diagnosisBasisService.getDiagnosisBases().subscribe(
+      (diagnosisBases) => {
+        this.diagnosisBases = diagnosisBases;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
     // get diagnosisCauses from the diagnosisCause service
-    this.diagnosisCauseService.getDiagnosisCauses()
-      .subscribe(
-        (diagnosisCauses) => {
-          this.diagnosisCauses = diagnosisCauses;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.diagnosisCauseService.getDiagnosisCauses().subscribe(
+      (diagnosisCauses) => {
+        this.diagnosisCauses = diagnosisCauses;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // TEMPORARY- will need to use user creds to query user contact list
     // get contact types from the ContactTypeService
     this.userContactsLoading = true;
-    this.contactService.getContacts()
-      .subscribe(
-        contacts => {
-          this.userContacts = contacts;
-          this.userContacts.sort(function (a, b) {
-            if (a.last_name < b.last_name) { return -1; }
-            if (a.last_name > b.last_name) { return 1; }
-            return 0;
-          });
+    this.contactService.getContacts().subscribe(
+      (contacts) => {
+        this.userContacts = contacts;
+        this.userContacts.sort(function (a, b) {
+          if (a.last_name < b.last_name) {
+            return -1;
+          }
+          if (a.last_name > b.last_name) {
+            return 1;
+          }
+          return 0;
+        });
 
-          // populate the search select options for the initial control
-          this.filteredContacts[0][0].next(this.userContacts);
-          this.userContactsLoading = false;
+        // populate the search select options for the initial control
+        this.filteredContacts[0][0].next(this.userContacts);
+        this.userContactsLoading = false;
 
-          // // listen for search field value changes
-          // this.contactFilterCtrl.valueChanges
-          //   .pipe(takeUntil(this._onDestroy))
-          //   .subscribe(() => {
-          //     this.filterContacts();
-          //   });
-        },
-        error => {
-          this.errorMessage = <any>error;
-          this.userContactsLoading = false;
-        }
-      );
+        // // listen for search field value changes
+        // this.contactFilterCtrl.valueChanges
+        //   .pipe(takeUntil(this._onDestroy))
+        //   .subscribe(() => {
+        //     this.filterContacts();
+        //   });
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+        this.userContactsLoading = false;
+      }
+    );
 
+    this.circleService.getAllUserCircles().subscribe(
+      (circles) => {
+        this.userCircles = circles;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
-    this.circleService.getAllUserCircles()
-      .subscribe(
-        circles => {
-          this.userCircles = circles;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-
-    this.eventSubmissionForm.get('complete').valueChanges.subscribe(value => {
+    this.eventSubmissionForm.get("complete").valueChanges.subscribe((value) => {
       if (value === true) {
-        this.eventSubmissionForm.get('quality_check').enable();
+        this.eventSubmissionForm.get("quality_check").enable();
       } else if (value === false) {
-        this.eventSubmissionForm.get('quality_check').disable();
-        this.eventSubmissionForm.get('quality_check').setValue(null);
+        this.eventSubmissionForm.get("quality_check").disable();
+        this.eventSubmissionForm.get("quality_check").setValue(null);
       }
     });
 
-    this.eventSubmissionForm.get('new_organizations').valueChanges.subscribe(orgArray => {
-      this.duplicateEventOrgViolation = false;
-      const duplicateExists = APP_UTILITIES.checkDuplicateInObject('org', orgArray);
-      // console.log('Duplicate event org exists? ' + duplicateExists);
-      if (duplicateExists) { this.duplicateEventOrgViolation = true; }
-    });
-
+    this.eventSubmissionForm
+      .get("new_organizations")
+      .valueChanges.subscribe((orgArray) => {
+        this.duplicateEventOrgViolation = false;
+        const duplicateExists = APP_UTILITIES.checkDuplicateInObject(
+          "org",
+          orgArray
+        );
+        // console.log('Duplicate event org exists? ' + duplicateExists);
+        if (duplicateExists) {
+          this.duplicateEventOrgViolation = true;
+        }
+      });
 
     ///////////////
-    this.eventSubmissionForm.get('complete').valueChanges.subscribe(value => {
+    this.eventSubmissionForm.get("complete").valueChanges.subscribe((value) => {
       if (value === true) {
-        this.eventSubmissionForm.get('quality_check').enable();
+        this.eventSubmissionForm.get("quality_check").enable();
       } else if (value === false) {
-        this.eventSubmissionForm.get('quality_check').disable();
-        this.eventSubmissionForm.get('quality_check').setValue(null);
+        this.eventSubmissionForm.get("quality_check").disable();
+        this.eventSubmissionForm.get("quality_check").setValue(null);
       }
     });
 
     /////////////////////
-
-
   }
 
   // onFormChanges(): void {
@@ -1190,29 +1300,86 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   // }
 
   // functions for getting mat-tooltip text from config file
-  eventTypeTooltip() { const string = FIELD_HELP_TEXT.eventTypeTooltip; return string; }
-  contactPersonTooltip() { const string = FIELD_HELP_TEXT.contactPersonTooltip; return string; }
-  recordStatusTooltip() { const string = FIELD_HELP_TEXT.recordStatusTooltip; return string; }
+  eventTypeTooltip() {
+    const string = FIELD_HELP_TEXT.eventTypeTooltip;
+    return string;
+  }
+  contactPersonTooltip() {
+    const string = FIELD_HELP_TEXT.contactPersonTooltip;
+    return string;
+  }
+  recordStatusTooltip() {
+    const string = FIELD_HELP_TEXT.recordStatusTooltip;
+    return string;
+  }
 
-  locationNameTooltip() { const string = FIELD_HELP_TEXT.locationNameTooltip; return string; }
-  standardizedLocationNameTooltip() { const string = FIELD_HELP_TEXT.standardizedLocationNameTooltip; return string; }
-  knownDeadTooltip() { const string = FIELD_HELP_TEXT.knownDeadTooltip; return string; }
-  estimatedDeadTooltip() { const string = FIELD_HELP_TEXT.estimatedDeadTooltip; return string; }
-  knownSickTooltip() { const string = FIELD_HELP_TEXT.knownSickTooltip; return string; }
-  estimatedSickTooltip() { const string = FIELD_HELP_TEXT.estimatedSickTooltip; return string; }
-  contactTypeTooltip() { const string = FIELD_HELP_TEXT.contactTypeTooltip; return string; }
-  locationCommentTooltip() { const string = FIELD_HELP_TEXT.locationCommentTooltip; return string; }
-  eventDiagnosisTooltip() { const string = FIELD_HELP_TEXT.eventDiagnosisTooltip; return string; }
+  locationNameTooltip() {
+    const string = FIELD_HELP_TEXT.locationNameTooltip;
+    return string;
+  }
+  standardizedLocationNameTooltip() {
+    const string = FIELD_HELP_TEXT.standardizedLocationNameTooltip;
+    return string;
+  }
+  knownDeadTooltip() {
+    const string = FIELD_HELP_TEXT.knownDeadTooltip;
+    return string;
+  }
+  estimatedDeadTooltip() {
+    const string = FIELD_HELP_TEXT.estimatedDeadTooltip;
+    return string;
+  }
+  knownSickTooltip() {
+    const string = FIELD_HELP_TEXT.knownSickTooltip;
+    return string;
+  }
+  estimatedSickTooltip() {
+    const string = FIELD_HELP_TEXT.estimatedSickTooltip;
+    return string;
+  }
+  contactTypeTooltip() {
+    const string = FIELD_HELP_TEXT.contactTypeTooltip;
+    return string;
+  }
+  locationCommentTooltip() {
+    const string = FIELD_HELP_TEXT.locationCommentTooltip;
+    return string;
+  }
+  eventDiagnosisTooltip() {
+    const string = FIELD_HELP_TEXT.eventDiagnosisTooltip;
+    return string;
+  }
 
-  eventCommentTooltip() { const string = FIELD_HELP_TEXT.eventCommentTooltip; return string; }
-  eventCommentTypeTooltip() { const string = FIELD_HELP_TEXT.eventCommentTypeTooltip; return string; }
+  eventCommentTooltip() {
+    const string = FIELD_HELP_TEXT.eventCommentTooltip;
+    return string;
+  }
+  eventCommentTypeTooltip() {
+    const string = FIELD_HELP_TEXT.eventCommentTypeTooltip;
+    return string;
+  }
 
-  collaboratorsAddIndividualTooltip() { const string = FIELD_HELP_TEXT.collaboratorsAddIndividualTooltip; return string; }
-  collaboratorsAddCircleTooltip() { const string = FIELD_HELP_TEXT.collaboratorsAddCircleTooltip; return string; }
+  collaboratorsAddIndividualTooltip() {
+    const string = FIELD_HELP_TEXT.collaboratorsAddIndividualTooltip;
+    return string;
+  }
+  collaboratorsAddCircleTooltip() {
+    const string = FIELD_HELP_TEXT.collaboratorsAddCircleTooltip;
+    return string;
+  }
 
-  serviceRequestRequestDiaServicesOnlyTooltip() { const string = FIELD_HELP_TEXT.serviceRequestRequestDiaServicesOnlyTooltip; return string; }
-  serviceRequestRequestDiaAndConsultTooltip() { const string = FIELD_HELP_TEXT.serviceRequestRequestDiaAndConsultTooltip; return string; }
-  serviceRequestNoServicesTooltip() { const string = FIELD_HELP_TEXT.serviceRequestNoServicesTooltip; return string; }
+  serviceRequestRequestDiaServicesOnlyTooltip() {
+    const string = FIELD_HELP_TEXT.serviceRequestRequestDiaServicesOnlyTooltip;
+    return string;
+  }
+  serviceRequestRequestDiaAndConsultTooltip() {
+    const string = FIELD_HELP_TEXT.serviceRequestRequestDiaAndConsultTooltip;
+    return string;
+  }
+  serviceRequestNoServicesTooltip() {
+    const string = FIELD_HELP_TEXT.serviceRequestNoServicesTooltip;
+    return string;
+  }
 
   serviceRequestCommentTooltip() {
     const string = FIELD_HELP_TEXT.serviceRequestCommentTooltip;
@@ -1247,31 +1414,84 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     const string = FIELD_HELP_TEXT.labTooltip;
     return string;
   }
-  userEventRefTooltip() { const string = FIELD_HELP_TEXT.userEventRefTooltip; return string; }
-  eventVisibilityTooltip() { const string = FIELD_HELP_TEXT.eventVisibilityTooltip; return string; }
-  contactOrganizationTooltip() { const string = FIELD_HELP_TEXT.contactOrganizationTooltip; return string; }
-  locationStartDateTooltip() { const string = FIELD_HELP_TEXT.locationStartDateTooltip; return string; }
-  locationEndDateTooltip() { const string = FIELD_HELP_TEXT.locationEndDateTooltip; return string; }
-  countryTooltip() { const string = FIELD_HELP_TEXT.countryTooltip; return string; }
-  stateTooltip() { const string = FIELD_HELP_TEXT.stateTooltip; return string; }
-  countyTooltip() { const string = FIELD_HELP_TEXT.countyTooltip; return string; }
-  landOwnershipTooltip() { const string = FIELD_HELP_TEXT.landOwnershipTooltip; return string; }
-  latitudeTooltip() { const string = FIELD_HELP_TEXT.latitudeTooltip; return string; }
-  longitudeTooltip() { const string = FIELD_HELP_TEXT.longitudeTooltip; return string; }
-  speciesTooltip() { const string = FIELD_HELP_TEXT.speciesTooltip; return string; }
-  populationTooltip() { const string = FIELD_HELP_TEXT.populationTooltip; return string; }
-  ageBiasTooltip() { const string = FIELD_HELP_TEXT.ageBiasTooltip; return string; }
-  sexBiasTooltip() { const string = FIELD_HELP_TEXT.sexBiasTooltip; return string; }
-  captiveTooltip() { const string = FIELD_HELP_TEXT.captiveTooltip; return string; }
+  userEventRefTooltip() {
+    const string = FIELD_HELP_TEXT.userEventRefTooltip;
+    return string;
+  }
+  eventVisibilityTooltip() {
+    const string = FIELD_HELP_TEXT.eventVisibilityTooltip;
+    return string;
+  }
+  contactOrganizationTooltip() {
+    const string = FIELD_HELP_TEXT.contactOrganizationTooltip;
+    return string;
+  }
+  locationStartDateTooltip() {
+    const string = FIELD_HELP_TEXT.locationStartDateTooltip;
+    return string;
+  }
+  locationEndDateTooltip() {
+    const string = FIELD_HELP_TEXT.locationEndDateTooltip;
+    return string;
+  }
+  countryTooltip() {
+    const string = FIELD_HELP_TEXT.countryTooltip;
+    return string;
+  }
+  stateTooltip() {
+    const string = FIELD_HELP_TEXT.stateTooltip;
+    return string;
+  }
+  countyTooltip() {
+    const string = FIELD_HELP_TEXT.countyTooltip;
+    return string;
+  }
+  landOwnershipTooltip() {
+    const string = FIELD_HELP_TEXT.landOwnershipTooltip;
+    return string;
+  }
+  latitudeTooltip() {
+    const string = FIELD_HELP_TEXT.latitudeTooltip;
+    return string;
+  }
+  longitudeTooltip() {
+    const string = FIELD_HELP_TEXT.longitudeTooltip;
+    return string;
+  }
+  speciesTooltip() {
+    const string = FIELD_HELP_TEXT.speciesTooltip;
+    return string;
+  }
+  populationTooltip() {
+    const string = FIELD_HELP_TEXT.populationTooltip;
+    return string;
+  }
+  ageBiasTooltip() {
+    const string = FIELD_HELP_TEXT.ageBiasTooltip;
+    return string;
+  }
+  sexBiasTooltip() {
+    const string = FIELD_HELP_TEXT.sexBiasTooltip;
+    return string;
+  }
+  captiveTooltip() {
+    const string = FIELD_HELP_TEXT.captiveTooltip;
+    return string;
+  }
 
   getErrorMessage(formControlName) {
-
-    return this.eventSubmissionForm.get(formControlName).hasError('required') ? 'Please enter a value' :
-      this.eventSubmissionForm.get(formControlName).hasError('email') ? 'Not a valid email' : '';
+    return this.eventSubmissionForm.get(formControlName).hasError("required")
+      ? "Please enter a value"
+      : this.eventSubmissionForm.get(formControlName).hasError("email")
+      ? "Not a valid email"
+      : "";
   }
 
   openDiagnosticInfoDialog() {
-    this.diagnosticInfoDialogRef = this.dialog.open(DiagnosticInfoComponent, {});
+    this.diagnosticInfoDialogRef = this.dialog.open(
+      DiagnosticInfoComponent,
+      {}
+    );
   }
 
   private filterAdminLevelOnes(eventLocationIndex) {
@@ -1281,14 +1501,19 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     // get the search keyword
     let search = this.adminLevelOneFilterCtrl.value;
     if (!search) {
-      this.filteredAdminLevelOnes[eventLocationIndex].next(this.adminLevelOnes.slice());
+      this.filteredAdminLevelOnes[eventLocationIndex].next(
+        this.adminLevelOnes.slice()
+      );
       return;
     } else {
       search = search.toLowerCase();
     }
     // filter the adminLevelOnes
     this.filteredAdminLevelOnes[eventLocationIndex].next(
-      this.adminLevelOnes.filter(admin_level_one => admin_level_one.name.toLowerCase().indexOf(search) > -1)
+      this.adminLevelOnes.filter(
+        (admin_level_one) =>
+          admin_level_one.name.toLowerCase().indexOf(search) > -1
+      )
     );
   }
 
@@ -1299,14 +1524,19 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     // get the search keyword
     let search = this.adminLevelTwoFilterCtrl.value;
     if (!search) {
-      this.filteredAdminLevelTwos[eventLocationIndex].next(this.adminLevelTwos.slice());
+      this.filteredAdminLevelTwos[eventLocationIndex].next(
+        this.adminLevelTwos.slice()
+      );
       return;
     } else {
       search = search.toLowerCase();
     }
     // filter the adminLevelTwos
     this.filteredAdminLevelTwos[eventLocationIndex].next(
-      this.adminLevelTwos.filter(admin_level_two => admin_level_two.name.toLowerCase().indexOf(search) > -1)
+      this.adminLevelTwos.filter(
+        (admin_level_two) =>
+          admin_level_two.name.toLowerCase().indexOf(search) > -1
+      )
     );
   }
 
@@ -1317,14 +1547,18 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     // get the search keyword
     let search = this.speciesFilterCtrl.value;
     if (!search) {
-      this.filteredSpecies[eventLocationIndex][locationSpeciesIndex].next(this.species.slice());
+      this.filteredSpecies[eventLocationIndex][locationSpeciesIndex].next(
+        this.species.slice()
+      );
       return;
     } else {
       search = search.toLowerCase();
     }
     // filter the adminLevelTwos
     this.filteredSpecies[eventLocationIndex][locationSpeciesIndex].next(
-      this.species.filter(species => species.name.toLowerCase().indexOf(search) > -1)
+      this.species.filter(
+        (species) => species.name.toLowerCase().indexOf(search) > -1
+      )
     );
   }
 
@@ -1335,7 +1569,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     // get the search keyword
     let search = this.contactFilterCtrl.value;
     if (!search) {
-      this.filteredContacts[eventLocationIndex][locationContactIndex].next(this.userContacts.slice());
+      this.filteredContacts[eventLocationIndex][locationContactIndex].next(
+        this.userContacts.slice()
+      );
       return;
     } else {
       search = search.toLowerCase();
@@ -1343,165 +1579,248 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     // filter the contacts
     this.filteredContacts[eventLocationIndex][locationContactIndex].next(
       // tslint:disable-next-line:max-line-length
-      this.userContacts.filter(contact => contact.first_name.toLowerCase().indexOf(search) > -1 || contact.last_name.toLowerCase().indexOf(search) > -1)
+      this.userContacts.filter(
+        (contact) =>
+          contact.first_name.toLowerCase().indexOf(search) > -1 ||
+          contact.last_name.toLowerCase().indexOf(search) > -1
+      )
     );
   }
 
-  createCommonEventDataObject(objectType, eventLocationIndex, objectInstanceIndex) {
-
-    const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'];
+  createCommonEventDataObject(
+    objectType,
+    eventLocationIndex,
+    objectInstanceIndex
+  ) {
+    const eventLocations = <FormArray>(
+      this.eventSubmissionForm.get("new_event_locations")["controls"]
+    );
     // check which object is being sent, parse out the specific form group instance from the form, add to the commonEventData object
     switch (objectType) {
-      case 'contact':
-        const contactsArray =
-          <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
+      case "contact":
+        const contactsArray = <FormArray>(
+          this.eventSubmissionForm
+            .get("new_event_locations")
+            ["controls"][eventLocationIndex].get("new_location_contacts")
+        );
         const contact = contactsArray.controls[objectInstanceIndex];
-        this.commonEventData.contacts.push(this.formBuilder.group({
-          contact: contact.value.contact,
-          contact_type: null
-        }));
+        this.commonEventData.contacts.push(
+          this.formBuilder.group({
+            contact: contact.value.contact,
+            contact_type: null,
+          })
+        );
 
         // loop through event locations and push the new contact into each, except the one it came from (so as to avoid duplicate)
         for (let i = 0, j = eventLocations.length; i < j; i++) {
-
           if (i !== eventLocationIndex) {
-
             // call addLocationContact, but also get the return value to know which contact instance to populate with the value
             const indexObject = this.addLocationContact(i);
 
             // tslint:disable-next-line:max-line-length
-            console.log('eventlocationindex: ' + indexObject.eventLocationIndex + ', locationspeciesindex: ' + indexObject.locationContactIndex);
+            console.log(
+              "eventlocationindex: " +
+                indexObject.eventLocationIndex +
+                ", locationspeciesindex: " +
+                indexObject.locationContactIndex
+            );
 
             // using the indexObject, push the species id value to the correct form instance
             // tslint:disable-next-line:max-line-length
-            this.eventSubmissionForm.get('new_event_locations')['controls'][indexObject.eventLocationIndex].get('new_location_contacts')['controls'][indexObject.locationContactIndex].get('contact').setValue(contact.value.contact);
+            this.eventSubmissionForm
+              .get("new_event_locations")
+              ["controls"][indexObject.eventLocationIndex].get(
+                "new_location_contacts"
+              )
+              ["controls"][indexObject.locationContactIndex].get("contact")
+              .setValue(contact.value.contact);
             // const locationContacts = eventLocations[i].get('location_contacts');
             // locationContacts.push(contact);
           }
         }
         // tslint:disable-next-line:max-line-length
-        this.openSnackBar(this.displayValuePipe.transform(contact.value.contact, 'first_name', this.userContacts) + ' ' + this.displayValuePipe.transform(contact.value.contact, 'last_name', this.userContacts) + ' added to all locations.', 'OK', 5000);
+        this.openSnackBar(
+          this.displayValuePipe.transform(
+            contact.value.contact,
+            "first_name",
+            this.userContacts
+          ) +
+            " " +
+            this.displayValuePipe.transform(
+              contact.value.contact,
+              "last_name",
+              this.userContacts
+            ) +
+            " added to all locations.",
+          "OK",
+          5000
+        );
 
         break;
-      case 'species':
-        const speciesArray =
-          <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
+      case "species":
+        const speciesArray = <FormArray>(
+          this.eventSubmissionForm
+            .get("new_event_locations")
+            ["controls"][eventLocationIndex].get("new_location_species")
+        );
         const species = speciesArray.controls[objectInstanceIndex];
-        this.commonEventData.species.push(this.formBuilder.group({
-          species: species.value.species,
-          population_count: null,
-          sick_count: [null, Validators.min(0)],
-          dead_count: [null, Validators.min(0)],
-          sick_count_estimated: [null, Validators.min(0)],
-          dead_count_estimated: [null, Validators.min(0)],
-          priority: null,
-          captive: null,
-          age_bias: null,
-          sex_bias: null
-        })
+        this.commonEventData.species.push(
+          this.formBuilder.group({
+            species: species.value.species,
+            population_count: null,
+            sick_count: [null, Validators.min(0)],
+            dead_count: [null, Validators.min(0)],
+            sick_count_estimated: [null, Validators.min(0)],
+            dead_count_estimated: [null, Validators.min(0)],
+            priority: null,
+            captive: null,
+            age_bias: null,
+            sex_bias: null,
+          })
         );
 
         // loop through event locations and push the new species into each, except the one it came from (so as to avoid duplicate)
         for (let i = 0, j = eventLocations.length; i < j; i++) {
-
           if (i !== eventLocationIndex) {
-
             // call addLocationSpecies, but also get the return value to know which species instance to populate with the value
             const indexObject = this.addLocationSpecies(i);
 
             // tslint:disable-next-line:max-line-length
-            console.log('eventlocationindex: ' + indexObject.eventLocationIndex + ', locationspeciesindex: ' + indexObject.locationSpeciesIndex);
+            console.log(
+              "eventlocationindex: " +
+                indexObject.eventLocationIndex +
+                ", locationspeciesindex: " +
+                indexObject.locationSpeciesIndex
+            );
 
             // using the indexObject, push the species id value to the correct form instance
             // tslint:disable-next-line:max-line-length
-            this.eventSubmissionForm.get('new_event_locations')['controls'][indexObject.eventLocationIndex].get('new_location_species')['controls'][indexObject.locationSpeciesIndex].get('species').setValue(species.value.species);
+            this.eventSubmissionForm
+              .get("new_event_locations")
+              ["controls"][indexObject.eventLocationIndex].get(
+                "new_location_species"
+              )
+              ["controls"][indexObject.locationSpeciesIndex].get("species")
+              .setValue(species.value.species);
           }
         }
         // tslint:disable-next-line:max-line-length
-        this.openSnackBar(this.displayValuePipe.transform(species.value.species, 'name', this.species) + ' added to all locations.', 'OK', 5000);
+        this.openSnackBar(
+          this.displayValuePipe.transform(
+            species.value.species,
+            "name",
+            this.species
+          ) + " added to all locations.",
+          "OK",
+          5000
+        );
         break;
     }
 
-    console.log('Common event data: ' + this.commonEventData);
+    console.log("Common event data: " + this.commonEventData);
   }
 
   endDateBeforeStart(AC: AbstractControl) {
-    AC.get('end_date').setErrors(null);
-    AC.get('start_date').setErrors(null);
-    const start_date = AC.get('start_date').value;
-    const end_date = AC.get('end_date').value;
-    if ((start_date !== null && end_date !== null) && start_date > end_date) {
-      AC.get('end_date').setErrors({ endDateBeforeStart: true });
+    AC.get("end_date").setErrors(null);
+    AC.get("start_date").setErrors(null);
+    const start_date = AC.get("start_date").value;
+    const end_date = AC.get("end_date").value;
+    if (start_date !== null && end_date !== null && start_date > end_date) {
+      AC.get("end_date").setErrors({ endDateBeforeStart: true });
     }
     return null;
   }
 
   startDateTodayorEarlierMortalityEvent(AC: AbstractControl) {
-    const start_date = AC.get('start_date').value;
-    const event_type = AC.get('event_type').value;
+    const start_date = AC.get("start_date").value;
+    const event_type = AC.get("event_type").value;
     const today = APP_UTILITIES.TODAY;
     if (event_type === 1) {
-      if ((start_date !== null) && ((start_date.getTime()) > (today.getTime()))) {
-        AC.get('start_date').setErrors({ startDateTodayorEarlierMortalityEvent: true });
+      if (start_date !== null && start_date.getTime() > today.getTime()) {
+        AC.get("start_date").setErrors({
+          startDateTodayorEarlierMortalityEvent: true,
+        });
       }
     }
     return null;
   }
 
   minSpecies(AC: AbstractControl) {
-    const locationSpeciesLength = AC.get('new_location_species')['controls'].length;
+    const locationSpeciesLength = AC.get("new_location_species")["controls"]
+      .length;
     if (locationSpeciesLength < 1) {
-      AC.get('new_location_species').setErrors({ minSpecies: true });
+      AC.get("new_location_species").setErrors({ minSpecies: true });
     }
     return null;
   }
 
   truncateDecimalDegrees($event, eventLocationIndex, field) {
-
-    const beforeDecimal = ($event + '').split('.')[0];
-    const afterDecimal = ($event + '').split('.')[1];
+    const beforeDecimal = ($event + "").split(".")[0];
+    const afterDecimal = ($event + "").split(".")[1];
 
     if (afterDecimal.length > 6) {
-      const truncatedValue = beforeDecimal + '.' + afterDecimal.substring(0, 6);
-      this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get(field).setValue(truncatedValue);
+      const truncatedValue = beforeDecimal + "." + afterDecimal.substring(0, 6);
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get(field)
+        .setValue(truncatedValue);
     }
-
   }
 
   checkForDuplicateEventOrg(orgID) {
-
     this.duplicateEventOrgViolation = false;
-    const eventOrganizations = <FormArray>this.eventSubmissionForm.get('new_organizations')['controls'];
+    const eventOrganizations = <FormArray>(
+      this.eventSubmissionForm.get("new_organizations")["controls"]
+    );
 
     for (let i = 0, j = eventOrganizations.length; i < j; i++) {
       // do not check last item in array because it is the one just added and will always match
       const lastAddedIndex = j - 1;
       if (i !== lastAddedIndex) {
-        if (this.eventSubmissionForm.get('new_organizations')['controls'][i].get('org').value === orgID) {
+        if (
+          this.eventSubmissionForm
+            .get("new_organizations")
+            ["controls"][i].get("org").value === orgID
+        ) {
           this.duplicateEventOrgViolation = true;
         }
       }
-
     }
   }
 
   checkForDuplicateEventDiagnosis(diagnosisID) {
-    const eventDiagnoses = <FormArray>this.eventSubmissionForm.get('new_event_diagnoses')['controls'];
+    const eventDiagnoses = <FormArray>(
+      this.eventSubmissionForm.get("new_event_diagnoses")["controls"]
+    );
     for (let i = 0, j = eventDiagnoses.length; i < j; i++) {
-      if (Number(this.eventSubmissionForm.get('new_event_diagnoses')['controls'][i].get('diagnosis').value) === diagnosisID) {
+      if (
+        Number(
+          this.eventSubmissionForm
+            .get("new_event_diagnoses")
+            ["controls"][i].get("diagnosis").value
+        ) === diagnosisID
+      ) {
         return true;
       }
     }
   }
 
   checkforMissingSpecies(eventLocationIndex) {
-
     // tslint:disable-next-line:max-line-length
-    const locationspecies = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
+    const locationspecies = <FormArray>(
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("new_location_species")
+    );
     let speciesSelectionMissing = false;
     for (let i = 0, j = locationspecies.length; i < j; i++) {
       // tslint:disable-next-line:max-line-length
-      if (this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][i].get('species').value === null) {
+      if (
+        this.eventSubmissionForm
+          .get("new_event_locations")
+          ["controls"][eventLocationIndex].get("new_location_species")
+          ["controls"][i].get("species").value === null
+      ) {
         speciesSelectionMissing = true;
       }
     }
@@ -1513,50 +1832,86 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   }
 
   checkEventLocationCommentMin(eventLocationIndex) {
-
     // tslint:disable-next-line:max-line-length
-    const siteDesciptionCommentLength = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('site_description').value.length;
-    const historyCommentLength = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('history').value.length;
+    const siteDesciptionCommentLength = this.eventSubmissionForm
+      .get("new_event_locations")
+      ["controls"][eventLocationIndex].get("site_description").value.length;
+    const historyCommentLength = this.eventSubmissionForm
+      .get("new_event_locations")
+      ["controls"][eventLocationIndex].get("history").value.length;
     // tslint:disable-next-line:max-line-length
-    const envFactorsCommentLength = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('environmental_factors').value.length;
-    const clinicalSignsCommentLength = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('clinical_signs').value.length;
+    const envFactorsCommentLength = this.eventSubmissionForm
+      .get("new_event_locations")
+      ["controls"][eventLocationIndex].get("environmental_factors")
+      .value.length;
+    const clinicalSignsCommentLength = this.eventSubmissionForm
+      .get("new_event_locations")
+      ["controls"][eventLocationIndex].get("clinical_signs").value.length;
     // tslint:disable-next-line:max-line-length
-    const generalCommentLength = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('comment').value.length;
-    if ((siteDesciptionCommentLength === 0) && (historyCommentLength === 0) && (envFactorsCommentLength === 0) && (clinicalSignsCommentLength === 0) && (generalCommentLength === 0)) {
+    const generalCommentLength = this.eventSubmissionForm
+      .get("new_event_locations")
+      ["controls"][eventLocationIndex].get("comment").value.length;
+    if (
+      siteDesciptionCommentLength === 0 &&
+      historyCommentLength === 0 &&
+      envFactorsCommentLength === 0 &&
+      clinicalSignsCommentLength === 0 &&
+      generalCommentLength === 0
+    ) {
       return true;
     }
     return false;
   }
 
   checkLocationSpeciesNumbers() {
-
     this.locationSpeciesNumbersViolation = false;
     this.numberAffectedViolation = false;
     this.completeEventLocationSpeciesNumbersViolation = false;
     // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
-    if (this.eventSubmissionForm.get('event_type').value === 1 || this.eventSubmissionForm.get('event_type').value === '1') {
+    if (
+      this.eventSubmissionForm.get("event_type").value === 1 ||
+      this.eventSubmissionForm.get("event_type").value === "1"
+    ) {
       // set var to capture of requirement is met at any of the event locations
       let requirementMetEventOpen = false;
       let requirementMetEventClosed = true;
-      const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+      const eventLocations = <FormArray>(
+        this.eventSubmissionForm.get("new_event_locations")
+      );
       // tslint:disable-next-line:max-line-length
-      for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
-        const locationspecies = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
+      for (
+        let eventLocationIndex = 0,
+          eventLocationsLength = eventLocations.length;
+        eventLocationIndex < eventLocationsLength;
+        eventLocationIndex++
+      ) {
+        const locationspecies = <FormArray>(
+          this.eventSubmissionForm
+            .get("new_event_locations")
+            ["controls"][eventLocationIndex].get("new_location_species")
+        );
 
         // if event is marked as complete
-        if (this.eventSubmissionForm.get('complete').value === true) {
-
+        if (this.eventSubmissionForm.get("complete").value === true) {
           // loop through each new_location_species array, set requirementMetEventClosed false if any species lacks the number requirement.
           // tslint:disable-next-line:max-line-length
-          for (let locationspeciesindex = 0, locationspecieslength = locationspecies.length; locationspeciesindex < locationspecieslength; locationspeciesindex++) {
-            const locationspeciesform = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex];
+          for (
+            let locationspeciesindex = 0,
+              locationspecieslength = locationspecies.length;
+            locationspeciesindex < locationspecieslength;
+            locationspeciesindex++
+          ) {
+            const locationspeciesform = this.eventSubmissionForm
+              .get("new_event_locations")
+              ["controls"][eventLocationIndex].get("new_location_species")[
+              "controls"
+            ][locationspeciesindex];
             if (
-              (
-                locationspeciesform.get('sick_count').value +
-                locationspeciesform.get('dead_count').value +
-                locationspeciesform.get('sick_count_estimated').value +
-                locationspeciesform.get('dead_count_estimated').value
-              ) < 1
+              locationspeciesform.get("sick_count").value +
+                locationspeciesform.get("dead_count").value +
+                locationspeciesform.get("sick_count_estimated").value +
+                locationspeciesform.get("dead_count_estimated").value <
+              1
             ) {
               requirementMetEventClosed = false;
             }
@@ -1566,21 +1921,28 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
         // loop through each new_location_species array, set requirementMetEventOpen true if any species has the number requirement.
         // if even one meets the criteria, the event is valid for submission.
         // tslint:disable-next-line:max-line-length
-        for (let locationspeciesindex = 0, locationspecieslength = locationspecies.length; locationspeciesindex < locationspecieslength; locationspeciesindex++) {
-          const locationspeciesform = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex];
+        for (
+          let locationspeciesindex = 0,
+            locationspecieslength = locationspecies.length;
+          locationspeciesindex < locationspecieslength;
+          locationspeciesindex++
+        ) {
+          const locationspeciesform = this.eventSubmissionForm
+            .get("new_event_locations")
+            ["controls"][eventLocationIndex].get("new_location_species")[
+            "controls"
+          ][locationspeciesindex];
           if (
-            (
-              locationspeciesform.get('sick_count').value +
-              locationspeciesform.get('dead_count').value +
-              locationspeciesform.get('sick_count_estimated').value +
-              locationspeciesform.get('dead_count_estimated').value
-            ) >= 1
+            locationspeciesform.get("sick_count").value +
+              locationspeciesform.get("dead_count").value +
+              locationspeciesform.get("sick_count_estimated").value +
+              locationspeciesform.get("dead_count_estimated").value >=
+            1
           ) {
             requirementMetEventOpen = true;
           }
         }
-
-      }// end eventlocations array loop
+      } // end eventlocations array loop
 
       if (requirementMetEventOpen) {
         this.locationSpeciesNumbersViolation = false;
@@ -1594,13 +1956,37 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
         this.completeEventLocationSpeciesNumbersViolation = true;
       }
     }
-    const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+    const eventLocations = <FormArray>(
+      this.eventSubmissionForm.get("new_event_locations")
+    );
     let numbersAffectedRequirementMet = false;
-    for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
-      const locationspecies = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
-      for (let locationspeciesindex = 0, locationspecieslength = locationspecies.length; locationspeciesindex < locationspecieslength; locationspeciesindex++) {
-        const locationspeciesform = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex];
-        if ((locationspeciesform.get('sick_count').value !== null) || (locationspeciesform.get('dead_count').value !== null) || (locationspeciesform.get('sick_count_estimated').value !== null) || (locationspeciesform.get('dead_count_estimated').value !== null)) {
+    for (
+      let eventLocationIndex = 0, eventLocationsLength = eventLocations.length;
+      eventLocationIndex < eventLocationsLength;
+      eventLocationIndex++
+    ) {
+      const locationspecies = <FormArray>(
+        this.eventSubmissionForm
+          .get("new_event_locations")
+          ["controls"][eventLocationIndex].get("new_location_species")
+      );
+      for (
+        let locationspeciesindex = 0,
+          locationspecieslength = locationspecies.length;
+        locationspeciesindex < locationspecieslength;
+        locationspeciesindex++
+      ) {
+        const locationspeciesform = this.eventSubmissionForm
+          .get("new_event_locations")
+          ["controls"][eventLocationIndex].get("new_location_species")[
+          "controls"
+        ][locationspeciesindex];
+        if (
+          locationspeciesform.get("sick_count").value !== null ||
+          locationspeciesform.get("dead_count").value !== null ||
+          locationspeciesform.get("sick_count_estimated").value !== null ||
+          locationspeciesform.get("dead_count_estimated").value !== null
+        ) {
           numbersAffectedRequirementMet = true;
         }
 
@@ -1616,12 +2002,22 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   checkLocationStartDates() {
     this.locationStartDatesViolation = false;
     let requirementMet = false;
-    const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+    const eventLocations = <FormArray>(
+      this.eventSubmissionForm.get("new_event_locations")
+    );
     // tslint:disable-next-line:max-line-length
     // loop through event locations
-    for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
+    for (
+      let eventLocationIndex = 0, eventLocationsLength = eventLocations.length;
+      eventLocationIndex < eventLocationsLength;
+      eventLocationIndex++
+    ) {
       // if there are any non-null start dates, requirement is met
-      if (this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('start_date').value !== null) {
+      if (
+        this.eventSubmissionForm
+          .get("new_event_locations")
+          ["controls"][eventLocationIndex].get("start_date").value !== null
+      ) {
         requirementMet = true;
       }
     }
@@ -1633,21 +2029,19 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   }
 
   checkEventCompleteRules() {
-
-    if (this.eventSubmissionForm.get('complete').value === true) {
-      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-        {
-          disableClose: true,
-          data: {
-            title: 'Marking event as complete',
-            titleIcon: 'warning',
-            message: 'Submitting an event as complete will lock all editing on the event after submission.',
-            messageIcon: '',
-            confirmButtonText: 'OK',
-            showCancelButton: false
-          }
-        }
-      );
+    if (this.eventSubmissionForm.get("complete").value === true) {
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent, {
+        disableClose: true,
+        data: {
+          title: "Marking event as complete",
+          titleIcon: "warning",
+          message:
+            "Submitting an event as complete will lock all editing on the event after submission.",
+          messageIcon: "",
+          confirmButtonText: "OK",
+          showCancelButton: false,
+        },
+      });
     }
 
     this.checkLocationEndDates();
@@ -1657,11 +2051,9 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   }
 
   updateAvailableDiagnoses() {
-
     // TODO: clear all event diagnosis selections
 
-    if (this.eventSubmissionForm.get('complete').value === true) {
-
+    if (this.eventSubmissionForm.get("complete").value === true) {
       // remove the 'unknown' diagnosis for incomplete events
       // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of "Pending".
       // tslint:disable-next-line:max-line-length
@@ -1669,16 +2061,21 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
       // add the 'unknown' diagnosis for complete events
       for (const diagnosis of this.allDiagnoses) {
-        if (diagnosis.id === APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis) {
+        if (
+          diagnosis.id ===
+          APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis
+        ) {
           this.availableDiagnoses.push(diagnosis);
         }
       }
-
-    } else if (this.eventSubmissionForm.get('complete').value === false) {
-
+    } else if (this.eventSubmissionForm.get("complete").value === false) {
       // tslint:disable-next-line:max-line-length
       // remove the 'unknown' diagnosis for complete events
-      this.availableDiagnoses = this.availableDiagnoses.filter(diagnosis => diagnosis.id !== APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis);
+      this.availableDiagnoses = this.availableDiagnoses.filter(
+        (diagnosis) =>
+          diagnosis.id !==
+          APP_SETTINGS.EVENT_COMPLETE_DIAGNOSIS_UNKNOWN.diagnosis
+      );
       // add the 'unknown' diagnosis for incomplete events
       // removed on 5/28/19 per instruction from NWHC to disallow direct user selection of "Pending".
       // for (const diagnosis of this.allDiagnoses) {
@@ -1686,20 +2083,30 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       //     this.availableDiagnoses.push(diagnosis);
       //   }
       // }
-
     }
   }
 
   checkLocationEndDates() {
     this.locationEndDatesViolation = false;
-    if (this.eventSubmissionForm.get('complete').value === true) {
+    if (this.eventSubmissionForm.get("complete").value === true) {
       let requirementMet = true;
-      const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+      const eventLocations = <FormArray>(
+        this.eventSubmissionForm.get("new_event_locations")
+      );
       // tslint:disable-next-line:max-line-length
       // loop through event locations
-      for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
+      for (
+        let eventLocationIndex = 0,
+          eventLocationsLength = eventLocations.length;
+        eventLocationIndex < eventLocationsLength;
+        eventLocationIndex++
+      ) {
         // if any end dates are null, requirement is not met
-        if (this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('end_date').value === null) {
+        if (
+          this.eventSubmissionForm
+            .get("new_event_locations")
+            ["controls"][eventLocationIndex].get("end_date").value === null
+        ) {
           requirementMet = false;
         }
       }
@@ -1714,33 +2121,78 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   checkSpeciesDiagnoses() {
     this.speciesDiagnosisViolation = false;
     this.nonCompliantSpeciesDiagnoses = [];
-    if (this.eventSubmissionForm.get('complete').value === true) {
-
+    if (this.eventSubmissionForm.get("complete").value === true) {
       ////////////////////////////////////////////////////////////////////////
       let requirementMet = true;
-      const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+      const eventLocations = <FormArray>(
+        this.eventSubmissionForm.get("new_event_locations")
+      );
       // tslint:disable-next-line:max-line-length
-      for (let eventLocationIndex = 0, eventLocationsLength = eventLocations.length; eventLocationIndex < eventLocationsLength; eventLocationIndex++) {
-        const locationspecies = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
+      for (
+        let eventLocationIndex = 0,
+          eventLocationsLength = eventLocations.length;
+        eventLocationIndex < eventLocationsLength;
+        eventLocationIndex++
+      ) {
+        const locationspecies = <FormArray>(
+          this.eventSubmissionForm
+            .get("new_event_locations")
+            ["controls"][eventLocationIndex].get("new_location_species")
+        );
         // loop through each new_location_species array
         // tslint:disable-next-line:max-line-length
-        for (let locationspeciesindex = 0, locationspecieslength = locationspecies.length; locationspeciesindex < locationspecieslength; locationspeciesindex++) {
-          const locationspeciesform = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex];
+        for (
+          let locationspeciesindex = 0,
+            locationspecieslength = locationspecies.length;
+          locationspeciesindex < locationspecieslength;
+          locationspeciesindex++
+        ) {
+          const locationspeciesform = this.eventSubmissionForm
+            .get("new_event_locations")
+            ["controls"][eventLocationIndex].get("new_location_species")[
+            "controls"
+          ][locationspeciesindex];
           // tslint:disable-next-line:max-line-length
-          const speciesdiagnoses = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex].get('new_species_diagnoses');
-          for (let speciesdiagnosisindex = 0, speciesdiagnoseslength = speciesdiagnoses.length; speciesdiagnosisindex < speciesdiagnoseslength; speciesdiagnosisindex++) {
+          const speciesdiagnoses = <FormArray>(
+            this.eventSubmissionForm
+              .get("new_event_locations")
+              ["controls"][eventLocationIndex].get("new_location_species")
+              ["controls"][locationspeciesindex].get("new_species_diagnoses")
+          );
+          for (
+            let speciesdiagnosisindex = 0,
+              speciesdiagnoseslength = speciesdiagnoses.length;
+            speciesdiagnosisindex < speciesdiagnoseslength;
+            speciesdiagnosisindex++
+          ) {
             // tslint:disable-next-line:max-line-length
-            const speciesdiagnosisform = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationspeciesindex].get('new_species_diagnoses')['controls'][speciesdiagnosisindex];
+            const speciesdiagnosisform = this.eventSubmissionForm
+              .get("new_event_locations")
+              ["controls"][eventLocationIndex].get("new_location_species")
+              ["controls"][locationspeciesindex].get("new_species_diagnoses")[
+              "controls"
+            ][speciesdiagnosisindex];
             // if any of the species diagnoses are missing a cause or basis value, requirement is not met and validation check fails
-            if (speciesdiagnosisform.get('cause').value === null || speciesdiagnosisform.get('basis').value === null) {
+            if (
+              speciesdiagnosisform.get("cause").value === null ||
+              speciesdiagnosisform.get("basis").value === null
+            ) {
               requirementMet = false;
               // add to an object storing the non-compliant species diagnoses
               this.nonCompliantSpeciesDiagnoses.push({
                 eventLocationNumber: eventLocationIndex + 1,
                 locationSpeciesNumber: locationspeciesindex + 1,
-                locationSpeciesName: this.displayValuePipe.transform(locationspeciesform.controls.species.value, 'name', this.species),
+                locationSpeciesName: this.displayValuePipe.transform(
+                  locationspeciesform.controls.species.value,
+                  "name",
+                  this.species
+                ),
                 speciesDiagnosisNumber: speciesdiagnosisindex + 1,
-                speciesDiagnosisName: this.displayValuePipe.transform(speciesdiagnosisform.controls.diagnosis.value, 'name', this.allDiagnoses)
+                speciesDiagnosisName: this.displayValuePipe.transform(
+                  speciesdiagnosisform.controls.diagnosis.value,
+                  "name",
+                  this.allDiagnoses
+                ),
               });
             }
           }
@@ -1751,52 +2203,46 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
         this.speciesDiagnosisViolation = false;
       } else {
         this.speciesDiagnosisViolation = true;
-
       }
     }
   }
 
   enforceLegalStatusRules(selected_legal_status) {
     if (selected_legal_status === 2 || selected_legal_status === 4) {
-
-      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-        {
-          disableClose: true,
-          data: {
-            title: 'Legal Status Change',
-            titleIcon: 'warning',
-            message: 'This change to legal status will set the event record to private (Not Visible to Public).',
-            confirmButtonText: 'OK',
-            showCancelButton: false
-          }
-        }
-      );
-
-      this.confirmDialogRef.afterClosed().subscribe(result => {
-        if (result === true) {
-          this.eventSubmissionForm.get('public').setValue(false);
-        }
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent, {
+        disableClose: true,
+        data: {
+          title: "Legal Status Change",
+          titleIcon: "warning",
+          message:
+            "This change to legal status will set the event record to private (Not Visible to Public).",
+          confirmButtonText: "OK",
+          showCancelButton: false,
+        },
       });
 
+      this.confirmDialogRef.afterClosed().subscribe((result) => {
+        if (result === true) {
+          this.eventSubmissionForm.get("public").setValue(false);
+        }
+      });
     }
     if (selected_legal_status === 1 || selected_legal_status === 3) {
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent, {
+        disableClose: true,
+        data: {
+          title: "Legal Status Change",
+          titleIcon: "warning",
+          message:
+            'This change to legal status will set the event record to public (Visible to Public). Select "Cancel" to maintain current event visibility. Select "OK" to change to public.',
+          confirmButtonText: "OK",
+          showCancelButton: true,
+        },
+      });
 
-      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-        {
-          disableClose: true,
-          data: {
-            title: 'Legal Status Change',
-            titleIcon: 'warning',
-            message: 'This change to legal status will set the event record to public (Visible to Public). Select "Cancel" to maintain current event visibility. Select "OK" to change to public.',
-            confirmButtonText: 'OK',
-            showCancelButton: true
-          }
-        }
-      );
-
-      this.confirmDialogRef.afterClosed().subscribe(result => {
+      this.confirmDialogRef.afterClosed().subscribe((result) => {
         if (result === true) {
-          this.eventSubmissionForm.get('public').setValue(true);
+          this.eventSubmissionForm.get("public").setValue(true);
         }
       });
     }
@@ -1804,127 +2250,137 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   enforceCaptiveRule(selected_captive_value) {
     if (selected_captive_value) {
-      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-        {
-          disableClose: true,
-          data: {
-            title: 'Location species captive',
-            titleIcon: 'warning',
-            message: 'Setting this species as captive will set the event record to private (Not Visible to Public). Select "Cancel" to maintain current event visibility. Select "OK" to change to private.',
-            confirmButtonText: 'OK',
-            showCancelButton: true
-          }
-        }
-      );
-
-      this.confirmDialogRef.afterClosed().subscribe(result => {
-        if (result === true) {
-          this.eventSubmissionForm.get('public').setValue(false);
-        }
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent, {
+        disableClose: true,
+        data: {
+          title: "Location species captive",
+          titleIcon: "warning",
+          message:
+            'Setting this species as captive will set the event record to private (Not Visible to Public). Select "Cancel" to maintain current event visibility. Select "OK" to change to private.',
+          confirmButtonText: "OK",
+          showCancelButton: true,
+        },
       });
 
+      this.confirmDialogRef.afterClosed().subscribe((result) => {
+        if (result === true) {
+          this.eventSubmissionForm.get("public").setValue(false);
+        }
+      });
     }
   }
 
   initEventLocation() {
-    return this.formBuilder.group({
-      name: '',
-      start_date: null,
-      end_date: null,
-      country: [APP_UTILITIES.DEFAULT_COUNTRY_ID, Validators.required],
-      administrative_level_one: [null, Validators.required],
-      administrative_level_two: [null, Validators.required],
-      latitude: [null, Validators.pattern(this.latitudePattern)],
-      longitude: [null, Validators.pattern(this.longitudePattern)],
-      land_ownership: [null, Validators.required],
-      gnis_name: '',
-      gnis_id: '',
-      site_description: '',
-      history: '',
-      environmental_factors: '',
-      clinical_signs: '',
-      comment: '',
-      // used only to capture event_type from event - not part of eventlocation record
-      event_type: null,
-      new_location_species: this.formBuilder.array([
-        this.initLocationSpecies()
-      ]),
-      new_location_contacts: this.formBuilder.array([
-        //this.initLocationContacts()
-      ])
-    },
+    return this.formBuilder.group(
       {
-        validator: [this.endDateBeforeStart, this.startDateTodayorEarlierMortalityEvent, this.minSpecies]
+        name: "",
+        start_date: null,
+        end_date: null,
+        country: [APP_UTILITIES.DEFAULT_COUNTRY_ID, Validators.required],
+        administrative_level_one: [null, Validators.required],
+        administrative_level_two: [null, Validators.required],
+        latitude: [null, Validators.pattern(this.latitudePattern)],
+        longitude: [null, Validators.pattern(this.longitudePattern)],
+        land_ownership: [null, Validators.required],
+        gnis_name: "",
+        gnis_id: "",
+        site_description: "",
+        history: "",
+        environmental_factors: "",
+        clinical_signs: "",
+        comment: "",
+        // used only to capture event_type from event - not part of eventlocation record
+        event_type: null,
+        new_location_species: this.formBuilder.array([
+          this.initLocationSpecies(),
+        ]),
+        new_location_contacts: this.formBuilder.array([
+          //this.initLocationContacts()
+        ]),
+      },
+      {
+        validator: [
+          this.endDateBeforeStart,
+          this.startDateTodayorEarlierMortalityEvent,
+          this.minSpecies,
+        ],
       }
     );
   }
 
   integer(AC: AbstractControl) {
-
-    const population_count = AC.get('population_count').value;
-    const sick_count = AC.get('sick_count').value;
-    const dead_count = AC.get('dead_count').value;
-    const sick_count_estimated = AC.get('sick_count_estimated').value;
-    const dead_count_estimated = AC.get('dead_count_estimated').value;
+    const population_count = AC.get("population_count").value;
+    const sick_count = AC.get("sick_count").value;
+    const dead_count = AC.get("dead_count").value;
+    const sick_count_estimated = AC.get("sick_count_estimated").value;
+    const dead_count_estimated = AC.get("dead_count_estimated").value;
     if (!Number.isInteger(population_count) && population_count !== null) {
-      AC.get('population_count').setErrors({ integer: true });
+      AC.get("population_count").setErrors({ integer: true });
     }
     if (!Number.isInteger(sick_count) && sick_count !== null) {
-      AC.get('sick_count').setErrors({ integer: true });
+      AC.get("sick_count").setErrors({ integer: true });
     }
     if (!Number.isInteger(dead_count) && dead_count !== null) {
-      AC.get('dead_count').setErrors({ integer: true });
+      AC.get("dead_count").setErrors({ integer: true });
     }
-    if (!Number.isInteger(sick_count_estimated) && sick_count_estimated !== null) {
-      AC.get('sick_count_estimated').setErrors({ integer: true });
+    if (
+      !Number.isInteger(sick_count_estimated) &&
+      sick_count_estimated !== null
+    ) {
+      AC.get("sick_count_estimated").setErrors({ integer: true });
     }
-    if (!Number.isInteger(dead_count_estimated) && dead_count_estimated !== null) {
-      AC.get('dead_count_estimated').setErrors({ integer: true });
+    if (
+      !Number.isInteger(dead_count_estimated) &&
+      dead_count_estimated !== null
+    ) {
+      AC.get("dead_count_estimated").setErrors({ integer: true });
     }
     return null;
   }
 
   estimatedSick(AC: AbstractControl) {
-    AC.get('sick_count_estimated').setErrors(null);
-    const sick_count = AC.get('sick_count').value;
-    const sick_count_estimated = AC.get('sick_count_estimated').value;
+    AC.get("sick_count_estimated").setErrors(null);
+    const sick_count = AC.get("sick_count").value;
+    const sick_count_estimated = AC.get("sick_count_estimated").value;
 
     if (sick_count !== null && sick_count_estimated !== null) {
       if (sick_count_estimated <= sick_count) {
-        AC.get('sick_count_estimated').setErrors({ estimatedSick: true });
+        AC.get("sick_count_estimated").setErrors({ estimatedSick: true });
       }
     }
   }
 
   estimatedDead(AC: AbstractControl) {
-    AC.get('dead_count_estimated').setErrors(null);
-    const dead_count = AC.get('dead_count').value;
-    const dead_count_estimated = AC.get('dead_count_estimated').value;
+    AC.get("dead_count_estimated").setErrors(null);
+    const dead_count = AC.get("dead_count").value;
+    const dead_count_estimated = AC.get("dead_count_estimated").value;
 
     if (dead_count !== null && dead_count_estimated !== null) {
       if (dead_count_estimated <= dead_count) {
-        AC.get('dead_count_estimated').setErrors({ estimatedDead: true });
+        AC.get("dead_count_estimated").setErrors({ estimatedDead: true });
       }
     }
   }
 
   initLocationSpecies() {
-    return this.formBuilder.group({
-      species: [null, Validators.required],
-      population_count: [null, Validators.min(0)],
-      sick_count: [null, Validators.min(0)],
-      dead_count: [null, Validators.min(0)],
-      sick_count_estimated: [null, Validators.min(0)],
-      dead_count_estimated: [null, Validators.min(0)],
-      priority: null,
-      captive: false,
-      age_bias: null,
-      sex_bias: null,
-      new_species_diagnoses: this.formBuilder.array([])
-    },
+    return this.formBuilder.group(
       {
-        validator: [this.integer, this.estimatedSick, this.estimatedDead]
-      });
+        species: [null, Validators.required],
+        population_count: [null, Validators.min(0)],
+        sick_count: [null, Validators.min(0)],
+        dead_count: [null, Validators.min(0)],
+        sick_count_estimated: [null, Validators.min(0)],
+        dead_count_estimated: [null, Validators.min(0)],
+        priority: null,
+        captive: false,
+        age_bias: null,
+        sex_bias: null,
+        new_species_diagnoses: this.formBuilder.array([]),
+      },
+      {
+        validator: [this.integer, this.estimatedSick, this.estimatedDead],
+      }
+    );
   }
 
   initSpeciesDiagnosis() {
@@ -1938,21 +2394,21 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
       positive_count: null,
       suspect_count: null,
       pooled: false,
-      new_species_diagnosis_organizations: null
+      new_species_diagnosis_organizations: null,
     });
   }
 
   initLocationContacts() {
     return this.formBuilder.group({
       contact: [null],
-      contact_type: null
+      contact_type: null,
     });
   }
 
   initLocationComments() {
     return this.formBuilder.group({
-      comment: '',
-      comment_type: null
+      comment: "",
+      comment_type: null,
     });
   }
 
@@ -1964,65 +2420,87 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   initEventComment() {
     return this.formBuilder.group({
-      comment: '',
-      comment_type: 5
+      comment: "",
+      comment_type: 5,
     });
   }
 
   initServiceRequestComment() {
     return this.formBuilder.group({
-      comment: ''
+      comment: "",
     });
   }
 
   initEventDiagnosis() {
     return this.formBuilder.group({
       // TODO: make this value configurable for the "Undetermined" value
-      diagnosis: null
+      diagnosis: null,
     });
   }
 
   // event locations
   addEventLocation() {
-
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+    const control = <FormArray>(
+      this.eventSubmissionForm.get("new_event_locations")
+    );
     control.push(this.initEventLocation());
 
     const eventLocationIndex = control.length - 1;
 
-    const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'];
+    const eventLocations = <FormArray>(
+      this.eventSubmissionForm.get("new_event_locations")["controls"]
+    );
     const newEventLocationIndex = eventLocations.length - 1;
-    const newEventLocation = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][newEventLocationIndex];
+    const newEventLocation = <FormArray>(
+      this.eventSubmissionForm.get("new_event_locations")["controls"][
+        newEventLocationIndex
+      ]
+    );
 
-    this.filteredAdminLevelOnes.push(new ReplaySubject<AdministrativeLevelOne[]>());
+    this.filteredAdminLevelOnes.push(
+      new ReplaySubject<AdministrativeLevelOne[]>()
+    );
     this.ManageAdminLevelOneControl(newEventLocationIndex);
 
     // need to update the adminLevelOne options per the default county value
-    this.updateAdminLevelOneOptions(APP_UTILITIES.DEFAULT_COUNTRY_ID, eventLocationIndex);
+    this.updateAdminLevelOneOptions(
+      APP_UTILITIES.DEFAULT_COUNTRY_ID,
+      eventLocationIndex
+    );
 
-    this.filteredAdminLevelTwos.push(new ReplaySubject<AdministrativeLevelTwo[]>());
+    this.filteredAdminLevelTwos.push(
+      new ReplaySubject<AdministrativeLevelTwo[]>()
+    );
     this.ManageAdminLevelTwoControl(newEventLocationIndex);
 
     const eventLocationSpecies = new Array<ReplaySubject<Species[]>>();
     this.filteredSpecies.push(eventLocationSpecies);
     // initiate an empty replaysubject
-    this.filteredSpecies[newEventLocationIndex].push(new ReplaySubject<Species[]>());
+    this.filteredSpecies[newEventLocationIndex].push(
+      new ReplaySubject<Species[]>()
+    );
     this.ManageSpeciesControl(newEventLocationIndex, 0);
 
     const eventLocationContacts = new Array<ReplaySubject<Contact[]>>();
     this.filteredContacts.push(eventLocationContacts);
     // initiate an empty replaysubject
-    this.filteredContacts[newEventLocationIndex].push(new ReplaySubject<Contact[]>());
+    this.filteredContacts[newEventLocationIndex].push(
+      new ReplaySubject<Contact[]>()
+    );
     this.ManageContactControl(newEventLocationIndex, 0);
 
     if (this.commonEventData.species.length > 0) {
       // tslint:disable-next-line:max-line-length
-      this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][0].get('species').setValue(this.commonEventData.species[0].controls.species.value);
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("new_location_species")
+        ["controls"][0].get("species")
+        .setValue(this.commonEventData.species[0].controls.species.value);
 
       if (this.commonEventData.species.length > 1) {
-
         // get number of species instances needed (default first one has been set already)
-        const speciesFormArrayRemainderLength = this.commonEventData.species.length - 1;
+        const speciesFormArrayRemainderLength =
+          this.commonEventData.species.length - 1;
 
         for (let i = 0; i < speciesFormArrayRemainderLength; i++) {
           this.addLocationSpecies(eventLocationIndex);
@@ -2031,14 +2509,17 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
         // start the loop at [1] (position 2) since [0] was already handled above
         for (let i = 1; i < this.commonEventData.species.length; i++) {
           // tslint:disable-next-line:max-line-length
-          this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][i].get('species').setValue(this.commonEventData.species[i].controls.species.value);
+          this.eventSubmissionForm
+            .get("new_event_locations")
+            ["controls"][eventLocationIndex].get("new_location_species")
+            ["controls"][i].get("species")
+            .setValue(this.commonEventData.species[i].controls.species.value);
         }
       }
     }
 
     // contacts are handled differently because there is no default blank contact instance
     if (this.commonEventData.contacts.length > 0) {
-
       for (let i = 0; i < this.commonEventData.contacts.length; i++) {
         // tslint:disable-next-line:max-line-length
         this.addLocationContact(eventLocationIndex);
@@ -2046,28 +2527,33 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
       for (let i = 0; i < this.commonEventData.contacts.length; i++) {
         // tslint:disable-next-line:max-line-length
-        this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts')['controls'][i].get('contact').setValue(this.commonEventData.contacts[i].controls.contact.value);
+        this.eventSubmissionForm
+          .get("new_event_locations")
+          ["controls"][eventLocationIndex].get("new_location_contacts")
+          ["controls"][i].get("contact")
+          .setValue(this.commonEventData.contacts[i].controls.contact.value);
       }
     }
 
-    this.usgsSearch = search_api.create('search-api-div', {
-      'verbose': true,
-      'placeholder': 'Search for GNIS place name',
-      'tooltip': 'Type to search GNIS database',
-      'on_result': function (event) {
+    this.usgsSearch = search_api.create("search-api-div", {
+      verbose: true,
+      placeholder: "Search for GNIS place name",
+      tooltip: "Type to search GNIS database",
+      on_result: function (event) {
         // do something with the result
         // o.result is a geojson point feature object with location information set as properties
         console.warn(event.result);
-      }
+      },
     });
 
     this.checkLocationEndDates();
     this.checkLocationStartDates();
-
   }
 
   removeEventLocation(eventLocationIndex) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations');
+    const control = <FormArray>(
+      this.eventSubmissionForm.get("new_event_locations")
+    );
     control.removeAt(eventLocationIndex);
     this.checkLocationEndDates();
   }
@@ -2078,17 +2564,20 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   // event organizations
   addEventOrganization() {
-    const control = <FormArray>this.eventSubmissionForm.get('new_organizations');
+    const control = <FormArray>(
+      this.eventSubmissionForm.get("new_organizations")
+    );
     control.push(this.initEventOrganization());
     const organizationIndex = control.length - 1;
 
     this.filteredOrganizations.push(new ReplaySubject<Organization[]>());
     this.ManageOrganizationControl(organizationIndex);
-
   }
 
   removeEventOrganization(eventOrgIndex) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_organizations');
+    const control = <FormArray>(
+      this.eventSubmissionForm.get("new_organizations")
+    );
     control.removeAt(eventOrgIndex);
   }
 
@@ -2098,12 +2587,12 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   // event comments
   addEventComment() {
-    const control = <FormArray>this.eventSubmissionForm.get('new_comments');
+    const control = <FormArray>this.eventSubmissionForm.get("new_comments");
     control.push(this.initEventComment());
   }
 
   removeEventComment(eventCommentIndex) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_comments');
+    const control = <FormArray>this.eventSubmissionForm.get("new_comments");
     control.removeAt(eventCommentIndex);
   }
 
@@ -2113,12 +2602,16 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   // service request comments
   addServiceRequestComment() {
-    const control = <FormArray>this.eventSubmissionForm.get('new_service_request').get('new_comments');
+    const control = <FormArray>(
+      this.eventSubmissionForm.get("new_service_request").get("new_comments")
+    );
     control.push(this.initServiceRequestComment());
   }
 
   removeServiceRequestComment(serviceRequestCommentIndex) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_service_request').get('new_comments');
+    const control = <FormArray>(
+      this.eventSubmissionForm.get("new_service_request").get("new_comments")
+    );
     control.removeAt(serviceRequestCommentIndex);
   }
 
@@ -2128,12 +2621,16 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   // event diagnoses
   addEventDiagnosis() {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_diagnoses');
+    const control = <FormArray>(
+      this.eventSubmissionForm.get("new_event_diagnoses")
+    );
     control.push(this.initEventDiagnosis());
   }
 
   removeEventDiagnosis(eventDiagnosisIndex) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_diagnoses');
+    const control = <FormArray>(
+      this.eventSubmissionForm.get("new_event_diagnoses")
+    );
     control.removeAt(eventDiagnosisIndex);
   }
 
@@ -2144,24 +2641,37 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   // location species
   addLocationSpecies(eventLocationIndex) {
     // tslint:disable-next-line:max-line-length
-    const controls = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
+    const controls = <FormArray>(
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("new_location_species")
+    );
     controls.push(this.initLocationSpecies());
     const locationSpeciesIndex = controls.length - 1;
 
     // const eventLocationSpecies = new Array<ReplaySubject<Species[]>>();
     // this.filteredSpecies.push(eventLocationSpecies);
     // initiate an empty replaysubject
-    this.filteredSpecies[eventLocationIndex].push(new ReplaySubject<Species[]>());
+    this.filteredSpecies[eventLocationIndex].push(
+      new ReplaySubject<Species[]>()
+    );
     this.ManageSpeciesControl(eventLocationIndex, locationSpeciesIndex);
 
     this.checkLocationSpeciesNumbers();
 
-    return ({ eventLocationIndex: eventLocationIndex, locationSpeciesIndex: locationSpeciesIndex });
+    return {
+      eventLocationIndex: eventLocationIndex,
+      locationSpeciesIndex: locationSpeciesIndex,
+    };
   }
 
   removeLocationSpecies(eventLocationIndex, locationSpeciesIndex) {
     // tslint:disable-next-line:max-line-length
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species');
+    const control = <FormArray>(
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("new_location_species")
+    );
     control.removeAt(locationSpeciesIndex);
 
     this.filteredSpecies[eventLocationIndex].splice(locationSpeciesIndex, 1);
@@ -2174,64 +2684,80 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   // location contacts
   addLocationContact(eventLocationIndex) {
     // tslint:disable-next-line:max-line-length
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
+    const control = <FormArray>(
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("new_location_contacts")
+    );
     control.push(this.initLocationContacts());
     const locationContactIndex = control.length - 1;
 
-    this.filteredContacts[eventLocationIndex].push(new ReplaySubject<Contact[]>());
+    this.filteredContacts[eventLocationIndex].push(
+      new ReplaySubject<Contact[]>()
+    );
     this.ManageContactControl(eventLocationIndex, locationContactIndex);
 
-    return ({ eventLocationIndex: eventLocationIndex, locationContactIndex: locationContactIndex });
+    return {
+      eventLocationIndex: eventLocationIndex,
+      locationContactIndex: locationContactIndex,
+    };
   }
 
   removeLocationContact(eventLocationIndex, locationContactIndex) {
     // tslint:disable-next-line:max-line-length
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts');
+    const control = <FormArray>(
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("new_location_contacts")
+    );
     control.removeAt(locationContactIndex);
 
     this.filteredContacts[eventLocationIndex].splice(locationContactIndex, 1);
   }
 
   viewContactDetailsDialog(eventLocationIndex, locationContactIndex) {
-
     // tslint:disable-next-line:max-line-length
-    const contact_id = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_contacts').value[locationContactIndex].contact;
+    const contact_id = this.eventSubmissionForm
+      .get("new_event_locations")
+      ["controls"][eventLocationIndex].get("new_location_contacts").value[
+      locationContactIndex
+    ].contact;
     // const currentContact = this.userContacts.find(i => i.id === contact_id);
 
-
     if (contact_id == null) {
-      this.openSnackBar('First select a contact to view that contact\'s details', 'OK', 5000);
+      this.openSnackBar(
+        "First select a contact to view that contact's details",
+        "OK",
+        5000
+      );
     } else {
-
       // look up contact
-      this.contactService.getContactDetails(contact_id)
-        .subscribe(
-          (contactDetails) => {
-
-            // Open dialog for viewing contact details
-            this.viewContactDetailsDialogRef = this.dialog.open(ViewContactDetailsComponent, {
+      this.contactService.getContactDetails(contact_id).subscribe(
+        (contactDetails) => {
+          // Open dialog for viewing contact details
+          this.viewContactDetailsDialogRef = this.dialog.open(
+            ViewContactDetailsComponent,
+            {
               data: {
-                contact: contactDetails
-              }
-            });
+                contact: contactDetails,
+              },
+            }
+          );
 
-            this.viewContactDetailsDialogRef.afterClosed()
-              .subscribe(
-                () => {
-                  // do something after close
-                },
-                error => {
-                  this.errorMessage = <any>error;
-                }
-              );
-          },
-          error => {
-            this.errorMessage = <any>error;
-          }
-        );
-
+          this.viewContactDetailsDialogRef.afterClosed().subscribe(
+            () => {
+              // do something after close
+            },
+            (error) => {
+              this.errorMessage = <any>error;
+            }
+          );
+        },
+        (error) => {
+          this.errorMessage = <any>error;
+        }
+      );
     }
-
   }
 
   getLocationContacts(form) {
@@ -2240,16 +2766,35 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex) {
     // tslint:disable-next-line:max-line-length
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
+    const control = <FormArray>(
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("new_location_species")
+        ["controls"][locationSpeciesIndex].get("new_species_diagnoses")
+    );
     control.push(this.initSpeciesDiagnosis());
     // tslint:disable-next-line:max-line-length
-    const speciesDiagnosisIndex = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses').length - 1;
+    const speciesDiagnosisIndex =
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("new_location_species")
+        ["controls"][locationSpeciesIndex].get("new_species_diagnoses").length -
+      1;
     return speciesDiagnosisIndex;
   }
 
-  removeSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex, speciesDiagnosisIndex) {
+  removeSpeciesDiagnosis(
+    eventLocationIndex,
+    locationSpeciesIndex,
+    speciesDiagnosisIndex
+  ) {
     // tslint:disable-next-line:max-line-length
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
+    const control = <FormArray>(
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("new_location_species")
+        ["controls"][locationSpeciesIndex].get("new_species_diagnoses")
+    );
     control.removeAt(speciesDiagnosisIndex);
   }
 
@@ -2263,12 +2808,20 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
   // location comments
   addLocationComments(eventLocationIndex) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('comments');
+    const control = <FormArray>(
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("comments")
+    );
     control.push(this.initLocationComments());
   }
 
   removeLocationComments(eventLocationIndex, m) {
-    const control = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('comments');
+    const control = <FormArray>(
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("comments")
+    );
     control.removeAt(m);
   }
 
@@ -2277,44 +2830,54 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   }
 
   updateEventType(eventTypeID) {
-    const eventLocations = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'];
+    const eventLocations = <FormArray>(
+      this.eventSubmissionForm.get("new_event_locations")["controls"]
+    );
     for (let i = 0, j = eventLocations.length; i < j; i++) {
-      this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('event_type').setValue(Number(eventTypeID));
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][i].get("event_type")
+        .setValue(Number(eventTypeID));
     }
 
     this.checkLocationSpeciesNumbers();
   }
 
   updateAdminLevelOneOptions(selectedCountryID, eventLocationIndex) {
-
     this.adminLevelOnesLoading = true;
     const id = Number(selectedCountryID);
 
-    this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_one').setValue(null);
+    this.eventSubmissionForm
+      .get("new_event_locations")
+      ["controls"][eventLocationIndex].get("administrative_level_one")
+      .setValue(null);
 
     // query the adminlevelones endpoint for appropriate records
     // update the options for the adminLevelOne select with the response
 
-    this.adminLevelOneService.queryAdminLevelOnes(id)
-      .subscribe(
-        adminLevelOnes => {
-          this.adminLevelOnes = adminLevelOnes;
-          this.adminLevelOnes.sort(function (a, b) {
-            if (a.name < b.name) { return -1; }
-            if (a.name > b.name) { return 1; }
-            return 0;
-          });
+    this.adminLevelOneService.queryAdminLevelOnes(id).subscribe(
+      (adminLevelOnes) => {
+        this.adminLevelOnes = adminLevelOnes;
+        this.adminLevelOnes.sort(function (a, b) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
 
-          // update the select options for the specific control
-          this.filteredAdminLevelOnes[eventLocationIndex].next(adminLevelOnes);
+        // update the select options for the specific control
+        this.filteredAdminLevelOnes[eventLocationIndex].next(adminLevelOnes);
 
-          this.adminLevelOnesLoading = false;
-        },
-        error => {
-          this.errorMessage = <any>error;
-          this.adminLevelOnesLoading = false;
-        }
-      );
+        this.adminLevelOnesLoading = false;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+        this.adminLevelOnesLoading = false;
+      }
+    );
   }
 
   updateAdminLevelTwoOptions(selectedAdminLevelOneID, eventLocationIndex) {
@@ -2323,39 +2886,45 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
 
       this.adminLevelTwosLoading = true;
 
-      this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('administrative_level_two').setValue(null);
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("administrative_level_two")
+        .setValue(null);
 
       // query the adminleveltwos endpoint for appropriate records
       // update the options for the adminLevelTwo select with the response
 
-      this.adminLevelTwoService.queryAdminLevelTwos(id)
-        .subscribe(
-          adminLevelTwos => {
-            this.adminLevelTwos = adminLevelTwos;
-            this.adminLevelTwos.sort(function (a, b) {
-              if (a.name < b.name) { return -1; }
-              if (a.name > b.name) { return 1; }
-              return 0;
-            });
+      this.adminLevelTwoService.queryAdminLevelTwos(id).subscribe(
+        (adminLevelTwos) => {
+          this.adminLevelTwos = adminLevelTwos;
+          this.adminLevelTwos.sort(function (a, b) {
+            if (a.name < b.name) {
+              return -1;
+            }
+            if (a.name > b.name) {
+              return 1;
+            }
+            return 0;
+          });
 
-            // update the select options for the specific control
-            this.filteredAdminLevelTwos[eventLocationIndex].next(adminLevelTwos);
+          // update the select options for the specific control
+          this.filteredAdminLevelTwos[eventLocationIndex].next(adminLevelTwos);
 
-            // dont think below block should be here, but leaving it for now for debugging
-            // listen for search field value changes
-            // this.adminLevelTwoFilterCtrl.valueChanges
-            //   .pipe(takeUntil(this._onDestroy))
-            //   .subscribe(() => {
-            //     this.filterAdminLevelTwos(eventLocationIndex);
-            //   });
+          // dont think below block should be here, but leaving it for now for debugging
+          // listen for search field value changes
+          // this.adminLevelTwoFilterCtrl.valueChanges
+          //   .pipe(takeUntil(this._onDestroy))
+          //   .subscribe(() => {
+          //     this.filterAdminLevelTwos(eventLocationIndex);
+          //   });
 
-            this.adminLevelTwosLoading = false;
-          },
-          error => {
-            this.errorMessage = <any>error;
-            this.adminLevelTwosLoading = false;
-          }
-        );
+          this.adminLevelTwosLoading = false;
+        },
+        (error) => {
+          this.errorMessage = <any>error;
+          this.adminLevelTwosLoading = false;
+        }
+      );
     }
   }
 
@@ -2366,169 +2935,209 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
   }
 
   setEventLocationForGNISSelect(eventLocationIndex) {
-    console.log('Selecting GNIS record for Event Location Number' + (eventLocationIndex + 1));
+    console.log(
+      "Selecting GNIS record for Event Location Number" +
+        (eventLocationIndex + 1)
+    );
   }
 
   removeCollaborator(userID, list) {
     switch (list) {
-      case 'read':
+      case "read":
         const readIndex = this.readCollaboratorArray.findIndex(function (o) {
           return o.id === userID;
         });
-        if (readIndex !== -1) { this.readCollaboratorArray.splice(readIndex, 1); }
+        if (readIndex !== -1) {
+          this.readCollaboratorArray.splice(readIndex, 1);
+        }
         break;
-      case 'write':
+      case "write":
         const writeIndex = this.writeCollaboratorArray.findIndex(function (o) {
           return o.id === userID;
         });
-        if (writeIndex !== -1) { this.writeCollaboratorArray.splice(writeIndex, 1); }
+        if (writeIndex !== -1) {
+          this.writeCollaboratorArray.splice(writeIndex, 1);
+        }
         break;
     }
-
   }
 
   addCollaborator(accessType) {
-    this.circleManagementDialogRef = this.dialog.open(CircleManagementComponent, {
-      disableClose: true,
-      data: {
-        action: 'selectUser',
-      }
-    });
-
-    this.circleManagementDialogRef.afterClosed()
-      .subscribe(
-        (selectedUser) => {
-          if (selectedUser !== 'cancel') {
-
-            if (accessType === 'read') {
-              this.readCollaboratorArray.push(selectedUser);
-            } else if (accessType === 'write') {
-              this.writeCollaboratorArray.push(selectedUser);
-            }
-          }
+    this.circleManagementDialogRef = this.dialog.open(
+      CircleManagementComponent,
+      {
+        disableClose: true,
+        data: {
+          action: "selectUser",
         },
-        error => {
-          this.errorMessage = <any>error;
+      }
+    );
+
+    this.circleManagementDialogRef.afterClosed().subscribe(
+      (selectedUser) => {
+        if (selectedUser !== "cancel") {
+          if (accessType === "read") {
+            this.readCollaboratorArray.push(selectedUser);
+          } else if (accessType === "write") {
+            this.writeCollaboratorArray.push(selectedUser);
+          }
         }
-      );
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
   }
 
   openAddSpeciesDiagnosisDialog(eventLocationIndex, locationSpeciesIndex) {
-
     // create local variable for speciesDiagnosis index
-    const speciesDiagnosisIndex = this.addSpeciesDiagnosis(eventLocationIndex, locationSpeciesIndex);
+    const speciesDiagnosisIndex = this.addSpeciesDiagnosis(
+      eventLocationIndex,
+      locationSpeciesIndex
+    );
     // create local array of selected diagnoses to feed to the dialog
     const existingSpeciesDiagnoses = [];
     // create a list of the already selected diagnoses for this species to prevent duplicate selection
     // tslint:disable-next-line:max-line-length
-    const speciesdiagnoses = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses');
+    const speciesdiagnoses = <FormArray>(
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("new_location_species")
+        ["controls"][locationSpeciesIndex].get("new_species_diagnoses")
+    );
     // tslint:disable-next-line:max-line-length
-    for (let speciesdiagnosisindex = 0, speciesdiagnoseslength = speciesdiagnoses.length; speciesdiagnosisindex < speciesdiagnoseslength; speciesdiagnosisindex++) {
+    for (
+      let speciesdiagnosisindex = 0,
+        speciesdiagnoseslength = speciesdiagnoses.length;
+      speciesdiagnosisindex < speciesdiagnoseslength;
+      speciesdiagnosisindex++
+    ) {
       // tslint:disable-next-line:max-line-length
-      const diagnosis = this.eventSubmissionForm.get('new_event_locations')['controls'][eventLocationIndex].get('new_location_species')['controls'][locationSpeciesIndex].get('new_species_diagnoses')['controls'][speciesdiagnosisindex].controls.diagnosis.value;
+      const diagnosis = this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][eventLocationIndex].get("new_location_species")
+        ["controls"][locationSpeciesIndex].get("new_species_diagnoses")[
+        "controls"
+      ][speciesdiagnosisindex].controls.diagnosis.value;
       if (diagnosis !== null) {
         existingSpeciesDiagnoses.push(diagnosis);
       }
     }
 
     // Open dialog for adding species diagnosis
-    this.editSpeciesDiagnosisDialogRef = this.dialog.open(EditSpeciesDiagnosisComponent, {
-      disableClose: true,
-      data: {
-        species_diagnosis_action: 'addToFormArray',
-        laboratories: this.laboratories,
-        eventlocationIndex: eventLocationIndex,
-        locationspeciesIndex: locationSpeciesIndex,
-        existing_diagnoses: existingSpeciesDiagnoses,
-        title: 'Add Species Diagnosis',
-        titleIcon: 'note_add',
-        actionButtonIcon: 'note_add'
+    this.editSpeciesDiagnosisDialogRef = this.dialog.open(
+      EditSpeciesDiagnosisComponent,
+      {
+        disableClose: true,
+        data: {
+          species_diagnosis_action: "addToFormArray",
+          laboratories: this.laboratories,
+          eventlocationIndex: eventLocationIndex,
+          locationspeciesIndex: locationSpeciesIndex,
+          existing_diagnoses: existingSpeciesDiagnoses,
+          title: "Add Species Diagnosis",
+          titleIcon: "note_add",
+          actionButtonIcon: "note_add",
+        },
       }
-    });
+    );
 
-    this.editSpeciesDiagnosisDialogRef.afterClosed()
-      .subscribe(
-        (speciesDiagnosisObj) => {
+    this.editSpeciesDiagnosisDialogRef.afterClosed().subscribe(
+      (speciesDiagnosisObj) => {
+        if (speciesDiagnosisObj.action === "cancel") {
+          // remove last species diagnosis added
+          // tslint:disable-next-line:max-line-length
+          this.removeSpeciesDiagnosis(
+            speciesDiagnosisObj.eventlocationIndex,
+            speciesDiagnosisObj.locationspeciesIndex,
+            speciesDiagnosisIndex
+          );
+          return;
+        } else if (speciesDiagnosisObj.action === "add") {
+          this.eventSubmissionForm
+            .get("new_event_locations")
+            ["controls"][speciesDiagnosisObj.eventlocationIndex].get(
+              "new_location_species"
+            )
+            ["controls"][speciesDiagnosisObj.locationspeciesIndex].get(
+              "new_species_diagnoses"
+            )
+            ["controls"][speciesDiagnosisIndex].setValue({
+              diagnosis: speciesDiagnosisObj.formValue.diagnosis,
+              cause: speciesDiagnosisObj.formValue.cause,
+              basis: speciesDiagnosisObj.formValue.basis,
+              suspect: speciesDiagnosisObj.formValue.suspect,
+              tested_count: speciesDiagnosisObj.formValue.tested_count,
+              diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
+              positive_count: speciesDiagnosisObj.formValue.positive_count,
+              suspect_count: speciesDiagnosisObj.formValue.suspect_count,
+              pooled: speciesDiagnosisObj.formValue.pooled,
+              new_species_diagnosis_organizations:
+                speciesDiagnosisObj.formValue
+                  .new_species_diagnosis_organizations,
+            });
 
-          if (speciesDiagnosisObj.action === 'cancel') {
-            // remove last species diagnosis added
-            // tslint:disable-next-line:max-line-length
-            this.removeSpeciesDiagnosis(speciesDiagnosisObj.eventlocationIndex, speciesDiagnosisObj.locationspeciesIndex, speciesDiagnosisIndex);
-            return;
-          } else if (speciesDiagnosisObj.action === 'add') {
-
-            this.eventSubmissionForm.get('new_event_locations')['controls'][speciesDiagnosisObj.eventlocationIndex]
-              .get('new_location_species')['controls'][speciesDiagnosisObj.locationspeciesIndex]
-              .get('new_species_diagnoses')['controls'][speciesDiagnosisIndex].setValue({
-                diagnosis: speciesDiagnosisObj.formValue.diagnosis,
-                cause: speciesDiagnosisObj.formValue.cause,
-                basis: speciesDiagnosisObj.formValue.basis,
-                suspect: speciesDiagnosisObj.formValue.suspect,
-                tested_count: speciesDiagnosisObj.formValue.tested_count,
-                diagnosis_count: speciesDiagnosisObj.formValue.diagnosis_count,
-                positive_count: speciesDiagnosisObj.formValue.positive_count,
-                suspect_count: speciesDiagnosisObj.formValue.suspect_count,
-                pooled: speciesDiagnosisObj.formValue.pooled,
-                new_species_diagnosis_organizations: speciesDiagnosisObj.formValue.new_species_diagnosis_organizations
-              });
-
-            // loops through the allDiagnoses list
-            for (const diagnosis of this.allDiagnoses) {
-              // checks if the just-added specices id matches a diagnosis
-              if (diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
-
-                // instantiate a boolean variable for use in the scope of this function, true if the diagnosis just added
-                // already exists within the availableDiagnoses array
-                let diagnosisFound = false;
-                // check to see if the diagnosis just added already exists in the availableDiagnoses array
-                for (const availableDiagnosis of this.availableDiagnoses) {
-                  if (availableDiagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)) {
-                    // if found, increment the count for that diagnosis
-                    availableDiagnosis.count++;
-                    // if found, set local diagnosisFound var found to true
-                    diagnosisFound = true;
-                    // if found, stop. do not add to availableDiagnoses array
-                    break;
-                  }
+          // loops through the allDiagnoses list
+          for (const diagnosis of this.allDiagnoses) {
+            // checks if the just-added specices id matches a diagnosis
+            if (
+              diagnosis.id === Number(speciesDiagnosisObj.formValue.diagnosis)
+            ) {
+              // instantiate a boolean variable for use in the scope of this function, true if the diagnosis just added
+              // already exists within the availableDiagnoses array
+              let diagnosisFound = false;
+              // check to see if the diagnosis just added already exists in the availableDiagnoses array
+              for (const availableDiagnosis of this.availableDiagnoses) {
+                if (
+                  availableDiagnosis.id ===
+                  Number(speciesDiagnosisObj.formValue.diagnosis)
+                ) {
+                  // if found, increment the count for that diagnosis
+                  availableDiagnosis.count++;
+                  // if found, set local diagnosisFound var found to true
+                  diagnosisFound = true;
+                  // if found, stop. do not add to availableDiagnoses array
+                  break;
                 }
-                // if diagnosis is not found to already exist in the availableDiagnoses array, add it.
-                if (!diagnosisFound) {
-                  diagnosis.suspect = speciesDiagnosisObj.formValue.suspect;
-                  // set diagnosis count to 1
-                  diagnosis.count = 1;
-                  this.availableDiagnoses.push(diagnosis);
-                }
-
+              }
+              // if diagnosis is not found to already exist in the availableDiagnoses array, add it.
+              if (!diagnosisFound) {
+                diagnosis.suspect = speciesDiagnosisObj.formValue.suspect;
+                // set diagnosis count to 1
+                diagnosis.count = 1;
+                this.availableDiagnoses.push(diagnosis);
               }
             }
-
-            this.checkSpeciesDiagnoses();
           }
 
-        },
-        error => {
-          this.errorMessage = <any>error;
+          this.checkSpeciesDiagnoses();
         }
-      );
-
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
   }
 
   resetStepper() {
     this.eventSubmissionForm.reset();
-    this.eventSubmissionForm.get('new_event_locations')['controls'][0].get('country').setValue(APP_UTILITIES.DEFAULT_COUNTRY_ID);
+    this.eventSubmissionForm
+      .get("new_event_locations")
+      ["controls"][0].get("country")
+      .setValue(APP_UTILITIES.DEFAULT_COUNTRY_ID);
     // need to update the adminLevelOne options per the default county value
     this.updateAdminLevelOneOptions(APP_UTILITIES.DEFAULT_COUNTRY_ID, 0);
     // reset default form values
     this.eventSubmissionForm.patchValue({
-      event_reference: '',
+      event_reference: "",
       complete: false,
       public: true,
       // NWHC only
       staff: null,
-      event_status: '1',
+      event_status: "1",
       quality_check: { value: null, disabled: true },
-      legal_status: '1',
-      legal_number: ''
+      legal_status: "1",
+      legal_number: "",
     });
     this.eventSubmissionForm.markAsUntouched();
     this.eventSubmissionForm.markAsPristine();
@@ -2536,31 +3145,41 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     window.scrollTo(0, 0);
   }
 
-
   submitEvent(formValue) {
     this.eventSubmissionForm.markAsUntouched();
 
     this.submitLoading = true;
 
     // check to see if there were blank contacts added and remove them if so
-    for (let i = 0; i < this.eventSubmissionForm.get('new_event_locations').value.length; i++) {
+    for (
+      let i = 0;
+      i < this.eventSubmissionForm.get("new_event_locations").value.length;
+      i++
+    ) {
       const contacts = [];
-      const contactsControl = <FormArray>this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('new_location_contacts');
-      this.eventSubmissionForm.get('new_event_locations')['controls'][i].get('new_location_contacts').value.forEach(contact => {
-        if (contact.contact === null) {
-          contactsControl.removeAt(contact);
-        } else {
-          contacts.push(contact);
-        }
-      });
+      const contactsControl = <FormArray>(
+        this.eventSubmissionForm
+          .get("new_event_locations")
+          ["controls"][i].get("new_location_contacts")
+      );
+      this.eventSubmissionForm
+        .get("new_event_locations")
+        ["controls"][i].get("new_location_contacts")
+        .value.forEach((contact) => {
+          if (contact.contact === null) {
+            contactsControl.removeAt(contact);
+          } else {
+            contacts.push(contact);
+          }
+        });
       formValue.new_event_locations[i].new_location_contacts = contacts;
     }
     // if lat/long fields are deleted to blank string, update to null to be a valid number type for submit
     for (const event_location of formValue.new_event_locations) {
-      if (event_location.latitude === '') {
+      if (event_location.latitude === "") {
         event_location.latitude = null;
       }
-      if (event_location.longitude === '') {
+      if (event_location.longitude === "") {
         event_location.longitude = null;
       }
     }
@@ -2591,57 +3210,66 @@ export class EventSubmissionComponent implements OnInit, OnDestroy, CanDeactivat
     formValue.new_organizations = new_orgs_array;
 
     // transform date for quality_check to the expected format
-    formValue.quality_check = this.datePipe.transform(formValue.quality_check, 'yyyy-MM-dd');
+    formValue.quality_check = this.datePipe.transform(
+      formValue.quality_check,
+      "yyyy-MM-dd"
+    );
     // convert start_date and end_date of eventlocations to 'yyyy-MM-dd' before submission
     // can be removed if configure datepicker to output this format (https://material.angular.io/components/datepicker/overview#choosing-a-date-implementation-and-date-format-settings)
     for (const event_location of formValue.new_event_locations) {
-      event_location.start_date = this.datePipe.transform(event_location.start_date, 'yyyy-MM-dd');
-      event_location.end_date = this.datePipe.transform(event_location.end_date, 'yyyy-MM-dd');
+      event_location.start_date = this.datePipe.transform(
+        event_location.start_date,
+        "yyyy-MM-dd"
+      );
+      event_location.end_date = this.datePipe.transform(
+        event_location.end_date,
+        "yyyy-MM-dd"
+      );
       //delete the event_type superficially attached to event locations
       delete event_location.event_type;
     }
 
-    clientStorage.setItem('eventSubmission', formValue);
+    clientStorage.setItem("eventSubmission", formValue);
 
-    this.eventService.create(formValue)
-      .subscribe(
-        (event) => {
-          this.submitLoading = false;
+    this.eventService.create(formValue).subscribe(
+      (event) => {
+        this.submitLoading = false;
 
-          this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-            {
-              disableClose: true,
-              data: {
-                title: 'Event Saved',
-                titleIcon: 'check',
-                message: 'Your event was successfully saved. The Event ID is ' + event.id,
-                confirmButtonText: 'OK',
-                showCancelButton: false
-              }
-            }
-          );
+        this.confirmDialogRef = this.dialog.open(ConfirmComponent, {
+          disableClose: true,
+          data: {
+            title: "Event Saved",
+            titleIcon: "check",
+            message:
+              "Your event was successfully saved. The Event ID is " + event.id,
+            confirmButtonText: "OK",
+            showCancelButton: false,
+          },
+        });
 
-          // when user clicks OK, reset the form and stepper using resetStepper()
-          this.confirmDialogRef.afterClosed().subscribe(result => {
-            if (result === true) {
-              // temporarily disabling the resetStepper function in favor of full page reload.
-              // tons of issues with resetting this form because of its complexity. full page reload works for now.
-              //this.resetStepper();
-              location.reload();
-            }
-          });
+        // when user clicks OK, reset the form and stepper using resetStepper()
+        this.confirmDialogRef.afterClosed().subscribe((result) => {
+          if (result === true) {
+            // temporarily disabling the resetStepper function in favor of full page reload.
+            // tons of issues with resetting this form because of its complexity. full page reload works for now.
+            //this.resetStepper();
+            location.reload();
+          }
+        });
 
-          gtag('event', 'click', { 'event_category': 'Event', 'event_label': 'New Event Created, type: ' + event.event_type });
-
-        },
-        error => {
-          this.submitLoading = false;
-          this.openSnackBar('Error. Event not Submitted. Error message: ' + error, 'OK', 8000);
-        }
-      );
-
-
-
+        gtag("event", "click", {
+          event_category: "Event",
+          event_label: "New Event Created, type: " + event.event_type,
+        });
+      },
+      (error) => {
+        this.submitLoading = false;
+        this.openSnackBar(
+          "Error. Event not Submitted. Error message: " + error,
+          "OK",
+          8000
+        );
+      }
+    );
   }
-
 }

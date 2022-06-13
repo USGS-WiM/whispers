@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
--
+- adds autocomplete functionality to the CircleChooseComponent so user can type to search options for selection (#1268)
+- adds a check against the user deleting the sole location species from an event location (#1238)
 
 ### Changed
 
@@ -26,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - fixes a missing call to updateCirclesResultsCount that was causing Circles pagination to malfunction (issue #1267)
+- fixes a bug with the Species Details list on Event Details page duplicating species when navigating between Associated Events (issue #713)
 
 ### Security
 

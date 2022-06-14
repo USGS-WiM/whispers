@@ -604,10 +604,13 @@ export class EditSpeciesDiagnosisComponent implements OnInit {
     }
   }
 
-  checkMinimum(value) {
+  checkMinimum() {
     this.minViolation = false;
-    // console.log("input changed");
-    if (value < 1) {
+    const testedCount = this.speciesDiagnosisForm.get("tested_count").value;
+    const diagnosisCount =
+      this.speciesDiagnosisForm.get("diagnosis_count").value;
+
+    if (testedCount === 0 || diagnosisCount === 0) {
       this.minViolation = true;
     }
   }

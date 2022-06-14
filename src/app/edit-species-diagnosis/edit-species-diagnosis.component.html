@@ -99,7 +99,8 @@
       </mat-form-field>
 
       <mat-form-field class="form control species-number-control">
-        <input matInput placeholder="Number Assessed" type="number" min="1" formControlName="tested_count">
+        <input matInput placeholder="Number Assessed" type="number" min="1" formControlName="tested_count"
+          [ngModel]="tested_count" (ngModelChange)="checkMinimum()">
         <mat-icon class="hint-hover-text" matSuffix matTooltip={{numberAssessedTooltip()}}
           matTooltipClass="tooltip-breakline">
           help</mat-icon>
@@ -115,7 +116,7 @@
 
       <mat-form-field class="form control species-number-control">
         <input matInput placeholder="Number with this Diagnosis" type="number" min="1" formControlName="diagnosis_count"
-          [ngModel]="tested_count" (ngModelChange)="checkMinimum($event)">
+          [ngModel]="diagnosis_count" (ngModelChange)="checkMinimum()">
         <mat-icon class="hint-hover-text" matSuffix matTooltip={{numberWithDiagnosisTooltip()}}
           matTooltipClass="tooltip-breakline">
           help</mat-icon>
@@ -203,8 +204,9 @@
 
       <mat-error color="warn" *ngIf="minViolation">
         <mat-icon class="icon">error</mat-icon>
-        <span class="alert-text">A species diagnosis record should not exist if no specimens were confirmed to have the
-          diagnosis after assessment. Please enter a number greater than zero to save this record.</span>
+        <span class="alert-text">Number Assessed and Number with this Diagnosis cannot be 0. Leave these fields blank if
+          values are unknown. Please do not use a species diagnosis to capture negative test results, instead enter that
+          information as a comment.</span>
       </mat-error>
     </div>
 

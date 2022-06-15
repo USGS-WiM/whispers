@@ -1,39 +1,47 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator, AbstractControl } from '@angular/forms/';
-import { Observable ,  Subject, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { Inject } from "@angular/core";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormArray,
+  Validators,
+  PatternValidator,
+  AbstractControl,
+} from "@angular/forms/";
+import { Observable, Subject, ReplaySubject } from "rxjs";
+import { take, takeUntil } from "rxjs/operators";
 
-import { MatDialog, MatDialogRef, MatSelect } from '@angular/material';
-import { MAT_DIALOG_DATA } from '@angular/material';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSelect } from "@angular/material";
+import { MAT_DIALOG_DATA } from "@angular/material";
+import { MatSnackBar } from "@angular/material";
 
-import { Species } from '@interfaces/species';
-import { SpeciesService } from '@services/species.service';
+import { Species } from "@interfaces/species";
+import { SpeciesService } from "@services/species.service";
 
-import { AgeBias } from '@interfaces/age-bias';
-import { SexBias } from '@interfaces/sex-bias';
+import { AgeBias } from "@interfaces/age-bias";
+import { SexBias } from "@interfaces/sex-bias";
 
-import { LocationSpeciesService } from '@services/location-species.service';
-import { AgeBiasService } from '@app/services/age-bias.service';
-import { SexBiasService } from '@app/services/sex-bias.service';
+import { LocationSpeciesService } from "@services/location-species.service";
+import { AgeBiasService } from "@app/services/age-bias.service";
+import { SexBiasService } from "@app/services/sex-bias.service";
 
-import { EventService } from '@app/services/event.service';
+import { EventService } from "@app/services/event.service";
 
-import { ConfirmComponent } from '@confirm/confirm.component';
+import { ConfirmComponent } from "@confirm/confirm.component";
 
-import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
+import { FIELD_HELP_TEXT } from "@app/app.field-help-text";
 
-import { DataUpdatedService } from '@app/services/data-updated.service';
+import { DataUpdatedService } from "@app/services/data-updated.service";
 declare let gtag: Function;
 
 @Component({
-  selector: 'app-edit-location-species',
-  templateUrl: './edit-location-species.component.html',
-  styleUrls: ['./edit-location-species.component.scss']
+  selector: "app-edit-location-species",
+  templateUrl: "./edit-location-species.component.html",
+  styleUrls: ["./edit-location-species.component.scss"],
 })
 export class EditLocationSpeciesComponent implements OnInit {
-  @ViewChild('speciesSelect') speciesSelect: MatSelect;
+  @ViewChild("speciesSelect") speciesSelect: MatSelect;
   locationSpeciesForm: FormGroup;
   confirmDialogRef: MatDialogRef<ConfirmComponent>;
 
@@ -56,7 +64,9 @@ export class EditLocationSpeciesComponent implements OnInit {
   ageBiases: AgeBias[];
   sexBiases: SexBias[];
 
-  public filteredSpecies: ReplaySubject<Species[]> = new ReplaySubject<Species[]>(1);
+  public filteredSpecies: ReplaySubject<Species[]> = new ReplaySubject<
+    Species[]
+  >(1);
 
   locationSpeciesNumbersViolation = false;
 
@@ -66,46 +76,52 @@ export class EditLocationSpeciesComponent implements OnInit {
   private _onDestroy = new Subject<void>();
 
   buildLocationSpeciesForm() {
-    this.locationSpeciesForm = this.formBuilder.group({
-      id: null,
-      event_location: null,
-      species: null,
-      population_count: [null, Validators.min(0)],
-      sick_count: [null, Validators.min(0)],
-      dead_count: [null, Validators.min(0)],
-      sick_count_estimated: [null, Validators.min(0)],
-      dead_count_estimated: [null, Validators.min(0)],
-      captive: false,
-      age_bias: null,
-      sex_bias: null
-    },
+    this.locationSpeciesForm = this.formBuilder.group(
       {
-        validator: [this.integer, this.estimatedSick, this.estimatedDead]
+        id: null,
+        event_location: null,
+        species: null,
+        population_count: [null, Validators.min(0)],
+        sick_count: [null, Validators.min(0)],
+        dead_count: [null, Validators.min(0)],
+        sick_count_estimated: [null, Validators.min(0)],
+        dead_count_estimated: [null, Validators.min(0)],
+        captive: false,
+        age_bias: null,
+        sex_bias: null,
+      },
+      {
+        validator: [this.integer, this.estimatedSick, this.estimatedDead],
       }
     );
   }
 
   integer(AC: AbstractControl) {
-
-    const population_count = AC.get('population_count').value;
-    const sick_count = AC.get('sick_count').value;
-    const dead_count = AC.get('dead_count').value;
-    const sick_count_estimated = AC.get('sick_count_estimated').value;
-    const dead_count_estimated = AC.get('dead_count_estimated').value;
+    const population_count = AC.get("population_count").value;
+    const sick_count = AC.get("sick_count").value;
+    const dead_count = AC.get("dead_count").value;
+    const sick_count_estimated = AC.get("sick_count_estimated").value;
+    const dead_count_estimated = AC.get("dead_count_estimated").value;
     if (!Number.isInteger(population_count) && population_count !== null) {
-      AC.get('population_count').setErrors({ integer: true });
+      AC.get("population_count").setErrors({ integer: true });
     }
     if (!Number.isInteger(sick_count) && sick_count !== null) {
-      AC.get('sick_count').setErrors({ integer: true });
+      AC.get("sick_count").setErrors({ integer: true });
     }
     if (!Number.isInteger(dead_count) && dead_count !== null) {
-      AC.get('dead_count').setErrors({ integer: true });
+      AC.get("dead_count").setErrors({ integer: true });
     }
-    if (!Number.isInteger(sick_count_estimated) && sick_count_estimated !== null) {
-      AC.get('sick_count_estimated').setErrors({ integer: true });
+    if (
+      !Number.isInteger(sick_count_estimated) &&
+      sick_count_estimated !== null
+    ) {
+      AC.get("sick_count_estimated").setErrors({ integer: true });
     }
-    if (!Number.isInteger(dead_count_estimated) && dead_count_estimated !== null) {
-      AC.get('dead_count_estimated').setErrors({ integer: true });
+    if (
+      !Number.isInteger(dead_count_estimated) &&
+      dead_count_estimated !== null
+    ) {
+      AC.get("dead_count_estimated").setErrors({ integer: true });
     }
     return null;
   }
@@ -127,26 +143,23 @@ export class EditLocationSpeciesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.ageBiasService.getAgeBiases().subscribe(
+      (ageBiases) => {
+        this.ageBiases = ageBiases;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
-    this.ageBiasService.getAgeBiases()
-      .subscribe(
-        ageBiases => {
-          this.ageBiases = ageBiases;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-
-    this.sexBiasService.getSexBiases()
-      .subscribe(
-        sexBiases => {
-          this.sexBiases = sexBiases;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.sexBiasService.getSexBiases().subscribe(
+      (sexBiases) => {
+        this.sexBiases = sexBiases;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // populate the search select options for the species control
     this.filteredSpecies.next(this.data.species);
@@ -164,24 +177,26 @@ export class EditLocationSpeciesComponent implements OnInit {
     if (this.data.eventlocation) {
       this.eventlocation = this.data.eventlocation;
       this.eventID = this.data.eventlocation.event;
-      this.administrative_level_one = this.data.eventlocation.administrative_level_one_string;
-      this.administrative_level_two = this.data.eventlocation.administrative_level_two_string;
+      this.administrative_level_one =
+        this.data.eventlocation.administrative_level_one_string;
+      this.administrative_level_two =
+        this.data.eventlocation.administrative_level_two_string;
     }
 
-    if (this.data.location_species_action === 'add') {
-      this.action_text = 'Add';
-      this.action_button_text = 'Submit';
-      this.locationSpeciesForm.get('dead_count_estimated').markAsTouched();
-      this.locationSpeciesForm.get('sick_count_estimated').markAsTouched();
-
-    } else if (this.data.location_species_action === 'edit') {
-
+    if (this.data.location_species_action === "add") {
+      this.action_text = "Add";
+      this.action_button_text = "Submit";
+      this.locationSpeciesForm.get("dead_count_estimated").markAsTouched();
+      this.locationSpeciesForm.get("sick_count_estimated").markAsTouched();
+    } else if (this.data.location_species_action === "edit") {
       this.locationspeciesString = this.data.locationspecies.species_string;
-      this.administrative_level_one = this.data.locationspecies.administrative_level_one_string;
-      this.administrative_level_two = this.data.locationspecies.administrative_level_two_string;
+      this.administrative_level_one =
+        this.data.locationspecies.administrative_level_one_string;
+      this.administrative_level_two =
+        this.data.locationspecies.administrative_level_two_string;
 
-      this.action_text = 'Edit';
-      this.action_button_text = 'Save Changes';
+      this.action_text = "Edit";
+      this.action_button_text = "Save Changes";
 
       this.locationSpeciesForm.setValue({
         id: this.data.locationspecies.id,
@@ -198,14 +213,18 @@ export class EditLocationSpeciesComponent implements OnInit {
       });
 
       if (this.data.locationspecies.age_bias !== null) {
-        this.locationSpeciesForm.get('age_bias').setValue(this.data.locationspecies.age_bias.toString());
+        this.locationSpeciesForm
+          .get("age_bias")
+          .setValue(this.data.locationspecies.age_bias.toString());
       }
       if (this.data.locationspecies.sex_bias !== null) {
-        this.locationSpeciesForm.get('sex_bias').setValue(this.data.locationspecies.sex_bias.toString());
+        this.locationSpeciesForm
+          .get("sex_bias")
+          .setValue(this.data.locationspecies.sex_bias.toString());
       }
 
-      this.locationSpeciesForm.get('dead_count_estimated').markAsTouched();
-      this.locationSpeciesForm.get('sick_count_estimated').markAsTouched();
+      this.locationSpeciesForm.get("dead_count_estimated").markAsTouched();
+      this.locationSpeciesForm.get("sick_count_estimated").markAsTouched();
 
       // this.locationSpeciesForm.get('species').disable();
 
@@ -227,7 +246,9 @@ export class EditLocationSpeciesComponent implements OnInit {
     }
     // filter the banks
     this.filteredSpecies.next(
-      this.data.species.filter(species => species.name.toLowerCase().indexOf(search) > -1)
+      this.data.species.filter(
+        (species) => species.name.toLowerCase().indexOf(search) > -1
+      )
     );
   }
 
@@ -238,65 +259,68 @@ export class EditLocationSpeciesComponent implements OnInit {
   }
 
   estimatedSick(AC: AbstractControl) {
-    AC.get('sick_count_estimated').setErrors(null);
-    const sick_count = AC.get('sick_count').value;
-    const sick_count_estimated = AC.get('sick_count_estimated').value;
+    AC.get("sick_count_estimated").setErrors(null);
+    const sick_count = AC.get("sick_count").value;
+    const sick_count_estimated = AC.get("sick_count_estimated").value;
 
     if (sick_count !== null && sick_count_estimated !== null) {
       if (sick_count_estimated <= sick_count) {
-        AC.get('sick_count_estimated').setErrors({ estimatedSick: true });
+        AC.get("sick_count_estimated").setErrors({ estimatedSick: true });
       }
     }
   }
 
   estimatedDead(AC: AbstractControl) {
-    AC.get('dead_count_estimated').setErrors(null);
-    const dead_count = AC.get('dead_count').value;
-    const dead_count_estimated = AC.get('dead_count_estimated').value;
+    AC.get("dead_count_estimated").setErrors(null);
+    const dead_count = AC.get("dead_count").value;
+    const dead_count_estimated = AC.get("dead_count_estimated").value;
 
     if (dead_count !== null && dead_count_estimated !== null) {
       if (dead_count_estimated <= dead_count) {
-        AC.get('dead_count_estimated').setErrors({ estimatedDead: true });
+        AC.get("dead_count_estimated").setErrors({ estimatedDead: true });
       }
     }
   }
-
 
   checkLocationSpeciesNumbers() {
     this.locationSpeciesNumbersViolation = false;
 
     // wrap logic in if block. if not a morbidity/mortality event, do not run this validation.
-    if (this.data.eventData.event_type === 1 || this.data.eventData.event_type === '1') {
+    if (
+      this.data.eventData.event_type === 1 ||
+      this.data.eventData.event_type === "1"
+    ) {
       // set var to capture of requirement is met at any of the event locations
       let requirementMet = false;
       // add in the current form values to the if statement
 
       for (const eventlocation of this.data.eventData.eventlocations) {
-
         let locationspecies = [];
         // if in edit mode, filter out locationspecies that is currently being edited.
         // if in add mode, use the full locationspecies array.
-        if (this.data.location_species_action === 'edit') {
+        if (this.data.location_species_action === "edit") {
           // tslint:disable-next-line:max-line-length
           // filter out the locationspecies that is currently being edited
-          locationspecies = eventlocation.locationspecies.filter(locspecies => locspecies.id !== this.locationSpeciesForm.get('id').value);
-        } else if (this.data.location_species_action === 'add') {
+          locationspecies = eventlocation.locationspecies.filter(
+            (locspecies) =>
+              locspecies.id !== this.locationSpeciesForm.get("id").value
+          );
+        } else if (this.data.location_species_action === "add") {
           locationspecies = eventlocation.locationspecies;
         }
         // check if the array has anything in it before looping
         if (locationspecies.length > 0) {
           for (const locspecies of locationspecies) {
             if (
-              (
-                locspecies.sick_count +
+              locspecies.sick_count +
                 locspecies.dead_count +
                 locspecies.sick_count_estimated +
                 locspecies.dead_count_estimated +
-                this.locationSpeciesForm.get('sick_count').value +
-                this.locationSpeciesForm.get('dead_count').value +
-                this.locationSpeciesForm.get('sick_count_estimated').value +
-                this.locationSpeciesForm.get('dead_count_estimated').value
-              ) >= 1
+                this.locationSpeciesForm.get("sick_count").value +
+                this.locationSpeciesForm.get("dead_count").value +
+                this.locationSpeciesForm.get("sick_count_estimated").value +
+                this.locationSpeciesForm.get("dead_count_estimated").value >=
+              1
             ) {
               requirementMet = true;
             }
@@ -304,11 +328,11 @@ export class EditLocationSpeciesComponent implements OnInit {
         } else {
           // if locationspecies array is empty, only use the form value to validate
           if (
-            (this.locationSpeciesForm.get('sick_count').value +
-              this.locationSpeciesForm.get('dead_count').value +
-              this.locationSpeciesForm.get('sick_count_estimated').value +
-              this.locationSpeciesForm.get('dead_count_estimated').value
-            ) >= 1
+            this.locationSpeciesForm.get("sick_count").value +
+              this.locationSpeciesForm.get("dead_count").value +
+              this.locationSpeciesForm.get("sick_count_estimated").value +
+              this.locationSpeciesForm.get("dead_count_estimated").value >=
+            1
           ) {
             requirementMet = true;
           }
@@ -324,73 +348,156 @@ export class EditLocationSpeciesComponent implements OnInit {
   }
 
   // Tooltip text
-  editLocationNameTooltip() { const string = FIELD_HELP_TEXT.editLocationNameTooltip; return string; }
-  editStandardizedLocationNameTooltip() { const string = FIELD_HELP_TEXT.editStandardizedLocationNameTooltip; return string; }
-  flywayTooltip() { const string = FIELD_HELP_TEXT.flywayTooltip; return string; }
-  editLandOwnershipTooltip() { const string = FIELD_HELP_TEXT.editLandOwnershipTooltip; return string; }
-  longitudeTooltip() { const string = FIELD_HELP_TEXT.longitudeTooltip; return string; }
-  latitudeTooltip() { const string = FIELD_HELP_TEXT.latitudeTooltip; return string; }
-  editEventTypeTooltip() { const string = FIELD_HELP_TEXT.editEventTypeTooltip; return string; }
-  editSpeciesTooltip() { const string = FIELD_HELP_TEXT.editSpeciesTooltip; return string; }
-  speciesTooltip() { const string = FIELD_HELP_TEXT.speciesTooltip; return string; }
-  editKnownDeadTooltip() { const string = FIELD_HELP_TEXT.editKnownDeadTooltip; return string; }
-  editEstimatedDeadTooltip() { const string = FIELD_HELP_TEXT.editEstimatedDeadTooltip; return string; }
-  editKnownSickTooltip() { const string = FIELD_HELP_TEXT.editKnownSickTooltip; return string; }
-  editEstimatedSickTooltip() { const string = FIELD_HELP_TEXT.editEstimatedSickTooltip; return string; }
-  populationTooltip() { const string = FIELD_HELP_TEXT.populationTooltip; return string; }
-  editAgeBiasTooltip() { const string = FIELD_HELP_TEXT.editAgeBiasTooltip; return string; }
-  editSexBiasTooltip() { const string = FIELD_HELP_TEXT.editSexBiasTooltip; return string; }
-  editCaptiveTooltip() { const string = FIELD_HELP_TEXT.editCaptiveTooltip; return string; }
-  editSpeciesDiagnosisTooltip() { const string = FIELD_HELP_TEXT.editSpeciesDiagnosisTooltip; return string; }
-  locationNameTooltip() { const string = FIELD_HELP_TEXT.locationNameTooltip; return string; }
-  numberAffectedTooltip() { const string = FIELD_HELP_TEXT.numberAffectedTooltip; return string; }
-  editRecordStatusTooltip() { const string = FIELD_HELP_TEXT.editRecordStatusTooltip; return string; }
-  collaboratorsAddIndividualTooltip() { const string = FIELD_HELP_TEXT.collaboratorsAddIndividualTooltip; return string; }
-  collaboratorsAddCircleTooltip() { const string = FIELD_HELP_TEXT.collaboratorsAddCircleTooltip; return string; }
+  editLocationNameTooltip() {
+    const string = FIELD_HELP_TEXT.editLocationNameTooltip;
+    return string;
+  }
+  editStandardizedLocationNameTooltip() {
+    const string = FIELD_HELP_TEXT.editStandardizedLocationNameTooltip;
+    return string;
+  }
+  flywayTooltip() {
+    const string = FIELD_HELP_TEXT.flywayTooltip;
+    return string;
+  }
+  editLandOwnershipTooltip() {
+    const string = FIELD_HELP_TEXT.editLandOwnershipTooltip;
+    return string;
+  }
+  longitudeTooltip() {
+    const string = FIELD_HELP_TEXT.longitudeTooltip;
+    return string;
+  }
+  latitudeTooltip() {
+    const string = FIELD_HELP_TEXT.latitudeTooltip;
+    return string;
+  }
+  editEventTypeTooltip() {
+    const string = FIELD_HELP_TEXT.editEventTypeTooltip;
+    return string;
+  }
+  editSpeciesTooltip() {
+    const string = FIELD_HELP_TEXT.editSpeciesTooltip;
+    return string;
+  }
+  speciesTooltip() {
+    const string = FIELD_HELP_TEXT.speciesTooltip;
+    return string;
+  }
+  editKnownDeadTooltip() {
+    const string = FIELD_HELP_TEXT.editKnownDeadTooltip;
+    return string;
+  }
+  editEstimatedDeadTooltip() {
+    const string = FIELD_HELP_TEXT.editEstimatedDeadTooltip;
+    return string;
+  }
+  editKnownSickTooltip() {
+    const string = FIELD_HELP_TEXT.editKnownSickTooltip;
+    return string;
+  }
+  editEstimatedSickTooltip() {
+    const string = FIELD_HELP_TEXT.editEstimatedSickTooltip;
+    return string;
+  }
+  populationTooltip() {
+    const string = FIELD_HELP_TEXT.populationTooltip;
+    return string;
+  }
+  editAgeBiasTooltip() {
+    const string = FIELD_HELP_TEXT.editAgeBiasTooltip;
+    return string;
+  }
+  editSexBiasTooltip() {
+    const string = FIELD_HELP_TEXT.editSexBiasTooltip;
+    return string;
+  }
+  editCaptiveTooltip() {
+    const string = FIELD_HELP_TEXT.editCaptiveTooltip;
+    return string;
+  }
+  editSpeciesDiagnosisTooltip() {
+    const string = FIELD_HELP_TEXT.editSpeciesDiagnosisTooltip;
+    return string;
+  }
+  locationNameTooltip() {
+    const string = FIELD_HELP_TEXT.locationNameTooltip;
+    return string;
+  }
+  numberAffectedTooltip() {
+    const string = FIELD_HELP_TEXT.numberAffectedTooltip;
+    return string;
+  }
+  editRecordStatusTooltip() {
+    const string = FIELD_HELP_TEXT.editRecordStatusTooltip;
+    return string;
+  }
+  collaboratorsAddIndividualTooltip() {
+    const string = FIELD_HELP_TEXT.collaboratorsAddIndividualTooltip;
+    return string;
+  }
+  collaboratorsAddCircleTooltip() {
+    const string = FIELD_HELP_TEXT.collaboratorsAddCircleTooltip;
+    return string;
+  }
 
   onSubmit(formValue) {
-
     this.submitLoading = true;
 
-    if (this.data.location_species_action === 'add') {
-
+    if (this.data.location_species_action === "add") {
       formValue.event_location = this.data.eventlocation.id;
-      console.log('gtag accessed');
-      this.locationSpeciesService.create(formValue)
-        .subscribe(
-          (event) => {
-            this.submitLoading = false;
-            console.log('gtag accessed');
-            this.openSnackBar('Species successfully added to this location', 'OK', 5000);
-            this.dataUpdatedService.triggerRefresh();
-            this.editLocationSpeciesDialogRef.close();
-            gtag('event', 'click', { 'event_category': 'Event Location Species Details', 'event_label': 'Species Added to Location, location: ' + event.event_location });
-          },
-          error => {
-            this.submitLoading = false;
-            this.openSnackBar('Error. New species not saved. Error message: ' + error, 'OK', 8000);
-          }
-        );
-
-    } else if (this.data.location_species_action === 'edit') {
-
+      console.log("gtag accessed");
+      this.locationSpeciesService.create(formValue).subscribe(
+        (event) => {
+          this.submitLoading = false;
+          console.log("gtag accessed");
+          this.openSnackBar(
+            "Species successfully added to this location",
+            "OK",
+            5000
+          );
+          this.dataUpdatedService.triggerRefresh();
+          this.editLocationSpeciesDialogRef.close();
+          gtag("event", "click", {
+            event_category: "Event Location Species Details",
+            event_label:
+              "Species Added to Location, location: " + event.event_location,
+          });
+        },
+        (error) => {
+          this.submitLoading = false;
+          this.openSnackBar(
+            "Error. New species not saved. Error message: " + error,
+            "OK",
+            8000
+          );
+        }
+      );
+    } else if (this.data.location_species_action === "edit") {
       formValue.id = this.data.locationspecies.id;
       formValue.event_location = this.data.locationspecies.event_location;
       formValue.species = this.data.locationspecies.species;
-      this.locationSpeciesService.update(formValue)
-        .subscribe(
-          (event) => {
-            this.submitLoading = false;
-            this.openSnackBar('Species Updated', 'OK', 5000);
-            this.dataUpdatedService.triggerRefresh();
-            this.editLocationSpeciesDialogRef.close();
-            gtag('event', 'click', { 'event_category': 'Event Location Species Details', 'event_label': 'Species Location Edited, location: ' + event.event_location });
-          },
-          error => {
-            this.submitLoading = false;
-            this.openSnackBar('Error. Species not updated. Error message: ' + error, 'OK', 8000);
-          }
-        );
+      this.locationSpeciesService.update(formValue).subscribe(
+        (event) => {
+          this.submitLoading = false;
+          this.openSnackBar("Species Updated", "OK", 5000);
+          this.dataUpdatedService.triggerRefresh();
+          this.editLocationSpeciesDialogRef.close();
+          gtag("event", "click", {
+            event_category: "Event Location Species Details",
+            event_label:
+              "Species Location Edited, location: " + event.event_location,
+          });
+        },
+        (error) => {
+          this.submitLoading = false;
+          this.openSnackBar(
+            "Error. Species not updated. Error message: " + error,
+            "OK",
+            8000
+          );
+        }
+      );
     }
   }
 
@@ -398,11 +505,18 @@ export class EditLocationSpeciesComponent implements OnInit {
     const result = [];
     for (const searchProperty of searchProperties) {
       if (isNaN(val)) {
-        const realval = val && typeof val === 'object' ? val[searchProperty] : val;
+        const realval =
+          val && typeof val === "object" ? val[searchProperty] : val;
         let lastOption = null;
         if (searchArray !== undefined) {
           for (let i = 0; i < searchArray.length; i++) {
-            if (searchArray[i][searchProperty] != null && (!realval || searchArray[i][searchProperty].toLowerCase().includes(realval.toLowerCase()))) {
+            if (
+              searchArray[i][searchProperty] != null &&
+              (!realval ||
+                searchArray[i][searchProperty]
+                  .toLowerCase()
+                  .includes(realval.toLowerCase()))
+            ) {
               if (searchArray[i][searchProperty] !== lastOption) {
                 lastOption = searchArray[i][searchProperty];
                 result.push(searchArray[i]);
@@ -418,9 +532,9 @@ export class EditLocationSpeciesComponent implements OnInit {
 
   displayFn(speciesId?: Species): string | undefined {
     let species_id_match;
-    for (let i = 0; i < this['options']._results.length - 1; i++) {
-      if (this['options']._results[i].value === speciesId) {
-        species_id_match = this['options']._results[i].viewValue;
+    for (let i = 0; i < this["options"]._results.length - 1; i++) {
+      if (this["options"]._results[i].value === speciesId) {
+        species_id_match = this["options"]._results[i].viewValue;
       }
     }
     return species_id_match;
@@ -428,44 +542,48 @@ export class EditLocationSpeciesComponent implements OnInit {
 
   enforceCaptiveRule(selected_captive_value) {
     if (selected_captive_value) {
-      this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-        {
-          disableClose: true,
-          data: {
-            title: 'Location species captive',
-            titleIcon: 'warning',
-            message: 'Setting this species as captive will set the event record to private (Not Visible to Public). Select "Cancel" to maintain current event visibility. Select "OK" to change to private.',
-            confirmButtonText: 'OK',
-            showCancelButton: true
-          }
-        }
-      );
+      this.confirmDialogRef = this.dialog.open(ConfirmComponent, {
+        disableClose: true,
+        data: {
+          title: "Location species captive",
+          titleIcon: "warning",
+          message:
+            'Setting this species as captive will set the event record to private (Not Visible to Public). Select "Cancel" to maintain current event visibility. Select "OK" to change to private.',
+          confirmButtonText: "OK",
+          showCancelButton: true,
+        },
+      });
 
-      this.confirmDialogRef.afterClosed().subscribe(result => {
+      this.confirmDialogRef.afterClosed().subscribe((result) => {
         if (result === true) {
           // update the event record to public = false
           const update = {
-            'id': this.data.eventData.id,
-            'event_type': this.data.eventData.event_type,
-            'public': false
+            id: this.data.eventData.id,
+            event_type: this.data.eventData.event_type,
+            public: false,
           };
-          this.eventService.update(update)
-            .subscribe(
-              (event) => {
-                // this.submitLoading = false;
-                this.openSnackBar('Event updated to Not Visible to Public.', 'OK', 5000);
-                // excluding this line below because it would trigger a whole page refresh, losing the user's form progress.
-                // this.dataUpdatedService.triggerRefresh();
-              },
-              error => {
-                // this.submitLoading = false;
-                this.openSnackBar('Error. Event visibility not updated. Error message: ' + error, 'OK', 15000);
-              } 
-            )
+          this.eventService.update(update).subscribe(
+            (event) => {
+              // this.submitLoading = false;
+              this.openSnackBar(
+                "Event updated to Not Visible to Public.",
+                "OK",
+                5000
+              );
+              // excluding this line below because it would trigger a whole page refresh, losing the user's form progress.
+              // this.dataUpdatedService.triggerRefresh();
+            },
+            (error) => {
+              // this.submitLoading = false;
+              this.openSnackBar(
+                "Error. Event visibility not updated. Error message: " + error,
+                "OK",
+                15000
+              );
+            }
+          );
         }
       });
-
     }
   }
-
 }

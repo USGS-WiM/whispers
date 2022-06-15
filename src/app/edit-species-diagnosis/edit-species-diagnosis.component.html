@@ -9,9 +9,10 @@
       <span *ngIf="locationspeciesString">Species: {{locationspeciesString}} </span> <br />
       <span *ngIf="data.locationspecies">Location: {{administrative_level_two}}, {{administrative_level_one}}</span>
       <br />
-      <span *ngIf="data.speciesdiagnosis">Species Diagnosis: {{data.speciesdiagnosis.diagnosis_string}} </span><mat-icon class="hint-hover-text" matSuffix 
-      matTooltip={{speciesDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
-help</mat-icon>
+      <span *ngIf="data.speciesdiagnosis">Species Diagnosis: {{data.speciesdiagnosis.diagnosis_string}} </span>
+      <mat-icon class="hint-hover-text" matSuffix matTooltip={{speciesDiagnosisTooltip()}}
+        matTooltipClass="tooltip-breakline">
+        help</mat-icon>
     </h3>
   </div>
 
@@ -21,10 +22,11 @@ help</mat-icon>
       </span> <br />
       <!-- <span *ngIf="data.locationspecies">Location: {{administrative_level_two}}, {{administrative_level_one}}</span> -->
       <br />
-      <span *ngIf="data.speciesdiagnosis">Species Diagnosis: 
-        {{data.speciesdiagnosis.diagnosis | displayValue:'name':this.diagnoses}} </span><mat-icon class="hint-hover-text" matSuffix 
-        matTooltip={{speciesDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
-  help</mat-icon>
+      <span *ngIf="data.speciesdiagnosis">Species Diagnosis:
+        {{data.speciesdiagnosis.diagnosis | displayValue:'name':this.diagnoses}} </span>
+      <mat-icon class="hint-hover-text" matSuffix matTooltip={{speciesDiagnosisTooltip()}}
+        matTooltipClass="tooltip-breakline">
+        help</mat-icon>
     </h3>
   </div>
 
@@ -53,9 +55,9 @@ help</mat-icon>
               {{diagnosis.name}}
             </mat-option>
           </mat-select>
-            <mat-icon class="hint-hover-text" matSuffix 
-                matTooltip={{speciesDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
-          help</mat-icon>
+          <mat-icon class="hint-hover-text" matSuffix matTooltip={{speciesDiagnosisTooltip()}}
+            matTooltipClass="tooltip-breakline">
+            help</mat-icon>
           <mat-hint align="end" matTooltip="Public field">
             <mat-icon>public</mat-icon>
           </mat-hint>
@@ -64,8 +66,7 @@ help</mat-icon>
         </mat-form-field>
 
         <mat-checkbox class="form-control suspect-checkbox" formControlName="suspect"
-          (change)="checkSuspectCompliance()"
-          matTooltip={{speciesDiagnosisSuspectTooltip()}}>
+          (change)="checkSuspectCompliance()" matTooltip={{speciesDiagnosisSuspectTooltip()}}>
           Species
           Diagnosis Suspect
           <mat-icon class="public-icon">public</mat-icon>
@@ -79,9 +80,9 @@ help</mat-icon>
           <mat-option *ngFor="let diagnosisBasis of diagnosisBases" [value]="diagnosisBasis.id">{{diagnosisBasis.name}}
           </mat-option>
         </mat-select>
-        <mat-icon class="hint-hover-text" matSuffix 
-              matTooltip={{basisOfDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
-        help</mat-icon>
+        <mat-icon class="hint-hover-text" matSuffix matTooltip={{basisOfDiagnosisTooltip()}}
+          matTooltipClass="tooltip-breakline">
+          help</mat-icon>
       </mat-form-field>
 
       <mat-form-field class="form-control">
@@ -91,36 +92,38 @@ help</mat-icon>
               *ngIf="this.speciesDiagnosisForm.get('suspect').value && diagnosisCause.id !== 4">Suspect&nbsp;</span>{{diagnosisCause.name}}
           </mat-option>
         </mat-select>
-        <mat-icon class="hint-hover-text" matSuffix 
-              matTooltip={{significanceOfDiagnosisForSpeciesTooltip()}} matTooltipClass="tooltip-breakline">
-        help</mat-icon>
-        
+        <mat-icon class="hint-hover-text" matSuffix matTooltip={{significanceOfDiagnosisForSpeciesTooltip()}}
+          matTooltipClass="tooltip-breakline">
+          help</mat-icon>
+
       </mat-form-field>
 
       <mat-form-field class="form control species-number-control">
-        <input matInput placeholder="Number Assessed" type="number" min="0" formControlName="tested_count">
-        <mat-icon class="hint-hover-text" matSuffix 
-              matTooltip={{numberAssessedTooltip()}} matTooltipClass="tooltip-breakline">
-        help</mat-icon>
+        <input matInput placeholder="Number Assessed" type="number" min="1" formControlName="tested_count"
+          [ngModel]="tested_count" (ngModelChange)="checkMinimum()">
+        <mat-icon class="hint-hover-text" matSuffix matTooltip={{numberAssessedTooltip()}}
+          matTooltipClass="tooltip-breakline">
+          help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
-        <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('min')">Minimum value is 0</mat-error>
+        <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('min')">Minimum value is 1
+        </mat-error>
         <mat-error *ngIf="this.speciesDiagnosisForm.get('tested_count').hasError('integerTestedCount')">Must be an
           integer
           (whole number)</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form control species-number-control">
-        <input matInput placeholder="Number with this Diagnosis" type="number" min="0"
-          formControlName="diagnosis_count">
-          <mat-icon class="hint-hover-text" matSuffix 
-              matTooltip={{numberWithDiagnosisTooltip()}} matTooltipClass="tooltip-breakline">
-        help</mat-icon>
+        <input matInput placeholder="Number with this Diagnosis" type="number" min="1" formControlName="diagnosis_count"
+          [ngModel]="diagnosis_count" (ngModelChange)="checkMinimum()">
+        <mat-icon class="hint-hover-text" matSuffix matTooltip={{numberWithDiagnosisTooltip()}}
+          matTooltipClass="tooltip-breakline">
+          help</mat-icon>
         <mat-hint align="end" matTooltip="Public field">
           <mat-icon>public</mat-icon>
         </mat-hint>
-        <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('min')">Minimum value is 0
+        <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('min')">Minimum value is 1
         </mat-error>
         <mat-error *ngIf="this.speciesDiagnosisForm.get('diagnosis_count').hasError('diagnosisCount')">Cannot be higher
           than Number Assessed</mat-error>
@@ -128,22 +131,6 @@ help</mat-icon>
           an integer
           (whole number)</mat-error>
       </mat-form-field>
-
-      <!-- <div class="horizontal-form-container" class="species-controls-container">
-          <mat-form-field class="species-number-control">
-            <input matInput placeholder="Number Confirmed" type="number" min="0"  formControlName="positive_count">
-            <mat-hint align="end" matTooltip="Public field">
-              <mat-icon>public</mat-icon>
-            </mat-hint>
-          </mat-form-field>
-
-          <mat-form-field class="species-number-control">
-            <input matInput placeholder="Number Suspect" type="number" formControlName="suspect_count">
-            <mat-hint align="end" matTooltip="Public field">
-              <mat-icon>public</mat-icon>
-            </mat-hint>
-          </mat-form-field>
-        </div> -->
 
       <div formArrayName="new_species_diagnosis_organizations">
         <div
@@ -162,9 +149,9 @@ help</mat-icon>
                     {{laboratory.name}}
                   </mat-option>
                 </mat-select>
-                <mat-icon class="hint-hover-text" matSuffix 
-                      matTooltip={{labTooltip()}} matTooltipClass="tooltip-breakline">
-                help</mat-icon>
+                <mat-icon class="hint-hover-text" matSuffix matTooltip={{labTooltip()}}
+                  matTooltipClass="tooltip-breakline">
+                  help</mat-icon>
                 <mat-hint align="end" matTooltip="Public field">
                   <mat-icon>public</mat-icon>
                 </mat-hint>
@@ -214,6 +201,13 @@ help</mat-icon>
         <span class="alert-text">The selected diagnosis has already been selected for this species at this
           location.</span>
       </mat-error>
+
+      <mat-error color="warn" *ngIf="minViolation">
+        <mat-icon class="icon">error</mat-icon>
+        <span class="alert-text">Number Assessed and Number with this Diagnosis cannot be 0. Leave these fields blank if
+          values are unknown. Please do not use a species diagnosis to capture negative test results, instead enter that
+          information as a comment.</span>
+      </mat-error>
     </div>
 
   </form>
@@ -226,7 +220,7 @@ help</mat-icon>
       <mat-icon>cancel</mat-icon>&nbsp;Cancel
     </button>
     <button mat-button color="primary" type="submit"
-      [disabled]="speciesDiagnosisForm.invalid || labSuspectViolation || labViolation || diagnosisSuspectViolation || duplicateDiagnosisViolation"
+      [disabled]="speciesDiagnosisForm.invalid || labSuspectViolation || labViolation || diagnosisSuspectViolation || duplicateDiagnosisViolation || minViolation"
       (click)="onSubmit(speciesDiagnosisForm.value)">
       <mat-icon>{{data.actionButtonIcon}}</mat-icon>{{action_button_text}}
     </button>

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - adds autocomplete functionality to the CircleChooseComponent so user can type to search options for selection (#1268)
 - adds a check against the user deleting the sole location species from an event location (#1238)
+- adds a new validation on the speciesDiagnosisForm of the EditSpeciesDiagnosisComponent to prevent 0 diagnosis count or tested count (#1262)
 
 ### Changed
 

@@ -888,6 +888,10 @@ export class HomeComponent implements OnInit {
           shapeClass = "wmm-diamond ";
           iconClasses = " wmm-icon-diamond wmm-icon-white ";
           sizeClass = "wmm-size-20";
+          // remove white center (icon) if complete
+          if (marker.events[0].complete) {
+            iconClasses = " wmm-icon-noicon ";
+          }
         }
       }
       // set icon to the proper combination of classnames set above (from WIM markermaker and some custom css)
@@ -912,13 +916,20 @@ export class HomeComponent implements OnInit {
 
       popupContent = "<h3>" + markerLocationContent + "</h3>";
       // loop through the events that are part of each single marker
-      for (const event of marker.events) {
-        const eventIconClasses = event.complete
-          ? "wmm-icon-noicon wmm-icon-white"
+      for (let event of marker.events) {
+        let eventIconClasses = event.complete
+          ? "wmm-icon-noicon"
           : "wmm-icon-circle wmm-icon-white";
-        const eventColorClass = this.getMarkerColorClass([event]);
-        const eventShapeClass = "wmm-circle";
-        const eventSizeClass = "wmm-size-20";
+        let eventColorClass = this.getMarkerColorClass([event]);
+        let eventShapeClass =
+          event.event_type === 1
+            ? "wmm-circle"
+            : "wmm-diamond wmm-icon-diamond";
+
+        if (event.event_type === 2 && !event.complete) {
+          eventIconClasses = "wmm-icon-diamond wmm-icon-white";
+        }
+        let eventSizeClass = "wmm-size-20";
         const eventMarkerClasses = [
           eventIconClasses,
           eventColorClass,

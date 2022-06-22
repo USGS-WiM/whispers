@@ -377,12 +377,6 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="{{eventIDTooltip()}}"
                 matTooltipClass="tooltip-breakline">Event ID</mat-header-cell>
               <mat-cell *matCellDef="let event">
-                <!-- <div class="wmm-circle wmm-icon-white wmm-size-20 {{getMarkerColorClass([event])}}
-                  {{ event.complete ? 'wmm-icon-noicon' : 'wmm-icon-circle' }}"
-                  matTooltip="{{ getUniqueAnimalTypes([event]).join(', ') }}"></div> -->
-                <!-- <div class="{{getMarkerClasses([event])}}" matTooltip="{{ getUniqueAnimalTypes([event]).join(', ') }}">
-                </div> -->
-                <!--TODO: finish other combos in the ngClass-->
                 <div class="{{getMarkerColorClass([event])}}"
                   [ngClass]="{'wmm-circle wmm-icon-circle wmm-icon-white wmm-size-20' : event.event_type === 1,
                   'wmm-diamond wmm-icon-diamond wmm-icon-white wmm-size-20': event.event_type === 2, 'wmm-icon-noicon': event.complete}"

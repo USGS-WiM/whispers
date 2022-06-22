@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - fixes a missing call to updateCirclesResultsCount that was causing Circles pagination to malfunction (issue #1267)
 - fixes a bug with the Species Details list on Event Details page duplicating species when navigating between Associated Events (issue #713)
-- fixes a bug with display of event icons/markers on map, popup, and event table on the home page (#1269)
+- fixes a bug with display of event icons/markers on map, popup, and event table on the home page (issue #1269)
 
 ### Security
 

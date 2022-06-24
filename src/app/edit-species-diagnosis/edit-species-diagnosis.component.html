@@ -100,7 +100,7 @@
 
       <mat-form-field class="form control species-number-control">
         <input matInput placeholder="Number Assessed" type="number" min="1" formControlName="tested_count"
-          [ngModel]="tested_count" (ngModelChange)="checkMinimum()">
+          (ngModelChange)="checkMinimum()">
         <mat-icon class="hint-hover-text" matSuffix matTooltip={{numberAssessedTooltip()}}
           matTooltipClass="tooltip-breakline">
           help</mat-icon>
@@ -116,7 +116,7 @@
 
       <mat-form-field class="form control species-number-control">
         <input matInput placeholder="Number with this Diagnosis" type="number" min="1" formControlName="diagnosis_count"
-          [ngModel]="diagnosis_count" (ngModelChange)="checkMinimum()">
+          (ngModelChange)="checkMinimum()">
         <mat-icon class="hint-hover-text" matSuffix matTooltip={{numberWithDiagnosisTooltip()}}
           matTooltipClass="tooltip-breakline">
           help</mat-icon>

@@ -378,10 +378,12 @@
                 matTooltipClass="tooltip-breakline">Event ID</mat-header-cell>
               <mat-cell *matCellDef="let event">
                 <div class="{{getMarkerColorClass([event])}}"
-                  [ngClass]="{'wmm-circle wmm-icon-circle wmm-icon-white wmm-size-20' : event.event_type === 1,
-                  'wmm-diamond wmm-icon-diamond wmm-icon-white wmm-size-20': event.event_type === 2, 'wmm-icon-noicon': event.complete}"
-                  matTooltip="{{ getUniqueAnimalTypes([event]).join(', ') }}"></div>
-                <mat-icon *ngIf="event.public == false">visibility_off</mat-icon>&nbsp;
+                  matTooltip="{{ getUniqueAnimalTypes([event]).join(', ') }}" [ngClass]="[event.event_type === 2 && event.complete  ?  'wmm-diamond wmm-icon-noicon wmm-size-20': '', 
+                  event.event_type === 1 && !event.complete ? 'wmm-circle wmm-icon-circle wmm-icon-white wmm-icon-20 wmm-size-20': '',
+                  event.event_type === 2 && !event.complete ? 'wmm-diamond wmm-icon-diamond wmm-icon-white wmm-icon-20 wmm-size-20' : '',
+                  event.event_type === 1 && event.complete ? 'wmm-circle wmm-icon-noicon wmm-size-20': '']">
+                </div>
+                <mat-icon *ngIf="event.public==false">visibility_off</mat-icon>&nbsp;
                 {{event.id}}
               </mat-cell>
             </ng-container>

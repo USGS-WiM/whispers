@@ -1,6 +1,6 @@
 {
   "name": "whispers",
-  "version": "2.16.12",
+  "version": "2.17.0",
   "description": "Wildlife Health Information Sharing Partnership event reporting system (WHISPers)",
   "scripts": {
     "ng": "ng",

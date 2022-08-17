@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/USGS-WiM/whispers/tree/dev)
 
+## [v2.17.0](https://github.com/USGS-WiM/whispers/releases/tag/v2.17.0) - 2022-08-17
+
 ### Added
 
 - adds autocomplete functionality to the CircleChooseComponent so user can type to search options for selection (#1268)
@@ -17,20 +19,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - changes text for Request to Collaborate (issue #1280)
 
-### Deprecated
-
--
-
-### Removed
-
--
-
 ### Fixed
 
 - fixes a missing call to updateCirclesResultsCount that was causing Circles pagination to malfunction (issue #1267)
 - fixes a bug with the Species Details list on Event Details page duplicating species when navigating between Associated Events (issue #713)
 - fixes a bug with display of event icons/markers on map, popup, and event table on the home page (issue #1269)
-
-### Security
-
--

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - updated text in the Edit User component (issue #1289)
+- lengthened select dropdowns and added tooltips on Custom Notification component (issue #1290)
 
 ### Deprecated
 

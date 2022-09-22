@@ -40,7 +40,8 @@
                       {{adminLevelOne.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedAdminLevelOnes.indexOf(adminLevelOne)) < (selectedAdminLevelOnes.length - 1)">{{(cueForm.get('event_location_administrative_level_one_includes_all').value)
+                    <span
+                      *ngIf="(selectedAdminLevelOnes.indexOf(adminLevelOne)) < (selectedAdminLevelOnes.length - 1)">{{(cueForm.get('event_location_administrative_level_one_includes_all').value)
                       ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
@@ -55,7 +56,8 @@
                 [matAutocomplete]="adminLevelOneAutoComplete" [formControl]="adminLevelOneControl">
               <mat-autocomplete #adminLevelOneAutoComplete="matAutocomplete" [displayWith]="displayFn"
                 (optionSelected)="addChip($event, selectedAdminLevelOnes, 'adminLevelOne')">
-                <mat-option *ngFor="let adminLevelOne of filteredAdminLevelOnes | async" [value]="adminLevelOne">
+                <mat-option *ngFor="let adminLevelOne of filteredAdminLevelOnes | async" [value]="adminLevelOne"
+                  [matTooltip]="adminLevelOne.name">
                   <span>{{ adminLevelOne.name }}</span>
                 </mat-option>
               </mat-autocomplete>
@@ -88,8 +90,9 @@
                       (removed)="removeChip(species, selectedSpecies, 'species')">{{species.name}}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedSpecies.indexOf(species)) < (selectedSpecies.length - 1)">{{(cueForm.get('species_includes_all').value)
-                        ? "and" : "or"}}&nbsp;</span>
+                    <span
+                      *ngIf="(selectedSpecies.indexOf(species)) < (selectedSpecies.length - 1)">{{(cueForm.get('species_includes_all').value)
+                      ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
               </div>
@@ -104,7 +107,8 @@
               <mat-spinner *ngIf="speciesLoading" [diameter]="20"></mat-spinner>
               <mat-autocomplete #speciesAutoComplete="matAutocomplete" [displayWith]="displayFn"
                 (optionSelected)="addChip($event, selectedSpecies, 'species')">
-                <mat-option *ngFor="let species of filteredSpecies | async" [value]="species">
+                <mat-option *ngFor="let species of filteredSpecies | async" [value]="species"
+                  [matTooltip]="species.name">
                   <span>{{ species.name }}</span>
                 </mat-option>
               </mat-autocomplete>
@@ -137,8 +141,9 @@
                       (removed)="removeChip(diagnosis, selectedDiagnoses, 'diagnosis')">{{ diagnosis.name }}
                       <mat-icon matChipRemove *ngIf="removable" (click)="stopPropagation($event)">cancel</mat-icon>
                     </mat-chip>
-                    <span *ngIf="(selectedDiagnoses.indexOf(diagnosis)) < (selectedDiagnoses.length - 1)">{{(cueForm.get('species_diagnosis_diagnosis_includes_all').value)
-                                ? "and" : "or"}}&nbsp;</span>
+                    <span
+                      *ngIf="(selectedDiagnoses.indexOf(diagnosis)) < (selectedDiagnoses.length - 1)">{{(cueForm.get('species_diagnosis_diagnosis_includes_all').value)
+                      ? "and" : "or"}}&nbsp;</span>
                   </span>
                 </mat-chip-list>
               </div>
@@ -153,7 +158,8 @@
               <mat-spinner *ngIf="diagnosesLoading" [diameter]="20"></mat-spinner>
               <mat-autocomplete #speciesDiagnosisAutoComplete="matAutocomplete" [displayWith]="displayFn"
                 (optionSelected)="addChip($event, selectedDiagnoses, 'diagnosis')">
-                <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis">
+                <mat-option *ngFor="let diagnosis of filteredDiagnoses | async" [value]="diagnosis"
+                  [matTooltip]="diagnosis.name">
                   <span>{{ diagnosis.name }}</span>
                 </mat-option>
               </mat-autocomplete>
@@ -203,7 +209,8 @@
               <mat-spinner *ngIf="landOwnershipLoading" [diameter]="20"></mat-spinner>
               <mat-autocomplete #landOwnershipAutoComplete="matAutocomplete" [displayWith]="displayFn"
                 (optionSelected)="addChip($event, selectedLandOwnership, 'landOwnership')">
-                <mat-option *ngFor="let landOwnership of filteredLandOwnership | async" [value]="landOwnership">
+                <mat-option *ngFor="let landOwnership of filteredLandOwnership | async" [value]="landOwnership"
+                  [matTooltip]="landOwnership.name">
                   <span>{{ landOwnership.name }}</span>
                 </mat-option>
               </mat-autocomplete>
@@ -222,8 +229,10 @@
           </mat-panel-title>
           <mat-panel-description>
             <span>
-              {{ cueForm.get('event_affected_count_operator').value === 'GTE' && cueForm.get('event_affected_count').value != null ? '&ge;' :
-              cueForm.get('event_affected_count_operator').value === 'LTE' && cueForm.get('event_affected_count').value != null ? '&le;' : '' }}
+              {{ cueForm.get('event_affected_count_operator').value === 'GTE' &&
+              cueForm.get('event_affected_count').value != null ? '&ge;' :
+              cueForm.get('event_affected_count_operator').value === 'LTE' && cueForm.get('event_affected_count').value
+              != null ? '&le;' : '' }}
               {{cueForm.get('event_affected_count').value}}</span>
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -258,10 +267,10 @@
             <mat-checkbox formControlName="send_email"></mat-checkbox>
             <span class="row align-items-center">&nbsp;&nbsp;<mat-icon class="icon">
                 {{cueForm.get('send_email').value === true ? 'email' :
-        cueForm.get('send_email').value === false ?  'unsubscribe' :  'unsubscribe'}}
+                cueForm.get('send_email').value === false ? 'unsubscribe' : 'unsubscribe'}}
               </mat-icon>
               &nbsp;{{cueForm.get('send_email').value === true ? ' Email ' :
-        cueForm.get('send_email').value === false ?  '' :  ''}}
+              cueForm.get('send_email').value === false ? '' : ''}}
             </span>
           </span>
         </span>

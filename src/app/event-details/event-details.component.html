@@ -96,10 +96,12 @@
                   <tr *ngFor="let eventLocation of eventData.eventlocations">
                     <td>{{eventLocation.administrative_level_two_string}},
                       {{eventLocation.administrative_level_one_string}}
-                      <br>{{eventLocation.country_string}} <br><span class="text-italic"><span>{{eventLocation.start_date
-                                            | date:'mediumDate'}}</span>
+                      <br>{{eventLocation.country_string}} <br><span
+                        class="text-italic"><span>{{eventLocation.start_date
+                          | date:'mediumDate'}}</span>
                         <span> thru </span>
-                        <span>{{eventLocation.end_date | date:'mediumDate'}}</span></span></td>
+                        <span>{{eventLocation.end_date | date:'mediumDate'}}</span></span>
+                    </td>
                   </tr>
                   <tr>
                     <th>WHISPers Record Status<mat-icon class="hint-table-hover-text" matSuffix
@@ -126,8 +128,9 @@
                   </tr>
                   <tr *ngFor="let eventOrganization of eventData.organizations">
                     <td>{{eventOrganization.organization.name}}</td>
-                    <td> {{eventOrganization.organization.city}} {{eventOrganization.organization.administrative_level_one |
-                                        displayValue:'abbreviation':this.administrative_level_one }} </td>
+                    <td> {{eventOrganization.organization.city}}
+                      {{eventOrganization.organization.administrative_level_one |
+                      displayValue:'abbreviation':this.administrative_level_one }} </td>
                   </tr>
                 </table>
               </div>
@@ -259,7 +262,8 @@
                           </span>
                           <br>
                           <span *ngIf="speciesdiagnosis.organizations_string.length > 0">Tested by
-                            <span *ngFor="let org of speciesdiagnosis.organizations_string; last as isLast"><span *ngIf=!isLast>{{org}},&nbsp;&nbsp;</span><span *ngIf=isLast>{{org}}</span></span>
+                            <span *ngFor="let org of speciesdiagnosis.organizations_string; last as isLast"><span
+                                *ngIf=!isLast>{{org}},&nbsp;&nbsp;</span><span *ngIf=isLast>{{org}}</span></span>
                           </span><br />
                         </span>
                       </span>
@@ -280,7 +284,8 @@
         <mat-divider style="margin: 25px auto;" [inset]="true"></mat-divider>
 
         <!-- Begin privileged data section -->
-        <div class="event-detail-wrapper" *ngIf="currentUser.role !== 7 && currentUser.role !== undefined && eventData.is_privileged_user">
+        <div class="event-detail-wrapper"
+          *ngIf="currentUser.role !== 7 && currentUser.role !== undefined && eventData.is_privileged_user">
 
           <div class="event-detail-wrapper">
 
@@ -355,7 +360,7 @@
               <div class="item" *ngIf="currentUser.role === 1 || currentUser.role === 2">
                 <div class="label">Quality Check</div>
                 <div class="value">{{eventData.quality_check === null ? 'Not Done' : eventData.quality_check !== null ?
-                            (eventData.quality_check | date:'shortDate') : 'Not Done' }}</div>
+                  (eventData.quality_check | date:'shortDate') : 'Not Done' }}</div>
               </div>
               <div class="item">
                 <div class="label">WHISPers Record Status</div>
@@ -372,8 +377,8 @@
             </div>
           </div>
 
-          <mat-tab-group class="tab-bar" [selectedIndex]="selectedTab"
-            (selectedTabChange)="resetExpansionPanels()" #eventDetailsTabs>
+          <mat-tab-group class="tab-bar" [selectedIndex]="selectedTab" (selectedTabChange)="resetExpansionPanels()"
+            #eventDetailsTabs>
 
             <!-- Events tab -->
 
@@ -457,8 +462,9 @@
                             </tr>
                             <tr *ngFor="let eventOrganization of eventData.organizations">
                               <td>{{eventOrganization.organization.name}}</td>
-                              <td> {{eventOrganization.organization.city}} {{eventOrganization.organization.administrative_level_one |
-                                        displayValue:'abbreviation':this.administrative_level_one }} </td>
+                              <td> {{eventOrganization.organization.city}}
+                                {{eventOrganization.organization.administrative_level_one |
+                                displayValue:'abbreviation':this.administrative_level_one }} </td>
                               <td>
                                 <!--eventOrganization.id will need to be updated (unless service response is updated - currently this is the org ID, not eventOrg ID-->
                                 <button mat-icon-button aria-label="delete event organization" color="warn"
@@ -611,16 +617,16 @@
                                 <mat-icon>add_comment</mat-icon>
                                 Add Comment
                               </button><br>
-                              <span  *ngIf="currentUser.role === 1 || currentUser.role === 2">
-                              <button mat-icon-button aria-label="respond to service request" color="primary"
-                                [disabled]="!eventData.permissions.update || eventData.complete"
-                                (click)="addServiceRequestResponse(servicerequest)">
-                                <mat-icon>assignment_turned_in</mat-icon>
-                                Respond
-                              </button>
-                              <mat-icon style="margin-left: 40px;" class="hint-hover-text" matSuffix
-                                matTooltip={{nwhcCarcassSubApprovalTooltip()}} matTooltipClass="tooltip-breakline">
-                                help</mat-icon>
+                              <span *ngIf="currentUser.role === 1 || currentUser.role === 2">
+                                <button mat-icon-button aria-label="respond to service request" color="primary"
+                                  [disabled]="!eventData.permissions.update || eventData.complete"
+                                  (click)="addServiceRequestResponse(servicerequest)">
+                                  <mat-icon>assignment_turned_in</mat-icon>
+                                  Respond
+                                </button>
+                                <mat-icon style="margin-left: 40px;" class="hint-hover-text" matSuffix
+                                  matTooltip={{nwhcCarcassSubApprovalTooltip()}} matTooltipClass="tooltip-breakline">
+                                  help</mat-icon>
                               </span>
                               <mat-divider [inset]="true" *ngIf="!last" class="request-divider"></mat-divider>
                             </li>
@@ -683,19 +689,20 @@
                                       <mat-list-item *ngFor="let user of readCollaboratorArray" role="listitem">
                                         {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
                                         <button mat-icon-button aria-label="remove collaborator" color="warn"
-                                          (click)="removeCollaborator(user.id, 'read')">
+                                          (click)="removeCollaborator(user.id, 'read')" [disabled]="eventData.complete">
                                           <mat-icon>remove_circle</mat-icon>
-                                        </button></mat-list-item>
+                                        </button>
+                                      </mat-list-item>
                                     </mat-list>
                                     <div class="button-row">
                                       <button mat-button color="primary"
                                         matTooltip="{{collaboratorsAddIndividualTooltip()}}"
-                                        (click)="addCollaborator('read')">
+                                        (click)="addCollaborator('read')" [disabled]="eventData.complete">
                                         <mat-icon>person_add</mat-icon> Add Individual
                                       </button>
                                       <button mat-button color="primary"
                                         matTooltip="{{collaboratorsAddCircleTooltip()}}"
-                                        (click)="openCircleChooseDialog('read')">
+                                        (click)="openCircleChooseDialog('read')" [disabled]="eventData.complete">
                                         <mat-icon>group_add</mat-icon> Add Circle
                                       </button>
                                     </div>
@@ -712,19 +719,21 @@
                                       <mat-list-item *ngFor="let user of writeCollaboratorArray" role="listitem">
                                         {{user.first_name}}&nbsp;{{user.last_name}}&nbsp;|&nbsp;{{user.organization_string}}
                                         <button mat-icon-button aria-label="remove collaborator" color="warn"
-                                          (click)="removeCollaborator(user.id, 'write')">
+                                          (click)="removeCollaborator(user.id, 'write')"
+                                          [disabled]="eventData.complete">
                                           <mat-icon>remove_circle</mat-icon>
-                                        </button></mat-list-item>
+                                        </button>
+                                      </mat-list-item>
                                     </mat-list>
                                     <div class="button-row">
                                       <button mat-button color="primary"
                                         matTooltip="{{collaboratorsAddIndividualTooltip()}}"
-                                        (click)="addCollaborator('write')">
+                                        (click)="addCollaborator('write')" [disabled]="eventData.complete">
                                         <mat-icon>person_add</mat-icon> Add Individual
                                       </button>
                                       <button mat-button color="primary"
                                         matTooltip="{{collaboratorsAddCircleTooltip()}}"
-                                        (click)="openCircleChooseDialog('write')">
+                                        (click)="openCircleChooseDialog('write')" [disabled]="eventData.complete">
                                         <mat-icon>group_add</mat-icon> Add Circle
                                       </button>
                                     </div>
@@ -880,7 +889,7 @@
                             (closed)="eventLocation.contactsOpen  = false" style="margin: 18px 0;">
                             <mat-expansion-panel-header>
                               <mat-panel-title>
-                                {{eventLocation.contactsOpen  ? 'Hide Location Contacts' : 'View Location Contacts'}}
+                                {{eventLocation.contactsOpen ? 'Hide Location Contacts' : 'View Location Contacts'}}
                               </mat-panel-title>
                             </mat-expansion-panel-header>
 

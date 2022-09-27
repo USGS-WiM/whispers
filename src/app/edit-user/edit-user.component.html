@@ -1,5 +1,6 @@
 <h1 mat-dialog-title>
-  <i class="material-icons">edit</i> Edit User Details</h1>
+  <i class="material-icons">edit</i> Edit User Details
+</h1>
 <mat-dialog-content>
   <form [formGroup]="editUserForm" autocomplete="off">
 
@@ -17,12 +18,13 @@
       </mat-form-field>
 
       <span class="text-smaller text-italic note">Note: Role and Organization are not editable. Please contact
-        WHISPers administration for assistance with changes to these details.</span>
-      
+        WHISPers administration at <a href="mailto: whispers@usgs.gov">whispers@usgs.gov </a> for assistance with
+        changes to these details.</span>
+
       <p><span>
-        <input id="changePassword" type="checkbox" (click)="checkChangePassword($event)">
-        <label for="changePassword"> Change Password?</label>
-      </span></p>
+          <input id="changePassword" type="checkbox" (click)="checkChangePassword($event)">
+          <label for="changePassword"> Change Password?</label>
+        </span></p>
 
       <div *ngIf="showChangePassword">
         <h4>Change password</h4>
@@ -31,14 +33,15 @@
         <mat-form-field class="form-control">
           <input matInput type="password" placeholder="Password" formControlName="password">
         </mat-form-field>
-        <br/>
+        <br />
         <!-- Confirm Password -->
         <mat-form-field class="form-control">
           <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword">
-          <mat-error *ngIf="editUserForm.controls.confirmPassword.errors?.matchPassword">Passwords do not match</mat-error>
+          <mat-error *ngIf="editUserForm.controls.confirmPassword.errors?.matchPassword">Passwords do not match
+          </mat-error>
         </mat-form-field>
       </div>
-      
+
 
     </div>
 

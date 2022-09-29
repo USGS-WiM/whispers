@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - added disabling of Add/Remove collaborator for complete events (issue #1291)
 - added automatic inclusion of Event Owner in the Alert Collaborators Component collaborators list (issue #1292)
+- added redirect to home after event submission (issue #1293)
 
 ### Changed
 

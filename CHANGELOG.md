@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - added disabling of Add/Remove collaborator for complete events (issue #1291)
+- added sutomatic inclusion of Event Owner in the Alert Collaboratros collaborators list (issue #1292)
 
 ### Changed
 

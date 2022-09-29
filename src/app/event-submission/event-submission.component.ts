@@ -3250,10 +3250,7 @@ export class EventSubmissionComponent
         // when user clicks OK, reset the form and stepper using resetStepper()
         this.confirmDialogRef.afterClosed().subscribe((result) => {
           if (result === true) {
-            // temporarily disabling the resetStepper function in favor of full page reload.
-            // tons of issues with resetting this form because of its complexity. full page reload works for now.
-            //this.resetStepper();
-            location.reload();
+            this.router.navigate([`../home/`], { relativeTo: this.route });
           }
         });
 

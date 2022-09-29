@@ -1,29 +1,42 @@
-import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef } from '@angular/material';
-import { MatSnackBar } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators, PatternValidator } from '@angular/forms/';
+import { Component, AfterViewInit, OnInit, ViewChild } from "@angular/core";
+import {
+  MatPaginator,
+  MatSort,
+  MatTableDataSource,
+  MatDialog,
+  MatDialogRef,
+} from "@angular/material";
+import { MatSnackBar } from "@angular/material";
+import { SelectionModel } from "@angular/cdk/collections";
+import { Router, ActivatedRoute, ParamMap } from "@angular/router";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormArray,
+  Validators,
+  PatternValidator,
+} from "@angular/forms/";
 
-import { merge } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { merge } from "rxjs";
+import { tap } from "rxjs/operators";
 
-import { APP_UTILITIES } from '@app/app.utilities';
-import { APP_SETTINGS } from '@app/app.settings';
-import { FIELD_HELP_TEXT } from '@app/app.field-help-text';
+import { APP_UTILITIES } from "@app/app.utilities";
+import { APP_SETTINGS } from "@app/app.settings";
+import { FIELD_HELP_TEXT } from "@app/app.field-help-text";
 
-import { EventService } from '@services/event.service';
-import { CurrentUserService } from '@services/current-user.service';
+import { EventService } from "@services/event.service";
+import { CurrentUserService } from "@services/current-user.service";
 
-import { EventDetail } from '@interfaces/event-detail';
+import { EventDetail } from "@interfaces/event-detail";
 
 @Component({
-  selector: 'app-alert-collaborators',
-  templateUrl: './alert-collaborators.component.html',
-  styleUrls: ['./alert-collaborators.component.scss']
+  selector: "app-alert-collaborators",
+  templateUrl: "./alert-collaborators.component.html",
+  styleUrls: ["./alert-collaborators.component.scss"],
 })
 export class AlertCollaboratorsComponent implements OnInit {
-  errorMessage = '';
+  errorMessage = "";
   eventID: string;
   resultsLoading = false;
   tableLoading = false;
@@ -31,16 +44,17 @@ export class AlertCollaboratorsComponent implements OnInit {
   dataSource;
   readCollaborators;
   writeCollaborators;
+  collaboratorsArray = [];
   initialSelection = [];
   allowMultiSelect = true;
-  selection = new SelectionModel<Number>(this.allowMultiSelect, this.initialSelection);
+  selection = new SelectionModel<Number>(
+    this.allowMultiSelect,
+    this.initialSelection
+  );
 
   submitLoading = false;
 
-  displayedColumns = [
-    'select',
-    'user'
-  ];
+  displayedColumns = ["select", "user"];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -51,7 +65,7 @@ export class AlertCollaboratorsComponent implements OnInit {
     this.alertCollaboratorForm = this.formBuilder.group({
       event: null,
       recipients: [],
-      comment: ''
+      comment: "",
     });
   }
 
@@ -62,32 +76,46 @@ export class AlertCollaboratorsComponent implements OnInit {
     public snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
-
     this.buildAlertCollaboratorForm();
   }
 
   ngOnInit() {
     this.tableLoading = true;
-    this.route.paramMap.subscribe(params => {
-      this.eventID = params.get('id');
+    this.route.paramMap.subscribe((params) => {
+      this.eventID = params.get("id");
 
       // Actual request to event details service, using id
-      this.eventService.getEventDetails(this.eventID)
-        .subscribe(
-          (eventdetails) => {
-            this.eventData = eventdetails;
-            this.readCollaborators = this.eventData.read_collaborators;
-            this.writeCollaborators = this.eventData.write_collaborators;
-            this.dataSource = this.readCollaborators.concat(this.writeCollaborators);
-            this.dataSource = new MatTableDataSource(this.dataSource);
-            this.dataSource.paginator = this.paginator;
-            // this.commentsDataSource.sort = this.sort;
-            this.tableLoading = false;
-          },
-          error => {
-            this.tableLoading = false;
-          }
-        );
+      this.eventService.getEventDetails(this.eventID).subscribe(
+        (eventdetails) => {
+          this.eventData = eventdetails;
+          this.readCollaborators = this.eventData.read_collaborators;
+          this.writeCollaborators = this.eventData.write_collaborators;
+          // add the event owner (creator) to the collaboarator list
+          let eventOwner = {
+            id: this.eventData.created_by,
+            first_name: this.eventData.created_by_first_name,
+            last_name: this.eventData.created_by_last_name,
+            organization: this.eventData.created_by_organization,
+            organization_string:
+              this.eventData.created_by_organization_string + " | Event Owner",
+            username: this.eventData.created_by_string,
+          };
+          this.collaboratorsArray = this.collaboratorsArray.concat(eventOwner);
+          this.collaboratorsArray = this.collaboratorsArray.concat(
+            this.readCollaborators
+          );
+          this.collaboratorsArray = this.collaboratorsArray.concat(
+            this.writeCollaborators
+          );
+          this.dataSource = new MatTableDataSource(this.collaboratorsArray);
+          this.dataSource.paginator = this.paginator;
+          // this.commentsDataSource.sort = this.sort;
+          this.tableLoading = false;
+        },
+        (error) => {
+          this.tableLoading = false;
+        }
+      );
     });
   }
 
@@ -100,9 +128,9 @@ export class AlertCollaboratorsComponent implements OnInit {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
   openSnackBar(message: string, action: string, duration: number) {
@@ -111,9 +139,7 @@ export class AlertCollaboratorsComponent implements OnInit {
     });
   }
 
-
   onSubmit(formValue) {
-
     this.submitLoading = true;
 
     formValue.event = this.eventID;
@@ -132,22 +158,26 @@ export class AlertCollaboratorsComponent implements OnInit {
       formValue.recipients.push(user.id);
     }
 
-    this.eventService.alertCollaborators(formValue)
-      .subscribe(
-        (response) => {
-          this.submitLoading = false;
-          this.openSnackBar('Alert successfully sent to event collaborators.', 'OK', 5000);
-        },
-        error => {
-          this.errorMessage = <any>error;
-          this.openSnackBar('Error. Collaboration request response not submitted. Error message: ' + error, 'OK', 8000);
-        }
-      );
+    this.eventService.alertCollaborators(formValue).subscribe(
+      (response) => {
+        this.submitLoading = false;
+        this.openSnackBar(
+          "Alert successfully sent to event collaborators.",
+          "OK",
+          5000
+        );
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+        this.openSnackBar(
+          "Error. Collaboration request response not submitted. Error message: " +
+            error,
+          "OK",
+          8000
+        );
+      }
+    );
 
-
-    // update the formValue.recipients array with the selected table values. 
-
-
+    // update the formValue.recipients array with the selected table values.
   }
-
 }

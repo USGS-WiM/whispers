@@ -21,9 +21,7 @@ th.mat-header-cell {
   padding: 0;
   border-bottom-width: 0px;
   border-bottom-style: none;
-  ;
 }
-
 
 .results-table-div {
   flex-grow: 3;
@@ -91,7 +89,6 @@ th.mat-header-cell {
     line-height: 11px;
     font-size: 11.5px;
   }
-
 }
 
 .results-button-row {
@@ -148,8 +145,10 @@ th.mat-header-cell {
 }
 
 .vertical-form-container {
-  display: inline-block;
-  flex-direction: column;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
 }
 
 .noCollaborators {

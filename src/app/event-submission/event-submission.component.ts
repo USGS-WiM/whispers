@@ -1745,6 +1745,17 @@ export class EventSubmissionComponent
     return null;
   }
 
+  endDateTodayorEarlier(AC: AbstractControl) {
+    const end_date = AC.get("end_date").value;
+    const today = APP_UTILITIES.TODAY;
+    if (end_date !== null && end_date.getTime() > today.getTime()) {
+      AC.get("end_date").setErrors({
+        endDateTodayorEarlier: true,
+      });
+    }
+    return null;
+  }
+
   minSpecies(AC: AbstractControl) {
     const locationSpeciesLength = AC.get("new_location_species")["controls"]
       .length;
@@ -2302,6 +2313,7 @@ export class EventSubmissionComponent
         validator: [
           this.endDateBeforeStart,
           this.startDateTodayorEarlierMortalityEvent,
+          this.endDateTodayorEarlier,
           this.minSpecies,
         ],
       }

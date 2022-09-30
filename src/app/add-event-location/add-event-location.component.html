@@ -62,6 +62,8 @@
             </mat-hint>
             <mat-error *ngIf="addEventLocationForm.get('end_date').hasError('endDateBeforeStart')">Cannot
               precede start date</mat-error>
+            <mat-error *ngIf="addEventLocationForm.get('end_date').hasError('endDateTodayorEarlier')">End date must be
+              today or earlier</mat-error>
           </mat-form-field>
         </div>
         <br>
@@ -454,7 +456,7 @@
 
                   <div>
                     <span class="text-larger text-bold">{{locationSpecies.get('species').value |
-                          displayValue:'name':this.species}}</span>
+                      displayValue:'name':this.species}}</span>
 
                     <!-- div for displaying species diagnoses added to the location species -->
                     <div *ngIf="getSpeciesDiagnoses(locationSpecies).length > 0">
@@ -475,20 +477,21 @@
                         <tr
                           *ngFor="let speciesDiagnosis of getSpeciesDiagnoses(locationSpecies); let speciesDiagnosisIndex = index">
                           <td>{{speciesDiagnosis.get('diagnosis').value |
-                                displayValue:'name':this.allDiagnoses}}&nbsp;<span
+                            displayValue:'name':this.allDiagnoses}}&nbsp;<span
                               *ngIf="speciesDiagnosis.get('suspect').value">suspect</span></td>
                           <td>{{speciesDiagnosis.get('cause').value |
-                                displayValue:'name':this.diagnosisCauses}}</td>
+                            displayValue:'name':this.diagnosisCauses}}</td>
                           <td>{{speciesDiagnosis.get('basis').value |
-                                displayValue:'name':this.diagnosisBases}}</td>
+                            displayValue:'name':this.diagnosisBases}}</td>
                           <td>{{speciesDiagnosis.get('tested_count').value}}</td>
                           <td>{{speciesDiagnosis.get('diagnosis_count').value}}</td>
                           <td>{{speciesDiagnosis.get('suspect').value ? 'Yes' : 'No'}}</td>
                           <td>
                             <ul *ngIf="getDiagnosisOrganizations(speciesDiagnosis)" class="table-cell-list">
                               <li
-                                *ngFor="let organizationID of getDiagnosisOrganizations(speciesDiagnosis); let diagnosisOrganizationIndex = index;">{{organizationID
-                                    | displayValue:'name':this.organizations}}</li><br>
+                                *ngFor="let organizationID of getDiagnosisOrganizations(speciesDiagnosis); let diagnosisOrganizationIndex = index;">
+                                {{organizationID
+                                | displayValue:'name':this.organizations}}</li><br>
                             </ul>
                           </td>
                           <td>

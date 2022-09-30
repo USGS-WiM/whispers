@@ -33,4 +33,10 @@ export interface EventDetail extends History {
   combined_comments: CombinedComments[];
   read_collaborators: User[];
   write_collaborators: User[];
+  created_by_string: string;
+  modified_by_string: string;
+  created_by_first_name: string;
+  created_by_last_name: string;
+  created_by_organization: number;
+  created_by_organization_string: string;
 }

@@ -1745,6 +1745,17 @@ export class EventSubmissionComponent
     return null;
   }
 
+  endDateTodayorEarlier(AC: AbstractControl) {
+    const end_date = AC.get("end_date").value;
+    const today = APP_UTILITIES.TODAY;
+    if (end_date !== null && end_date.getTime() > today.getTime()) {
+      AC.get("end_date").setErrors({
+        endDateTodayorEarlier: true,
+      });
+    }
+    return null;
+  }
+
   minSpecies(AC: AbstractControl) {
     const locationSpeciesLength = AC.get("new_location_species")["controls"]
       .length;
@@ -2302,6 +2313,7 @@ export class EventSubmissionComponent
         validator: [
           this.endDateBeforeStart,
           this.startDateTodayorEarlierMortalityEvent,
+          this.endDateTodayorEarlier,
           this.minSpecies,
         ],
       }
@@ -3250,10 +3262,7 @@ export class EventSubmissionComponent
         // when user clicks OK, reset the form and stepper using resetStepper()
         this.confirmDialogRef.afterClosed().subscribe((result) => {
           if (result === true) {
-            // temporarily disabling the resetStepper function in favor of full page reload.
-            // tons of issues with resetting this form because of its complexity. full page reload works for now.
-            //this.resetStepper();
-            location.reload();
+            this.router.navigate([`../home/`], { relativeTo: this.route });
           }
         });
 

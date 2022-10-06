@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- fixed bug on Circles Component where initial load sized table length to 10 despite pagination selection (issue #1267)
+
 ### Security
 
 ## [2.17.0](https://github.com/USGS-WiM/whispers/releases/tag/v2.17.0)

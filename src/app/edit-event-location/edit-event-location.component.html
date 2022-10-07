@@ -1,5 +1,6 @@
 <h1 mat-dialog-title>
-  <i class="material-icons">edit_location</i> Edit Event Location Details</h1>
+  <i class="material-icons">edit_location</i> Edit Event Location Details
+</h1>
 <mat-dialog-content>
 
   <form [formGroup]="editEventLocationForm" autocomplete="off">
@@ -29,6 +30,8 @@
         </mat-hint>
         <mat-error *ngIf="this.editEventLocationForm.get('end_date').hasError('endDateBeforeStart')">Cannot
           precede start date</mat-error>
+        <mat-error *ngIf="this.editEventLocationForm.get('end_date').hasError('endDateTodayorEarlier')">End date must be
+          today or earlier</mat-error>
       </mat-form-field>
     </div>
     <br>

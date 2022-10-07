@@ -94,7 +94,7 @@ export class CirclesComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.dataSource = new CirclesDataSource(this.circleService);
-    this.dataSource.loadCircles("", 1, 10);
+    this.dataSource.loadCircles("", 1, 20);
 
     // the following block triggers the reloading of the circles after a change is made to a circle
     this.circlesSubscription = this.circleManagementService

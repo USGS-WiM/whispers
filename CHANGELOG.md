@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [2.18.0](https://github.com/USGS-WiM/whispers/releases/tag/v2.18.0)
+
+### Added
+
 - added disabling of Add/Remove collaborator for complete events (issue #1291)
 - added automatic inclusion of Event Owner in the Alert Collaborators Component collaborators list (issue #1292)
 - added redirect to home after event submission (issue #1293)
@@ -18,15 +32,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - updated text in the Edit User component (issue #1289)
 - lengthened select dropdowns and added tooltips on Custom Notification component (issue #1290)
 
-### Deprecated
-
-### Removed
-
 ### Fixed
 
 - fixed bug on Circles Component where initial load sized table length to 10 despite pagination selection (issue #1267)
-
-### Security
 
 ## [2.17.0](https://github.com/USGS-WiM/whispers/releases/tag/v2.17.0)
 

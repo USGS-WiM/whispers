@@ -3,6 +3,12 @@
 </h1>
 
 <mat-dialog-content id="aboutModal">
+  <p>
+    <button mat-button color="accent" (click)="openDiagnosticSubmissionGuideLink()">
+      <mat-icon>info</mat-icon> Click here for current NWHC diagnostic case submission guidelines (external link)
+    </button>
+  </p>
+
   <h2>Suitable Specimen Criteria</h2>
   <p>
     In order for the USGS National Wildlife Health Center (NWHC) to provide the best possible diagnostic services,
@@ -17,7 +23,7 @@
           provide details on rehabilitation in the comment field before submitting the diagnostic request.</li>
       </ul>
     </li>
-    <li>Whole carcasses (2-3 per species, usually no more than 5-6 total) with intact body cavity (no or very light
+    <li>Whole carcasses with intact body cavity (no or very light
       scavenging, not previously necropsied).
       <ul>
         <li>If the carcass is &#62;100lbs or too large to ship please make a note in the comment field before submitting

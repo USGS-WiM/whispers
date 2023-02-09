@@ -1,38 +1,41 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
-import { MatPaginator, MatSort, MatTableDataSource, MatTabGroup } from '@angular/material';
-import { Router, ActivatedRoute } from '@angular/router';
+import { SelectionModel } from "@angular/cdk/collections";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { MatDialog, MatDialogRef } from "@angular/material";
+import {
+  MatPaginator,
+  MatSort,
+  MatTableDataSource,
+  MatTabGroup,
+} from "@angular/material";
+import { Router, ActivatedRoute } from "@angular/router";
 
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from "@angular/material";
 
-import { ContactService } from '@app/services/contact.service';
+import { ContactService } from "@app/services/contact.service";
 
-import { Contact } from '@interfaces/contact';
+import { Contact } from "@interfaces/contact";
 
-import { CreateContactComponent } from '@create-contact/create-contact.component';
-import { CurrentUserService } from '@services/current-user.service';
+import { CreateContactComponent } from "@create-contact/create-contact.component";
+import { CurrentUserService } from "@services/current-user.service";
 
-import { EventService } from '@services/event.service';
+import { EventService } from "@services/event.service";
 
-import { APP_SETTINGS } from '@app/app.settings';
-import { OrganizationService } from '@services/organization.service';
-import { RoleService } from '@services/role.service';
+import { APP_SETTINGS } from "@app/app.settings";
+import { OrganizationService } from "@services/organization.service";
 
-import { ConfirmComponent } from '@confirm/confirm.component';
+import { ConfirmComponent } from "@confirm/confirm.component";
 
-import { EditUserComponent } from '@app/edit-user/edit-user.component';
-import { NewLookupRequestComponent } from '@app/new-lookup-request/new-lookup-request.component';
-import { JsonPipe } from '@angular/common';
-import { BulkUploadComponent } from '@app/bulk-upload/bulk-upload.component';
+import { EditUserComponent } from "@app/edit-user/edit-user.component";
+import { NewLookupRequestComponent } from "@app/new-lookup-request/new-lookup-request.component";
+import { JsonPipe } from "@angular/common";
+import { BulkUploadComponent } from "@app/bulk-upload/bulk-upload.component";
 
 @Component({
-  selector: 'app-user-dashboard',
-  templateUrl: './user-dashboard.component.html',
-  styleUrls: ['./user-dashboard.component.scss']
+  selector: "app-user-dashboard",
+  templateUrl: "./user-dashboard.component.html",
+  styleUrls: ["./user-dashboard.component.scss"],
 })
 export class UserDashboardComponent implements OnInit {
-
   contactsDataSource: MatTableDataSource<Contact>;
   contactsLoading = false;
 
@@ -46,7 +49,6 @@ export class UserDashboardComponent implements OnInit {
   events;
   contacts;
   organizations = [];
-  roles = [];
 
   selection;
   currentUser;
@@ -54,17 +56,17 @@ export class UserDashboardComponent implements OnInit {
   selectedTab: number;
 
   contactDisplayedColumns = [
-    'select',
-    'last_name',
-    'first_name',
-    'phone_number',
-    'email',
-    'organization',
-    'permission_source'
+    "select",
+    "last_name",
+    "first_name",
+    "phone_number",
+    "email",
+    "organization",
+    "permission_source",
   ];
 
-  @ViewChild('eventPaginator') paginator: MatPaginator;
-  @ViewChild('eventSort') sort: MatSort;
+  @ViewChild("eventPaginator") paginator: MatPaginator;
+  @ViewChild("eventSort") sort: MatSort;
 
   @ViewChild(MatPaginator) contactPaginator: MatPaginator;
   @ViewChild(MatSort) contactSort: MatSort;
@@ -74,14 +76,12 @@ export class UserDashboardComponent implements OnInit {
     private _contactService: ContactService,
     private organizationService: OrganizationService,
     private currentUserService: CurrentUserService,
-    private roleService: RoleService,
     private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
     public snackBar: MatSnackBar
   ) {
-
-    currentUserService.currentUser.subscribe(user => {
+    currentUserService.currentUser.subscribe((user) => {
       this.currentUser = user;
     });
 
@@ -93,50 +93,39 @@ export class UserDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-
     // const events: EventSummary[] = this._eventService.getTestData();
     const initialSelection = [];
     const allowMultiSelect = true;
-    this.selection = new SelectionModel<Contact>(allowMultiSelect, initialSelection);
+    this.selection = new SelectionModel<Contact>(
+      allowMultiSelect,
+      initialSelection
+    );
 
     this.contactsLoading = true;
 
-    this._contactService.getContacts()
-      .subscribe(
-        (usercontacts) => {
-          this.contacts = usercontacts;
-          this.contactsDataSource = new MatTableDataSource(this.contacts);
-          this.contactsDataSource.paginator = this.contactPaginator;
-          this.contactsDataSource.sort = this.contactSort;
-          this.contactsLoading = false;
-        },
-        error => {
-          this.errorMessage = <any>error;
-          this.contactsLoading = false;
-        }
-      );
+    this._contactService.getContacts().subscribe(
+      (usercontacts) => {
+        this.contacts = usercontacts;
+        this.contactsDataSource = new MatTableDataSource(this.contacts);
+        this.contactsDataSource.paginator = this.contactPaginator;
+        this.contactsDataSource.sort = this.contactSort;
+        this.contactsLoading = false;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+        this.contactsLoading = false;
+      }
+    );
 
     // get organizations from the OrganizationService
-    this.organizationService.getOrganizations()
-      .subscribe(
-        organizations => {
-          this.organizations = organizations;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-
-    // get roles from the RoleService
-    this.roleService.getRoles()
-      .subscribe(
-        roles => {
-          this.roles = roles;
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.organizationService.getOrganizations().subscribe(
+      (organizations) => {
+        this.organizations = organizations;
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
 
     // this.contactsDataSource = new MatTableDataSource(this.contacts);
     // set selected tab
@@ -165,92 +154,85 @@ export class UserDashboardComponent implements OnInit {
 
   openCreateContactDialog() {
     this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-      minWidth: '75%',
+      minWidth: "75%",
       disableClose: true,
       data: {
-        contact_action: 'create'
-      }
+        contact_action: "create",
+      },
     });
 
-    this.createContactDialogRef.afterClosed()
-      .subscribe(
-        () => {
-          this._contactService.getContacts()
-            .subscribe(
-              (usercontacts) => {
-                this.selection.clear();
+    this.createContactDialogRef.afterClosed().subscribe(
+      () => {
+        this._contactService.getContacts().subscribe(
+          (usercontacts) => {
+            this.selection.clear();
 
-                this.contacts = usercontacts;
-                this.contactsDataSource = new MatTableDataSource(this.contacts);
-                this.contactsDataSource.paginator = this.contactPaginator;
-                this.contactsDataSource.sort = this.contactSort;
-              },
-              error => {
-                this.errorMessage = <any>error;
-              }
-            );
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+            this.contacts = usercontacts;
+            this.contactsDataSource = new MatTableDataSource(this.contacts);
+            this.contactsDataSource.paginator = this.contactPaginator;
+            this.contactsDataSource.sort = this.contactSort;
+          },
+          (error) => {
+            this.errorMessage = <any>error;
+          }
+        );
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
   }
 
   openEditContactDialog() {
-
     // Add code to determine how many are selected
 
     if (this.selection.selected.length > 1) {
-      alert('you have too many contacts selected for edit. select only one.');
+      alert("you have too many contacts selected for edit. select only one.");
     } else if (this.selection.selected.length === 1) {
       this.createContactDialogRef = this.dialog.open(CreateContactComponent, {
-        minWidth: '60%',
+        minWidth: "60%",
         data: {
-          contact_action: 'edit',
-          contact: this.selection.selected[0]
-        }
+          contact_action: "edit",
+          contact: this.selection.selected[0],
+        },
         // height: '75%'
       });
 
       // Add listener here that updates contacts when dialog is closed
-      this.createContactDialogRef.afterClosed()
-        .subscribe(
-          () => {
-            this._contactService.getContacts()
-              .subscribe(
-                (usercontacts) => {
-                  this.selection.clear();
+      this.createContactDialogRef.afterClosed().subscribe(
+        () => {
+          this._contactService.getContacts().subscribe(
+            (usercontacts) => {
+              this.selection.clear();
 
-                  this.contacts = usercontacts;
-                  this.contactsDataSource = new MatTableDataSource(this.contacts);
-                  this.contactsDataSource.paginator = this.contactPaginator;
-                  this.contactsDataSource.sort = this.contactSort;
-                },
-                error => {
-                  this.errorMessage = <any>error;
-                }
-              );
-          },
-          error => {
-            this.errorMessage = <any>error;
-          }
-        );
+              this.contacts = usercontacts;
+              this.contactsDataSource = new MatTableDataSource(this.contacts);
+              this.contactsDataSource.paginator = this.contactPaginator;
+              this.contactsDataSource.sort = this.contactSort;
+            },
+            (error) => {
+              this.errorMessage = <any>error;
+            }
+          );
+        },
+        (error) => {
+          this.errorMessage = <any>error;
+        }
+      );
     }
   }
 
   openContactRemoveConfirm() {
-    this.confirmDialogRef = this.dialog.open(ConfirmComponent,
-      {
-        data: {
-          title: 'Delete Contact',
-          message: 'Are you sure you want to delete the contact?',
-          confirmButtonText: 'Yes, Delete',
-          showCancelButton: true
-        }
-      }
-    );
+    this.confirmDialogRef = this.dialog.open(ConfirmComponent, {
+      data: {
+        title: "Delete Contact",
+        message: "Are you sure you want to delete the contact?",
+        confirmButtonText: "Yes, Delete",
+        showCancelButton: true,
+      },
+    });
 
-    this.confirmDialogRef.afterClosed().subscribe(result => {
+    this.confirmDialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
         this.removeContact();
       }
@@ -258,102 +240,93 @@ export class UserDashboardComponent implements OnInit {
   }
 
   openEditUserDialog() {
-
     // Open dialog for adding event diagnosis
     this.editUserDialogRef = this.dialog.open(EditUserComponent, {
-      data: {}
+      data: {},
     });
 
-    this.editUserDialogRef.afterClosed()
-      .subscribe(
-        () => {
-          // do something after close
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
-
+    this.editUserDialogRef.afterClosed().subscribe(
+      () => {
+        // do something after close
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
   }
 
   openNewLookupRequestDialog() {
-
     // Open dialog for requesting new lookup value
-    this.newLookupRequestDialogRef = this.dialog.open(NewLookupRequestComponent, {
-      data: {
-        title: 'Request New Item',
-        titleIcon: 'add_circle',
-        showCancelButton: true,
-        action_button_text: 'Submit request',
-        actionButtonIcon: 'send'
-      }
-    });
-
-    this.newLookupRequestDialogRef.afterClosed()
-      .subscribe(
-        () => {
-
+    this.newLookupRequestDialogRef = this.dialog.open(
+      NewLookupRequestComponent,
+      {
+        data: {
+          title: "Request New Item",
+          titleIcon: "add_circle",
+          showCancelButton: true,
+          action_button_text: "Submit request",
+          actionButtonIcon: "send",
         },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+      }
+    );
 
+    this.newLookupRequestDialogRef.afterClosed().subscribe(
+      () => {},
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
   }
 
-
   openBulkUploadDialog() {
-
     // open dialog for bulk upload
     this.bulkUploadDialogRef = this.dialog.open(BulkUploadComponent, {
       // minWidth: '50%',
       data: {
-        title: 'Bulk Data Upload',
-        titleIcon: 'cloud_upload',
-        showCancelButton: true
-      }
+        title: "Bulk Data Upload",
+        titleIcon: "cloud_upload",
+        showCancelButton: true,
+      },
     });
 
-    this.bulkUploadDialogRef.afterClosed()
-      .subscribe(
-        () => {
-          // do something after close
-        },
-        error => {
-          this.errorMessage = <any>error;
-        }
-      );
+    this.bulkUploadDialogRef.afterClosed().subscribe(
+      () => {
+        // do something after close
+      },
+      (error) => {
+        this.errorMessage = <any>error;
+      }
+    );
   }
 
   removeContact() {
-
     if (this.selection.selected.length > 1) {
-      alert('you have too many contacts selected for removal. select only one.');
+      alert(
+        "you have too many contacts selected for removal. select only one."
+      );
     } else if (this.selection.selected.length === 1) {
-      this._contactService.remove(this.selection.selected[0])
-        .subscribe(
-          () => {
-            this._contactService.getContacts()
-              .subscribe(
-                (usercontacts) => {
-                  this.selection.clear();
+      this._contactService.remove(this.selection.selected[0]).subscribe(
+        () => {
+          this._contactService.getContacts().subscribe(
+            (usercontacts) => {
+              this.selection.clear();
 
-                  this.contacts = usercontacts;
-                  this.contactsDataSource = new MatTableDataSource(this.contacts);
-                  this.contactsDataSource.paginator = this.contactPaginator;
-                  this.contactsDataSource.sort = this.contactSort;
+              this.contacts = usercontacts;
+              this.contactsDataSource = new MatTableDataSource(this.contacts);
+              this.contactsDataSource.paginator = this.contactPaginator;
+              this.contactsDataSource.sort = this.contactSort;
 
-                  this.openSnackBar('Contact Removed', 'OK', 5000);
-                },
-                error => {
-                  this.errorMessage = <any>error;
-                }
-              );
-          },
-          error => {
-            this.errorMessage = <any>error;
-          }
-        );
+              this.openSnackBar("Contact Removed", "OK", 5000);
+            },
+            (error) => {
+              this.errorMessage = <any>error;
+            }
+          );
+        },
+        (error) => {
+          this.errorMessage = <any>error;
+        }
+      );
     }
   }
 
@@ -367,23 +340,29 @@ export class UserDashboardComponent implements OnInit {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.contactsDataSource.data.forEach(row => this.selection.select(row));
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.contactsDataSource.data.forEach((row) =>
+          this.selection.select(row)
+        );
   }
 
   formatPhone(phone) {
-    let formatted_phone = '';
+    let formatted_phone = "";
 
     if (phone != null && phone.length == 10) {
-      let temp_phone = phone.split('');
-      formatted_phone = '(' + temp_phone.slice(0, 3).join('') + ') ' + temp_phone.slice(3, 6).join('') + '-' + temp_phone.slice(6, 10).join('');
+      let temp_phone = phone.split("");
+      formatted_phone =
+        "(" +
+        temp_phone.slice(0, 3).join("") +
+        ") " +
+        temp_phone.slice(3, 6).join("") +
+        "-" +
+        temp_phone.slice(6, 10).join("");
     } else {
       formatted_phone = phone;
     }
 
     return formatted_phone;
   }
-
-
 }

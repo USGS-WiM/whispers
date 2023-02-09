@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- added link to NWHC diagnostic case submission guidelines and updated text in the service request dialog
+- changed handling of the role name display - eliminated query of role table in favor of role_string from server auth response
+
 ### Deprecated
 
 ### Removed

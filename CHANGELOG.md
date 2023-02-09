@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Security
 
+## [2.18.1](https://github.com/USGS-WiM/whispers/releases/tag/v2.18.1)
+
+### Changed
+
+- added link to NWHC diagnostic case submission guidelines and updated text in the service request dialog
+- changed handling of the role name display - eliminated query of role table in favor of role_string from server auth response
+
 ## [2.18.0](https://github.com/USGS-WiM/whispers/releases/tag/v2.18.0)
 
 ### Added
